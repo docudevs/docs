@@ -1,0 +1,21 @@
+---
+title: Home
+---
+
+{% cta %}
+Turn your unstructured documents into data.
+{% /cta %}
+
+## How to
+
+{% matrix %}
+{% matrix_item title="Connect" %}
+Connect to the DocuDevs platform
+{% /matrix_item %}
+{% matrix_item title="Get started with documents" %}
+Transform your documents into structured data
+{% /matrix_item %}
+{% matrix_item title="Advanced" %}
+Control what to extract
+{% /matrix_item %}
+{% /matrix %}
