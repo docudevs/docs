@@ -1,9 +1,10 @@
+
 <script lang="ts">
     import { page } from '$app/stores';
 
     let is_expanded = false;
 
-    $: links = [
+    const links = [
         {
             path: '/documentation',
             name: 'Connect',

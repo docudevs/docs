@@ -1,18 +1,5 @@
 <script lang="ts">
-	export const prerender = true;
 	import { page } from '$app/stores';
-	const links = [
-		{
-			path: '/',
-			name: 'Home',
-			is_selected: $page.url.pathname === '/',
-		},
-		{
-			path: '/documentation',
-			name: 'Documentation',
-			is_selected: $page.url.pathname.startsWith('/documentation'),
-		}
-	];
 </script>
 
 <header id="navigation" class="p-navigation is-dark">
@@ -30,15 +17,22 @@
 		</div>
 		<nav class="p-navigation__nav" aria-label="Navigation">
 			<ul class="p-navigation__items">
-				{#each links as link}
+
 					<li
 						class="p-navigation__item"
-						class:is-selected={link.is_selected}
-						aria-current={link.is_selected ? 'page' : null}
+						class:is-selected={$page.url.pathname === '/'}
+						aria-current={$page.url.pathname === '/' ? 'page' : null}
 					>
-						<a class="p-navigation__link" href={link.path}>{link.name}</a>
+						<a class="p-navigation__link" href='/'>Home</a>
 					</li>
-				{/each}
+				<li
+					class="p-navigation__item"
+					class:is-selected={$page.url.pathname === '/documentation'}
+					aria-current={$page.url.pathname === '/documentation' ? 'page' : null}
+				>
+					<a class="p-navigation__link" href='/documentation'>Documentation</a>
+				</li>
+
 				<li class="p-navigation__item">
 					<a
 						class="p-navigation__link"
