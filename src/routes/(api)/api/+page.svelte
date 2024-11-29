@@ -16,4 +16,5 @@
 	<title>OpenAPI Specification</title>
 </svelte:head>
 
-<div id="swagger-ui-container" />
+<div id="swagger-ui-container">
+</div>
