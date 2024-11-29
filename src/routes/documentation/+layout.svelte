@@ -13,8 +13,13 @@
         {
             path: '/documentation/basics',
             name: 'Basics',
-            is_selected: $page.url.pathname === '/documentation/configuration',
+            is_selected: $page.url.pathname === '/documentation/basics',
         },
+        {
+            path: '/documentation/templates',
+            name: 'Templates',
+            is_selected: $page.url.pathname === '/documentation/templates',
+        }
 
     ];
 </script>

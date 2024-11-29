@@ -1,0 +1,176 @@
+---
+title: Templates
+---
+
+Templates functionality allows you to upload, manage, and fill templates with data. Templates can be in PDF or Word format.
+
+### Upload Template
+
+**Endpoint:** `POST /template/{name}`
+
+**Description:** Uploads a new template document (PDF or Word) to the server.
+
+**Request:**
+- **Path Parameter:**
+    - `name` (String): The name of the template.
+- **Headers:**
+    - `Authorization` (String): API key for authorization.
+- **Form Data:**
+    - `document` (File): The template document to be uploaded.
+
+**Response:**
+- **200 OK:** Template uploaded successfully.
+- **400 Bad Request:** Invalid input.
+- **500 Internal Server Error:** Server error.
+
+**Example:**
+```sh
+curl -X POST https://api.docudevs.ai/template/invoice \
+     -H "Authorization: $API_KEY" \
+     -F "document=@invoice.pdf"
+```
+
+Response example:
+```json
+{
+  "guid": "123e4567-e89b-12d3-a456-426614174000",
+  "formFields": [
+    {
+      "name": "customerName",
+      "tooltip": "Enter the customer's name",
+      "type": "text",
+      "flags": ["required"],
+      "value": "",
+      "defaultValue": "John Doe",
+      "options": [],
+      "script": null
+    },
+    {
+      "name": "invoiceAmount",
+      "tooltip": "Enter the invoice amount",
+      "type": "text",
+      "flags": ["required"],
+      "value": "",
+      "defaultValue": "100.00",
+      "options": [],
+      "script": null
+    },
+    {
+      "name": "paymentStatus",
+      "tooltip": "",
+      "type": "CHECK_BOX",
+      "flags": ["COMBO_BOX"],
+      "value": "Paid",
+      "defaultValue": "Paid",
+      "options": ["Paid", "Unpaid"],
+      "script": null
+    },
+    {
+      "name": "termsAccepted",
+      "tooltip": null,
+      "type": "PUSH_BUTTON",
+      "flags": [],
+      "value": "UNCHECKED",
+      "defaultValue": null,
+      "options": [],
+      "script": null
+    }
+  ]
+}
+```
+
+### Get Template Metadata
+
+**Endpoint:** `GET /template/metadata/{name}`
+
+**Description:** Retrieves metadata for a specific template.
+
+**Request:**
+- **Path Parameter:**
+    - `name` (String): The name of the template.
+- **Headers:**
+    - `Authorization` (String): API key for authorization.
+
+**Response:**
+- **200 OK:** Returns the metadata of the template.
+- **404 Not Found:** Template not found.
+- **500 Internal Server Error:** Server error.
+
+**Example:**
+```sh
+curl -X GET https://api.docudevs.ai/template/metadata/invoice \
+     -H "Authorization: $API_KEY"
+```
+
+### Delete Template
+
+**Endpoint:** `DELETE /template/{name}`
+
+**Description:** Deletes a specific template.
+
+**Request:**
+- **Path Parameter:**
+    - `name` (String): The name of the template.
+- **Headers:**
+    - `Authorization` (String): API key for authorization.
+
+**Response:**
+- **200 OK:** Template deleted successfully.
+- **404 Not Found:** Template not found.
+- **500 Internal Server Error:** Server error.
+
+**Example:**
+```sh
+curl -X DELETE https://api.docudevs.ai/template/invoice \
+     -H "Authorization: $API_KEY"
+```
+
+### Fill Template
+
+**Endpoint:** `POST /template/fill/{name}`
+
+**Description:** Fills a template with provided data and returns the filled document.
+
+**Request:**
+- **Path Parameter:**
+    - `name` (String): The name of the template.
+- **Headers:**
+    - `Authorization` (String): API key for authorization.
+- **Body:**
+    - `fields` (JSON): A JSON object containing the fields to fill in the template.
+
+
+The fields object must be a 'flat' dictionary for pdf-forms. It can be a nested object for word documents.
+
+**Response:**
+- **200 OK:** Returns the filled document.
+- **404 Not Found:** Template not found.
+- **500 Internal Server Error:** Server error.
+
+**Example:**
+```sh
+curl --output filled_invoice.pdf -X POST https://api.docudevs.ai/template/fill/invoice \
+     -H "Authorization: $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"fields":{"name": "John Doe", "amount": "100.00", "termsAccepted": true }}'
+```
+
+### List Templates
+
+**Endpoint:** `GET /template/list`
+
+**Description:** Lists all templates for the organization.
+
+**Request:**
+- **Headers:**
+    - `Authorization` (String): API key for authorization.
+
+**Response:**
+- **200 OK:** Returns a list of templates.
+- **500 Internal Server Error:** Server error.
+
+**Example:**
+```sh
+curl -X GET https://api.docudevs.ai/template/list \
+     -H "Authorization: $API_KEY"
+```
