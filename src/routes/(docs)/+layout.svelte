@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 </script>
-
+<svelte:head>
+	<link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-4.2.0.min.css" />
+</svelte:head>
 <header id="navigation" class="p-navigation is-dark">
 	<div class="p-navigation__row">
 		<div class="p-navigation__banner">

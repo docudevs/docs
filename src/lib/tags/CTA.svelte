@@ -15,6 +15,12 @@
                         class="p-button u-no-margin--bottom">DocuDevs.ai</a
                     >
                 </li>
+                <li class="p-inline-list__item">
+                    <a
+                      href="/api"
+                      class="p-button u-no-margin--bottom">OpenAPI Specification</a
+                    >
+                </li>
             </ul>
         </div>
     </div>
