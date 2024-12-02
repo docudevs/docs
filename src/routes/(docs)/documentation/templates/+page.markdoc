@@ -2,7 +2,7 @@
 title: Templates
 ---
 
-Templates functionality allows you to upload, manage, and fill templates with data. Templates can be in PDF or Word format.
+Templates functionality allows you to upload, manage, and fill templates with data. Templates can be in PDF or Office (word, excel or powerpoint) format.
 
 ### Upload Template
 
@@ -147,13 +147,39 @@ The fields object must be a 'flat' dictionary for pdf-forms. It can be a nested 
 - **404 Not Found:** Template not found.
 - **500 Internal Server Error:** Server error.
 
-**Example:**
+**Example flat:**
 ```sh
 curl --output filled_invoice.pdf -X POST https://api.docudevs.ai/template/fill/invoice \
      -H "Authorization: $API_KEY" \
      -H "Content-Type: application/json" \
      -d '{"fields":{"name": "John Doe", "amount": "100.00", "termsAccepted": true }}'
 ```
+
+**Example word template:**
+![img.png](img.png)
+Office templates can have nested objects. Creating of dynamic tables is also possible (demonstrated in the [example template](https://docs.docudevs.ai/template1.docx))
+
+```sh
+curl --output template-filled.docx -X POST https://api.docudevs.ai/template/fill/template1 \
+     -H "Authorization: $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "fields": {
+             "bullets": ["item 1", "item 2"],
+             "variable1": "value for variable 1",
+             "variable2": "This is some text.",
+             "col_labels": ["mammal", "bird", "reptile", "fish"],
+             "tbl_contents": [
+               {"label": "domestic", "cols": ["dog", "chicken", "turtle", "goldfish"]},
+               {"label": "wild", "cols": ["lion", "eagle", "snake", "shark"]},
+               {"label": "farm", "cols": ["cow", "duck", "lizard", "trout"]}
+             ]
+           }
+         }'
+```
+
+Will render:
+![img_1.png](img_1.png)
 
 ### List Templates
 
