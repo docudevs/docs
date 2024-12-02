@@ -45,4 +45,3 @@ and access the variables as you would in a regular Markdoc document:
 <!-- ./src/lib/partials/header.md -->
 # { % $name % }
 ```
-[OpenAPI specification](https://docs.docudevs.ai/docudevs.yaml)

@@ -162,7 +162,7 @@ Office templates can have nested objects. Creating of dynamic tables is also pos
 ```sh
 curl --output template-filled.docx -X POST https://api.docudevs.ai/template/fill/template1 \
      -H "Authorization: $API_KEY" \
-     -H "Content-Type: application/json" \
+     -H "Content-Type: application/json" 
      -d '{
            "fields": {
              "bullets": ["item 1", "item 2"],

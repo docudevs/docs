@@ -18,7 +18,7 @@
                 <li class="p-inline-list__item">
                     <a
                       href="/api"
-                      class="p-button u-no-margin--bottom">OpenAPI Specification</a
+                      class="p-button u-no-margin--bottom">OpenAPI Specification (SwaggerUI)</a
                     >
                 </li>
             </ul>
