@@ -156,7 +156,7 @@ curl --output filled_invoice.pdf -X POST https://api.docudevs.ai/template/fill/i
 ```
 
 **Example word template:**
-![img.png](img.png)
+![img.png](./img.png)
 Office templates can have nested objects. Creating of dynamic tables is also possible (demonstrated in the [example template](https://docs.docudevs.ai/template1.docx))
 
 ```sh
@@ -179,7 +179,7 @@ curl --output template-filled.docx -X POST https://api.docudevs.ai/template/fill
 ```
 
 Will render:
-![img_1.png](img_1.png)
+![img_1.png](./img_1.png)
 
 ### List Templates
 
