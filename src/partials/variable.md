@@ -1,3 +1,0 @@
-### Partial with variable
-
-{% $name %}

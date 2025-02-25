@@ -1,0 +1,71 @@
+---
+id: upload-document
+title: "uploadDocument"
+description: "uploadDocument"
+sidebar_label: "uploadDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJx9Uz1z2zAM/Ss6znLkdvSWNh0yNdcmky8DLCIWW4lkSdCtT6f/XoD6ONlOu4F8wMPDI9grgmNUu73Srk4dWlKvpXIeA5Bx9lGrnUq+daAfZrxUAX8ljPTJ6bPa9ap2lgTgsEstGQ+BqjcXuo0GArmOdYNdjnwQbjIY5bT05JjOHrlZpGDskZsIATCiDsZCOKthGBubgPpSLwNoa6el7op0kvY8coP3ranzYJWrCWnD3RA65r5kp5AwX0TvbBy1ftxuMzvGOhgvHDfWFJxTzEU8wsqYdesfUWr/7coxGX3rCOuJBJTiO9CVNZlgSef3JEOt5L9kud9mhcM49/9GYpoOqXGyB95FOXughk/V7HM1VjBi7JvL6qZ2QvKAp1jcPz2q6z4LuLjHLtQYI08kBXfFF4jsCBW/4VyQK9jNE5tUnF0Kxdw8CpLXrFSMxpF7e/dB/BLBHWSvLXS4DFesprsQtRhL+Icq34KxwpNCm18pD77avHLiE4sbMYfBvj9AxJfQDoNc80fh3d3tOTxBMHAQY/aysg2CxsCHXv1ETlGfx23Z5GWV9DaJlPe+1FDORfd1jZ5W6TeLNryunvDp6/dnTj5MP7dzWmqEePJwCUXkMPwFkWZxNg==
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/upload"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

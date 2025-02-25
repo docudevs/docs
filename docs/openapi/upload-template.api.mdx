@@ -1,0 +1,71 @@
+---
+id: upload-template
+title: "uploadTemplate"
+description: "uploadTemplate"
+sidebar_label: "uploadTemplate"
+hide_title: true
+hide_table_of_contents: true
+api: eJx9U8Fy00AM/ZUdnWDGaQJH3wrh0BMdCKdMD4qtNAu2d9mVAx6P/x1p7Thu0+FkeSU9SU9PPTA+R8j3ULqiralheMrAeQrI1jUPJeTQ+sphuaPaV8gEGXgMWBNT0MQeGvmRsPTJwDZie+ST2IF+tzaQgHBoKYNYnKhGyHvgzmtO5GCbZxiGpzGYIn9yZacRhWtY2xGzbiu2UpTXRxfqVYmcMK5oPmjHbCnq3zzJTZ0MFADFAwfbYOik8rLLJQvioKZwpea9Ap1a243Y6H1li0TX2hVMvJJqhLVgv0RXDtJD9K6JY68fN5uETrEI1ivGDeFGYswlSUZYELMs/TNq7oKVYaz/P2hBkz2enG7Zu8hpt7K5HNY8hax73euQFnt0iVLLlc69FUa2dI7m/vEBXteZnduJNyM7KihGoVMT7swXjLIvNn+wM+yMTHWWFZrOtcFcyI7qSevOQLxxxN7cfQAZTBuuMc08KXAcziyme9HUrAamv7yWEJGq4LShShpKg++Br9l5whVpnpQb8fX9ASP9CNUw6LPoVSSU78U8Y7B4UF7kIEob1RZWj1hFumlj3iC8+zap472Rem+2Nz1i0ykJWLX6J+Yv6i5HN6hYT4QlhVR/dH0eq6ySTK+pbx3TkF2S7ouCPC/CbySmpzqL5vHr950EH6abrV2pOQo8bW02hSWR4z9gF4mm
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadTemplate"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/template/{name}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadTemplate
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadTemplate 200 response","content":{"application/json":{"schema":{}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

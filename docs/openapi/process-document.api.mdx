@@ -1,0 +1,71 @@
+---
+id: process-document
+title: "processDocument"
+description: "processDocument"
+sidebar_label: "processDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVD1v2zAQ/SsEpxZQY7ejtzTJkKFo4CaT4eFMMTZbfpWknAgC/3vvKMlWbddDMzgU+e7u3eM7djzBNvLFitdONEbaxNcVd14GSMrZx5ovuA9OyBjvR0DFPQQwMslAkR23+IG4baNqPFSWYiDtcB3k70YFiVlSaGTFo9hJA3zR8dR6iokpKLvlOa97sIzpq6tbQghnE5XDJXivlSiMZj+js7R3TIX8kG9SMtKXE+GYfzUWqLhttObrXHGtzXWAfE8BBBX75mp5HXva0CUM8jM+XcdsIAgsFqeojXNagp3CjDLyuRz/OxnCkkqa1H3x2kF954wBW6PI+fRGykb0zsa+9Jf5nP4hERGUJwnO758hiI1RWPY/76m45dwIKGmC1MRLHpmyX412G+Dr066XI8OcS+NXe8I86OedK3Z3sfc4OnjBZ+NczIaQWUeFMyKow+XRsw/vYDwR6DINwasrLQycqNC93Ed2+/TIT8kcDg8SD7WwbQq4YQ8QUbbE3qBlyTGUfI9KstY1gY0EI53UkADz42nsc89vPpOo1BSagCgN0zqUYBMJ/mJ1kD/hPMy8BpxrTNQEXe6yqDN5NaoxIa4W5WrwRnYkJaK6bgNRvgSdM22jZAFHfIXLPQQFG5II35FaRVrjJbyCjvKM0MFp/MNyMMJHhvUuEh02wbakB+iGvnD5S7bjW5VppHYSahlK/f7orq/yqczZMfTM27kaI26FkD5dxa4nBnv6/uMZwZvhnTPlkeEB3ujBxN9C05WuyxiUvY5rsNsGtoTtc9LfHyCP/Aw=
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"processDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/process/{guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+processDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["string","null"]},"llm":{"type":["string","null"]},"extractionMode":{"type":["string","null"]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"processDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

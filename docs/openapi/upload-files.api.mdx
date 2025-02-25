@@ -1,0 +1,71 @@
+---
+id: upload-files
+title: "uploadFiles"
+description: "uploadFiles"
+sidebar_label: "uploadFiles"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVMty2zAM/BUNz3Kc9uhbWjczOTXTJqdODrAI22wpkSUhpxqP/r0A9XTsTN2THtzFAgsQR0Wwi2r1Q2lX1CVWpF5y5TwGIOOqB61WqvbWgb43FqPKlYcAJRIGYR1VxR+MeQVDfGgqfv9dY2j4IxZ7LEGtjooaj6Kxcc4iVHxW1daql7ZlsYBMiPTJ6UawhatI0uDXsrZkWI+WWxfKhQZK0aa4PkimZDgxgSPBgBkUIwVT7UbBXEkk4OhqYyrgNNt8qnzkTbQLcBYtPf2vyLkZ/2a1nTkmoD7tEB9gVTgt/BNDevOeuirAe2uK1MilKwhpwZoIpeQzN+t61tyq61mTY9dy2tPaKdSYfkTvqth1++PtrTw0xiIYLzFORzVjQDYw2OXZXM11f0Yhvj9Uu9ro88GQhhJQHS8cvelaCjDCuc1kyAr+OeX6bciw7Yp+tx6VerZ3ciO9i5SuIu35azl0ZdnBF9seb6qtSwn2imvGrfEQs7vHB/VWajxc99EyNqLAGLkoIdxkXyCyKZS9QpORy9jQA/uUNa4O2ZBClJM0V7ni09jFvr35kOaA0y4h2d2vjS7hbCjwJKPRWMI/tPQWeLlwkDrY1KVU++xS5OqkejZ6Ly4x5HjcQMTnYNtWfnfrSXaXNhE2Vtq0BRsxV7+wmXbZAWwt8kqW1AGCESzz5PbtETSGFKTjfO6ma5Eme+Je2mBtPpDuigL9XOpsMEV67Prj1+9PDN70i7J0WjgSuDd8fJUk2/Yvxa0KkA==
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadFiles"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/upload-files"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadFiles
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"wait","in":"query","schema":{"type":["boolean","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"metadata":{"type":["string","null"],"format":"binary"},"document":{"type":"string","format":"binary"},"prompt":{"type":["string","null"],"format":"binary"},"schema":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"schema":{"contentType":"application/octet-stream"},"metadata":{"contentType":"application/octet-stream"},"document":{"contentType":"application/octet-stream"},"prompt":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadFiles 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

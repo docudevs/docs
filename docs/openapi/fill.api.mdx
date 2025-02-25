@@ -1,0 +1,71 @@
+---
+id: fill
+title: "fill"
+description: "fill"
+sidebar_label: "fill"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVMFu2zAM/RWDpw3wmmxH37q1A3pakGWnIAfGohNtsqVJclLD8L+PlJ00adrDcohp6ZF8fCTdQ8RdgGINkWpnMBJscrCOPEZtmycFBVTaGMjBoceaInmB99DwC1+mRw66Ydth3LPt6W+rPbFr9C3lEMo91QhFD7Fz4hOi180OhmEzginEr1Z1gihtE6mJYqJzRpeJxux3sI2cvYRyXkhGTUHeKk1GJQuV0uKCZnGBECLDcEltffJhDlFHI7xWkwTfueDlyItJDq8rSgfB2SaMyb/M5/JQFEqvnSSfRMv4JjtBWZh3iqvD0Xp1Xd61UjlU1tfInrDVDfoOhNVlDKeq/w2QKrslzVju8t5K551lBfKxrwXMTiMyE9ysl9YPfC3NWb608fEZGcbJ+0HmorKJziTxgy3bBzqE7H7xBK/Tny/FqFmpjLtcUghcgjjcZY8YuJ8xO2KXRZuxoAducdbZ1mdqcgpyozAix+fbMMae330G5iMV1ZhmaRrgqeYrJmf5Ij3HGdfM483OrTdp9JIcFxuTn4IUKSZP1F6EY0jfbzHQL2+GQY5ZI5a+WLN5QK9xK5rwLikdxGbJKzSBbticBwc+LKdR/JhxvjdZTofYdCIAmlbe2PxD3Wlfhw3j9oSKfMo/Xn0bs3xaSYAX15s9HPKTx31ZkovvYKexliU/D9Tix88Vw7fTttdWiZfHo3w2+D8RtanutFrprAeDza7FnWBHBvL7B3cgoVQ=
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"fill"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/template/fill/{name}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+fill
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"fields":{"additionalProperties":true}},"required":["fields"],"title":"TemplateFillRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"fill 200 response","content":{"application/msword":{"schema":{"type":"string","format":"binary"}},"application/pdf":{"schema":{"type":"string","format":"binary"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

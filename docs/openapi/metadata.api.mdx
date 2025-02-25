@@ -1,0 +1,71 @@
+---
+id: metadata
+title: "metadata"
+description: "metadata"
+sidebar_label: "metadata"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVE1v2zAM/SsCTxtgNNmOvhVIO/RWDNsuQQ6szSTaFEuV6GyG4f8+UrFTt0kHzBfT5sd7JJ/UA+MuQbkGpkNwyASbAnygiGx981BDCQdirJERCggYUT4pakoPjXxIQH4VYBuxA/Je7EjPrY0k6RxbKiBVezoglD1wFzQncbTNDoZho8Ep+CZRUv/n5VJfNaUq2qAkZhSMeM0ULjCVb5ga1gQMwdkqs178TJrVX6JijNgpVek2o4WovbI9YZ/6ueBYAHvv2IYX33pyFtC0zsFGg7LnSvbW5Rm/z+LtTAo4omuvF6tpi63jH68DrvHxeXr/CXya+r8KD/PtrsfmikkEE+g4jqkT2TJbdgr2uLq/t+RqgdOneGfVkirm3qsCd8RZfCKtEhaTUhdT6KJX8CFLcOsz9xFr5at2Rcdkbh8f4C3S2anGQWRkRA0VpSTtasKNucMkymDzGzvD3ojajiIW0/k2mnpMSuoZCYs3nWovbz7psoJPfMDmRVvz9l6xOe+C6Q8vpD85TVKgjS7LNLc+O6TFvFCZa8uI9wKnYX3/hIm+RzcM+vu5pdjJ/41uI1p80tnI8a1tUlsmvEWX6ILR+XTBh6/jxj+aabNvmU4Sa7rz0ksQ8xd10xUxqCr3hDXFjH9y3VYVBZ4lXZxkvSPOWvhy902U8xe7HpsO
+sidebar_class_name: "get api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"metadata"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/template/metadata/{name}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+metadata
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"metadata 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"name":{"type":"string"},"tooltip":{"type":["string","null"]},"type":{"type":"string"},"flags":{"type":"array","items":{"type":"string"}},"value":{"type":"string"},"defaultValue":{"type":["string","null"]},"options":{"type":"array","items":{"type":"string"}},"script":{"type":["string","null"]}},"required":["flags","name","options","type","value"],"title":"PDFField"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
