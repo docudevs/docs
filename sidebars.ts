@@ -7,7 +7,8 @@ const sidebars: SidebarsConfig = {
       label: 'Basics',
       items: [
         'basics/install',
-        'basics/SimpleDocuments'
+        'basics/SimpleDocuments',
+        'templates/Templates'
       ],
     },
     // ...other categories or items...
