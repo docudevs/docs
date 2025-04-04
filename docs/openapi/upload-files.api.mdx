@@ -5,7 +5,7 @@ description: "uploadFiles"
 sidebar_label: "uploadFiles"
 hide_title: true
 hide_table_of_contents: true
-api: eJyVVMty2zAM/BUNz3Kc9uhbWjczOTXTJqdODrAI22wpkSUhpxqP/r0A9XTsTN2THtzFAgsQR0Wwi2r1Q2lX1CVWpF5y5TwGIOOqB61WqvbWgb43FqPKlYcAJRIGYR1VxR+MeQVDfGgqfv9dY2j4IxZ7LEGtjooaj6Kxcc4iVHxW1daql7ZlsYBMiPTJ6UawhatI0uDXsrZkWI+WWxfKhQZK0aa4PkimZDgxgSPBgBkUIwVT7UbBXEkk4OhqYyrgNNt8qnzkTbQLcBYtPf2vyLkZ/2a1nTkmoD7tEB9gVTgt/BNDevOeuirAe2uK1MilKwhpwZoIpeQzN+t61tyq61mTY9dy2tPaKdSYfkTvqth1++PtrTw0xiIYLzFORzVjQDYw2OXZXM11f0Yhvj9Uu9ro88GQhhJQHS8cvelaCjDCuc1kyAr+OeX6bciw7Yp+tx6VerZ3ciO9i5SuIu35azl0ZdnBF9seb6qtSwn2imvGrfEQs7vHB/VWajxc99EyNqLAGLkoIdxkXyCyKZS9QpORy9jQA/uUNa4O2ZBClJM0V7ni09jFvr35kOaA0y4h2d2vjS7hbCjwJKPRWMI/tPQWeLlwkDrY1KVU++xS5OqkejZ6Ly4x5HjcQMTnYNtWfnfrSXaXNhE2Vtq0BRsxV7+wmXbZAWwt8kqW1AGCESzz5PbtETSGFKTjfO6ma5Eme+Je2mBtPpDuigL9XOpsMEV67Prj1+9PDN70i7J0WjgSuDd8fJUk2/Yvxa0KkA==
+api: eJyVVE1v2zAM/SuGzk6T7Zhbt2xATyu29hT0wFhMos22NInKZgT+7yPlj9htCmQny+J75OMTpbMiOAS13ipti1hhTeolV9ahBzK2ftBqraIrLeivpsSgcuXxd8RAn6xu1PqsCluTsHhZxZKMA0/LvfXVQgOBbIfiiFVaOS+JyXAegSPBgKHGoYgI5E194Cp1LEtRIpmAs6udqcE3qs0vQkfehXYFbmqOxkK6Cf9b6iL9dlbbWWQ86rmtHMC6sFr4M1t6C5+6XsC50hTJ/aUtCGnBNRGqa73czpyafTtravWtrHbuAOvFtBEci+5O/uNqJR+NofDGSY75lGUMyAYGez2ZsWndn0GI7w/YIRr9dkjkWAkohiuhV2eXEoxwPmwyVAr+OWn9Pihsu6bf7Ucl/49WLpOzgfjfAR35bzk4vOzgi32PN/XeJoF9xQ3jNngK2f3jg3pdagxu+mwZG1FgCNyUEO6yLxDYFMr+QJORzdjQE/uUNTb6bJAQJJJmJFccDV3u1d0HsUxkV5DsrqHCsb9saHCmaDSW8C8tXQmmliTRl+mUUu+Tq5GrWfds9FFcYsj5vIOAz75sW9nml4ev2HrLyxN4AzvxZis364ig0fPPWf1ChqjP3cws0rwKvIwi6Nob1eYD6b4o0NEE/mbc2pfJWT5++/HE4F3/FFZWC0cS9zaOSxHZtv8AXm/m/A==
 sidebar_class_name: "post api-method"
 info_path: openapi/docudevs-api
 custom_edit_url: null
@@ -47,14 +47,14 @@ uploadFiles
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"wait","in":"query","schema":{"type":["boolean","null"]}}]}
+  parameters={undefined}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"metadata":{"type":["string","null"],"format":"binary"},"document":{"type":"string","format":"binary"},"prompt":{"type":["string","null"],"format":"binary"},"schema":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"schema":{"contentType":"application/octet-stream"},"metadata":{"contentType":"application/octet-stream"},"document":{"contentType":"application/octet-stream"},"prompt":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"metadata":{"type":["string","null"],"format":"binary"},"document":{"type":"string","format":"binary"},"instructions":{"type":["string","null"],"format":"binary"},"schema":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"schema":{"contentType":"application/octet-stream"},"instructions":{"contentType":"application/octet-stream"},"metadata":{"contentType":"application/octet-stream"},"document":{"contentType":"application/octet-stream"}}}},"required":true}}
 >
   
 </RequestSchema>

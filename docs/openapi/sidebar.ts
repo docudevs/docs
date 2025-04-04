@@ -8,6 +8,36 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "configuration",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/list-configurations",
+          label: "listConfigurations",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-configuration",
+          label: "getConfiguration",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/save-configuration",
+          label: "saveConfiguration",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/delete-configuration",
+          label: "deleteConfiguration",
+          className: "api-method delete",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "document",
       items: [
         {
@@ -26,12 +56,6 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "openapi/upload-files",
           label: "uploadFiles",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "openapi/upload-files-sync",
-          label: "uploadFilesSync",
           className: "api-method post",
         },
         {

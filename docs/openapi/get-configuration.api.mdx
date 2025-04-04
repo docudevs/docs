@@ -1,0 +1,71 @@
+---
+id: get-configuration
+title: "getConfiguration"
+description: "getConfiguration"
+sidebar_label: "getConfiguration"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE2P2jAQ/SuRT60ULbRHbmjJVkh8aYET4jA4A2TrxF7boY2i/PfOmK8AFVJ7ysTzZt7M+I1r4WHnRG8lpC622a604DNdiHUstMHjzzAVPbFD/3qDiIUBCzl6tBxfi4J+CBg+scgKsg34PdkWP8vMIqXxtsRYOLnHHESvFr4yHOO8zYqdaJo1g53RhUPH/u/dLn9SdNJmJvA+lhIRKjqHER114rHwHAjGqEwGVOfDcXTdYjeWe/TZkUtLey1pJYpSKUqmNx8oPc8DlJpuQ6dYlDlDBslbfzlaEGr2noyHyzFZk+kkYbTPvOLWptIuOGOzbmKhVP7fFOPhZNhialGMVH6lwN/eguSGxzrFf2SbD8ezUUKg+SKZzdscyW3aQHV/javzPcZHLsbQiHPjn2M2YCUldW3URmuFULRheZZj6PNJsuZa8dIoDemrznMoUpJWw87nQqI8pOe9Puk9SJwE3BOdm+Xo1KzxJoh8q0M5J86BluUADy7qz/iubtkuTjZyEmhEw5HoHHXAAS9RAo606KNfUEVeR0R6IHlGlS5tlJ6CHHtS8ED5yeuOubsv3wRPWztP7XJJp22kNqL7Hm/KuuygJ+V0jAJaXMpUWhU2JPR//zjEohfSkz72xMiAut6Aw6VVTcPHnyXais7JPIDNYMPjIaGlmWObBrwF5fChlsvqii/vp0fja0R8f63xdAhFxbMAVfIfmT+xOr9DQad7hBRt4D+6+lKi8a2gh2eCH6KLFH4kC9LPH+SgvhA=
+sidebar_class_name: "get api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getConfiguration"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/configuration/{name}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getConfiguration
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","PREMIUM"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -5,23 +5,100 @@ info:
     to data
   version: "0.1"
 paths:
-  /document/process/{guid}:
+  /configuration:
+    get:
+      tags:
+        - configuration
+      operationId: listConfigurations
+      responses:
+        "200":
+          description: listConfigurations 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NamedConfiguration"
+  /configuration/{name}:
+    get:
+      tags:
+        - configuration
+      operationId: getConfiguration
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: getConfiguration 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadCommand"
     post:
       tags:
-      - document
-      operationId: processDocument
+        - configuration
+      operationId: saveConfiguration
       parameters:
-      - name: guid
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/UploadCommand"
         required: true
+      responses:
+        "200":
+          description: saveConfiguration 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NamedConfiguration"
+    delete:
+      tags:
+        - configuration
+      operationId: deleteConfiguration
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: deleteConfiguration 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
+  /document/process/{guid}:
+    post:
+      tags:
+        - document
+      operationId: processDocument
+      parameters:
+        - name: guid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: configuration
+          in: query
+          schema:
+            type:
+              - string
+              - "null"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadCommand"
       responses:
         "200":
           description: processDocument 200 response
@@ -32,7 +109,7 @@ paths:
   /document/upload:
     post:
       tags:
-      - document
+        - document
       operationId: uploadDocument
       requestBody:
         content:
@@ -43,7 +120,7 @@ paths:
                   type: string
                   format: binary
               required:
-              - document
+                - document
             encoding:
               document:
                 contentType: application/octet-stream
@@ -58,15 +135,8 @@ paths:
   /document/upload-files:
     post:
       tags:
-      - document
+        - document
       operationId: uploadFiles
-      parameters:
-      - name: wait
-        in: query
-        schema:
-          type:
-          - boolean
-          - "null"
       requestBody:
         content:
           multipart/form-data:
@@ -74,32 +144,32 @@ paths:
               properties:
                 metadata:
                   type:
-                  - string
-                  - "null"
+                    - string
+                    - "null"
                   format: binary
                 document:
                   type: string
                   format: binary
-                prompt:
+                instructions:
                   type:
-                  - string
-                  - "null"
+                    - string
+                    - "null"
                   format: binary
                 schema:
                   type:
-                  - string
-                  - "null"
+                    - string
+                    - "null"
                   format: binary
               required:
-              - document
+                - document
             encoding:
               schema:
+                contentType: application/octet-stream
+              instructions:
                 contentType: application/octet-stream
               metadata:
                 contentType: application/octet-stream
               document:
-                contentType: application/octet-stream
-              prompt:
                 contentType: application/octet-stream
         required: true
       responses:
@@ -109,71 +179,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadResponse"
-  /document/upload-files/sync:
-    post:
-      tags:
-      - document
-      operationId: uploadFilesSync
-      parameters:
-      - name: wait
-        in: query
-        schema:
-          type:
-          - boolean
-          - "null"
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              properties:
-                metadata:
-                  type:
-                  - string
-                  - "null"
-                  format: binary
-                document:
-                  type: string
-                  format: binary
-                prompt:
-                  type:
-                  - string
-                  - "null"
-                  format: binary
-                schema:
-                  type:
-                  - string
-                  - "null"
-                  format: binary
-              required:
-              - document
-            encoding:
-              schema:
-                contentType: application/octet-stream
-              metadata:
-                contentType: application/octet-stream
-              document:
-                contentType: application/octet-stream
-              prompt:
-                contentType: application/octet-stream
-        required: true
-      responses:
-        "200":
-          description: uploadFilesSync 200 response
-          content:
-            application/json:
-              schema:
-                type: string
   /job/result/{uuid}:
     get:
       tags:
-      - job
+        - job
       operationId: result
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: result 200 response
@@ -184,14 +200,14 @@ paths:
   /job/status/{guid}:
     get:
       tags:
-      - job
+        - job
       operationId: status
       parameters:
-      - name: guid
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: guid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: status 200 response
@@ -202,14 +218,14 @@ paths:
   /settings/view:
     get:
       tags:
-      - settings
+        - settings
       operationId: settings
       parameters:
-      - name: email
-        in: query
-        required: true
-        schema:
-          type: string
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: settings 200 response
@@ -220,14 +236,14 @@ paths:
   /template/fill/{name}:
     post:
       tags:
-      - template
+        - template
       operationId: fill
       parameters:
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -249,7 +265,7 @@ paths:
   /template/list:
     get:
       tags:
-      - template
+        - template
       operationId: listTemplates
       responses:
         "200":
@@ -263,14 +279,14 @@ paths:
   /template/metadata/{name}:
     get:
       tags:
-      - template
+        - template
       operationId: metadata
       parameters:
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: metadata 200 response
@@ -283,14 +299,14 @@ paths:
   /template/{name}:
     post:
       tags:
-      - document
+        - document
       operationId: uploadTemplate
       parameters:
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           multipart/form-data:
@@ -300,7 +316,7 @@ paths:
                   type: string
                   format: binary
               required:
-              - document
+                - document
             encoding:
               document:
                 contentType: application/octet-stream
@@ -313,14 +329,14 @@ paths:
               schema: {}
     delete:
       tags:
-      - template
+        - template
       operationId: deleteTemplate
       parameters:
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: deleteTemplate 200 response
@@ -338,40 +354,82 @@ components:
           type: string
         organization:
           type:
-          - "null"
-          - object
+            - "null"
+            - object
           allOf:
-          - $ref: "#/components/schemas/Organization"
+            - $ref: "#/components/schemas/Organization"
         contenttype:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
         created:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
           format: date-time
         updated:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
           format: date-time
       required:
-      - name
+        - name
+    ExtractionMode:
+      enum:
+        - SIMPLE
+        - STEPS
+    LlmType:
+      enum:
+        - DEFAULT
+        - MINI
+        - PREMIUM
+    NamedConfiguration:
+      properties:
+        id:
+          type:
+            - integer
+            - "null"
+          format: int64
+        name:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        storagePath:
+          type: string
+        created:
+          type:
+            - string
+            - "null"
+          format: date-time
+        updated:
+          type:
+            - string
+            - "null"
+          format: date-time
+      required:
+        - name
+        - organizationId
+        - storagePath
+    OcrType:
+      enum:
+        - DEFAULT
+        - PREMIUM
+        - NONE
     Organization:
       properties:
         name:
           type: string
       required:
-      - name
+        - name
     PDFField:
       properties:
         name:
           type: string
         tooltip:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
         type:
           type: string
         flags:
@@ -382,22 +440,22 @@ components:
           type: string
         defaultValue:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
         options:
           type: array
           items:
             type: string
         script:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
       required:
-      - flags
-      - name
-      - options
-      - type
-      - value
+        - flags
+        - name
+        - options
+        - type
+        - value
     ProcessingJob:
       properties:
         status:
@@ -406,68 +464,75 @@ components:
           type: string
         error:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
         tokenCount:
           type:
-          - integer
-          - "null"
+            - integer
+            - "null"
           format: int32
         created:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
           format: date-time
         updated:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
           format: date-time
       required:
-      - guid
-      - status
+        - guid
+        - status
     Settings:
       properties:
         apiKey:
           type: string
       required:
-      - apiKey
+        - apiKey
     TemplateFillRequest:
       properties:
         fields:
           additionalProperties: true
       required:
-      - fields
+        - fields
+    Unit: {}
     UploadCommand:
       properties:
         ocr:
           type:
-          - string
-          - "null"
+            - "null"
+            - object
+          allOf:
+            - $ref: "#/components/schemas/OcrType"
         llm:
           type:
-          - string
-          - "null"
+            - "null"
+            - object
+          allOf:
+            - $ref: "#/components/schemas/LlmType"
         extractionMode:
           type:
-          - string
-          - "null"
+            - "null"
+            - object
+          allOf:
+            - $ref: "#/components/schemas/ExtractionMode"
         schema:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
         prompt:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
         barcodes:
           type:
-          - boolean
-          - "null"
+            - boolean
+            - "null"
         mimeType:
           type:
-          - string
-          - "null"
+            - string
+            - "null"
     UploadResponse:
       properties:
         guid:
@@ -475,5 +540,5 @@ components:
         status:
           type: string
       required:
-      - guid
-      - status
+        - guid
+        - status

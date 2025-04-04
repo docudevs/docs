@@ -1,0 +1,71 @@
+---
+id: save-configuration
+title: "saveConfiguration"
+description: "saveConfiguration"
+sidebar_label: "saveConfiguration"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVUtv2kAQ/ivWnlrJCWlV9cAtJa6EFB4K4YQ4DPYAm6692901CUX+751Z87AhompyCPv49pvXN+Od8LByojsTqS6WclVa8FIXYh4LbbDe9DPRFQ422GtBYmHAQo4eLRPsREEbQoafWMiC1gb8mtYWf5fSIvF4W2IsXLrGHER3J/zW8BvnrSxWoqrmNRid/6GzLSPIL4+F5yUYo2QarHdeHLlAZycqY9ljL9HxTqf2xD8TRakUOaIXL5h6jg6UGi2D21iUOUMekp/308dnQo2fkkF/OqDVcDRMGO2lV+znKLXPzFjNq1golX/YxKA/7DcsNUw8qvxkAt+8hZQDHugM/9PapD8YPyYEmjwn40nTRtKmDabOazI7FCWubTGGUpwbfx2zAJsSqWuiFlorhKIJy2WOIc4rZNXJ46lRGrKeznMoMtJJdS6qcOCMLlxt+uvdHf+QI6mVJgj2HRFHBIsO78jwB8Ums2YYkjhWaI9xxGKpbQ7Eylffvwnyte6VC/1TQe0KCvnn2HhHyIn1ks15bWGFY+6290hTi+Axu5LrBmtG0BtP5eGXpck+9LJVn9lhJpwF13a8oc8hwbP2tKmqUPR/1JMoaSCtNU8so50PQ4qTIjqt+dbZsUcVXXNpn04TJ3mD3Cg8TpBGy4Z2b+zPe/PQbxXPvqUOKdvH86DT8gE3Lrofc9e3gzhe8iIn9UUkrhSdoyzzg9soAUdC89ErbCOvI4pkQ9qLtrq0UbZ/5PiGCgDET7eu5r67/cL+cCqocdil/ZDmzEXnqWv5dZSRp0A7RgENdBaEVUH/IavnX41YdAM/lXLN2SfAbrcAh1OrqoqPKdGWxvqMlhuwEhacH5pZmXS8protQTm88OXYmOLT015XnyOy966P+0MotpwMUCXvaPkLt4fvUxh5a4SMOort11e92spNGEynpxejoIoPL+7TFI2/ip03NDkeTVg6i/23La+FY+GVP5L0P7ipQ9RhsISznVBQrErqE7qvOfnvLyXunl4=
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"saveConfiguration"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/configuration/{name}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+saveConfiguration
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","PREMIUM"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"saveConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"organizationId":{"type":"integer","format":"int64"},"storagePath":{"type":"string"},"created":{"type":["string","null"],"format":"date-time"},"updated":{"type":["string","null"],"format":"date-time"}},"required":["name","organizationId","storagePath"],"title":"NamedConfiguration"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -28,7 +28,7 @@ If you don't specify the schema or the configuration, the API will use sensible 
   ]}>
   <TabItem value="curl">
 ```sh
-curl -s -S -X POST https://api.docudevs.ai/document/upload-files/sync \
+curl -s -S -X POST https://api.docudevs.ai/document/upload-files \
      -H "Authorization: $API_KEY" \
      -F "document=@invoice.pdf"
 ```
@@ -45,7 +45,7 @@ client = DocuDevsClient(token=os.getenv('API_KEY'))
 with open("invoice.pdf", "rb") as f:
     document = f.read()
 
-guid = await client.submit_and_process_document(document=document, document_mime_type="application/pdf")
+guid = await client.submit_document(document=document, document_mime_type="application/pdf")
 result = await client.wait_until_ready(guid)
 print(result)
 ```
@@ -134,7 +134,7 @@ Send the instructions together with the document to the api:
   ]}>
   <TabItem value="curl">
 ```sh
-curl -s -S -X POST https://api.docudevs.ai/document/upload-files/sync \
+curl -s -S -X POST https://api.docudevs.ai/document/upload-files \
      -H "Authorization: $API_KEY" \
      -F "document=@invoice.pdf" \
      -F "instructions=@instructions.txt"

@@ -5,7 +5,7 @@ description: "processDocument"
 sidebar_label: "processDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVD1v2zAQ/SsEpxZQY7ejtzTJkKFo4CaT4eFMMTZbfpWknAgC/3vvKMlWbddDMzgU+e7u3eM7djzBNvLFitdONEbaxNcVd14GSMrZx5ovuA9OyBjvR0DFPQQwMslAkR23+IG4baNqPFSWYiDtcB3k70YFiVlSaGTFo9hJA3zR8dR6iokpKLvlOa97sIzpq6tbQghnE5XDJXivlSiMZj+js7R3TIX8kG9SMtKXE+GYfzUWqLhttObrXHGtzXWAfE8BBBX75mp5HXva0CUM8jM+XcdsIAgsFqeojXNagp3CjDLyuRz/OxnCkkqa1H3x2kF954wBW6PI+fRGykb0zsa+9Jf5nP4hERGUJwnO758hiI1RWPY/76m45dwIKGmC1MRLHpmyX412G+Dr066XI8OcS+NXe8I86OedK3Z3sfc4OnjBZ+NczIaQWUeFMyKow+XRsw/vYDwR6DINwasrLQycqNC93Ed2+/TIT8kcDg8SD7WwbQq4YQ8QUbbE3qBlyTGUfI9KstY1gY0EI53UkADz42nsc89vPpOo1BSagCgN0zqUYBMJ/mJ1kD/hPMy8BpxrTNQEXe6yqDN5NaoxIa4W5WrwRnYkJaK6bgNRvgSdM22jZAFHfIXLPQQFG5II35FaRVrjJbyCjvKM0MFp/MNyMMJHhvUuEh02wbakB+iGvnD5S7bjW5VppHYSahlK/f7orq/yqczZMfTM27kaI26FkD5dxa4nBnv6/uMZwZvhnTPlkeEB3ujBxN9C05WuyxiUvY5rsNsGtoTtc9LfHyCP/Aw=
+api: eJydVU1v2zAM/SuGThvgNd2OuXWtBwRoPpCPU5EDYyuJOslyJTmtYfi/j5TtRG2CFGsPqWyRj3zkI10zBzvLhk8s02mpeO7YOma64Aac0PkoY0NWGJ1yax96g5gVYEBxxw151izHB7TblSLDS5GTD7g9ng1/KYXhiOJMyWNm0z1XwIY1c1VBPtYZke9Y08RHmFTnW7Er2wR6vJeSm4qdAzz1CDHLSynZumnWbVhu3W+dVWSKiI4SxyMUhRSphx48W8THdydMZIrMneCWnnRqwkAeH2uzeeaprxJIOd36AvC8VGTykPy5Wz0u0Wo2T8aj1RhPk+kkIWsnnCR609QsCbFZNzGTUn05xHg0GQWRghCPUp1C8DdnICXCY53x/4y2GI1njwkaLZbJbBHGSN7D+lCfNyemEqvCXbfZgEkR1IZWG60lhzw0U0Jxz/OaGk4ZrwqpIbvXSkGeoeLoznBb6Ny2oX7d3tI/DJwaUXj1nYk/QqOo98IwX5SWH5XzKcASOnClvTggwTA99bPWma8/spz3GTYtz6ucEAeHea/9rGvbDjiO75AN+qUw6FwGNQVu0IIYzk9jlryBKiQ/jk2gU6/x4PmjIHuRNTTqW+25d2Qowwd+sNHdjKT+nsXx8tibLkmsFzncRAlYrLeLXqGKnI6wVwdsQVTp0kQ9M0s3GThAfLy1LfbtzU/Kh6qBaqGUuuXUhYiC2r3L6tg3hzQHhQTcXghUGulF4Msa7Nq4B8TT0PcUW7mnHqBVXW/A8pWRTUOv2xVI05kJCxtJQtiCtLhW//LqwuI8gCwpFUYr8QBGkNNlgA8cjqpm3+ad6L5HiHiRW/cS8iqM2SflSfntsOeQcePjt1f3bZQffoZPrmdzRN+G1uMuTXnhrtquAzHPpgsS3Kb7DKhWbgZe6cuEvz5N7Vn7kfPvaiYh35WwI9sWk/7+AVX8bCU=
 sidebar_class_name: "post api-method"
 info_path: openapi/docudevs-api
 custom_edit_url: null
@@ -47,14 +47,14 @@ processDocument
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"configuration","in":"query","schema":{"type":["string","null"]}}]}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["string","null"]},"llm":{"type":["string","null"]},"extractionMode":{"type":["string","null"]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","PREMIUM"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}}}}
 >
   
 </RequestSchema>
