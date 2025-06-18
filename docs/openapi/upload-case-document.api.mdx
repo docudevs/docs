@@ -1,0 +1,71 @@
+---
+id: upload-case-document
+title: "uploadCaseDocument"
+description: "uploadCaseDocument"
+sidebar_label: "uploadCaseDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJyFVMFu2zAM/RVBpw1w6mwYdvCta3foaUXXnoIeGFlJtNmWJtHZDMP/PlKyHTfJsJtk8j0+PpHuJcI+yGIjFQQd5GsmrdMe0NjmoZSFbF1lobyj4L1Vba0blJl04KHWqD0je9nQhVKZgTCZNA3dHOCBzl7/ao3XRIW+1ZkM6qBrkEUvsXOMMg3qvfaUurO+BkyfPn+Sw/Ca4DrgF1t2jFGWskkCHeu2QkNCMGfcqgSMrCd+57kTNNQV3cpJ/alyQG+a/bLw1jTgO6q81L05YV8poBtlS8adkY7SnhM3OFcZFW3MrUKNK6qmoSbut+zsSvwQnG1C0vpxvY7sOihvHHNcfQhBeWICUhsLc5blfwTG/9uZfWvKS1dIU0DANlwJndkTCeZ0ejQ0WHH+S5T8NCkcUu//a4uoaLYOlqfP2ZDmjWapkHmc0bxPgzbkCRsHbmejzrEwU93rYxC3jw/yvOIcnH0kP5QOgXpjwI34CoG8QfEbOoFWkK9Hskt0tvVievLAkTh0maRoSNzrmw/sHMuuIbo+7kaSKrhPsWj0jbLZZ9R/MHcV0B4RWeur+GjRg2lPM1nM6zbaQMYf2C7K6fstBV98NQz8mVaIprrY0PEI3sCWTaK9LU3gMxm9gyroCznzQMl3T+N7vxdU8KrM8SM0HTsCVcs3Ov7U3enfMPAGHTSUtPCsIAXvUp1V3J0T+NqGD9kEulVKO1ykX8w8/z/mSXr89v2Zkrfjj6S2JWOYeHzE+Ug+0Zz+Bddxw4o=
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadCaseDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/upload"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadCaseDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadCaseDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

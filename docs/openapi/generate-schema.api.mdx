@@ -1,0 +1,71 @@
+---
+id: generate-schema
+title: "generateSchema"
+description: "generateSchema"
+sidebar_label: "generateSchema"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVLFy2zAM/RUeZzlyOnpL6w6ZkmuSyZcBphCLrUSyJORWp9O/F5AsRbbTXjdAwAMeHkB1muCQ9GanC2+aGh3p10z7gBHIendf6I0+oBMXn0yJNehMR/zZYKLPvmj1ptPGOxIgm3VTkQ0QKX/zsV4VQCCf04hkK0SpTRaTeHNPtqkNyM0SResO3EQKAEf03jqIre4zbR1HGyPE0jtk945xTVUJ/ytsP5K2EYvzWTmAzvhC8FzxssNptOeRG4RQWTMIk3tDSCvORqiF23KU/0X157y4Mw4fUuD2o0Kf1utBKEwm2iA1rhaiOEdNIBZhsY5l6+9JsH/fxaGxxfUemE8ioCZ9ELoQdSgwp/MWyFIl+S+h8lB8mxj249z/GonL1Eill+sLPhH7AahkL590zifEKk0Q6978QPPUd8upWzwmdfd4ry8bzsHtqaBiOQymxKMJ4EZ9hcTSkPoFrSKvWNYjq6Va30Q1sUgSGa480xxNY+31za0IJ8xrGER3UONiSjWPeUZqVpjwN+WhAuukThOrYV2DAovjzfSlBix6KXJxVtftIeFLrPpePvOD5Xew2bF5hGhhLwrt5PxLhAIjO53+gZyiv4z3sxrOV9KrRjh99LT7bALdGYOBFulXp9e/Lpb6+PD0zMn70x+k9oVgpPBJzNkUkn3/B+6YogA=
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"generateSchema"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/generate-schema"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+generateSchema
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"},"instructions":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"instructions":{"contentType":"application/octet-stream"},"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"generateSchema 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

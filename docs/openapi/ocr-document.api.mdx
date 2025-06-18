@@ -1,0 +1,71 @@
+---
+id: ocr-document
+title: "ocrDocument"
+description: "ocrDocument"
+sidebar_label: "ocrDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1z2jAQ/SsendoZN9AeudFAZphpAkPhxHDY2ALUypIiySQej/97dyWbmEA41Adblvbjvd23qpmHvWOjDct1VhZcebZNmTbcghdazXI2Yjqzk+4wZQYsFNxzS141U/iDNvtS5HgoFK4N+AOuLX8pheUYwduSp8xlB14AG9XMV4Z8nLdC7VnTpKcwO20L8F2gl5Lbil16bjrXlKlSSrZtmm3Mx53/qfOKTDOtPCHGJRgjRRYIDf44rWjvPaaxRNcL7ugPydKHq7KgRJPpw3j9a4WZFsvp42z9iKun+dMUP+P1ak7F8sJLwj7P7IrgNSkFeYhMbmBOWSEKHlxuMesXchPgnee810UBKscyRltntHKRy4/hkD45d5kVhuifdzNBg6TzwJT/WbLQ+8u2Yt88+NJd7fgZqVY8rXmP3tpIDfmyQ9hEjp/ywRiozIMm0RrtolpRiyM26NQ9QPNBTQkbPCVmy3fZTN+gMJS4bkiBOx2gt1goyYQfXTJezNhHEKfDU2mxRBl3DumSw10yBYfl8skrVInXCZb6iBVMKl3apAPn6CQHDxgfT12MPbz7TsUkQthogtQOC1JJetTPEJ1K7vmbHxgJOFAYpLQy9C9UpTfzQbL4HoVWYAcOVD60qOtncHxtZdPQdpxImvtcOHiW1L8dSIfj/ZdX/QE+giwpP6PRPIIVZH3d8wPwkwrZl2Urkq8JRrxKqN0EVfVzdmgCm4ZG7cAh5zbkj0f3Mcu3MH/vrhe6p8speoyzjBt/03bbE+Bi/puujef2Oip0Tj4WXulqxHeAqQPrMCJhr2YS1L6EPdnGmPT8Ax5e6/A=
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"ocrDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/ocr/{guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+ocrDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"format","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"},"ocrFormat":{"type":["string","null"]},"mimeType":{"type":["string","null"]}},"required":["ocr"],"title":"OcrCommand"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"ocrDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

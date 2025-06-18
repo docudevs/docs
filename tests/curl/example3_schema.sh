@@ -17,7 +17,7 @@ echo "Running Example 3: Invoice - provide schema"
 
 # Call the API
 echo "Calling the API..."
-response=$(curl -s -S -X POST https://api.docudevs.ai/document/upload-files/sync \
+response=$(curl -s -S -X POST http://localhost:9090/document/upload-files/sync \
      -H "Authorization: $API_KEY" \
      -F "document=@invoice.pdf" \
      -F "schema=@schema.json")

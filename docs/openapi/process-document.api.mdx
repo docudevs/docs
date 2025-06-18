@@ -5,7 +5,7 @@ description: "processDocument"
 sidebar_label: "processDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVU1v2zAM/SuGThvgNd2OuXWtBwRoPpCPU5EDYyuJOslyJTmtYfi/j5TtRG2CFGsPqWyRj3zkI10zBzvLhk8s02mpeO7YOma64Aac0PkoY0NWGJ1yax96g5gVYEBxxw151izHB7TblSLDS5GTD7g9ng1/KYXhiOJMyWNm0z1XwIY1c1VBPtYZke9Y08RHmFTnW7Er2wR6vJeSm4qdAzz1CDHLSynZumnWbVhu3W+dVWSKiI4SxyMUhRSphx48W8THdydMZIrMneCWnnRqwkAeH2uzeeaprxJIOd36AvC8VGTykPy5Wz0u0Wo2T8aj1RhPk+kkIWsnnCR609QsCbFZNzGTUn05xHg0GQWRghCPUp1C8DdnICXCY53x/4y2GI1njwkaLZbJbBHGSN7D+lCfNyemEqvCXbfZgEkR1IZWG60lhzw0U0Jxz/OaGk4ZrwqpIbvXSkGeoeLoznBb6Ny2oX7d3tI/DJwaUXj1nYk/QqOo98IwX5SWH5XzKcASOnClvTggwTA99bPWma8/spz3GTYtz6ucEAeHea/9rGvbDjiO75AN+qUw6FwGNQVu0IIYzk9jlryBKiQ/jk2gU6/x4PmjIHuRNTTqW+25d2Qowwd+sNHdjKT+nsXx8tibLkmsFzncRAlYrLeLXqGKnI6wVwdsQVTp0kQ9M0s3GThAfLy1LfbtzU/Kh6qBaqGUuuXUhYiC2r3L6tg3hzQHhQTcXghUGulF4Msa7Nq4B8TT0PcUW7mnHqBVXW/A8pWRTUOv2xVI05kJCxtJQtiCtLhW//LqwuI8gCwpFUYr8QBGkNNlgA8cjqpm3+ad6L5HiHiRW/cS8iqM2SflSfntsOeQcePjt1f3bZQffoZPrmdzRN+G1uMuTXnhrtquAzHPpgsS3Kb7DKhWbgZe6cuEvz5N7Vn7kfPvaiYh35WwI9sWk/7+AVX8bCU=
+api: eJydVUtv2kAQ/ivWnlrJDWmP3GhwJaQQEI8T4jCsN+B0X91dJ0GW/3tn1jY4IUJKcoj38c188/hmqViAvWfDDcsNL5XQgW1TZqxwEAqjJzkbMusMF96PO0DKLDhQIghHlhXTuEHcvixyvCw02UA44NqJf2XhBHoJrhQp8/wgFLBhxcLRko0PrtB7VtfbBix8+G3yIyG40YHocAnWyoLHiAZP3mg6O7vC+DDeUAhPO8Pd2f+G6VJKDMTsngSPuYGUs8cYttClIsg4+zNa368QNV9k08l6iquH2UOGn9F6NSOjUARJ4c64W5HjelunTEr1Zabp5GHSI+xR3Et1phCvwQGnvKcmF59kW06m83vKYrnK5kv8zu4WfabsrfNI+L5Bm65DacNIGKy3suE6ZgeOo1PfR+2MkQJ0H6YKJWK2V5zV54jXVhrI74xSoHMUDd054a3RvqH6dXtLHyTmrrCU2qV+EwQlnRXSfFFnUe2XQsYSBgil/0jj/XnYdOPSwrfvs1x0EdZNnldzQj84jwcTx9X4ZkZxAods0M31oDUZVERcI4IyXJxnLnsFZaU4zVBPrVHpvf17WXZSq2n6H03MvU2GIhyLZ5+M5iT4t1mcLk+9aYPEepHBTZKBx3qH5AWOSTAJ9uoZW5AcTemSLjNPNzkEQP946xvftzc/KR6qBqqFQmqfqZYi6dXuTVSnvgVMc2Al4IOGjkonowhiWXvPZdo5xNUw9hRbeaAeIKqqduDF2sm6pmOstcO3bYPLZ3AF7KhEOLF54WmN3XsE6cVFQCeJsm+LVkHfE+T7MND2EPSR6gGypB0u/4pj90jHUT8IyIWL/M3VXcPyIw7k2fRiKOq0sxhxLmy4it32lDmfLUk9u/aBV412HLzQLwX+j2GamHWcn3hWMQl6X8KesI1P+vsP2MxEpA==
 sidebar_class_name: "post api-method"
 info_path: openapi/docudevs-api
 custom_edit_url: null
@@ -47,14 +47,14 @@ processDocument
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"configuration","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","PREMIUM"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}}}}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","PREMIUM"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS","OCR"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}}}}
 >
   
 </RequestSchema>

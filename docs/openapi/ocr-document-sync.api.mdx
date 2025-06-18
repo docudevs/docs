@@ -1,0 +1,71 @@
+---
+id: ocr-document-sync
+title: "ocrDocumentSync"
+description: "ocrDocumentSync"
+sidebar_label: "ocrDocumentSync"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVD1z2zAM/Ss8znLkdvSWNh0yNXdJp54HmoIjthTJkpBbnU7/vQD16bjt0M0QgPcegEf3EtVrkoevsvK6bcChPBbSB4gKjXePlTxIr+PDlHzunJaFDCqqBhAid/bSUUB1Zx8bhZQ2jqIfLcSOgqRraJQ89BK7AMyUMBr3SinXWiuPw1AsEET1H/2kOALVJ/zgq45LtXfIs9DPprVoSDCWrG9XKcxgK2yIPC4aSBwta1gIV75pwIM8GadIHCnPxCZCdb1CSoDTvuK+N6CTtJcRW4Vgjc67Lr1GwB2xgWoI+xodYwv5QwrepVHr+/0+o0PS0QTGuL2WoCIxd9EMm81sub8lbu5vtj0PP4x6/klF6GSK2rNngk+YjYI1ReW8AJoxlmmsNe7sM5FBy0wM9QCXJO6fHuVbqiU5Ewo6m4aUSBw33IlPKtEJUfxUnUAvaM4LXVV0vo1ipk+cyQ4oJGXTiL2/eydpNpbcqLyF1Y0r3zThlaxlSwi/sAxWkXMJqY02GysPv7FFMfk7L4BMW/OSqKDvTyrBl2iHgT+PzueHVZmkTpbPf1Y2QSG/Q7d9aBdlW6aX/IT+UjxSrpVHDqLhUuJgp9agKoiZcGz5OHpklz269v7pJTHx2HSvNYStqBt7MfVikKfPzy9UfJoebOOr+S9kus/yk0UOw28s75ve
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"ocrDocumentSync"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/ocr/sync"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+ocrDocumentSync
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"format","in":"query","schema":{"type":["string","null"]}},{"name":"ocr","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"ocrDocumentSync 200 response","content":{"application/json":{"schema":{"type":"string"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

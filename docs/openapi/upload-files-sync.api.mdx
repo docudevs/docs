@@ -1,0 +1,71 @@
+---
+id: upload-files-sync
+title: "uploadFilesSync"
+description: "uploadFilesSync"
+sidebar_label: "uploadFilesSync"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVE1z0zAQ/SsanZ065ZhbITDTE51pOTE9KPYmEZUlIa0DHo//O7uSnTgkQDj5Q/veW7396CWqXZSrr7J2VduARflaSOchKNTOPtZyJVtvnKo/aQPxubOVLKRXQTWAEBjZS0sfFFc5u9W7NiMpSlv6+b2F0NFHrPbQKLnqJXYeWDBi0HZHR7Y1Rr4OAwkHoPiI713dcSgxIqdEr01rUJMullsXmkWtMJGdaH3grFFDTOGAaor5g2AhmUkRu9xoqyjLoTi5cMSdYFfCSbTx+L8i//TiCmrI5ugA9Xm16ABs5WrGnxkymveSb6G8N7pKpSldhYAL0gTVcD5zs25Hza26HXVy7FbMcH53DC2kH9E7G3O13y2X/KghVkH71H4XbSsoSEwocnrWW3Ptb5HB/UWNphINOZ+/Sslk6d7x8HgXMU0M7umrnEwrM2SxZUwZM0jbrUuKGg1Lril4DYcoHp4e5e+ax8P1SCnI2gpipCwZcCc+qkjTgOKH6gQ6QRc+0ICIzrVBTHlEPkm1LySdxsy9vLtPtaLcG5XsGEc8Zy3STcV41bO0jnYh/MTSG0VLgJjaYNKMJhdm3VvIuQ+8JpiT+n/PtlFk329UhC/BDAP/ztuEd06to9oYboitMhEK+QbdlR10UKbldCRvl4MKmkFEwGOzB1VDSGwZ/CG3xCK15Al7bfUMxQR6qCrwOAu/6CaWPvbD0+fnFwrejBuucTVjmHiswvGVkxyGX7N596A=
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadFilesSync"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/upload-files/sync"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadFilesSync
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"configuration","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"metadata":{"type":["string","null"],"format":"binary"},"document":{"type":"string","format":"binary"},"prompt":{"type":["string","null"],"format":"binary"},"schema":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"schema":{"contentType":"application/octet-stream"},"metadata":{"contentType":"application/octet-stream"},"document":{"contentType":"application/octet-stream"},"prompt":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadFilesSync 200 response","content":{"application/json":{"schema":{"type":"string"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

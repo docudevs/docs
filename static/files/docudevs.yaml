@@ -5,6 +5,89 @@ info:
     to data
   version: "0.1"
 paths:
+  /cases:
+    get:
+      tags:
+        - cases
+      operationId: listCases
+      responses:
+        "200":
+          description: listCases 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Case"
+    post:
+      tags:
+        - cases
+      operationId: createCase
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CasesController.CreateCaseRequest"
+        required: true
+      responses:
+        "200":
+          description: createCase 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+  /cases/{caseId}:
+    get:
+      tags:
+        - cases
+      operationId: getCase
+      parameters:
+        - name: caseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: getCase 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+  /cases/{caseId}/upload:
+    post:
+      tags:
+        - cases
+      operationId: uploadCaseDocument
+      parameters:
+        - name: caseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  type: string
+                  format: binary
+              required:
+                - document
+            encoding:
+              document:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: uploadCaseDocument 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
   /configuration:
     get:
       tags:
@@ -77,6 +160,107 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Unit"
+  /document/generate-schema:
+    post:
+      tags:
+        - document
+      operationId: generateSchema
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  type: string
+                  format: binary
+                instructions:
+                  type:
+                    - string
+                    - "null"
+                  format: binary
+              required:
+                - document
+            encoding:
+              instructions:
+                contentType: application/octet-stream
+              document:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: generateSchema 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
+  /document/ocr/sync:
+    post:
+      tags:
+        - document
+      operationId: ocrDocumentSync
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type:
+              - string
+              - "null"
+        - name: ocr
+          in: query
+          schema:
+            type:
+              - string
+              - "null"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  type: string
+                  format: binary
+              required:
+                - document
+            encoding:
+              document:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: ocrDocumentSync 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+  /document/ocr/{guid}:
+    post:
+      tags:
+        - document
+      operationId: ocrDocument
+      parameters:
+        - name: guid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          schema:
+            type:
+              - string
+              - "null"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OcrCommand"
+      responses:
+        "200":
+          description: ocrDocument 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
   /document/process/{guid}:
     post:
       tags:
@@ -88,12 +272,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: configuration
-          in: query
-          schema:
-            type:
-              - string
-              - "null"
       requestBody:
         content:
           application/json:
@@ -102,6 +280,29 @@ paths:
       responses:
         "200":
           description: processDocument 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
+  /document/process/{guid}/with-configuration/{configurationName}:
+    post:
+      tags:
+        - document
+      operationId: processDocumentWithConfiguration
+      parameters:
+        - name: guid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: configurationName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: processDocumentWithConfiguration 200 response
           content:
             application/json:
               schema:
@@ -179,6 +380,60 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadResponse"
+  /document/upload-files/sync:
+    post:
+      tags:
+        - document
+      operationId: uploadFilesSync
+      parameters:
+        - name: configuration
+          in: query
+          schema:
+            type:
+              - string
+              - "null"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                metadata:
+                  type:
+                    - string
+                    - "null"
+                  format: binary
+                document:
+                  type: string
+                  format: binary
+                prompt:
+                  type:
+                    - string
+                    - "null"
+                  format: binary
+                schema:
+                  type:
+                    - string
+                    - "null"
+                  format: binary
+              required:
+                - document
+            encoding:
+              schema:
+                contentType: application/octet-stream
+              metadata:
+                contentType: application/octet-stream
+              document:
+                contentType: application/octet-stream
+              prompt:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: uploadFilesSync 200 response
+          content:
+            application/json:
+              schema:
+                type: string
   /job/result/{uuid}:
     get:
       tags:
@@ -195,8 +450,7 @@ paths:
           description: result 200 response
           content:
             application/json:
-              schema:
-                type: string
+              schema: {}
   /job/status/{guid}:
     get:
       tags:
@@ -348,6 +602,45 @@ paths:
                   $ref: "#/components/schemas/PDFField"
 components:
   schemas:
+    Case:
+      properties:
+        id:
+          type:
+            - integer
+            - "null"
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type:
+            - string
+            - "null"
+        createdAt:
+          type:
+            - string
+            - "null"
+          format: date-time
+        updatedAt:
+          type:
+            - string
+            - "null"
+          format: date-time
+      required:
+        - name
+        - organizationId
+    CasesController.CreateCaseRequest:
+      properties:
+        name:
+          type: string
+        description:
+          type:
+            - string
+            - "null"
+      required:
+        - name
     DocumentTemplate:
       properties:
         name:
@@ -378,6 +671,7 @@ components:
       enum:
         - SIMPLE
         - STEPS
+        - OCR
     LlmType:
       enum:
         - DEFAULT
@@ -411,11 +705,26 @@ components:
         - name
         - organizationId
         - storagePath
+    OcrCommand:
+      properties:
+        ocr:
+          $ref: "#/components/schemas/OcrType"
+        ocrFormat:
+          type:
+            - string
+            - "null"
+        mimeType:
+          type:
+            - string
+            - "null"
+      required:
+        - ocr
     OcrType:
       enum:
         - DEFAULT
         - PREMIUM
         - NONE
+        - AUTO
     Organization:
       properties:
         name:
@@ -471,6 +780,8 @@ components:
             - integer
             - "null"
           format: int32
+        jobType:
+          type: string
         created:
           type:
             - string
@@ -483,6 +794,7 @@ components:
           format: date-time
       required:
         - guid
+        - jobType
         - status
     Settings:
       properties:

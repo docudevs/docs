@@ -1,0 +1,71 @@
+---
+id: create-case
+title: "createCase"
+description: "createCase"
+sidebar_label: "createCase"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVE1z2jAQ/SuePTtAO50euFGSQ07NpOmJ4bBYG6NWllRJJqEe//fu2mAMZHJIOSB5v/T27ZMaSFhGmK+gwEgR1jk4TwGTdvZewRyKQJhoyU7IIdCfmmL65tQe5g0UziaySbbovdFFlzb9FZ0VWyy2VKHsfJCiSfMB/GWxIlnT3vMKMQVtS2hzUBSLoL0UOflXx4AcbG0MrNu2B6IDKXF35Rh30slIPcEalwwtOGMoTJZDB489fGjPS6RQU2eI3tnYY/w8m8lyhmjERcb+7JjAyD7IhFbjPjXXKCkMjebw7EKFXFVcX78IRS6UaPXfYT4Di6fk66T/JTw/dK4W6Z2w0cmKg2+S5lM5t/bqg7lvDfqKgovJy3Dby9bOVVxR2jrRtncshhw8pi1/TfsbkINM7fGk9LtXrLyhk3JHBGr77Lq2DghuXVHf0i5mi4d7uAQxOGVTsVwyVkNBMXIxSZhkdxhZGSl7wX2WXMaq2rFYsr2rQ6YOSVE8TBJyffbGvvZs8knwSEcV2hHWvvPs0PqbA4dEr2nqDWrbzSuYTqkdK6N3YStssaFpNmz6GUzbipl5CvwarHi7w6BxI0SsRDRbQsWKnK8a+E17mU9/S26e5FgJN7Ucf3Vj2vyYsSgK8und2PVooA/ffzxx8ObwPlVOSU7AF3m7+H8Oop+u/e7+dbYGDNqyxlJi+5ry+wejFsCO
+sidebar_class_name: "post api-method"
+info_path: openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createCase"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createCase
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"description":{"type":["string","null"]}},"required":["name"],"title":"CasesController.CreateCaseRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createCase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name","organizationId"],"title":"Case"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

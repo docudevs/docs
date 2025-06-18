@@ -8,6 +8,36 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "cases",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/list-cases",
+          label: "listCases",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/create-case",
+          label: "createCase",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-case",
+          label: "getCase",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/upload-case-document",
+          label: "uploadCaseDocument",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "configuration",
       items: [
         {
@@ -42,8 +72,32 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
+          id: "openapi/generate-schema",
+          label: "generateSchema",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/ocr-document-sync",
+          label: "ocrDocumentSync",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/ocr-document",
+          label: "ocrDocument",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "openapi/process-document",
           label: "processDocument",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/process-document-with-configuration",
+          label: "processDocumentWithConfiguration",
           className: "api-method post",
         },
         {
@@ -56,6 +110,12 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "openapi/upload-files",
           label: "uploadFiles",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/upload-files-sync",
+          label: "uploadFilesSync",
           className: "api-method post",
         },
         {
