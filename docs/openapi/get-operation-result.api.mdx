@@ -1,0 +1,71 @@
+---
+id: get-operation-result
+title: "getOperationResult"
+description: "getOperationResult"
+sidebar_label: "getOperationResult"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VD1v2zAQ/SsEpxYQYrejNgMJgnRpYaST4YGWLjFTWmTIo1tB0H/vHS3Tkm04QIdqEcn7evfukZ1E9RpkuZLWgVeobRPkujjtnmpZylfA78eDJYRoUBbSKa92gOA5vJMNbcj1zW4eo67JrhvaOoVbWnt4j9oD5UIfoZCh2sJOybKT2DoOC+h18yr7vsiZMoRndvnXfGt2Do7agsD2r/M5/2oIldeO01/tT5CfOAZSwco2CA1yqHLO6Cr5zt4Cx3ej+s4zbtSHakc2LoEl/ijjtxseUwaueQRUGMNVU+VBIdQLvGqNrr5hBe+tP1lWR1Mhm2iMXPeJVKJpsVfaqI0Zo9tYa0A1MjvdStSPZ7kagS5GSjpXwpS5SyyZl3GfJATUyEjl2ayXxzH3/BUfaoPSku63drgZCRCpspSzDHTWDej7WTdB3ychv9jEyQDn3lbxHvZBLH48yfPy2ciLHbUtSGEVhEA0csCdeFCB1Ibit2oFWkFK3ZMARWujF/UQFNhCTCjKT9ZwyD2/+5KEaAPuVNLxcPWoK5GbFrnrCbI8b4Q/OHNG6TTy6E26BomR0atC4eVpouV0pDSbLYHggK7bqAA/vel7Pn6P4Fs6p+VeeX2QGr02tQ68phG8KBPgAlu+r/LTctDXZ0GFr2IeDlXTMj3KRN7R8he0oxeNn6b/WHbKUM93bguqBp/6P/gsqgocjqIv3iZ+/7JYHx+eSeN/AW+AD7k=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getOperationResult"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/operation/{jobGuid}/{operationType}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getOperationResult
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"jobGuid","in":"path","required":true,"schema":{"type":"string"}},{"name":"operationType","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getOperationResult 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"parentJobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"createdAt":{"type":"string"},"updatedAt":{"type":"string"},"error":{"type":["string","null"]},"resultAvailable":{"type":"boolean"},"result":{"type":["string","null"]}},"required":["createdAt","jobGuid","operationType","parentJobGuid","resultAvailable","status","updatedAt"],"title":"OperationResultResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

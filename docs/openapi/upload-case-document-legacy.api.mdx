@@ -1,0 +1,75 @@
+---
+id: upload-case-document-legacy
+title: "uploadCaseDocumentLegacy"
+description: "uploadCaseDocumentLegacy"
+sidebar_label: "uploadCaseDocumentLegacy"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVMFu2zAM/RVBpw1w6mwYdvCta3coMGBF156CHhibSbTZlibR2QzD/z5Sdmw3zYbdJJF8fHwk1WmCfdDZRucQMOjnRFuHHsjY+q7QmW5caaG4YeOtzZsKa/qCe8hbnWgHHiok9BLf6ZovHCA4HJloU/PNAR347PFnYzwyIPkGEx3yA1ags05T6yTK1IR79Oy6s74CGp4+ftB9/zyEY6BPtmglJrfsXZMcq6Ykw0QolbhVARRRZ3znpR4yXBvfirGGReZA3tT7ZeKtqcG3nHnJezPHPrMB69wWEncGOlJ7HLDBudLkUczU5oS04mwIFWO/RBdV4kNwtg4D1/frdUTHkHvjBOMf7VDsrU7hXMxCoiWJ70FQ/q7PvjHFa22YWSCgJlwwnYkUASZ3bh0ZKsX/KRJ/ODHsBwUKdB6Z2zwZ/1cup+DJO1iZUGcDxWnkSct0Guc47YYx7NMBIY7jzkb+IyEBvMVjUNf3d/o872Q8pVWsU44hcM0ScKU+Q2DNSP2CVpFVrPeRZVStbbw6DUQQSxzJRLM1DNjrq3eiqNCuIHZj3JyBqpJq57xTvS8ITm0g/E2pK4GXjTEbX8aeRilOK53obNrJUQ3uy0FUY5+u27LxyZd9L8+8Zzz62YaPR/AGtqIVL3dhgpxZ7x2U4bxPi5XUbx7GcXirOOFFmuMj1FLXEcpGbnz8ge38gfSyZgeEgn8FYTAYb4Y8q7hgc/Clb6BPTkHXeY6OFu6vVkI+mWmg7r9+e2Tn7fjbVLaQGAEeezkdWSce4z8vI9N5
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadCaseDocumentLegacy"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/upload"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+uploadCaseDocumentLegacy
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadCaseDocumentLegacy 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

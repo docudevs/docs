@@ -5,9 +5,9 @@ description: "ocrDocument"
 sidebar_label: "ocrDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVE1z2jAQ/SsendoZN9AeudFAZphpAkPhxHDY2ALUypIiySQej/97dyWbmEA41Adblvbjvd23qpmHvWOjDct1VhZcebZNmTbcghdazXI2Yjqzk+4wZQYsFNxzS141U/iDNvtS5HgoFK4N+AOuLX8pheUYwduSp8xlB14AG9XMV4Z8nLdC7VnTpKcwO20L8F2gl5Lbil16bjrXlKlSSrZtmm3Mx53/qfOKTDOtPCHGJRgjRRYIDf44rWjvPaaxRNcL7ugPydKHq7KgRJPpw3j9a4WZFsvp42z9iKun+dMUP+P1ak7F8sJLwj7P7IrgNSkFeYhMbmBOWSEKHlxuMesXchPgnee810UBKscyRltntHKRy4/hkD45d5kVhuifdzNBg6TzwJT/WbLQ+8u2Yt88+NJd7fgZqVY8rXmP3tpIDfmyQ9hEjp/ywRiozIMm0RrtolpRiyM26NQ9QPNBTQkbPCVmy3fZTN+gMJS4bkiBOx2gt1goyYQfXTJezNhHEKfDU2mxRBl3DumSw10yBYfl8skrVInXCZb6iBVMKl3apAPn6CQHDxgfT12MPbz7TsUkQthogtQOC1JJetTPEJ1K7vmbHxgJOFAYpLQy9C9UpTfzQbL4HoVWYAcOVD60qOtncHxtZdPQdpxImvtcOHiW1L8dSIfj/ZdX/QE+giwpP6PRPIIVZH3d8wPwkwrZl2Urkq8JRrxKqN0EVfVzdmgCm4ZG7cAh5zbkj0f3Mcu3MH/vrhe6p8speoyzjBt/03bbE+Bi/puujef2Oip0Tj4WXulqxHeAqQPrMCJhr2YS1L6EPdnGmPT8Ax5e6/A=
+api: eJydVE1z2jAQ/SsendoZN6Q9cqMBZphpQoaGU4bDYiugVpYUfZB4PP7v3ZVsMCHJoRywLe3X2/d2G+Zh59j4kZW6CBVXnm1ypg234IVWi5KNmS7stL/MmQELFffcklfDFH6gzS6IEi+FwncDfo/vlj8HYTlG8DbwnLlizytg44b52pCP81aoHWvb/BjmSdsKfB/oOXBbs0vPx941ZypIyTZtu0n5uPM/dVmTaaGVp4rxFYyRooiARn+cVnR2imkswfWCO/pCsPTgKlSUaDqbT9a/HjDT/Wp2u1jf4tvd8m6Gj8n6YUnN8sJLqn1Z2Acqr80pyDwh+aTmnFWi4tHlU6uSu8KKLZ+LXbCpyN54q7XkoAZ9GLb9MYI5r/BGVxWoEpuebJ3RyqWgP66v6ZHSGWrWOfcZGmS9B6b8zwZHpVyKAFn24IN7Vx9noDqpdeYDeGsjNZSrvsI2YfwQD8ZAHe81Sdxol7SNyh2zUT8LIzQfNZSwxVtCtjqJbPYKlZG8E03P94nAE7unswsuaTRakvuTjsg7KFTjlB9cNrlfsLcYjpdHZrDDBXcOc5DDVTYDh9322QvUmdcZMnVAArJaB5v12BzdlOAB4+OtS7Gvr74TF9QP1AmV1E0mQswGnTur6MiY569+ZCTg9GKQYGWkPzZ1sGDifOD/ODKJBO6p+2jRNFtwfG1l29JxGn9aMqVwsJVE/xNIh7vkL6+H2+IAMlB+RnvgAFaQ9fuebwo/iph9WXUa+5phxHcBdYeg6mHOvpqIpqWJ3XMouY3509VNyvItyuHkejE2tAmTx6QouPGf2m4G+r1f/qYdte12X6VL8rHwQnsY/2OZOqKOExbPGiZB7QLsyDbFpN8/pA8SUw==
 sidebar_class_name: "post api-method"
-info_path: openapi/docudevs-api
+info_path: docs/openapi/docudevs-api
 custom_edit_url: null
 ---
 
@@ -54,7 +54,7 @@ ocrDocument
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"},"ocrFormat":{"type":["string","null"]},"mimeType":{"type":["string","null"]}},"required":["ocr"],"title":"OcrCommand"}}}}}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"},"ocrFormat":{"type":["string","null"]},"mimeType":{"type":["string","null"]},"describeFigures":{"type":["boolean","null"]}},"required":["ocr"],"title":"OcrCommand"}}}}}
 >
   
 </RequestSchema>

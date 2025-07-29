@@ -1,0 +1,71 @@
+---
+id: get-case-document
+title: "getCaseDocument"
+description: "getCaseDocument"
+sidebar_label: "getCaseDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VU1v2kAQ/SvWnlrJDWlV9cCNBhpRpQlK0hPKYbAH2NR4nd0xrWP5v3dmbWwTUBR6KBfWu/P53tvZUhGsnBrOVQQOnXoIlcnQAmmTTmM1VCukCz4ZmyjfYEoqVBlY2CChFbdSpfzBduLODqHSKX9lQGteW3zKtUWOQzbHULlojRtQw1JRkYmXTglXaNl0aewGqN768llVVdiGjpvcp4d3ZHW64mAPYuwyk0qPfP7p/Fz+YnSR1Zk0e9hqwEbBzouzRYaLZQTYD7Is0ZEHafDoxLnsJc+sQEi6TqXjrqB5r+E0TxKB+2Xj4Q7Kt6DEbNkVpPq5JexNTrlDOz25rh4PhxCzg06wZuzIYQPevd/v0jYGu6xs6PQzfi2oxu6U6haJWcxEF8fSs14hBoJ+UB+KAVw8YkQSE+JYC4yQzHoMirQ4ApMaoXMc746Acl8epvlGIs0m1+Pp9SUHm93eXEzu7uqPi5sfs6vJ/WTM62+j6RUvOAtpSqS4ncyacHspvpvF6fREFoEwHtErAPf8GA78QJr5EkFk8T/6Vv1rOO9YCLuJsHd/W5UcSPcIxj249oZQJb/w9eurPOtr0wwxP7hEHWrgJ92grOurBrvyeKurtPKjZmk8Hj3Gxrh1wWg2VS+zt4ft+Oi6EYezYAKOBUXBbygCMgHfiC1rLChMboO2BjnxQg0Vn7o69vnZR68P42gDftg0k5H7CqTnoNf0XlntVSD8Q4MsAR6fQrdN/KDygOxGf6iGB5T53R5/TMiaqxCnslyw9U+bVJVsP+VoC97n5RashoVAxs9DrJ2smYUlJA4P6munqnp32+jofcBZj9bdbEJaCD6Q5PLFy19YdE+QvBz/MWsPnUoG2Boh5psqvdcGoyjCjHquB6+HPE+tVi8n96zvv8PtkhM=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getCaseDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/documents/{documentId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getCaseDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"documentId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getCaseDocument 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"caseId":{"type":"integer","format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"documentId":{"type":"string"},"filename":{"type":"string"},"contentType":{"type":["string","null"]},"sizeBytes":{"type":["integer","null"],"format":"int64"},"blobPath":{"type":"string"},"metadata":{"type":["null","object"],"additionalProperties":true},"processingStatus":{"enum":["PENDING","PROCESSING","COMPLETED","FAILED"],"title":"DocumentStatus"},"processingJobId":{"type":["integer","null"],"format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["blobPath","caseId","documentId","filename","organizationId","processingStatus"],"title":"CaseDocument"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

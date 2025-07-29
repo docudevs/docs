@@ -5,9 +5,9 @@ description: "uploadCaseDocument"
 sidebar_label: "uploadCaseDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJyFVMFu2zAM/RVBpw1w6mwYdvCta3foaUXXnoIeGFlJtNmWJtHZDMP/PlKyHTfJsJtk8j0+PpHuJcI+yGIjFQQd5GsmrdMe0NjmoZSFbF1lobyj4L1Vba0blJl04KHWqD0je9nQhVKZgTCZNA3dHOCBzl7/ao3XRIW+1ZkM6qBrkEUvsXOMMg3qvfaUurO+BkyfPn+Sw/Ca4DrgF1t2jFGWskkCHeu2QkNCMGfcqgSMrCd+57kTNNQV3cpJ/alyQG+a/bLw1jTgO6q81L05YV8poBtlS8adkY7SnhM3OFcZFW3MrUKNK6qmoSbut+zsSvwQnG1C0vpxvY7sOihvHHNcfQhBeWICUhsLc5blfwTG/9uZfWvKS1dIU0DANlwJndkTCeZ0ejQ0WHH+S5T8NCkcUu//a4uoaLYOlqfP2ZDmjWapkHmc0bxPgzbkCRsHbmejzrEwU93rYxC3jw/yvOIcnH0kP5QOgXpjwI34CoG8QfEbOoFWkK9Hskt0tvVievLAkTh0maRoSNzrmw/sHMuuIbo+7kaSKrhPsWj0jbLZZ9R/MHcV0B4RWeur+GjRg2lPM1nM6zbaQMYf2C7K6fstBV98NQz8mVaIprrY0PEI3sCWTaK9LU3gMxm9gyroCznzQMl3T+N7vxdU8KrM8SM0HTsCVcs3Ov7U3enfMPAGHTSUtPCsIAXvUp1V3J0T+NqGD9kEulVKO1ykX8w8/z/mSXr89v2Zkrfjj6S2JWOYeHzE+Ug+0Zz+Bddxw4o=
+api: eJydVU1v2zAM/SuGThvgNN0w7JBbmmRDhq41mu4U9CDbTKLOtjyJ7uYG/u8j5c98bGt3k0TxkXp8IvcC5daKyVpE0oIVD77QORiJSmfLWExEkSdaxjMyznVUpJCh8EUujUwBwbDnXmS0oauMQD6+UBntcok7Whv4USgDBIWmAF/YaAepFJO9wDJnL5UhbMHQ1Y02qcT66OMHUVUPtTtYvNJxyT6RptuUAi3TIkFFieCY/UaxRIfa4+eGX4KKXkW7uM2+j2zRqGw7DByqTJqSIg/zXve+D2SALNIx+x2BNqnd19gyzxMVORrHOkLAEUUDmRL2ITqz4g5srjNb5/r+8tKhg42MyhnjbCE8uue1jvSMATnD8I+W/f/MjIp7TtaDcmRFkrAejsvit4V+SQ1JTmYrM/XcKepFToUFs3x1Xm05DsI0VSbzRiVQS/WM8aB8fdhOI3VUumjVM1yVWHP3muzCRIcBf4pz4ek3yVbCLaiDIgLDR4iQMWUcK6ZRJsGggo2CqKgRWEt4K5RYuPQgK1JGChY38+XNZwIL7m5ni9Wq3sxuvwbXi/vFnNafpstrWlAUVJhwcq3MGriDEF90+PryRPQBEOIp/oXggR/RASNUVC8WRB7/p+/RX+6q4Pf9aqCbgUpOpHuG4wFdBy2yqr/5v36wcIXfaW60ubZ1a2WFiLFrx+N9nWM1blO0rr1utKNhUKg5PFlvGizFcdDO2HWN/hHscOEtpCUdofdTlh5qjz7CE0nLK3VhvC4sW5w+fUFWW2NfXrxzsqDMU+l6TDMJ6pd6/FRv8NaDzLpPgPALx3kiaWpwoU3iWpSjoZ1KvpicFMuRv2PS6Np+H5L9m0mqio9pZlAbn6xp+SSNkiHzRIMqVpbXRPdGJhZOMuo6qHhz12jmrUcxz2baHMqsZFJkUvCOlt+h7IdhxS1jBzKmv8EZ1MZZHWfkuk3vfG6kVX7rNI0iyHFw/aTJ88Ds9BTcru7pcthMzlTH7MPATR27JfFEav0NQcm/5A==
 sidebar_class_name: "post api-method"
-info_path: openapi/docudevs-api
+info_path: docs/openapi/docudevs-api
 custom_edit_url: null
 ---
 
@@ -28,7 +28,7 @@ import Heading from "@theme/Heading";
 
 <MethodEndpoint
   method={"post"}
-  path={"/cases/{caseId}/upload"}
+  path={"/cases/{caseId}/documents"}
   context={"endpoint"}
 >
   
@@ -62,7 +62,7 @@ uploadCaseDocument
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"uploadCaseDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+  responses={{"200":{"description":"uploadCaseDocument 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"caseId":{"type":"integer","format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"documentId":{"type":"string"},"filename":{"type":"string"},"contentType":{"type":["string","null"]},"sizeBytes":{"type":["integer","null"],"format":"int64"},"blobPath":{"type":"string"},"metadata":{"type":["null","object"],"additionalProperties":true},"processingStatus":{"enum":["PENDING","PROCESSING","COMPLETED","FAILED"],"title":"DocumentStatus"},"processingJobId":{"type":["integer","null"],"format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["blobPath","caseId","documentId","filename","organizationId","processingStatus"],"title":"CaseDocument"}}}}}}
 >
   
 </StatusCodes>

@@ -8,7 +8,7 @@ paths:
   /cases:
     get:
       tags:
-        - cases
+      - cases
       operationId: listCases
       responses:
         "200":
@@ -21,7 +21,7 @@ paths:
                   $ref: "#/components/schemas/Case"
     post:
       tags:
-        - cases
+      - cases
       operationId: createCase
       requestBody:
         content:
@@ -39,15 +39,15 @@ paths:
   /cases/{caseId}:
     get:
       tags:
-        - cases
+      - cases
       operationId: getCase
       parameters:
-        - name: caseId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
         "200":
           description: getCase 200 response
@@ -55,18 +55,88 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Case"
-  /cases/{caseId}/upload:
+    put:
+      tags:
+      - cases
+      operationId: updateCase
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CasesController.UpdateCaseRequest"
+        required: true
+      responses:
+        "200":
+          description: updateCase 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+    delete:
+      tags:
+      - cases
+      operationId: deleteCase
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: deleteCase 200 response
+  /cases/{caseId}/documents:
+    get:
+      tags:
+      - cases
+      operationId: listCaseDocuments
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        "200":
+          description: listCaseDocuments 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page_CaseDocument_"
     post:
       tags:
-        - cases
+      - cases
       operationId: uploadCaseDocument
       parameters:
-        - name: caseId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       requestBody:
         content:
           multipart/form-data:
@@ -76,7 +146,7 @@ paths:
                   type: string
                   format: binary
               required:
-                - document
+              - document
             encoding:
               document:
                 contentType: application/octet-stream
@@ -87,11 +157,88 @@ paths:
           content:
             application/json:
               schema:
+                $ref: "#/components/schemas/CaseDocument"
+  /cases/{caseId}/documents/{documentId}:
+    get:
+      tags:
+      - cases
+      operationId: getCaseDocument
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getCaseDocument 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseDocument"
+    delete:
+      tags:
+      - cases
+      operationId: deleteCaseDocument
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: deleteCaseDocument 200 response
+  /cases/{caseId}/upload:
+    post:
+      tags:
+      - cases
+      operationId: uploadCaseDocumentLegacy
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  type: string
+                  format: binary
+              required:
+              - document
+            encoding:
+              document:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: uploadCaseDocumentLegacy 200 response
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/UploadResponse"
+      deprecated: true
   /configuration:
     get:
       tags:
-        - configuration
+      - configuration
       operationId: listConfigurations
       responses:
         "200":
@@ -105,14 +252,14 @@ paths:
   /configuration/{name}:
     get:
       tags:
-        - configuration
+      - configuration
       operationId: getConfiguration
       parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: getConfiguration 200 response
@@ -122,14 +269,14 @@ paths:
                 $ref: "#/components/schemas/UploadCommand"
     post:
       tags:
-        - configuration
+      - configuration
       operationId: saveConfiguration
       parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -145,14 +292,14 @@ paths:
                 $ref: "#/components/schemas/NamedConfiguration"
     delete:
       tags:
-        - configuration
+      - configuration
       operationId: deleteConfiguration
       parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: deleteConfiguration 200 response
@@ -163,8 +310,15 @@ paths:
   /document/generate-schema:
     post:
       tags:
-        - document
+      - document
       operationId: generateSchema
+      parameters:
+      - name: instructionsText
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           multipart/form-data:
@@ -175,11 +329,11 @@ paths:
                   format: binary
                 instructions:
                   type:
-                    - string
-                    - "null"
+                  - string
+                  - "null"
                   format: binary
               required:
-                - document
+              - document
             encoding:
               instructions:
                 contentType: application/octet-stream
@@ -196,21 +350,21 @@ paths:
   /document/ocr/sync:
     post:
       tags:
-        - document
+      - document
       operationId: ocrDocumentSync
       parameters:
-        - name: format
-          in: query
-          schema:
-            type:
-              - string
-              - "null"
-        - name: ocr
-          in: query
-          schema:
-            type:
-              - string
-              - "null"
+      - name: format
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
+      - name: ocr
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           multipart/form-data:
@@ -220,7 +374,7 @@ paths:
                   type: string
                   format: binary
               required:
-                - document
+              - document
             encoding:
               document:
                 contentType: application/octet-stream
@@ -235,20 +389,20 @@ paths:
   /document/ocr/{guid}:
     post:
       tags:
-        - document
+      - document
       operationId: ocrDocument
       parameters:
-        - name: guid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: format
-          in: query
-          schema:
-            type:
-              - string
-              - "null"
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           application/json:
@@ -264,14 +418,20 @@ paths:
   /document/process/{guid}:
     post:
       tags:
-        - document
+      - document
       operationId: processDocument
       parameters:
-        - name: guid
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dependsOn
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           application/json:
@@ -287,19 +447,25 @@ paths:
   /document/process/{guid}/with-configuration/{configurationName}:
     post:
       tags:
-        - document
+      - document
       operationId: processDocumentWithConfiguration
       parameters:
-        - name: guid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: configurationName
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: configurationName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dependsOn
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
       responses:
         "200":
           description: processDocumentWithConfiguration 200 response
@@ -310,7 +476,7 @@ paths:
   /document/upload:
     post:
       tags:
-        - document
+      - document
       operationId: uploadDocument
       requestBody:
         content:
@@ -321,7 +487,7 @@ paths:
                   type: string
                   format: binary
               required:
-                - document
+              - document
             encoding:
               document:
                 contentType: application/octet-stream
@@ -336,7 +502,7 @@ paths:
   /document/upload-files:
     post:
       tags:
-        - document
+      - document
       operationId: uploadFiles
       requestBody:
         content:
@@ -345,24 +511,24 @@ paths:
               properties:
                 metadata:
                   type:
-                    - string
-                    - "null"
+                  - string
+                  - "null"
                   format: binary
                 document:
                   type: string
                   format: binary
                 instructions:
                   type:
-                    - string
-                    - "null"
+                  - string
+                  - "null"
                   format: binary
                 schema:
                   type:
-                    - string
-                    - "null"
+                  - string
+                  - "null"
                   format: binary
               required:
-                - document
+              - document
             encoding:
               schema:
                 contentType: application/octet-stream
@@ -383,15 +549,15 @@ paths:
   /document/upload-files/sync:
     post:
       tags:
-        - document
+      - document
       operationId: uploadFilesSync
       parameters:
-        - name: configuration
-          in: query
-          schema:
-            type:
-              - string
-              - "null"
+      - name: configuration
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           multipart/form-data:
@@ -399,24 +565,24 @@ paths:
               properties:
                 metadata:
                   type:
-                    - string
-                    - "null"
+                  - string
+                  - "null"
                   format: binary
                 document:
                   type: string
                   format: binary
                 prompt:
                   type:
-                    - string
-                    - "null"
+                  - string
+                  - "null"
                   format: binary
                 schema:
                   type:
-                    - string
-                    - "null"
+                  - string
+                  - "null"
                   format: binary
               required:
-                - document
+              - document
             encoding:
               schema:
                 contentType: application/octet-stream
@@ -434,17 +600,86 @@ paths:
             application/json:
               schema:
                 type: string
+  /job/dependencies/{guid}:
+    get:
+      tags:
+      - job
+      operationId: getDependencies
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getDependencies 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DependencyInfo"
+  /job/list:
+    get:
+      tags:
+      - job
+      operationId: listJobs
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      - name: size
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      - name: sort
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
+      - name: status
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
+      - name: createdAtFrom
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
+      - name: createdAtTo
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
+      responses:
+        "200":
+          description: listJobs 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page_ProcessingJob_"
   /job/result/{uuid}:
     get:
       tags:
-        - job
+      - job
       operationId: result
       parameters:
-        - name: uuid
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: result 200 response
@@ -454,14 +689,14 @@ paths:
   /job/status/{guid}:
     get:
       tags:
-        - job
+      - job
       operationId: status
       parameters:
-        - name: guid
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: status 200 response
@@ -469,17 +704,76 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProcessingJob"
+  /operation:
+    post:
+      tags:
+      - operations
+      operationId: submitOperation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitOperationRequest"
+        required: true
+      responses:
+        "200":
+          description: submitOperation 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitOperationResponse"
+  /operation/{jobGuid}:
+    get:
+      tags:
+      - operations
+      operationId: getOperationStatus
+      parameters:
+      - name: jobGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getOperationStatus 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OperationStatusResponse"
+  /operation/{jobGuid}/{operationType}:
+    get:
+      tags:
+      - operations
+      operationId: getOperationResult
+      parameters:
+      - name: jobGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: operationType
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getOperationResult 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OperationResultResponse"
   /settings/view:
     get:
       tags:
-        - settings
+      - settings
       operationId: settings
       parameters:
-        - name: email
-          in: query
-          required: true
-          schema:
-            type: string
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: settings 200 response
@@ -490,14 +784,14 @@ paths:
   /template/fill/{name}:
     post:
       tags:
-        - template
+      - template
       operationId: fill
       parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -519,7 +813,7 @@ paths:
   /template/list:
     get:
       tags:
-        - template
+      - template
       operationId: listTemplates
       responses:
         "200":
@@ -533,14 +827,14 @@ paths:
   /template/metadata/{name}:
     get:
       tags:
-        - template
+      - template
       operationId: metadata
       parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: metadata 200 response
@@ -553,14 +847,14 @@ paths:
   /template/{name}:
     post:
       tags:
-        - document
+      - document
       operationId: uploadTemplate
       parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       requestBody:
         content:
           multipart/form-data:
@@ -570,7 +864,7 @@ paths:
                   type: string
                   format: binary
               required:
-                - document
+              - document
             encoding:
               document:
                 contentType: application/octet-stream
@@ -583,14 +877,14 @@ paths:
               schema: {}
     delete:
       tags:
-        - template
+      - template
       operationId: deleteTemplate
       parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: deleteTemplate 200 response
@@ -606,83 +900,185 @@ components:
       properties:
         id:
           type:
-            - integer
-            - "null"
+          - integer
+          - "null"
           format: int64
         organizationId:
           type: integer
+          format: int64
+        userId:
+          type:
+          - integer
+          - "null"
           format: int64
         name:
           type: string
         description:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         createdAt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
           format: date-time
         updatedAt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
           format: date-time
       required:
-        - name
-        - organizationId
+      - name
+      - organizationId
+    CaseDocument:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        caseId:
+          type: integer
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        userId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        documentId:
+          type: string
+        filename:
+          type: string
+        contentType:
+          type:
+          - string
+          - "null"
+        sizeBytes:
+          type:
+          - integer
+          - "null"
+          format: int64
+        blobPath:
+          type: string
+        metadata:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        processingStatus:
+          $ref: "#/components/schemas/DocumentStatus"
+        processingJobId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        updatedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - blobPath
+      - caseId
+      - documentId
+      - filename
+      - organizationId
+      - processingStatus
     CasesController.CreateCaseRequest:
       properties:
         name:
           type: string
         description:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
       required:
-        - name
+      - name
+    CasesController.UpdateCaseRequest:
+      properties:
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+      required:
+      - name
+    DependencyInfo:
+      properties:
+        guid:
+          type: string
+        dependsOnGuid:
+          type:
+          - string
+          - "null"
+        dependencyStatus:
+          type: string
+        parentJob:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ProcessingJob"
+      required:
+      - dependencyStatus
+      - guid
+    DocumentStatus:
+      enum:
+      - PENDING
+      - PROCESSING
+      - COMPLETED
+      - FAILED
     DocumentTemplate:
       properties:
         name:
           type: string
         organization:
           type:
-            - "null"
-            - object
+          - "null"
+          - object
           allOf:
-            - $ref: "#/components/schemas/Organization"
+          - $ref: "#/components/schemas/Organization"
         contenttype:
           type:
-            - string
-            - "null"
-        created:
+          - string
+          - "null"
+        createdAt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
           format: date-time
-        updated:
+        updatedAt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
           format: date-time
       required:
-        - name
+      - name
     ExtractionMode:
       enum:
-        - SIMPLE
-        - STEPS
-        - OCR
+      - SIMPLE
+      - STEPS
+      - OCR
     LlmType:
       enum:
-        - DEFAULT
-        - MINI
-        - PREMIUM
+      - DEFAULT
+      - MINI
+      - HIGH
     NamedConfiguration:
       properties:
         id:
           type:
-            - integer
-            - "null"
+          - integer
+          - "null"
           format: int64
         name:
           type: string
@@ -691,54 +1087,140 @@ components:
           format: int64
         storagePath:
           type: string
-        created:
+        createdAt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
           format: date-time
-        updated:
+        updatedAt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
           format: date-time
       required:
-        - name
-        - organizationId
-        - storagePath
+      - name
+      - organizationId
+      - storagePath
     OcrCommand:
       properties:
         ocr:
           $ref: "#/components/schemas/OcrType"
         ocrFormat:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         mimeType:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
+        describeFigures:
+          type:
+          - boolean
+          - "null"
       required:
-        - ocr
+      - ocr
     OcrType:
       enum:
-        - DEFAULT
-        - PREMIUM
-        - NONE
-        - AUTO
+      - DEFAULT
+      - PREMIUM
+      - NONE
+      - AUTO
+    OperationInfo:
+      properties:
+        jobGuid:
+          type: string
+        operationType:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        error:
+          type:
+          - string
+          - "null"
+      required:
+      - createdAt
+      - jobGuid
+      - operationType
+      - status
+      - updatedAt
+    OperationParameters:
+      properties:
+        llmType:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/LlmType"
+        customParameters:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+    OperationResultResponse:
+      properties:
+        jobGuid:
+          type: string
+        parentJobGuid:
+          type: string
+        operationType:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        error:
+          type:
+          - string
+          - "null"
+        resultAvailable:
+          type: boolean
+        result:
+          type:
+          - string
+          - "null"
+      required:
+      - createdAt
+      - jobGuid
+      - operationType
+      - parentJobGuid
+      - resultAvailable
+      - status
+      - updatedAt
+    OperationStatusResponse:
+      properties:
+        parentJobGuid:
+          type: string
+        operations:
+          type: array
+          items:
+            $ref: "#/components/schemas/OperationInfo"
+        totalOperations:
+          type: integer
+          format: int32
+      required:
+      - operations
+      - parentJobGuid
+      - totalOperations
     Organization:
       properties:
         name:
           type: string
       required:
-        - name
+      - name
     PDFField:
       properties:
         name:
           type: string
         tooltip:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         type:
           type: string
         flags:
@@ -749,22 +1231,72 @@ components:
           type: string
         defaultValue:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         options:
           type: array
           items:
             type: string
         script:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
       required:
-        - flags
-        - name
-        - options
-        - type
-        - value
+      - flags
+      - name
+      - options
+      - type
+      - value
+    Page_CaseDocument_:
+      allOf:
+      - $ref: "#/components/schemas/Slice_CaseDocument_"
+      - properties:
+          totalSize:
+            type: integer
+            format: int64
+          totalPages:
+            type: integer
+            format: int32
+      required:
+      - totalPages
+      - totalSize
+    Page_ProcessingJob_:
+      allOf:
+      - $ref: "#/components/schemas/Slice_ProcessingJob_"
+      - properties:
+          totalSize:
+            type: integer
+            format: int64
+          totalPages:
+            type: integer
+            format: int32
+      required:
+      - totalPages
+      - totalSize
+    Pageable:
+      allOf:
+      - $ref: "#/components/schemas/Sort"
+      - properties:
+          number:
+            type: integer
+            format: int32
+          size:
+            type: integer
+            format: int32
+          mode:
+            $ref: "#/components/schemas/Pageable.Mode"
+          sort:
+            $ref: "#/components/schemas/Sort"
+      required:
+      - mode
+      - number
+      - size
+      - sort
+    Pageable.Mode:
+      enum:
+      - CURSOR_NEXT
+      - CURSOR_PREVIOUS
+      - OFFSET
     ProcessingJob:
       properties:
         status:
@@ -773,78 +1305,214 @@ components:
           type: string
         error:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         tokenCount:
           type:
-            - integer
-            - "null"
+          - integer
+          - "null"
           format: int32
         jobType:
           type: string
-        created:
+        operationType:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
+        organizationId:
+          type: integer
+          format: int64
+        dependsOnGuid:
+          type:
+          - string
+          - "null"
+        dependencyStatus:
+          type: string
+        createdAt:
+          type:
+          - string
+          - "null"
           format: date-time
-        updated:
+        updatedAt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
           format: date-time
       required:
-        - guid
-        - jobType
-        - status
+      - dependencyStatus
+      - guid
+      - jobType
+      - organizationId
+      - status
     Settings:
       properties:
         apiKey:
           type: string
       required:
-        - apiKey
+      - apiKey
+    Slice_CaseDocument_:
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/CaseDocument"
+        pageable:
+          $ref: "#/components/schemas/Pageable"
+        pageNumber:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+      required:
+      - content
+      - empty
+      - numberOfElements
+      - offset
+      - pageNumber
+      - pageable
+      - size
+    Slice_ProcessingJob_:
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProcessingJob"
+        pageable:
+          $ref: "#/components/schemas/Pageable"
+        pageNumber:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+      required:
+      - content
+      - empty
+      - numberOfElements
+      - offset
+      - pageNumber
+      - pageable
+      - size
+    Sort:
+      properties:
+        orderBy:
+          type: array
+          items:
+            $ref: "#/components/schemas/Sort.Order"
+      required:
+      - orderBy
+    Sort.Order:
+      properties:
+        ignoreCase:
+          type: boolean
+        direction:
+          $ref: "#/components/schemas/Sort.Order.Direction"
+        property:
+          type: string
+        ascending:
+          type: boolean
+      required:
+      - ascending
+      - direction
+      - ignoreCase
+      - property
+    Sort.Order.Direction:
+      enum:
+      - ASC
+      - DESC
+    SubmitOperationRequest:
+      properties:
+        jobGuid:
+          type: string
+        type:
+          type: string
+        parameters:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/OperationParameters"
+      required:
+      - jobGuid
+      - type
+    SubmitOperationResponse:
+      properties:
+        jobGuid:
+          type: string
+        operationType:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+      required:
+      - jobGuid
+      - message
+      - operationType
+      - status
     TemplateFillRequest:
       properties:
         fields:
           additionalProperties: true
       required:
-        - fields
+      - fields
     Unit: {}
     UploadCommand:
       properties:
         ocr:
           type:
-            - "null"
-            - object
+          - "null"
+          - object
           allOf:
-            - $ref: "#/components/schemas/OcrType"
+          - $ref: "#/components/schemas/OcrType"
         llm:
           type:
-            - "null"
-            - object
+          - "null"
+          - object
           allOf:
-            - $ref: "#/components/schemas/LlmType"
+          - $ref: "#/components/schemas/LlmType"
         extractionMode:
           type:
-            - "null"
-            - object
+          - "null"
+          - object
           allOf:
-            - $ref: "#/components/schemas/ExtractionMode"
+          - $ref: "#/components/schemas/ExtractionMode"
         schema:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         prompt:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         barcodes:
           type:
-            - boolean
-            - "null"
+          - boolean
+          - "null"
         mimeType:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
+        describeFigures:
+          type:
+          - boolean
+          - "null"
     UploadResponse:
       properties:
         guid:
@@ -852,5 +1520,5 @@ components:
         status:
           type: string
       required:
-        - guid
-        - status
+      - guid
+      - status

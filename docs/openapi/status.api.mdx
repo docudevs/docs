@@ -5,9 +5,9 @@ description: "status"
 sidebar_label: "status"
 hide_title: true
 hide_table_of_contents: true
-api: eJydU01v2zAM/SuCTivgNVl3y61Yi6E9FUN3CnJgbCZRa1sqRWUzDP/3kf5qugQ7LJfQevx4JB9by7CPdrW2L35rN5n1AQnY+fqhsCsbGThFm9kABBUykvq2tpYPgffJFQK6WuwAfBCb8C05QglmSpjZmB+wArtqLTcB+5Tk6r3tuo06x+DriFHxm+VS/wqMObmgFGYCRjAzOUuR3NeMNas7hFC6vGe8eIka057UDKT9sBsqjN2cc8mGTi4BSOTpHVlPUGbrVJZ2Iy7sX7H+5tNAaPJzQnGPNDtmduepAvFR6OuNJpeZP/fuFwrnhMBY/KP0ScZCXD+zk6VIZArFf0V2p9tbT8udOGbT+CSaHZfK9ol8jjFK6kdRT6e/7OICJVrUc/CqqT1yLyiRy8ouJP1i8Fm0WrHr9bTzPfuxzJ3P0x0eo7l9erB/F5hBNSpRhQkzKw24NvcQRQBsfkFj2BsRz1E0YRqfyBRjUFREZgGSX9A45F5ef9GBBh+5gl5ao/Dnrj5wmbfI+JsXoQQ5DN0Hlb0W+46HQ8veM6z6OctQD1JF8bbdQsSfVHadPr8lpEbexTwCOdjqSOQECxfVlonuoIx4RmW+Efvpx7jVKyP1LlIcH6FutH8ok36J+YrNdOadSv2AUIimtf4A3eY5Bj4JOrtHvfN599/vn0UmfwBbCYO7
+api: eJydVEtz0zAQ/isenWDGNKEwHHLL0E6nXOhAOWVy2NgbR60jqdIqYDz+7+z6laQxHMglsvbxffv4VCuCIqjFSj3ZjVqnyjr0QNqa+1wtVCCgGFSqHHjYI6EX31oZ/mBzEXXORm347IB2fPb4ErVHDiYfMVUh2+Ee1KJWVDlsU3ptCtU0a3EOzpqAQezX87n85Rgyr51QGAkkbEsGZwbJrCE0JO7gXKmzlvHsKUhMfYLpvNRDukPoq7nkknaVTBnQe+uPltVgSpWJZanW7EL2Gc1nGztCg59migX60TFVW+v3wD5i+nAtybnnj637BPA4iHOPKQLWF2D073FsY7Yjh1PsTx8lf44OTR6+mruz0qfyd65osur73zuYeQTCfEn/yHXCI2fnd6R5jTg2uvw/Y5vTjVtdMk2HHR1afdGtdFgLRiBNpVT14G2GITD8F1ZFI790cjE5mlWxs6KVAqkVCstgoWaMN+t8ZrVQaFqdbG1bYQ9zY7N4g4eQLB/u1WuA0SiHPW974kZWEnCV3ELgxabkJ1QJ2YRFceBdTyobfZL3QUEs3C/g/GwNXe751Xtpu7OB9tBKphf0WNUZl3HahL9o5kpgwcvUfNlqrK24e0DSY4ZF23hu6o5RxF7XGwj4w5dNI9cvEX3F93w8gNewkZbw05LrIGfu6BbKgBdURu2rN9/6yb9NGG+SYn8JppL6oYzyxcdnrIbnq5EN3yHkrBPB70zLLENHJ0EX74y8X+Ps724feU3+AKoDz6g=
 sidebar_class_name: "get api-method"
-info_path: openapi/docudevs-api
+info_path: docs/openapi/docudevs-api
 custom_edit_url: null
 ---
 
@@ -62,7 +62,7 @@ status
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"status 200 response","content":{"application/json":{"schema":{"properties":{"status":{"type":"string"},"guid":{"type":"string"},"error":{"type":["string","null"]},"tokenCount":{"type":["integer","null"],"format":"int32"},"jobType":{"type":"string"},"created":{"type":["string","null"],"format":"date-time"},"updated":{"type":["string","null"],"format":"date-time"}},"required":["guid","jobType","status"],"title":"ProcessingJob"}}}}}}
+  responses={{"200":{"description":"status 200 response","content":{"application/json":{"schema":{"properties":{"status":{"type":"string"},"guid":{"type":"string"},"error":{"type":["string","null"]},"tokenCount":{"type":["integer","null"],"format":"int32"},"jobType":{"type":"string"},"operationType":{"type":["string","null"]},"organizationId":{"type":"integer","format":"int64"},"dependsOnGuid":{"type":["string","null"]},"dependencyStatus":{"type":"string"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["dependencyStatus","guid","jobType","organizationId","status"],"title":"ProcessingJob"}}}}}}
 >
   
 </StatusCodes>

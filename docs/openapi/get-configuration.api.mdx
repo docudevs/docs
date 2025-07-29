@@ -5,9 +5,9 @@ description: "getConfiguration"
 sidebar_label: "getConfiguration"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVMuu2jAQ/ZXIq1aKLrRLdghyKyRe4rFCLAZngNw6sa/t0KIo/94Z8wpQIbUrjz1n5syMj10JDzsnOishdbHNdqUFn+lCrGOhDZ42g1R0xA597w4RCwMWcvRoOb4SBW0IGJZYZAXZBvyebIufZWaR0nhbYiyc3GMOolMJfzQc47zNip2o6zWDndGFQ8f+7+02Lyk6aTMTeJ9LiQgVXcKIjjrxWHgOBGNUJgOq9eE4umqwG8s9+uzEpaW9lbQSRakUJdObD5Se5wFKTbahUyzKnCH95L27HC4INZ0lo8FyRNZ4Mk5o6S4XEw7ymVfc4UTaBSeu13UslMr/m2k0GA8ahA2KocpvFPjbW5Dc90in+I9s88FoOuQu5otkOqd10ps1mZL75IHw8U5Xl0uNT4yMoXnnxr/GbMBKSuqaqI3WCqFowvIsx9Dti2T1reKlURrSns5zKFLSWc3O16qiPCTuvT6LP+id1NwRrbuX0qpY8HVQ/FaHcs6cfS3LPh5c1J3yjd2zXZ1s5KTWiIYj0TnqgAPeogQcCdNHv+AYeR0R6YG0Gh11aaP0HOTYk4IHyk9ed8rdfvsmeNraeWqXSzo/TWojeuzxrqzrg/Skn5ZRQK+YMpVWhecS+n/8KWLRCelJH3tiZEBVbcDh0qq65uPPEu2Rzsk8gM1gw+MhuaWZY5sGvAXl8KmW6zsWX2bnH+RrRHx/rfF8CMWRZwGq5B2ZP/F4+ZSCTvcIKdrAf3J1pUTjG0FPfwb/Slcp/EgWpJ8/u2LBDQ==
+api: eJydVE2P2jAQ/SuRT60ULbRHbgiyu0h8iY8T4jA4A2TrxF7boUVR/ntnzDdst2pPnsQz782z37gSHjZOtBZC6mKdbUoLPtOFWMZCGzx89FLREhv0nZuMWBiwkKNHy/WVKOiDEsMSi6yg2IDfUmzxvcwsEoy3JcbCyS3mIFqV8HvDNc7brNiIul5ysjO6cOh4/3uzyUuKTtrMBN7HViLKik5lREdKPBaeC8EYlcmQ1XhzXF1dsRvLGn124NLSXlpaiKJUisD06g2l5/MApUbroBSLMueUbvLcnvdnlDWeJIPefEDRcDRMaGnPZyMu8plXrHAk7YyB62UdC6Xy/2Ya9IY9Wl57L6/X+H2VX/Dxl7cgWfRAp/iPVNPeYNxnCdNZMp7SOupMrpmSW/BAeH+hi9ONxgdGzqHDzo3/PGcFVhKou85aaa0Qiuu0PMsxqP0U7GCaFT6zUf6CWV/0zY3SkHZ0nkORkiXr+oz1JwMSDs3BVh/nJIwGGb8lGjdD1ah4NuowHGsd+jlydrUsu7hzUXvMl3vLdt7kICdjR3SUEp0jvVzwFCXgyMM++gn7yOuISHdk62ivSxulxyLHOyl4IHzadQfs5tM3wXejnSe53NJxiklGdK/xpq3z7HpyW8MooIEnpNKqMFlB//2jEotWgCc3bYmRE6pqBQ7nVtU1/34v0e7pP4U7sBms+HjInGnmOKYDXoNy+NDLeeTFl8nxsfkaEd+HPR5/QrHnswBV8heFP3B/er+Cq7cIKdrAf9hqS4nGXxU9PC/8gJ2t8JLMyD+/AREc0A0=
 sidebar_class_name: "get api-method"
-info_path: openapi/docudevs-api
+info_path: docs/openapi/docudevs-api
 custom_edit_url: null
 ---
 
@@ -62,7 +62,7 @@ getConfiguration
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"getConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","PREMIUM"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS","OCR"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}}}}}
+  responses={{"200":{"description":"getConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","HIGH"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS","OCR"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]},"describeFigures":{"type":["boolean","null"]}},"title":"UploadCommand"}}}}}}
 >
   
 </StatusCodes>

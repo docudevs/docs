@@ -1,0 +1,71 @@
+---
+id: submit-operation
+title: "submitOperation"
+description: "submitOperation"
+sidebar_label: "submitOperation"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1VEtz2jAQ/isenWmgPXKjJQ9m0sIk5MRwWNsKiMqWK61IGMb/vbvyA5sQppdywNK+9e23exQIGyfGK2EKaQGVyZ1YD063WSrGwvk4UzhvZGIgrPzjpcPvJj2I8VEkJkeZIx+hKLRKgt1w58iYZC7Zygz4VFiOjEo6vu1MfO9Vykc8FJIzoVX5RpSDWnBBUYCFTKK07qReidxrTXWZeCcT5BeA1vNX0pzn1Dpb9kJf9ZW5z9hkens3eXlcktXP2a8ZfR5m9w9sigo11/dYhy3XVGLiHZps8Y+FpqlitEAvOoWi9bIsT/Fb8DtRKVdZtUJZmXLwBtAavk59z/0WPlX9E2U/QsjKAlcQESrAvo1G/EmlS6wqQv8/MCIio6jxouz/gQ8tI5efEcMhoHcXVZl0DjaX3D4FsHE5z9zmuQZuDURZBnyvQhdS4dbwnBWGWsIMxy3dhqZjw9A9nYbu9h2yQsseaM2bBmdv7I9MRUCqSuWvJgBSP2JqEj+VexdNFkzwftGtkg8ZtTaiziUEESVgh5voFhx1EaM3OERoImLAnhobHYy3UVo7OdakgEDxSeuq2KObr2Gu6fEZBH7kVG2LVNSFqldV20yU7zgsNKicA3mrA7UCip3Fxh3bMsIkPB5jcPLF6rJkMeFqaZGt6LgHqyBmRFY8ylsJqbRhF/yWZCJ+VNT+UpNhD9pzCR9oXg4aj0mSyAKv2q47JFjMn3nPxPVqzUzKPhbeeO3S/1gETlarmgyCjPYa5BsfOC6qmPz7CxjfCvA=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"submitOperation"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/operation"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+submitOperation
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"type":{"type":"string"},"parameters":{"type":["null","object"],"allOf":[{"properties":{"llmType":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","HIGH"],"title":"LlmType"}]},"customParameters":{"type":["null","object"],"additionalProperties":true}},"title":"OperationParameters"}]}},"required":["jobGuid","type"],"title":"SubmitOperationRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"submitOperation 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

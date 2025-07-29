@@ -1,0 +1,71 @@
+---
+id: list-case-documents
+title: "listCaseDocuments"
+description: "listCaseDocuments"
+sidebar_label: "listCaseDocuments"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV9+P2jgQ/lciP91JOdjbO/Vh3yhkK07tgmC3qrRarUwygHtOnNrO9ijK/94Z55eBqIWqfbsnSDwz38w3n+3Jnlm+MezmkcXcgGFPIVM5aG6FyqYJu2FSGDvGpYmKixQya1jIcq55ChY0Oe5Zhg9oSQHQJWQiw6ec2y3+1/CpEBowktUFhMzEW0g5u9kzu8vJS2QWNqDRdK10ym316tXfrCzDNnTON9AE/lSA3v145L+u8UUCa15IfHPloxjx5degXCPME8UyucqIZXS/vrqinwRMrEVOdPeRHaBZ0PhhyFghXGbJk+e5FLFr1PCjIfe9lx2XcrZ23ck1NdSKCtYLUBfAteZUqbCQOpNDB5F0to9etVkhJanluGtho4NzWoxi0xueiS+t3s5yKgzo6cV5JTWpBzDGapFtaHktJFRC6Fmsabt37zvY2qBBRUPS0Oudrbi7JLuVVKs57Zk+eNxsPOGW+0FdKCRw9RFiSzF5kgiikcu510GSLUbApsZgDMZbWm4Llx5kRUqR5tHdZHr3BoPNF7NxtFxWD+PZu/nb6D6a4P/b0fQt/kEUK6yk5BqJ1uEOIP5Rq8vbE2vgFpKR/QbBnh/SAX9Ygf0iQeTJD/qW/hZ/7LoQdseZpxtPJSfS7eHYo8vf1Q6VjjS+kvCtzap0Avr17oLNusmUBsLyfFZKSeCZ2wJYZ1ydNV37R8sxRpxE+OMlvFTaDmaUwGDSelVdJsBdr065iSFL6KEH/ojqztbPK/Rr8NB6M8OYR0Ebxo7MGZ3yh1Rh8SuMcMZBXu/qM01TlYDP7vhhsZwtnu+iD/e0p6qn+SJ6P509LPHN7PZ2Gd37Cc9rZQzeUShCpwpOev2/OH6aOOrbubN0TQwbjYTNZOAa0dMpVu/nu0s0pdZrA/a7xtXheIEAIc0PGuB1uKpnto4kVKPcORGPSGwGiAaoJ2pb2wEr3pFX1+P3AUcZePYPyeeePWuV5XJ5DhUVa86emnRmpccy8PxDD/xIAcdpl0543xnsmLvUt4pG7E1NFV3+bOjm8OG+un7KYeJ5iGytXCXeHTyBFxOM5lN2DNkuNphBdz+RwyCIuEFibfCZ7wKrAuzsC3Id7FShgxaWVtzoETJcNVXsq8GfTvPK2JS786IeoanOgAoN/EoPEmsbYeE/O8wlF06bhZbuyHIsNF8jIbs5uYbdtbpFZDLb71e4/qBlWdLramqnizQRhqSG9K65NHCSQzsHs98Wdcd/D6jLfbn9C7vuI+SFy4JMnD5/AUx91nQwT/SgRTUs/OzSmqsj2/mYTS41+SVNtlvgdKpSBtXiKI4ht57byRcJpd6q/A3ecmX5FXWy4fU=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listCaseDocuments"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/documents"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listCaseDocuments
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"page","in":"query","required":true,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":true,"schema":{"type":"integer","format":"int32","default":20}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listCaseDocuments 200 response","content":{"application/json":{"schema":{"allOf":[{"properties":{"content":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"caseId":{"type":"integer","format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"documentId":{"type":"string"},"filename":{"type":"string"},"contentType":{"type":["string","null"]},"sizeBytes":{"type":["integer","null"],"format":"int64"},"blobPath":{"type":"string"},"metadata":{"type":["null","object"],"additionalProperties":true},"processingStatus":{"enum":["PENDING","PROCESSING","COMPLETED","FAILED"],"title":"DocumentStatus"},"processingJobId":{"type":["integer","null"],"format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["blobPath","caseId","documentId","filename","organizationId","processingStatus"],"title":"CaseDocument"}},"pageable":{"allOf":[{"properties":{"orderBy":{"type":"array","items":{"properties":{"ignoreCase":{"type":"boolean"},"direction":{"enum":["ASC","DESC"],"title":"Sort.Order.Direction"},"property":{"type":"string"},"ascending":{"type":"boolean"}},"required":["ascending","direction","ignoreCase","property"],"title":"Sort.Order"}}},"required":["orderBy"],"title":"Sort"},{"properties":{"number":{"type":"integer","format":"int32"},"size":{"type":"integer","format":"int32"},"mode":{"enum":["CURSOR_NEXT","CURSOR_PREVIOUS","OFFSET"],"title":"Pageable.Mode"},"sort":{"properties":{"orderBy":{"type":"array","items":{"properties":{"ignoreCase":{"type":"boolean"},"direction":{"enum":["ASC","DESC"],"title":"Sort.Order.Direction"},"property":{"type":"string"},"ascending":{"type":"boolean"}},"required":["ascending","direction","ignoreCase","property"],"title":"Sort.Order"}}},"required":["orderBy"],"title":"Sort"}}}],"required":["mode","number","size","sort"],"title":"Pageable"},"pageNumber":{"type":"integer","format":"int32"},"offset":{"type":"integer","format":"int64"},"size":{"type":"integer","format":"int32"},"empty":{"type":"boolean"},"numberOfElements":{"type":"integer","format":"int32"}},"required":["content","empty","numberOfElements","offset","pageNumber","pageable","size"],"title":"Slice_CaseDocument_"},{"properties":{"totalSize":{"type":"integer","format":"int64"},"totalPages":{"type":"integer","format":"int32"}}}],"required":["totalPages","totalSize"],"title":"Page_CaseDocument_"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

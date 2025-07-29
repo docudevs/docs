@@ -1,0 +1,71 @@
+---
+id: get-operation-status
+title: "getOperationStatus"
+description: "getOperationStatus"
+sidebar_label: "getOperationStatus"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVMtu2zAQ/BWCpxYQYje96WYgQeBeUqTpyfBhLa1tupLIkCu3gqB/7671sGIJaXURyeE+Z5a1JjgEHW+0deiBjC2C3kbX3TrVsT4gPfcHPwioDDrSDjzkSOjFvNYFb/jqye6eSpMybgreOqAjrz2+lcYj+yJfYqRDcsQcdFxrqpyYBfKmOOim2crl4DgNDILfL5fySzEk3jhJYDYfxfdUb8gBE1sQFiSm4FxmksvdxSmIfT2K77yUSqaNxjWx1beuhml60bhNVxi8h0pKJszD1Ovpf/y9XpCZG6Ft+ByUeATCdEWzaOnSD1D03vorsumhSBdllult04xp24xiRSOS36c/JDsOzoySoUyiD6Sti73VEoEsQfY811PDBB7Qs6u99TlQe/T1Xt8mNmIkuiFw6n8umVZBL714GvmifyqOnbP6j7abj0ts1nqsF0NCi7prVHMZBy5ZyuvCP9ikfMBzUKvva30bbgBlkXNFihWVYAjMkBjcqUcIrC5Sv6FSZBXr/cyCU5UtvUo7oyAI0wDsn9HQ+l7efRH+nQ2Uw2UautHlKtRQpBqqfJfZQA/hH1q4DHjKRWo+a8dHOjCihM3jXizc+iPHFLyudxDwp8+aRo7fSvQVn/PyDN7AThrET0pqgqy5w3vIAk5SGYZcf3rpBPFZCelzKfajWsigniErZcfLX1iNnq1my1ePCCkrT1Jo0VWSoKOR3eRNkXdrkMPT4yur6C+rhdxq
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getOperationStatus"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/operation/{jobGuid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getOperationStatus
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"jobGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getOperationStatus 200 response","content":{"application/json":{"schema":{"properties":{"parentJobGuid":{"type":"string"},"operations":{"type":"array","items":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"createdAt":{"type":"string"},"updatedAt":{"type":"string"},"error":{"type":["string","null"]}},"required":["createdAt","jobGuid","operationType","status","updatedAt"],"title":"OperationInfo"}},"totalOperations":{"type":"integer","format":"int32"}},"required":["operations","parentJobGuid","totalOperations"],"title":"OperationStatusResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

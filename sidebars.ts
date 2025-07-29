@@ -1,4 +1,4 @@
-import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
 const sidebars: SidebarsConfig = {
   tutorialSidebar: [
@@ -13,7 +13,7 @@ const sidebars: SidebarsConfig = {
         'getting-started/first-document',   // NEW: Detailed walkthrough
       ],
     },
-    
+
     // Core Features - Main functionality
     {
       type: 'category',
@@ -25,7 +25,7 @@ const sidebars: SidebarsConfig = {
         'core/schema-generation',           // NEW: AI schema generation
       ],
     },
-    
+
     // Advanced Features - Power user functionality
     {
       type: 'category',
@@ -36,10 +36,10 @@ const sidebars: SidebarsConfig = {
         'advanced/operations',              // NEW: Error analysis & operations
       ],
     },
-    
+
     // Integration & Best Practices - Removed temporarily
     // TODO: Add integration guides when more specific patterns emerge
-    
+
     // Reference - Technical details
     {
       type: 'category',
@@ -51,7 +51,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
   ],
-  
+
   // API Reference - Auto-generated
   apiSidebar: [
     {

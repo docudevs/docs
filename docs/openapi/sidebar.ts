@@ -30,9 +30,45 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "openapi/update-case",
+          label: "updateCase",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "openapi/delete-case",
+          label: "deleteCase",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "openapi/list-case-documents",
+          label: "listCaseDocuments",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "openapi/upload-case-document",
           label: "uploadCaseDocument",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-case-document",
+          label: "getCaseDocument",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/delete-case-document",
+          label: "deleteCaseDocument",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "openapi/upload-case-document-legacy",
+          label: "uploadCaseDocumentLegacy",
+          className: "menu__list-item--deprecated api-method post",
         },
       ],
     },
@@ -132,6 +168,18 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
+          id: "openapi/get-dependencies",
+          label: "getDependencies",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/list-jobs",
+          label: "listJobs",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "openapi/result",
           label: "result",
           className: "api-method get",
@@ -140,6 +188,30 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "openapi/status",
           label: "status",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "operations",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/submit-operation",
+          label: "submitOperation",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-operation-status",
+          label: "getOperationStatus",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-operation-result",
+          label: "getOperationResult",
           className: "api-method get",
         },
       ],

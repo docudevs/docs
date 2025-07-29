@@ -5,9 +5,9 @@ description: "processDocument"
 sidebar_label: "processDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVUtv2kAQ/ivWnlrJDWmP3GhwJaQQEI8T4jCsN+B0X91dJ0GW/3tn1jY4IUJKcoj38c188/hmqViAvWfDDcsNL5XQgW1TZqxwEAqjJzkbMusMF96PO0DKLDhQIghHlhXTuEHcvixyvCw02UA44NqJf2XhBHoJrhQp8/wgFLBhxcLRko0PrtB7VtfbBix8+G3yIyG40YHocAnWyoLHiAZP3mg6O7vC+DDeUAhPO8Pd2f+G6VJKDMTsngSPuYGUs8cYttClIsg4+zNa368QNV9k08l6iquH2UOGn9F6NSOjUARJ4c64W5HjelunTEr1Zabp5GHSI+xR3Et1phCvwQGnvKcmF59kW06m83vKYrnK5kv8zu4WfabsrfNI+L5Bm65DacNIGKy3suE6ZgeOo1PfR+2MkQJ0H6YKJWK2V5zV54jXVhrI74xSoHMUDd054a3RvqH6dXtLHyTmrrCU2qV+EwQlnRXSfFFnUe2XQsYSBgil/0jj/XnYdOPSwrfvs1x0EdZNnldzQj84jwcTx9X4ZkZxAods0M31oDUZVERcI4IyXJxnLnsFZaU4zVBPrVHpvf17WXZSq2n6H03MvU2GIhyLZ5+M5iT4t1mcLk+9aYPEepHBTZKBx3qH5AWOSTAJ9uoZW5AcTemSLjNPNzkEQP946xvftzc/KR6qBqqFQmqfqZYi6dXuTVSnvgVMc2Al4IOGjkonowhiWXvPZdo5xNUw9hRbeaAeIKqqduDF2sm6pmOstcO3bYPLZ3AF7KhEOLF54WmN3XsE6cVFQCeJsm+LVkHfE+T7MND2EPSR6gGypB0u/4pj90jHUT8IyIWL/M3VXcPyIw7k2fRiKOq0sxhxLmy4it32lDmfLUk9u/aBV412HLzQLwX+j2GamHWcn3hWMQl6X8KesI1P+vsP2MxEpA==
+api: eJydVU1vozAQ/SvIp12Jbbp7zC3bpFukpkT5OFU5DOAmdI1NbZMWIf77zhgINKlSbXMIxn7zxjPzZqiYhZ1h40eWqLjIuLRs6zOVcw02VTJI2JjlWsXcmGkH8FkOGjJuuSbLikl8QdyuSBM8TCXZgN3jWvOXItUcWawuuM9MvOcZsHHFbJmTjbE6lTtW1/6RJuE5l4kJZcf1UnBdsnPjx87aZ7IQgm3retu45Mb+VklJ0FhJS5fGJeS5SGMX1+jZKEl7PSdGiVHblBt6U7EeOnL8mJfomccuQyBE+OSC57LICDKd3U4292tELZazebCZ4+ohfJjhY7JZh2RkUysowjDWayKut7XPhMi+7GkePAT4uAv+3A3570XW8/M3qyGmoOcq4f/pahXMF/cUwmo9W6zwGd4sh55m78mdw8/L5FOys9xexkSgYyQ1Q1SklOAgh7AszbiL9iIZ8sQ6jfhtuiv0J5x1H98mFwqSG5VlIBNUKZ2hea6kaUh+XV/To6HPKRHnDeMhyOus0M0XJena67xzMOEWbGE+bKpBAz52/dnCt6dRLrsb1k2cF2NCHhwAe+XmgzLNUMCWH7NRN0hGrcmoIsc1IijCZd+eszfIcsGP7TYQtmuKwfupiHthdtnqa95pq9/pldRMoV4yPeZMIAStaQI9KZfaNleUgCk/GG+yCNhpko6Hx9K3OUAfZHDlzcBgOa33CqVnlYdSOGCFvVIV2usSZ+gkAQvIj6em4b6++knFpmSjGOlK7bxsXXiD0ry71VEWFrM4ygXgUEWiQgunMVe1wfj3O0JcjZ1kUCl7KjGiqioCwzda1DVtN5OZBkaSGogE6ewJhMEc/+XlySw/gCjoGoym9AF0SgYfG5/c/9gw7Nuy1fN3Dxk/jKvdBFkOfXYXcgG5MbXnkHDt/DdHN42XH04ZvelZi9KnqrGYxDHP7UXsdtAni3BFWo7aL1PWKFnDK30o8d9dU7moXTe7vYoJkLsCdoRtOOn3D4uwm4s=
 sidebar_class_name: "post api-method"
-info_path: openapi/docudevs-api
+info_path: docs/openapi/docudevs-api
 custom_edit_url: null
 ---
 
@@ -47,14 +47,14 @@ processDocument
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"dependsOn","in":"query","schema":{"type":["string","null"]}}]}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","PREMIUM"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS","OCR"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]}},"title":"UploadCommand"}}}}}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","HIGH"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS","OCR"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]},"describeFigures":{"type":["boolean","null"]}},"title":"UploadCommand"}}}}}
 >
   
 </RequestSchema>

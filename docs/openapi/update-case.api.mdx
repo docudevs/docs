@@ -1,0 +1,71 @@
+---
+id: update-case
+title: "updateCase"
+description: "updateCase"
+sidebar_label: "updateCase"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVD1v2zAQ/SvCTS2gxG5RdNDmOBm8BUY8GR7OEi2zpUiWpJyogv577yTZkj8QtGkGh+J9vXt8dzUEzD0ka0jRCw+bGIwVDoM0epFBAqXNMIg5GSEGiw4LEYTjiBo0fZALR5JvDFLTl8Wwp7MTv0rpBKUIrhQx+HQvCoSkhlBZjpI6iFw4ct0ZV2Dorr5/g6bZdOHChweTVRyTGvLWgY9orZJpC3DywxvNd0Ny6xh+kNRKcgR4KumDkzqHJoZM+NRJy0kG+/roEIMulYJN04z7WHfpCFyQQXE+ZsXPCZozSgl3vzpxtezgUy/NJRXthbdG+w7j1+mU/50hGrEekT06BhCyDzIhs3GfA/ddo9dvQDJwOWr5+6SEv3i4GEov3OKfS/3vMxErThBf2Sy84zaqzOTeBUlVGXPL9Udib8njirgLvbAkmsvWzqeMJmxvePZsGdqho4FKYNIO6KTupq0hA7/5cpiTpzcsrBKD7ocmzosN/Eq9M23XPcBHk5aP4uCj2fPiKuxk5ENBGoxIYqnwnpJxwH30hJ7kFqJXrKJgIpLqgRQYVaZ0UdYHebZQs0j5yeq73NP7L4zHGh8K1KMWOmKinpmbeoAg3sLEKqT1w8/pVCv/lrXjWosh6bcUPceeqrCprrd0t3KqafiaiHS0bNZ0PKCTuGVKaMtl0vOZHmSHyosrFKeJhE/LXg2fI6p4E11/ibri/lGV/EXHn6IaNmnDkt4LzGhuGEFnnHd17l44xRB8tQWa+BgxS1Nhw7u+m5Hcnlcv5LvtV25hMg5x+MrbnH5bnKZtu10p7V0NCnVeYs6+XUr++wO1Hioa
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"updateCase"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/cases/{caseId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+updateCase
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"description":{"type":["string","null"]}},"required":["name"],"title":"CasesController.UpdateCaseRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"updateCase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name","organizationId"],"title":"Case"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
