@@ -46,6 +46,7 @@ const sidebars: SidebarsConfig = {
       label: 'Reference',
       items: [
         'reference/sdk-methods',            // NEW: Complete SDK reference
+        'reference/cli-reference',          // NEW: CLI command reference
         'reference/error-codes',            // NEW: Error reference
         'reference/limits-quotas',          // NEW: Platform limits
       ],

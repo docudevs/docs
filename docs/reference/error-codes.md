@@ -436,7 +436,7 @@ The CLI returns appropriate exit codes:
 
 ```bash
 # Check exit code
-docudevs process document.pdf
+docudevs process document.pdf --prompt="Extract data"
 if [ $? -eq 2 ]; then
     echo "Authentication failed - check API key"
 elif [ $? -eq 4 ]; then

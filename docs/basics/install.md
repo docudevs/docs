@@ -214,18 +214,83 @@ curl -X POST https://api.docudevs.ai/document/upload-files \
 
 ### CLI Tool
 
-Install the command-line interface for quick operations:
+The CLI tool is included with the SDK installation and provides convenient command-line access to all DocuDevs functionality:
 
 ```bash
-# Install CLI tool
-pip install docudevs-cli
+# CLI is included with SDK installation
+pip install docudevs-api-client
 
-# Configure API key
-docudevs config set-api-key your-api-key-here
+# Set up authentication (choose one method)
+export DOCUDEVS_TOKEN=your-api-key-here
+# OR
+export API_KEY=your-api-key-here
+# OR pass token with each command using --token
 
-# Process a document
-docudevs process document.pdf
+# High-level document processing (upload + process + wait for result)
+docudevs process document.pdf --prompt="Extract invoice data"
+
+# OCR-only processing
+docudevs ocr document.pdf --format=markdown
+
+# Upload and process with a saved configuration
+docudevs process-with-config document.pdf my-invoice-config
+
+# Case management
+docudevs create-case "Invoice Batch 2024-01"
+docudevs list-cases
+docudevs upload-case-document 123 document.pdf
+
+# Configuration management
+docudevs list-configurations
+docudevs save-configuration my-config config.json
+
+# Template management
+docudevs list-templates
+docudevs fill template-name data.json
+
+# Operations (error analysis, etc.)
+docudevs error-analysis job-guid-here
+
+# Low-level commands (for advanced usage)
+docudevs upload-document document.pdf    # Upload only
+docudevs process-document GUID config.json  # Process uploaded doc
+docudevs status GUID                     # Check job status
+docudevs result GUID                     # Get job result
+docudevs wait GUID                       # Wait for completion
 ```
+
+#### CLI Authentication
+
+The CLI supports multiple authentication methods:
+
+1. **Environment Variable (Recommended)**:
+   ```bash
+   export DOCUDEVS_TOKEN=your-api-key-here
+   docudevs process document.pdf
+   ```
+
+2. **Legacy Environment Variable**:
+   ```bash
+   export API_KEY=your-api-key-here
+   docudevs process document.pdf
+   ```
+
+3. **Command Line Option**:
+   ```bash
+   docudevs --token=your-api-key-here process document.pdf
+   ```
+
+#### CLI Features
+
+- **High-level Commands**: `process`, `ocr`, `process-with-config` handle the full workflow
+- **Case Management**: Create and manage document cases
+- **Configuration Management**: Save and reuse processing configurations  
+- **Template Operations**: Fill and manage document templates
+- **Operations**: Submit and monitor advanced operations like error analysis
+- **Automatic Waiting**: Commands automatically wait for results by default
+- **Environment Integration**: Respects environment variables for authentication
+
+For complete CLI documentation including all commands and options, see the **[CLI Reference](/docs/reference/cli-reference)**.
 
 ## Configuration Options
 
