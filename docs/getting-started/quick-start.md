@@ -1,0 +1,240 @@
+---
+title: Quick Start - 5 Minute Tutorial
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Quick Start - 5 Minute Tutorial
+
+Get started with DocuDevs in just 5 minutes! This tutorial will walk you through processing your first document and extracting structured data using AI.
+
+## What You'll Learn
+
+By the end of this tutorial, you'll know how to:
+- Install and configure the DocuDevs SDK
+- Upload and process a document
+- Extract structured data using AI
+- Retrieve and use the results
+
+## Prerequisites
+
+- Python 3.8+ installed on your system
+- A DocuDevs API key ([contact us](mailto:support@docudevs.ai) to get started)
+- A sample document (PDF, Word, or image file)
+
+## Step 1: Install the SDK (30 seconds)
+
+<Tabs
+  defaultValue="pip"
+  values={[
+    {label: 'pip', value: 'pip'},
+    {label: 'poetry', value: 'poetry'},
+  ]}>
+  <TabItem value="pip">
+```bash
+pip install docudevs-sdk
+```
+  </TabItem>
+  <TabItem value="poetry">
+```bash
+poetry add docudevs-sdk
+```
+  </TabItem>
+</Tabs>
+
+## Step 2: Set Your API Key (10 seconds)
+
+```bash
+export API_KEY="your-api-key-here"
+```
+
+## Step 3: Process Your First Document (2 minutes)
+
+Create a simple Python script to process a document:
+
+```python
+import os
+import asyncio
+from docudevs.docudevs_client import DocuDevsClient
+
+async def process_document():
+    # Initialize client
+    client = DocuDevsClient(token=os.getenv('API_KEY'))
+    
+    # Read your document
+    with open("your-document.pdf", "rb") as f:
+        document_data = f.read()
+    
+    # Submit for processing with simple instructions
+    response = await client.submit_document(
+        document=document_data,
+        document_mime_type="application/pdf",
+        instruction="Extract all key information from this document"
+    )
+    
+    # Get the processing job ID
+    job_id = response.parsed.guid
+    print(f"Document submitted for processing. Job ID: {job_id}")
+    
+    # Wait for processing to complete
+    result = await client.wait_until_ready(job_id)
+    print("Processing complete!")
+    
+    # Display results
+    if hasattr(result, 'result'):
+        print("\nExtracted Data:")
+        print(result.result)
+    else:
+        print("\nExtracted Data:")
+        print(result)
+
+# Run the processing
+asyncio.run(process_document())
+```
+
+## Step 4: Run and See Results (2 minutes)
+
+Save the script as `quick_start.py` and run it:
+
+```bash
+python quick_start.py
+```
+
+You'll see output like:
+
+```
+Document submitted for processing. Job ID: abc123-def456-ghi789
+Processing complete!
+
+Extracted Data:
+{
+  "invoice_number": "INV-2024-001",
+  "date": "2024-01-15",
+  "total_amount": "$1,250.00",
+  "vendor": "Acme Corp",
+  "items": [
+    {
+      "description": "Professional Services",
+      "quantity": 10,
+      "unit_price": "$125.00"
+    }
+  ]
+}
+```
+
+## What Just Happened?
+
+1. **Document Upload**: Your document was securely uploaded to DocuDevs
+2. **AI Processing**: Our AI analyzed the document and extracted structured data
+3. **Smart Extraction**: The AI understood the document type and extracted relevant fields
+4. **JSON Output**: Results were returned in clean, structured JSON format
+
+## Next Steps - Choose Your Path
+
+### 🚀 **For Developers**
+- [Complete First Document Guide](/docs/getting-started/first-document) - Learn advanced processing options
+- [Simple Documents](/docs/basics/SimpleDocuments) - Understand document processing fundamentals
+- [SDK Methods Reference](/docs/reference/sdk-methods) - Explore all available functions
+
+### 📋 **For Business Users**
+- [Use Cases](/docs/integration/use-cases) - See real-world application examples
+- [Cases](/docs/advanced/cases) - Organize documents into collections
+- [Templates](/docs/templates/Templates) - Create reusable document templates
+
+### ⚙️ **For System Integrators**
+- [Best Practices](/docs/integration/best-practices) - Production deployment guidelines
+- [Configuration](/docs/configuration/Configuration) - Save and reuse processing settings
+- [Troubleshooting](/docs/integration/troubleshooting) - Debug common issues
+
+## Try Different Document Types
+
+DocuDevs works with various document formats:
+
+<Tabs
+  defaultValue="invoice"
+  values={[
+    {label: 'Invoice', value: 'invoice'},
+    {label: 'Receipt', value: 'receipt'},
+    {label: 'Contract', value: 'contract'},
+    {label: 'Form', value: 'form'},
+  ]}>
+  <TabItem value="invoice">
+```python
+instruction = "Extract invoice number, date, vendor, total amount, and all line items"
+```
+  </TabItem>
+  <TabItem value="receipt">
+```python
+instruction = "Extract merchant name, date, total amount, and purchased items"
+```
+  </TabItem>
+  <TabItem value="contract">
+```python
+instruction = "Extract parties involved, contract dates, key terms, and obligations"
+```
+  </TabItem>
+  <TabItem value="form">
+```python
+instruction = "Extract all form fields and their values"
+```
+  </TabItem>
+</Tabs>
+
+## Common Customizations
+
+### Add Custom Schema
+```python
+schema = {
+    "invoice_number": "The invoice number",
+    "date": "Invoice date in YYYY-MM-DD format",
+    "vendor": "Company that issued the invoice",
+    "total": "Total amount as number",
+    "currency": "Currency code (USD, EUR, etc.)"
+}
+
+response = await client.submit_document(
+    document=document_data,
+    document_mime_type="application/pdf",
+    instruction="Extract invoice data according to the schema",
+    schema=schema
+)
+```
+
+### Process Multiple Documents
+```python
+# Create a case for organizing related documents
+case_response = await client.create_case({
+    "name": "Q4 2024 Invoices",
+    "description": "All vendor invoices for Q4 processing"
+})
+case_id = case_response.parsed.id
+
+# Upload multiple documents to the case
+for filename in ["invoice1.pdf", "invoice2.pdf", "invoice3.pdf"]:
+    with open(filename, "rb") as f:
+        await client.upload_case_document(
+            case_id=case_id,
+            document=f.read(),
+            filename=filename
+        )
+```
+
+## Getting Help
+
+- **Documentation**: Browse our [complete documentation](/docs/basics/install)
+- **Examples**: Check out [integration examples](/docs/integration/use-cases)
+- **Support**: Email us at [support@docudevs.ai](mailto:support@docudevs.ai)
+- **Issues**: Found a bug? Let us know!
+
+## What's Next?
+
+You've successfully processed your first document! Now you're ready to:
+
+1. **Explore Advanced Features**: Learn about [Cases](/docs/advanced/cases) for document organization
+2. **Customize Processing**: Dive into [Templates](/docs/templates/Templates) and [Configuration](/docs/configuration/Configuration)
+3. **Build Integration**: Review [Best Practices](/docs/integration/best-practices) for production use
+4. **Scale Your Solution**: Discover performance optimization techniques
+
+Ready to build something amazing with DocuDevs? Let's continue with the [detailed first document guide](/docs/getting-started/first-document)!
