@@ -173,7 +173,7 @@ curl -X POST "https://api.docudevs.ai/document/ocr/sync?format=markdown&ocr=auto
 ### Basic OCR Processing
 
 ```python
-from docudevs import DocuDevsClient
+from docudevs_client import DocuDevsClient
 from io import BytesIO
 
 # Initialize client
@@ -194,32 +194,6 @@ guid = await client.submit_and_ocr_document(
 # Wait for results
 result = await client.wait_until_ready(guid)
 print(result.result)  # For OCR results, use .result attribute
-```
-
-### Synchronous Python Example
-
-```python
-from docudevs import DocuDevsClientSync
-from io import BytesIO
-
-# Initialize synchronous client
-client = DocuDevsClientSync(token="your_api_key")
-
-# Read document
-with open("document.pdf", "rb") as f:
-    document = BytesIO(f.read())
-
-# Process with OCR
-guid = client.submit_and_ocr_document(
-    document=document,
-    document_mime_type="application/pdf",
-    ocr="AUTO",  # Recommended for best results
-    ocr_format="markdown"
-)
-
-# Get results
-result = client.wait_until_ready(guid)
-print(result.result)
 ```
 
 

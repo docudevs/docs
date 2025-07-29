@@ -100,7 +100,7 @@ GET /operation/{parentJobGuid}/{operationType}
 
 ## SDK Examples
 
-### Python (Async)
+### Python
 
 ```python
 from docudevs_client import DocuDevsClient
@@ -131,43 +131,6 @@ analysis_result = await client.submit_and_wait_for_error_analysis(
 )
 
 print(f"Analysis result: {analysis_result}")
-```
-
-### Python (Sync)
-
-```python
-from docudevs_client import DocuDevsClientSync
-
-client = DocuDevsClientSync(token="your-api-key")
-
-# Process document
-response = client.upload_and_process(
-    document=document_data,
-    document_mime_type="application/pdf",
-    instructions="Extract contract terms and dates"
-)
-
-# Submit operation with custom parameters
-operation_response = client.submit_operation_with_parameters(
-    job_guid=response.parsed.guid,
-    operation_type="error-analysis",
-    llm_type="HIGH",
-    custom_parameters={"focus": "financial_data"}
-)
-
-# Check operation status
-status_response = client.get_operation_status(job_guid=response.parsed.guid)
-print(f"Operations: {status_response.operations}")
-
-# Get specific operation result
-result_response = client.get_operation_result(
-    job_guid=response.parsed.guid,
-    operation_type="error-analysis"
-)
-
-if result_response.result_available:
-    analysis = result_response.result
-    print(f"Error analysis: {analysis}")
 ```
 
 ### Advanced Usage with Parameters

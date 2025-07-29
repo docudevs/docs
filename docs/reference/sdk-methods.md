@@ -4,7 +4,7 @@ Complete reference for all DocuDevs Python SDK methods.
 
 ## Client Initialization
 
-### DocuDevsClient (Async)
+### DocuDevsClient
 
 ```python
 from docudevs_client import DocuDevsClient
@@ -15,17 +15,6 @@ client = DocuDevsClient(
 )
 ```
 
-### DocuDevsClientSync (Sync)
-
-```python
-from docudevs_client import DocuDevsClientSync
-
-client = DocuDevsClientSync(
-    api_url="https://api.docudevs.ai",
-    token="your-api-key"
-)
-```
-
 ## Configuration Management
 
 ### list_configurations()
@@ -33,11 +22,7 @@ client = DocuDevsClientSync(
 List all saved configurations.
 
 ```python
-# Async
 configurations = await client.list_configurations()
-
-# Sync
-configurations = client.list_configurations()
 ```
 
 **Returns:** List of configuration objects
@@ -47,11 +32,7 @@ configurations = client.list_configurations()
 Get a specific configuration by name.
 
 ```python
-# Async
 config = await client.get_configuration("my-config")
-
-# Sync
-config = client.get_configuration("my-config")
 ```
 
 **Parameters:**
@@ -71,11 +52,7 @@ body = UploadCommand(
     llm="gpt-4"
 )
 
-# Async
 response = await client.save_configuration("invoice-config", body)
-
-# Sync
-response = client.save_configuration("invoice-config", body)
 ```
 
 **Parameters:**
@@ -87,11 +64,7 @@ response = client.save_configuration("invoice-config", body)
 Delete a configuration.
 
 ```python
-# Async
 response = await client.delete_configuration("old-config")
-
-# Sync
-response = client.delete_configuration("old-config")
 ```
 
 ## Document Upload and Processing
@@ -115,11 +88,7 @@ body = UploadFilesBody(
     instructions="Extract key information"
 )
 
-# Async
 response = await client.upload_files(body)
-
-# Sync
-response = client.upload_files(body)
 ```
 
 ### upload_document(body)
@@ -131,11 +100,7 @@ from docudevs.models import UploadDocumentBody
 
 body = UploadDocumentBody(document=document_file)
 
-# Async
 response = await client.upload_document(body)
-
-# Sync
-response = client.upload_document(body)
 ```
 
 ### upload_and_process()
@@ -143,19 +108,11 @@ response = client.upload_document(body)
 Convenience method to upload and process a document in one call.
 
 ```python
-# Async
 response = await client.upload_and_process(
     document=document_bytes,
     document_mime_type="application/pdf",
     instructions="Extract invoice data",
     llm="gpt-4"
-)
-
-# Sync
-response = client.upload_and_process(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    instructions="Extract invoice data"
 )
 ```
 
@@ -172,18 +129,11 @@ response = client.upload_and_process(
 Upload and process with OCR only (no LLM extraction).
 
 ```python
-# Async
 guid = await client.upload_and_process_ocr_only(
     document=document_bytes,
     document_mime_type="application/pdf",
     ocr="advanced",
     ocr_format="markdown"
-)
-
-# Sync
-guid = client.upload_and_process_ocr_only(
-    document=document_bytes,
-    document_mime_type="application/pdf"
 )
 ```
 
@@ -194,11 +144,7 @@ guid = client.upload_and_process_ocr_only(
 Get job status.
 
 ```python
-# Async
 status_response = await client.status(uuid="job-guid")
-
-# Sync
-status_response = client.status(uuid="job-guid")
 ```
 
 ### result(uuid)
@@ -206,11 +152,7 @@ status_response = client.status(uuid="job-guid")
 Get job result.
 
 ```python
-# Async
 result_response = await client.result(uuid="job-guid")
-
-# Sync
-result_response = client.result(uuid="job-guid")
 ```
 
 ### wait_until_ready()
@@ -218,7 +160,6 @@ result_response = client.result(uuid="job-guid")
 Wait for a job to complete and return the result.
 
 ```python
-# Async only
 result = await client.wait_until_ready(
     guid="job-guid",
     timeout=60,
@@ -238,16 +179,10 @@ result = await client.wait_until_ready(
 Create a new document case.
 
 ```python
-# Async
+# Create a new document case
 case = await client.create_case(
     name="Invoice Processing Q1",
     description="Q1 2024 invoices"
-)
-
-# Sync
-case = client.create_case(
-    name="Contract Review",
-    description="Legal contracts for review"
 )
 ```
 
@@ -260,11 +195,7 @@ case = client.create_case(
 List all cases.
 
 ```python
-# Async
 cases = await client.list_cases()
-
-# Sync
-cases = client.list_cases()
 ```
 
 ### get_case(case_id)
@@ -272,11 +203,7 @@ cases = client.list_cases()
 Get case details.
 
 ```python
-# Async
 case = await client.get_case(case_id=123)
-
-# Sync
-case = client.get_case(case_id=123)
 ```
 
 ### upload_case_document()
@@ -284,19 +211,11 @@ case = client.get_case(case_id=123)
 Upload a document to a case.
 
 ```python
-# Async
 response = await client.upload_case_document(
     case_id=123,
     document=document_bytes,
     document_mime_type="application/pdf",
     filename="invoice.pdf"
-)
-
-# Sync
-response = client.upload_case_document(
-    case_id=123,
-    document=document_bytes,
-    document_mime_type="application/pdf"
 )
 ```
 
@@ -307,14 +226,7 @@ response = client.upload_case_document(
 Submit an operation for a completed job.
 
 ```python
-# Async
 response = await client.submit_operation(
-    job_guid="completed-job-guid",
-    operation_type="error-analysis"
-)
-
-# Sync
-response = client.submit_operation(
     job_guid="completed-job-guid",
     operation_type="error-analysis"
 )
@@ -325,19 +237,11 @@ response = client.submit_operation(
 Submit operation with custom parameters.
 
 ```python
-# Async
 response = await client.submit_operation_with_parameters(
     job_guid="job-guid",
     operation_type="error-analysis",
     llm_type="HIGH",
     custom_parameters={"focus": "numerical_data"}
-)
-
-# Sync
-response = client.submit_operation_with_parameters(
-    job_guid="job-guid",
-    operation_type="error-analysis",
-    llm_type="HIGH"
 )
 ```
 
@@ -346,11 +250,7 @@ response = client.submit_operation_with_parameters(
 Get status of operations for a job.
 
 ```python
-# Async
 status = await client.get_operation_status(job_guid="job-guid")
-
-# Sync
-status = client.get_operation_status(job_guid="job-guid")
 ```
 
 ### get_operation_result()
@@ -358,14 +258,7 @@ status = client.get_operation_status(job_guid="job-guid")
 Get result of a specific operation.
 
 ```python
-# Async
 result = await client.get_operation_result(
-    job_guid="job-guid",
-    operation_type="error-analysis"
-)
-
-# Sync
-result = client.get_operation_result(
     job_guid="job-guid",
     operation_type="error-analysis"
 )
@@ -376,7 +269,6 @@ result = client.get_operation_result(
 Submit operation and wait for completion.
 
 ```python
-# Async only
 result = await client.submit_and_wait_for_operation(
     job_guid="job-guid",
     operation_type="error-analysis",
@@ -390,7 +282,6 @@ result = await client.submit_and_wait_for_operation(
 Convenience method for error analysis.
 
 ```python
-# Async only
 analysis = await client.submit_and_wait_for_error_analysis(
     job_guid="job-guid",
     timeout=120
@@ -404,11 +295,7 @@ analysis = await client.submit_and_wait_for_error_analysis(
 List all templates.
 
 ```python
-# Async
 templates = await client.list_templates()
-
-# Sync
-templates = client.list_templates()
 ```
 
 ### upload_template()
@@ -416,17 +303,10 @@ templates = client.list_templates()
 Upload a new template.
 
 ```python
-# Async
 response = await client.upload_template(
     name="invoice-template",
     template_file=template_bytes,
     instructions="Extract invoice data"
-)
-
-# Sync
-response = client.upload_template(
-    name="invoice-template", 
-    template_file=template_bytes
 )
 ```
 
@@ -435,11 +315,7 @@ response = client.upload_template(
 Get template metadata.
 
 ```python
-# Async
 metadata = await client.metadata(template_id="template-name")
-
-# Sync
-metadata = client.metadata(template_id="template-name")
 ```
 
 ### fill_template()
@@ -453,14 +329,7 @@ request = TemplateFillRequest(
     document_data={"name": "John Doe", "amount": 1000}
 )
 
-# Async
 response = await client.fill_template(
-    template_id="template-name",
-    request=request
-)
-
-# Sync
-response = client.fill_template(
     template_id="template-name",
     request=request
 )
@@ -471,11 +340,7 @@ response = client.fill_template(
 Delete a template.
 
 ```python
-# Async
 response = await client.delete_template(name="old-template")
-
-# Sync
-response = client.delete_template(name="old-template")
 ```
 
 ## Schema Generation
@@ -485,17 +350,10 @@ response = client.delete_template(name="old-template")
 Generate JSON schema from a document.
 
 ```python
-# Async
 response = await client.generate_schema(
     document=document_bytes,
     document_mime_type="application/pdf",
     instructions="Focus on financial data"
-)
-
-# Sync
-response = client.generate_schema(
-    document=document_bytes,
-    document_mime_type="application/pdf"
 )
 ```
 
@@ -506,17 +364,10 @@ response = client.generate_schema(
 Process an uploaded document.
 
 ```python
-# Async
 response = await client.process_document(
     guid="uploaded-doc-guid",
     instructions="Extract all data",
     llm="gpt-4"
-)
-
-# Sync
-response = client.process_document(
-    guid="uploaded-doc-guid",
-    instructions="Extract all data"
 )
 ```
 
@@ -525,15 +376,8 @@ response = client.process_document(
 Process using a saved configuration.
 
 ```python
-# Async
 response = await client.process_document_with_configuration(
     guid="uploaded-doc-guid",
-    configuration_name="invoice-config"
-)
-
-# Sync
-response = client.process_document_with_configuration(
-    guid="uploaded-doc-guid", 
     configuration_name="invoice-config"
 )
 ```
@@ -551,14 +395,7 @@ ocr_body = OcrCommand(
     mime_type="application/pdf"
 )
 
-# Async
 response = await client.ocr_document(
-    guid="uploaded-doc-guid",
-    body=ocr_body
-)
-
-# Sync
-response = client.ocr_document(
     guid="uploaded-doc-guid",
     body=ocr_body
 )

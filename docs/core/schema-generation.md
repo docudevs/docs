@@ -41,7 +41,7 @@ instructions: [optional text]
 
 ## SDK Examples
 
-### Python (Async)
+### Python
 
 ```python
 from docudevs_client import DocuDevsClient
@@ -59,32 +59,6 @@ with open("sample-invoice.pdf", "rb") as f:
 guid = response.parsed.guid
 result = await client.wait_until_ready(guid)
 schema = result.result  # JSON schema string
-```
-
-### Python (Sync)
-
-```python
-from docudevs_client import DocuDevsClientSync
-
-client = DocuDevsClientSync(token="your-api-key")
-
-# Generate schema with instructions
-with open("contract.pdf", "rb") as f:
-    response = client.generate_schema(
-        document=f.read(),
-        document_mime_type="application/pdf",
-        instructions="Focus on contract terms, dates, and monetary amounts"
-    )
-
-# Poll for completion
-import time
-guid = response.parsed.guid
-while True:
-    result = client.result(uuid=guid)
-    if result.status_code == 200:
-        schema = result.content.decode('utf-8')
-        break
-    time.sleep(2)
 ```
 
 ### CLI Usage

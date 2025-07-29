@@ -55,7 +55,7 @@ Technical documentation and complete API coverage:
 - **Multi-format support** - PDFs, Word docs, images, and more
 
 ### 📦 Developer-Friendly
-- **Simple SDK** with intuitive async/sync methods
+- **Simple SDK** with intuitive async methods
 - **Comprehensive examples** for every feature
 - **Clear documentation** with runnable code samples
 
