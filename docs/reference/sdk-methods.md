@@ -288,6 +288,92 @@ analysis = await client.submit_and_wait_for_error_analysis(
 )
 ```
 
+## Generative Tasks
+
+### create_generative_task()
+
+Create a generative task for a completed job.
+
+```python
+response = await client.create_generative_task(
+    parent_job_id="completed-job-guid",
+    prompt="Summarize this document and explain its main purpose",
+    model="DEFAULT",
+    temperature=0.7,
+    max_tokens=500
+)
+```
+
+**Parameters:**
+- `parent_job_id` (str): The parent job GUID (must be completed)
+- `prompt` (str): The prompt to send to the AI model
+- `model` (str, optional): AI model to use
+- `temperature` (float, optional): Temperature parameter (0.0 to 1.0)
+- `max_tokens` (int, optional): Maximum tokens to generate
+
+**Returns:** Generative task creation response
+
+### submit_and_wait_for_generative_task()
+
+Create a generative task and wait for completion.
+
+```python
+result = await client.submit_and_wait_for_generative_task(
+    parent_job_id="completed-job-guid",
+    prompt="Summarize this document and explain its main purpose",
+    model="DEFAULT",
+    temperature=0.7,
+    max_tokens=500,
+    timeout=120,
+    poll_interval=2.0
+)
+
+# Parse the result
+import json
+result_data = json.loads(result.result)
+generated_text = result_data['generated_text']
+```
+
+**Parameters:**
+- `parent_job_id` (str): The parent job GUID (must be completed)
+- `prompt` (str): The prompt to send to the AI model
+- `model` (str, optional): AI model to use
+- `temperature` (float, optional): Temperature parameter (0.0 to 1.0)
+- `max_tokens` (int, optional): Maximum tokens to generate
+- `timeout` (int): Maximum time to wait in seconds (default: 120)
+- `poll_interval` (float): Time between status checks in seconds (default: 2.0)
+
+**Returns:** The generative task result once complete
+
+**Raises:**
+- `TimeoutError`: If the operation doesn't complete within the timeout
+- `Exception`: If the operation fails or errors occur
+
+## OCR Processing
+
+### submit_and_ocr_document()
+
+Convenience method to upload and process a document with OCR only.
+
+```python
+guid = await client.submit_and_ocr_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    ocr="PREMIUM",
+    ocr_format="markdown",
+    describe_figures=True
+)
+```
+
+**Parameters:**
+- `document` (BytesIO): Document content
+- `document_mime_type` (str): MIME type
+- `ocr` (str, optional): OCR type ("DEFAULT", "PREMIUM", "AUTO")
+- `ocr_format` (str, optional): OCR output format ("plain", "markdown")
+- `describe_figures` (bool, optional): Whether to describe figures in detail
+
+**Returns:** Job GUID for the OCR processing job
+
 ## Templates
 
 ### list_templates()
@@ -477,6 +563,11 @@ result.metadata        # Processing metadata
 
 ### Operation Types
 - `"error-analysis"`
+- `"generative-task"`
+
+### Generative Task Models
+- `"DEFAULT"` - Standard AI model, good balance of speed and quality
+- `"HIGH"` - Premium AI model, slower but higher quality responses
 
 ## Best Practices
 
@@ -535,4 +626,58 @@ async def process_documents_batch(documents):
             results.append(result)
     
     return results
+```
+
+### Generative Task Workflows
+```python
+async def analyze_document_with_ai(document_data, mime_type):
+    """Complete workflow: OCR + multiple generative tasks"""
+    
+    # Step 1: Process with OCR
+    ocr_job_id = await client.submit_and_ocr_document(
+        document=document_data,
+        document_mime_type=mime_type,
+        ocr="PREMIUM",
+        ocr_format="markdown"
+    )
+    
+    # Wait for OCR to complete
+    await client.wait_until_ready(ocr_job_id)
+    
+    # Step 2: Generate summary
+    summary_task = client.submit_and_wait_for_generative_task(
+        parent_job_id=ocr_job_id,
+        prompt="Provide a concise summary of this document."
+    )
+    
+    # Step 3: Extract key information
+    key_info_task = client.submit_and_wait_for_generative_task(
+        parent_job_id=ocr_job_id,
+        prompt="List the most important facts, dates, and numbers from this document."
+    )
+    
+    # Step 4: Categorize document
+    category_task = client.submit_and_wait_for_generative_task(
+        parent_job_id=ocr_job_id,
+        prompt="What type of document is this? (e.g., invoice, contract, report, etc.)"
+    )
+    
+    # Wait for all generative tasks to complete
+    summary, key_info, category = await asyncio.gather(
+        summary_task, key_info_task, category_task
+    )
+    
+    # Parse results
+    import json
+    return {
+        'summary': json.loads(summary.result)['generated_text'],
+        'key_info': json.loads(key_info.result)['generated_text'],
+        'category': json.loads(category.result)['generated_text']
+    }
+
+# Usage
+analysis = await analyze_document_with_ai(document_bytes, "application/pdf")
+print(f"Document Type: {analysis['category']}")
+print(f"Summary: {analysis['summary']}")
+print(f"Key Information: {analysis['key_info']}")
 ```

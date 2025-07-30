@@ -131,11 +131,57 @@ Extracted Data:
 3. **Smart Extraction**: The AI understood the document type and extracted relevant fields
 4. **JSON Output**: Results were returned in clean, structured JSON format
 
+## Bonus: AI-Powered Document Analysis (1 minute)
+
+Want to go beyond structured extraction? Try using AI to understand and summarize your documents:
+
+```python
+async def analyze_document_with_ai():
+    client = DocuDevsClient(token=os.getenv('API_KEY'))
+    
+    # Read your document
+    with open("your-document.pdf", "rb") as f:
+        document_data = f.read()
+    
+    # First, process with OCR to extract text
+    ocr_job_id = await client.submit_and_ocr_document(
+        document=document_data,
+        document_mime_type="application/pdf",
+        ocr="PREMIUM",
+        ocr_format="markdown"
+    )
+    
+    # Wait for OCR to complete
+    await client.wait_until_ready(ocr_job_id)
+    
+    # Now ask AI to analyze the document
+    analysis = await client.submit_and_wait_for_generative_task(
+        parent_job_id=ocr_job_id,
+        prompt="Summarize this document and explain what type of document it is and its main purpose."
+    )
+    
+    # Parse and display the AI response
+    import json
+    result_data = json.loads(analysis.result)
+    print("\nAI Analysis:")
+    print(result_data['generated_text'])
+
+# Run the analysis
+asyncio.run(analyze_document_with_ai())
+```
+
+This approach is perfect for:
+- **Document Summaries**: Get quick overviews of long documents
+- **Document Classification**: Automatically categorize document types
+- **Question Answering**: Ask specific questions about document content
+- **Content Transformation**: Convert documents to different formats or styles
+
 ## Next Steps - Choose Your Path
 
 ### 🚀 **For Developers**
 - [Complete First Document Guide](/docs/getting-started/first-document) - Learn advanced processing options
 - [Simple Documents](/docs/basics/SimpleDocuments) - Understand document processing fundamentals
+- [Operations](/docs/advanced/operations) - Use generative tasks and error analysis
 - [SDK Methods Reference](/docs/reference/sdk-methods) - Explore all available functions
 
 ### 📋 **For Business Users**

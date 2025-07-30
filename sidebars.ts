@@ -21,6 +21,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'basics/SimpleDocuments',           // EXISTING: Core document processing
         'basics/PlainOCR',                  // EXISTING: OCR-only processing
+        'core/ai-analysis',                 // NEW: AI document analysis and generative tasks
         'templates/Templates',              // EXISTING: Template management
         'core/schema-generation',           // NEW: AI schema generation
       ],
