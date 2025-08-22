@@ -417,7 +417,7 @@ Operations can fail with specific error messages:
 
 ```python
 from http import HTTPStatus
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 client = DocuDevsClient(token="your-api-key")
 

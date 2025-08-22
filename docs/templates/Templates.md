@@ -14,14 +14,16 @@ Templates functionality allows you to upload, manage, and fill templates with da
 **Description:** Uploads a new template document (PDF or Word) to the server.
 
 **Request:**
+
 - **Path Parameter:**
-    - `name` (String): The name of the template.
+  - `name` (String): The name of the template.
 - **Headers:**
-    - `Authorization` (String): API key for authorization.
+  - `Authorization` (String): API key for authorization.
 - **Form Data:**
-    - `document` (File): The template document to be uploaded.
+  - `document` (File): The template document to be uploaded.
 
 **Response:**
+
 - **200 OK:** Template uploaded successfully.
 - **400 Bad Request:** Invalid input.
 - **500 Internal Server Error:** Server error.
@@ -34,16 +36,18 @@ Templates functionality allows you to upload, manage, and fill templates with da
     {label: 'Python', value: 'python'},
   ]}>
   <TabItem value="curl">
+
 ```sh
 curl -X POST https://api.docudevs.ai/template/invoice \
      -H "Authorization: $API_KEY" \
      -F "document=@invoice.pdf"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 import asyncio
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 api_key = 'YOUR_API_KEY'
 template_name = 'invoice'
@@ -52,7 +56,7 @@ client = DocuDevsClient(token=api_key)
 async def upload_template():
     with open('invoice.pdf', 'rb') as file:
         response = await client.upload_template(
-            name=template_name, 
+            name=template_name,
             file=file
         )
         if response.status_code == 200:
@@ -62,6 +66,7 @@ async def upload_template():
             print(f"Error: {response.status_code}")
 
 asyncio.run(upload_template())
+
 ```
   </TabItem>
 </Tabs>
@@ -122,12 +127,14 @@ Response example:
 **Description:** Retrieves metadata for a specific template.
 
 **Request:**
+
 - **Path Parameter:**
-    - `name` (String): The name of the template.
+  - `name` (String): The name of the template.
 - **Headers:**
-    - `Authorization` (String): API key for authorization.
+  - `Authorization` (String): API key for authorization.
 
 **Response:**
+
 - **200 OK:** Returns the metadata of the template.
 - **404 Not Found:** Template not found.
 - **500 Internal Server Error:** Server error.
@@ -140,15 +147,17 @@ Response example:
     {label: 'Python', value: 'python'},
   ]}>
   <TabItem value="curl">
+
 ```sh
 curl -X GET https://api.docudevs.ai/template/metadata/invoice \
      -H "Authorization: $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 import asyncio
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 api_key = 'YOUR_API_KEY'
 template_name = 'invoice'
@@ -163,6 +172,7 @@ async def get_template_metadata():
         print(f"Error: {response.status_code}")
 
 asyncio.run(get_template_metadata())
+
 ```
   </TabItem>
 </Tabs>
@@ -196,6 +206,7 @@ asyncio.run(get_template_metadata())
 curl -X DELETE https://api.docudevs.ai/template/invoice \
      -H "Authorization: $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -214,6 +225,7 @@ async def delete_template():
         print(f"Error deleting template: {response.status_code}")
 
 asyncio.run(delete_template())
+
 ```
   </TabItem>
 </Tabs>
@@ -254,12 +266,13 @@ curl --output filled_invoice.pdf -X POST https://api.docudevs.ai/template/fill/i
      -H "Content-Type: application/json" \
      -d '{"fields":{"name": "John Doe", "amount": "100.00", "termsAccepted": true}}'
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 import asyncio
 import os
-from docudevs_client import DocuDevsClient, TemplateFillRequest
+from docudevs.docudevs_client import DocuDevsClient, TemplateFillRequest
 
 api_key = 'YOUR_API_KEY'
 template_name = 'invoice'
@@ -272,7 +285,7 @@ async def fill_template():
         'amount': '100.00',
         'termsAccepted': True
     }
-    
+
     # Create the template fill request
     fill_request = TemplateFillRequest(fields=fields)
     
@@ -288,6 +301,7 @@ async def fill_template():
         print(f"Error filling template: {response.status_code}")
 
 asyncio.run(fill_template())
+
 ```
   </TabItem>
 </Tabs>
@@ -320,11 +334,12 @@ curl --output template-filled.docx -X POST https://api.docudevs.ai/template/fill
          ]
        }}'
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 import asyncio
-from docudevs_client import DocuDevsClient, TemplateFillRequest
+from docudevs.docudevs_client import DocuDevsClient, TemplateFillRequest
 
 api_key = 'YOUR_API_KEY'
 template_name = 'template1'
@@ -343,7 +358,7 @@ async def fill_complex_template():
             {'label': 'farm', 'cols': ['cow', 'duck', 'lizard', 'trout']}
         ]
     }
-    
+
     # Create the template fill request
     fill_request = TemplateFillRequest(fields=fields)
     
@@ -359,6 +374,7 @@ async def fill_complex_template():
         print(f"Error filling template: {response.status_code}")
 
 asyncio.run(fill_complex_template())
+
 ```
   </TabItem>
 </Tabs>
@@ -392,11 +408,12 @@ Will render:
 curl -X GET https://api.docudevs.ai/template/list \
      -H "Authorization: $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 import asyncio
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 api_key = 'YOUR_API_KEY'
 client = DocuDevsClient(token=api_key)
@@ -411,6 +428,7 @@ async def list_templates():
         print(f"Error retrieving templates: {response.status_code}")
 
 asyncio.run(list_templates())
+
 ```
   </TabItem>
 </Tabs>

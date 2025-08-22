@@ -12,7 +12,7 @@ The DocuDevs CLI provides convenient command-line access to all platform functio
 The CLI is included when you install the DocuDevs SDK:
 
 ```bash
-pip install docudevs-api-client
+pip install docu-devs-api-client
 ```
 
 ## Authentication
@@ -52,6 +52,7 @@ docudevs process document.pdf [OPTIONS]
 ```
 
 **Options:**
+
 - `--prompt TEXT`: Extraction prompt describing what to extract
 - `--schema TEXT`: JSON schema for structured extraction
 - `--ocr [DEFAULT|NONE|PREMIUM|AUTO]`: OCR processing type (default: DEFAULT)
@@ -60,6 +61,7 @@ docudevs process document.pdf [OPTIONS]
 - `--wait/--no-wait`: Wait for processing to complete (default: wait)
 
 **Examples:**
+
 ```bash
 # Extract invoice data
 docudevs process invoice.pdf --prompt="Extract invoice data including total, date, vendor"
@@ -80,12 +82,14 @@ docudevs ocr-only document.pdf [OPTIONS]
 ```
 
 **Options:**
+
 - `--ocr [DEFAULT|NONE|PREMIUM|AUTO]`: OCR processing type (default: DEFAULT)
 - `--format [plain|markdown]`: Output format (default: plain)
 - `--timeout INTEGER`: Timeout in seconds (default: 60)
 - `--wait/--no-wait`: Wait for processing to complete (default: wait)
 
 **Examples:**
+
 ```bash
 # Basic OCR
 docudevs ocr-only document.pdf
@@ -106,9 +110,11 @@ docudevs wait JOB_GUID [OPTIONS]
 ```
 
 **Options:**
+
 - `--timeout INTEGER`: Timeout in seconds (default: 60)
 
 **Example:**
+
 ```bash
 docudevs wait 550e8400-e29b-41d4-a716-446655440000
 ```
@@ -142,6 +148,7 @@ docudevs save-configuration CONFIG_NAME config.json
 ```
 
 **Example config.json:**
+
 ```json
 {
   "prompt": "Extract invoice data",
@@ -180,6 +187,7 @@ docudevs fill TEMPLATE_NAME data.json
 ```
 
 **Example data.json:**
+
 ```json
 {
   "name": "John Doe",
@@ -212,7 +220,7 @@ docudevs result JOB_GUID
 
 These options are available for all commands:
 
-- `--api-url TEXT`: API endpoint URL (default: https://api.docudevs.ai)
+- `--api-url TEXT`: API endpoint URL (default: <https://api.docudevs.ai>)
 - `--token TEXT`: Authentication token (or use environment variables)
 - `--help`: Show help message and exit
 
@@ -236,6 +244,7 @@ fi
 ## Error Handling
 
 The CLI returns appropriate exit codes:
+
 - `0`: Success
 - `1`: Error (authentication, processing, etc.)
 
@@ -312,22 +321,28 @@ done
 ### Common Issues
 
 **Authentication Error:**
+
 ```
 Error: No authentication token provided
 ```
+
 - Set `DOCUDEVS_TOKEN` environment variable or use `--token`
 
 **Network/Connection Error:**
+
 ```
 Error: Connection timeout
 ```
+
 - Check internet connection and firewall settings
 - Verify API endpoint with `--api-url`
 
 **File Not Found:**
+
 ```
 Error: Path "document.pdf" does not exist
 ```
+
 - Verify file path is correct and file exists
 - Use absolute paths if needed
 

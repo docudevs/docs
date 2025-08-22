@@ -139,7 +139,7 @@ GET /operation/{parentJobGuid}/{operationType}
 #### Error Analysis
 
 ```python
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 client = DocuDevsClient(token="your-api-key")
 
@@ -171,7 +171,7 @@ print(f"Analysis result: {analysis_result}")
 #### Generative Tasks
 
 ```python
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 client = DocuDevsClient(token="your-api-key")
 

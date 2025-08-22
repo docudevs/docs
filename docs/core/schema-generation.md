@@ -44,7 +44,7 @@ instructions: [optional text]
 ### Python
 
 ```python
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 client = DocuDevsClient(token="your-api-key")
 

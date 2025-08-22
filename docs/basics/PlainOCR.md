@@ -76,7 +76,7 @@ docudevs ocr document.pdf --ocr auto
 First, install the DocuDevs CLI:
 
 ```bash
-pip install docudevs-sdk
+pip install docu-devs-api-client
 ```
 
 Set your API key as an environment variable:
@@ -182,7 +182,7 @@ curl -X POST "https://api.docudevs.ai/document/ocr/sync?format=markdown&ocr=auto
 ### Basic OCR Processing
 
 ```python
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 from io import BytesIO
 
 # Initialize client

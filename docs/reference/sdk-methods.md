@@ -7,7 +7,7 @@ Complete reference for all DocuDevs Python SDK methods.
 ### DocuDevsClient
 
 ```python
-from docudevs_client import DocuDevsClient
+from docudevs.docudevs_client import DocuDevsClient
 
 client = DocuDevsClient(
     api_url="https://api.docudevs.ai",  # Optional, defaults to production

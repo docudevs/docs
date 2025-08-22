@@ -12,6 +12,7 @@ DocuDevs transforms your unstructured documents into structured data using advan
 ## Quick Navigation
 
 ### 🚀 New to DocuDevs?
+
 Start here for a smooth onboarding experience:
 
 - **[5-Minute Quick Start](/docs/getting-started/quick-start)** - Process your first document in minutes
@@ -19,6 +20,7 @@ Start here for a smooth onboarding experience:
 - **[First Document Walkthrough](/docs/getting-started/first-document)** - Detailed tutorial with examples
 
 ### 📋 Core Features
+
 Learn about the main functionality:
 
 - **[Simple Documents](/docs/basics/SimpleDocuments)** - Basic document processing
@@ -27,6 +29,7 @@ Learn about the main functionality:
 - **[Schema Generation](/docs/core/schema-generation)** - AI-powered output structure creation
 
 ### ⚡ Advanced Features
+
 Power user functionality for complex workflows:
 
 - **[Cases](/docs/advanced/cases)** - Organize documents into collections ⭐ *Most Popular*
@@ -34,6 +37,7 @@ Power user functionality for complex workflows:
 - **[Operations](/docs/advanced/operations)** - Error analysis and post-processing workflows
 
 ### 🔧 Integration & Production
+
 Ready to deploy? These guides will help:
 
 - **[Use Cases](/docs/integration/use-cases)** - Real-world implementation examples
@@ -41,6 +45,7 @@ Ready to deploy? These guides will help:
 - **[Troubleshooting](/docs/integration/troubleshooting)** - Debug common issues
 
 ### 📖 Reference
+
 Technical documentation and complete API coverage:
 
 - **[SDK Methods](/docs/reference/sdk-methods)** - Complete Python SDK reference
@@ -50,16 +55,19 @@ Technical documentation and complete API coverage:
 ## What Makes DocuDevs Different?
 
 ### 🤖 AI-Powered Intelligence
+
 - **Context-aware extraction** that understands document structure and meaning
 - **Flexible schema generation** - define your output format or let AI determine the best structure
 - **Multi-format support** - PDFs, Word docs, images, and more
 
 ### 📦 Developer-Friendly
+
 - **Simple SDK** with intuitive async methods
 - **Comprehensive examples** for every feature
 - **Clear documentation** with runnable code samples
 
 ### 🏢 Enterprise-Ready
+
 - **Scalable architecture** built for high-volume processing
 - **Secure processing** with enterprise-grade security
 - **Flexible deployment** options for any infrastructure
@@ -93,18 +101,21 @@ Technical documentation and complete API coverage:
 Choose the path that best fits your needs:
 
 ### For Developers
+
 1. [Install the SDK](/docs/basics/install)
 2. [Quick Start Tutorial](/docs/getting-started/quick-start)
 3. [Explore Cases](/docs/advanced/cases) for document organization
 4. [Review SDK Methods](/docs/reference/sdk-methods) for advanced usage
 
 ### For Business Users
+
 1. [Quick Start Tutorial](/docs/getting-started/quick-start) - understand the basics
 2. [Use Cases](/docs/integration/use-cases) - see real-world applications
 3. [Templates](/docs/templates/Templates) - create reusable workflows
 4. [Best Practices](/docs/integration/best-practices) - optimize for your needs
 
 ### For System Integrators
+
 1. [Installation Guide](/docs/basics/install)
 2. [First Document Guide](/docs/getting-started/first-document) - comprehensive walkthrough
 3. [Best Practices](/docs/integration/best-practices) - production deployment
@@ -113,7 +124,7 @@ Choose the path that best fits your needs:
 ## Download Resources
 
 - **[OpenAPI Specification](/files/docudevs.yaml)** - Complete API specification
-- **[Python SDK on PyPI](https://pypi.org/project/docudevs-sdk/)** - Install via pip
+- **[Python SDK on PyPI](https://pypi.org/project/docu-devs-api-client/)** - Install via pip
 - **[Sample Documents](/files/sample-documents/)** - Test documents for experimentation
 
 ## Need Help?

@@ -21,7 +21,7 @@ By the end of this tutorial, you'll know how to:
 
 ## Prerequisites
 
-- Python 3.8+ installed on your system
+- Python 3.9+ installed on your system
 - A DocuDevs API key ([contact us](mailto:support@docudevs.ai) to get started)
 - A sample document (PDF, Word, or image file)
 
@@ -37,13 +37,13 @@ By the end of this tutorial, you'll know how to:
   <TabItem value="pip">
 
 ```bash
-pip install docudevs-sdk
+pip install docu-devs-api-client
 ```
 
   </TabItem>
   <TabItem value="poetry">
 ```bash
-poetry add docudevs-sdk
+poetry add docu-devs-api-client
 ```
   </TabItem>
   <TabItem value="uv">
@@ -54,7 +54,7 @@ uv venv
 source .venv/bin/activate
 
 # Install the SDK
-uv pip install docudevs-sdk
+uv pip install docu-devs-api-client
 ```
 
   </TabItem>
