@@ -3,7 +3,6 @@ title: CLI Reference
 sidebar_position: 5
 ---
 
-# CLI Reference
 
 The DocuDevs CLI provides convenient command-line access to all platform functionality. The CLI is included with the SDK installation and supports both high-level convenience commands and low-level API operations.
 
@@ -220,7 +219,7 @@ docudevs result JOB_GUID
 
 These options are available for all commands:
 
-- `--api-url TEXT`: API endpoint URL (default: <https://api.docudevs.ai>)
+- `--api-url TEXT`: API endpoint URL (default https://api.docudevs.ai)
 - `--token TEXT`: Authentication token (or use environment variables)
 - `--help`: Show help message and exit
 
