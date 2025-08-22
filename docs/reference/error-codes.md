@@ -7,14 +7,17 @@ Complete reference for HTTP status codes and error responses in the DocuDevs API
 ### Success Codes (2xx)
 
 #### 200 OK
+
 Successful request with response data.
 
 **Used by:**
+
 - GET requests that return data
 - POST requests that complete successfully
 - Processing operations that finish
 
 **Example Response:**
+
 ```json
 {
   "guid": "uuid-string",
@@ -24,14 +27,17 @@ Successful request with response data.
 ```
 
 #### 201 Created
+
 Resource successfully created.
 
 **Used by:**
+
 - Creating new cases
 - Uploading documents
 - Saving configurations
 
 **Example Response:**
+
 ```json
 {
   "id": 123,
@@ -43,9 +49,11 @@ Resource successfully created.
 ### Client Error Codes (4xx)
 
 #### 400 Bad Request
+
 Invalid request parameters or malformed data.
 
 **Common Causes:**
+
 - Missing required fields
 - Invalid parameter values
 - Malformed JSON
@@ -53,6 +61,7 @@ Invalid request parameters or malformed data.
 - Invalid operation types
 
 **Example Response:**
+
 ```json
 {
   "message": "Invalid operation type: invalid-operation",
@@ -63,6 +72,7 @@ Invalid request parameters or malformed data.
 **Specific Cases:**
 
 **Invalid Operation Type:**
+
 ```bash
 POST /operation
 {
@@ -73,6 +83,7 @@ POST /operation
 ```
 
 **Parent Job Not Completed:**
+
 ```bash
 POST /operation
 {
@@ -83,6 +94,7 @@ POST /operation
 ```
 
 **Missing Required Fields:**
+
 ```bash
 POST /cases
 {
@@ -92,15 +104,18 @@ POST /cases
 ```
 
 #### 401 Unauthorized
+
 Authentication failed or missing.
 
 **Common Causes:**
+
 - Missing API key
 - Invalid API key
 - Expired token
 - Malformed Authorization header
 
 **Example Response:**
+
 ```json
 {
   "message": "Unauthorized",
@@ -109,6 +124,7 @@ Authentication failed or missing.
 ```
 
 **Authentication Examples:**
+
 ```bash
 # Missing Authorization header
 GET /cases
@@ -121,14 +137,17 @@ Authorization: Bearer invalid-key
 ```
 
 #### 403 Forbidden
+
 Valid authentication but insufficient permissions.
 
 **Common Causes:**
+
 - API key doesn't have required permissions
 - Accessing resources from different organization
 - Quota or limit exceeded
 
 **Example Response:**
+
 ```json
 {
   "message": "Access denied to organization resources",
@@ -137,9 +156,11 @@ Valid authentication but insufficient permissions.
 ```
 
 #### 404 Not Found
+
 Requested resource doesn't exist.
 
 **Common Causes:**
+
 - Invalid GUID
 - Job not found
 - Case not found
@@ -148,6 +169,7 @@ Requested resource doesn't exist.
 - Resource belongs to different organization
 
 **Example Response:**
+
 ```json
 {
   "message": "Resource not found",
@@ -158,39 +180,46 @@ Requested resource doesn't exist.
 **Specific Cases:**
 
 **Job Not Found:**
+
 ```bash
 GET /job/status/invalid-guid
 # Returns: 404 Not Found
 ```
 
 **Case Not Found:**
+
 ```bash
 GET /cases/99999
 # Returns: 404 Not Found
 ```
 
 **Configuration Not Found:**
+
 ```bash
 GET /configuration/nonexistent-config
 # Returns: 404 Not Found
 ```
 
 **Operation Not Found:**
+
 ```bash
 GET /operation/invalid-guid/error-analysis
 # Returns: 404 Not Found
 ```
 
 #### 409 Conflict
+
 Resource conflict or state mismatch.
 
 **Common Causes:**
+
 - Configuration name already exists
 - Template name already exists
 - Document limit exceeded
 - Concurrent modification
 
 **Example Response:**
+
 ```json
 {
   "message": "Configuration name already exists",
@@ -201,6 +230,7 @@ Resource conflict or state mismatch.
 **Specific Cases:**
 
 **Case Document Limit:**
+
 ```bash
 POST /cases/123/documents
 # When case already has 200 documents
@@ -208,23 +238,28 @@ POST /cases/123/documents
 ```
 
 **Duplicate Configuration:**
+
 ```bash
 POST /configuration/existing-name
 # Returns: 409 Conflict
 ```
 
 #### 413 Payload Too Large
+
 Request body or file too large.
 
 **Common Causes:**
+
 - Document exceeds size limits
 - Request body too large
 
 **Limits:**
+
 - Maximum document size: 10 MB
 - Maximum request size: 15 MB
 
 **Example Response:**
+
 ```json
 {
   "message": "File size exceeds maximum limit of 10MB",
@@ -233,9 +268,11 @@ Request body or file too large.
 ```
 
 #### 415 Unsupported Media Type
+
 Unsupported file format or content type.
 
 **Supported Formats:**
+
 - `application/pdf`
 - `application/vnd.openxmlformats-officedocument.wordprocessingml.document` (DOCX)
 - `text/plain`
@@ -244,6 +281,7 @@ Unsupported file format or content type.
 - `image/tiff`
 
 **Example Response:**
+
 ```json
 {
   "message": "Unsupported file format: application/unknown",
@@ -252,15 +290,18 @@ Unsupported file format or content type.
 ```
 
 #### 422 Unprocessable Entity
+
 Valid request format but semantic errors.
 
 **Common Causes:**
+
 - Invalid file content
 - Corrupted document
 - Missing document content
 - Invalid schema format
 
 **Example Response:**
+
 ```json
 {
   "message": "Document appears to be corrupted or unreadable",
@@ -271,14 +312,17 @@ Valid request format but semantic errors.
 ### Server Error Codes (5xx)
 
 #### 500 Internal Server Error
+
 Unexpected server error.
 
 **Common Causes:**
+
 - Database connection issues
 - Storage service unavailable
 - Unexpected application errors
 
 **Example Response:**
+
 ```json
 {
   "message": "Internal server error",
@@ -287,25 +331,31 @@ Unexpected server error.
 ```
 
 #### 502 Bad Gateway
+
 Upstream service unavailable.
 
 **Common Causes:**
+
 - AI processing service down
 - Storage service unavailable
 - External API failures
 
 #### 503 Service Unavailable
+
 Service temporarily unavailable.
 
 **Common Causes:**
+
 - Maintenance mode
 - System overload
 - Rate limiting
 
 #### 504 Gateway Timeout
+
 Request timeout from upstream services.
 
 **Common Causes:**
+
 - Long-running AI processing
 - Storage operation timeout
 - Network connectivity issues
@@ -339,6 +389,7 @@ Jobs can have error states in their status:
 ```
 
 **Common Job Errors:**
+
 - `"Processing failed: Document format not supported"`
 - `"Processing failed: Document appears to be corrupted"`
 - `"Processing failed: Text extraction failed"`
@@ -371,26 +422,14 @@ from docudevs_client import DocuDevsClient
 client = DocuDevsClient(token="your-api-key")
 
 try:
-    response = await client.upload_and_process(
-        document=document_data,
-        document_mime_type="application/pdf"
-    )
-    
-    # Check HTTP status
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
-        print("Invalid API key")
-    elif response.status_code == HTTPStatus.NOT_FOUND:
-        print("Resource not found")
-    elif response.status_code == HTTPStatus.BAD_REQUEST:
-        print(f"Bad request: {response.content}")
-    elif response.status_code != HTTPStatus.OK:
-        print(f"Error {response.status_code}: {response.content}")
-    else:
-        # Success - process result
-        result = await client.wait_until_ready(response.parsed.guid)
-        
+  job_id = await client.submit_and_process_document(
+    document=document_data,
+    document_mime_type="application/pdf"
+  )
+  result = await client.wait_until_ready(job_id)
+  print("Processing completed")
 except Exception as e:
-    print(f"Request failed: {e}")
+  print(f"Request failed: {e}")
 ```
 
 ### Handling Specific Errors
@@ -449,11 +488,13 @@ fi
 While not strictly error codes, rate limiting affects API usage:
 
 **Headers:**
+
 - `X-RateLimit-Limit`: Requests per time window
 - `X-RateLimit-Remaining`: Remaining requests
 - `X-RateLimit-Reset`: Reset time (Unix timestamp)
 
 **Response when rate limited:**
+
 ```json
 {
   "message": "Rate limit exceeded. Try again later.",
@@ -468,6 +509,7 @@ While not strictly error codes, rate limiting affects API usage:
 
 **Error:** 401 Unauthorized
 **Solutions:**
+
 1. Verify API key is correct
 2. Check Authorization header format: `Bearer YOUR_API_KEY`
 3. Ensure API key hasn't expired
@@ -477,12 +519,14 @@ While not strictly error codes, rate limiting affects API usage:
 
 **Error:** 413 Payload Too Large
 **Solutions:**
+
 1. Reduce file size (max 10MB)
 2. Compress images before upload
 3. Split large documents
 
 **Error:** 415 Unsupported Media Type
 **Solutions:**
+
 1. Convert to supported format (PDF, DOCX, TXT, images)
 2. Verify MIME type is correct
 3. Check file isn't corrupted
@@ -491,6 +535,7 @@ While not strictly error codes, rate limiting affects API usage:
 
 **Error:** Job status "FAILED"
 **Solutions:**
+
 1. Check job error message for specific cause
 2. Verify document is readable/not corrupted
 3. Try with different processing parameters
@@ -500,6 +545,7 @@ While not strictly error codes, rate limiting affects API usage:
 
 **Error:** 404 Not Found
 **Solutions:**
+
 1. Verify GUID/ID is correct
 2. Check resource belongs to your organization
 3. Ensure resource hasn't been deleted
@@ -509,6 +555,7 @@ While not strictly error codes, rate limiting affects API usage:
 
 **Error:** 400 Bad Request on operation submission
 **Solutions:**
+
 1. Verify parent job is completed
 2. Check operation type spelling
 3. Ensure valid parameters
@@ -525,6 +572,7 @@ When encountering persistent errors:
 5. **Contact support** with error details and request IDs
 
 For support requests, include:
+
 - Error message and status code
 - Request details (endpoint, parameters)
 - Timestamp of the error

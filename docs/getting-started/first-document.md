@@ -60,28 +60,28 @@ Let's start with the simplest approach - just upload the document and let DocuDe
     {label: 'cURL', value: 'curl'},
   ]}>
   <TabItem value="python">
+
 ```python
 async def basic_processing():
-    # Submit document with minimal configuration
-    response = await client.submit_document(
+    # Submit document for AI extraction (non-OCR)
+    job_id = await client.submit_and_process_document(
         document=document_data,
         document_mime_type="application/pdf"
     )
-    
-    job_id = response.parsed.guid
     print(f"Job submitted: {job_id}")
     
     # Wait for completion
     result = await client.wait_until_ready(job_id)
     
     print("Basic Processing Result:")
-    print(json.dumps(result.result, indent=2))
+    print(json.dumps(result.parsed, indent=2))
     
     return result
 
 # Run basic processing
 result = await basic_processing()
 ```
+
   </TabItem>
   <TabItem value="curl">
 ```bash
@@ -91,12 +91,15 @@ curl -X POST https://api.docudevs.ai/document/upload-files \
   -F "document=@sample_invoice.pdf"
 
 # Check status (use GUID from upload response)
-curl -X GET https://api.docudevs.ai/job/status/{GUID} \
+
+curl -X GET <https://api.docudevs.ai/job/status/{GUID}> \
   -H "Authorization: Bearer $API_KEY"
 
 # Get results once complete
-curl -X GET https://api.docudevs.ai/job/result/{GUID} \
+
+curl -X GET <https://api.docudevs.ai/job/result/{GUID}> \
   -H "Authorization: Bearer $API_KEY"
+
 ```
   </TabItem>
 </Tabs>
@@ -118,17 +121,15 @@ async def processing_with_instructions():
     - Payment terms and due date
     """
     
-    response = await client.submit_document(
+    job_id = await client.submit_and_process_document(
         document=document_data,
         document_mime_type="application/pdf",
-        instruction=instruction
+        prompt=instruction
     )
-    
-    job_id = response.parsed.guid
     result = await client.wait_until_ready(job_id)
     
     print("Processing with Instructions Result:")
-    print(json.dumps(result.result, indent=2))
+    print(json.dumps(result.parsed, indent=2))
     
     return result
 
@@ -177,18 +178,16 @@ async def processing_with_schema():
         "payment_terms": "Payment terms description"
     }
     
-    response = await client.submit_document(
+    job_id = await client.submit_and_process_document(
         document=document_data,
         document_mime_type="application/pdf",
-        instruction=instruction,
+        prompt=instruction,
         schema=schema
     )
-    
-    job_id = response.parsed.guid
     result = await client.wait_until_ready(job_id)
     
     print("Processing with Schema Result:")
-    print(json.dumps(result.result, indent=2))
+    print(json.dumps(result.parsed, indent=2))
     
     return result
 
@@ -234,9 +233,8 @@ async def create_and_use_configuration():
     )
     
     result = await client.wait_until_ready(response.parsed.guid)
-    
     print("Processing with Named Configuration Result:")
-    print(json.dumps(result.result, indent=2))
+    print(json.dumps(result.parsed, indent=2))
     
     return result
 ```
@@ -246,6 +244,7 @@ async def create_and_use_configuration():
 The processing results typically include:
 
 ### Success Response Structure
+
 ```json
 {
   "invoice_number": "INV-2024-001",
@@ -272,6 +271,7 @@ The processing results typically include:
 ```
 
 ### Processing Status Flow
+
 1. **Submitted**: Document uploaded and queued for processing
 2. **Processing**: AI is analyzing the document
 3. **Completed**: Extraction finished successfully
@@ -282,6 +282,7 @@ The processing results typically include:
 DocuDevs can process various document types. Here are optimized approaches for common formats:
 
 ### PDF Documents
+
 ```python
 # Standard PDF processing
 mime_type = "application/pdf"
@@ -289,6 +290,7 @@ mime_type = "application/pdf"
 ```
 
 ### Images (JPG, PNG)
+
 ```python
 # Image processing often benefits from OCR
 mime_type = "image/jpeg"  # or "image/png"
@@ -298,6 +300,7 @@ instruction = "First perform OCR to extract all text, then analyze the content f
 ```
 
 ### Word Documents
+
 ```python
 # Word document processing
 mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -307,6 +310,7 @@ instruction = "Extract information from this structured document, preserving any
 ```
 
 ### Scanned Documents
+
 ```python
 # Scanned documents need OCR
 instruction = "This is a scanned document. First extract all text using OCR, then analyze for key information"
@@ -329,17 +333,12 @@ async def robust_document_processing(document_path):
         with open(document_path, "rb") as f:
             document_data = f.read()
         
-        # Submit for processing
-        response = await client.submit_document(
+        # Submit for processing using convenience method
+        job_id = await client.submit_and_process_document(
             document=document_data,
             document_mime_type="application/pdf",
-            instruction="Extract key information from this document"
+            prompt="Extract key information from this document"
         )
-        
-        if response.status_code != 200:
-            raise Exception(f"Upload failed: {response.status_code}")
-        
-        job_id = response.parsed.guid
         print(f"Processing job {job_id}...")
         
         # Wait for completion with timeout
@@ -373,6 +372,7 @@ else:
 ## Advanced Processing Options
 
 ### Batch Processing Multiple Documents
+
 ```python
 async def process_multiple_documents(file_paths):
     results = []
@@ -382,14 +382,11 @@ async def process_multiple_documents(file_paths):
             with open(file_path, "rb") as f:
                 document_data = f.read()
             
-            response = await client.submit_document(
+            job_id = await client.submit_and_process_document(
                 document=document_data,
                 document_mime_type="application/pdf",
-                instruction="Extract invoice data"
+                prompt="Extract invoice data"
             )
-            
-            # Don't wait - just collect job IDs
-            job_id = response.parsed.guid
             results.append({
                 "file": file_path,
                 "job_id": job_id,
@@ -424,6 +421,7 @@ for item in batch_results:
 ```
 
 ### Using Cases for Organization
+
 ```python
 async def process_with_case_organization():
     # Create a case for related documents
@@ -472,6 +470,7 @@ await process_with_case_organization()
 ## Performance Tips
 
 ### Optimizing Processing Speed
+
 1. **Use appropriate LLM models**:
    - `gpt-3.5-turbo`: Faster, good for simple extraction
    - `gpt-4`: Slower, better for complex documents
@@ -485,6 +484,7 @@ await process_with_case_organization()
 4. **Process documents in parallel** when handling multiple files
 
 ### Quality Optimization
+
 1. **Include document context** in instructions
 2. **Specify output format** requirements (dates, numbers, etc.)
 3. **Use examples** in instructions when needed

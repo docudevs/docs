@@ -14,6 +14,7 @@ Operations allow you to run additional analysis and processing on documents that
 ### Error Analysis
 
 Analyzes completed document processing jobs to identify:
+
 - Potential extraction errors or inconsistencies
 - Missing or incomplete data fields
 - Confidence levels for extracted information
@@ -22,6 +23,7 @@ Analyzes completed document processing jobs to identify:
 ### Generative Tasks
 
 Generates custom AI responses based on processed document content:
+
 - Document summaries and explanations
 - Content transformation (e.g., format conversion)
 - Question answering based on document content
@@ -43,6 +45,7 @@ POST /operation
 ```
 
 **Request Body:**
+
 ```json
 {
   "jobGuid": "uuid-of-completed-job",
@@ -61,6 +64,7 @@ POST /operation/{parentJobId}/generative-task
 ```
 
 **Request Body:**
+
 ```json
 {
   "prompt": "Summarize this document and explain its main purpose",
@@ -71,6 +75,7 @@ POST /operation/{parentJobId}/generative-task
 ```
 
 **Response:**
+
 ```json
 {
   "jobGuid": "new-operation-job-uuid",
@@ -87,6 +92,7 @@ GET /operation/{parentJobGuid}
 ```
 
 **Response:**
+
 ```json
 {
   "parentJobGuid": "original-job-uuid",
@@ -111,6 +117,7 @@ GET /operation/{parentJobGuid}/{operationType}
 ```
 
 **Response:**
+
 ```json
 {
   "jobGuid": "operation-job-uuid",
@@ -137,14 +144,13 @@ from docudevs_client import DocuDevsClient
 client = DocuDevsClient(token="your-api-key")
 
 # Process a document first
-response = await client.upload_and_process(
-    document=document_data,
-    document_mime_type="application/pdf",
-    instructions="Extract invoice data including line items and totals"
+job_guid = await client.submit_and_process_document(
+  document=document_data,
+  document_mime_type="application/pdf",
+  prompt="Extract invoice data including line items and totals"
 )
 
 # Wait for processing to complete
-job_guid = response.parsed.guid
 result = await client.wait_until_ready(job_guid)
 
 # Submit error analysis operation
@@ -225,7 +231,7 @@ for question in questions:
         prompt=f"Based on this document, answer the following question: {question}"
     )
     
-    result_data = json.loads(answer.result)
+  result_data = json.loads(answer.result)
     print(f"Q: {question}")
     print(f"A: {result_data['generated_text']}\n")
 ```
@@ -255,7 +261,7 @@ for i, prompt in enumerate(tasks):
         prompt=prompt
     )
     
-    result_data = json.loads(result.result)
+  result_data = json.loads(result.result)
     results.append({
         'task': i + 1,
         'prompt': prompt,
@@ -518,15 +524,14 @@ common_issues = find_common_issues(analyses)
 
 ```python
 # Process invoice
-invoice_result = await client.upload_and_process(
-    document=invoice_pdf,
-    instructions="Extract invoice number, date, items, and total"
+job_id = await client.submit_and_process_document(
+  document=invoice_pdf,
+  document_mime_type="application/pdf",
+  prompt="Extract invoice number, date, items, and total"
 )
 
 # Analyze for accuracy
-analysis = await client.submit_and_wait_for_error_analysis(
-    job_guid=invoice_result.parsed.guid
-)
+analysis = await client.submit_and_wait_for_error_analysis(job_guid=job_id)
 
 # Check for numerical accuracy issues
 if "numerical_accuracy" in analysis.potential_issues:
@@ -588,7 +593,7 @@ for language in languages:
         prompt=f"Translate the main content of this document to {language}. Maintain the original structure and formatting."
     )
     
-    result_data = json.loads(translation.result)
+  result_data = json.loads(translation.result)
     translations[language] = result_data['generated_text']
 
 print(f"Translated to {len(translations)} languages")
@@ -625,9 +630,9 @@ conclusions = await client.submit_and_wait_for_generative_task(
 
 # Compile research summary
 research_summary = {
-    'abstract': json.loads(abstract.result)['generated_text'],
-    'methodology': json.loads(methodology.result)['generated_text'],
-    'conclusions': json.loads(conclusions.result)['generated_text']
+  'abstract': json.loads(abstract.result)['generated_text'],
+  'methodology': json.loads(methodology.result)['generated_text'],
+  'conclusions': json.loads(conclusions.result)['generated_text']
 }
 ```
 
@@ -662,15 +667,18 @@ except Exception as e:
 ### Common Issues
 
 **Operation Not Found (404)**
+
 - Verify the parent job GUID exists and is completed
 - Check that you have access to the job (organization scope)
 
 **Operation Failed**
+
 - Check the operation status for error details
 - Verify the parent job completed successfully
 - Ensure sufficient processing credits
 
 **No Result Available**
+
 - Wait longer for operation to complete
 - Check operation status for errors
 - Verify result storage permissions

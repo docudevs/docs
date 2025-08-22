@@ -13,6 +13,7 @@ Get started with DocuDevs in just 5 minutes! This tutorial will walk you through
 ## What You'll Learn
 
 By the end of this tutorial, you'll know how to:
+
 - Install and configure the DocuDevs SDK
 - Upload and process a document
 - Extract structured data using AI
@@ -31,16 +32,31 @@ By the end of this tutorial, you'll know how to:
   values={[
     {label: 'pip', value: 'pip'},
     {label: 'poetry', value: 'poetry'},
+    {label: 'uv', value: 'uv'},
   ]}>
   <TabItem value="pip">
+
 ```bash
 pip install docudevs-sdk
 ```
+
   </TabItem>
   <TabItem value="poetry">
 ```bash
 poetry add docudevs-sdk
 ```
+  </TabItem>
+  <TabItem value="uv">
+
+```bash
+# Optional: create a virtual environment
+uv venv
+source .venv/bin/activate
+
+# Install the SDK
+uv pip install docudevs-sdk
+```
+
   </TabItem>
 </Tabs>
 
@@ -67,28 +83,22 @@ async def process_document():
     with open("your-document.pdf", "rb") as f:
         document_data = f.read()
     
-    # Submit for processing with simple instructions
-    response = await client.submit_document(
-        document=document_data,
-        document_mime_type="application/pdf",
-        instruction="Extract all key information from this document"
-    )
-    
-    # Get the processing job ID
-    job_id = response.parsed.guid
+  # Submit for AI extraction (non-OCR)
+  job_id = await client.submit_and_process_document(
+    document=document_data,
+    document_mime_type="application/pdf",
+    prompt="Extract all key information from this document"
+  )
     print(f"Document submitted for processing. Job ID: {job_id}")
     
-    # Wait for processing to complete
+    # Wait for processing to complete; extraction results are JSON
     result = await client.wait_until_ready(job_id)
     print("Processing complete!")
     
-    # Display results
-    if hasattr(result, 'result'):
-        print("\nExtracted Data:")
-        print(result.result)
-    else:
-        print("\nExtracted Data:")
-        print(result)
+  # Display results as JSON (extraction returns structured data)
+  import json
+  print("\nExtracted Data:")
+  print(json.dumps(result.parsed, indent=2))
 
 # Run the processing
 asyncio.run(process_document())
@@ -160,17 +170,16 @@ async def analyze_document_with_ai():
         prompt="Summarize this document and explain what type of document it is and its main purpose."
     )
     
-    # Parse and display the AI response
-    import json
-    result_data = json.loads(analysis.result)
-    print("\nAI Analysis:")
-    print(result_data['generated_text'])
+  # Display the AI response
+  print("\nAI Analysis:")
+  print(analysis.generated_text)
 
 # Run the analysis
 asyncio.run(analyze_document_with_ai())
 ```
 
 This approach is perfect for:
+
 - **Document Summaries**: Get quick overviews of long documents
 - **Document Classification**: Automatically categorize document types
 - **Question Answering**: Ask specific questions about document content
@@ -179,17 +188,20 @@ This approach is perfect for:
 ## Next Steps - Choose Your Path
 
 ### 🚀 **For Developers**
+
 - [Complete First Document Guide](/docs/getting-started/first-document) - Learn advanced processing options
 - [Simple Documents](/docs/basics/SimpleDocuments) - Understand document processing fundamentals
 - [Operations](/docs/advanced/operations) - Use generative tasks and error analysis
 - [SDK Methods Reference](/docs/reference/sdk-methods) - Explore all available functions
 
 ### 📋 **For Business Users**
+
 - [Use Cases](/docs/integration/use-cases) - See real-world application examples
 - [Cases](/docs/advanced/cases) - Organize documents into collections
 - [Templates](/docs/templates/Templates) - Create reusable document templates
 
 ### ⚙️ **For System Integrators**
+
 - [Best Practices](/docs/integration/best-practices) - Production deployment guidelines
 - [Configuration](/docs/configuration/Configuration) - Save and reuse processing settings
 - [Troubleshooting](/docs/integration/troubleshooting) - Debug common issues
@@ -207,9 +219,11 @@ DocuDevs works with various document formats:
     {label: 'Form', value: 'form'},
   ]}>
   <TabItem value="invoice">
+
 ```python
 instruction = "Extract invoice number, date, vendor, total amount, and all line items"
 ```
+
   </TabItem>
   <TabItem value="receipt">
 ```python
@@ -231,6 +245,7 @@ instruction = "Extract all form fields and their values"
 ## Common Customizations
 
 ### Add Custom Schema
+
 ```python
 schema = {
     "invoice_number": "The invoice number",
@@ -240,15 +255,16 @@ schema = {
     "currency": "Currency code (USD, EUR, etc.)"
 }
 
-response = await client.submit_document(
-    document=document_data,
-    document_mime_type="application/pdf",
-    instruction="Extract invoice data according to the schema",
-    schema=schema
+job_id = await client.submit_and_process_document(
+  document=document_data,
+  document_mime_type="application/pdf",
+  prompt="Extract invoice data according to the schema",
+  schema=schema
 )
 ```
 
 ### Process Multiple Documents
+
 ```python
 # Create a case for organizing related documents
 case_response = await client.create_case({

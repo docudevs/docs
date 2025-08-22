@@ -12,6 +12,7 @@ Named configurations allow you to save and reuse processing settings across mult
 **🎯 Key Feature: Prompts & Schemas**
 
 The most powerful aspect of named configurations is the ability to store **prompts** and **schemas**. This ensures:
+
 - **Consistent data extraction** across all documents processed with the same configuration
 - **Standardized response format** - all processed documents return data in the exact same structure
 - **Reusable business logic** - define once, use everywhere
@@ -19,6 +20,7 @@ The most powerful aspect of named configurations is the ability to store **promp
 With configurations, you can define:
 
 ### Core Processing Settings
+
 - **Prompt** - Custom instructions for data extraction
 - **Schema** - JSON schema defining the exact output structure ⭐ *Most Important*
 - OCR quality level
@@ -30,6 +32,7 @@ With configurations, you can define:
 ### Why Schemas Matter
 
 When you include a schema in your named configuration, **every document** processed with that configuration will return data in the exact same format. This is crucial for:
+
 - **Database integration** - consistent field names and types
 - **API consumption** - predictable response structure
 - **Business logic** - reliable data processing workflows
@@ -50,6 +53,7 @@ You can save a new configuration or update an existing one by sending a POST req
     {label: 'Python SDK', value: 'python'},
   ]}>
   <TabItem value="curl">
+
 ```sh
 curl -s -S -X POST https://api.docudevs.ai/configuration/invoice-config \
      -H "Authorization: $API_KEY" \
@@ -85,6 +89,7 @@ curl -s -S -X POST https://api.docudevs.ai/configuration/invoice-config \
        "barcodes": true
      }'
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -94,6 +99,7 @@ import os
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Save a comprehensive configuration with prompt and schema
+
 config = {
     "prompt": "Extract invoice data including vendor details, line items, and totals. Pay special attention to tax calculations and invoice dates.",
     "schema": {
@@ -127,6 +133,7 @@ config = {
 
 result = await client.save_configuration("invoice-config", config)
 print(f"Configuration saved: {result}")
+
 ```
   </TabItem>
 </Tabs>
@@ -151,6 +158,7 @@ curl -s -S -X POST https://api.docudevs.ai/configuration/simple-config \
        "barcodes": true
      }'
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -160,6 +168,7 @@ import os
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Save a configuration with processing settings only
+
 config = {
     "ocr": "PREMIUM",
     "llm": "PREMIUM",
@@ -169,6 +178,7 @@ config = {
 
 result = await client.save_configuration("simple-config", config)
 print(f"Configuration saved: {result}")
+
 ```
   </TabItem>
 </Tabs>
@@ -188,6 +198,7 @@ To see all your saved configurations, send a GET request to `/configuration`:
 curl -s -S -X GET https://api.docudevs.ai/configuration \
      -H "Authorization: $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -198,6 +209,7 @@ client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 configs = await client.list_configurations()
 print(f"Available configurations: {configs}")
+
 ```
   </TabItem>
 </Tabs>
@@ -217,6 +229,7 @@ To get the details of a specific configuration, send a GET request to `/configur
 curl -s -S -X GET https://api.docudevs.ai/configuration/invoice-config \
      -H "Authorization: $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -227,6 +240,7 @@ client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 config = await client.get_configuration("invoice-config")
 print(f"Configuration details: {config}")
+
 ```
   </TabItem>
 </Tabs>
@@ -246,6 +260,7 @@ When you no longer need a configuration, you can delete it with a DELETE request
 curl -s -S -X DELETE https://api.docudevs.ai/configuration/invoice-config \
      -H "Authorization: $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -256,6 +271,7 @@ client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 await client.delete_configuration("invoice-config")
 print("Configuration deleted")
+
 ```
   </TabItem>
 </Tabs>
@@ -279,27 +295,30 @@ curl -s -S -X POST "https://api.docudevs.ai/document/process/DOCUMENT_GUID?confi
      -H "Content-Type: application/json" \
      -d '{}'
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 from docudevs.docudevs_client import DocuDevsClient
 import os
+import json
 
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
-# First upload a document
+# Upload and process in one step with a saved configuration
+
 with open("invoice.pdf", "rb") as f:
-    document = f.read()
+  document = f.read()
 
-guid = await client.submit_document(document=document, document_mime_type="application/pdf")
-
-# Then process it with the saved configuration
-result = await client.process_document(
-    guid=guid,
-    configuration="invoice-config"
+guid = await client.submit_and_process_document_with_configuration(
+  document=document,
+  document_mime_type="application/pdf",
+  configuration_name="invoice-config"
 )
 
-print(result)
+result = await client.wait_until_ready(guid)
+print(json.dumps(result.parsed, indent=2))
+
 ```
   </TabItem>
 </Tabs>
@@ -393,10 +412,10 @@ When creating or updating a configuration, you can specify the following paramet
 }
 ```
 
-
 ## Best Practices
 
 ### Schema Design
+
 1. **Always define a schema** - This is the most important part of a configuration. Without a schema, response formats may vary between documents.
 
 2. **Use required fields** - Mark essential fields as required in your schema to ensure they're always extracted.
@@ -406,6 +425,7 @@ When creating or updating a configuration, you can specify the following paramet
 4. **Nest objects logically** - Group related fields (like `line_items` in invoices) into nested objects or arrays.
 
 ### Prompt Optimization
+
 1. **Be specific** - Clear, detailed prompts lead to better extraction results.
 
 2. **Include context** - Mention the document type and any special requirements in your prompt.
@@ -413,6 +433,7 @@ When creating or updating a configuration, you can specify the following paramet
 3. **Test iteratively** - Start with basic prompts and refine based on results.
 
 ### Configuration Management
+
 1. **Naming conventions** - Use descriptive names for your configurations such as "invoice-premium" or "receipt-fast" to easily identify their purpose.
 
 2. **Configuration reuse** - Create separate configurations for different document types or processing requirements rather than modifying a single configuration repeatedly.
@@ -426,6 +447,7 @@ When creating or updating a configuration, you can specify the following paramet
 ## Real-World Examples
 
 ### E-commerce Receipt Processing
+
 ```json
 {
   "prompt": "Extract purchase details from e-commerce receipts including order info and shipping",
@@ -454,6 +476,7 @@ When creating or updating a configuration, you can specify the following paramet
 ```
 
 ### Healthcare Form Processing
+
 ```json
 {
   "prompt": "Extract patient information and medical details from healthcare forms",

@@ -94,7 +94,7 @@ async def ask_questions_about_document():
             prompt=f"Based on this document, answer the following question: {question}"
         )
         
-        result_data = json.loads(answer.result)
+    result_data = json.loads(answer.result)
         print(f"Q: {question}")
         print(f"A: {result_data['generated_text']}\n")
 
@@ -126,7 +126,7 @@ async def analyze_multilingual_document():
             prompt=f"Provide a summary of this document in {language}. Include the main points and conclusions."
         )
         
-        result_data = json.loads(analysis.result)
+    result_data = json.loads(analysis.result)
         print(f"Summary in {language}:")
         print(result_data['generated_text'])
         print("---\n")
@@ -213,7 +213,7 @@ async def transform_document_content():
             prompt=transformation["prompt"]
         )
         
-        result_data = json.loads(result.result)
+    result_data = json.loads(result.result)
         results[transformation["name"]] = result_data['generated_text']
     
     return results
@@ -286,6 +286,7 @@ await client.submit_and_wait_for_generative_task(
 ### Effective Prompt Writing
 
 **Be Specific and Clear**
+
 ```python
 # Good prompt
 prompt = "Extract the contract start date, end date, parties involved, and key obligations. Format as a bulleted list."
@@ -295,6 +296,7 @@ prompt = "Tell me about this document."
 ```
 
 **Provide Context and Format Instructions**
+
 ```python
 prompt = """Analyze this financial report and provide:
 1. Revenue trends (increase/decrease and percentages)
@@ -320,8 +322,8 @@ async def safe_document_analysis(document_data, mime_type, prompt):
         
         ocr_result = await client.wait_until_ready(ocr_job_id, timeout=120)
         
-        # Check if OCR was successful
-        if not ocr_result or not hasattr(ocr_result, 'result'):
+        # Basic success check
+        if not ocr_result:
             return None, "OCR processing failed"
         
         # Submit generative task
@@ -517,13 +519,13 @@ async def comprehensive_document_review(document_data, mime_type):
     client = DocuDevsClient(token="your-api-key")
     
     # First, do structured extraction
-    extraction_job = await client.upload_and_process(
+    extraction_job_id = await client.submit_and_process_document(
         document=document_data,
         document_mime_type=mime_type,
-        instructions="Extract all structured data from this document"
+        prompt="Extract all structured data from this document"
     )
     
-    extraction_result = await client.wait_until_ready(extraction_job.parsed.guid)
+    extraction_result = await client.wait_until_ready(extraction_job_id)
     
     # Then do error analysis on extraction
     error_analysis = await client.submit_and_wait_for_error_analysis(

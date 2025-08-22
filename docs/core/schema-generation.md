@@ -50,10 +50,12 @@ client = DocuDevsClient(token="your-api-key")
 
 # Basic schema generation
 with open("sample-invoice.pdf", "rb") as f:
-    response = await client.generate_schema(
-        document=f.read(),
-        document_mime_type="application/pdf"
-    )
+  job_id = await client.submit_and_process_document(
+    document=f.read(),
+    document_mime_type="application/pdf",
+    prompt="Focus on financial data"
+  )
+  result = await client.wait_until_ready(job_id)
 
 # Wait for completion and get schema
 guid = response.parsed.guid
@@ -137,11 +139,11 @@ schema_response = await client.generate_schema(
 schema = await client.wait_until_ready(schema_response.parsed.guid)
 
 # Use schema for extraction
-extraction_response = await client.upload_and_process(
+  extraction_response = await client.submit_and_process_document(
     document=target_doc,
     document_mime_type="application/pdf",
-    instructions=f"Extract data according to this schema: {schema.result}"
-)
+    prompt=f"Extract data according to this schema: {schema.result}"
+  )
 ```
 
 ### For Template Creation
@@ -158,16 +160,19 @@ await client.upload_template(
 ## Best Practices
 
 ### Document Selection
+
 - Use representative, well-structured documents
 - Choose documents with clear, readable text
 - Avoid documents with poor scan quality
 
 ### Instructions
+
 - Be specific about the data you want to capture
 - Mention any special formatting requirements
 - Include examples of edge cases to handle
 
 ### Schema Refinement
+
 - Review generated schemas before use
 - Test with multiple document samples
 - Refine based on processing results
@@ -175,6 +180,7 @@ await client.upload_template(
 ## Common Use Cases
 
 ### Invoice Processing
+
 ```python
 instructions = """
 Focus on:
@@ -187,6 +193,7 @@ Focus on:
 ```
 
 ### Contract Analysis
+
 ```python
 instructions = """
 Extract:
@@ -199,6 +206,7 @@ Extract:
 ```
 
 ### Form Processing
+
 ```python
 instructions = """
 Capture:

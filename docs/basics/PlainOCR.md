@@ -5,6 +5,7 @@ DocuDevs provides OCR-only processing for extracting plain text or markdown cont
 ## Overview
 
 The Plain OCR feature allows you to:
+
 - Extract text content in either plain text or markdown format
 - Choose between standard and premium OCR quality
 - Process documents without complex data structuring
@@ -31,18 +32,21 @@ docudevs ocr document.pdf --ocr auto
 ## OCR Quality Options
 
 ### DEFAULT Quality
+
 - Uses Azure Document Intelligence's standard OCR engine
 - Fast processing
 - Good for clear, well-formatted documents
 - No additional AI processing
 
 ### PREMIUM Quality  
+
 - Includes AI-powered error correction
 - Better accuracy for handwritten or poor-quality documents
 - Pagewise processing for optimal results
 - Additional processing time for enhanced accuracy
 
 ### AUTO Quality (Recommended)
+
 - Automatically analyzes document quality and selects appropriate processing level
 - Starts with DEFAULT quality for speed
 - Automatically escalates to PREMIUM if quality issues are detected
@@ -52,12 +56,14 @@ docudevs ocr document.pdf --ocr auto
 ## Output Formats
 
 ### Markdown Format (Default)
+
 - Preserves document formatting
 - Maintains headers, lists, and text structure
 - Ideal for documents with rich formatting
 - Better readability and structure retention
 
 ### Plain Text Format
+
 - Raw text extraction
 - No formatting preservation  
 - Smaller output size
@@ -131,6 +137,7 @@ docudevs result {guid}
 ### Basic OCR Processing
 
 1. **Upload your document:**
+
 ```bash
 curl -X POST "https://api.docudevs.ai/document/upload" \
   -H "Authorization: Bearer YOUR_API_KEY" \
@@ -138,6 +145,7 @@ curl -X POST "https://api.docudevs.ai/document/upload" \
 ```
 
 2. **Process with OCR:**
+
 ```bash
 curl -X POST "https://api.docudevs.ai/document/ocr/{guid}?format=markdown" \
   -H "Authorization: Bearer YOUR_API_KEY" \
@@ -148,6 +156,7 @@ curl -X POST "https://api.docudevs.ai/document/ocr/{guid}?format=markdown" \
 ```
 
 3. **Check status and get results:**
+
 ```bash
 # Check processing status
 curl -X GET "https://api.docudevs.ai/job/status/{guid}" \
@@ -193,7 +202,7 @@ guid = await client.submit_and_ocr_document(
 
 # Wait for results
 result = await client.wait_until_ready(guid)
-print(result.result)  # For OCR results, use .result attribute
+
+# OCR returns text content
+print(result.result)
 ```
-
-

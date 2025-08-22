@@ -8,6 +8,7 @@ import TabItem from '@theme/TabItem';
 ## Principles
 
 There are 4 items you can send to the API:
+
 1. The document to be processed (mandatory)
 2. The schema to be used (optional)
 3. Processing instructions for the data (optional)
@@ -16,6 +17,7 @@ There are 4 items you can send to the API:
 If you don't specify the schema or the configuration, the API will use sensible defaults for them.
 
 ## Example 1 - Invoice - minimal using just the document
+
 ![example invoice](/files/simple_documents/invoice-screenshot.png)
 
 [Example invoice](/files/simple_documents/invoice.pdf). You can send it to the API using the following command:
@@ -27,27 +29,36 @@ If you don't specify the schema or the configuration, the API will use sensible 
     {label: 'Python SDK', value: 'python'},
   ]}>
   <TabItem value="curl">
+
 ```sh
 curl -s -S -X POST https://api.docudevs.ai/document/upload-files \
      -H "Authorization: $API_KEY" \
      -F "document=@invoice.pdf"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 from docudevs.docudevs_client import DocuDevsClient
 import os
+import json
 
 # Initialize the client with your API key
+
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Process the document
+
 with open("invoice.pdf", "rb") as f:
     document = f.read()
 
-guid = await client.submit_document(document=document, document_mime_type="application/pdf")
+guid = await client.submit_and_process_document(
+  document=document,
+  document_mime_type="application/pdf"
+)
 result = await client.wait_until_ready(guid)
-print(result)
+print(json.dumps(result.parsed, indent=2))
+
 ```
   </TabItem>
 </Tabs>
@@ -113,12 +124,13 @@ This will give you the result of the document being processed using the default 
 
 ## Example 2 - Invoice - provide instructions
 
-Previous example provided a lot of data and fields. Maybe you only need few fields from the invoice? 
+Previous example provided a lot of data and fields. Maybe you only need few fields from the invoice?
 
 You can create an instructions file and send it to the API. This file is free-formatted text, that you can
-fill in any language. 
+fill in any language.
 
 Example of instructions file that we name `instructions.txt`:
+
 ```
 I need: IBAN, reference-number, account-owner, 
 account-address and total amount from this invoice.
@@ -133,35 +145,41 @@ Send the instructions together with the document to the api:
     {label: 'Python SDK', value: 'python'},
   ]}>
   <TabItem value="curl">
+
 ```sh
 curl -s -S -X POST https://api.docudevs.ai/document/upload-files \
      -H "Authorization: $API_KEY" \
      -F "document=@invoice.pdf" \
      -F "instructions=@instructions.txt"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
 from docudevs.docudevs_client import DocuDevsClient
 import os
+import json
 
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Read instructions from file
+
 with open('instructions.txt', 'r') as file:
     prompt = file.read()
 
 # Process the document with instructions
+
 with open("invoice.pdf", "rb") as f:
     document = f.read()
 
 guid = await client.submit_and_process_document(
-    document=document, 
+    document=document,
     document_mime_type="application/pdf",
     prompt=prompt
 )
 result = await client.wait_until_ready(guid)
-print(result)
+print(json.dumps(result.parsed, indent=2))
+
 ```
   </TabItem>
 </Tabs>
@@ -184,13 +202,14 @@ Previous example provided nicely only the data fields that we are interested in.
 But what if we want to have the data in a specific format? To integrate it with our system we need the data in a specific format.
 For example the previous example gave us the total amount as a string "50.00 CHF". But we want to have it as a number.
 
-The schema is given in [JSON-Schema](https://json-schema.org/) format. 
+The schema is given in [JSON-Schema](https://json-schema.org/) format.
 To create a schema, you can just ask ChatGPT to do it for you from a given example.
 
-Let's use the previous answer as an example. We want to have the total amount as a number, and 
+Let's use the previous answer as an example. We want to have the total amount as a number, and
 the address split into street, postal code and city.
 
 The json-schema for this would look like this (as created by chat-gpt):
+
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
@@ -238,6 +257,7 @@ The json-schema for this would look like this (as created by chat-gpt):
   "required": ["iban", "reference_number", "account_owner", "account_address", "total_amount"]
 }
 ```
+
 Let's store this schema in a file called `schema.json` and send it to the API together with the document:
 
 **Note we don't need to specify the instructions in this case**
@@ -249,12 +269,14 @@ Let's store this schema in a file called `schema.json` and send it to the API to
     {label: 'Python SDK', value: 'python'},
   ]}>
   <TabItem value="curl">
+
 ```sh
 curl -s -S -X POST https://api.docudevs.ai/document/upload-files/sync \
      -H "Authorization: $API_KEY" \
      -F "document=@invoice.pdf" \
      -F "schema=@schema.json"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -265,20 +287,23 @@ import json
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Read schema from file
+
 with open('schema.json', 'r') as file:
     schema = json.load(file)
 
 # Process the document with schema
+
 with open("invoice.pdf", "rb") as f:
     document = f.read()
 
 guid = await client.submit_and_process_document(
-    document=document, 
+    document=document,
     document_mime_type="application/pdf",
     schema=schema
 )
 result = await client.wait_until_ready(guid)
-print(result)
+print(json.dumps(result.parsed, indent=2))
+
 ```
   </TabItem>
 </Tabs>
@@ -306,6 +331,7 @@ The previous examples showed how to extract data from an invoice. But what if yo
 For this we would need to set a configuration parameter. The configuration is a JSON object that can contain various settings for the processing.
 
 we create a configuration file `config.json` with the following content:
+
 ```json
 {
   "barcodes": true
@@ -313,9 +339,11 @@ we create a configuration file `config.json` with the following content:
 ```
 
 Let's have an instructions file `instructions.txt` that say we only want the QR code:
+
 ```
 I need: QR code from this invoice.
 ```
+
 Let's send them to the API together with the document:
 
 <Tabs
@@ -325,6 +353,7 @@ Let's send them to the API together with the document:
     {label: 'Python SDK', value: 'python'},
   ]}>
   <TabItem value="curl">
+
 ```sh
 curl -s -S -X POST https://api.docudevs.ai/document/upload-files/sync \
      -H "Authorization: $API_KEY" \
@@ -332,6 +361,7 @@ curl -s -S -X POST https://api.docudevs.ai/document/upload-files/sync \
      -F "instructions=@instructions.txt" \
      -F "metadata=@config.json"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -342,22 +372,24 @@ import json
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Read instructions from file
+
 with open('instructions.txt', 'r') as file:
     prompt = file.read()
 
-
 # Process the document with instructions and config
+
 with open("invoice.pdf", "rb") as f:
     document = f.read()
 
 guid = await client.submit_and_process_document(
-    document=document, 
+    document=document,
     document_mime_type="application/pdf",
     prompt=prompt,
     barcodes=True
 )
 result = await client.wait_until_ready(guid)
-print(result)
+print(json.dumps(result.parsed, indent=2))
+
 ```
   </TabItem>
 </Tabs>
@@ -438,6 +470,7 @@ Now, let's use this model to generate a JSON schema and process our document:
     {label: 'Python SDK', value: 'python'},
   ]}>
   <TabItem value="python">
+
 ```python
 from docudevs.docudevs_client import DocuDevsClient
 import os
@@ -471,6 +504,7 @@ print(f"IBAN: {invoice_data.iban}")
 print(f"Total Amount: {invoice_data.total_amount}")
 print(f"City: {invoice_data.account_address.city}")
 ```
+
   </TabItem>
 </Tabs>
 

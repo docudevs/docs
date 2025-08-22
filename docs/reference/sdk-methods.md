@@ -36,6 +36,7 @@ config = await client.get_configuration("my-config")
 ```
 
 **Parameters:**
+
 - `name` (str): Configuration name
 
 **Returns:** Configuration object
@@ -56,6 +57,7 @@ response = await client.save_configuration("invoice-config", body)
 ```
 
 **Parameters:**
+
 - `name` (str): Configuration name
 - `body` (UploadCommand): Configuration details
 
@@ -103,39 +105,29 @@ body = UploadDocumentBody(document=document_file)
 response = await client.upload_document(body)
 ```
 
-### upload_and_process()
+### submit_and_process_document()
 
-Convenience method to upload and process a document in one call.
+Convenience method to upload and process a document for structured extraction in one call. Returns a job GUID.
 
 ```python
-response = await client.upload_and_process(
+job_id = await client.submit_and_process_document(
     document=document_bytes,
     document_mime_type="application/pdf",
-    instructions="Extract invoice data",
+    prompt="Extract invoice data",
     llm="gpt-4"
 )
+
+result = await client.wait_until_ready(job_id)
+print(json.dumps(result.parsed, indent=2))
 ```
 
 **Parameters:**
+
 - `document` (bytes): Document content
 - `document_mime_type` (str): MIME type
-- `instructions` (str, optional): Processing instructions
+- `prompt` (str, optional): Processing instructions
 - `llm` (str, optional): LLM to use
-- `ocr` (str, optional): OCR type
-- `ocr_format` (str, optional): OCR output format
-
-### upload_and_process_ocr_only()
-
-Upload and process with OCR only (no LLM extraction).
-
-```python
-guid = await client.upload_and_process_ocr_only(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    ocr="advanced",
-    ocr_format="markdown"
-)
-```
+- `schema` (dict, optional): JSON schema for structured output
 
 ## Job Management
 
@@ -168,6 +160,7 @@ result = await client.wait_until_ready(
 ```
 
 **Parameters:**
+
 - `guid` (str): Job GUID
 - `timeout` (int): Maximum wait time in seconds
 - `poll_interval` (float): Polling interval in seconds
@@ -187,6 +180,7 @@ case = await client.create_case(
 ```
 
 **Parameters:**
+
 - `name` (str): Case name
 - `description` (str, optional): Case description
 
@@ -305,6 +299,7 @@ response = await client.create_generative_task(
 ```
 
 **Parameters:**
+
 - `parent_job_id` (str): The parent job GUID (must be completed)
 - `prompt` (str): The prompt to send to the AI model
 - `model` (str, optional): AI model to use
@@ -328,13 +323,14 @@ result = await client.submit_and_wait_for_generative_task(
     poll_interval=2.0
 )
 
-# Parse the result
+# Parse the result JSON
 import json
 result_data = json.loads(result.result)
 generated_text = result_data['generated_text']
 ```
 
 **Parameters:**
+
 - `parent_job_id` (str): The parent job GUID (must be completed)
 - `prompt` (str): The prompt to send to the AI model
 - `model` (str, optional): AI model to use
@@ -346,6 +342,7 @@ generated_text = result_data['generated_text']
 **Returns:** The generative task result once complete
 
 **Raises:**
+
 - `TimeoutError`: If the operation doesn't complete within the timeout
 - `Exception`: If the operation fails or errors occur
 
@@ -366,6 +363,7 @@ guid = await client.submit_and_ocr_document(
 ```
 
 **Parameters:**
+
 - `document` (BytesIO): Document content
 - `document_mime_type` (str): MIME type
 - `ocr` (str, optional): OCR type ("DEFAULT", "PREMIUM", "AUTO")
@@ -492,20 +490,13 @@ response = await client.ocr_document(
 All SDK methods can raise exceptions. Common patterns:
 
 ```python
-from http import HTTPStatus
-
 try:
-    response = await client.upload_and_process(
+    job_id = await client.submit_and_process_document(
         document=document_bytes,
         document_mime_type="application/pdf"
     )
-    
-    if response.status_code != HTTPStatus.OK:
-        print(f"Error: {response.content}")
-        return
-        
-    result = await client.wait_until_ready(response.parsed.guid)
-    
+    result = await client.wait_until_ready(job_id)
+    print(json.dumps(result.parsed, indent=2))
 except TimeoutError as e:
     print(f"Processing timed out: {e}")
 except Exception as e:
@@ -527,12 +518,14 @@ response.parsed       # Parsed response object (if successful)
 ### Common Response Types
 
 **UploadResponse:**
+
 ```python
 response.parsed.guid    # Job GUID
 response.parsed.status  # Job status
 ```
 
 **Job Status:**
+
 ```python
 status.status          # PENDING, PROCESSING, COMPLETED, FAILED
 status.created_at      # Creation timestamp
@@ -540,38 +533,95 @@ status.updated_at      # Last update timestamp
 ```
 
 **Job Result:**
+
 ```python
 result.result          # Extracted data (JSON string)
 result.metadata        # Processing metadata
 ```
 
+## Result Handling
+
+How to read results depending on the workflow:
+
+- Extraction (structured data)
+  - Use `submit_and_process_document(...)` to submit.
+  - `wait_until_ready(job_id)` returns an object with `parsed` populated by the SDK.
+  - Access the structured data from `result.parsed`.
+
+```python
+# Extraction flow
+job_id = await client.submit_and_process_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract invoice data"
+)
+result = await client.wait_until_ready(job_id)
+print(json.dumps(result.parsed, indent=2))
+```
+
+- OCR-only (plain text or markdown)
+  - Use `submit_and_ocr_document(...)` to submit.
+  - `wait_until_ready(job_id)` returns text content in `result.result`.
+
+```python
+# OCR flow
+job_id = await client.submit_and_ocr_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    ocr="PREMIUM",
+    ocr_format="markdown"
+)
+ocr_result = await client.wait_until_ready(job_id)
+print(ocr_result.result)
+```
+
+- Generative tasks (JSON string)
+  - `submit_and_wait_for_generative_task(...)` returns a job whose `result.result` is a JSON string.
+  - Parse with `json.loads(...)` then access `generated_text`.
+
+```python
+# Generative task flow
+gen = await client.submit_and_wait_for_generative_task(
+    parent_job_id=parent_job_id,
+    prompt="Summarize this document"
+)
+data = json.loads(gen.result)
+print(data["generated_text"])
+```
+
 ## Constants and Enums
 
 ### LLM Types
-- `"gpt-3.5-turbo"`
-- `"gpt-4"`
-- `"gpt-4-turbo"`
+
+- "gpt-3.5-turbo"
+- "gpt-4"
+- "gpt-4-turbo"
 
 ### OCR Types
-- `"basic"`
-- `"advanced"`
+
+- "basic"
+- "advanced"
 
 ### OCR Formats
-- `"plain"`
-- `"markdown"`
-- `"json"`
+
+- "plain"
+- "markdown"
+- "json"
 
 ### Operation Types
-- `"error-analysis"`
-- `"generative-task"`
+
+- "error-analysis"
+- "generative-task"
 
 ### Generative Task Models
-- `"DEFAULT"` - Standard AI model, good balance of speed and quality
-- `"HIGH"` - Premium AI model, slower but higher quality responses
+
+- "DEFAULT" - Standard AI model, good balance of speed and quality
+- "HIGH" - Premium AI model, slower but higher quality responses
 
 ## Best Practices
 
 ### Authentication
+
 ```python
 import os
 
@@ -581,58 +631,43 @@ client = DocuDevsClient(
 )
 ```
 
-### Error Handling
+### Error Handling (Best Practices)
+
 ```python
 async def safe_process_document(document_data, mime_type):
     try:
-        response = await client.upload_and_process(
+        job_id = await client.submit_and_process_document(
             document=document_data,
             document_mime_type=mime_type
         )
-        
-        if response.status_code != 200:
-            return None, f"Upload failed: {response.content}"
-            
-        result = await client.wait_until_ready(
-            response.parsed.guid,
-            timeout=120
-        )
-        
+        result = await client.wait_until_ready(job_id, timeout=120)
         return result, None
-        
     except Exception as e:
         return None, str(e)
 ```
 
 ### Batch Processing
+
 ```python
 async def process_documents_batch(documents):
-    tasks = []
-    for doc_data, mime_type in documents:
-        task = client.upload_and_process(
-            document=doc_data,
-            document_mime_type=mime_type
-        )
-        tasks.append(task)
-    
-    # Upload all documents concurrently
-    responses = await asyncio.gather(*tasks)
-    
+    # Submit all jobs concurrently
+    submit_tasks = [
+        client.submit_and_process_document(document=doc, document_mime_type=mime)
+        for doc, mime in documents
+    ]
+    job_ids = await asyncio.gather(*submit_tasks)
+
     # Wait for all to complete
-    results = []
-    for response in responses:
-        if response.status_code == 200:
-            result = await client.wait_until_ready(response.parsed.guid)
-            results.append(result)
-    
-    return results
+    wait_tasks = [client.wait_until_ready(job_id) for job_id in job_ids]
+    return await asyncio.gather(*wait_tasks)
 ```
 
 ### Generative Task Workflows
+
 ```python
 async def analyze_document_with_ai(document_data, mime_type):
     """Complete workflow: OCR + multiple generative tasks"""
-    
+
     # Step 1: Process with OCR
     ocr_job_id = await client.submit_and_ocr_document(
         document=document_data,
@@ -640,33 +675,33 @@ async def analyze_document_with_ai(document_data, mime_type):
         ocr="PREMIUM",
         ocr_format="markdown"
     )
-    
+
     # Wait for OCR to complete
     await client.wait_until_ready(ocr_job_id)
-    
+
     # Step 2: Generate summary
     summary_task = client.submit_and_wait_for_generative_task(
         parent_job_id=ocr_job_id,
         prompt="Provide a concise summary of this document."
     )
-    
+
     # Step 3: Extract key information
     key_info_task = client.submit_and_wait_for_generative_task(
         parent_job_id=ocr_job_id,
         prompt="List the most important facts, dates, and numbers from this document."
     )
-    
+
     # Step 4: Categorize document
     category_task = client.submit_and_wait_for_generative_task(
         parent_job_id=ocr_job_id,
         prompt="What type of document is this? (e.g., invoice, contract, report, etc.)"
     )
-    
+
     # Wait for all generative tasks to complete
     summary, key_info, category = await asyncio.gather(
         summary_task, key_info_task, category_task
     )
-    
+
     # Parse results
     import json
     return {
