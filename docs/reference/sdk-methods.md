@@ -366,11 +366,71 @@ guid = await client.submit_and_ocr_document(
 
 - `document` (BytesIO): Document content
 - `document_mime_type` (str): MIME type
-- `ocr` (str, optional): OCR type ("DEFAULT", "PREMIUM", "AUTO")
+- `ocr` (str, optional): OCR type ("DEFAULT", "LOW", "PREMIUM", "AUTO")
 - `ocr_format` (str, optional): OCR output format ("plain", "markdown")
-- `describe_figures` (bool, optional): Whether to describe figures in detail
+- `describe_figures` (bool, optional): Whether to describe figures in detail (ignored when `ocr` is "LOW")
 
 **Returns:** Job GUID for the OCR processing job
+
+### Map-Reduce Convenience Methods
+
+Use these helpers to process large documents in overlapping page chunks with deduplication.
+
+#### submit_and_process_document_map_reduce()
+
+```python
+job_id = await client.submit_and_process_document_map_reduce(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract invoice line items (sku, description, qty, unit_price, total)",
+    pages_per_chunk=4,
+    overlap_pages=1,
+    dedup_key="items.sku"
+)
+
+status = await client.wait_until_ready(job_id)
+```
+
+Parameters:
+
+- `pages_per_chunk` (int, default 1) size of each window
+- `overlap_pages` (int, default 0) pages re-used from previous window
+- `dedup_key` (str, optional) path for cross-chunk deduplication (required if overlap > 0)
+
+Validation rules enforced client-side:
+
+- `pages_per_chunk >= 1`
+- `0 <= overlap_pages < pages_per_chunk`
+- `dedup_key` required when `overlap_pages > 0`
+
+#### process_document_map_reduce()
+
+Process a previously uploaded (already has GUID) document using map-reduce parameters.
+
+```python
+response = await client.process_document_map_reduce(
+    guid="uploaded-guid",
+    prompt="Extract contract parties and obligations",
+    pages_per_chunk=5,
+    overlap_pages=1,
+    dedup_key="parties.name"
+)
+```
+
+#### build_upload_command_map_reduce()
+
+Builds the lower-level command object; primarily useful for advanced batching scenarios.
+
+```python
+cmd = client.build_upload_command_map_reduce(
+    prompt="Extract table rows",
+    pages_per_chunk=3,
+    overlap_pages=1,
+    dedup_key="rows.id"
+)
+```
+
+See also: [Map-Reduce Extraction](../core/map-reduce-extraction.md) for strategy and tuning guidance.
 
 ## Templates
 
@@ -599,8 +659,10 @@ print(data["generated_text"])
 
 ### OCR Types
 
-- "basic"
-- "advanced"
+- "DEFAULT"
+- "LOW"
+- "PREMIUM"
+- "AUTO"
 
 ### OCR Formats
 

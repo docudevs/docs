@@ -19,7 +19,7 @@ AI Document Analysis uses generative AI models to understand and analyze documen
 
 ## How It Works
 
-1. **OCR Processing**: First, extract text from your document using OCR
+1. **OCR Processing**: First, extract text from your document using OCR (for very large documents consider enabling Map-Reduce extraction to improve recall)
 2. **AI Analysis**: Submit generative tasks with custom prompts
 3. **Intelligent Response**: Get AI-generated insights based on document content
 

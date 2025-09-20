@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
         'core/ai-analysis',                 // NEW: AI document analysis and generative tasks
         'templates/Templates',              // EXISTING: Template management
         'core/schema-generation',           // NEW: AI schema generation
+        'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
       ],
     },
 

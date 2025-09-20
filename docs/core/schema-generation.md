@@ -10,6 +10,7 @@ The Schema Generation feature analyzes your documents and creates structured JSO
 - Understanding document structure before processing
 - Building data validation rules
 - Standardizing data extraction across document types
+- Improving coverage of very large documents (pair with Map-Reduce extraction when downstream processing needs higher recall)
 
 ## How It Works
 
