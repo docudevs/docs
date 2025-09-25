@@ -91,14 +91,14 @@ async def process_document():
   )
     print(f"Document submitted for processing. Job ID: {job_id}")
     
-    # Wait for processing to complete; extraction results are JSON
-    result = await client.wait_until_ready(job_id)
+    # Wait for processing to complete; request canonical JSON output
+    data = await client.wait_until_ready(job_id, result_format="json")
     print("Processing complete!")
     
   # Display results as JSON (extraction returns structured data)
   import json
   print("\nExtracted Data:")
-  print(json.dumps(result.parsed, indent=2))
+  print(json.dumps(data, indent=2))
 
 # Run the processing
 asyncio.run(process_document())

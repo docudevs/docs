@@ -56,8 +56,8 @@ guid = await client.submit_and_process_document(
   document=document,
   document_mime_type="application/pdf"
 )
-result = await client.wait_until_ready(guid)
-print(json.dumps(result.parsed, indent=2))
+result = await client.wait_until_ready(guid, result_format="json")
+print(json.dumps(result, indent=2))
 
 ```
   </TabItem>
@@ -177,8 +177,8 @@ guid = await client.submit_and_process_document(
     document_mime_type="application/pdf",
     prompt=prompt
 )
-result = await client.wait_until_ready(guid)
-print(json.dumps(result.parsed, indent=2))
+result = await client.wait_until_ready(guid, result_format="json")
+print(json.dumps(result, indent=2))
 
 ```
   </TabItem>
@@ -301,8 +301,8 @@ guid = await client.submit_and_process_document(
     document_mime_type="application/pdf",
     schema=schema
 )
-result = await client.wait_until_ready(guid)
-print(json.dumps(result.parsed, indent=2))
+result = await client.wait_until_ready(guid, result_format="json")
+print(json.dumps(result, indent=2))
 
 ```
   </TabItem>
@@ -387,8 +387,8 @@ guid = await client.submit_and_process_document(
     prompt=prompt,
     barcodes=True
 )
-result = await client.wait_until_ready(guid)
-print(json.dumps(result.parsed, indent=2))
+result = await client.wait_until_ready(guid, result_format="json")
+print(json.dumps(result, indent=2))
 
 ```
   </TabItem>
@@ -494,7 +494,7 @@ guid = await client.submit_and_process_document(
     document_mime_type="application/pdf",
     schema=schema
 )
-result = await client.wait_until_ready(guid)
+result = await client.wait_until_ready(guid, result_format="json")
 
 # Convert response directly to Pydantic model
 invoice_data = InvoiceData.model_validate(result)

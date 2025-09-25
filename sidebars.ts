@@ -25,6 +25,7 @@ const sidebars: SidebarsConfig = {
         'templates/Templates',              // EXISTING: Template management
         'core/schema-generation',           // NEW: AI schema generation
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
+        'core/batch-processing',            // NEW: Multi-document batch processing
       ],
     },
 

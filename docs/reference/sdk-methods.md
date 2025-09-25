@@ -117,8 +117,8 @@ job_id = await client.submit_and_process_document(
     llm="gpt-4"
 )
 
-result = await client.wait_until_ready(job_id)
-print(json.dumps(result.parsed, indent=2))
+result = await client.wait_until_ready(job_id, result_format="json")
+print(json.dumps(result, indent=2))
 ```
 
 **Parameters:**
@@ -155,7 +155,8 @@ Wait for a job to complete and return the result.
 result = await client.wait_until_ready(
     guid="job-guid",
     timeout=60,
-    poll_interval=1.0
+    poll_interval=1.0,
+    result_format="json"
 )
 ```
 
@@ -164,6 +165,8 @@ result = await client.wait_until_ready(
 - `guid` (str): Job GUID
 - `timeout` (int): Maximum wait time in seconds
 - `poll_interval` (float): Polling interval in seconds
+- `result_format` (str | None): Optional explicit format (`"json"`, `"csv"`, `"excel"`). When omitted, returns legacy object mode.
+- `excel_save_to` (str | None): Optional file path to persist Excel output when `result_format="excel"`.
 
 ## Cases Management
 
@@ -388,7 +391,7 @@ job_id = await client.submit_and_process_document_map_reduce(
     dedup_key="items.sku"
 )
 
-status = await client.wait_until_ready(job_id)
+result = await client.wait_until_ready(job_id, result_format="json")
 ```
 
 Parameters:
@@ -555,8 +558,8 @@ try:
         document=document_bytes,
         document_mime_type="application/pdf"
     )
-    result = await client.wait_until_ready(job_id)
-    print(json.dumps(result.parsed, indent=2))
+    result = await client.wait_until_ready(job_id, result_format="json")
+    print(json.dumps(result, indent=2))
 except TimeoutError as e:
     print(f"Processing timed out: {e}")
 except Exception as e:
@@ -604,24 +607,46 @@ result.metadata        # Processing metadata
 How to read results depending on the workflow:
 
 - Extraction (structured data)
-  - Use `submit_and_process_document(...)` to submit.
-  - `wait_until_ready(job_id)` returns an object with `parsed` populated by the SDK.
-  - Access the structured data from `result.parsed`.
+    - Use `submit_and_process_document(...)` to submit.
+    - Call `wait_until_ready(job_id, result_format="json")` to fetch the canonical JSON payload directly.
+    - The return value is a Python dict for single-document jobs or a list of dicts for batch jobs.
 
 ```python
-# Extraction flow
+# Extraction flow (single document)
 job_id = await client.submit_and_process_document(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract invoice data"
+        document=document_bytes,
+        document_mime_type="application/pdf",
+        prompt="Extract invoice data"
 )
-result = await client.wait_until_ready(job_id)
-print(json.dumps(result.parsed, indent=2))
+data = await client.wait_until_ready(job_id, result_format="json")
+print(json.dumps(data, indent=2))
 ```
 
+- Batch extraction
+    - Submit with the batch helpers, then request JSON using the same `result_format` flag.
+    - The API returns a list aligned to the uploaded document order. Each entry is either a dict matching your schema or `null` for failed/missing items.
+
+```python
+batch_guid = await client.submit_and_process_batch(
+        documents=file_paths,
+        document_mime_type="application/pdf",
+        prompt="Extract invoice data"
+)
+batch_results = await client.wait_until_ready(batch_guid, result_format="json")
+for index, item in enumerate(batch_results):
+        if item:
+                print(f"Document {index}:", json.dumps(item, indent=2))
+        else:
+                print(f"Document {index}: no structured result")
+```
+
+- Legacy object mode
+    - If you omit `result_format`, `wait_until_ready` retains backward compatibility by returning a SimpleNamespace-like object.
+    - Structured extraction jobs expose their JSON in `result.parsed`; batch jobs now surface a list in `result.result`.
+
 - OCR-only (plain text or markdown)
-  - Use `submit_and_ocr_document(...)` to submit.
-  - `wait_until_ready(job_id)` returns text content in `result.result`.
+    - Use `submit_and_ocr_document(...)` to submit.
+    - `wait_until_ready(job_id)` (no `result_format`) returns text content in `result.result`.
 
 ```python
 # OCR flow
@@ -702,7 +727,7 @@ async def safe_process_document(document_data, mime_type):
             document=document_data,
             document_mime_type=mime_type
         )
-        result = await client.wait_until_ready(job_id, timeout=120)
+        result = await client.wait_until_ready(job_id, timeout=120, result_format="json")
         return result, None
     except Exception as e:
         return None, str(e)
@@ -720,7 +745,7 @@ async def process_documents_batch(documents):
     job_ids = await asyncio.gather(*submit_tasks)
 
     # Wait for all to complete
-    wait_tasks = [client.wait_until_ready(job_id) for job_id in job_ids]
+    wait_tasks = [client.wait_until_ready(job_id, result_format="json") for job_id in job_ids]
     return await asyncio.gather(*wait_tasks)
 ```
 

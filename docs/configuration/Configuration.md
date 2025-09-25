@@ -316,8 +316,8 @@ guid = await client.submit_and_process_document_with_configuration(
   configuration_name="invoice-config"
 )
 
-result = await client.wait_until_ready(guid)
-print(json.dumps(result.parsed, indent=2))
+result = await client.wait_until_ready(guid, result_format="json")
+print(json.dumps(result, indent=2))
 
 ```
   </TabItem>

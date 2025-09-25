@@ -15,7 +15,7 @@ Use Map-Reduce when:
 
 Prefer standard processing when the document is short (< 50 pages) and you extract single entities (such as all parties of a single contract)
 
-If you have 1000 page product catalog, and you need to extract information of each SKU (and the data for SKU is always the same), then use Map-Reduce
+If you have 1000 page product catalog, and you need to extract information of each SKU (and the data for SKU is always in the same area of document i.e. not spread over tens of pages), then use Map-Reduce
 
 ## Core Concepts
 

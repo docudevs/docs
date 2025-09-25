@@ -71,10 +71,10 @@ async def basic_processing():
     print(f"Job submitted: {job_id}")
     
     # Wait for completion
-    result = await client.wait_until_ready(job_id)
+    result = await client.wait_until_ready(job_id, result_format="json")
     
     print("Basic Processing Result:")
-    print(json.dumps(result.parsed, indent=2))
+    print(json.dumps(result, indent=2))
     
     return result
 
@@ -126,10 +126,10 @@ async def processing_with_instructions():
         document_mime_type="application/pdf",
         prompt=instruction
     )
-    result = await client.wait_until_ready(job_id)
+    result = await client.wait_until_ready(job_id, result_format="json")
     
     print("Processing with Instructions Result:")
-    print(json.dumps(result.parsed, indent=2))
+    print(json.dumps(result, indent=2))
     
     return result
 
@@ -184,10 +184,10 @@ async def processing_with_schema():
         prompt=instruction,
         schema=schema
     )
-    result = await client.wait_until_ready(job_id)
+    result = await client.wait_until_ready(job_id, result_format="json")
     
     print("Processing with Schema Result:")
-    print(json.dumps(result.parsed, indent=2))
+    print(json.dumps(result, indent=2))
     
     return result
 
@@ -232,9 +232,9 @@ async def create_and_use_configuration():
         configuration=config_name
     )
     
-    result = await client.wait_until_ready(response.parsed.guid)
+    result = await client.wait_until_ready(response.parsed.guid, result_format="json")
     print("Processing with Named Configuration Result:")
-    print(json.dumps(result.parsed, indent=2))
+    print(json.dumps(result, indent=2))
     
     return result
 ```
@@ -343,7 +343,7 @@ async def robust_document_processing(document_path):
         
         # Wait for completion with timeout
         try:
-            result = await client.wait_until_ready(job_id, timeout=300)  # 5 minute timeout
+            result = await client.wait_until_ready(job_id, timeout=300, result_format="json")  # 5 minute timeout
             return result
         
         except TimeoutError:
@@ -404,7 +404,7 @@ async def process_multiple_documents(file_paths):
     for item in results:
         if item["job_id"]:
             try:
-                result = await client.wait_until_ready(item["job_id"])
+                result = await client.wait_until_ready(item["job_id"], result_format="json")
                 item["result"] = result
                 item["status"] = "completed"
             except Exception as e:
@@ -456,7 +456,7 @@ async def process_with_case_organization():
             instruction="Extract invoice data"
         )
         
-        result = await client.wait_until_ready(process_response.parsed.guid)
+    result = await client.wait_until_ready(process_response.parsed.guid, result_format="json")
         print(f"Processed {filename}")
     
     # List all documents in the case
