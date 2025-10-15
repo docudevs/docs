@@ -1,4 +1,3 @@
-
 ---
 title: Map-Reduce Extraction
 description: Break long or repetitive documents into manageable windows while preserving header context.
