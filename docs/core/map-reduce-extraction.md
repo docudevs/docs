@@ -1,202 +1,159 @@
+
 ---
 title: Map-Reduce Extraction
+description: Break long or repetitive documents into manageable windows while preserving header context.
 sidebar_position: 4
 ---
 
-Process very large or repetitive documents by breaking them into overlapping page chunks ("map" phase) and aggregating results ("reduce" phase) to improve coverage, consistency, and memory efficiency.
-
-## When To Use
-
-Use Map-Reduce when:
-
-- Documents exceed typical context/token limits
-- Key/value information appears multiple times (tables, repeated headers)
-- You need higher recall by scanning overlapping windows
-
-Prefer standard processing when the document is short (< 50 pages) and you extract single entities (such as all parties of a single contract)
-
-If you have 1000 page product catalog, and you need to extract information of each SKU (and the data for SKU is always in the same area of document i.e. not spread over tens of pages), then use Map-Reduce
-
-## Core Concepts
-
-| Concept | Description |
-|---------|-------------|
-| pagesPerChunk | Number of sequential pages combined into a single chunk window |
-| overlapPages | Number of trailing pages from previous chunk re-included at start of next chunk (sliding window) |
-| dedupKey | Field/property path used to remove duplicate items across chunks (first occurrence wins) |
-| totalFragments | Total number of chunk windows generated for the job |
-| completedFragments | Number of chunks already processed |
-| jobMode | `STANDARD` or `MAP_REDUCE` |
-
-**Page Boundaries**: OCR markdown uses `<!-- PageBreak -->` markers. Pages are split on that token before forming chunks.
-
-**Chunk Windows**: Windows advance by `pagesPerChunk - overlapPages` pages until the end of the document is reached.
-
-## Parameter Rules
-
-- `pagesPerChunk >= 1`
-- `overlapPages >= 0`
-- `overlapPages < pagesPerChunk`
-- If `overlapPages > 0` then `dedupKey` is required (non-empty)
-- If `pagesPerChunk == 1` then `overlapPages` must be 0 (implied)
-
-## High-Level Flow
-
-1. User enables Map-Reduce and sets parameters
-2. Backend stores job with `job_mode = MAP_REDUCE`
-3. Worker loads OCR markdown, splits into pages
-4. Worker constructs chunk windows with overlap
-5. For each chunk:
-   - Combine page markdown into a single prompt input
-   - Run extraction/LLM pass
-   - Merge structured results into aggregate output
-   - Perform deduplication (if configured) as items are added
-   - Emit status update (`completedFragments`)
-6. Final aggregated result stored like a standard job
-
-## Example Chunking
-
-Document has 9 pages, `pagesPerChunk=4`, `overlapPages=1`:
-
-Chunks (page indices 1-based):
-
-- Chunk 1: 1 2 3 4
-- Chunk 2: 4 5 6 7 (page 4 overlapped)
-- Chunk 3: 7 8 9 (remaining pages, shorter final window allowed)
-
-`totalFragments = 3`, windows advanced by `4 - 1 = 3` pages.
-
-## API Request (Multipart Upload + Process)
-
-```bash
-curl -X POST "https://api.docudevs.ai/document/process" \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@large.pdf" \
-  -F 'metadata={
-    "prompt": "Extract all invoice line items with SKU, description, quantity, unit price, total.",
-    "mapReduce": {
-      "enabled": true,
-      "pagesPerChunk": 4,
-      "overlapPages": 1,
-      "dedupKey": "items.sku"
-    }
-  }'
-```
-
-## Python SDK Example
-
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import asyncio, json
-
-async def run():
-    client = DocuDevsClient(token="YOUR_API_KEY")
-    with open("large.pdf", "rb") as f:
-        data = f.read()
-
-    job_id = await client.submit_and_process_document_map_reduce(
-        document=data,
-        document_mime_type="application/pdf",
-        prompt="Extract all invoice line items with SKU, description, quantity, unit price, total.",
-        pages_per_chunk=4,
-        overlap_pages=1,
-        dedup_key="items.sku"
-    )
-
-    result = await client.wait_until_ready(job_id)
-    parsed = json.loads(result.result)
-    print(parsed)
-
-asyncio.run(run())
-```
-
-## Status Semantics
-
-`GET /job/status/{guid}` will include:
+Map-Reduce is an optional processing mode that helps you extract structured data from long, repetitive, or multi-section documents. DocuDevs splits the document into windows, extracts the relevant data, and then merges the results into a single response. You always receive a consistent JSON payload:
 
 ```json
 {
-  "guid": "...",
-  "jobMode": "MAP_REDUCE",
-  "totalFragments": 5,
-  "completedFragments": 2,
-  "status": "PROCESSING"
+  "header": { ... optional ... },
+  "records": [ ... rows ... ]
 }
 ```
 
-Progress bar in UI = `completedFragments / totalFragments`.
+- `records` contains the aggregated row data (always present).
+- `header` is included only when you request a header pass.
 
-## Deduplication Strategy
+No additional orchestration is required—every SDK helper and API endpoint returns the structure above.
 
-When `dedupKey` is provided:
+## When to use Map-Reduce
 
-- Each structured result item is inspected for the key path
-- First occurrence of each unique key value is kept
-- Subsequent duplicates are discarded
-- Order of first appearance is preserved
+Choose Map-Reduce when:
 
-If the key is missing on an item, that item is retained (assumed unique).
+- The document is very long (annual statements, large catalogues, multi-section reports).
+- Important data is repeated across pages (product listings, recurring ledger entries, meter readings).
+- Header facts (invoice metadata, report summary, measurement certificate) should guide row extraction.
 
-## Output Shape
+Stay with the default single-pass mode when the document is short or does not repeat content.
 
-Final result structure matches standard extraction output. No additional nesting is introduced; aggregation is transparent to consumers.
+## Key options
 
-## Best Practices
+| Option | Purpose |
+| --- | --- |
+| `pagesPerChunk` | Number of pages (or OCR segments) per extraction window. |
+| `overlapPages` | Pages carried over from the previous window to catch rows that span boundaries. |
+| `dedupKey` | Field used to remove duplicates when overlap is enabled. |
+| `header_options` | Toggle the header pass, set page limit, and configure row prompt augmentation. |
+| `header_schema` | (SDK) JSON schema for the header response, separate from the row schema. |
+| `header_prompt` | (SDK) Prompt override for the header pass. |
 
-| Scenario | Recommendation |
-|----------|----------------|
-| Long repetitive tables | Use overlap of 1–2 pages to catch row splits |
-| Unique per-page sections | Keep `overlapPages=0` |
-| Memory or token limits | Reduce `pagesPerChunk` until stable |
-| Many near-duplicate items | Provide a precise `dedupKey` |
-| Highly varied page lengths | Allow last chunk to be shorter |
+### Header capture
 
-### Choosing Parameters
+When `header_options` is enabled:
 
-Start with:
+- The first `page_limit` pages (default 1) are processed separately.
+- You can provide `header_schema` so header data is structured independently of the row schema.
+- `header_prompt` (SDK) lets you tailor the header pass without changing the main prompt.
+- `row_prompt_augmentation` injects the extracted header facts into each subsequent row window.
 
-- `pagesPerChunk=4`
-- `overlapPages=1`
-- `dedupKey` targeting your primary item identifier
+Whether you request a header or not, the service always returns `{ "header": {...?}, "records": [...] }`.
 
-Adjust based on recall vs. cost trade-offs.
+### Choosing chunk size and overlap
 
-### Common Mistakes
+1. Start with `pagesPerChunk=4` and `overlapPages=1`.
+2. Increase `pagesPerChunk` if chunks lose context (e.g., multi-page rows).
+3. Decrease `pagesPerChunk` if latency or token usage is high.
+4. Set `overlapPages=0` when rows never cross page boundaries.
 
-| Mistake | Impact | Fix |
-|---------|--------|-----|
-| Overlap without dedupKey | Duplicate items | Provide `dedupKey` |
-| Large pagesPerChunk + large overlap | Excess cost & latency | Reduce overlap or chunk size |
-| Very high pagesPerChunk | Context overflows | Lower chunk size |
-| Too small chunk size (1) | Lost multi-page context | Increase to 2–4 |
+## Quick examples
 
-## Limitations
+Below are two end-to-end examples using the Python SDK. Both return the canonical `{header, records}` structure.
 
-- Sequential processing (no parallel chunk execution yet)
-- Dedup only supports a single key path currently
-- Requires OCR format that preserves clear page markers (`<!-- PageBreak -->`)
-- Aggregation currently keeps first occurrence only (no merge of partial objects)
+### Invoice with header + line items
 
-## Cross-Feature Integration
+```python
+from docudevs.docudevs_client import DocuDevsClient
+import asyncio
 
-You can chain Map-Reduce output into AI Analysis or Error Analysis just like a standard job—downstream features are unaware of chunk internals.
+async def run_invoice_example() -> None:
+    client = DocuDevsClient(token="YOUR_API_KEY")
+    with open("sample-invoice.pdf", "rb") as fh:
+        payload = fh.read()
 
-## Troubleshooting
+    job_id = await client.submit_and_process_document_map_reduce(
+        document=payload,
+        document_mime_type="application/pdf",
+        prompt=(
+            "Extract invoice header information (invoiceNumber, issueDate, billing address) and "
+            "invoice line items (sku, description, quantity, unitPrice, total)."
+        ),
+        pages_per_chunk=4,
+        overlap_pages=1,
+        dedup_key="lineItems.sku",
+        header_options={
+            "page_limit": 2,
+            "include_in_rows": False,
+            "row_prompt_augmentation": "Invoice header context"
+        },
+        header_schema='{"invoiceNumber":"string","issueDate":"string","billingAddress":"string"}'
+    )
 
-| Symptom | Possible Cause | Action |
-|---------|----------------|--------|
-| `totalFragments` = 1 unexpectedly | Document shorter than chunk size | Reduce `pagesPerChunk` only if needed |
-| Progress stalls | Long-running extraction on a large chunk | Use smaller `pagesPerChunk` |
-| Missing expected items | Over-aggressive dedup | Verify `dedupKey` correctness |
-| Duplicates remain | Key path not present on those items | Confirm data path; maybe post-filter |
+    result = await client.wait_until_ready(job_id, result_format="json")
+    print("Invoice header:", result.get("header"))
+    print("First line item:", result["records"][0] if result["records"] else None)
 
-## Migration / Backward Compatibility
+asyncio.run(run_invoice_example())
+```
 
-- Existing jobs default to `STANDARD`
-- New parameters ignored unless `mapReduce.enabled=true`
-- No schema/table migrations beyond added columns (`job_mode`, `total_fragments`, `completed_fragments`)
+### Industrial equipment report
 
-## See Also
+```python
+from docudevs.docudevs_client import DocuDevsClient
+import asyncio
 
-- [AI Document Analysis](./ai-analysis.md)
-- [Schema Generation](./schema-generation.md)
+async def run_equipment_report() -> None:
+    client = DocuDevsClient(token="YOUR_API_KEY")
+    with open("machine-report.pdf", "rb") as fh:
+        payload = fh.read()
+
+    header_schema = '{"reportNumber":"string","equipment":"string","technician":"string"}'
+    rows_schema = '{"type":"array","items":{"type":"object","properties":{"metric":{"type":"string"},"measured":{"type":"string"},"nominal":{"type":"string"},"tolerancePlus":{"type":"string"},"toleranceMinus":{"type":"string"},"deviation":{"type":"string"}},"required":["metric","measured"]}}'
+
+    job_id = await client.submit_and_process_document_map_reduce(
+        document=payload,
+        document_mime_type="application/pdf",
+        prompt="Extract equipment measurements (metric, measured, nominal, tolerance, deviation).",
+        schema=rows_schema,
+        pages_per_chunk=2,
+        overlap_pages=0,
+        dedup_key="metric",
+        header_options={
+            "page_limit": 1,
+            "include_in_rows": False,
+            "row_prompt_augmentation": "Equipment report header context"
+        },
+        header_schema=header_schema
+    )
+
+    result = await client.wait_until_ready(job_id, result_format="json")
+    print("Report header:", result.get("header"))
+    print("First measurement:", result["records"][0] if result["records"] else None)
+
+asyncio.run(run_equipment_report())
+```
+
+## Practical tips
+
+- **Pick a dedup key** whenever you use overlap. Use a stable identifier that exists on every row (e.g., SKU, metric name).
+- **Keep header schema small.** Only include the fields you plan to use later (e.g., for prompt augmentation or downstream joins).
+- **Monitor progress.** `GET /job/status/{guid}` reports `totalFragments`, `completedFragments`, and `mapReduceHeaderCaptured` so you can display user-friendly progress.
+- **Timeouts.** Long windows take longer to process; consider smaller chunks if jobs approach your timeout budget.
+
+## Frequently asked questions
+
+**Do I need to manage chunking myself?**
+No. You only provide the parameters; the service handles splitting, retries, and aggregation.
+
+**Can I combine Map-Reduce with Steps or Templates?**
+Not yet. Map-Reduce is currently available for the “simple” extraction mode.
+
+**What if the document has no header?**
+Leave `header_options` and `header_schema` unset. The response will simply contain `{ "records": [...] }`.
+
+**How do I know the response is complete?**
+Poll `wait_until_ready(..., result_format="json")` (or the REST status endpoint). Once you receive a 200 with `status=COMPLETED`, the `records` array is final.
+
+Ready to adopt Map-Reduce? Try the examples above or call the `/document/process` endpoint with your own document payload.

@@ -58,7 +58,6 @@ curl -X POST "https://api.docudevs.ai/document/batch/${BATCH_GUID}/upload" \
 Each upload response includes the assigned index and updated totals:
 The `schema` field should contain a JSON schema string—use the same structure you pass to single-document extractions.
 
-
 ```json
 {
   "jobGuid": "9f1f7ef0-5e0c-4d33-9f03-4c499df0c4d2",

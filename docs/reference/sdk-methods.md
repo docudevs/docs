@@ -118,6 +118,9 @@ job_id = await client.submit_and_process_document(
 )
 
 result = await client.wait_until_ready(job_id, result_format="json")
+assert isinstance(result, dict)
+print("Header", result.get("header"))
+print("Records", len(result.get("records", [])))
 print(json.dumps(result, indent=2))
 ```
 
@@ -388,10 +391,19 @@ job_id = await client.submit_and_process_document_map_reduce(
     prompt="Extract invoice line items (sku, description, qty, unit_price, total)",
     pages_per_chunk=4,
     overlap_pages=1,
-    dedup_key="items.sku"
+    dedup_key="items.sku",
+    header_options={
+        "page_limit": 2,
+        "include_in_rows": False,
+        "row_prompt_augmentation": "Invoice header context"
+    },
+    header_schema='{"invoiceNumber":"string","issueDate":"date"}'
 )
 
 result = await client.wait_until_ready(job_id, result_format="json")
+assert isinstance(result, dict)
+print("Header", result.get("header"))
+print("Records", len(result.get("records", [])))
 ```
 
 Parameters:
@@ -399,12 +411,19 @@ Parameters:
 - `pages_per_chunk` (int, default 1) size of each window
 - `overlap_pages` (int, default 0) pages re-used from previous window
 - `dedup_key` (str, optional) path for cross-chunk deduplication (required if overlap > 0)
+- `header_options` (dict, optional) enables header capture; accepts `page_limit`, `include_in_rows`, `schema_file_name`, `prompt_file_name`, `row_prompt_augmentation`
+- `header_schema` (str, optional) dedicated JSON schema for the header pass (row schema stays in `schema`)
+- `header_prompt` (str, optional) prompt override for the header extraction pass
 
 Validation rules enforced client-side:
 
 - `pages_per_chunk >= 1`
 - `0 <= overlap_pages < pages_per_chunk`
 - `dedup_key` required when `overlap_pages > 0`
+- When `header_options` provided and `enabled` defaults to true, `page_limit >= 1`
+- `header_schema` automatically enables header capture (defaults `page_limit` to 1 when not provided)
+
+The `wait_until_ready(..., result_format="json")` helper always returns the canonical structure `{"header": {...?}, "records": [...]}`, even when the server processes older jobs.
 
 #### process_document_map_reduce()
 
@@ -416,7 +435,9 @@ response = await client.process_document_map_reduce(
     prompt="Extract contract parties and obligations",
     pages_per_chunk=5,
     overlap_pages=1,
-    dedup_key="parties.name"
+    dedup_key="parties.name",
+    header_options={"page_limit": 1},
+    header_schema='{"agreementName":"string"}'
 )
 ```
 
@@ -429,7 +450,9 @@ cmd = client.build_upload_command_map_reduce(
     prompt="Extract table rows",
     pages_per_chunk=3,
     overlap_pages=1,
-    dedup_key="rows.id"
+    dedup_key="rows.id",
+    header_options={"enabled": True, "row_prompt_augmentation": "Table header"},
+    header_schema='{"tableTitle":"string"}'
 )
 ```
 
@@ -607,9 +630,9 @@ result.metadata        # Processing metadata
 How to read results depending on the workflow:
 
 - Extraction (structured data)
-    - Use `submit_and_process_document(...)` to submit.
-    - Call `wait_until_ready(job_id, result_format="json")` to fetch the canonical JSON payload directly.
-    - The return value is a Python dict for single-document jobs or a list of dicts for batch jobs.
+  - Use `submit_and_process_document(...)` to submit.
+  - Call `wait_until_ready(job_id, result_format="json")` to fetch the canonical JSON payload directly.
+  - The return value is a Python dict for single-document jobs or a list of dicts for batch jobs.
 
 ```python
 # Extraction flow (single document)
@@ -623,8 +646,8 @@ print(json.dumps(data, indent=2))
 ```
 
 - Batch extraction
-    - Submit with the batch helpers, then request JSON using the same `result_format` flag.
-    - The API returns a list aligned to the uploaded document order. Each entry is either a dict matching your schema or `null` for failed/missing items.
+  - Submit with the batch helpers, then request JSON using the same `result_format` flag.
+  - The API returns a list aligned to the uploaded document order. Each entry is either a dict matching your schema or `null` for failed/missing items.
 
 ```python
 batch_guid = await client.submit_and_process_batch(
@@ -641,12 +664,12 @@ for index, item in enumerate(batch_results):
 ```
 
 - Legacy object mode
-    - If you omit `result_format`, `wait_until_ready` retains backward compatibility by returning a SimpleNamespace-like object.
-    - Structured extraction jobs expose their JSON in `result.parsed`; batch jobs now surface a list in `result.result`.
+  - If you omit `result_format`, `wait_until_ready` retains backward compatibility by returning a SimpleNamespace-like object.
+  - Structured extraction jobs expose their JSON in `result.parsed`; batch jobs now surface a list in `result.result`.
 
 - OCR-only (plain text or markdown)
-    - Use `submit_and_ocr_document(...)` to submit.
-    - `wait_until_ready(job_id)` (no `result_format`) returns text content in `result.result`.
+  - Use `submit_and_ocr_document(...)` to submit.
+  - `wait_until_ready(job_id)` (no `result_format`) returns text content in `result.result`.
 
 ```python
 # OCR flow
