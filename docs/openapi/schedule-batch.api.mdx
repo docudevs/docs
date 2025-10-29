@@ -1,0 +1,71 @@
+---
+id: schedule-batch
+title: "scheduleBatch"
+description: "scheduleBatch"
+sidebar_label: "scheduleBatch"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1v2zAM/SuCThvgxWl3y61diqKnFWl3CnJgbMVRa0uaRKc1DP/3kfJHkmbogOXgyOQj+fhIuZUIRZCLtdwCZnu5SaR1ygNqax5yuZAh26u8LtVtdCfSgYdKofIc1EpDL4Qqap2TUxs6O0AGevW71l5RDvS1SmKiCuSildg4jgnotSlk1216sAp4a/OGEZk1qAzyEZwrdRb5pC/BGrYdUznPbFGrwG/WF8z5ssIpm/UA23TndmYZDcFZE/qE1/M5/+UqZF475vBREUEQMcZQ1//J/MVu71nCS+7JVO/Uq6lKoTwV3FlfAfam79cRj4B1+LcMY83TClM0zQQ1lhwe+3waIKux1a6L+n0iDSWjRdlb3iJnA8blodVYyDS3WV2RTGlcurTl9enSMZqArNfquBN371A5JjPN+EQfbXY2djvwXVLypToEcfP4ID8ynJzLgYKgQWQqBErGATNxB4GGguINGoFW0EAPNCfR2NqLkXdgTw4IlJ+8oc99NbuazZkRd1tBHPhwP8bWxKjMGatpUqjeMXUl0D2iNLUv46ZE0dZyLE7R2yHLojgfII9tz1ITvG23ENQvX3Ydm0lLT3drTccDeA1b1ooucK4Dn0nSHZRBXTCbFlp+WQ3L81VQyb8yHoxgGhYGyprf6PiqmvEj0W0It1eQ0/Zy/d71o6/y7ZkTHEMvrlCXjBE3WaYcfordnCzg48+nZxZu+MBUNucYD2/8paJnpGlj1/HqRFsrSzBFDQVj+5z8+wN3+cou
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"scheduleBatch"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/batch/{guid}/schedule"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+scheduleBatch
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"orgId":{"type":"string"}},"required":["orgId"]}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"scheduleBatch 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"scheduled":{"type":"integer","format":"int32"},"status":{"type":"string"}},"required":["jobGuid","scheduled","status"],"title":"BatchScheduleResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

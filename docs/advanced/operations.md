@@ -1,5 +1,8 @@
 # Operations
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 Perform post-processing operations on completed document jobs for error analysis, generative tasks, and workflow optimization.
 
 ## Overview
@@ -132,11 +135,18 @@ GET /operation/{parentJobGuid}/{operationType}
 }
 ```
 
-## SDK Examples
+## SDK & CLI Examples
 
-### Python
+### Error Analysis
 
-#### Error Analysis
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
 
 ```python
 from docudevs.docudevs_client import DocuDevsClient
@@ -151,15 +161,9 @@ job_guid = await client.submit_and_process_document(
 )
 
 # Wait for processing to complete
-result = await client.wait_until_ready(job_guid)
+await client.wait_until_ready(job_guid)
 
-# Submit error analysis operation
-operation_response = await client.submit_operation(
-    job_guid=job_guid,
-    operation_type="error-analysis"
-)
-
-# Wait for operation to complete and get result
+# Submit error analysis operation and wait for the result
 analysis_result = await client.submit_and_wait_for_error_analysis(
     job_guid=job_guid,
     timeout=120
@@ -168,14 +172,49 @@ analysis_result = await client.submit_and_wait_for_error_analysis(
 print(f"Analysis result: {analysis_result}")
 ```
 
-#### Generative Tasks
+  </TabItem>
+  <TabItem value="cli">
+```bash
+# Submit error analysis and wait for completion
+docudevs operations error-analysis JOB_GUID --timeout 180
+
+# Check status of operations on the job (optional)
+docudevs operations status JOB_GUID
+```
+
+  </TabItem>
+  <TabItem value="curl">
+```bash
+curl -X POST https://api.docudevs.ai/operation \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"jobGuid": "JOB_GUID", "type": "error-analysis"}'
+
+# Poll for operation status
+curl -X GET https://api.docudevs.ai/operation/JOB_GUID \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+</Tabs>
+
+### Generative Tasks
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
 
 ```python
 from docudevs.docudevs_client import DocuDevsClient
 
 client = DocuDevsClient(token="your-api-key")
 
-# First, process a document with OCR
+# Process the document with OCR first
 ocr_job_id = await client.submit_and_ocr_document(
     document=document_data,
     document_mime_type="application/pdf",
@@ -183,29 +222,44 @@ ocr_job_id = await client.submit_and_ocr_document(
     ocr_format="markdown"
 )
 
-# Wait for OCR to complete
 await client.wait_until_ready(ocr_job_id)
 
-# Create a generative task
-# Generate summary
-    # For quick analysis (faster, lower cost)
-await client.submit_and_wait_for_generative_task(
+summary = await client.submit_and_wait_for_generative_task(
     parent_job_id=ocr_job_id,
-    prompt="Quick summary of main points",
+    prompt="Summarize the main findings",
     model="DEFAULT"
 )
 
-# For detailed analysis (slower, higher quality)
-await client.submit_and_wait_for_generative_task(
-    parent_job_id=ocr_job_id,
-    prompt="Detailed analysis with insights and recommendations",
-    model="HIGH"
-)# Parse the result
-import json
-result_data = json.loads(generative_result.result)
-generated_text = result_data['generated_text']
-print(f"Generated summary: {generated_text}")
+print(summary.generated_text)
 ```
+
+  </TabItem>
+  <TabItem value="cli">
+```bash
+# Create a generative task that waits for completion
+docudevs operations generative-task PARENT_JOB_GUID \
+  --prompt "Summarize the main findings" \
+  --model DEFAULT --timeout 180
+
+# Retrieve the operation result if needed later
+docudevs operations result PARENT_JOB_GUID --type generative-task
+```
+
+  </TabItem>
+  <TabItem value="curl">
+```bash
+curl -X POST https://api.docudevs.ai/operation/PARENT_JOB_GUID/generative-task \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Summarize the main findings", "model": "DEFAULT"}'
+
+# Fetch the generative task result
+curl -X GET https://api.docudevs.ai/operation/PARENT_JOB_GUID/generative-task \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+</Tabs>
 
 #### Document Question Answering
 

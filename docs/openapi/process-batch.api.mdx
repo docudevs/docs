@@ -1,0 +1,71 @@
+---
+id: process-batch
+title: "processBatch"
+description: "processBatch"
+sidebar_label: "processBatch"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVktv4zYQ/isCT13AjbPbW25ex9kI9QtOjBYwcqClic0sRaoklcQw9N93htTLceu1tzmEMjnzzevjDPfM8Y1lNyu25i7Zsqce0zkY7oRWccpuWG50AtZ+9ac9lnPDM3BgSGfPFP5AoU0hUjwUihS4I0ED/xTCAEI4U0CP2WQLGWc3e+Z2OelYZ4TasLJ8CsJg3Ved7kgi0cqBcvTJ81yKxLvTf7Fa0V4LxaWcPXtH0E102wmwtK8T01paMVVIiS7p9QskjkJs9UAVGYncju4Gy/EjSs0Xo0m8nODX6O/haIzrdDYd4TJYPs5wGc/+IggnnKQwZol5JDPlU9ljUma/bHc6mBL8JJ7GuNzH3+67ZsYya83AuzM8oZxMdAoXWnyIJ/MxxfPwOJo/4DobLrqWRofg3uDH4q3q6vWCRZLBCmS5Oy2z5iZBUNuVWmstgauuWCYy8NGeBEOcxIg13IlNYX6OyfMFpEVybroOCQWKryWRuaFvbYIi5xuwczDDbaG+d+EF0ngDpnGjx561yTgmiY7++ELK+hWM5PmcMC7VTTGg/E/Ync7TFngK596HC8Mei0y4S90WKpFFCrFa6LeflY2MxCoVyWF2uDF81zEiHGQdgY4bH82fyeYgcyckTH2L+7/MDzLn4Rn9Nvfig2KTYR/03e+UStltt6umap1LPanZf+/JMNRZxlVKl/sC3UOt+niZS83T5qx31IvNJu4yqOn7deOvTQdBxA4+2VwrGyC+XF/TEi58HrJxMJgilIhqFczL2QPk0NUXvf5Gk+zYWeof70OtksIYUMnuXKp146vRj7A6ufbRDA1wB4s6nDJk5L+jJ0RwW+3HtbbOj2kcwjesn+qkIAr1/XTv72lQl/1KGeUoI4t2+I7eeZZLaEZoZzz50db5/XEGtXOlzm5L0/qCtDvtIAivg7bjtzJH/b0SbRt508gCxTrVEupZ+xpVeb3FPNzCq40G85h9zGVzeFtlK6oShGCkcBWNuEWKuOiN7yKnI6QXdm0X7XRhojrFlk5S7jji46kN2J+vPl9d+26JhcEbQk5Vj6bKSFTX8MCphl4OE93PJRe+5xZGetr68q5YbdtnNKDcVG+xusZIri1xAqX3+zW3sDSyLGkbq26QyCv8fOVG0L33IyAVtur6z1xaOHKsuVzst0VF708RWvxXh6tNrqhbv3JZ0C/8/E5TK7wby+6QQvvhaBis/O5Z0aoeXWdqOEFjkCSQu5OyT52bMp89EI/X1ZszCyw2/I0er/jfu6l91L45+L09k1xtChxKeB4w6e8Hh4TO1w==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"processBatch"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/batch/{guid}/process"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+processBatch
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"allOf":[{"properties":{"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM","EXCEL","NONE","AUTO","LOW"],"title":"OcrType"}]},"llm":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","NANO","MINI","HIGH"],"title":"LlmType"}]},"extractionMode":{"type":["null","object"],"allOf":[{"enum":["SIMPLE","STEPS","OCR"],"title":"ExtractionMode"}]},"schema":{"type":["string","null"]},"prompt":{"type":["string","null"]},"barcodes":{"type":["boolean","null"]},"mimeType":{"type":["string","null"]},"describeFigures":{"type":["boolean","null"]},"mapReduce":{"type":["null","object"],"allOf":[{"properties":{"enabled":{"type":"boolean"},"pagesPerChunk":{"type":["integer","null"],"format":"int32"},"overlapPages":{"type":["integer","null"],"format":"int32"},"dedupKey":{"type":["string","null"]},"header":{"type":["null","object"],"allOf":[{"properties":{"enabled":{"type":"boolean"},"pageLimit":{"type":["integer","null"],"format":"int32"},"includeInRows":{"type":["boolean","null"]},"pageIndices":{"type":["array","null"],"items":{"type":"integer","format":"int32"}},"schema":{"type":["string","null"]},"schemaFileName":{"type":["string","null"]},"prompt":{"type":["string","null"]},"promptFileName":{"type":["string","null"]},"rowPromptAugmentation":{"type":["string","null"]}},"required":["enabled"],"title":"MapReduceHeaderCommand"}]}},"required":["enabled"],"title":"MapReduceCommand"}]}},"title":"UploadCommand"},{"properties":{"orgId":{"type":"string"}}}],"required":["orgId"]}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"processBatch 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"maxConcurrency":{"type":"integer","format":"int32"}},"required":["jobGuid","maxConcurrency"],"title":"BatchCreateResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

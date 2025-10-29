@@ -1,0 +1,71 @@
+---
+id: get
+title: "get"
+description: "get"
+sidebar_label: "get"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE2L2zAQ/StCpxZMki2lB98Cu5SFtISyPYUcZq1Jola2tNI4W2P83ztjO8a7G7o9RdF8vffmya0mOCad7/Rm801toz9bgzHpfaZ9wAhkfXVvdK6PSDrTASKUSJKR71pd8R+OWcMhW/EpAJ34HPGpthG5jmKNmU7FCUvQeaupCX1FRXjEyKkHH0ug4erLZ911eylPwVcJk1R8Wq3kx2Aqog2CZ0CjOKAumdyo8NyzIsmFEJwteuzLX0kK2hmEEIUZ2aE9Y/8fWNnIdUpNFG11lAAE+zO6q6HSG3QP/e2VqMHgfFMy6O8veu8uOTy0dk7vOff3M8RjDxiMscIM3HZGRHTmtERAdbo6rYgIhGZN/x5UB/N+Wjdf8e6iQDYYYYQ6Zz+qN+HjHZMlJwA3rry47pY877/remlebVvaIZ383IpstVwvnSuX4eLbZWtN15vx4HsC45RbX9S3eE5qvb3Xr9tPQTnIOhT3KzAl5iwFC3UHiVUm9QyNIq/YamcWXjW+jsqMRUkirB1wf46moffN4maxEvmDT1RCb8Xx1Qw0XkCZ1kb4h5bBAT8q2clgr4HxTjNj4T+91UznLDxreuIZktC2j5CQV9J1cv1UY2z4no9niBYeRRJ+vcYmObOkB3AJ32CZXpT+8GPc9kfF065iHC+haoQ/uFr+iRuwGb4QnbjrhMCQ++lDYF0UGGhW8ubtygdhWv3Xuwe2yF8D5piF
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"get"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/llm/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+get
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"get 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

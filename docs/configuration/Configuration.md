@@ -51,6 +51,7 @@ You can save a new configuration or update an existing one by sending a POST req
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 
@@ -136,6 +137,13 @@ print(f"Configuration saved: {result}")
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+# Save the configuration JSON above to config.json first
+docudevs save-configuration invoice-config config.json
+```
+
+  </TabItem>
 </Tabs>
 
 #### Simple Configuration (Processing Settings Only)
@@ -145,6 +153,7 @@ print(f"Configuration saved: {result}")
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -181,6 +190,13 @@ print(f"Configuration saved: {result}")
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+# Save the JSON payload above to simple-config.json first
+docudevs save-configuration simple-config simple-config.json
+```
+
+  </TabItem>
 </Tabs>
 
 ### Listing All Configurations
@@ -192,6 +208,7 @@ To see all your saved configurations, send a GET request to `/configuration`:
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -212,6 +229,12 @@ print(f"Available configurations: {configs}")
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs list-configurations
+```
+
+  </TabItem>
 </Tabs>
 
 ### Retrieving a Specific Configuration
@@ -223,6 +246,7 @@ To get the details of a specific configuration, send a GET request to `/configur
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -243,6 +267,12 @@ print(f"Configuration details: {config}")
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs get-configuration invoice-config
+```
+
+  </TabItem>
 </Tabs>
 
 ### Deleting a Configuration
@@ -254,6 +284,7 @@ When you no longer need a configuration, you can delete it with a DELETE request
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -274,6 +305,12 @@ print("Configuration deleted")
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs delete-configuration invoice-config
+```
+
+  </TabItem>
 </Tabs>
 
 ## Using Configurations
@@ -287,6 +324,7 @@ You can apply a saved configuration when processing a document by specifying the
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -320,6 +358,12 @@ result = await client.wait_until_ready(guid, result_format="json")
 print(json.dumps(result, indent=2))
 
 ```
+  </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs process invoice.pdf --configuration invoice-config
+```
+
   </TabItem>
 </Tabs>
 

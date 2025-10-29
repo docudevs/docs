@@ -5,7 +5,7 @@ description: "ocrDocument"
 sidebar_label: "ocrDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVE1z2jAQ/SsendoZN6Q9cqMBZphpQoaGU4bDYiugVpYUfZB4PP7v3ZVsMCHJoRywLe3X2/d2G+Zh59j4kZW6CBVXnm1ypg234IVWi5KNmS7stL/MmQELFffcklfDFH6gzS6IEi+FwncDfo/vlj8HYTlG8DbwnLlizytg44b52pCP81aoHWvb/BjmSdsKfB/oOXBbs0vPx941ZypIyTZtu0n5uPM/dVmTaaGVp4rxFYyRooiARn+cVnR2imkswfWCO/pCsPTgKlSUaDqbT9a/HjDT/Wp2u1jf4tvd8m6Gj8n6YUnN8sJLqn1Z2Acqr80pyDwh+aTmnFWi4tHlU6uSu8KKLZ+LXbCpyN54q7XkoAZ9GLb9MYI5r/BGVxWoEpuebJ3RyqWgP66v6ZHSGWrWOfcZGmS9B6b8zwZHpVyKAFn24IN7Vx9noDqpdeYDeGsjNZSrvsI2YfwQD8ZAHe81Sdxol7SNyh2zUT8LIzQfNZSwxVtCtjqJbPYKlZG8E03P94nAE7unswsuaTRakvuTjsg7KFTjlB9cNrlfsLcYjpdHZrDDBXcOc5DDVTYDh9322QvUmdcZMnVAArJaB5v12BzdlOAB4+OtS7Gvr74TF9QP1AmV1E0mQswGnTur6MiY569+ZCTg9GKQYGWkPzZ1sGDifOD/ODKJBO6p+2jRNFtwfG1l29JxGn9aMqVwsJVE/xNIh7vkL6+H2+IAMlB+RnvgAFaQ9fuebwo/iph9WXUa+5phxHcBdYeg6mHOvpqIpqWJ3XMouY3509VNyvItyuHkejE2tAmTx6QouPGf2m4G+r1f/qYdte12X6VL8rHwQnsY/2OZOqKOExbPGiZB7QLsyDbFpN8/pA8SUw==
+api: eJydVN9v2jAQ/lciP21SVto98sbaVKrUFsRAm1TxcCQueHNs13Zooyj/++7sBEJpeRgP2PH9/O6+u4Z52Dg2fmKFzquSK89WKdOGW/BCq7uCjZnO7U0vTJkBCyX33JJVwxR+oM6mEgUKhcK7Ab/Fu+UvlbAcPXhb8ZS5fMtLYOOG+dqQjfNWqA1r23Tv5lnbEnzv6KXitmanlk+9acpUJSVbte0qxuPO/9BFTaq5Vp4yxisYI0UeAI3+OK3o7eDTWILrBXf0hWDp4KoqKdBNdjtZ3i8w0myePdwtH/CW/b7O7vF8nD5meEyWiyke99NfVDovvCQk09wuKNk2JZe3EdcZBCkrRcmDyVmtgrvcijW/FZvKxpR75bXWkoMaVGXYhKcA7TjDa12WoApsQdR1RisXnX6/vKQjhjNUumMmJKiQ9BYY8j/LHXhzSgnsuQdfuQ9F3Fptz7LhGHfHzc7joAJLIzUU8x5EG8vwKWT0gcTfapoJo10cBqT6mI364Rmh+qihgC1KCfz8wMrsDUojeceynhKH7A8EOLydtJtmqaX5eNahBB0UyvGG71wymd2x9xj2wn3zsAk5dw5jkMFFkoHDhvjkFerE6wSbucMeJbWubNJjcyQpwAP6R6mLvq8uri4uqStUESQTJdUNM4JMBrU7ymnfVs/f/MhIwIFHJ5WVgSOhrIOdFIYI/8ehl9jCLdUfNZpmDY4vrWxbeo4bg/ZSIRysJRHgGaTD9fOX18MFswNZUXxGq2MHVpD2x5bvEt8znX2Zdyz7mqDHDwF1j6DqYcw+m4CmpbHecii4DfGj6DpG+RYIcTA9mS1antFikufc+LO6qwGDZ9OftNbW3bosdUE2Fl5pdeN/SFMH1GEMw1vDJKhNBRvSjT7p9w8xLyG/
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ ocrDocument
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"enum":["DEFAULT","PREMIUM","NONE","AUTO"],"title":"OcrType"},"ocrFormat":{"type":["string","null"]},"mimeType":{"type":["string","null"]},"describeFigures":{"type":["boolean","null"]}},"required":["ocr"],"title":"OcrCommand"}}}}}
+  body={{"content":{"application/json":{"schema":{"properties":{"ocr":{"enum":["DEFAULT","PREMIUM","EXCEL","NONE","AUTO","LOW"],"title":"OcrType"},"ocrFormat":{"type":["string","null"]},"mimeType":{"type":["string","null"]},"describeFigures":{"type":["boolean","null"]}},"required":["ocr"],"title":"OcrCommand"}}}}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ ocrDocument
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"ocrDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+  responses={{"200":{"description":"ocrDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
 >
   
 </StatusCodes>

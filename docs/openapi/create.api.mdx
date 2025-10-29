@@ -1,0 +1,71 @@
+---
+id: create
+title: "create"
+description: "create"
+sidebar_label: "create"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVU1v2zAM/SuGzl7SDsMOuXVtD8W6Lei6U9ADY7GJWtnSJDptEPi/j7Tij7RBBuy0HGKZpCjyvUd5pwhWUc0W6vb2WzYPbmM0hqgecuU8BiDjqhutZqoICIQqVwF/1xjpi9NbNdupwlWEFckSvLemaLdMn6KrxBaLNZYgKx8kIRmM8lZBifKkreenihRMtVJNzknMr2CPukqn0d631iNejd66bcm1fD/IvehiclXV1qoHjn1+gbCK45jWxT0vn7Ag6R60NtIJ2PmocAo1piK/4vZoGZGA6njq+CZhaAJqce9z9Z2P+8wTTlwOGbJy0GVLw60tO6ruEh2qOcy7LzRg9K6KCfOPZ2fy0BiLYLw01/OasS/rgvnYf2TV6BEmhlOsMHC2RxdKoGT6/ElQ+l/oP8nyWypHpyXU9AWdPqj2+u9h7/WQZMBg9qUeEUVf30gdI11ckRNNNC007wmXjEhrJ6PtHesnVx5ozW9Ta8up7y+CXAnpd8PQX79C6S0OQzw01JE3WEacDca3VA2ejphuHLs5GyI6TkZcmOrRtfjuQbhyRX2Fm5hdzG/U2+57pyykhIxbLTBGTiYbJtk1RBYBZS+wzchlPAkb1kW2dXXI9H5TFA9TC5yfvTHlPp+cT86kIgG0hGoEUQ/6QTW9sAhfaeotmEq212kAEh8LxXwIO+OreS2MsWu3W0JExrxpxMwcBUZrwcsNBANLwWMhQlwj8F5+2annFtDLNOAf9oragK2lkHfD3uTdjouiQE8nYx9Gopr/+HnPwcv9Z0KEwNYAL/IJ4f+Zkuu2BaIdsda2UxaqVQ0riU055fcH77xJwg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"create"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/llm/providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+create
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"type":["null","object"],"additionalProperties":true},"apiKey":{"type":"string"},"status":{"type":["string","null"]}},"required":["apiKey","apiUrl","modelType","name"],"title":"CreateLlmProviderRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"create 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

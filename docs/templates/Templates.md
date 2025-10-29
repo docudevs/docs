@@ -5,35 +5,22 @@ title: Templates
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Templates functionality allows you to upload, manage, and fill templates with data. Templates can be in PDF or Office (word, excel or powerpoint) format.
+DocuDevs can treat a form as a reusable template: upload it once, peek at the form fields, and keep filling it with fresh data straight from your workflow. Templates support PDF forms as well as Word, Excel, and PowerPoint documents.
 
-### Upload Template
+## Getting a template into DocuDevs
 
-**Endpoint:** `POST /template/{name}`
+Uploading a template is as simple as naming it and sending the source document. After that you can refer to the template by name from the SDK, CLI, or API.
 
-**Description:** Uploads a new template document (PDF or Word) to the server.
+> API nerd note: this maps to `POST /template/{name}`.
 
-**Request:**
+Need a quick inventory of every template? List them all in one go.
 
-- **Path Parameter:**
-  - `name` (String): The name of the template.
-- **Headers:**
-  - `Authorization` (String): API key for authorization.
-- **Form Data:**
-  - `document` (File): The template document to be uploaded.
-
-**Response:**
-
-- **200 OK:** Template uploaded successfully.
-- **400 Bad Request:** Invalid input.
-- **500 Internal Server Error:** Server error.
-
-**Example:**
 <Tabs
   defaultValue="curl"
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 
@@ -69,9 +56,15 @@ asyncio.run(upload_template())
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs upload-template invoice invoice.pdf
+```
+
+  </TabItem>
 </Tabs>
 
-Response example:
+**Sample response**
 ```json
 {
   "guid": "123e4567-e89b-12d3-a456-426614174000",
@@ -120,31 +113,18 @@ Response example:
 }
 ```
 
-### Get Template Metadata
+## Inspecting template fields
 
-**Endpoint:** `GET /template/metadata/{name}`
+Want to know which fields DocuDevs discovered? Grab the metadata and you’ll see every form field, default value, tooltip, and more.
 
-**Description:** Retrieves metadata for a specific template.
+> API mapping: `GET /template/metadata/{name}`.
 
-**Request:**
-
-- **Path Parameter:**
-  - `name` (String): The name of the template.
-- **Headers:**
-  - `Authorization` (String): API key for authorization.
-
-**Response:**
-
-- **200 OK:** Returns the metadata of the template.
-- **404 Not Found:** Template not found.
-- **500 Internal Server Error:** Server error.
-
-**Example:**
 <Tabs
   defaultValue="curl"
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 
@@ -175,31 +155,26 @@ asyncio.run(get_template_metadata())
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs template-metadata invoice
+```
+
+  </TabItem>
 </Tabs>
 
-### Delete Template
+## Cleaning up templates
 
-**Endpoint:** `DELETE /template/{name}`
+Templates stick around until you delete them. Use this when a form is obsolete or replaced.
 
-**Description:** Deletes a specific template.
+> API mapping: `DELETE /template/{name}`.
 
-**Request:**
-- **Path Parameter:**
-    - `name` (String): The name of the template.
-- **Headers:**
-    - `Authorization` (String): API key for authorization.
-
-**Response:**
-- **200 OK:** Template deleted successfully.
-- **404 Not Found:** Template not found.
-- **500 Internal Server Error:** Server error.
-
-**Example:**
 <Tabs
   defaultValue="curl"
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -228,36 +203,28 @@ asyncio.run(delete_template())
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs delete-template invoice
+```
+
+  </TabItem>
 </Tabs>
 
-### Fill Template
+## Filling templates with data
 
-**Endpoint:** `POST /template/fill/{name}`
+Once a template is uploaded you only need to send a JSON payload with the fields you want to merge. PDF forms expect a flat dictionary; Word templates support nested structures (great for tables or repeated sections).
 
-**Description:** Fills a template with provided data and returns the filled document.
+> API mapping: `POST /template/fill/{name}`.
 
-**Request:**
-- **Path Parameter:**
-    - `name` (String): The name of the template.
-- **Headers:**
-    - `Authorization` (String): API key for authorization.
-- **Body:**
-    - `fields` (JSON): A JSON object containing the fields to fill in the template.
+### Flat PDF example
 
-
-The fields object must be a 'flat' dictionary for pdf-forms. It can be a nested object for word documents.
-
-**Response:**
-- **200 OK:** Returns the filled document.
-- **404 Not Found:** Template not found.
-- **500 Internal Server Error:** Server error.
-
-**Example flat:**
 <Tabs
   defaultValue="curl"
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -304,9 +271,17 @@ asyncio.run(fill_template())
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+# Save the request body above to invoice-fill.json first
+docudevs fill invoice invoice-fill.json --output filled_invoice.pdf
+```
+
+  </TabItem>
 </Tabs>
 
-**Example word template:**
+### Word template example
+
 ![img.png](./img.png)
 Office templates can have nested objects. Creating of dynamic tables is also possible (demonstrated in the [example template](https://docs.docudevs.ai/template1.docx))
 
@@ -315,6 +290,7 @@ Office templates can have nested objects. Creating of dynamic tables is also pos
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -377,31 +353,26 @@ asyncio.run(fill_complex_template())
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+# Save the nested request body above to template-fill.json first
+docudevs fill template1 template-fill.json --output template-filled.docx
+```
+
+  </TabItem>
 </Tabs>
 
 Will render:
 ![img_1.png](./img_1.png)
 
-### List Templates
+## Listing available templates
 
-**Endpoint:** `GET /template/list`
-
-**Description:** Lists all templates for the organization.
-
-**Request:**
-- **Headers:**
-    - `Authorization` (String): API key for authorization.
-
-**Response:**
-- **200 OK:** Returns a list of templates.
-- **500 Internal Server Error:** Server error.
-
-**Example:**
 <Tabs
   defaultValue="curl"
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```sh
@@ -431,4 +402,16 @@ asyncio.run(list_templates())
 
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs list-templates
+```
+
+  </TabItem>
 </Tabs>
+
+## Where to go next
+
+- Pair templates with [named configurations](/docs/configuration/Configuration) to keep prompts and schemas in sync.
+- Trigger template fills from the [SDK helper methods](/docs/reference/sdk-methods) for end-to-end automation.
+- Need troubleshooting tips? Drop into the [CLI reference](/docs/reference/cli-reference) for every flag and command.

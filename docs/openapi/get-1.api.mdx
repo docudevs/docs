@@ -1,0 +1,71 @@
+---
+id: get-1
+title: "get_1"
+description: "get_1"
+sidebar_label: "get_1"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNU0uP00AM/iujOYEU9YEQh9wqukI9bbWCU1Uhb8ZtB5LM7IxTCFH+O3ZeG20rwSnO+PX58+dGE5yjTg9686cKqB4/P6l9cFdrMER9TLTzGICsK3dGp/qM9H2tE+0hQIEkMemh0SX/sNcadtmSLQ90YTvgS2UDciaFChMdswsWoNNGU+27jJLwjIFDTy4UQP3Tp4+6bY+SHr0rI0bJ+LBaycdgzIL1gmjEo9ilxlgulTmuWpJEg/e5zTr8yx9RUpoZCB9kOrJ9A0b/P8CSYdopNFKw5VkcWBrvbN/5xlk4g/nO3PWdEIjZ72CAMVbwQr6fwRP+ODASB8a7NbLARdBsZt0Po5sxV3mujxxWefPvsHa+usPrXDOkSb/tcaqBlQkhb48s5QLxMQujorbkeLOt1L+zRymHdHGD0DqZsYxSvXRZWPpRlcvGmrYT2sl1Qwx9ti6rtniNarPf6bcNJqcYBatDcb0MY+S5JWGhHiAy06R+Qa3IKRbRlclXtauCMkNSFA/zB1yfvbGvvV6sFytZgXeRCuhENlwEj6HWb8FMyyP8TUufA5+MbCbknSi7mQ+aZxYGpltMdMqMM68X7iIBTfMMEb+FvG3l+aXCUPM7m1cIFp6FFL5NY6PYTOoJ8og3WKZr0e+ehp2/V9ztLsbhEcpaGIC8kj82f2Ld338rGrsgMOSue+/YZBl6mqXc3KWc+7T8Lw9fWSZ/AUXajuU=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"get_1"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/ocr/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+get_1
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"get_1 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

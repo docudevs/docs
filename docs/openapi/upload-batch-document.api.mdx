@@ -1,0 +1,71 @@
+---
+id: upload-batch-document
+title: "uploadBatchDocument"
+description: "uploadBatchDocument"
+sidebar_label: "uploadBatchDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE1v2zAM/SuGThvgxGl3860fw9DTiq49BTkwthKrsy1NorMagf/7SMl2nDjDdqNE8vHpkdRRIOydSNdiC5gVYhMLbaQFVLp+ykUqGlNqyO/Z+aizppI1ilgYsFBJlJZTj6KmA8XuG5WTU9VkG8CCbCt/NcpKQkLbyFi4rJAViPQosDWc49Cqei+6bhOCpcN7nbcckekauRyZVVOioqKY7LStFjmgxzihGcu0UUnHp3xgOqsTCwYA8oitqsG2oqMX2z2/dc5pyn99Qh0yNhQg60znHH1Rtif/GhDBmFJlXtVEZyhxQTUkVFTjvAqr5C+c0bULr7ldrTy6dJlVhjGu9yWiwGjIJJIT/ab13x0D/F28d739xo2c68GtzeXHxKOowl7aqax09eWWY1EjlAM3919JF4KHavHIaIZJM4MKSwb1Srx5UV4GCbqg7j+FI2Aa5kLzvBvtwoDT+KYiGVqa+PVIjjziXRIw/KjvtH9Zz4IRH+XBRXfPT+Ky8ugcG0bCZ9I5EpcTltFXcNQEjH5DG6GOqIEH6kvU6sZGAxPHHr8AsSCvC9g3y5vlilVn/hX4BvdbGchG/sXR5Mln5MbmoPzAxJRAS0xojS39gHg1zjYgfBexSPul7yWhjhSsIAUfj1tw8s2WXcfXtNq0bemazANYBVsWjP6OXDm2SfsdlE7OeI1TLD699LPxOeJRuMa3v4S6ZXWgbPhE5k/ZDv9Tx1tbSMhpArl+cD2EKgu/r6fUa/9OFw9Jd1kmDU7CZ2vGv9o4Ws/ff7yycv33Vumccxi4b+dokko0uX8A33vwoA==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadBatchDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/batch/{guid}/upload"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadBatchDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"},"orgId":{"type":"string"}},"required":["document","orgId"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadBatchDocument 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"index":{"type":"integer","format":"int32"},"totalDocuments":{"type":"integer","format":"int32"}},"required":["index","jobGuid","totalDocuments"],"title":"BatchUploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: create-batch
+title: "createBatch"
+description: "createBatch"
+sidebar_label: "createBatch"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVMFu2zAM/RWDZy9Ju1tubVIMPbXoulPgAyMrtjpZ0iQ5TWD430fKcZY0TTEfbFkkHx8fKXUQsQowX8Eao6ihyME66TEqax5LmIPwEqO8T8YcvPzTyhDvbbmHeQfCmihN5CU6p5VIcdO3YA3vBVHLBpNV66cNZenAecaPSgbeb3C3sEa03ksjEmTcO8l0FCFX0lNO02rNvDbWN0i52PT9Fvo+h6iiJm9I9BaJ6cvAEPr8Yy7rK65oTAEhemUqwumLoTDlZcmpB8eCDD0bgrMmDBC3sxl/ShmEV45rPVcoI4dsjCDq/63POdM3u/7Rqs+45lcVOxHsE6FOyxvRL7CKK4IeyukHQa4Wz4Ay1panxllqQQ4OY01/09KKtiEhpuuDIyvw8m+WHnbYOE58ORGzfGzciQjKbGwq/UB3SfhLuQ3Z3fMjfKR4NC4PLDJSW8gQCIwDJtkDBlI+Zu+4z6LNqGtbaka2t63PRuqBLSVGJHyyhgH7ZnIzmTEjLrjB1FWDjTwqk43SnHE6Ni3KXZw6jcowSOt1Goak2grG1BR9PJw1C0u2rltjkL+87nveJiU9ibWi5Ra9wjXLsioIs5ZY0lTw0fstyQUWw0x+e2UG7K5bZnIxn3yAhog7IaSLX/oWJ71/fvr5ypQPd0RjS47x+M73B73nAHzJcHSa9rTXgUZTtVix74DJz18r2Zkn
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createBatch"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/batch"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createBatch
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"allOf":[{"properties":{"maxConcurrency":{"type":["integer","null"],"format":"int32"}},"title":"BatchCreateRequest"},{"properties":{"orgId":{"type":"string"}}}],"required":["orgId"]}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createBatch 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"maxConcurrency":{"type":"integer","format":"int32"}},"required":["jobGuid","maxConcurrency"],"title":"BatchCreateResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

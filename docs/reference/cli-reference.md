@@ -53,9 +53,15 @@ docudevs process document.pdf [OPTIONS]
 **Options:**
 
 - `--prompt TEXT`: Extraction prompt describing what to extract
+- `--prompt-file PATH`: Read extraction prompt from a text file
 - `--schema TEXT`: JSON schema for structured extraction
-- `--ocr [DEFAULT|NONE|PREMIUM|AUTO]`: OCR processing type (default: DEFAULT)
+- `--schema-file PATH`: Load JSON schema from file
+- `--configuration TEXT`: Process using a named configuration
+- `--ocr [DEFAULT|NONE|PREMIUM|AUTO|EXCEL]`: OCR processing type (default: DEFAULT)
 - `--llm [DEFAULT|MINI|HIGH]`: LLM model to use (default: DEFAULT)
+- `--barcodes`: Enable barcode and QR detection for this run
+- `--extraction-mode [OCR|SIMPLE|STEPS]`: Force a specific extraction pipeline
+- `--describe-figures`: Request figure descriptions when supported
 - `--timeout INTEGER`: Timeout in seconds (default: 60)
 - `--wait/--no-wait`: Wait for processing to complete (default: wait)
 
@@ -70,6 +76,12 @@ docudevs process contract.pdf --schema='{"type": "object", "properties": {"party
 
 # Use premium OCR and don't wait for result
 docudevs process scan.pdf --ocr=PREMIUM --no-wait
+
+# Read prompt and schema from files
+docudevs process invoice.pdf --prompt-file instructions.txt --schema-file schema.json
+
+# Process using a saved configuration and enable barcode detection
+docudevs process receipt.pdf --configuration retail-config --barcodes
 ```
 
 ### `ocr-only`
@@ -177,12 +189,36 @@ List all available templates.
 docudevs list-templates
 ```
 
-### `fill`
+### `upload-template`
 
-Fill a template with data from a JSON file.
+Upload a template document.
 
 ```bash
-docudevs fill TEMPLATE_NAME data.json
+docudevs upload-template TEMPLATE_NAME template.pdf
+```
+
+### `template-metadata`
+
+Fetch metadata for a template.
+
+```bash
+docudevs template-metadata TEMPLATE_NAME
+```
+
+### `delete-template`
+
+Delete a template.
+
+```bash
+docudevs delete-template TEMPLATE_NAME
+```
+
+### `fill`
+
+Fill a template with data from a JSON file and optionally write the result to disk.
+
+```bash
+docudevs fill TEMPLATE_NAME data.json --output filled.pdf
 ```
 
 **Example data.json:**
@@ -193,6 +229,133 @@ docudevs fill TEMPLATE_NAME data.json
   "address": "123 Main St",
   "date": "2024-01-15"
 }
+```
+
+## Case Management
+
+Manage cases and documents stored within them.
+
+### `cases list`
+
+List all cases for the current organization.
+
+```bash
+docudevs cases list
+```
+
+### `cases create`
+
+Create a new case.
+
+```bash
+docudevs cases create --name "Quarterly Invoices" --description "Q4 2024 invoice processing"
+```
+
+### `cases get`
+
+Retrieve details for a specific case.
+
+```bash
+docudevs cases get CASE_ID
+```
+
+### `cases update`
+
+Update an existing case.
+
+```bash
+docudevs cases update CASE_ID --name "Quarterly Invoices (Updated)"
+```
+
+### `cases delete`
+
+Delete a case and all associated documents.
+
+```bash
+docudevs cases delete CASE_ID
+```
+
+### `cases upload-document`
+
+Upload a document into a case.
+
+```bash
+docudevs cases upload-document CASE_ID invoice.pdf
+```
+
+### `cases list-documents`
+
+List documents stored in a case.
+
+```bash
+docudevs cases list-documents CASE_ID --page 0 --size 20
+```
+
+### `cases get-document`
+
+Get metadata for a document stored in a case.
+
+```bash
+docudevs cases get-document CASE_ID DOCUMENT_ID
+```
+
+### `cases delete-document`
+
+Remove a document from a case.
+
+```bash
+docudevs cases delete-document CASE_ID DOCUMENT_ID
+```
+
+## Operations Management
+
+Run post-processing operations such as error analysis and generative tasks.
+
+### `operations submit`
+
+Submit an operation by type.
+
+```bash
+docudevs operations submit JOB_GUID --type error-analysis --parameter quality=deep
+```
+
+- `--llm-type` optional LLM override (`DEFAULT`, `MINI`, `HIGH`)
+- `--parameter` key/value pairs passed to the operation
+- `--wait` to block until the operation completes
+
+### `operations error-analysis`
+
+Convenience command for error analysis.
+
+```bash
+docudevs operations error-analysis JOB_GUID --timeout 180
+```
+
+### `operations generative-task`
+
+Create a generative task from a completed job.
+
+```bash
+docudevs operations generative-task PARENT_JOB_GUID --prompt "Summarize the findings" --model DEFAULT
+```
+
+- `--no-wait` returns immediately with the operation job GUID
+- `--temperature` and `--max-tokens` mirror API parameters
+
+### `operations status`
+
+List operations created for a job.
+
+```bash
+docudevs operations status JOB_GUID
+```
+
+### `operations result`
+
+Fetch the result payload for a completed operation.
+
+```bash
+docudevs operations result JOB_GUID --type error-analysis
 ```
 
 ## Low-Level Commands
@@ -225,7 +388,7 @@ These options are available for all commands:
 
 ## Output Format
 
-All CLI commands return JSON-formatted output that can be parsed by other tools:
+Most CLI commands return JSON-formatted output that can be parsed by other tools. Commands that produce binary content (for example `fill`) should be used with `--output` to write results to disk.
 
 ```bash
 # Save result to file
@@ -291,7 +454,7 @@ echo '{"prompt": "Extract invoice data", "ocr": "PREMIUM"}' > invoice-config.jso
 docudevs save-configuration invoice-processing invoice-config.json
 
 # Use the configuration
-docudevs process-with-config invoice.pdf invoice-processing
+docudevs process invoice.pdf --configuration invoice-processing
 ```
 
 ### Error Recovery

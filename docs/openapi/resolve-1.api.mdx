@@ -1,0 +1,71 @@
+---
+id: resolve-1
+title: "resolve_1"
+description: "resolve_1"
+sidebar_label: "resolve_1"
+hide_title: true
+hide_table_of_contents: true
+api: eJydU8uO2zAM/BVBZyOPoughtwBZFEEP3UN7CoJCKzGJWtnSUnTawPC/l7Qdx8g+CjSX2OZwOMNHo2MCNORjtXV6pRFyDGf4sdSFTgZNCQSY9WrX6IpfGPELLhzzFT8+14Dyku0JSqNXjaZLYsxOZ0JfHTlU1SHofdsWY36GAFbqffkvon0hGlOsMmQBflgs5M9BtuiT8E5dKA6rK55ZbKwIKpIMk1LwtnM+/5klrZnUTyh9Id8X8e6miRUTHAGZ7RCxNNR/+vRRt8XgcYQO6jkAlUvR95VfBMvoIGzdq7EDGKqxl2Gc86LXhMeJPMIaGJiJgflVDotMAm5N73W20HVy/4a10v/n2iM4CY++JkoL6dfN1dCVUSFPkDwFkfjVIjs5ewe4oahb+RVvzVIogU5R1vQI1C0onfhlLhNB7so8WpwP+G61DrGzMlTbRFtv4JzV+nGr78uMQXkoeUcUr4CFnNm9JMzUg8ncb1K/zUVRVLxKZx6BusQalRuSskS4i4b5OZp77uVsOVvIIFLMVJpu1YZrGNSq5b2gcYwEf2ieguFDkRlh6Nazc77TV+eczd51ceWTJp+4mGCa5slk+I6hbeVzf2ty0M5n8xRkjgcTMhTdaV8P/GxCLeW1nO4byLtTvqXs5QW95HAl2a0TGB5yV7bPXVsLiSZZL+5RWMaBf374xuvxF9RPmCI=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"resolve_1"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/internal/ocr/resolve"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+resolve_1
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"key","in":"query","schema":{"type":["string","null"]}},{"name":"selectionKey","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"resolve_1 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

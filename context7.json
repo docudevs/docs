@@ -1,0 +1,8 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Docudevs SDK",
+  "description": "Docudevs AI Document automation platform SDK documentation.",
+  "folders": ["docs"],
+  "excludeFolders": ["src","static","tests"],
+  "excludeFiles": ["sidebars.ts","tsconfig.json","docusaurus.config.ts","vite.config.ts","package.json","package-lock.json"]
+}

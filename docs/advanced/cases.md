@@ -82,8 +82,9 @@ print(f"Created case ID: {case.id}")
   </TabItem>
   <TabItem value="cli">
 ```bash
-# Note: CLI support for cases is coming soon
-# For now, use the API directly or Python SDK
+docudevs cases create \
+  --name "Q4 2024 Vendor Invoices" \
+  --description "All invoices from vendors for Q4 2024 processing"
 ```
   </TabItem>
 </Tabs>
@@ -95,6 +96,7 @@ print(f"Created case ID: {case.id}")
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -115,6 +117,12 @@ for case in cases:
     print(f"  Created: {case.created_at}")
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases list
+```
+
+  </TabItem>
 </Tabs>
 
 ### Getting Case Details
@@ -124,6 +132,7 @@ for case in cases:
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -144,6 +153,12 @@ print(f"Created: {case.created_at}")
 print(f"Organization ID: {case.organization_id}")
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases get 123
+```
+
+  </TabItem>
 </Tabs>
 
 ### Updating Cases
@@ -153,6 +168,7 @@ print(f"Organization ID: {case.organization_id}")
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -179,6 +195,14 @@ updated_case = response.parsed
 print(f"Updated case: {updated_case.name}")
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases update 123 \
+  --name "Q4 2024 Vendor Invoices - Updated" \
+  --description "Updated description with additional context"
+```
+
+  </TabItem>
 </Tabs>
 
 ### Deleting Cases
@@ -188,6 +212,7 @@ print(f"Updated case: {updated_case.name}")
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -205,6 +230,12 @@ if response.status_code == 204:
     print("Case deleted successfully")
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases delete 123
+```
+
+  </TabItem>
 </Tabs>
 
 :::warning
@@ -220,6 +251,7 @@ Deleting a case will also delete all documents associated with that case. This a
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -247,6 +279,12 @@ print(f"Uploaded document {document.document_id} to case {case_id}")
 print(f"Status: {document.processing_status}")
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases upload-document 123 invoice_001.pdf
+```
+
+  </TabItem>
 </Tabs>
 
 ### Listing Documents in a Case
@@ -256,6 +294,7 @@ print(f"Status: {document.processing_status}")
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -289,6 +328,12 @@ for document in documents_page.content:
     print(f"  Uploaded: {document.created_at}")
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases list-documents 123 --page 0 --size 20
+```
+
+  </TabItem>
 </Tabs>
 
 ### Getting Document Details
@@ -298,6 +343,7 @@ for document in documents_page.content:
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -320,6 +366,12 @@ print(f"Processing Status: {document.processing_status}")
 print(f"Metadata: {document.metadata}")
 ```
   </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases get-document 123 doc-uuid-here
+```
+
+  </TabItem>
 </Tabs>
 
 ### Deleting Documents from Cases
@@ -329,6 +381,7 @@ print(f"Metadata: {document.metadata}")
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 ```bash
@@ -347,6 +400,12 @@ response = await client.delete_case_document(case_id, document_id)
 if response.status_code == 204:
     print("Document deleted successfully")
 ```
+  </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs cases delete-document 123 doc-uuid-here
+```
+
   </TabItem>
 </Tabs>
 

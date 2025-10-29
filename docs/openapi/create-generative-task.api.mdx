@@ -1,0 +1,71 @@
+---
+id: create-generative-task
+title: "createGenerativeTask"
+description: "createGenerativeTask"
+sidebar_label: "createGenerativeTask"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVUtv2zAM/iuCThvgNml3y61ri6K7tEizU5ADbTOJWtvSJDltYPi/j5SfSb0NWA6JxLc+fmQq6WHn5GIttUELXunCyU003B5TuZCJRfD4gEUQHnAF7k1G0oCFHD1aDlDJgi5kTFIs/A8dk2skVRFEfk9ni79KZZEieltiJF2yxxzkopL+aNjVeauKnazrTWOMzn/X6ZEtEl14CstHMCZTSahu9up0wbIhlLFcu1fo2ltu/ESKSOY6xWzQrDtVJIsyy+SGTDzmAYfS4tiwKPMYbW8Yya22OVAWuc00/XJw+FjpNyzc2E/RE3bTjqT6dk0PH4O07qonQ698xuWf9mDZYER+9Tm6QeAMtbMB4no+558UXWKVYez+0FdBlqJzpVL/E/hXHT+UKp1EvifXKmgmLJwn0N1029A52E25nYHXVTC4nGfu84wAfinjXPmnzm7ZAVHXAeR/4xfy+b3muTGamhM19F/IWZ99Vo2GpJ7t+gAXvonA6C6HAbj/gNxkOCb0wNaWx4PghLXzEy7Oa57IrQ7otS++00l5hwcnbp4f5fkLeyUfcipZUAEJ4Ump2OFS3IOjlnvxDkfhtSC6HIgF4qhLK9LWybEmBQ8Un7SuiX11eXU555YyTDkEOrU7pAFWDMiKFtqT6noGePzwM5MBLRsKV9ow1g3qo8VG7ovT5XQOPPFgzy0jr6qKweFPm9U1i6kVlvbQmo4HsApiho52Xqocn6nZW8gcfiqwnx75Zdly86vgHk0V3gqhODJOkJV8o+MbHs/2as3baY+Q0jbhMhqL2ybZRUvuLsKnsa2jzuMmSdD4v9puRnx+fnpZkXHc7mRmHkktvPNyp+9QrTbNvwgZBFklMyh2ZZhZ2cTkz289kUA+
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createGenerativeTask"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/operation/{parentJobId}/generative-task"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createGenerativeTask
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"parentJobId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"prompt":{"type":"string"},"model":{"type":["string","null"]},"temperature":{"type":["number","null"],"format":"float"},"maxTokens":{"type":["integer","null"],"format":"int32"}},"required":["prompt"],"title":"GenerativeTaskRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createGenerativeTask 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

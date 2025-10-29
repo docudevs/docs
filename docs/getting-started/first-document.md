@@ -58,6 +58,7 @@ Let's start with the simplest approach - just upload the document and let DocuDe
   values={[
     {label: 'Python SDK', value: 'python'},
     {label: 'cURL', value: 'curl'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="python">
 
@@ -101,6 +102,12 @@ curl -X GET <https://api.docudevs.ai/job/result/{GUID}> \
   -H "Authorization: Bearer $API_KEY"
 
 ```
+  </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs process sample_invoice.pdf
+```
+
   </TabItem>
 </Tabs>
 

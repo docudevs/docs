@@ -27,6 +27,7 @@ If you don't specify the schema or the configuration, the API will use sensible 
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 
@@ -60,6 +61,12 @@ result = await client.wait_until_ready(guid, result_format="json")
 print(json.dumps(result, indent=2))
 
 ```
+  </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs process invoice.pdf
+```
+
   </TabItem>
 </Tabs>
 
@@ -143,6 +150,7 @@ Send the instructions together with the document to the api:
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 
@@ -181,6 +189,12 @@ result = await client.wait_until_ready(guid, result_format="json")
 print(json.dumps(result, indent=2))
 
 ```
+  </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs process invoice.pdf --schema-file schema.json
+```
+
   </TabItem>
 </Tabs>
 
@@ -267,6 +281,7 @@ Let's store this schema in a file called `schema.json` and send it to the API to
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 
@@ -305,6 +320,15 @@ result = await client.wait_until_ready(guid, result_format="json")
 print(json.dumps(result, indent=2))
 
 ```
+  </TabItem>
+  <TabItem value="cli">
+```bash
+# Prompt text comes from instructions.txt; --barcodes enables QR detection
+docudevs process invoice.pdf \
+  --prompt-file instructions.txt \
+  --barcodes
+```
+
   </TabItem>
 </Tabs>
 
@@ -351,6 +375,7 @@ Let's send them to the API together with the document:
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
 
@@ -391,6 +416,14 @@ result = await client.wait_until_ready(guid, result_format="json")
 print(json.dumps(result, indent=2))
 
 ```
+  </TabItem>
+  <TabItem value="cli">
+```bash
+docudevs process invoice.pdf \
+  --prompt-file instructions.txt \
+  --barcodes
+```
+
   </TabItem>
 </Tabs>
 
