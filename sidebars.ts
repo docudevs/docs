@@ -11,6 +11,7 @@ const sidebars: SidebarsConfig = {
         'getting-started/quick-start',      // NEW: 5-minute tutorial
         'basics/install',                   // EXISTING: Installation guide
         'getting-started/first-document',   // NEW: Detailed walkthrough
+        'basics/Agents', 
       ],
     },
 
