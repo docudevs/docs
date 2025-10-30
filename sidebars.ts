@@ -15,7 +15,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Core Features - Main functionality
+    // Core Features - Main functionality.
     {
       type: 'category',
       label: 'Core Features',
