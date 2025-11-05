@@ -1,0 +1,71 @@
+---
+id: get-knowledge-base
+title: "getKnowledgeBase"
+description: "getKnowledgeBase"
+sidebar_label: "getKnowledgeBase"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE2P2jAQ/SuWT62UBbaqeuBGu6sK9VJV7QntYUiG4K6xvfaEbRrlv3cmCYEF1C8u2J6ZN29ent1ogjLp+Uo/Ov9ssSjxZg0Jk37ItA8YgYx3y0LPdYn06ZDznlN0pgNE2CFhFIRGO95wYs5Brsi0cbwLQFteR3yqTEQGolhhplO+xR3oeaOpDlJlHGGJkVM3Pu6A+qN3b3XbPkh5Ct4JL654M5vJX4EpjyYIwSv0FGepQxmj5p4bOJJCCMGavJts+j1JdXPCJ0SZm0zfyxRHjqsTkq6yVjQ6J8uqxRKc+TkK9xcTZrpKGJf/3KoXfGyQKBpXSuCFNEfMIeEAyYkmvfymR7C19xbBCVoeEQiLBf0G64Rewck3ZJiaDBaK/6xtT02zumA6TH+hN6ORISsjfJC8Vn7ZH8zCMOzjrR983lmbbTvX07NrMW16d7edvTe+m2pod+fz6g73SS0+L/V5xzEoix0bUbHPckyJhZCCibqHxJ4j9Qy1Iq/Yr3u2oap9FVUxFCWJsEbA+BxNPfbt5HYyE7GDT7SD7pMPd5GHUeOkahj1qjs04Q+aBgum++ZVtN1l6GS4fB0yPR+uOeu95baS1DQS/BZt28rxU4Wx5nNe7iEaWItK/EwUJsmatd6ATXjBZ7yp+tWXwQCvFXe8ynM4BFeLJGAr2fHyEevjU9SK1bcIBd8nYdAHF3mOgU7KLt4FeXlGX3y8/8pm+gVAXsQd
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getKnowledgeBase"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getKnowledgeBase
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getKnowledgeBase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"isKnowledgeBase":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["isKnowledgeBase","name","organizationId"],"title":"Case"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

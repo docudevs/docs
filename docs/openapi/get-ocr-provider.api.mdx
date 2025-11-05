@@ -1,0 +1,71 @@
+---
+id: get-ocr-provider
+title: "getOcrProvider"
+description: "getOcrProvider"
+sidebar_label: "getOcrProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE2P0zAQ/SuWTyBFbRchDrlVdIV62moFp6qHWXvaGpLYa08KIcp/ZyZJQ5augFOnnq/3Zt6k1QSnpPO9Xv+sI6qHj49qF/3FWYxJHzLtA0Yg56ut1bk+IT2YeA3QmQ4QoUSS4Hzf6or/cJiz7HIVWwHozHbE59pF5BIUa8x0MmcsQeetpib0GRXhqa949LEEGp4+vNddd5D0FHyVMEnGu9VKfiwmE10QaDfAFMeoaxLXNJ7LVyRpEELhTM9o+TVJbjtDE6LwJTd0Yhr/gzAbaU+hiaKrTuLAygbvhs43ztJbLLb2Vd8RgXgfPQyw1gleKHYzeDJIDkzEgenVGiZyEbTrWff91c2Y66LQBw6rg/13WDff4f43rxnSbFj7ldU4lQkhr5EcFQJxtqkNeV5xJ/X/tlCpi3T2owZ74bGwcr30Ji7DVbDL1tmul97R92zGhhtv6g1eklrvtvrPTpNTjJJloriewZR4AJKwUPeQeOSkvkOjyCtW04W3oBpfR2XHpCQeHiRwffamofbd4m6xkl0En6iEXm3jjTANxQzVjOILXNNCCX/QMhTA9yTbikUv1J7+XjN9GcZ0sZnOeQs86zM3lIC2fYKEX2LRdfL8XGNs+J3NC0QHTzIfPlzrktg83yMUCW+wTBek3zyOOniruNurGMdHqBoZBhS1/GPzGzbDx6ET3Z0RhLZ0HxxrYzDQLOXmVuVbMOng0/1nls4vISye4A==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getOcrProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/ocr/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getOcrProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

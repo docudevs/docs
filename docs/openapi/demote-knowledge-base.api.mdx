@@ -1,11 +1,11 @@
 ---
-id: delete
-title: "delete"
-description: "delete"
-sidebar_label: "delete"
+id: demote-knowledge-base
+title: "demoteKnowledgeBase"
+description: "demoteKnowledgeBase"
+sidebar_label: "demoteKnowledgeBase"
 hide_title: true
 hide_table_of_contents: true
-api: eJxtUsFu2zAM/RWBpw0w4nQYdvCtQHIokAHFsJ2KHFiLidXJlirK2QzD/z7STr2trS+mSD6Sj3wjZDwzVA9wOHw19ylcnKXEcCwgREqYXejuLFRgyVMmKCBiwlbMpKgROnlI2FkJuU6siLkRO9Fz7xIJNKeeCuC6oRahGiEPcUZ0mc6UJPUUUot5cX35DNN0VDjH0DGxIj5tt/qzxHVyUUdaBzISMy/JUqsOUrbLmo4xelfPDMonVsz4d4pJv+LdklJF+DXhFWthVUHpfVvGly2Vo7PTzPsUZmYue6W2C3W/owub2/s7eN1kDarRyqxG6tXE7LqzAjZmj+yIs/mFg8nBCKULpWyG0CdjryDWiMWMUl+ivNS+2dxstiC8YuDc4kz5eqCVyX/TrNfI9DuX0aOcUOB98hpbSD+AkNYVrOIooJJ7y5UaaaMJ4/iITD+SnyZ1P/eUBvGLecHk8FG3IlqxjtWWxZ7QM72ZZT0efPh2lc9HI93enfHqxG7QFaDv9SXmTxoWPU5HyWoIZeS5+xK4rWuK+R/IG5mo/FYB7PaH/fe9aPIPbVkROw==
+api: eJyFUk1PwzAM/SuRTyCVbSDEoTfQdkBwQAhOaAfTeltEm4TEHVRV/zv2WsbXJE5xbD/7PdsdMK4T5E/w4vxbReWaTp4xUYJlBj5QRLbeXZeQQ0m1Z7r5TLuSLMggYMSamKIW6cDJR3ILCQooA+vkF5A3Ykd6bWwkqcWxoQxSsaEaIe+A26Ao65jWFCV15WONPLguzqHvlwpPwTulJoiz2UyfklIRbVCOhxkaSTSfSKmT/Q+R9iJo4wfNlWjbyRQJOUx/TWnaDUr7ndSV34mxXKmauS+aOW2Tuby7ht9990E1anJsQvQFpWTdWgETs8BkKbF5w9awN4V3W4psWt9EU46gpJESGaW+RNNQ+3RyOpmBSA0+cY1OSY17GeSavV4zCv5Bbr8PpneehgpliVKtiZXGhkn8vZcM8nHrsquNdNakrtPgY6z6Xt2vDcVW/GJuMVp81kHJ1ZQ2qS0TX2GV6A8fEc8iVygd3Y9HdGyk40GeoxNdq1PBqtGfmC/Ufl1mv+y/rXm+uF08LOQ8PgAHRwsv
 sidebar_class_name: "delete api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -22,13 +22,13 @@ import Heading from "@theme/Heading";
 <Heading
   as={"h1"}
   className={"openapi__heading"}
-  children={"delete"}
+  children={"demoteKnowledgeBase"}
 >
 </Heading>
 
 <MethodEndpoint
   method={"delete"}
-  path={"/llm/providers/{id}"}
+  path={"/knowledge-bases/{caseId}"}
   context={"endpoint"}
 >
   
@@ -36,7 +36,7 @@ import Heading from "@theme/Heading";
 
 
 
-delete
+demoteKnowledgeBase
 
 <Heading
   id={"request"}
@@ -47,7 +47,7 @@ delete
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
 >
   
 </ParamsDetails>
@@ -62,7 +62,7 @@ delete
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"delete 200 response","content":{"application/json":{"schema":{}}}}}}
+  responses={{"200":{"description":"demoteKnowledgeBase 200 response"}}}
 >
   
 </StatusCodes>

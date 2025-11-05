@@ -5,7 +5,7 @@ description: "updateCase"
 sidebar_label: "updateCase"
 hide_title: true
 hide_table_of_contents: true
-api: eJylVD1v2zAQ/SvCTS2g2E5RdNCWOhm8BUY8GR7OEi2zpUiWpJyogv577yTZkj8QtGkGh+J9vXt8dzUEzD0ka0jRCw+bGIwVDoM0epFBAqXNMIg5GSEGiw4LEYTjiBo0fZALR5JvDFLTl8Wwp7MTv0rpBKUIrhQx+HQvCoSkhlBZjpI6iFw4ct0ZV2Dorr59habZdOHCh+8mqzgmNeStAx/RWiXTFuD0hzea74bk1jH8IKmV5AjwVNIHJ3UOTQyZ8KmTlpMM9vXRIQZdKgWbphn3se7SEbggg+J8zIqfEzRnlBJusjpxtezgUy/NJRXthbdG+w7jl9mM/50hGrEekT06BhCyDzIhs3GfA/ddo9dvQDJwOWr5+6SEv3i4GEov3OKfS/3vMxErThBf2UN4x21Umcm9C5KqMuaW64/E3pLHFXEXemFJNJetnU8ZTdje8OzZMrRDRwOVwLQd0GndTVtDBn7z5TAnT29YWCUG3Q9NnBcb+JV6Z9que4CPJi0fxcFHD8+Lq7CTkQ8FaTAiiaXCe0rGAZPoCT3JLUSvWEXBRCTVAykwqkzpoqwP8myhZpHyk9V3ue8n95MZI7LGhwL1qImOmqjn5qYiIIi3MLUKaQHxgzrVDkDL23GxxZD0e4oeZE9V2FTXW7pbOdU0fE1UOlo3azoe0EncMim05zLp+UxPskPlxRWK00zCp2Wvh88RVbyJrr9EXTEDqEr+ouNPUQ27tGFR7wVmNDmMoDPOuzp3L5xiCL7aA018jHhIU2HDu76bkeCeVy/ku+2XbmEyDnH4yvucflucpm27XSrtXQ0KdV5izr5dSv77A4DQKnk=
+api: eJylVU1v2zAM/SsGTxvgJu0w7JBbvw7FLkXQnoIcGJt1tMmSJslpM8P/faTsxGlSFFvXQyuLH3p8fGRbiFgFmC2gwEABljlYRx6jsuauhBk0rsRI12yEHBx6rCmSl4gWDH+wi0Sybw7K8JfDuOazp1+N8sQpom8oh1CsqUaYtRC3TqKUiVSRZ9cn62uM/dW3r9B1yz6cQryy5VZiCsveJsoRndOqSACnP4I1cjcmd17gR8WlzHYA90+G6JWpoMuhpFB45STJaF/sHHIwjdaw7LrDOhZ9OgYXVdSST1gJ1wzNW63JTx73XM17+FxLd0xFugjOmtBj/HJ+Ln9eITpgPWN7tgtgZB9kQpWHdY7c94We9oBl4Cs06vdeCX/RuByaQP7un5/63zax8sJ3Y581lRVdiVTHZCtrNaGRbIUnJrW8jO/kOoAnHTiLiqFJYakhH4k90tAx0qH6E76PZCZK6o4ZeT2cPJhrKyPrmphmledwBtM019O2H9KODSKV+Thety9YO03juIxlvX5sbIsyTzbxMAC8sUVzQ5uQXd7fnYTtjXKoWboZK7OgEDiZBEyyWwys0pg94zaLNmOFb1i42dY2PiuHoCAWLhY5P1tDn/ticjE5F0TOhlijOSiipyYbuHlTSBDpJU6dRpXk0Xid5ibxttuHOcyG9cYNWfMrYmrbFd89et11cs1Uet5SCz5u0CtcCSm8HksV5MwteUId6ATFfpTh03xQyOeMX3wT3XCJZisMoG7ki48/aTuu4E5mYU1Y8sAJgt543b9z9iApxuCT9dHlu4jLoiAX3/VdHgju/vGBfVfDrq5tKSEen+XfAP9OOG0qO+2idNeCRlM1WIlvn1J+/gBI4D3d
 sidebar_class_name: "put api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -62,7 +62,7 @@ updateCase
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"updateCase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name","organizationId"],"title":"Case"}}}}}}
+  responses={{"200":{"description":"updateCase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"isKnowledgeBase":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["isKnowledgeBase","name","organizationId"],"title":"Case"}}}}}}
 >
   
 </StatusCodes>

@@ -523,5 +523,5 @@ docudevs result YOUR_GUID_HERE
 ## See Also
 
 - [SDK Methods Reference](/docs/reference/sdk-methods) - Python SDK documentation
-- [API Documentation](/docs/openapi) - REST API reference
+- [API Documentation](/docs/openapi/docudevs-api) - REST API reference
 - [Error Codes](/docs/reference/error-codes) - Common error codes and solutions

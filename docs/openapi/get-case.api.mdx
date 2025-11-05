@@ -5,7 +5,7 @@ description: "getCase"
 sidebar_label: "getCase"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVE1v2zAM/SuCThvgJekw7JBbsBZDbsOwnYIeWJtJ1DqWKtHZPMP/fY+289EmGLblEknkIx/JR7dWaJPsfGVzSpzsfWZ94EjifLUs7NxuWD7BYjMbKNKOhaO6t7bCBXaFwTGzrsItkGxxjvxcu8jAS6w5synf8o7svLXSBEW5SnjDEa5rH3ckw9PHD7br7hWegq+UDhDvZzP9Kzjl0QXldWJlYDQHbwTLPeJWov4UQunyvo7pY1JQe0YjRK1S3JDCFSdqqzNuVV2W2pHXHNGjuKHK/Tq26S8Ky2ydOC7/OdXQ52OCJNFVGzW86Mgp5uhwCAnHPDIJFwv5g9tZ5gLO78Qhq3IOxX9iu3MZrIYyLhoHrDgptbBeZZ3+suvDBhry2/pRlb0ioba5nfbSnbaDFLtei2vfEx5j3/q8vuV9MosvS/s6/NGohx3kY6COnFNCjQqYmDtKUIqYH9QY8QYq20M8pvF1NMUISmpB+YT4sKYh9s3kZjLTPgafZEf9oMbFQQlmLOvqJK3wT5mGkrBYOohY9sLtSz5sa2bn4/6hkVukUFPbPuDteyy7Tp+fa44N3nHcU3T0oB3B/hYu6RndXFOZ+ILFcZfsm6/jHN8aZLzKbnykqtHyqaz1huMTN6dvRKdi3DIVULwyGIyLPOcgZ7CLzdVPwnHyn+++QSW/ATSMllk=
+api: eJydVE2P0zAQ/SuWTyCFtosQh9wKu0IVF4TgVO1hmkwTg2t77UmXEOW/M5OkH2wrxG4vtT0zz++N36TTBFXS+VoXkDDp+0z7gBHIeLcqda4rpI8c0ZkOEGGHhFHSO+14w3Ep48RMG8e7AFTzOuJDYyJyPcUGM52KGneg805TG6TKOMIKI6dufdwBjUfv3+m+v5fyFLwTOlzxdrGQvxJTEU0QXidWioPqkM1ghWdcR5IPIVhTDDrmP5IUdWc0QhSVZMYrTHmitj7j5hprpSNPOXKPYgXO/D626T+EZbpJGFfPvmrs8/GCRNG4SgJ/deSEOSUcIDnRpM/OP1osK/wgT3kC23hvEZygFRGBsFzSP7DO6JWc/IYMUxNhoXxhbX/ulfUF00n9Rb8ZjQxZkTCYs5dfdt0jXM2urf1k5sHIbNJczwfHz7vRwf1g4a0fJEzYt75obnGf1PLLSj+FPwZlsWPXKTZVgSmxaimYqTtIbDBSj9Aq8orNuWfPqdY3UZVTUZIINwQYn6NpxL6Z3cwW0tngE+1geN9p3liCmmRdNYAm/EXzYMEMz9pEO/h9kHwY8kzn09hyI2u+QkJdt+Gz79H2vRw/NBhbPuflHqKBjXSEx740SdbczS3YhBcsjiOoX32dXva14huvspsOwbUiH2wjO17+xPb0aenFwzVCyYMiDMbgsigw0FnZxcDLl+T48p/uvrFL/gDvmKm9
 sidebar_class_name: "get api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -62,7 +62,7 @@ getCase
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"getCase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name","organizationId"],"title":"Case"}}}}}}
+  responses={{"200":{"description":"getCase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"isKnowledgeBase":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["isKnowledgeBase","name","organizationId"],"title":"Case"}}}}}}
 >
   
 </StatusCodes>

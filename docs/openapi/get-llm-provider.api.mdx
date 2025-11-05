@@ -1,0 +1,71 @@
+---
+id: get-llm-provider
+title: "getLlmProvider"
+description: "getLlmProvider"
+sidebar_label: "getLlmProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE2L2zAQ/StCpxZMki2lh9wCWcpCWkLZnkIOs9YkUStbWmmcrTH+752xHePdpB8ny5qv92beqNEEx6SXO73ZfFHb6M/WYEx6n2kfMAJZXz4YvdRHpI0rLg460wEiFEjivNw1uuQfdrOGTbbkUwA68Tnic2UjcgqKFWY65ScsQC8bTXXoIkrCY5fx4GMB1F99+qjbdi/hKfgyYZKID4uFfAymPNog0K6AKfZRlyDOmXtOX5KEQQjO5h2j+Y8ksc0ETYjCl2xfiWn8D8JsoD26Joq2PIoBgv0e3U1T4Q26x+72htVgcL4uGPTXV7l3Fx8uWjmn9+z78wXisQMMxlhhBm47ISItZ7dEQFW6WS2PCIRmRX8vVAXzb7d2Ou3dpQNZr4kB6pT90L0RH4+bLDkBOJnomjxLoW271vx58JIZ6eQHrXYCZQEu9dy5Yh4uwp431rSdRA++4zIUXPu8WuM5qdX2Qb+tNBrlIJNRnC/HlJi+BMzUPSRuOKkXqBV5xao78wxU7auozBCUxMJtBM7P1tTnvpvdzRYyieATFdCpctglpqGYoZpQfIVrHCfhL5oHB7x3Mqtedj39nWb60oxxszO95IFwr09cUBya5gkS8qjaVq6fK4w13/PxDNHCk/SHF9zYJGfu7wFcwiss46bpd98GFbxXXO0mxuESylqaAa6SP1EJ1v0j0orqTghCW6r3hlWeY6BJyNVOy5sx6uDz/SNL5zcN5KqF
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getLlmProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/llm/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getLlmProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

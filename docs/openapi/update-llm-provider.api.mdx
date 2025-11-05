@@ -1,0 +1,71 @@
+---
+id: update-llm-provider
+title: "updateLlmProvider"
+description: "updateLlmProvider"
+sidebar_label: "updateLlmProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1v2zAM/SuCThvgNe0w7JBb1hZYsW4Iiu4U5MBYaqJOtjRJTmsY/u8jJTt208Ad2kMqkxS/3iPV8ABbz+crfnv7ky2d2SshnefrjBsrHQRlyhvB57yyAoK81UVvwzNuwUEhA9nPVw0v8QMtlUCVKvFkIezw7OTfSjmJXoKrZMZ9vpMF8HnDQ23jjTLIbfT4YFwBIYm+fuFtu07XpQ/fjKjpTm7Qugx0BGu1ymOOs0dvSpINzq2jCoKSnr5Scn3IFffBqXKLIctKa75uM/Smfjs9bVMYIfV9VE+ZCWm1qQtM89ebYf88gdv6sU1UYf83jzIPhAQIoahI0MtRTdTMlPYPWU/H8AFC5ads0CiooAmN38dI3yUAEI32GMwo8NaUPnX58/k5/RPS505ZyvkUdRiasf4e5vBOSJFo/8Oh7Aj7vvYTkI9UJ5Aead8H8CSOxxiNouVOYgPFIkwHSn1+w+wFhKu+A1ma2i7VcfVd9w75rQeijBC9Cobo0cbWTGJPzmXYGZH2Q76LewT3xJzPtC5mtl9Bs0aJFpXEgrthBVw/Q2G1HEZ6qLBHc5CMQByEx9gNmh6pfgL70RosepBG4KjywcSGd125Mnl1JfeeLZY3/LgdByUdKAWG9ebSe3RGF87YNXhkRWBPULNgGI7GHonCalM5JrpLnjTYV0D/qPXJ98XZxdk5ZWSNDwWUoxYlFBjCwEY4vEjtQLsgn8PMasANTpxK45EQWnFEiPA6PBMZnyNxkBM7jEkGTbMBLxGGtiUxwuawgSs87sEp2FCL8KkQytMZSfAA2stXuRw2Av9w17H1I8NoJ3PshFDW1A/QFX0RnBE7zK+l6dhJoLIpelJcphifOpr3F19toDbrbyzyXNowabse0Xu5uL/8jtab7uUiNqLYwRM9ivgbszSx6Dj4UdZwDeW2gi3ZJqf09w8tqKHW
+sidebar_class_name: "patch api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"updateLlmProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/llm/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+updateLlmProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":["string","null"]},"apiUrl":{"type":["string","null"]},"modelType":{"type":["string","null"]},"deploymentName":{"type":["string","null"]},"kwargs":{"type":["null","object"],"additionalProperties":true},"apiKey":{"type":["string","null"]},"status":{"type":["string","null"]}},"title":"UpdateLlmProviderRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"updateLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

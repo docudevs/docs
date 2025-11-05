@@ -5,7 +5,7 @@ description: "listCases"
 sidebar_label: "listCases"
 hide_title: true
 hide_table_of_contents: true
-api: eJydU01v2zAM/SuCzlmSDsMOuQVrMeS2w3YKemAl1tYmS6pEZ/MM//eRypfXdgM2XyyJ7z3qkdSoCZqiN3ttoGDR9wsdE2YgF8PO6o32rtCHGlrojCXFIOvNqN+u1/KzWEx2SfBztOKwOuOZamIgDCQMSMk7UzOsvhahjbqYFjuQFQ0JWQhyhoF5jrCr6VKWe5E7Jnf2it1rx9oNZoaH3nvx8BhzB5xNQu/f6Yld5QaC+3kxdsl0Jb8k9QXz7p9TBehwlqBQdqGRwG+1umqeAGdJBpqMQGi39BfYLLNl8BtynFXunOx/cifp8FPvMlrhVBsvCsdccuTFmDSaWfIt/jQHLNAhtVFGqUHibQJqebMyp7ALj7Fe9aR6G01/i4eitp92+rnuJSiLjgdK8VwYLIXdCWGp7qDwjJD6DoOiqHjuDjw2aoh9VvZEKhJh48D6HC1H7ZvlzXItFUyxUAe1RcdWVjvq7OfVLmrCH7RKHlyoTci+Dm31OntbLUvLwTg+8NGX7KdJjp96zAOf8/IA2cGDVGIvk9AiWB63zX7U35AhemsMJqnjAXxfX8rz5zTdz2r+8e4zt+gXjoNSSA==
+api: eJydU8Fu2zAM/RVB5yxJh2GH3LK1GIJddthOQQ+MzNrqZEmV6HSZ4X8fqTiJl24DVl8siXyPfNRTrwnqrFdbbSBj1vczHSImIBv8ptIr7WymjyU00wlzDF7Wq16/XS7lV2E2yUbJn2YrDqtTPkNN8ISeBAExOmtKhcVjFlivs2mwBVnRISITQUpwYJwlbEu5mKQvssfitrrkbrVl7hoTp/vOOdHwEFILXE1C79/pgVWlGrz9eRZ2rnQBvwR1GdPmv0t5aHFSIFOyvpbAb7O6cI4JJ0pOtPmzD88Oqxo/8DQnZLsQHIIXNpMQCKs1/YNr0l7FyW/IcmsiLFavxA5ig6fOJqzKPK46HdW/mDezkSUnEsQfzCPf7G/2YYIWqQniwBqJtxGo4c3CjGHrH0JpfmS9Daa7xX1W6y8bfc17DsqiZR8qtpPBnFmvAObqDjJbi9QzHBQFxXbds9vUIXRJVSMoS4RHAczP0XzkvpnfzJcy0xgytVBu9uiAIked9Pzx8jXhD1pEB7ZcaZdc8XrROnmSDVPLQd/v+OhbcsMgx08dpgOf83IPycJOJrEVAzUIFbt0te31d+QUvTYGo8xxD64rD+z6FQ73k5l/uvvKV/QL6OJlrA==
 sidebar_class_name: "get api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ listCases
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"listCases 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name","organizationId"],"title":"Case"}}}}}}}
+  responses={{"200":{"description":"listCases 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"isKnowledgeBase":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["isKnowledgeBase","name","organizationId"],"title":"Case"}}}}}}}
 >
   
 </StatusCodes>

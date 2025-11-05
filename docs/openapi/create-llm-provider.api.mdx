@@ -1,0 +1,71 @@
+---
+id: create-llm-provider
+title: "createLlmProvider"
+description: "createLlmProvider"
+sidebar_label: "createLlmProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVcFu2zAM/RVBZy9ph2GH3Lqmh2LdFnTdKeiBsdhErWxpkpw0CPzvI604VtMgA3ZaDrFMUhT53qO8kxGWQU7m8u7um5h5u9YKfZCPhbQOPURt61slJ7L0CBHvTNXHyEJ6/N1giF+s2srJTpa2jlhHXoJzRpfd7vFzsDXbQrnCCnjlPOeOGgO/1VAhP+PW0VOG6HW9lG1BSfQvb066KqvQPHTWE16FzthtRbV8f5N73scUsm6MkY8U+7IBvwx5TOei9hfPWEYGApTS3AmYWVZ49A2mIr/i9mQZIUJswrnj24Sh9qjYvc916Dzvs0g4UTlRR8MHXR8zcp/okO3bvPtCPQZn65Aw/3hxwQ+FofTacXOnKBYUJvp9VME/EqxVBo+mFMtOPU/WVxCT6fMnBux/UcJZwo9ZzU5LAKqreP6gxqm/h72XRlIEgXko9YQ+DvVlQskYnUbL8mg7aM5yz8kxrizPvrOkqkI6iCt6GxtTjd3hpigk838/XAU3r1A5g8NoD731PA6WjL7BeMza4Ok56oe0n74hoqcno0XXT7aDeo/H1JbNFNdBXM1u5TEQBycvuARBrZYYAiXjDSNxA4H0EMUGtiJaQUOxJomIrW28UPtNgT3EMlB+8oaU+3J0ObrgihjQCuoMooS/IAJExsCb0g6Ci/gax86ArjlXkwYjkTOXRA5TlV/kK6aPXLvdAgISAW3LZiLME3RzWq7Ba1gwOHMW6AqBz5/Md/KlQ/c6Df6HvdLWYBou5N0l0Bb9jquyRBfPxj5mCpv9+PlAwYv9l4RVQVYPG/7K0P9E8o3cAdGNXmfbSQP1soElx6ac/PsDbK5bwg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createLlmProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/llm/providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createLlmProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"type":["null","object"],"additionalProperties":true},"apiKey":{"type":"string"},"status":{"type":["string","null"]}},"required":["apiKey","apiUrl","modelType","name"],"title":"CreateLlmProviderRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

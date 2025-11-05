@@ -1,0 +1,71 @@
+---
+id: resolve-llm-provider
+title: "resolveLlmProvider"
+description: "resolveLlmProvider"
+sidebar_label: "resolveLlmProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJyFU0tv2zAM/iuCzkaSDkUPuQVIMQTIhhy6U9EDazGOVtlSJdpdYPi/j7Qdz12DNpfY5ut7kK0mKJJeP+pdRRgrcGq//6GfMu0DRiDrq53Rax0xedfg3pWH6BtrMOpMB4hQIpdJg1ZX/MKpL3jmmK348bXGKC8pP2EJet1qOgeUaYmirQoOVbVz+qnreCLPCL5KmCTx22olfwZTHm0QHFdRKM5Tl0Jul3umUZGUQgjO5j2F5e8k9e0MSIhCkOwwzZp/4Bg6YdETPPpYAg2f7m51l40cp9SRBgcg2F/RXQ2V3qB76L9eiRoMzp9LBv3zXe+PGmX65Q1i0QMGY6wwA3eYEaFYI6clAqrT1Wl5RCA0G/p8UB3M12mdWPZa24hGwqMCmYg5QZ2zH9Wb8LHlZMkJwJmjW/K6k1/2pfnSHenkZUELpH4j6cQvSzsu89K5cjkW9kt59D2jcezW5/UWm6Q2h53+f94UlAfxR/HO5JgSiyAFC3UPiWUn9QZnRV7x7jXshDr7OiozFiWJsJjA/Tmaht43i5vFSvwIPlEJ/W6O5zOiVcxTzYi+wzYZS/iHlsEBX5u4NizgIMKjvojA1SyDzi6tRfgTz5Wctn2GhOxb18nn4WDlmI1N8OzE2SO4hFl/1pfjbsDVMl7L2TYQraRymazOCUEQS4+hZJPnGGhW9eEwpctk5Pf7B/b/L1Ssk+c=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"resolveLlmProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/internal/llm/resolve"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+resolveLlmProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"key","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"resolveLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

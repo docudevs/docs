@@ -1,0 +1,71 @@
+---
+id: create-ocr-provider
+title: "createOcrProvider"
+description: "createOcrProvider"
+sidebar_label: "createOcrProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1z2jAQ/SsanV0gnU4P3GjIIdMDDE1PHg7CWkCpLKmSTEI9/u/d9Qc2H5O04YDlXel533u7KnkUu8CnKZ/9KTywxf2KLb09KAk+8HXCrQMvorLmUfIpzzyICIvMd3t4wj38LiDEb1Ye+bTkmTURTKSlcE6rrD49fg7WUCxke8gFrZwn7Kgg0JsROdAzHh0+eYhemR2vEg5GOqsawKukcOo7HG+mcitBU9E3cltkgWxDn0y5KbRGNnbzDFkk5kJKRaULvRxUGn0BiBAiIpydb9GTBmhdVY0yyoOkdFvpgE9fYtKwx29GFTWVen+p86oRmVfnuG01SMVZExpCnycTekgImVeOGNwyjuE21p3DCj5omxoKjKxgV/fE1vpcxCb09QtJ/jF//9XE//JqgNHIImfxLScTXjj5/rYLwwc+nypNSK8r308VDhpg4NQ8WrKd8N/xlKAh7i1NqrOBPu1E3OPb2GZ+7E5znXDyddUP7sOryJ2GfhB7dr0/fawbuz5yMqoP9f50s9UZMTBAma2tRW15z21WzOEQ2Gz5yC8Jn5K0yLFbGVLKIAQEowMj9iACOh/ZiziyaBk29QGbgR1t4ZlsDwXKoJ8C8TEbGuy70d1oQhWRcLkwAykanRkKzQZKn5V2aq0Ir3HstFCGsAqv65GpTUg5mkCWDK/XPdmEqbLciAA/va4qCqMxHvVNcXkQXokNiZNSK+5B0Penacl/1RbcN4P76YkKoO26oEKuhrhKuhOzLAMX39y7HnTScvHjCTdv2vudnMaoFy909+P/lNO1WQtRD1kdK7kWZleIHe1tMOn3FwQ9ORA=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createOcrProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/ocr/providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createOcrProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"endpoint":{"type":"string"},"apiKey":{"type":"string"},"modelId":{"type":"string"},"features":{"type":["null","object"],"additionalProperties":true},"status":{"type":["string","null"]}},"required":["apiKey","endpoint","modelId","name"],"title":"CreateOcrProviderRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

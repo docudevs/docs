@@ -49,7 +49,7 @@ Ready to deploy? These guides will help:
 Technical documentation and complete API coverage:
 
 - **[SDK Methods](/docs/reference/sdk-methods)** - Complete Python SDK reference
-- **[OpenAPI Specification](/docs/openapi)** - REST API documentation
+- **<a href="/files/docudevs.yaml" target="_blank" rel="noopener noreferrer">OpenAPI Specification</a>** - REST API documentation
 - **[Error Codes](/docs/reference/error-codes)** - Error handling reference
 
 ## What Makes DocuDevs Different?
@@ -119,13 +119,12 @@ Choose the path that best fits your needs:
 1. [Installation Guide](/docs/basics/install)
 2. [First Document Guide](/docs/getting-started/first-document) - comprehensive walkthrough
 3. [Best Practices](/docs/integration/best-practices) - production deployment
-4. [OpenAPI Docs](/docs/openapi) - direct API integration
+4. [OpenAPI Docs](/docs/openapi/docudevs-api) - direct API integration
 
 ## Download Resources
 
-- **[OpenAPI Specification](/files/docudevs.yaml)** - Complete API specification
+- **<a href="/files/docudevs.yaml" target="_blank" rel="noopener noreferrer">OpenAPI Specification</a>** - Complete API specification
 - **[Python SDK on PyPI](https://pypi.org/project/docu-devs-api-client/)** - Install via pip
-- **[Sample Documents](/files/sample-documents/)** - Test documents for experimentation
 
 ## Need Help?
 

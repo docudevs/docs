@@ -1,0 +1,71 @@
+---
+id: update-ocr-provider
+title: "updateOcrProvider"
+description: "updateOcrProvider"
+sidebar_label: "updateOcrProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVUtv2zAM/iuCThvgNe0w7JBb+gBW7NAgaE9BDozFJOpsSZPktJnh/z7SimM37dJtOTg0XyK/j5RrGWEd5HguJ78qj+Luaiam3m61Qh/kIpPWoYeorblVciwrpyDiXe47H5lJBx5KjOw/ntfS0At5akUmbUhyEDcke/xZaY+UJfoKMxnyDZYgx7WMO9dGmIjrNuPK+hJiUn39IptmkcIxxEurdhyTW/I2kUVwrtB5W+PoMVjDuj6589xB1Bj4LRXXHTmXIXpt1nSkqYpCLppMolHO6pT5z17g9HfcnfYprcKCUTvltEKIhHsYerVGQn75iHlkDkApze1BMR10wzBShhApQzh1CjlFHQvG+OGYv1mClTBujilqFcFZE1J5n8/P+U9hyL12XM9bAyHITXRxVMN/EqXVX01GdsRo1/ubRA6Mr7gZ2IaU/BPygxy5pySoJu+MUULvHbcXxMz7vgaVZmnduq72qBwqXPQDMGDqOlqmnfO/wymnxrixKm1zvmm3nrZ6LEc29yPXXRijWquGjMzurF/Ym2coXYH9AvY99iz1um65es2Brl7Vs9TtS0fHgAZtVraFdt/9tc2ra9wGMZneyuO2D0YWSppZQX3lGAIl44AzcQOB+I/iCXYiWkGjvaWREDtbeaH2QYEthB9QfrKGlPvi7OLsnCtyNsQSzACKhLYguMUA7xelHQYs4nMcuQLoXuXp8UW7OC0Tc0lMMC+HyzuTY5oK4n5DZ7JDXS8h4IMvmobVRI8nlOckbsFrWDJEdIErHVgmtFdQBHxVy2Gj5YfZfi4/CjrtzRr3SjA7xgOKit9I/NESTPU1vAcbBG6bT0+Gq3TGp3sO7wNf3SBN1kVM8hxdPOm7GIzxdHJ/9Y28l/vvCU8YqT088aeKnm2Vtm26XfFWV8sCzLqCNfumpPz7DX4TfyU=
+sidebar_class_name: "patch api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"updateOcrProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/ocr/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+updateOcrProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":["string","null"]},"endpoint":{"type":["string","null"]},"apiKey":{"type":["string","null"]},"modelId":{"type":["string","null"]},"features":{"type":["null","object"],"additionalProperties":true},"status":{"type":["string","null"]}},"title":"UpdateOcrProviderRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"updateOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

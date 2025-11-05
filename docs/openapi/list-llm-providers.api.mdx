@@ -1,0 +1,63 @@
+---
+id: list-llm-providers
+title: "listLlmProviders"
+description: "listLlmProviders"
+sidebar_label: "listLlmProviders"
+hide_title: true
+hide_table_of_contents: true
+api: eJyFU8Fu2zAM/RVBZyNJh2GH3gKkGApkQw7dKciBtVhbq2ypEuXOMPzvI+00c4tgzSWW+B7Jx0cNmqBK+vao9/sf6hB9Zw3GpE+F9gEjkPXtvdG32tlEe9f8QxQ6Ygq+Tcj0QX/ZbOTPYCqjDUK7QlKMUm80zlD6lrAlIUIIzpZTvfXvJOxBp7LGBuSL+oCcD2KEnnmWsJmqhihdkp17sGaBtZy6wsjoJx8boPnq21c9FrqFBhfQRNG2lQQg2F/RXQ013qB7mG6vRA0G5/uGxfx8l/v4huGi2Tl9YuzzK8RqahiMsaIY3GEhhGJGhiUCyulqtTIiEJot/b9QDuZz2ChGvmQb0Uj4PIFChnlpdan+PL1Lf7wpZMlJgwurd+T1OP2KT3ZCkiPVXpasQuJjAKr5sHauWYcFzLZPflJyLrfzZd5hl9T2cK8/lrkE5UN8UZyqxJRYvBBW6g4Sj5vUK/SKvOJd7NgB1fsclTmTkkR4iMD5OZrm3Derm9VGfAg+UQPTrs4rNalTLE8t9b3r7GIn4R9aBwe2lVR5XrtZ+1GzdpnE8j3WXExCw/AICdmkcZTrl4yx53v+7CBaeJTZHMX+GoG5fBj0MzJEb8sSg0y4A5en9/Tx0Y2nhRvf7x7Yw7/SoGxk
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listLlmProviders"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/llm/providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listLlmProviders
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listLlmProviders 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

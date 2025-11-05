@@ -1,0 +1,71 @@
+---
+id: resolve-ocr-provider
+title: "resolveOcrProvider"
+description: "resolveOcrProvider"
+sidebar_label: "resolveOcrProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJydU8GO2kAM/ZXRnCNgq6oHbkisKtRDObQnxGF2xsC0k8ysx6FFUf69dhJCust2pXIhif3s5/fsRscEaMjHauP0UiPkGM7w1eIW49k7QF3oZNCUQIBZL3eNrviFU3/ChWO+4sfnGlBesj1BafSy0XRJnLPTmdBXRw5VdQh637bFiM8QwErjL/9VaF8I2RSrDFkSPywW8ucgW/RJ6t4dR3GeugK5nI0VQUUCNSkFbzst5j+y4JsJkYSiFPm+m3c3ckyd4NgpdYhYGuo/ffqo22IYdkwdxuAAVC5F33d+FSyjg7Bxd2MHMFRjT8M454WvCdsJPcIaODETJ+a7NSxyEXAr+pfEha6Tez+tFSOea4/gJDzONWFaiF63qQZVRoZsJXkKQnHi1JqibuVXvGuq1AY6RdngI1C3snTil7lYgyzPPFqcD8Bu2Q6xm2lou462XsM5q9V2o1/2G4PyUPKyKN4FCzmzDAKYqUeTWXhSv8xFUVS8U2f2Ql1ijcoNoCwRltNwfY7mvvbD7GG2EEdSzFSabueG+xjYKp5TTQb9i9toLcFvmqdg+IrENwzdynYi7PRVBEazDLq4lhbhT9xXcprmyWT4jqFt5XN/iHLtzmfzFMTbgwkZiu7ur9d/NqGW9lru+o3MF3d+g+zlBb1guJPs2wmMDClte+zKWkg0Qb26Uakyev/58RuvzB/kMKgd
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"resolveOcrProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/internal/ocr/resolve"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+resolveOcrProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"key","in":"query","schema":{"type":["string","null"]}},{"name":"selectionKey","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"resolveOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

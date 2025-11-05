@@ -1,0 +1,71 @@
+---
+id: promote-knowledge-base
+title: "promoteKnowledgeBase"
+description: "promoteKnowledgeBase"
+sidebar_label: "promoteKnowledgeBase"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1z2jAQ/SsanflKp9MDN/JxYHook6YnJgdhb4waWVKlNYR6/N+7KxswhKRtOICQdt++fXqrWqIqopwu5bN1WwN5AcOVihDl40A6D0Ghdnaey6n0wZUO4es+7prC5EAG+FVBxGuX7+S0lpmzCBZ5qbw3OksA45/RWd6L2RpKxSuCI3jUVIrTCIyr1BJ3HqiaJpgCAhV4cqFU2G59+Sybpq2pA+TMu8skuqjRcOoJw3hDhIIzBsJocaGD+5Y+wZ7gYqggbUTvbGw5fppM+CeHmAXtua03VBEUKfap1MEHNdE9PZY9QWxlDPd7LgxdWCiU1b8Pd/YPag5kFSHM/7uUVSX0CkQM2hZ8cCLPEbML2ENSoI6nVjqCrZwzoCyjZQEUQj7Dd7B69HIKHqImatyYzz+Ye2axc6Zd96/07nnwhuOaJrnq74YhqBJw7dKYOXLjQHqFa/o3Ph/LgWTb3B+H7u5Fld5Af4gmrK59cqnvjtCty6pb2EQxW8zlOafDIS9KsqoglhnESFJxwkjcqUiuRLFVO4FOkKM3ZFSxc1UQeZcU+YRUVIRPp7HFvhpdjSZ8HdxYqZIpWvPspRAHLUQnxkUPSYQXHHujdHJGFUwamaTTxedrzUrSUV3z1o9gmoa3SblAT9WSlhsVtFqxPkt25BpUTrafLmv5DDu+xXZwhw9MgMNNxUReDXEz2GfMsgw8vhv72LvsxbfvDxS86h7P0uWcE9SWH1b6nkp2WRIiPQlpr5ZG2aJSBce2mPz5Az+pAPM=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"promoteKnowledgeBase"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+promoteKnowledgeBase
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"caseId":{"type":"integer","format":"int64"}},"required":["caseId"],"title":"KnowledgeBasesController.PromoteKnowledgeBaseRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"promoteKnowledgeBase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"isKnowledgeBase":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["isKnowledgeBase","name","organizationId"],"title":"Case"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
