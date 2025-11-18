@@ -2407,6 +2407,20 @@ components:
           additionalProperties: true
       required:
       - fields
+    ToolDescriptor:
+      properties:
+        type:
+          $ref: "#/components/schemas/ToolType"
+        config:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+      required:
+      - type
+    ToolType:
+      enum:
+      - KNOWLEDGE_BASE_SEARCH
     Unit: {}
     UpdateKeyBindingRequestDto:
       properties:
@@ -2526,6 +2540,12 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/MapReduceCommand"
+        tools:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/ToolDescriptor"
     UploadResponse:
       properties:
         guid:

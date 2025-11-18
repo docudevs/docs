@@ -2,7 +2,6 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
 const sidebars: SidebarsConfig = {
   tutorialSidebar: [
-    'intro',
     // Getting Started - Clear onboarding path
     {
       type: 'category',
@@ -12,11 +11,10 @@ const sidebars: SidebarsConfig = {
         'getting-started/quick-start',      // NEW: 5-minute tutorial
         'basics/install',                   // EXISTING: Installation guide
         'getting-started/first-document',   // NEW: Detailed walkthrough
-        'basics/Agents', 
       ],
     },
 
-    // Core Features - Main functionality.
+    // Core Features - Main functionality
     {
       type: 'category',
       label: 'Core Features',
@@ -27,6 +25,7 @@ const sidebars: SidebarsConfig = {
         'templates/Templates',              // EXISTING: Template management
         'core/schema-generation',           // NEW: AI schema generation
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
+        'core/knowledge-search',            // NEW: Knowledge base assisted extraction
         'core/batch-processing',            // NEW: Multi-document batch processing
       ],
     },

@@ -38,6 +38,8 @@ Stay with the default single-pass mode when the document is short or does not re
 | `header_options` | Toggle the header pass, set page limit, and configure row prompt augmentation. |
 | `header_schema` | (SDK) JSON schema for the header response, separate from the row schema. |
 | `header_prompt` | (SDK) Prompt override for the header pass. |
+| `stopWhenEmpty` | Stop chunking after a run of empty windows. |
+| `emptyChunkGrace` | How many empty chunks to tolerate before stopping; defaults to 0 when `stopWhenEmpty` is true. |
 
 ### Header capture
 
@@ -47,6 +49,7 @@ When `header_options` is enabled:
 - You can provide `header_schema` so header data is structured independently of the row schema.
 - `header_prompt` (SDK) lets you tailor the header pass without changing the main prompt.
 - `row_prompt_augmentation` injects the extracted header facts into each subsequent row window.
+- `page_indices` lets you specify exact pages (supports negatives for counting from the end) when the header appears deeper in the document.
 
 Whether you request a header or not, the service always returns `{ "header": {...?}, "records": [...] }`.
 
@@ -56,6 +59,19 @@ Whether you request a header or not, the service always returns `{ "header": {..
 2. Increase `pagesPerChunk` if chunks lose context (e.g., multi-page rows).
 3. Decrease `pagesPerChunk` if latency or token usage is high.
 4. Set `overlapPages=0` when rows never cross page boundaries.
+5. Enable `stopWhenEmpty=true` with a small `emptyChunkGrace` (0–1) when tables end mid-document and remaining pages are noise.
+
+### Progress and termination metadata
+
+Map-Reduce jobs persist a progress file (`map_reduce_progress.json`) that tracks:
+
+- `totalChunks` and `completedChunks`
+- `headerCaptured`
+- `stopWhenEmpty`
+- `earlyTerminated`
+- `terminationChunkIndex` and `terminationReason`
+
+The job status endpoint includes these fields via `mapReduceStatus`, and JSON results expose the same information under `mapReduceMetadata`. These fields are helpful when you need to communicate early termination or display granular progress in the UI.
 
 ## Quick examples
 

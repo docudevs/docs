@@ -5,7 +5,7 @@ description: "submitOperation"
 sidebar_label: "submitOperation"
 hide_title: true
 hide_table_of_contents: true
-api: eJy1VEtz2jAQ/isenSmQHrnRQhJmUmAScmI4yLYCorKlSisShvF/7678wCaE6aU+WNK+9e2nPTHgW8dGa6aNsBykzh3b9M6nWcpGzPk4k7CoZazHrPjjhYMfOj2y0YklOgeRA225MUomwW6wd2iMMpfsRMZpZyxFBikcnfY6fvAypS0cjaBMYGW+ZUWvElxRGG55JkBYd1avWe6Vwrp0vBcJ0A24Uos31FzmVCpbdULf9BW5z8hkMr0fvz6t0Go+ni9w+TWbz3B5nD08kgdIUFTmUxW92GCliXegs+U/1pumkkDjatmqF6wXRXGO3/SgFRVzFWVHpBUpBa9xrVBs1ffS7eRz2UZWdCOErCRwBvlQ4vZ9OKQlFS6x0gQafCJGhEZR7YXZ/wMtGmKuvuKHAw7eXVVlwjm+veb2JYC1y2XmJs8tcCsgiiLgexO6kAp2mp6b0dgSIjrs8DTQLRuC7vn89qYfPDNKdECr79S7uGP35ZQExKpk/qYDINUlJjrxE3Fw0XhJBO8W3Shpk2FrI+xcghBhAnLoR1PusIsQvfNjBDpCBhywsdFRexullZMjTcqBY3zUujL2Xf+uPwwPHK+f8cCQHOttsIraYHXqatoJ4gMGRnGZUyBvVSBXwLE14ahnO8IYhadTzJ14taooSIzIWpxoa9weuJU8JkzW9Jh3gqfChqHwW6AJ+1mS+1tFhwNXnkr4RPSiV3uMk0QYuGm7adFguXihgRNXMzbTKflY/k7zF/8jFlhZzmw0CDIccDzf+sByVsak7y85ZAzr
+api: eJy1VEtz2jAQ/isenWmgPXKjJQ9m0sIk5MRwWNsKiMqWK61IGMb/vbvyA5sQppdywNK+9e23exQIGyfGK2EKaQGVyZ1YD063WSrGwvk4UzhvZGIgrPzjpcPvJj2I8VEkJkeZIx+hKLRKgt1w58iYZC7Zygz4VFiOjEo6vu1MfO9Vykc8FJIzoVX5RpSDWnBBUYCFTKK07qReidxrTXWZeCcT5BeA1vNX0pzn1Dpb9kJf9ZW5z9hkens3eXlcktXP2a8ZfR5m9w9sigo11/dYhy3XVGLiHZps8Y+FpqlitEAvOoWi9bIsT/Fb8DtRKVdZtUJZmXLwBtAavk59z/0WPlX9E2U/QsjKAlcQESrAvo1G/EmlS6wqQv8/MCIio6jxouz/gQ8tI5efEcMhoHcXVZl0DjaX3D4FsHE5z9zmuQZuDURZBnyvQhdS4dbwnBWGWsIMxy3dhqZjw9A9nYbu9h2yQsseaM2bBmdv7I9MRUCqSuWvJgBSP2JqEj+VexdNFkzwftGtkg8ZtTaiziUEESVgh5voFhx1EaM3OERoImLAnhobHYy3UVo7OdakgEDxSeuq2KObr2Gu6fEZBH7kVG2LVNSFqldV20yU7zgsNKicA3mrA7UCip3Fxh3bMsIkPB5jcPLF6rJkMeFqaZGt6LgHqyBmRFY8ylsJqbRhF/yWZCJ+VNT+UpNhD9pzCR9oXg4aj0mSyAKv2q47JFjMn3nPxPVqzUzKPhbeeO3S/1gETlarmgyCjPYa5BsfOC6qmPz7CxjfCvA=
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ submitOperation
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"type":{"type":"string"},"parameters":{"type":["null","object"],"allOf":[{"properties":{"llmType":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","NANO","MINI","HIGH"],"title":"LlmType"}]},"customParameters":{"type":["null","object"],"additionalProperties":true}},"title":"OperationParameters"}]}},"required":["jobGuid","type"],"title":"SubmitOperationRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"type":{"type":"string"},"parameters":{"type":["null","object"],"allOf":[{"properties":{"llmType":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","HIGH"],"title":"LlmType"}]},"customParameters":{"type":["null","object"],"additionalProperties":true}},"title":"OperationParameters"}]}},"required":["jobGuid","type"],"title":"SubmitOperationRequest"}}},"required":true}}
 >
   
 </RequestSchema>

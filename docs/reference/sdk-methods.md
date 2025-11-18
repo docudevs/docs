@@ -411,9 +411,11 @@ Parameters:
 - `pages_per_chunk` (int, default 1) size of each window
 - `overlap_pages` (int, default 0) pages re-used from previous window
 - `dedup_key` (str, optional) path for cross-chunk deduplication (required if overlap > 0)
-- `header_options` (dict, optional) enables header capture; accepts `page_limit`, `include_in_rows`, `schema_file_name`, `prompt_file_name`, `row_prompt_augmentation`
+- `header_options` (dict, optional) enables header capture; accepts `page_limit`, `page_indices`, `include_in_rows`, `schema_file_name`, `prompt_file_name`, `row_prompt_augmentation`
 - `header_schema` (str, optional) dedicated JSON schema for the header pass (row schema stays in `schema`)
 - `header_prompt` (str, optional) prompt override for the header extraction pass
+- `stop_when_empty` (bool, optional) terminate processing after a run of empty chunks (defaults to `False`)
+- `empty_chunk_grace` (int, optional) number of consecutive empty chunks tolerated before termination (defaults to `0` when `stop_when_empty=True`)
 
 Validation rules enforced client-side:
 
@@ -422,8 +424,10 @@ Validation rules enforced client-side:
 - `dedup_key` required when `overlap_pages > 0`
 - When `header_options` provided and `enabled` defaults to true, `page_limit >= 1`
 - `header_schema` automatically enables header capture (defaults `page_limit` to 1 when not provided)
+- `empty_chunk_grace >= 0`
+- `empty_chunk_grace` may only be non-zero when `stop_when_empty` is true
 
-The `wait_until_ready(..., result_format="json")` helper always returns the canonical structure `{"header": {...?}, "records": [...]}`, even when the server processes older jobs.
+The `wait_until_ready(..., result_format="json")` helper always returns the canonical structure `{"header": {...?}, "records": [...], "mapReduceMetadata": {...?}}`, even when the server processes older jobs. `mapReduceMetadata` reflects runtime details such as `totalChunks`, `completedChunks`, `stopWhenEmpty`, and `terminationReason` when available.
 
 #### process_document_map_reduce()
 

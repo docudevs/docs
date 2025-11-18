@@ -104,36 +104,6 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "batch",
-      items: [
-        {
-          type: "doc",
-          id: "openapi/create-batch",
-          label: "createBatch",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "openapi/process-batch",
-          label: "processBatch",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "openapi/schedule-batch",
-          label: "scheduleBatch",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "openapi/upload-batch-document",
-          label: "uploadBatchDocument",
-          className: "api-method post",
-        },
-      ],
-    },
-    {
-      type: "category",
       label: "document",
       items: [
         {
@@ -194,18 +164,6 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Internal LLM",
-      items: [
-        {
-          type: "doc",
-          id: "openapi/resolve-llm-provider",
-          label: "resolveLlmProvider",
-          className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
       label: "job",
       items: [
         {
@@ -228,153 +186,9 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "openapi/result-csv",
-          label: "resultCsv",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/result-excel",
-          label: "resultExcel",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/result-json",
-          label: "resultJson",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
           id: "openapi/status",
           label: "status",
           className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "knowledge-bases",
-      items: [
-        {
-          type: "doc",
-          id: "openapi/list-knowledge-bases",
-          label: "listKnowledgeBases",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/promote-knowledge-base",
-          label: "promoteKnowledgeBase",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "openapi/get-knowledge-base",
-          label: "getKnowledgeBase",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/demote-knowledge-base",
-          label: "demoteKnowledgeBase",
-          className: "api-method delete",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "LLM Providers",
-      items: [
-        {
-          type: "doc",
-          id: "openapi/list-llm-keys",
-          label: "listLlmKeys",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/update-llm-key",
-          label: "updateLlmKey",
-          className: "api-method put",
-        },
-        {
-          type: "doc",
-          id: "openapi/list-llm-providers",
-          label: "listLlmProviders",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/create-llm-provider",
-          label: "createLlmProvider",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "openapi/get-llm-provider",
-          label: "getLlmProvider",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/delete-llm-provider",
-          label: "deleteLlmProvider",
-          className: "api-method delete",
-        },
-        {
-          type: "doc",
-          id: "openapi/update-llm-provider",
-          label: "updateLlmProvider",
-          className: "api-method patch",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "Azure OCR Providers",
-      items: [
-        {
-          type: "doc",
-          id: "openapi/list-ocr-keys",
-          label: "listOcrKeys",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/update-ocr-key",
-          label: "updateOcrKey",
-          className: "api-method put",
-        },
-        {
-          type: "doc",
-          id: "openapi/list-ocr-providers",
-          label: "listOcrProviders",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/create-ocr-provider",
-          label: "createOcrProvider",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "openapi/get-ocr-provider",
-          label: "getOcrProvider",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/delete-ocr-provider",
-          label: "deleteOcrProvider",
-          className: "api-method delete",
-        },
-        {
-          type: "doc",
-          id: "openapi/update-ocr-provider",
-          label: "updateOcrProvider",
-          className: "api-method patch",
         },
       ],
     },
@@ -399,12 +213,6 @@ const sidebar: SidebarsConfig = {
           id: "openapi/get-operation-result",
           label: "getOperationResult",
           className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "openapi/create-generative-task",
-          label: "createGenerativeTask",
-          className: "api-method post",
         },
       ],
     },
@@ -447,18 +255,6 @@ const sidebar: SidebarsConfig = {
           id: "openapi/delete-template",
           label: "deleteTemplate",
           className: "api-method delete",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "UNTAGGED",
-      items: [
-        {
-          type: "doc",
-          id: "openapi/resolve-ocr-provider",
-          label: "resolveOcrProvider",
-          className: "api-method get",
         },
       ],
     },
