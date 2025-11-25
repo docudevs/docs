@@ -1,417 +1,329 @@
 ---
 title: Templates
+sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-DocuDevs can treat a form as a reusable template: upload it once, peek at the form fields, and keep filling it with fresh data straight from your workflow. Templates support PDF forms as well as Word, Excel, and PowerPoint documents.
+# Templates
 
-## Getting a template into DocuDevs
+Upload and reuse document templates (PDF, Word, Excel) to automatically fill them with data.
 
-Uploading a template is as simple as naming it and sending the source document. After that you can refer to the template by name from the SDK, CLI, or API.
+## Overview
 
-> API nerd note: this maps to `POST /template/{name}`.
+Templates allow you to treat documents as reusable forms. You upload a document once, and DocuDevs analyzes it to find fillable fields. You can then fill these templates repeatedly with new data via the API.
 
-Need a quick inventory of every template? List them all in one go.
+**Supported Formats:**
+
+- **PDF Forms**: Standard AcroForms.
+- **Word Documents**: `.docx` files with placeholders or content controls.
+- **Excel Spreadsheets**: `.xlsx` files.
+- **PowerPoint Presentations**: `.pptx` files.
+
+## Managing Templates
+
+### Uploading a Template
+
+Upload a document to create a new template. DocuDevs will automatically detect the fields available for filling.
 
 <Tabs
-  defaultValue="curl"
+  defaultValue="python"
   values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python', value: 'python'},
+    {label: 'Python SDK', value: 'python'},
     {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
   ]}>
-  <TabItem value="curl">
-
-```sh
-curl -X POST https://api.docudevs.ai/template/invoice \
-     -H "Authorization: $API_KEY" \
-     -F "document=@invoice.pdf"
-```
-
-  </TabItem>
   <TabItem value="python">
+
 ```python
-import asyncio
 from docudevs.docudevs_client import DocuDevsClient
-
-api_key = 'YOUR_API_KEY'
-template_name = 'invoice'
-client = DocuDevsClient(token=api_key)
-
-async def upload_template():
-    with open('invoice.pdf', 'rb') as file:
-        response = await client.upload_template(
-            name=template_name,
-            file=file
-        )
-        if response.status_code == 200:
-            print("Template uploaded successfully")
-            print(response.parsed)  # Contains form fields and template info
-        else:
-            print(f"Error: {response.status_code}")
-
-asyncio.run(upload_template())
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs upload-template invoice invoice.pdf
-```
-
-  </TabItem>
-</Tabs>
-
-**Sample response**
-```json
-{
-  "guid": "123e4567-e89b-12d3-a456-426614174000",
-  "formFields": [
-    {
-      "name": "customerName",
-      "tooltip": "Enter the customer's name",
-      "type": "text",
-      "flags": ["required"],
-      "value": "",
-      "defaultValue": "John Doe",
-      "options": [],
-      "script": null
-    },
-    {
-      "name": "invoiceAmount",
-      "tooltip": "Enter the invoice amount",
-      "type": "text",
-      "flags": ["required"],
-      "value": "",
-      "defaultValue": "100.00",
-      "options": [],
-      "script": null
-    },
-    {
-      "name": "paymentStatus",
-      "tooltip": "",
-      "type": "CHECK_BOX",
-      "flags": ["COMBO_BOX"],
-      "value": "Paid",
-      "defaultValue": "Paid",
-      "options": ["Paid", "Unpaid"],
-      "script": null
-    },
-    {
-      "name": "termsAccepted",
-      "tooltip": null,
-      "type": "PUSH_BUTTON",
-      "flags": [],
-      "value": "UNCHECKED",
-      "defaultValue": null,
-      "options": [],
-      "script": null
-    }
-  ]
-}
-```
-
-## Inspecting template fields
-
-Want to know which fields DocuDevs discovered? Grab the metadata and you’ll see every form field, default value, tooltip, and more.
-
-> API mapping: `GET /template/metadata/{name}`.
-
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python', value: 'python'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="curl">
-
-```sh
-curl -X GET https://api.docudevs.ai/template/metadata/invoice \
-     -H "Authorization: $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-import asyncio
-from docudevs.docudevs_client import DocuDevsClient
-
-api_key = 'YOUR_API_KEY'
-template_name = 'invoice'
-client = DocuDevsClient(token=api_key)
-
-async def get_template_metadata():
-    response = await client.metadata(template_id=template_name)
-    if response.status_code == 200:
-        print("Template metadata retrieved successfully")
-        print(response.parsed)  # Contains template metadata
-    else:
-        print(f"Error: {response.status_code}")
-
-asyncio.run(get_template_metadata())
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs template-metadata invoice
-```
-
-  </TabItem>
-</Tabs>
-
-## Cleaning up templates
-
-Templates stick around until you delete them. Use this when a form is obsolete or replaced.
-
-> API mapping: `DELETE /template/{name}`.
-
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python', value: 'python'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="curl">
-```sh
-curl -X DELETE https://api.docudevs.ai/template/invoice \
-     -H "Authorization: $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-import asyncio
-from docudevs_client import DocuDevsClient
-
-api_key = 'YOUR_API_KEY'
-template_name = 'invoice'
-client = DocuDevsClient(token=api_key)
-
-async def delete_template():
-    response = await client.delete_template(template_id=template_name)
-    if response.status_code == 200:
-        print(f"Template {template_name} deleted successfully")
-    else:
-        print(f"Error deleting template: {response.status_code}")
-
-asyncio.run(delete_template())
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs delete-template invoice
-```
-
-  </TabItem>
-</Tabs>
-
-## Filling templates with data
-
-Once a template is uploaded you only need to send a JSON payload with the fields you want to merge. PDF forms expect a flat dictionary; Word templates support nested structures (great for tables or repeated sections).
-
-> API mapping: `POST /template/fill/{name}`.
-
-### Flat PDF example
-
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python', value: 'python'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="curl">
-```sh
-curl --output filled_invoice.pdf -X POST https://api.docudevs.ai/template/fill/invoice \
-     -H "Authorization: $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"fields":{"name": "John Doe", "amount": "100.00", "termsAccepted": true}}'
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-import asyncio
 import os
-from docudevs.docudevs_client import DocuDevsClient, TemplateFillRequest
+import asyncio
 
-api_key = 'YOUR_API_KEY'
-template_name = 'invoice'
-client = DocuDevsClient(token=api_key)
+client = DocuDevsClient(token=os.getenv('API_KEY'))
 
-async def fill_template():
-    # Create fields object with data to fill the template
-    fields = {
-        'name': 'John Doe',
-        'amount': '100.00',
-        'termsAccepted': True
-    }
+async def upload_invoice_template():
+    with open('invoice_template.pdf', 'rb') as f:
+        # Upload template with name "invoice"
+        response = await client.upload_template(
+            name="invoice",
+            document=f,
+            mime_type="application/pdf"
+        )
+        
+        # The response contains the detected form fields
+        print(f"Template uploaded. Detected fields: {response.parsed.form_fields}")
 
-    # Create the template fill request
-    fill_request = TemplateFillRequest(fields=fields)
-    
-    # Send the fill request
-    response = await client.fill(name=template_name, body=fill_request)
-    
-    if response.status_code == 200:
-        # Save the response to a file
-        with open('filled_invoice.pdf', 'wb') as f:
-            f.write(response.content)
-        print("Template filled and saved successfully")
-    else:
-        print(f"Error filling template: {response.status_code}")
-
-asyncio.run(fill_template())
-
+# asyncio.run(upload_invoice_template())
 ```
+
   </TabItem>
   <TabItem value="cli">
+
 ```bash
-# Save the request body above to invoice-fill.json first
-docudevs fill invoice invoice-fill.json --output filled_invoice.pdf
+docudevs upload-template invoice invoice_template.pdf
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/template/invoice \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "document=@invoice_template.pdf"
 ```
 
   </TabItem>
 </Tabs>
 
-### Word template example
+### Listing Templates
 
-![img.png](./img.png)
-Office templates can have nested objects. Creating of dynamic tables is also possible (demonstrated in the [example template](https://docs.docudevs.ai/template1.docx))
-
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python', value: 'python'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="curl">
-```sh
-curl --output template-filled.docx -X POST https://api.docudevs.ai/template/fill/template1 \
-     -H "Authorization: $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "fields": {
-         "bullets": ["item 1", "item 2"],
-         "variable1": "value for variable 1",
-         "variable2": "This is some text.",
-         "col_labels": ["mammal", "bird", "reptile", "fish"],
-         "tbl_contents": [
-           {"label": "domestic", "cols": ["dog", "chicken", "turtle", "goldfish"]},
-           {"label": "wild", "cols": ["lion", "eagle", "snake", "shark"]},
-           {"label": "farm", "cols": ["cow", "duck", "lizard", "trout"]}
-         ]
-       }}'
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-import asyncio
-from docudevs.docudevs_client import DocuDevsClient, TemplateFillRequest
-
-api_key = 'YOUR_API_KEY'
-template_name = 'template1'
-client = DocuDevsClient(token=api_key)
-
-async def fill_complex_template():
-    # Create fields object with nested data structure
-    fields = {
-        'bullets': ['item 1', 'item 2'],
-        'variable1': 'value for variable 1',
-        'variable2': 'This is some text.',
-        'col_labels': ['mammal', 'bird', 'reptile', 'fish'],
-        'tbl_contents': [
-            {'label': 'domestic', 'cols': ['dog', 'chicken', 'turtle', 'goldfish']},
-            {'label': 'wild', 'cols': ['lion', 'eagle', 'snake', 'shark']},
-            {'label': 'farm', 'cols': ['cow', 'duck', 'lizard', 'trout']}
-        ]
-    }
-
-    # Create the template fill request
-    fill_request = TemplateFillRequest(fields=fields)
-    
-    # Send the fill request
-    response = await client.fill(name=template_name, body=fill_request)
-    
-    if response.status_code == 200:
-        # Save the response to a file
-        with open('template-filled.docx', 'wb') as f:
-            f.write(response.content)
-        print("Complex template filled and saved successfully")
-    else:
-        print(f"Error filling template: {response.status_code}")
-
-asyncio.run(fill_complex_template())
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-# Save the nested request body above to template-fill.json first
-docudevs fill template1 template-fill.json --output template-filled.docx
-```
-
-  </TabItem>
-</Tabs>
-
-Will render:
-![img_1.png](./img_1.png)
-
-## Listing available templates
+Get a list of all available templates in your organization.
 
 <Tabs
-  defaultValue="curl"
+  defaultValue="python"
   values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python', value: 'python'},
+    {label: 'Python SDK', value: 'python'},
     {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
   ]}>
-  <TabItem value="curl">
-```sh
-curl -X GET https://api.docudevs.ai/template/list \
-     -H "Authorization: $API_KEY"
-```
-
-  </TabItem>
   <TabItem value="python">
+
 ```python
-import asyncio
-from docudevs.docudevs_client import DocuDevsClient
-
-api_key = 'YOUR_API_KEY'
-client = DocuDevsClient(token=api_key)
-
-async def list_templates():
-    response = await client.list_templates()
-    if response.status_code == 200:
-        print("Templates retrieved successfully:")
-        for template in response.parsed:
-            print(f"- {template['name']}")
-    else:
-        print(f"Error retrieving templates: {response.status_code}")
-
-asyncio.run(list_templates())
-
+templates = await client.list_templates()
+for template in templates:
+    print(f"Name: {template.name}, Created: {template.created_at}")
 ```
+
   </TabItem>
   <TabItem value="cli">
+
 ```bash
 docudevs list-templates
 ```
 
   </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X GET https://api.docudevs.ai/template/list \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
 </Tabs>
 
-## Where to go next
+### Inspecting Template Metadata
 
-- Pair templates with [named configurations](/docs/configuration/Configuration) to keep prompts and schemas in sync.
-- Trigger template fills from the [SDK helper methods](/docs/reference/sdk-methods) for end-to-end automation.
-- Need troubleshooting tips? Drop into the [CLI reference](/docs/reference/cli-reference) for every flag and command.
+Retrieve details about a specific template, including its fillable fields.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+metadata = await client.metadata("invoice")
+print(f"Fields for {metadata.name}:")
+for field in metadata.form_fields:
+    print(f"- {field.name} ({field.type})")
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs template-metadata invoice
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X GET https://api.docudevs.ai/template/metadata/invoice \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+</Tabs>
+
+### Deleting a Template
+
+Remove a template when it is no longer needed.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+await client.delete_template("invoice")
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs delete-template invoice
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X DELETE https://api.docudevs.ai/template/invoice \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+</Tabs>
+
+## Filling Templates
+
+Once a template is uploaded, you can fill it with data. The data structure depends on the template type.
+
+### Filling a PDF Form
+
+PDF forms typically use a flat dictionary of field names and values.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+from docudevs.models import TemplateFillRequest
+
+async def fill_invoice():
+    fill_request = TemplateFillRequest(
+        fields={
+            "customerName": "Acme Corp",
+            "invoiceNumber": "INV-2024-001",
+            "totalAmount": "1500.00",
+            "paid": True
+        }
+    )
+    
+    response = await client.fill(name="invoice", body=fill_request)
+    
+    # Save the filled PDF
+    with open("filled_invoice.pdf", "wb") as f:
+        f.write(response.content)
+
+# asyncio.run(fill_invoice())
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+# Create data.json: {"fields": {"customerName": "Acme Corp", ...}}
+docudevs fill invoice data.json --output filled_invoice.pdf
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/template/fill/invoice \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fields": {
+      "customerName": "Acme Corp",
+      "invoiceNumber": "INV-2024-001",
+      "totalAmount": "1500.00",
+      "paid": true
+    }
+  }' \
+  --output filled_invoice.pdf
+```
+
+  </TabItem>
+</Tabs>
+
+### Filling a Word Template with Tables
+
+Word templates support nested data structures, allowing you to fill tables and repeated sections.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+async def fill_report():
+    fill_request = TemplateFillRequest(
+        fields={
+            "reportTitle": "Quarterly Sales",
+            "date": "2024-04-01",
+            "items": [
+                {"product": "Widget A", "sales": 100, "revenue": 5000},
+                {"product": "Widget B", "sales": 200, "revenue": 8000},
+                {"product": "Widget C", "sales": 50, "revenue": 2500}
+            ],
+            "summary": {
+                "totalRevenue": 15500,
+                "growth": "15%"
+            }
+        }
+    )
+    
+    response = await client.fill(name="sales_report", body=fill_request)
+    
+    with open("filled_report.docx", "wb") as f:
+        f.write(response.content)
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs fill sales_report report_data.json --output filled_report.docx
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/template/fill/sales_report \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fields": {
+      "reportTitle": "Quarterly Sales",
+      "items": [
+        {"product": "Widget A", "sales": 100},
+        {"product": "Widget B", "sales": 200}
+      ]
+    }
+  }' \
+  --output filled_report.docx
+```
+
+  </TabItem>
+</Tabs>
+
+## Best Practices
+
+- **Field Naming**: Use clear, consistent names for your form fields (e.g., camelCase like `customerName`).
+- **Testing**: Upload your template and inspect the metadata to ensure all fields are detected correctly.
+- **Data Types**: Ensure the data you send matches the expected type (e.g., booleans for checkboxes).
+- **Configurations**: Combine templates with [Named Configurations](../configuration/Configuration.md) to standardize the filling process if you have complex logic.

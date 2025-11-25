@@ -189,7 +189,7 @@ async def processing_with_schema():
         document=document_data,
         document_mime_type="application/pdf",
         prompt=instruction,
-        schema=schema
+        schema=json.dumps(schema)
     )
     result = await client.wait_until_ready(job_id, result_format="json")
     
@@ -212,7 +212,7 @@ async def create_and_use_configuration():
     config_name = "invoice_processing_standard"
     
     configuration = {
-        "instruction": "Extract comprehensive invoice data",
+        "prompt": "Extract comprehensive invoice data",
         "schema": {
             "invoice_number": "Invoice number",
             "date": "Invoice date in YYYY-MM-DD format", 
@@ -225,18 +225,33 @@ async def create_and_use_configuration():
                 }
             ]
         },
-        "llm_type": "gpt-4",
-        "temperature": 0.1
+        "llm": "HIGH"
     }
     
     # Save the configuration
-    save_response = await client.save_configuration(config_name, configuration)
+    from docudevs.models import UploadCommand
+    # Convert dict to UploadCommand or pass dict if client supports it (client.save_configuration expects UploadCommand)
+    # The SDK usually requires the model object, but let's assume we construct it or pass a dict that the client handles (if it does).
+    # Actually, looking at sdk-methods.md, we use UploadCommand.
+    
+    # Let's rewrite this to be correct with the SDK
+    cmd = UploadCommand(
+        prompt=configuration["prompt"],
+        schema=json.dumps(configuration["schema"]), # Schema must be string
+        llm=configuration["llm"]
+    )
+    
+    save_response = await client.save_configuration(config_name, cmd)
     print(f"Configuration saved: {config_name}")
     
     # Use the saved configuration
+    # Note: process_document_with_configuration takes a GUID of an uploaded doc, 
+    # or submit_and_process_document_with_configuration takes the doc.
+    # The example in the file uses process_document_with_configuration with a job_id from previous step.
+    
     response = await client.process_document_with_configuration(
         guid=job_id,  # From previous upload
-        configuration=config_name
+        configuration_name=config_name
     )
     
     result = await client.wait_until_ready(response.parsed.guid, result_format="json")
@@ -324,8 +339,8 @@ instruction = "This is a scanned document. First extract all text using OCR, the
 
 # Consider using higher quality settings
 configuration = {
-    "ocr_type": "azure_document_intelligence",  # More accurate for scanned docs
-    "llm_type": "gpt-4"  # Better understanding of OCR'd text
+    "ocr": "PREMIUM",  # More accurate for scanned docs
+    "llm": "HIGH"      # Better understanding of OCR'd text
 }
 ```
 

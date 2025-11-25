@@ -1,196 +1,204 @@
+---
+title: SDK Methods
+sidebar_position: 4
+---
+
 # SDK Method Reference
 
-Complete reference for all DocuDevs Python SDK methods.
+Complete reference for the DocuDevs Python SDK (`docudevs-sdk`).
 
 ## Client Initialization
 
 ### DocuDevsClient
 
+Initialize the client with your API key.
+
 ```python
 from docudevs.docudevs_client import DocuDevsClient
+import os
 
 client = DocuDevsClient(
     api_url="https://api.docudevs.ai",  # Optional, defaults to production
-    token="your-api-key"                # Required
+    token=os.getenv("DOCUDEVS_API_KEY") # Required
 )
 ```
 
-## Configuration Management
+## Document Processing
 
-### list_configurations()
+### submit_and_process_document
 
-List all saved configurations.
-
-```python
-configurations = await client.list_configurations()
-```
-
-**Returns:** List of configuration objects
-
-### get_configuration(name)
-
-Get a specific configuration by name.
+Upload and process a document for structured data extraction.
 
 ```python
-config = await client.get_configuration("my-config")
+job_guid = await client.submit_and_process_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract invoice data",
+    schema={...},  # Optional JSON schema
+    ocr="PREMIUM", # Optional: DEFAULT, PREMIUM, LOW
+    llm="PREMIUM"  # Optional: DEFAULT, PREMIUM
+)
 ```
 
-**Parameters:**
+### submit_and_process_document_with_configuration
 
-- `name` (str): Configuration name
+Process a document using a saved configuration.
 
-**Returns:** Configuration object
+```python
+job_guid = await client.submit_and_process_document_with_configuration(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    configuration_name="invoice-config"
+)
+```
 
-### save_configuration(name, body)
+### submit_and_ocr_document
 
-Save a new configuration.
+Process a document with OCR only (no structured extraction).
+
+```python
+job_guid = await client.submit_and_ocr_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    ocr="PREMIUM",
+    ocr_format="markdown", # markdown, plain, jsonl (for Excel)
+    describe_figures=True
+)
+```
+
+### wait_until_ready
+
+Wait for a job to complete and retrieve the result.
+
+```python
+result = await client.wait_until_ready(
+    guid=job_guid,
+    timeout=180,
+    poll_interval=5.0,
+    result_format="json" # json, csv, excel, or None (legacy object)
+)
+```
+
+## Batch Processing
+
+### submit_and_process_batch
+
+Upload and process multiple documents as a batch.
+
+```python
+batch_guid = await client.submit_and_process_batch(
+    documents=[file1_bytes, file2_bytes],
+    document_mime_type="application/pdf",
+    prompt="Extract data",
+    max_concurrency=5
+)
+```
+
+## Configurations
+
+### save_configuration
+
+Save a named configuration.
 
 ```python
 from docudevs.models import UploadCommand
 
-body = UploadCommand(
-    instructions="Extract invoice data",
-    llm="gpt-4"
+config = UploadCommand(
+    prompt="Extract invoice data",
+    ocr="PREMIUM"
 )
-
-response = await client.save_configuration("invoice-config", body)
+await client.save_configuration("invoice-config", config)
 ```
 
-**Parameters:**
+### list_configurations
 
-- `name` (str): Configuration name
-- `body` (UploadCommand): Configuration details
+List all saved configurations.
 
-### delete_configuration(name)
+```python
+configs = await client.list_configurations()
+```
+
+### get_configuration
+
+Get details of a specific configuration.
+
+```python
+config = await client.get_configuration("invoice-config")
+```
+
+### delete_configuration
 
 Delete a configuration.
 
 ```python
-response = await client.delete_configuration("old-config")
+await client.delete_configuration("invoice-config")
 ```
 
-## Document Upload and Processing
+## Templates
 
-### upload_files(body)
+### upload_template
 
-Upload files with processing parameters.
+Upload a new document template.
 
 ```python
-from docudevs.models import UploadFilesBody
-from docudevs.types import File
-
-document_file = File(
-    payload=document_bytes,
-    file_name="document.pdf",
-    mime_type="application/pdf"
-)
-
-body = UploadFilesBody(
-    files=[document_file],
-    instructions="Extract key information"
-)
-
-response = await client.upload_files(body)
+with open("form.pdf", "rb") as f:
+    await client.upload_template(
+        name="form-template",
+        document=f,
+        mime_type="application/pdf"
+    )
 ```
 
-### upload_document(body)
+### list_templates
 
-Upload a single document.
+List all available templates.
 
 ```python
-from docudevs.models import UploadDocumentBody
-
-body = UploadDocumentBody(document=document_file)
-
-response = await client.upload_document(body)
+templates = await client.list_templates()
 ```
 
-### submit_and_process_document()
+### metadata
 
-Convenience method to upload and process a document for structured extraction in one call. Returns a job GUID.
+Get metadata (fields) for a template.
 
 ```python
-job_id = await client.submit_and_process_document(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract invoice data",
-    llm="gpt-4"
-)
-
-result = await client.wait_until_ready(job_id, result_format="json")
-assert isinstance(result, dict)
-print("Header", result.get("header"))
-print("Records", len(result.get("records", [])))
-print(json.dumps(result, indent=2))
+meta = await client.metadata("form-template")
 ```
 
-**Parameters:**
+### fill
 
-- `document` (bytes): Document content
-- `document_mime_type` (str): MIME type
-- `prompt` (str, optional): Processing instructions
-- `llm` (str, optional): LLM to use
-- `schema` (dict, optional): JSON schema for structured output
-
-## Job Management
-
-### status(uuid)
-
-Get job status.
+Fill a template with data.
 
 ```python
-status_response = await client.status(uuid="job-guid")
+from docudevs.models import TemplateFillRequest
+
+request = TemplateFillRequest(fields={"name": "John"})
+response = await client.fill("form-template", request)
 ```
 
-### result(uuid)
+### delete_template
 
-Get job result.
+Delete a template.
 
 ```python
-result_response = await client.result(uuid="job-guid")
+await client.delete_template("form-template")
 ```
 
-### wait_until_ready()
+## Cases
 
-Wait for a job to complete and return the result.
+### create_case
 
-```python
-result = await client.wait_until_ready(
-    guid="job-guid",
-    timeout=60,
-    poll_interval=1.0,
-    result_format="json"
-)
-```
-
-**Parameters:**
-
-- `guid` (str): Job GUID
-- `timeout` (int): Maximum wait time in seconds
-- `poll_interval` (float): Polling interval in seconds
-- `result_format` (str | None): Optional explicit format (`"json"`, `"csv"`, `"excel"`). When omitted, returns legacy object mode.
-- `excel_save_to` (str | None): Optional file path to persist Excel output when `result_format="excel"`.
-
-## Cases Management
-
-### create_case()
-
-Create a new document case.
+Create a new case (collection of documents).
 
 ```python
-# Create a new document case
+from docudevs.models import CreateCaseBody
+
 case = await client.create_case(
-    name="Invoice Processing Q1",
-    description="Q1 2024 invoices"
+    body=CreateCaseBody(name="Q1 Invoices")
 )
 ```
 
-**Parameters:**
-
-- `name` (str): Case name
-- `description` (str, optional): Case description
-
-### list_cases()
+### list_cases
 
 List all cases.
 
@@ -198,635 +206,82 @@ List all cases.
 cases = await client.list_cases()
 ```
 
-### get_case(case_id)
-
-Get case details.
-
-```python
-case = await client.get_case(case_id=123)
-```
-
-### upload_case_document()
+### upload_case_document
 
 Upload a document to a case.
 
 ```python
-response = await client.upload_case_document(
+from docudevs.models import UploadCaseDocumentBody
+from docudevs.types import File
+
+await client.upload_case_document(
     case_id=123,
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    filename="invoice.pdf"
+    body=UploadCaseDocumentBody(
+        document=File(payload=data, file_name="doc.pdf")
+    )
 )
 ```
 
 ## Operations
 
-### submit_operation()
+### submit_and_wait_for_error_analysis
 
-Submit an operation for a completed job.
+Run error analysis on a completed job.
 
 ```python
-response = await client.submit_operation(
-    job_guid="completed-job-guid",
-    operation_type="error-analysis"
-)
+analysis = await client.submit_and_wait_for_error_analysis(job_guid)
 ```
 
-### submit_operation_with_parameters()
+### submit_and_wait_for_generative_task
 
-Submit operation with custom parameters.
+Run a generative AI task on a completed job.
 
 ```python
-response = await client.submit_operation_with_parameters(
-    job_guid="job-guid",
+task = await client.submit_and_wait_for_generative_task(
+    parent_job_id=job_guid,
+    prompt="Summarize this document",
+    model="DEFAULT"
+)
+# Result is in task.result (JSON string)
+```
+
+### submit_and_wait_for_operation_with_parameters
+
+Run an operation with custom parameters.
+
+```python
+result = await client.submit_and_wait_for_operation_with_parameters(
+    job_guid=job_guid,
     operation_type="error-analysis",
     llm_type="HIGH",
-    custom_parameters={"focus": "numerical_data"}
+    custom_parameters={"focus": "dates"}
 )
 ```
 
-### get_operation_status()
+## Map-Reduce Helpers
 
-Get status of operations for a job.
+### submit_and_process_document_map_reduce
 
-```python
-status = await client.get_operation_status(job_guid="job-guid")
-```
-
-### get_operation_result()
-
-Get result of a specific operation.
+Process large documents using map-reduce strategy.
 
 ```python
-result = await client.get_operation_result(
-    job_guid="job-guid",
-    operation_type="error-analysis"
-)
-```
-
-### submit_and_wait_for_operation()
-
-Submit operation and wait for completion.
-
-```python
-result = await client.submit_and_wait_for_operation(
-    job_guid="job-guid",
-    operation_type="error-analysis",
-    timeout=120,
-    poll_interval=2.0
-)
-```
-
-### submit_and_wait_for_error_analysis()
-
-Convenience method for error analysis.
-
-```python
-analysis = await client.submit_and_wait_for_error_analysis(
-    job_guid="job-guid",
-    timeout=120
-)
-```
-
-## Generative Tasks
-
-### create_generative_task()
-
-Create a generative task for a completed job.
-
-```python
-response = await client.create_generative_task(
-    parent_job_id="completed-job-guid",
-    prompt="Summarize this document and explain its main purpose",
-    model="DEFAULT",
-    temperature=0.7,
-    max_tokens=500
-)
-```
-
-**Parameters:**
-
-- `parent_job_id` (str): The parent job GUID (must be completed)
-- `prompt` (str): The prompt to send to the AI model
-- `model` (str, optional): AI model to use
-- `temperature` (float, optional): Temperature parameter (0.0 to 1.0)
-- `max_tokens` (int, optional): Maximum tokens to generate
-
-**Returns:** Generative task creation response
-
-### submit_and_wait_for_generative_task()
-
-Create a generative task and wait for completion.
-
-```python
-result = await client.submit_and_wait_for_generative_task(
-    parent_job_id="completed-job-guid",
-    prompt="Summarize this document and explain its main purpose",
-    model="DEFAULT",
-    temperature=0.7,
-    max_tokens=500,
-    timeout=120,
-    poll_interval=2.0
-)
-
-# Parse the result JSON
-import json
-result_data = json.loads(result.result)
-generated_text = result_data['generated_text']
-```
-
-**Parameters:**
-
-- `parent_job_id` (str): The parent job GUID (must be completed)
-- `prompt` (str): The prompt to send to the AI model
-- `model` (str, optional): AI model to use
-- `temperature` (float, optional): Temperature parameter (0.0 to 1.0)
-- `max_tokens` (int, optional): Maximum tokens to generate
-- `timeout` (int): Maximum time to wait in seconds (default: 120)
-- `poll_interval` (float): Time between status checks in seconds (default: 2.0)
-
-**Returns:** The generative task result once complete
-
-**Raises:**
-
-- `TimeoutError`: If the operation doesn't complete within the timeout
-- `Exception`: If the operation fails or errors occur
-
-## OCR Processing
-
-### submit_and_ocr_document()
-
-Convenience method to upload and process a document with OCR only.
-
-```python
-guid = await client.submit_and_ocr_document(
-    document=document_bytes,
+job_guid = await client.submit_and_process_document_map_reduce(
+    document=doc_bytes,
     document_mime_type="application/pdf",
-    ocr="PREMIUM",
-    ocr_format="markdown",
-    describe_figures=True
-)
-```
-
-**Parameters:**
-
-- `document` (BytesIO): Document content
-- `document_mime_type` (str): MIME type
-- `ocr` (str, optional): OCR type ("DEFAULT", "LOW", "PREMIUM", "AUTO")
-- `ocr_format` (str, optional): OCR output format ("plain", "markdown")
-- `describe_figures` (bool, optional): Whether to describe figures in detail (ignored when `ocr` is "LOW")
-
-**Returns:** Job GUID for the OCR processing job
-
-### Map-Reduce Convenience Methods
-
-Use these helpers to process large documents in overlapping page chunks with deduplication.
-
-#### submit_and_process_document_map_reduce()
-
-```python
-job_id = await client.submit_and_process_document_map_reduce(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract invoice line items (sku, description, qty, unit_price, total)",
-    pages_per_chunk=4,
-    overlap_pages=1,
-    dedup_key="items.sku",
-    header_options={
-        "page_limit": 2,
-        "include_in_rows": False,
-        "row_prompt_augmentation": "Invoice header context"
-    },
-    header_schema='{"invoiceNumber":"string","issueDate":"date"}'
-)
-
-result = await client.wait_until_ready(job_id, result_format="json")
-assert isinstance(result, dict)
-print("Header", result.get("header"))
-print("Records", len(result.get("records", [])))
-```
-
-Parameters:
-
-- `pages_per_chunk` (int, default 1) size of each window
-- `overlap_pages` (int, default 0) pages re-used from previous window
-- `dedup_key` (str, optional) path for cross-chunk deduplication (required if overlap > 0)
-- `header_options` (dict, optional) enables header capture; accepts `page_limit`, `page_indices`, `include_in_rows`, `schema_file_name`, `prompt_file_name`, `row_prompt_augmentation`
-- `header_schema` (str, optional) dedicated JSON schema for the header pass (row schema stays in `schema`)
-- `header_prompt` (str, optional) prompt override for the header extraction pass
-- `stop_when_empty` (bool, optional) terminate processing after a run of empty chunks (defaults to `False`)
-- `empty_chunk_grace` (int, optional) number of consecutive empty chunks tolerated before termination (defaults to `0` when `stop_when_empty=True`)
-
-Validation rules enforced client-side:
-
-- `pages_per_chunk >= 1`
-- `0 <= overlap_pages < pages_per_chunk`
-- `dedup_key` required when `overlap_pages > 0`
-- When `header_options` provided and `enabled` defaults to true, `page_limit >= 1`
-- `header_schema` automatically enables header capture (defaults `page_limit` to 1 when not provided)
-- `empty_chunk_grace >= 0`
-- `empty_chunk_grace` may only be non-zero when `stop_when_empty` is true
-
-The `wait_until_ready(..., result_format="json")` helper always returns the canonical structure `{"header": {...?}, "records": [...], "mapReduceMetadata": {...?}}`, even when the server processes older jobs. `mapReduceMetadata` reflects runtime details such as `totalChunks`, `completedChunks`, `stopWhenEmpty`, and `terminationReason` when available.
-
-#### process_document_map_reduce()
-
-Process a previously uploaded (already has GUID) document using map-reduce parameters.
-
-```python
-response = await client.process_document_map_reduce(
-    guid="uploaded-guid",
-    prompt="Extract contract parties and obligations",
+    prompt="Extract line items",
     pages_per_chunk=5,
     overlap_pages=1,
-    dedup_key="parties.name",
-    header_options={"page_limit": 1},
-    header_schema='{"agreementName":"string"}'
-)
-```
-
-#### build_upload_command_map_reduce()
-
-Builds the lower-level command object; primarily useful for advanced batching scenarios.
-
-```python
-cmd = client.build_upload_command_map_reduce(
-    prompt="Extract table rows",
-    pages_per_chunk=3,
-    overlap_pages=1,
-    dedup_key="rows.id",
-    header_options={"enabled": True, "row_prompt_augmentation": "Table header"},
-    header_schema='{"tableTitle":"string"}'
-)
-```
-
-See also: [Map-Reduce Extraction](../core/map-reduce-extraction.md) for strategy and tuning guidance.
-
-## Templates
-
-### list_templates()
-
-List all templates.
-
-```python
-templates = await client.list_templates()
-```
-
-### upload_template()
-
-Upload a new template.
-
-```python
-response = await client.upload_template(
-    name="invoice-template",
-    template_file=template_bytes,
-    instructions="Extract invoice data"
-)
-```
-
-### metadata(template_id)
-
-Get template metadata.
-
-```python
-metadata = await client.metadata(template_id="template-name")
-```
-
-### fill_template()
-
-Fill a template with data.
-
-```python
-from docudevs.models import TemplateFillRequest
-
-request = TemplateFillRequest(
-    document_data={"name": "John Doe", "amount": 1000}
-)
-
-response = await client.fill_template(
-    template_id="template-name",
-    request=request
-)
-```
-
-### delete_template()
-
-Delete a template.
-
-```python
-response = await client.delete_template(name="old-template")
-```
-
-## Schema Generation
-
-### generate_schema()
-
-Generate JSON schema from a document.
-
-```python
-response = await client.generate_schema(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    instructions="Focus on financial data"
-)
-```
-
-## Processing Methods
-
-### process_document()
-
-Process an uploaded document.
-
-```python
-response = await client.process_document(
-    guid="uploaded-doc-guid",
-    instructions="Extract all data",
-    llm="gpt-4"
-)
-```
-
-### process_document_with_configuration()
-
-Process using a saved configuration.
-
-```python
-response = await client.process_document_with_configuration(
-    guid="uploaded-doc-guid",
-    configuration_name="invoice-config"
-)
-```
-
-### ocr_document()
-
-Process document with OCR only.
-
-```python
-from docudevs.models import OcrCommand
-
-ocr_body = OcrCommand(
-    ocr="advanced",
-    ocr_format="markdown",
-    mime_type="application/pdf"
-)
-
-response = await client.ocr_document(
-    guid="uploaded-doc-guid",
-    body=ocr_body
+    dedup_key="sku"
 )
 ```
 
 ## Error Handling
 
-All SDK methods can raise exceptions. Common patterns:
+The SDK raises exceptions for API errors.
 
 ```python
 try:
-    job_id = await client.submit_and_process_document(
-        document=document_bytes,
-        document_mime_type="application/pdf"
-    )
-    result = await client.wait_until_ready(job_id, result_format="json")
-    print(json.dumps(result, indent=2))
-except TimeoutError as e:
-    print(f"Processing timed out: {e}")
+    await client.get_configuration("non-existent")
 except Exception as e:
-    print(f"Processing failed: {e}")
-```
-
-## Response Objects
-
-### Standard Response Structure
-
-Most methods return response objects with:
-
-```python
-response.status_code  # HTTP status code
-response.content      # Raw response content
-response.parsed       # Parsed response object (if successful)
-```
-
-### Common Response Types
-
-**UploadResponse:**
-
-```python
-response.parsed.guid    # Job GUID
-response.parsed.status  # Job status
-```
-
-**Job Status:**
-
-```python
-status.status          # PENDING, PROCESSING, COMPLETED, FAILED
-status.created_at      # Creation timestamp
-status.updated_at      # Last update timestamp
-```
-
-**Job Result:**
-
-```python
-result.result          # Extracted data (JSON string)
-result.metadata        # Processing metadata
-```
-
-## Result Handling
-
-How to read results depending on the workflow:
-
-- Extraction (structured data)
-  - Use `submit_and_process_document(...)` to submit.
-  - Call `wait_until_ready(job_id, result_format="json")` to fetch the canonical JSON payload directly.
-  - The return value is a Python dict for single-document jobs or a list of dicts for batch jobs.
-
-```python
-# Extraction flow (single document)
-job_id = await client.submit_and_process_document(
-        document=document_bytes,
-        document_mime_type="application/pdf",
-        prompt="Extract invoice data"
-)
-data = await client.wait_until_ready(job_id, result_format="json")
-print(json.dumps(data, indent=2))
-```
-
-- Batch extraction
-  - Submit with the batch helpers, then request JSON using the same `result_format` flag.
-  - The API returns a list aligned to the uploaded document order. Each entry is either a dict matching your schema or `null` for failed/missing items.
-
-```python
-batch_guid = await client.submit_and_process_batch(
-        documents=file_paths,
-        document_mime_type="application/pdf",
-        prompt="Extract invoice data"
-)
-batch_results = await client.wait_until_ready(batch_guid, result_format="json")
-for index, item in enumerate(batch_results):
-        if item:
-                print(f"Document {index}:", json.dumps(item, indent=2))
-        else:
-                print(f"Document {index}: no structured result")
-```
-
-- Legacy object mode
-  - If you omit `result_format`, `wait_until_ready` retains backward compatibility by returning a SimpleNamespace-like object.
-  - Structured extraction jobs expose their JSON in `result.parsed`; batch jobs now surface a list in `result.result`.
-
-- OCR-only (plain text or markdown)
-  - Use `submit_and_ocr_document(...)` to submit.
-  - `wait_until_ready(job_id)` (no `result_format`) returns text content in `result.result`.
-
-```python
-# OCR flow
-job_id = await client.submit_and_ocr_document(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    ocr="PREMIUM",
-    ocr_format="markdown"
-)
-ocr_result = await client.wait_until_ready(job_id)
-print(ocr_result.result)
-```
-
-- Generative tasks (JSON string)
-  - `submit_and_wait_for_generative_task(...)` returns a job whose `result.result` is a JSON string.
-  - Parse with `json.loads(...)` then access `generated_text`.
-
-```python
-# Generative task flow
-gen = await client.submit_and_wait_for_generative_task(
-    parent_job_id=parent_job_id,
-    prompt="Summarize this document"
-)
-data = json.loads(gen.result)
-print(data["generated_text"])
-```
-
-## Constants and Enums
-
-### LLM Types
-
-- "gpt-3.5-turbo"
-- "gpt-4"
-- "gpt-4-turbo"
-
-### OCR Types
-
-- "DEFAULT"
-- "LOW"
-- "PREMIUM"
-- "AUTO"
-
-### OCR Formats
-
-- "plain"
-- "markdown"
-- "json"
-
-### Operation Types
-
-- "error-analysis"
-- "generative-task"
-
-### Generative Task Models
-
-- "DEFAULT" - Standard AI model, good balance of speed and quality
-- "HIGH" - Premium AI model, slower but higher quality responses
-
-## Best Practices
-
-### Authentication
-
-```python
-import os
-
-# Use environment variables for API keys
-client = DocuDevsClient(
-    token=os.getenv("DOCUDEVS_API_KEY")
-)
-```
-
-### Error Handling (Best Practices)
-
-```python
-async def safe_process_document(document_data, mime_type):
-    try:
-        job_id = await client.submit_and_process_document(
-            document=document_data,
-            document_mime_type=mime_type
-        )
-        result = await client.wait_until_ready(job_id, timeout=120, result_format="json")
-        return result, None
-    except Exception as e:
-        return None, str(e)
-```
-
-### Batch Processing
-
-```python
-async def process_documents_batch(documents):
-    # Submit all jobs concurrently
-    submit_tasks = [
-        client.submit_and_process_document(document=doc, document_mime_type=mime)
-        for doc, mime in documents
-    ]
-    job_ids = await asyncio.gather(*submit_tasks)
-
-    # Wait for all to complete
-    wait_tasks = [client.wait_until_ready(job_id, result_format="json") for job_id in job_ids]
-    return await asyncio.gather(*wait_tasks)
-```
-
-### Generative Task Workflows
-
-```python
-async def analyze_document_with_ai(document_data, mime_type):
-    """Complete workflow: OCR + multiple generative tasks"""
-
-    # Step 1: Process with OCR
-    ocr_job_id = await client.submit_and_ocr_document(
-        document=document_data,
-        document_mime_type=mime_type,
-        ocr="PREMIUM",
-        ocr_format="markdown"
-    )
-
-    # Wait for OCR to complete
-    await client.wait_until_ready(ocr_job_id)
-
-    # Step 2: Generate summary
-    summary_task = client.submit_and_wait_for_generative_task(
-        parent_job_id=ocr_job_id,
-        prompt="Provide a concise summary of this document."
-    )
-
-    # Step 3: Extract key information
-    key_info_task = client.submit_and_wait_for_generative_task(
-        parent_job_id=ocr_job_id,
-        prompt="List the most important facts, dates, and numbers from this document."
-    )
-
-    # Step 4: Categorize document
-    category_task = client.submit_and_wait_for_generative_task(
-        parent_job_id=ocr_job_id,
-        prompt="What type of document is this? (e.g., invoice, contract, report, etc.)"
-    )
-
-    # Wait for all generative tasks to complete
-    summary, key_info, category = await asyncio.gather(
-        summary_task, key_info_task, category_task
-    )
-
-    # Parse results
-    import json
-    return {
-        'summary': json.loads(summary.result)['generated_text'],
-        'key_info': json.loads(key_info.result)['generated_text'],
-        'category': json.loads(category.result)['generated_text']
-    }
-
-# Usage
-analysis = await analyze_document_with_ai(document_bytes, "application/pdf")
-print(f"Document Type: {analysis['category']}")
-print(f"Summary: {analysis['summary']}")
-print(f"Key Information: {analysis['key_info']}")
+    print(f"Error: {e}")
 ```

@@ -3,6 +3,9 @@ title: AI Document Analysis
 sidebar_position: 3
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # AI Document Analysis
 
 Generate intelligent insights from your documents using AI-powered generative tasks. Perfect for summarization, content transformation, and custom analysis workflows.
@@ -26,6 +29,15 @@ AI Document Analysis uses generative AI models to understand and analyze documen
 ## Basic Usage
 
 ### Document Summarization
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
 
 ```python
 import asyncio
@@ -63,7 +75,54 @@ async def summarize_document():
 asyncio.run(summarize_document())
 ```
 
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+# Step 1: Process document with OCR
+# Note: Capture the Job ID from the output
+docudevs ocr report.pdf --ocr PREMIUM --format markdown
+
+# Step 2: Generate summary using the Job ID from step 1
+docudevs operations generative-task <JOB_ID> \
+  --prompt "Summarize this document in 2-3 paragraphs, highlighting the key findings and recommendations."
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+# Step 1: Process document with OCR
+# Returns a JSON with "guid" (Job ID)
+curl -X POST https://api.docudevs.ai/document/ocr \
+  -H "Authorization: $API_KEY" \
+  -F "document=@report.pdf" \
+  -F "ocr=PREMIUM" \
+  -F "format=markdown"
+
+# Step 2: Generate summary
+# Replace <JOB_ID> with the guid from step 1
+curl -X POST https://api.docudevs.ai/operation/<JOB_ID>/generative-task \
+  -H "Authorization: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Summarize this document in 2-3 paragraphs, highlighting the key findings and recommendations."
+  }'
+```
+
+  </TabItem>
+</Tabs>
+
 ### Question Answering
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
 
 ```python
 async def ask_questions_about_document():
@@ -94,12 +153,47 @@ async def ask_questions_about_document():
             prompt=f"Based on this document, answer the following question: {question}"
         )
         
-    result_data = json.loads(answer.result)
+        result_data = json.loads(answer.result)
         print(f"Q: {question}")
         print(f"A: {result_data['generated_text']}\n")
 
 asyncio.run(ask_questions_about_document())
 ```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+# 1. OCR the document
+docudevs ocr contract.pdf
+# (Capture JOB_ID)
+
+# 2. Ask questions
+docudevs operations generative-task <JOB_ID> \
+  --prompt "Based on this document, answer: What is the contract start date and end date?"
+
+docudevs operations generative-task <JOB_ID> \
+  --prompt "Based on this document, answer: Who are the parties involved in this contract?"
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+# 1. OCR
+curl -X POST https://api.docudevs.ai/document/ocr \
+  -H "Authorization: $API_KEY" \
+  -F "document=@contract.pdf"
+
+# 2. Ask Question
+curl -X POST https://api.docudevs.ai/operation/<JOB_ID>/generative-task \
+  -H "Authorization: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Based on this document, answer: What is the contract start date and end date?"}'
+```
+
+  </TabItem>
+</Tabs>
 
 ## Advanced Use Cases
 

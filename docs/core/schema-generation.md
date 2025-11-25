@@ -1,252 +1,170 @@
+---
+title: Schema Generation
+description: Automatically generate JSON schemas from your documents using AI.
+sidebar_position: 5
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Schema Generation
 
-Generate JSON schemas automatically from your documents using AI analysis.
+Automatically generate JSON schemas from your documents using AI.
 
-## Overview
-
-The Schema Generation feature analyzes your documents and creates structured JSON schemas that capture the key data fields and their types. This is particularly useful for:
-
-- Creating extraction templates for similar documents
-- Understanding document structure before processing
-- Building data validation rules
-- Standardizing data extraction across document types
-- Improving coverage of very large documents (pair with Map-Reduce extraction when downstream processing needs higher recall)
+Defining a perfect JSON schema for a complex document can be tedious. DocuDevs can analyze your document and generate a schema for you, which you can then refine and use for extraction.
 
 ## How It Works
 
-1. Upload a representative document
-2. Optionally provide instructions for what to focus on
-3. AI analyzes the document structure and content
-4. Returns a JSON schema with identified fields and data types
+1. **Upload** a representative document (e.g., a sample invoice).
+2. **Instruct** the AI on what fields matter (optional).
+3. **Receive** a valid JSON Schema ready for use.
 
-## API Usage
+## Generating a Schema
 
-### Generate Schema Endpoint
-
-```http
-POST /document/generate-schema
-Content-Type: multipart/form-data
-
-document: [file]
-instructions: [optional text]
-```
-
-### Response
-
-```json
-{
-  "guid": "uuid-string",
-  "status": "PENDING"
-}
-```
-
-## SDK Examples
-
-### Python
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
 
 ```python
 from docudevs.docudevs_client import DocuDevsClient
+import os
+import asyncio
 
-client = DocuDevsClient(token="your-api-key")
+client = DocuDevsClient(token=os.getenv('API_KEY'))
 
-# Basic schema generation
-with open("sample-invoice.pdf", "rb") as f:
-  job_id = await client.submit_and_process_document(
-    document=f.read(),
+async def generate_my_schema():
+    with open("sample-invoice.pdf", "rb") as f:
+        document_data = f.read()
+
+    # Submit schema generation job
+    response = await client.generate_schema(
+        document=document_data,
+        document_mime_type="application/pdf",
+        instructions="Focus on extracting the invoice number, date, and all line items with prices."
+    )
+    
+    # Wait for the result
+    result = await client.wait_until_ready(response.parsed.guid)
+    
+    # The result is the JSON Schema string
+    print("Generated Schema:")
+    print(result.result)
+
+if __name__ == "__main__":
+    asyncio.run(generate_my_schema())
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+# Generate schema and save to file
+docudevs generate-schema sample-invoice.pdf \
+  --instructions "Focus on invoice details" \
+  --output invoice-schema.json
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/document/generate-schema \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "document=@sample-invoice.pdf" \
+  -F "instructions=Focus on invoice details"
+```
+
+  </TabItem>
+</Tabs>
+
+## Using the Generated Schema
+
+Once you have the schema, you can use it to process documents with strict validation.
+
+### 1. Review and Refine
+
+The generated schema is a starting point. You might want to:
+
+- Rename fields to match your database columns.
+- Change data types (e.g., `string` to `number`).
+- Add `required` fields.
+
+### 2. Use in Extraction
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+  ]}>
+  <TabItem value="python">
+
+```python
+# Use the schema string you got from the generation step
+my_schema = { ... } 
+
+guid = await client.submit_and_process_document(
+    document=new_document_data,
     document_mime_type="application/pdf",
-    prompt="Focus on financial data"
-  )
-  result = await client.wait_until_ready(job_id)
-
-# Wait for completion and get schema
-guid = response.parsed.guid
-result = await client.wait_until_ready(guid)
-schema = result.result  # JSON schema string
+    schema=my_schema
+)
 ```
 
-### CLI Usage
+  </TabItem>
+  <TabItem value="cli">
 
 ```bash
-# Basic schema generation
-docudevs generate-schema document.pdf
-
-# With custom instructions
-docudevs generate-schema document.pdf --instructions "Extract contact information and addresses"
-
-# Save schema to file
-docudevs generate-schema document.pdf --output schema.json
+docudevs process new-invoice.pdf --schema-file invoice-schema.json
 ```
 
-### cURL Example
+  </TabItem>
+</Tabs>
 
-```bash
-curl -X POST "https://api.docudevs.ai/document/generate-schema" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -F "document=@sample.pdf" \
-  -F "instructions=Focus on financial data"
-```
+## Best Practices
 
-## Schema Output Format
+- **Use Representative Documents**: Upload a document that contains all the fields you expect to see.
+- **Be Specific in Instructions**: If you need specific formats (e.g., "Dates as YYYY-MM-DD"), mention it in the instructions.
+- **Iterate**: Generate a schema, test it on a few documents, and refine it if necessary.
 
-Generated schemas follow JSON Schema Draft 7 specification:
+## Example Output
+
+Here is what a generated schema might look like:
 
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "title": "Document Schema",
   "properties": {
     "invoice_number": {
       "type": "string",
-      "description": "Unique invoice identifier"
+      "description": "Unique identifier for the invoice"
     },
     "date": {
       "type": "string",
       "format": "date",
-      "description": "Invoice date"
+      "description": "Date of issue"
     },
     "total_amount": {
       "type": "number",
-      "description": "Total invoice amount"
+      "description": "Final total including tax"
     },
-    "items": {
+    "line_items": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "description": {"type": "string"},
-          "quantity": {"type": "number"},
-          "unit_price": {"type": "number"}
+          "description": { "type": "string" },
+          "quantity": { "type": "number" },
+          "price": { "type": "number" }
         }
       }
     }
   },
-  "required": ["invoice_number", "date", "total_amount"]
+  "required": ["invoice_number", "total_amount"]
 }
 ```
-
-## Using Generated Schemas
-
-### For Document Processing
-
-Use the generated schema as extraction instructions:
-
-```python
-# Generate schema first
-schema_response = await client.generate_schema(
-    document=sample_doc,
-    document_mime_type="application/pdf"
-)
-schema = await client.wait_until_ready(schema_response.parsed.guid)
-
-# Use schema for extraction
-  extraction_response = await client.submit_and_process_document(
-    document=target_doc,
-    document_mime_type="application/pdf",
-    prompt=f"Extract data according to this schema: {schema.result}"
-  )
-```
-
-### For Template Creation
-
-```python
-# Create template from generated schema
-await client.upload_template(
-    name="invoice-template",
-    template_file=template_data,
-    instructions=schema.result
-)
-```
-
-## Best Practices
-
-### Document Selection
-
-- Use representative, well-structured documents
-- Choose documents with clear, readable text
-- Avoid documents with poor scan quality
-
-### Instructions
-
-- Be specific about the data you want to capture
-- Mention any special formatting requirements
-- Include examples of edge cases to handle
-
-### Schema Refinement
-
-- Review generated schemas before use
-- Test with multiple document samples
-- Refine based on processing results
-
-## Common Use Cases
-
-### Invoice Processing
-
-```python
-instructions = """
-Focus on:
-- Invoice number and date
-- Vendor information (name, address)
-- Line items with descriptions, quantities, prices
-- Tax amounts and total
-- Payment terms
-"""
-```
-
-### Contract Analysis
-
-```python
-instructions = """
-Extract:
-- Contract parties and their roles
-- Key dates (start, end, renewal)
-- Financial terms and amounts
-- Obligations and deliverables
-- Termination clauses
-"""
-```
-
-### Form Processing
-
-```python
-instructions = """
-Capture:
-- All form fields and their values
-- Checkbox and radio button selections
-- Signature information
-- Date fields in consistent format
-"""
-```
-
-## Error Handling
-
-```python
-try:
-    response = await client.generate_schema(
-        document=document_data,
-        document_mime_type="application/pdf"
-    )
-    
-    if response.status_code != 200:
-        print(f"Error: {response.content}")
-        return
-        
-    result = await client.wait_until_ready(response.parsed.guid)
-    schema = result.result
-    
-except Exception as e:
-    print(f"Schema generation failed: {e}")
-```
-
-## Limitations
-
-- Maximum document size: 10 MB
-- Supported formats: PDF, DOCX, TXT, images
-- Processing time varies by document complexity
-- Generated schemas may need manual refinement for edge cases
-
-## Next Steps
-
-- [Use schemas for document processing](../basics/SimpleDocuments.md)
-- [Create templates from schemas](../templates/Templates.md)
-- [Process documents in batches](../advanced/cases.md)

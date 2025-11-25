@@ -68,6 +68,15 @@ export API_KEY="your-api-key-here"
 
 ## Step 3: Process Your First Document (2 minutes)
 
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
 Create a simple Python script to process a document:
 
 ```python
@@ -83,30 +92,52 @@ async def process_document():
     with open("your-document.pdf", "rb") as f:
         document_data = f.read()
     
-  # Submit for AI extraction (non-OCR)
-  job_id = await client.submit_and_process_document(
-    document=document_data,
-    document_mime_type="application/pdf",
-    prompt="Extract all key information from this document"
-  )
+    # Submit for AI extraction (non-OCR)
+    job_id = await client.submit_and_process_document(
+        document=document_data,
+        document_mime_type="application/pdf",
+        prompt="Extract all key information from this document"
+    )
     print(f"Document submitted for processing. Job ID: {job_id}")
     
     # Wait for processing to complete; request canonical JSON output
     data = await client.wait_until_ready(job_id, result_format="json")
     print("Processing complete!")
     
-  # Display results as JSON (extraction returns structured data)
-  import json
-  print("\nExtracted Data:")
-  print(json.dumps(data, indent=2))
+    # Display results as JSON (extraction returns structured data)
+    import json
+    print("\nExtracted Data:")
+    print(json.dumps(data, indent=2))
 
 # Run the processing
 asyncio.run(process_document())
 ```
 
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+# Process the document with a prompt
+docudevs process your-document.pdf \
+  --prompt "Extract all key information from this document"
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -s -S -X POST https://api.docudevs.ai/document/upload-files \
+     -H "Authorization: $API_KEY" \
+     -F "document=@your-document.pdf" \
+     -F "prompt=Extract all key information from this document"
+```
+
+  </TabItem>
+</Tabs>
+
 ## Step 4: Run and See Results (2 minutes)
 
-Save the script as `quick_start.py` and run it:
+If you used Python, save the script as `quick_start.py` and run it:
 
 ```bash
 python quick_start.py

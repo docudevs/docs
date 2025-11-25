@@ -1,6 +1,32 @@
+---
+title: Error Codes
+sidebar_position: 6
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Error Codes Reference
 
-Complete reference for HTTP status codes and error responses in the DocuDevs API.
+Complete reference for HTTP status codes, error responses, and troubleshooting in the DocuDevs API.
+
+## Quick Reference
+
+| Status Code | Description | Common Cause |
+| :--- | :--- | :--- |
+| **200** | OK | Successful request |
+| **201** | Created | Resource created successfully |
+| **400** | Bad Request | Invalid parameters or malformed data |
+| **401** | Unauthorized | Missing or invalid API key |
+| **403** | Forbidden | Insufficient permissions or quota exceeded |
+| **404** | Not Found | Resource does not exist |
+| **409** | Conflict | Resource already exists or state conflict |
+| **413** | Payload Too Large | File size exceeds limit (10MB) |
+| **415** | Unsupported Media Type | File format not supported |
+| **422** | Unprocessable Entity | Valid request but semantic error (e.g. corrupted file) |
+| **429** | Too Many Requests | Rate limit exceeded |
+| **500** | Internal Server Error | Unexpected server error |
+| **503** | Service Unavailable | System maintenance or overload |
 
 ## HTTP Status Codes
 
@@ -16,16 +42,6 @@ Successful request with response data.
 - POST requests that complete successfully
 - Processing operations that finish
 
-**Example Response:**
-
-```json
-{
-  "guid": "uuid-string",
-  "status": "COMPLETED",
-  "result": {...}
-}
-```
-
 #### 201 Created
 
 Resource successfully created.
@@ -35,16 +51,6 @@ Resource successfully created.
 - Creating new cases
 - Uploading documents
 - Saving configurations
-
-**Example Response:**
-
-```json
-{
-  "id": 123,
-  "name": "New Case",
-  "createdAt": "2024-01-15T10:30:00Z"
-}
-```
 
 ### Client Error Codes (4xx)
 
@@ -60,7 +66,8 @@ Invalid request parameters or malformed data.
 - Unsupported file formats
 - Invalid operation types
 
-**Example Response:**
+<Tabs>
+<TabItem value="json" label="Response">
 
 ```json
 {
@@ -69,39 +76,20 @@ Invalid request parameters or malformed data.
 }
 ```
 
-**Specific Cases:**
+</TabItem>
+<TabItem value="sdk" label="Python SDK">
 
-**Invalid Operation Type:**
-
-```bash
-POST /operation
-{
-  "jobGuid": "valid-guid",
-  "type": "invalid-operation"  # Unknown operation type
-}
-# Returns: 400 Bad Request
+```python
+# Raises docudevs.exceptions.ApiException
+try:
+    client.create_case(body=CreateCaseBody(description="Missing name"))
+except ApiException as e:
+    print(f"Status: {e.status}") # 400
+    print(f"Reason: {e.reason}") # Bad Request
 ```
 
-**Parent Job Not Completed:**
-
-```bash
-POST /operation
-{
-  "jobGuid": "pending-job-guid",  # Job still processing
-  "type": "error-analysis"
-}
-# Returns: 400 Bad Request
-```
-
-**Missing Required Fields:**
-
-```bash
-POST /cases
-{
-  "description": "Missing name field"
-}
-# Returns: 400 Bad Request
-```
+</TabItem>
+</Tabs>
 
 #### 401 Unauthorized
 
@@ -114,27 +102,26 @@ Authentication failed or missing.
 - Expired token
 - Malformed Authorization header
 
-**Example Response:**
-
-```json
-{
-  "message": "Unauthorized",
-  "status": 401
-}
-```
-
-**Authentication Examples:**
+<Tabs>
+<TabItem value="curl" label="cURL">
 
 ```bash
 # Missing Authorization header
-GET /cases
-# Returns: 401 Unauthorized
-
-# Invalid API key
-GET /cases
-Authorization: Bearer invalid-key
+curl -X GET https://api.docudevs.ai/cases
 # Returns: 401 Unauthorized
 ```
+
+</TabItem>
+<TabItem value="cli" label="CLI">
+
+```bash
+# Invalid token
+docudevs --token=invalid list-cases
+# Error: Authentication failed (401)
+```
+
+</TabItem>
+</Tabs>
 
 #### 403 Forbidden
 
@@ -145,15 +132,6 @@ Valid authentication but insufficient permissions.
 - API key doesn't have required permissions
 - Accessing resources from different organization
 - Quota or limit exceeded
-
-**Example Response:**
-
-```json
-{
-  "message": "Access denied to organization resources",
-  "status": 403
-}
-```
 
 #### 404 Not Found
 
@@ -168,44 +146,19 @@ Requested resource doesn't exist.
 - Template not found
 - Resource belongs to different organization
 
-**Example Response:**
+<Tabs>
+<TabItem value="sdk" label="Python SDK">
 
-```json
-{
-  "message": "Resource not found",
-  "status": 404
-}
+```python
+try:
+    client.get_case(case_id=99999)
+except ApiException as e:
+    if e.status == 404:
+        print("Case not found")
 ```
 
-**Specific Cases:**
-
-**Job Not Found:**
-
-```bash
-GET /job/status/invalid-guid
-# Returns: 404 Not Found
-```
-
-**Case Not Found:**
-
-```bash
-GET /cases/99999
-# Returns: 404 Not Found
-```
-
-**Configuration Not Found:**
-
-```bash
-GET /configuration/nonexistent-config
-# Returns: 404 Not Found
-```
-
-**Operation Not Found:**
-
-```bash
-GET /operation/invalid-guid/error-analysis
-# Returns: 404 Not Found
-```
+</TabItem>
+</Tabs>
 
 #### 409 Conflict
 
@@ -217,55 +170,21 @@ Resource conflict or state mismatch.
 - Template name already exists
 - Document limit exceeded
 - Concurrent modification
-
-**Example Response:**
-
-```json
-{
-  "message": "Configuration name already exists",
-  "status": 409
-}
-```
+- Batch job not found or not a batch job (when accessing batch endpoints)
 
 **Specific Cases:**
 
-**Case Document Limit:**
-
-```bash
-POST /cases/123/documents
-# When case already has 200 documents
-# Returns: 409 Conflict - "Case document limit reached: 200"
-```
-
-**Duplicate Configuration:**
-
-```bash
-POST /configuration/existing-name
-# Returns: 409 Conflict
-```
+- **Case Document Limit:** "Case document limit reached: 200"
+- **Duplicate Configuration:** "Configuration name already exists"
 
 #### 413 Payload Too Large
 
 Request body or file too large.
 
-**Common Causes:**
-
-- Document exceeds size limits
-- Request body too large
-
 **Limits:**
 
 - Maximum document size: 10 MB
 - Maximum request size: 15 MB
-
-**Example Response:**
-
-```json
-{
-  "message": "File size exceeds maximum limit of 10MB",
-  "status": 413
-}
-```
 
 #### 415 Unsupported Media Type
 
@@ -280,15 +199,6 @@ Unsupported file format or content type.
 - `image/png`
 - `image/tiff`
 
-**Example Response:**
-
-```json
-{
-  "message": "Unsupported file format: application/unknown",
-  "status": 415
-}
-```
-
 #### 422 Unprocessable Entity
 
 Valid request format but semantic errors.
@@ -300,65 +210,15 @@ Valid request format but semantic errors.
 - Missing document content
 - Invalid schema format
 
-**Example Response:**
-
-```json
-{
-  "message": "Document appears to be corrupted or unreadable",
-  "status": 422
-}
-```
-
 ### Server Error Codes (5xx)
 
 #### 500 Internal Server Error
 
-Unexpected server error.
-
-**Common Causes:**
-
-- Database connection issues
-- Storage service unavailable
-- Unexpected application errors
-
-**Example Response:**
-
-```json
-{
-  "message": "Internal server error",
-  "status": 500
-}
-```
-
-#### 502 Bad Gateway
-
-Upstream service unavailable.
-
-**Common Causes:**
-
-- AI processing service down
-- Storage service unavailable
-- External API failures
+Unexpected server error. Please contact support if this persists.
 
 #### 503 Service Unavailable
 
-Service temporarily unavailable.
-
-**Common Causes:**
-
-- Maintenance mode
-- System overload
-- Rate limiting
-
-#### 504 Gateway Timeout
-
-Request timeout from upstream services.
-
-**Common Causes:**
-
-- Long-running AI processing
-- Storage operation timeout
-- Network connectivity issues
+Service temporarily unavailable due to maintenance or high load.
 
 ## Error Response Format
 
@@ -376,7 +236,7 @@ All error responses follow a consistent format:
 
 ## Job Status Errors
 
-Jobs can have error states in their status:
+Jobs can have error states in their status, separate from HTTP errors.
 
 ```json
 {
@@ -396,70 +256,29 @@ Jobs can have error states in their status:
 - `"Processing failed: AI service unavailable"`
 - `"Processing timeout after 300 seconds"`
 
-## Operation Errors
-
-Operations can fail with specific error messages:
-
-```json
-{
-  "jobGuid": "operation-guid",
-  "operationType": "error-analysis",
-  "status": "FAILED",
-  "error": "Parent job result not available for analysis",
-  "createdAt": "2024-01-15T10:30:00Z",
-  "updatedAt": "2024-01-15T10:32:00Z"
-}
-```
-
 ## SDK Error Handling
 
-### Python SDK Examples
+The Python SDK raises exceptions for non-2xx responses.
 
 ```python
-from http import HTTPStatus
 from docudevs.docudevs_client import DocuDevsClient
+from docudevs.exceptions import ApiException
 
 client = DocuDevsClient(token="your-api-key")
 
 try:
-  job_id = await client.submit_and_process_document(
-    document=document_data,
-    document_mime_type="application/pdf"
-  )
-  result = await client.wait_until_ready(job_id)
-  print("Processing completed")
-except Exception as e:
-  print(f"Request failed: {e}")
-```
-
-### Handling Specific Errors
-
-```python
-# Handle case document limit
-try:
-    response = await client.upload_case_document(
-        case_id=case_id,
+    job_id = await client.submit_and_process_document(
         document=document_data,
         document_mime_type="application/pdf"
     )
-except Exception as e:
-    if "limit reached" in str(e):
-        print("Case is full - cannot add more documents")
-    else:
-        print(f"Upload failed: {e}")
-
-# Handle operation errors
-try:
-    analysis = await client.submit_and_wait_for_error_analysis(job_guid)
+    result = await client.wait_until_ready(job_id)
+except ApiException as e:
+    print(f"API Error: {e.status} - {e.reason}")
+    print(f"Details: {e.body}")
 except TimeoutError:
-    print("Analysis timed out - try again later")
+    print("Processing timed out")
 except Exception as e:
-    if "not found" in str(e).lower():
-        print("Job not found or not accessible")
-    elif "not completed" in str(e).lower():
-        print("Job must be completed before running analysis")
-    else:
-        print(f"Analysis failed: {e}")
+    print(f"Unexpected error: {e}")
 ```
 
 ## CLI Error Handling
@@ -467,25 +286,18 @@ except Exception as e:
 The CLI returns appropriate exit codes:
 
 - `0`: Success
-- `1`: General error
-- `2`: Authentication error
-- `3`: Not found error
-- `4`: Permission error
-- `5`: Server error
+- `1`: General error (including API errors)
+
+Error messages are written to stderr.
 
 ```bash
-# Check exit code
-docudevs process document.pdf --prompt="Extract data"
-if [ $? -eq 2 ]; then
-    echo "Authentication failed - check API key"
-elif [ $? -eq 4 ]; then
-    echo "Permission denied"
+docudevs process document.pdf
+if [ $? -ne 0 ]; then
+    echo "Processing failed"
 fi
 ```
 
 ## Rate Limiting
-
-While not strictly error codes, rate limiting affects API usage:
 
 **Headers:**
 
@@ -503,78 +315,21 @@ While not strictly error codes, rate limiting affects API usage:
 }
 ```
 
-## Troubleshooting Common Errors
+## Troubleshooting
 
 ### Authentication Issues
 
-**Error:** 401 Unauthorized
-**Solutions:**
-
-1. Verify API key is correct
-2. Check Authorization header format: `Bearer YOUR_API_KEY`
-3. Ensure API key hasn't expired
-4. Verify API key has required permissions
+- **401 Unauthorized**: Check your API key. Ensure it is set in `DOCUDEVS_TOKEN` or passed via `--token`.
 
 ### File Upload Issues
 
-**Error:** 413 Payload Too Large
-**Solutions:**
-
-1. Reduce file size (max 10MB)
-2. Compress images before upload
-3. Split large documents
-
-**Error:** 415 Unsupported Media Type
-**Solutions:**
-
-1. Convert to supported format (PDF, DOCX, TXT, images)
-2. Verify MIME type is correct
-3. Check file isn't corrupted
+- **413 Payload Too Large**: Compress your PDF or split it into smaller files.
+- **415 Unsupported Media Type**: Convert your file to PDF or a supported image format.
 
 ### Job Processing Issues
 
-**Error:** Job status "FAILED"
-**Solutions:**
-
-1. Check job error message for specific cause
-2. Verify document is readable/not corrupted
-3. Try with different processing parameters
-4. Contact support if error persists
+- **Job FAILED**: Check the `error` field in the job status. If the document is password protected, remove the password and try again.
 
 ### Resource Not Found
 
-**Error:** 404 Not Found
-**Solutions:**
-
-1. Verify GUID/ID is correct
-2. Check resource belongs to your organization
-3. Ensure resource hasn't been deleted
-4. Wait for job completion before accessing results
-
-### Operation Errors
-
-**Error:** 400 Bad Request on operation submission
-**Solutions:**
-
-1. Verify parent job is completed
-2. Check operation type spelling
-3. Ensure valid parameters
-4. Verify job belongs to your organization
-
-## Getting Help
-
-When encountering persistent errors:
-
-1. **Check API status page** for service outages
-2. **Review error message details** for specific causes
-3. **Verify request format** against API documentation
-4. **Test with minimal examples** to isolate issues
-5. **Contact support** with error details and request IDs
-
-For support requests, include:
-
-- Error message and status code
-- Request details (endpoint, parameters)
-- Timestamp of the error
-- Job GUID (if applicable)
-- Steps to reproduce
+- **404 Not Found**: Verify the GUID/ID. Ensure you are using the correct API key for the organization that owns the resource.

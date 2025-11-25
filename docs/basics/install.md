@@ -246,7 +246,7 @@ export API_KEY=your-api-key-here
 docudevs process document.pdf --prompt="Extract invoice data"
 
 # OCR-only processing
-docudevs ocr document.pdf --format=markdown
+docudevs ocr-only document.pdf --format=markdown
 
 # Upload and process with a saved configuration
 docudevs process-with-config document.pdf my-invoice-config

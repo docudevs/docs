@@ -17,16 +17,16 @@ The simplest way to extract text from a document is using the DocuDevs CLI:
 
 ```bash
 # Extract text as markdown (default)
-docudevs ocr document.pdf
+docudevs ocr-only document.pdf
 
 # Extract as plain text
-docudevs ocr document.pdf --format plain
+docudevs ocr-only document.pdf --format plain
 
 # Use premium OCR for better accuracy
-docudevs ocr document.pdf --ocr premium
+docudevs ocr-only document.pdf --ocr premium
 
 # Use auto quality selection (recommended)
-docudevs ocr document.pdf --ocr auto
+docudevs ocr-only document.pdf --ocr auto
 ```
 
 ## OCR Quality Options
@@ -89,37 +89,37 @@ export DOCUDEVS_API_KEY="your_api_key"
 
 ```bash
 # Extract text from a PDF (markdown format by default)
-docudevs ocr document.pdf
+docudevs ocr-only document.pdf
 
 # Extract as plain text
-docudevs ocr document.pdf --format plain
+docudevs ocr-only document.pdf --format plain
 
 # Use premium OCR for handwritten documents
-docudevs ocr handwritten.pdf --ocr premium
+docudevs ocr-only handwritten.pdf --ocr premium
 
 # Process an image file
-docudevs ocr receipt.jpg
+docudevs ocr-only receipt.jpg
 
 # Use auto quality (recommended for mixed quality documents)
-docudevs ocr scanned-doc.pdf --ocr auto
+docudevs ocr-only scanned-doc.pdf --ocr auto
 ```
 
 ### Advanced CLI Usage
 
 ```bash
 # Process and save output to a file
-docudevs ocr document.pdf > extracted_text.md
+docudevs ocr-only document.pdf > extracted_text.md
 
 # Process multiple files
 for file in *.pdf; do
-    docudevs ocr "$file" > "${file%.pdf}.txt" --format plain
+    docudevs ocr-only "$file" > "${file%.pdf}.txt" --format plain
 done
 
 # Use with specific API endpoint
-docudevs --api-url https://api.docudevs.ai ocr document.pdf
+docudevs --api-url https://api.docudevs.ai ocr-only document.pdf
 
 # Override API key for this command
-docudevs --token different_api_key ocr document.pdf
+docudevs --token different_api_key ocr-only document.pdf
 ```
 
 ### Checking Results
