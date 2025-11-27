@@ -275,6 +275,45 @@ job_guid = await client.submit_and_process_document_map_reduce(
 )
 ```
 
+## LLM Tracing
+
+### get_trace
+
+Get the LLM trace for a completed job (only available if `trace=True` was set).
+
+```python
+trace = await client.get_trace(job_guid)
+if trace:
+    print(f"Total tokens: {trace['total_tokens']}")
+    print(f"LLM calls: {trace['total_llm_calls']}")
+    for event in trace['events']:
+        print(f"  {event['type']}: {event['name']}")
+```
+
+### get_image
+
+Get a page thumbnail image from a processed job.
+
+```python
+image_bytes = await client.get_image(job_guid, page_index=0)
+if image_bytes:
+    with open("page_0.png", "wb") as f:
+        f.write(image_bytes)
+```
+
+### Enabling Tracing
+
+Pass `trace=True` to any processing method:
+
+```python
+job_guid = await client.submit_and_process_document(
+    document=doc_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract data",
+    trace=True  # Enable LLM tracing
+)
+```
+
 ## Error Handling
 
 The SDK raises exceptions for API errors.

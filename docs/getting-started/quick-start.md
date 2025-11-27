@@ -10,6 +10,8 @@ import TabItem from '@theme/TabItem';
 
 Get started with DocuDevs in just 5 minutes! This tutorial will walk you through processing your first document and extracting structured data using AI.
 
+If you are already a seasoned developer, check out these [Python notebooks with examples](https://github.com/docudevs/python-examples)
+
 ## What You'll Learn
 
 By the end of this tutorial, you'll know how to:

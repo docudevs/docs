@@ -48,48 +48,47 @@ You maintain a "Signature Appliances" case (`kb-kitchen-pro`) that stores the ca
 import asyncio
 from pathlib import Path
 from pydantic import BaseModel, Field
+import json
 
 from docudevs.docudevs_client import DocuDevsClient
-from docudevs.models.tool_descriptor import ToolDescriptor
-from docudevs.models.tool_descriptor_config_type_1 import ToolDescriptorConfigType1
-from docudevs.models.tool_type import ToolType
 
 class CatalogRow(BaseModel):
-  sku: str = Field(regex=r"^SKU-\d{5}$")
-  canonical_name: str = Field(max_length=80)
-  localized_display_name: str = Field(max_length=40)
-  regulatory_class: str
-  marketing_summary: str | None = None
+    sku: str = Field(pattern=r"^SKU-\d{5}$")
+    canonical_name: str = Field(max_length=80)
+    localized_display_name: str = Field(max_length=40)
+    regulatory_class: str
+    marketing_summary: str | None = None
 
 class CatalogResult(BaseModel):
-  records: list[CatalogRow]
+    records: list[CatalogRow]
 
 async def enrich_products():
-  client = DocuDevsClient(token="YOUR_API_KEY")
-  payload = Path("samples/products.csv").read_bytes()
+    client = DocuDevsClient(token="YOUR_API_KEY")
+    payload = Path("samples/products.csv").read_bytes()
 
-  tool = ToolDescriptor(
-    type=ToolType("KNOWLEDGE_BASE_SEARCH"),
-    config=ToolDescriptorConfigType1.from_dict({
-      "caseId": "kb-kitchen-pro",
-      "topK": 8,
-    }),
-  )
+    # Define the knowledge search tool as a simple dict
+    tool = {
+        "type": "KNOWLEDGE_BASE_SEARCH",
+        "config": {
+            "caseId": "kb-kitchen-pro",
+            "topK": 8,
+        }
+    }
 
-  job_id = await client.submit_and_process_document(
-    document=payload,
-    document_mime_type="text/csv",
-    prompt=(
-      "Fill canonical_name, localized_display_name (<=40 chars), regulatory_class, "
-      "and marketing_summary using the Signature Appliances knowledge base."
-    ),
-    schema=CatalogResult.schema_json(),
-    tools=[tool],
-  )
+    job_id = await client.submit_and_process_document(
+        document=payload,
+        document_mime_type="text/csv",
+        prompt=(
+            "Fill canonical_name, localized_display_name (<=40 chars), regulatory_class, "
+            "and marketing_summary using the Signature Appliances knowledge base."
+        ),
+        schema=json.dumps(CatalogResult.model_json_schema()),
+        tools=[tool],
+    )
 
-  raw = await client.wait_until_ready(job_id, result_format="json")
-  result = CatalogResult(**raw)
-  print(result.records[0])
+    raw = await client.wait_until_ready(job_id, result_format="json")
+    result = CatalogResult(**raw)
+    print(result.records[0])
 
 asyncio.run(enrich_products())
 ```

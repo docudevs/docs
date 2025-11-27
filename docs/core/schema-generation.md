@@ -42,14 +42,14 @@ async def generate_my_schema():
         document_data = f.read()
 
     # Submit schema generation job
-    response = await client.generate_schema(
+    job_guid = await client.generate_schema(
         document=document_data,
         document_mime_type="application/pdf",
         instructions="Focus on extracting the invoice number, date, and all line items with prices."
     )
     
     # Wait for the result
-    result = await client.wait_until_ready(response.parsed.guid)
+    result = await client.wait_until_ready(job_guid)
     
     # The result is the JSON Schema string
     print("Generated Schema:")
