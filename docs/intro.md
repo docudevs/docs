@@ -18,7 +18,7 @@ Start here for a smooth onboarding experience:
 - **[5-Minute Quick Start](/docs/getting-started/quick-start)** - Process your first document in minutes
 - **[Installation Guide](/docs/basics/install)** - Set up the SDK and get your API key  
 - **[First Document Walkthrough](/docs/getting-started/first-document)** - Detailed tutorial with examples
-- ** [Python notebooks with examples](https://github.com/docudevs/python-examples)**
+- **[Python notebooks with examples](https://github.com/docudevs/python-examples)**
 
 ### 📋 Core Features
 
