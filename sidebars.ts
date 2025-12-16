@@ -38,7 +38,8 @@ const sidebars: SidebarsConfig = {
         'advanced/cases',                   // NEW: Document collections
         'advanced/job-management',          // NEW: Job lifecycle and cleanup
         'configuration/Configuration',      // EXISTING: Named configurations
-        'advanced/operations',              // NEW: Error analysis & operations
+        'advanced/operations',    
+        'advanced/page-range',          // NEW: Page range extraction
         'advanced/tracing',                 // EXISTING: LLM tracing
       ],
     },
