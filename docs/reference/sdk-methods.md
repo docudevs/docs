@@ -301,6 +301,29 @@ if image_bytes:
         f.write(image_bytes)
 ```
 
+## Job Management
+
+### delete_job
+
+Delete a job and its associated data. Jobs must be in a terminal state (COMPLETED, ERROR, TIMEOUT, or PARTIAL). Jobs older than 14 days are automatically purged, so this method is primarily for cleaning up recent jobs.
+
+```python
+result = await client.delete_job(job_guid)
+if result.status_code == 200:
+    print(f"Deleted {result.parsed['jobsDeleted']} job(s)")
+```
+
+**Parameters:**
+
+- `guid` (str): The job GUID to delete
+
+**Returns:** A response object with:
+
+- `status_code` (int): HTTP status (200 on success, 404 if not found)
+- `parsed` (dict): Contains `jobsDeleted`, `errors` on success
+
+**Note:** Deleting a job removes all associated data including uploaded documents, OCR results, and extracted data. Usage/billing records are preserved but disassociated from the deleted job.
+
 ### Enabling Tracing
 
 Pass `trace=True` to any processing method:

@@ -51,6 +51,7 @@ Cases are ideal for scenarios where you need to:
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X POST https://api.docudevs.ai/cases \
   -H "Authorization: Bearer $API_KEY" \
@@ -60,6 +61,7 @@ curl -X POST https://api.docudevs.ai/cases \
     "description": "All invoices from vendors for Q4 2024 processing"
   }'
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -67,9 +69,11 @@ from docudevs.docudevs_client import DocuDevsClient
 import os
 
 # Initialize the client
+
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Create a new case
+
 case_data = {
     "name": "Q4 2024 Vendor Invoices",
     "description": "All invoices from vendors for Q4 2024 processing"
@@ -78,6 +82,7 @@ case_data = {
 response = await client.create_case(case_data)
 case = response.parsed
 print(f"Created case ID: {case.id}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -86,6 +91,7 @@ docudevs cases create \
   --name "Q4 2024 Vendor Invoices" \
   --description "All invoices from vendors for Q4 2024 processing"
 ```
+
   </TabItem>
 </Tabs>
 
@@ -99,10 +105,12 @@ docudevs cases create \
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X GET https://api.docudevs.ai/cases \
   -H "Authorization: Bearer $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -115,6 +123,7 @@ for case in cases:
     if case.description:
         print(f"  Description: {case.description}")
     print(f"  Created: {case.created_at}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -135,10 +144,12 @@ docudevs cases list
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X GET https://api.docudevs.ai/cases/{case_id} \
   -H "Authorization: Bearer $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -151,6 +162,7 @@ print(f"Case: {case.name}")
 print(f"Description: {case.description}")
 print(f"Created: {case.created_at}")
 print(f"Organization ID: {case.organization_id}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -171,6 +183,7 @@ docudevs cases get 123
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X PUT https://api.docudevs.ai/cases/{case_id} \
   -H "Authorization: Bearer $API_KEY" \
@@ -180,6 +193,7 @@ curl -X PUT https://api.docudevs.ai/cases/{case_id} \
     "description": "Updated description with additional context"
   }'
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -193,6 +207,7 @@ update_data = {
 response = await client.update_case(case_id, update_data)
 updated_case = response.parsed
 print(f"Updated case: {updated_case.name}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -215,10 +230,12 @@ docudevs cases update 123 \
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X DELETE https://api.docudevs.ai/cases/{case_id} \
   -H "Authorization: Bearer $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -228,6 +245,7 @@ response = await client.delete_case(case_id)
 
 if response.status_code == 204:
     print("Case deleted successfully")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -254,11 +272,13 @@ Deleting a case will also delete all documents associated with that case. This a
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X POST https://api.docudevs.ai/cases/{case_id}/documents \
   -H "Authorization: Bearer $API_KEY" \
   -F "document=@invoice_001.pdf"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -277,6 +297,7 @@ response = await client.upload_case_document(
 document = response.parsed
 print(f"Uploaded document {document.document_id} to case {case_id}")
 print(f"Status: {document.processing_status}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -297,11 +318,13 @@ docudevs cases upload-document 123 invoice_001.pdf
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 # List documents with pagination
 curl -X GET "https://api.docudevs.ai/cases/{case_id}/documents?page=0&size=20" \
   -H "Authorization: Bearer $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -326,6 +349,7 @@ for document in documents_page.content:
     print(f"  Status: {document.processing_status}")
     print(f"  Size: {document.size_bytes} bytes")
     print(f"  Uploaded: {document.created_at}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -346,10 +370,12 @@ docudevs cases list-documents 123 --page 0 --size 20
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X GET https://api.docudevs.ai/cases/{case_id}/documents/{document_id} \
   -H "Authorization: Bearer $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -364,6 +390,7 @@ print(f"Document: {document.filename}")
 print(f"Content Type: {document.content_type}")
 print(f"Processing Status: {document.processing_status}")
 print(f"Metadata: {document.metadata}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -384,10 +411,12 @@ docudevs cases get-document 123 doc-uuid-here
     {label: 'CLI', value: 'cli'},
   ]}>
   <TabItem value="curl">
+
 ```bash
 curl -X DELETE https://api.docudevs.ai/cases/{case_id}/documents/{document_id} \
   -H "Authorization: Bearer $API_KEY"
 ```
+
   </TabItem>
   <TabItem value="python">
 ```python
@@ -399,6 +428,7 @@ response = await client.delete_case_document(case_id, document_id)
 
 if response.status_code == 204:
     print("Document deleted successfully")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -414,11 +444,13 @@ docudevs cases delete-document 123 doc-uuid-here
 Cases support two levels of scope:
 
 ### Organization-wide Cases
+
 - **Created by**: Any user in the organization
 - **Visible to**: All users in the organization  
 - **Use case**: Shared projects, company-wide document processing
 
 ### User-specific Cases
+
 - **Created by**: A specific user
 - **Visible to**: Only the creating user (and organization admins)
 - **Use case**: Personal projects, user-specific workflows
@@ -464,18 +496,21 @@ result = await client.process_document(document_id, processing_instructions)
 ## Best Practices
 
 ### Case Organization
+
 - Use **descriptive names** that clearly indicate the case purpose
 - Include **relevant dates** in case names (e.g., "Q4 2024 Invoices")
 - Add **detailed descriptions** for complex cases
 - Use **consistent naming conventions** across your organization
 
 ### Document Management
+
 - **Upload documents immediately** when they become available
 - **Check processing status** regularly for large batches
 - **Use meaningful filenames** that help identify document contents
 - **Include metadata** in document uploads when relevant
 
 ### Performance Optimization
+
 - **Batch upload** multiple documents to the same case when possible
 - **Monitor processing status** to avoid overwhelming the system
 - **Use pagination** when listing large numbers of documents
@@ -505,6 +540,7 @@ except Exception as e:
 
 ## What's Next?
 
+- Learn about [Job Management](/docs/advanced/job-management) for cleanup and data retention
 - Learn about [Operations](/docs/advanced/operations) for advanced document processing workflows
 - Explore [Named Configurations](/docs/configuration/Configuration) for consistent processing settings
 - Check out [Use Cases](/docs/integration/use-cases) for real-world implementation examples
