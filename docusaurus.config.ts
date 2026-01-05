@@ -90,6 +90,11 @@ const config: Config = {
           sidebarId: 'apiSidebar',
           position: 'left',
           label: 'API',
+        },
+        {
+          to: '/docs/core/knowledge-search',
+          position: 'left',
+          label: 'Knowledge Search',
         }
       ],
       style: 'dark',

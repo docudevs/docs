@@ -36,7 +36,7 @@ job_guid = await client.submit_and_process_document(
     prompt="Extract invoice data",
     schema={...},  # Optional JSON schema
     ocr="PREMIUM", # Optional: DEFAULT, PREMIUM, LOW
-    llm="PREMIUM"  # Optional: DEFAULT, PREMIUM
+    llm="HIGH"  # Optional: DEFAULT, MINI, HIGH
 )
 ```
 
@@ -271,7 +271,8 @@ job_guid = await client.submit_and_process_document_map_reduce(
     prompt="Extract line items",
     pages_per_chunk=5,
     overlap_pages=1,
-    dedup_key="sku"
+    dedup_key="sku",
+    parallel_processing=True
 )
 ```
 

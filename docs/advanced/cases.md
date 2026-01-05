@@ -66,23 +66,21 @@ curl -X POST https://api.docudevs.ai/cases \
   <TabItem value="python">
 ```python
 from docudevs.docudevs_client import DocuDevsClient
+from docudevs.models import CasesControllerCreateCaseRequest
 import os
 
 # Initialize the client
-
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
-# Create a new case
+# Create a new case using the request model
+case_request = CasesControllerCreateCaseRequest(
+    name="Q4 2024 Vendor Invoices",
+    description="All invoices from vendors for Q4 2024 processing"
+)
 
-case_data = {
-    "name": "Q4 2024 Vendor Invoices",
-    "description": "All invoices from vendors for Q4 2024 processing"
-}
-
-response = await client.create_case(case_data)
+response = await client.create_case(case_request)
 case = response.parsed
 print(f"Created case ID: {case.id}")
-
 ```
   </TabItem>
   <TabItem value="cli">
@@ -197,17 +195,18 @@ curl -X PUT https://api.docudevs.ai/cases/{case_id} \
   </TabItem>
   <TabItem value="python">
 ```python
+from docudevs.models import CasesControllerUpdateCaseRequest
+
 # Update case details
 case_id = 123
-update_data = {
-    "name": "Q4 2024 Vendor Invoices - Updated",
-    "description": "Updated description with additional context"
-}
+update_request = CasesControllerUpdateCaseRequest(
+    name="Q4 2024 Vendor Invoices - Updated",
+    description="Updated description with additional context"
+)
 
-response = await client.update_case(case_id, update_data)
+response = await client.update_case(case_id, update_request)
 updated_case = response.parsed
 print(f"Updated case: {updated_case.name}")
-
 ```
   </TabItem>
   <TabItem value="cli">
@@ -282,22 +281,33 @@ curl -X POST https://api.docudevs.ai/cases/{case_id}/documents \
   </TabItem>
   <TabItem value="python">
 ```python
-# Upload a document to a specific case
-case_id = 123
+from docudevs.models import UploadCaseDocumentBody
+from docudevs.types import File
 
+# First, create a case (required before uploading documents)
+from docudevs.models import CasesControllerCreateCaseRequest
+
+case_request = CasesControllerCreateCaseRequest(
+    name="My Invoice Case",
+    description="Documents for invoice processing"
+)
+case_response = await client.create_case(case_request)
+case = case_response.parsed
+case_id = case.id
+print(f"Created case ID: {case_id}")
+
+# Now upload a document to the case
 with open("invoice_001.pdf", "rb") as f:
     file_data = f.read()
 
-response = await client.upload_case_document(
-    case_id=case_id,
-    document=file_data,
-    filename="invoice_001.pdf"
+body = UploadCaseDocumentBody(
+    document=File(payload=file_data, file_name="invoice_001.pdf")
 )
+response = await client.upload_case_document(case_id=case_id, body=body)
 
 document = response.parsed
 print(f"Uploaded document {document.document_id} to case {case_id}")
 print(f"Status: {document.processing_status}")
-
 ```
   </TabItem>
   <TabItem value="cli">
@@ -473,25 +483,37 @@ You can monitor processing progress by checking the `processing_status` field wh
 Documents uploaded to cases can be processed just like standalone documents:
 
 ```python
-# Upload document to case
-case_id = 123
-response = await client.upload_case_document(case_id, document_data, "contract.pdf")
-document = response.parsed
+from docudevs.models import CasesControllerCreateCaseRequest, UploadCaseDocumentBody
+from docudevs.types import File
+import json
 
-# Process the document with instructions
-document_id = document.document_id
-processing_instructions = {
-    "instruction": "Extract all key contract terms, dates, and parties",
-    "schema": {
-        "contract_date": "Date of the contract",
-        "parties": "List of all parties involved",
-        "key_terms": "Important contract terms and conditions"
-    }
-}
+# Step 1: Create a case first
+case_request = CasesControllerCreateCaseRequest(
+    name="Contract Review",
+    description="Contract documents for review"
+)
+case_response = await client.create_case(case_request)
+case = case_response.parsed
+case_id = case.id
 
-# Process using the standard document processing API
-result = await client.process_document(document_id, processing_instructions)
+# Step 2: Upload document to case
+with open("contract.pdf", "rb") as f:
+    document_data = f.read()
+
+upload_body = UploadCaseDocumentBody(
+    document=File(payload=document_data, file_name="contract.pdf")
+)
+upload_response = await client.upload_case_document(case_id=case_id, body=upload_body)
+document = upload_response.parsed
+
+print(f"Uploaded document {document.document_id} to case {case_id}")
 ```
+
+:::note
+Case documents are stored and organized within the case. To process them with AI extraction, 
+you would process them separately using the standard document processing API with 
+`submit_and_process_document()`.
+:::
 
 ## Best Practices
 

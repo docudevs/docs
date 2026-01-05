@@ -138,6 +138,8 @@ curl -X POST https://api.docudevs.ai/document/upload-files/sync \
   <TabItem value="python">
 
 ```python
+import json
+
 schema = {
     "type": "object",
     "properties": {
@@ -146,10 +148,11 @@ schema = {
     }
 }
 
+# Schema must be passed as a JSON string
 guid = await client.submit_and_process_document(
     document=doc_bytes,
     document_mime_type="application/pdf",
-    schema=schema
+    schema=json.dumps(schema)
 )
 ```
 

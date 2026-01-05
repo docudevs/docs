@@ -58,7 +58,7 @@ async def save_invoice_config():
             "required": ["vendor_name", "total_amount"]
         },
         ocr="PREMIUM",
-        llm="PREMIUM",
+        llm="HIGH",
         extraction_mode="STEPS",
         barcodes=True
     )
@@ -82,7 +82,7 @@ docudevs save-configuration invoice-config config.json
 #   "prompt": "Extract invoice data...",
 #   "schema": { ... },
 #   "ocr": "PREMIUM",
-#   "llm": "PREMIUM"
+#   "llm": "HIGH"
 # }
 ```
 
@@ -104,7 +104,7 @@ curl -X POST https://api.docudevs.ai/configuration/invoice-config \
       }
     },
     "ocr": "PREMIUM",
-    "llm": "PREMIUM",
+    "llm": "HIGH",
     "extractionMode": "STEPS",
     "barcodes": true
   }'
@@ -280,7 +280,7 @@ When creating a configuration, you can specify the following parameters:
 | `prompt` | String | Custom instructions for data extraction. |
 | `schema` | Object | JSON Schema defining the exact output structure. |
 | `ocr` | Enum | OCR quality level (`NONE`, `DEFAULT`, `PREMIUM`). |
-| `llm` | Enum | LLM model quality (`DEFAULT`, `PREMIUM`). |
+| `llm` | Enum | LLM model quality (`DEFAULT`, `MINI`, `HIGH`). |
 | `extractionMode` | Enum | Extraction method (`SIMPLE`, `STEPS`). |
 | `barcodes` | Boolean | Enable barcode and QR code scanning. |
 | `describeFigures` | Boolean | Enable AI description of figures and images. |
@@ -290,4 +290,4 @@ When creating a configuration, you can specify the following parameters:
 - **Version Your Configurations**: If you change your schema significantly, consider creating a new configuration (e.g., `invoice-v2`) to avoid breaking existing integrations.
 - **Use Schemas**: Always define a strict JSON schema to ensure predictable API responses.
 - **Test Prompts**: Experiment with different prompts in the playground or via temporary configurations before finalizing them.
-- **Optimize Costs**: Use `DEFAULT` OCR and LLM for simple documents and `PREMIUM` only when necessary.
+- **Optimize Costs**: Use `DEFAULT` OCR and LLM for simple documents and `HIGH` only when necessary.

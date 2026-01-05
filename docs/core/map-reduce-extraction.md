@@ -41,6 +41,7 @@ You always receive a consistent JSON payload:
 | `pagesPerChunk` | Number of pages per extraction window. | `1` |
 | `overlapPages` | Number of pages to overlap between chunks to catch data spanning pages. | `0` |
 | `dedupKey` | JSON path to a unique field (e.g., `sku`, `date`) used to remove duplicates caused by overlap. | `null` |
+| `parallel_processing` | When `true`, chunks are processed in parallel by multiple workers for faster throughput. | `false` |
 | `header_options` | Configuration for extracting document-level metadata (header). | `null` |
 
 ## Example: Processing a Long Invoice
@@ -79,6 +80,7 @@ async def process_long_invoice():
         pages_per_chunk=4,
         overlap_pages=1,
         dedup_key="lineItems.sku",  # Unique key to deduplicate rows
+        parallel_processing=True,  # Process chunks in parallel for faster results
         
         # Header Extraction Strategy
         header_options={
@@ -160,4 +162,4 @@ print(f"Progress: {status.parsed.mapReduceStatus.completedChunks} / {status.pars
 
 - **Missing Rows**: Check if rows are split across pages. Increase `overlapPages`.
 - **Duplicate Rows**: Ensure your `dedupKey` is truly unique for each row.
-- **Slow Processing**: Reduce `pagesPerChunk` to parallelize more effectively.
+- **Slow Processing**: Reduce `pagesPerChunk` to speed up individual chunk processing.

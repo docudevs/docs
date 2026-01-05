@@ -3,7 +3,7 @@ info:
   title: DocuDevs API
   description: DocuDevs Document processing API. Easiest way to convert your documents
     to data
-  version: "0.1"
+  version: 1.1.0
 paths:
   /cases:
     get:
@@ -30,12 +30,8 @@ paths:
               $ref: "#/components/schemas/CasesController.CreateCaseRequest"
         required: true
       responses:
-        "200":
-          description: createCase 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Case"
+        "201":
+          description: Case created successfully
   /cases/{caseId}:
     get:
       tags:
@@ -152,12 +148,8 @@ paths:
                 contentType: application/octet-stream
         required: true
       responses:
-        "200":
-          description: uploadCaseDocument 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CaseDocument"
+        "201":
+          description: Document uploaded successfully
   /cases/{caseId}/documents/{documentId}:
     get:
       tags:
@@ -307,6 +299,121 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Unit"
+  /document/batch:
+    post:
+      tags:
+      - batch
+      operationId: createBatch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/BatchCreateRequest"
+              - properties:
+                  orgId:
+                    type: string
+              required:
+              - orgId
+      responses:
+        "200":
+          description: createBatch 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchCreateResponse"
+  /document/batch/{guid}/process:
+    post:
+      tags:
+      - batch
+      operationId: processBatch
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/UploadCommand"
+              - properties:
+                  orgId:
+                    type: string
+              required:
+              - orgId
+      responses:
+        "200":
+          description: processBatch 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchCreateResponse"
+  /document/batch/{guid}/schedule:
+    post:
+      tags:
+      - batch
+      operationId: scheduleBatch
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                orgId:
+                  type: string
+              required:
+              - orgId
+        required: true
+      responses:
+        "200":
+          description: scheduleBatch 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchScheduleResponse"
+  /document/batch/{guid}/upload:
+    post:
+      tags:
+      - batch
+      operationId: uploadBatchDocument
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  type: string
+                  format: binary
+                orgId:
+                  type: string
+              required:
+              - document
+              - orgId
+            encoding:
+              document:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: uploadBatchDocument 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchUploadResponse"
   /document/generate-schema:
     post:
       tags:
@@ -600,6 +707,40 @@ paths:
             application/json:
               schema:
                 type: string
+  /internal/llm/resolve:
+    post:
+      tags:
+      - Internal LLM
+      operationId: resolveLlmProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResolveLlmRequest"
+        required: true
+      responses:
+        "200":
+          description: resolveLlmProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolvedLlmProviderDto"
+  /internal/ocr/resolve:
+    post:
+      operationId: resolveOcrProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResolveOcrRequest"
+        required: true
+      responses:
+        "200":
+          description: resolveOcrProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolvedOcrProviderDto"
   /job/dependencies/{guid}:
     get:
       tags:
@@ -618,6 +759,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DependencyInfo"
+  /job/image/{guid}/{pageIndex}:
+    get:
+      tags:
+      - job
+      operationId: getImage
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pageIndex
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: getImage 200 response
+          content:
+            application/json:
+              schema: {}
   /job/list:
     get:
       tags:
@@ -686,6 +850,57 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/result/{uuid}/csv:
+    get:
+      tags:
+      - job
+      operationId: resultCsv
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: resultCsv 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/result/{uuid}/excel:
+    get:
+      tags:
+      - job
+      operationId: resultExcel
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: resultExcel 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/result/{uuid}/json:
+    get:
+      tags:
+      - job
+      operationId: resultJson
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: resultJson 200 response
+          content:
+            application/json:
+              schema: {}
   /job/status/{guid}:
     get:
       tags:
@@ -704,6 +919,357 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProcessingJob"
+  /job/trace/{guid}:
+    get:
+      tags:
+      - job
+      operationId: getTrace
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getTrace 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/{guid}:
+    delete:
+      tags:
+      - job
+      operationId: deleteJob
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: deleteJob 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurgeResult"
+  /knowledge-bases:
+    get:
+      tags:
+      - knowledge-bases
+      operationId: listKnowledgeBases
+      responses:
+        "200":
+          description: listKnowledgeBases 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Case"
+    post:
+      tags:
+      - knowledge-bases
+      operationId: promoteKnowledgeBase
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KnowledgeBasesController.PromoteKnowledgeBaseRequest"
+        required: true
+      responses:
+        "201":
+          description: Case promoted to knowledge base
+  /knowledge-bases/{caseId}:
+    get:
+      tags:
+      - knowledge-bases
+      operationId: getKnowledgeBase
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getKnowledgeBase 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+    delete:
+      tags:
+      - knowledge-bases
+      operationId: demoteKnowledgeBase
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: demoteKnowledgeBase 200 response
+  /llm/keys:
+    get:
+      tags:
+      - LLM Providers
+      operationId: listLlmKeys
+      responses:
+        "200":
+          description: listLlmKeys 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LlmKeyBindingDto"
+  /llm/keys/{key}:
+    put:
+      tags:
+      - LLM Providers
+      operationId: updateLlmKey
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateKeyBindingRequestDto"
+        required: true
+      responses:
+        "200":
+          description: updateLlmKey 200 response
+          content:
+            application/json:
+              schema: {}
+  /llm/providers:
+    get:
+      tags:
+      - LLM Providers
+      operationId: listLlmProviders
+      responses:
+        "200":
+          description: listLlmProviders 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LlmProviderDto"
+    post:
+      tags:
+      - LLM Providers
+      operationId: createLlmProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLlmProviderRequest"
+        required: true
+      responses:
+        "200":
+          description: createLlmProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LlmProviderDto"
+  /llm/providers/{id}:
+    get:
+      tags:
+      - LLM Providers
+      operationId: getLlmProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getLlmProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LlmProviderDto"
+    delete:
+      tags:
+      - LLM Providers
+      operationId: deleteLlmProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: deleteLlmProvider 200 response
+          content:
+            application/json:
+              schema: {}
+    patch:
+      tags:
+      - LLM Providers
+      operationId: updateLlmProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLlmProviderRequest"
+        required: true
+      responses:
+        "200":
+          description: updateLlmProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LlmProviderDto"
+  /ocr/keys:
+    get:
+      tags:
+      - Azure OCR Providers
+      operationId: listOcrKeys
+      responses:
+        "200":
+          description: listOcrKeys 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OcrKeyBindingDto"
+  /ocr/keys/{key}:
+    put:
+      tags:
+      - Azure OCR Providers
+      operationId: updateOcrKey
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOcrKeyBindingRequestDto"
+        required: true
+      responses:
+        "200":
+          description: updateOcrKey 200 response
+          content:
+            application/json:
+              schema: {}
+  /ocr/providers:
+    get:
+      tags:
+      - Azure OCR Providers
+      operationId: listOcrProviders
+      responses:
+        "200":
+          description: listOcrProviders 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OcrProviderDto"
+    post:
+      tags:
+      - Azure OCR Providers
+      operationId: createOcrProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOcrProviderRequest"
+        required: true
+      responses:
+        "200":
+          description: createOcrProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OcrProviderDto"
+  /ocr/providers/{id}:
+    get:
+      tags:
+      - Azure OCR Providers
+      operationId: getOcrProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getOcrProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OcrProviderDto"
+    delete:
+      tags:
+      - Azure OCR Providers
+      operationId: deleteOcrProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: deleteOcrProvider 200 response
+          content:
+            application/json:
+              schema: {}
+    patch:
+      tags:
+      - Azure OCR Providers
+      operationId: updateOcrProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOcrProviderRequest"
+        required: true
+      responses:
+        "200":
+          description: updateOcrProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OcrProviderDto"
   /operation:
     post:
       tags:
@@ -763,6 +1329,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OperationResultResponse"
+  /operation/{parentJobId}/generative-task:
+    post:
+      tags:
+      - operations
+      operationId: createGenerativeTask
+      parameters:
+      - name: parentJobId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerativeTaskRequest"
+        required: true
+      responses:
+        "200":
+          description: createGenerativeTask 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitOperationResponse"
   /settings/view:
     get:
       tags:
@@ -894,8 +1484,62 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PDFField"
+  /user/me:
+    get:
+      operationId: getCurrentUser
+      responses:
+        "200":
+          description: getCurrentUser 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfo"
 components:
   schemas:
+    BatchCreateRequest:
+      properties:
+        maxConcurrency:
+          type:
+          - integer
+          - "null"
+          format: int32
+    BatchCreateResponse:
+      properties:
+        jobGuid:
+          type: string
+        maxConcurrency:
+          type: integer
+          format: int32
+      required:
+      - jobGuid
+      - maxConcurrency
+    BatchScheduleResponse:
+      properties:
+        jobGuid:
+          type: string
+        scheduled:
+          type: integer
+          format: int32
+        status:
+          type: string
+      required:
+      - jobGuid
+      - scheduled
+      - status
+    BatchUploadResponse:
+      properties:
+        jobGuid:
+          type: string
+        index:
+          type: integer
+          format: int32
+        totalDocuments:
+          type: integer
+          format: int32
+      required:
+      - index
+      - jobGuid
+      - totalDocuments
     Case:
       properties:
         id:
@@ -917,6 +1561,8 @@ components:
           type:
           - string
           - "null"
+        isKnowledgeBase:
+          type: boolean
         createdAt:
           type:
           - string
@@ -928,6 +1574,7 @@ components:
           - "null"
           format: date-time
       required:
+      - isKnowledgeBase
       - name
       - organizationId
     CaseDocument:
@@ -1012,6 +1659,58 @@ components:
           - "null"
       required:
       - name
+    CreateLlmProviderRequest:
+      properties:
+        name:
+          type: string
+        apiUrl:
+          type: string
+        modelType:
+          type: string
+        deploymentName:
+          type:
+          - string
+          - "null"
+        kwargs:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        apiKey:
+          type: string
+        status:
+          type:
+          - string
+          - "null"
+      required:
+      - apiKey
+      - apiUrl
+      - modelType
+      - name
+    CreateOcrProviderRequest:
+      properties:
+        name:
+          type: string
+        endpoint:
+          type: string
+        apiKey:
+          type: string
+        modelId:
+          type: string
+        features:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        status:
+          type:
+          - string
+          - "null"
+      required:
+      - apiKey
+      - endpoint
+      - modelId
+      - name
     DependencyInfo:
       properties:
         guid:
@@ -1068,11 +1767,202 @@ components:
       - SIMPLE
       - STEPS
       - OCR
+    GenerativeTaskRequest:
+      properties:
+        prompt:
+          type: string
+        model:
+          type:
+          - string
+          - "null"
+        temperature:
+          type:
+          - number
+          - "null"
+          format: float
+        maxTokens:
+          type:
+          - integer
+          - "null"
+          format: int32
+      required:
+      - prompt
+    KnowledgeBasesController.PromoteKnowledgeBaseRequest:
+      properties:
+        caseId:
+          type: integer
+          format: int64
+      required:
+      - caseId
+    LlmKeyBindingDto:
+      properties:
+        key:
+          type: string
+        providerId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        providerName:
+          type:
+          - string
+          - "null"
+      required:
+      - key
+    LlmProviderDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        apiUrl:
+          type: string
+        modelType:
+          type: string
+        deploymentName:
+          type:
+          - string
+          - "null"
+        kwargs:
+          additionalProperties: true
+        status:
+          type: string
+        createdAt:
+          type:
+          - string
+          - "null"
+        updatedAt:
+          type:
+          - string
+          - "null"
+      required:
+      - apiUrl
+      - id
+      - kwargs
+      - modelType
+      - name
+      - status
     LlmType:
       enum:
       - DEFAULT
+      - NANO
       - MINI
       - HIGH
+    MapReduceCommand:
+      properties:
+        enabled:
+          type: boolean
+        parallelProcessing:
+          type:
+          - boolean
+          - "null"
+        pagesPerChunk:
+          type:
+          - integer
+          - "null"
+          format: int32
+        overlapPages:
+          type:
+          - integer
+          - "null"
+          format: int32
+        dedupKey:
+          type:
+          - string
+          - "null"
+        stopWhenEmpty:
+          type:
+          - boolean
+          - "null"
+        emptyChunkGrace:
+          type:
+          - integer
+          - "null"
+          format: int32
+        header:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/MapReduceHeaderCommand"
+      required:
+      - enabled
+    MapReduceHeaderCommand:
+      properties:
+        enabled:
+          type: boolean
+        pageLimit:
+          type:
+          - integer
+          - "null"
+          format: int32
+        includeInRows:
+          type:
+          - boolean
+          - "null"
+        pageIndices:
+          type:
+          - array
+          - "null"
+          items:
+            type: integer
+            format: int32
+        schema:
+          type:
+          - string
+          - "null"
+        schemaFileName:
+          type:
+          - string
+          - "null"
+        prompt:
+          type:
+          - string
+          - "null"
+        promptFileName:
+          type:
+          - string
+          - "null"
+        rowPromptAugmentation:
+          type:
+          - string
+          - "null"
+      required:
+      - enabled
+    MapReduceRuntimeStatus:
+      properties:
+        totalChunks:
+          type:
+          - integer
+          - "null"
+          format: int32
+        completedChunks:
+          type:
+          - integer
+          - "null"
+          format: int32
+        headerCaptured:
+          type:
+          - boolean
+          - "null"
+        stopWhenEmpty:
+          type:
+          - boolean
+          - "null"
+        earlyTerminated:
+          type:
+          - boolean
+          - "null"
+        terminationChunkIndex:
+          type:
+          - integer
+          - "null"
+          format: int32
+        terminationReason:
+          type:
+          - string
+          - "null"
     NamedConfiguration:
       properties:
         id:
@@ -1119,12 +2009,59 @@ components:
           - "null"
       required:
       - ocr
+    OcrKeyBindingDto:
+      properties:
+        key:
+          type: string
+        providerId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        providerName:
+          type:
+          - string
+          - "null"
+      required:
+      - key
+    OcrProviderDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        endpoint:
+          type: string
+        modelId:
+          type: string
+        features:
+          additionalProperties: true
+        status:
+          type: string
+        createdAt:
+          type:
+          - string
+          - "null"
+        updatedAt:
+          type:
+          - string
+          - "null"
+      required:
+      - endpoint
+      - features
+      - id
+      - modelId
+      - name
+      - status
     OcrType:
       enum:
       - DEFAULT
       - PREMIUM
+      - EXCEL
       - NONE
       - AUTO
+      - LOW
     OperationInfo:
       properties:
         jobGuid:
@@ -1327,6 +2264,42 @@ components:
           - "null"
         dependencyStatus:
           type: string
+        jobMode:
+          type: string
+        totalFragments:
+          type:
+          - integer
+          - "null"
+          format: int32
+        completedFragments:
+          type:
+          - integer
+          - "null"
+          format: int32
+        isBatch:
+          type: boolean
+        totalDocs:
+          type: integer
+          format: int32
+        completedDocs:
+          type: integer
+          format: int32
+        failedDocs:
+          type: integer
+          format: int32
+        maxConcurrency:
+          type: integer
+          format: int32
+        nextDocIndex:
+          type: integer
+          format: int32
+        inProgressDocs:
+          type: integer
+          format: int32
+        batchMetadata:
+          type:
+          - "null"
+          - object
         createdAt:
           type:
           - string
@@ -1337,12 +2310,109 @@ components:
           - string
           - "null"
           format: date-time
+        mapReduceStatus:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/MapReduceRuntimeStatus"
       required:
+      - completedDocs
       - dependencyStatus
+      - failedDocs
       - guid
+      - inProgressDocs
+      - isBatch
+      - jobMode
       - jobType
+      - maxConcurrency
+      - nextDocIndex
       - organizationId
       - status
+      - totalDocs
+    PurgeResult:
+      properties:
+        jobsDeleted:
+          type: integer
+          format: int32
+        errors:
+          type: array
+          items:
+            type: string
+      required:
+      - errors
+      - jobsDeleted
+    ResolveLlmRequest:
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        key:
+          type: string
+        selectionKey:
+          type:
+          - string
+          - "null"
+      required:
+      - key
+      - organizationId
+    ResolveOcrRequest:
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        key:
+          type:
+          - string
+          - "null"
+        selectionKey:
+          type:
+          - string
+          - "null"
+      required:
+      - organizationId
+    ResolvedLlmProviderDto:
+      properties:
+        providerId:
+          type: integer
+          format: int64
+        apiUrl:
+          type: string
+        modelType:
+          type: string
+        deploymentName:
+          type:
+          - string
+          - "null"
+        kwargs:
+          additionalProperties: true
+        apiKey:
+          type: string
+      required:
+      - apiKey
+      - apiUrl
+      - kwargs
+      - modelType
+      - providerId
+    ResolvedOcrProviderDto:
+      properties:
+        providerId:
+          type: integer
+          format: int64
+        endpoint:
+          type: string
+        modelId:
+          type: string
+        features:
+          additionalProperties: true
+        apiKey:
+          type: string
+      required:
+      - apiKey
+      - endpoint
+      - features
+      - modelId
+      - providerId
     Settings:
       properties:
         apiKey:
@@ -1472,7 +2542,93 @@ components:
           additionalProperties: true
       required:
       - fields
+    ToolDescriptor:
+      properties:
+        type:
+          $ref: "#/components/schemas/ToolType"
+        config:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+      required:
+      - type
+    ToolType:
+      enum:
+      - KNOWLEDGE_BASE_SEARCH
     Unit: {}
+    UpdateKeyBindingRequestDto:
+      properties:
+        providerId:
+          type:
+          - integer
+          - "null"
+          format: int64
+    UpdateLlmProviderRequest:
+      properties:
+        name:
+          type:
+          - string
+          - "null"
+        apiUrl:
+          type:
+          - string
+          - "null"
+        modelType:
+          type:
+          - string
+          - "null"
+        deploymentName:
+          type:
+          - string
+          - "null"
+        kwargs:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        apiKey:
+          type:
+          - string
+          - "null"
+        status:
+          type:
+          - string
+          - "null"
+    UpdateOcrKeyBindingRequestDto:
+      properties:
+        providerId:
+          type:
+          - integer
+          - "null"
+          format: int64
+    UpdateOcrProviderRequest:
+      properties:
+        name:
+          type:
+          - string
+          - "null"
+        endpoint:
+          type:
+          - string
+          - "null"
+        apiKey:
+          type:
+          - string
+          - "null"
+        modelId:
+          type:
+          - string
+          - "null"
+        features:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        status:
+          type:
+          - string
+          - "null"
     UploadCommand:
       properties:
         ocr:
@@ -1513,12 +2669,55 @@ components:
           type:
           - boolean
           - "null"
+        mapReduce:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/MapReduceCommand"
+        tools:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/ToolDescriptor"
+        trace:
+          type:
+          - boolean
+          - "null"
+        pageRange:
+          type:
+          - array
+          - "null"
+          items:
+            type: integer
+            format: int32
     UploadResponse:
       properties:
         guid:
           type: string
         status:
           type: string
+        error:
+          type:
+          - string
+          - "null"
       required:
       - guid
       - status
+    UserInfo:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        email:
+          type:
+          - string
+          - "null"
+        organizationId:
+          type:
+          - integer
+          - "null"
+          format: int64
