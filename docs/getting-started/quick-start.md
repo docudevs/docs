@@ -280,41 +280,72 @@ instruction = "Extract all form fields and their values"
 ### Add Custom Schema
 
 ```python
+import json
+
+# Define a proper JSON Schema
 schema = {
-    "invoice_number": "The invoice number",
-    "date": "Invoice date in YYYY-MM-DD format",
-    "vendor": "Company that issued the invoice",
-    "total": "Total amount as number",
-    "currency": "Currency code (USD, EUR, etc.)"
+    "type": "object",
+    "properties": {
+        "invoice_number": {"type": "string"},
+        "date": {"type": "string", "format": "date"},
+        "vendor": {"type": "string"},
+        "total": {"type": "number"},
+        "currency": {"type": "string"}
+    },
+    "required": ["invoice_number", "total"]
 }
 
 job_id = await client.submit_and_process_document(
-  document=document_data,
-  document_mime_type="application/pdf",
-  prompt="Extract invoice data according to the schema",
-  schema=schema
+    document=document_data,
+    document_mime_type="application/pdf",
+    prompt="Extract invoice data according to the schema",
+    schema=json.dumps(schema)  # Schema must be a JSON string
 )
 ```
 
-### Process Multiple Documents
+### Process Multiple Similar Documents (Batch)
+
+For processing many similar documents with the same extraction configuration, use **batch processing**:
 
 ```python
-# Create a case for organizing related documents
-case_response = await client.create_case({
-    "name": "Q4 2024 Invoices",
-    "description": "All vendor invoices for Q4 processing"
-})
-case_id = case_response.parsed.id
+import json
 
-# Upload multiple documents to the case
+# 1. Create a batch
+batch_guid = await client.create_batch(max_concurrency=3)
+
+# 2. Upload documents to the batch
 for filename in ["invoice1.pdf", "invoice2.pdf", "invoice3.pdf"]:
     with open(filename, "rb") as f:
-        await client.upload_case_document(
-            case_id=case_id,
+        await client.upload_batch_document(
+            batch_guid=batch_guid,
             document=f.read(),
-            filename=filename
+            mime_type="application/pdf",
+            file_name=filename,
         )
+
+# 3. Process all documents with the same configuration
+schema = {
+    "type": "object",
+    "properties": {
+        "invoice_number": {"type": "string"},
+        "total": {"type": "number"}
+    }
+}
+
+await client.process_batch(
+    batch_guid=batch_guid,
+    mime_type="application/pdf",
+    prompt="Extract invoice data",
+    schema=json.dumps(schema),
+)
+
+# 4. Wait for all results
+results = await client.wait_until_ready(batch_guid, result_format="json")
+for i, result in enumerate(results):
+    print(f"Document {i}: {result}")
 ```
+
+> **Tip**: Use [Cases](/docs/advanced/cases) when you need to organize documents for search and retrieval (RAG), not for batch processing.
 
 ## Getting Help
 

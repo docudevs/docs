@@ -70,9 +70,11 @@ from docudevs.models import CasesControllerCreateCaseRequest
 import os
 
 # Initialize the client
+
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 # Create a new case using the request model
+
 case_request = CasesControllerCreateCaseRequest(
     name="Q4 2024 Vendor Invoices",
     description="All invoices from vendors for Q4 2024 processing"
@@ -81,6 +83,7 @@ case_request = CasesControllerCreateCaseRequest(
 response = await client.create_case(case_request)
 case = response.parsed
 print(f"Created case ID: {case.id}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -198,6 +201,7 @@ curl -X PUT https://api.docudevs.ai/cases/{case_id} \
 from docudevs.models import CasesControllerUpdateCaseRequest
 
 # Update case details
+
 case_id = 123
 update_request = CasesControllerUpdateCaseRequest(
     name="Q4 2024 Vendor Invoices - Updated",
@@ -207,6 +211,7 @@ update_request = CasesControllerUpdateCaseRequest(
 response = await client.update_case(case_id, update_request)
 updated_case = response.parsed
 print(f"Updated case: {updated_case.name}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -285,6 +290,7 @@ from docudevs.models import UploadCaseDocumentBody
 from docudevs.types import File
 
 # First, create a case (required before uploading documents)
+
 from docudevs.models import CasesControllerCreateCaseRequest
 
 case_request = CasesControllerCreateCaseRequest(
@@ -297,6 +303,7 @@ case_id = case.id
 print(f"Created case ID: {case_id}")
 
 # Now upload a document to the case
+
 with open("invoice_001.pdf", "rb") as f:
     file_data = f.read()
 
@@ -308,6 +315,7 @@ response = await client.upload_case_document(case_id=case_id, body=body)
 document = response.parsed
 print(f"Uploaded document {document.document_id} to case {case_id}")
 print(f"Status: {document.processing_status}")
+
 ```
   </TabItem>
   <TabItem value="cli">
@@ -510,8 +518,8 @@ print(f"Uploaded document {document.document_id} to case {case_id}")
 ```
 
 :::note
-Case documents are stored and organized within the case. To process them with AI extraction, 
-you would process them separately using the standard document processing API with 
+Case documents are stored and organized within the case. To process them with AI extraction,
+you would process them separately using the standard document processing API with
 `submit_and_process_document()`.
 :::
 
