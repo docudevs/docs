@@ -1,0 +1,71 @@
+---
+id: list-prices
+title: "listPrices"
+description: "listPrices"
+sidebar_label: "listPrices"
+hide_title: true
+hide_table_of_contents: true
+api: eJx1U02P2jAQ/SuWT60UAV1VPXCj2tVqb6uqPSEOxhnAxbG94wltFPHfO5OEkF1KLmSYj/cm702ryeyzXq711nnvwl5vCh0ToCEXw0upl9q7TK/oLGRd6GTQVECA0tPqwAGXRNxzaaFd4OCtBmw4QHirHQKPIKyh0NkeoDJ62WpqknRlQgE8nzdSnFMMmTE4/7BYyE8J2aJLQuQdDcV5dWlgIBsDQSBpMSl5Zzvu899Z+tpbXINohKAjqDq8hLIxORgiBpHNb4gWUlnWlu5kbY0IwTbX5PqSLXSovdcbrqqDo1UV657xpc7xDnvAsbDQu4iV4RpJffsq8ykeIeRnNFw7ZXDtve0Jzh57le5zOk/FWo8fYLruR3DmR468oH/vjdNpw2LKU9zVjgexfQ5RjLUH6hxFBw7mg//m6VLnwi52rAecx2jrRzhltXp90R8RxqS8VOwGxdx5TuaR0jBTTyazwKT+mEZRVGyaE2uumlijKoemLJnSkOH5nM397C+zh9miUz9mqkxnqsH4spgaN3tHaVSH4C/Nkzd8HKI++s5k3dbXqyv0sDd/2APDSK5ttybDL/Tns/zd35VcXemy2XoRa2d8hhvg8SD0px+Drp+VSPg/QkdoJhd8Mr6WGi1HeTLoBIhBxbgHMCW7TBj0TStrIdGk6+b8ZMqo9/PTT/bHPzUihOQ=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listPrices"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/billing/prices"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listPrices
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"orgId","in":"query","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listPrices 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"priceId":{"type":"string"},"productId":{"type":"string"},"currency":{"type":["string","null"]},"unitAmount":{"type":["integer","null"],"format":"int64"},"tokensGranted":{"type":"integer","format":"int64"},"nickname":{"type":["string","null"]}},"required":["priceId","productId","tokensGranted"],"title":"BillingPrice"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

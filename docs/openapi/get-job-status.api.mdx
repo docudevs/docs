@@ -1,0 +1,71 @@
+---
+id: get-job-status
+title: "getJobStatus"
+description: "getJobStatus"
+sidebar_label: "getJobStatus"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVktP20AQ/ivWnlrJJZRWPeRGgSIqIRBQ9YBymNiTZMHeXXbHlDTyf+/MOrGdB+VxysYzs/PN65tdKIJpUMNbdWfHapQq69ADaWvOcjVUU6SfdnxNQFVQqXLgoURCLxYLZfiPKFU6Z6E2fHZAMz57fKi0R76CfIWpCtkMS1DDhaK5E5tAXpupquuRKAdnTcAg8oP9ffnJMWReOwGyASNhjWRlwq4yawgNiRE4V+gsoh/cBbFc9Dw7L7GRbvyEJqZtRGkTzy4Bem99J7ldiVJlqqJQI1Yhe4/myFYNoJWeZohT9K1iqibWl8A6IvpyIJdz/m+i+g7HbVHWNXYBsH4KRv9tS9je1mHo+/72Ve7P0aHJw4U5XQt91/2NKppsfv18BjmWc5vvjoUsQfHDw7TkqoW3ZimzpSu4A/N336DDd6Bs1sM2trZAMC24Y5uFFxO3AecNNhPQxZsMSng6siarvJe0v9LI4BOxjzOu1dMrTbS59HbKoxXeAG4syTxHghwI+rWIFeB+HN9hRrF1Mo/AqTqk/3RYzwVfiJ9IM8WwbeXyd9uW4K4wrzLc7NgtkKmCoriYRHJbp4vYGEezyty/v2XfZz5DyNEfgaMqEmpnverb3nQGsu73DM1J6Wj+gi6CL+Y36EttJLUvaNNSkWklxrHRWK+LpXfJFcKSoZ/jGtHXVEgDnq8qeMXEylVdFrKOSt2uud2Yxx1stTZ+abe61jq/I4mOyjqC3hrIjWHb4uB0tWz6/DLqomPfGbvm4HnJ8Uqs68izzy1AAYA0s8v9HNcyL92hGjDCQeNqsJDI6hjaxMYsL52x8+oYH0NyeHmmNt20QjkIuyauxSYGe8kJBJ4ISv7APCGb8PJ95CFJ5rbySb40CiKJdJAqlobm7s97B3v70gTOBiohln71gEBKOLykjW8NVUtDxFkeuAJ0pOrKF3Grx9ib50sv0cNYWU7yjL2JfLEYQ8Bfvqhr+fxQoecBueXjI3gNY0kOT32ug5w5txMoAm5BaV8b6sPVsu8+JlLYXRCXH8FIjzxCUck/Pt7jfPVsqkftiEf/jegwy9BRz2jrZSPvprYLTk9uuG3+AaJAWR0=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getJobStatus"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/job/status/{guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getJobStatus
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getJobStatus 200 response","content":{"application/json":{"schema":{"properties":{"status":{"type":"string"},"guid":{"type":"string"},"error":{"type":["string","null"]},"tokenCount":{"type":["integer","null"],"format":"int32"},"jobType":{"type":"string"},"operationType":{"type":["string","null"]},"organizationId":{"type":"integer","format":"int64"},"dependsOnGuid":{"type":["string","null"]},"dependencyStatus":{"type":"string"},"jobMode":{"type":"string"},"totalFragments":{"type":["integer","null"],"format":"int32"},"completedFragments":{"type":["integer","null"],"format":"int32"},"isBatch":{"type":"boolean"},"totalDocs":{"type":"integer","format":"int32"},"completedDocs":{"type":"integer","format":"int32"},"failedDocs":{"type":"integer","format":"int32"},"maxConcurrency":{"type":"integer","format":"int32"},"nextDocIndex":{"type":"integer","format":"int32"},"inProgressDocs":{"type":"integer","format":"int32"},"batchMetadata":{"type":["null","object"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"},"mapReduceStatus":{"type":["null","object"],"allOf":[{"properties":{"totalChunks":{"type":["integer","null"],"format":"int32"},"completedChunks":{"type":["integer","null"],"format":"int32"},"headerCaptured":{"type":["boolean","null"]},"stopWhenEmpty":{"type":["boolean","null"]},"earlyTerminated":{"type":["boolean","null"]},"terminationChunkIndex":{"type":["integer","null"],"format":"int32"},"terminationReason":{"type":["string","null"]}},"title":"MapReduceRuntimeStatus"}]}},"required":["completedDocs","dependencyStatus","failedDocs","guid","inProgressDocs","isBatch","jobMode","jobType","maxConcurrency","nextDocIndex","organizationId","status","totalDocs"],"title":"ProcessingJob"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

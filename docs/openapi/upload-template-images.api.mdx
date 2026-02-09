@@ -1,0 +1,71 @@
+---
+id: upload-template-images
+title: "uploadTemplateImages"
+description: "uploadTemplateImages"
+sidebar_label: "uploadTemplateImages"
+hide_title: true
+hide_table_of_contents: true
+api: eJyFVE2T0zAM/Ssen2Am3ZQ95rawHHqiA+XU6UGN1daQxMZWCplM/jtSPtq0XYZTlFjSe3p+SqsJjlFnW01Y+gII9S7RzmMAsq5aGZ3p2hcOzGY8X5VwxKgT7SFAiYRByltd8Qsn949E24pjD3TiOOCv2gbkVhRqTHTMT1iCzlpNjZeaSMFWR911uyEZI310ppGM3FWEFUlY1gVZBqX04EK5MEB9j2s3H4Q3WWbHb3bgeUWBEKARajxpfERPtLQFhtJ7W0FomE83J7+dWu74M1a5M1J2gzSy3YyA3hc273VMXU5IC4ZCKKVxdy9L/yF6V8Wh1fNyKQ+DMQ/WS49/3ITiTDWV8hQzxeYEfkTpMJcLjLFyBMX6Rrj7SxnY/p8IY7MdTk4s412k3iJsgEynk7fSVuzRpXYqsNXB9ZiWCgF9dXn9iueoXtYrfQ96OZSg5BkV33iOMTJPKXhSnyHyEKR+Q6PIKZbizHOpxtVBmbEoyklvnkTzaRx6f3h6flpqnlOYl9BLNTp6mFVNw6rLtDfsLroR/qGUM3kDuF0dit6avRCzJUt0Nm3KaKpEn0Q0TmrbPUT8Hoquk8+8D2zGbMvhGYKFvSjFC2dslJjlPkAR8YHPxQj63dfRau8VA77Jc9qRSjbkDEUtbxz+xGZa6k58f0IwGHr84ejTgLLoPX8tfWtZu2Qqeslz9DRLf3Cq/Aoublp/+bbh5P34TyidkRppPN7jJWSV2K1/ARa/rYk=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadTemplateImages"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/template/{name}/images"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadTemplateImages
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"images":{"type":"array","items":{"type":"string","format":"binary"}}},"required":["images"]},"encoding":{"images":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadTemplateImages 200 response","content":{"application/json":{"schema":{"additionalProperties":{"type":"string"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

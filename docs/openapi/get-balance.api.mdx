@@ -1,0 +1,71 @@
+---
+id: get-balance
+title: "getBalance"
+description: "getBalance"
+sidebar_label: "getBalance"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNU8Fu2zAM/RWBpw0wkqwYdsitRYuht6HYTkEOjM0k2mRJlehsnuF/H2k7TtpuwHyxZZLvkXxPHTAeMqw3sLPOWX+AbQEhUkK2wT9WsIYD8R069CVBARET1sSUtKYDLwdJCekgqQVYL4fnhlIrh0TPjU0kEJwaKiCXR6oR1h1wG7Uqc1LCvt9qco7BZ8oav1mt9FVRLpON2siLNozEzblAiMrgmTxrCcbobDn0vvyeta674o1JJ2M7skjT6O3vedC5LytwB0qCvA+pRh5/ffoIfQG7aRP/l50ZucmX5M155gJ84xxs+/56T5sZvnjdnayILTslvBuFmpbxdN5Dr0/xz6UJpOh2DJOig5R8lMNyEn554bZ+H4amJ8b7UDb3dMrm9ssjvKaYg/pRiw5G1lxSzoKpBQvzgFlWzuYntoaDEblOooJpQ5NMNRVljVTIKPgSzSP2h8XNYqWLjCFzjYOck+VkBnMZ7UVLszRMv3gZHYotBaNJbjDBMPbF7xdNZcdH4dFg1+0w07fk+l5/j5ZWw1c2486pWHt0md4wz16Ed0+Tru+NcPy1ox/UXl2eE7pGc0DvwwmTVSIh3UrmkbASj2kHY9FtWVLkq6o3zleUWfHPD1/FIH8AHlNW4w==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getBalance"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/billing/balance"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getBalance
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"orgId","in":"query","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getBalance 200 response","content":{"application/json":{"schema":{"properties":{"organizationId":{"type":"integer","format":"int64"},"balance":{"type":"integer","format":"int64"},"status":{"type":["string","null"]}},"required":["balance","organizationId"],"title":"BillingBalanceResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

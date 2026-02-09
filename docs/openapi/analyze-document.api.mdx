@@ -1,0 +1,71 @@
+---
+id: analyze-document
+title: "analyzeDocument"
+description: "analyzeDocument"
+sidebar_label: "analyzeDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVMly2zAM/RUNz/LSHH1Lm2Ymp2ba5NTxAaJgmy1FqiTkVvXo3wtQi+3YSTvTmyjgPQAPy0ERbKNafVWl102FjtQ6V77GAGS8eyjVSoED2/7Gu9EhVzUEqJAwCPKgHD/Yz+vANuP480eDoeVH1DusQK0OitoaJUykYNyWTa6xVq27Lp/wJUYdTIH3ZtsEjH/nKry3CO4qGf6iAJr+g4t1CMiASO992Yqv9o5EAP6sGkuGZaDFxodqVgIltiNvHUREMhybX5O4U8SjEEIAbFGFccDZcRUpsAlYnjeGDei0LwX3gnRI7annhrq2RqcOLrwmpBlHQ6iY+5ydQoPpR6y9i32uN8tlYk/dqIXjcgYydspGFNdwosxp7G9RwK/Lsm1MeSkJJxQJqIlXTRiCD29P1Jl8KcbEyE0lQ1Yon2vrofw8FtH12rxZNvPw2O+8bEXtY78KtOPXYmzGYoCkidv4lOgQUFjucB+z28cH9TLSZJwkZqk0xsi1CWCefYTIslH2E9qMfMaS71nJrPVNyMboUSxpGHPF1thzv5vfzJeineRcQWrJsCZDttlJhWd5TQ0gXqhFbYHXiImaYFM3U/EnI5qPhCL0ThRi6+FQQMTnYLtOfvc7KHejNBEKK23agI2Yq+/YTndkD7aRwEqW+hXPy4vxL6iL03AEreURjKA4Q1m4HUKJIaXboz/0oz5Lq3bEXjsIkkMPutUaazpxv9gSCT3N1uOnL0/sXAx3p/KlYIR46O30KUl23R84vP9M
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"analyzeDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/analyze"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+analyzeDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"ocr","in":"query","schema":{"type":["string","null"]}},{"name":"describeFigures","in":"query","schema":{"type":["boolean","null"]}},{"name":"extractFigures","in":"query","schema":{"type":["boolean","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"analyzeDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

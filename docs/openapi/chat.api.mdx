@@ -1,0 +1,71 @@
+---
+id: chat
+title: "chat"
+description: "chat"
+sidebar_label: "chat"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1v2zAM/SuGzl6S9phbthRDD8OKrjsFOTC2Gqu1JU2i0xqB//tIyV9xsw1YDo4sko/k4zPPAuHoxXon4Cg1in0qjJUOUBl9n4u1yApAkQonf9XS42eTN2J9FpnRyO50BGtLlYWA5Ys3mu98VsgK+GQdw6GSnt8q6T3lCWdsrCR8cA4aSqBQVv5jhDOlnHh7dEofRZtOK5jZ2litcjLnvnrHNGJRg6iQQcUXau1brChE5SarK3L9Wqt8xN31wKnQdVmKPXl6iuoI+rPbrI6h90kFG+acy3iM9FIZF1HoahkuvDXaR0ZuVyv+y6XPnLJMezelhCxJ7yrS/53RizlcEjAh/UrfUysC1v6qqWv+39Pqs48h06xDjuscdq23baDxI0MBFQvDurbG87sFLOhtGdS/7JyYosdR8HfvUNkow1HAu16b49wHwofm9nNRjc4TKic8Kf1sAkldc1uK3sqTTzYP92Le0mDcdjkSmmTGuPrIAYvkDjxNFZM3aBI0CRV4okEnjald0hfm2ZIDAuGT1Ufsm8XtYsUVMU8VBMVoqOTI5EUtw1hRvuPSlqA0B9euDAILJPcrJo0IxE3BM6D78/kAXv50ZdvyNRHvaMvs6HgCp+DAVOz4uysk5NIF8l9lw59wpPzTE2dn97IOS2Wu9zbtIzZZJi3+1Xc/kcnD9x9P5Hzo9l5lco5x8Mb7hJ5rIXhjcnTcV3x3FiXoYx0ELyIm/34D1aHe2w==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"chat"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/agent/chat"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+chat
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"messages":{"type":"array","items":{"properties":{"role":{"type":"string"},"content":{"type":"string"}},"required":["content","role"],"title":"ChatMessage"}},"documentGuid":{"type":["string","null"]},"sessionId":{"type":["string","null"]}},"required":["messages"],"title":"AgentChatRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"chat 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"sessionId":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","sessionId","status"],"title":"AgentChatResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

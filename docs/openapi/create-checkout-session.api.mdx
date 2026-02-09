@@ -1,0 +1,71 @@
+---
+id: create-checkout-session
+title: "createCheckoutSession"
+description: "createCheckoutSession"
+sidebar_label: "createCheckoutSession"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE1T4zAM/Ssen7Nt4dgbXwdOMMCeOj2ojkgMSey1lUInk/++Upz0A1iWHBrXepae3pPTaYIi6uVKb2xV2abQ60w7jwHIuuY210ttAgLhVYnm1bX0iDFyRGc64J8WI126fKeXnTauIWxIluB9Zc2QYf4SGcx70ZRYwxCtqrtnrthpH6QSWYyy74M1KBU7TTuPXDlSEEZ9n4rZgLkwnYDMlCxVgrxM5CeSD4ma7rOPRVwovi7Rr0+LJOC6Py1OocVhI3rXxJTyfLGQV47RBOul6X+JphiqprOs4I8lO+0hpmxf9sFJx5q/Q/V/KY/B2VHi76Qd6ff9oM0P2ubMNVLpZJi8Y1sy7YFK/jcfh24+8eCQdP9wGK2bd6i9EDkakKmbbLLzqH3bPLuh75H+tTPtNW6juri/1R/p7oOyqNkKxUobYd0UcmCmbiCy6qTeYKfIKXZsy0aonWuDysdDUSI5EHB+jsaU+2x2PlsII2m5hsHRBmrcq6QmmdRBpxN6e/MI32nuK7CN5GuTsUnCw709OC/ulaIzR7tuAxHZ3r6XbZY18G1d8XILwcJGNFqtOWuJkGMYruUrMkRfpeH89SQcBF61wuXToModSycujEFP32LXR6Nwf/f4xODN+P2oXS5nArzJt4V/l1oMHrQYxn7Y63QFTdFCIdiUU56/fISruw==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createCheckoutSession"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/billing/checkout"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createCheckoutSession
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"allOf":[{"properties":{"priceId":{"type":"string"}},"required":["priceId"],"title":"BillingCheckoutRequest"},{"properties":{"orgId":{"type":"string"}}}],"required":["orgId"]}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createCheckoutSession 200 response","content":{"application/json":{"schema":{"properties":{"sessionId":{"type":"string"},"checkoutUrl":{"type":"string"}},"required":["checkoutUrl","sessionId"],"title":"BillingCheckoutResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

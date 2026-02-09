@@ -1,0 +1,71 @@
+---
+id: delete-job
+title: "deleteJob"
+description: "deleteJob"
+sidebar_label: "deleteJob"
+hide_title: true
+hide_table_of_contents: true
+api: eJx1Uz1v20AM/SuHm1pAsF138xbAHlJ0CIJ2CjzQEi1fKukuJOVWEPTfS0q2qzTJJB4/HsnHp94LlOw3T/45Hvw+8zEhgYTY3Bd+4wusUPCbhjKfgKDWF1l67xt9aEbZhkKDoVE7gZzUJnxpA6HWC7WYec5PWIPf9F66ZDUsFJrSD8PekjnFhpEtvl6t7FMg5xSSTTGfwWnYXfO1Tx4bwUasAlKqQj7OvXxmK+tnbRPZVhKmJroob0fMYjZTUKwSSWGPkWqQyfV17YfMI1EkniUDEXS2tWDN7y02zFl4ugJkr3rr8hKksrqHlkp8RG4rsWIr/4ADxdAbnOK/44yXUd43fqnoy94OMowXOcZxtEuPbczbLZ7Z3T3c+//xb0EzaiXVKWc5Mus6VrBwO2DlT9xv6JxEp9yflVLXxZZccSliixQgoPga5Qn7y2K9WBmNKbLUMN7mIp5pAzft9WqiG6WCf2SZKlCBKURL1XjQceFJs5nfjBpUOk/awNx9fwDGn1QNg7lfWqRO/WqegQIcjA9VcBHYbKXyCBXjmwlu+vKfHi/H/Oy037uTXZXRmC7OULX2UvMXdte/ZNhr3gmhUJlZ/yl0l+eYZFb0Rsv2m9yOvt193/3YqUr+AsC2Q8E=
+sidebar_class_name: "delete api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"deleteJob"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/job/{guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+deleteJob
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"deleteJob 200 response","content":{"application/json":{"schema":{"properties":{"jobsDeleted":{"type":"integer","format":"int32"},"errors":{"type":"array","items":{"type":"string"}}},"required":["errors","jobsDeleted"],"title":"PurgeResult"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

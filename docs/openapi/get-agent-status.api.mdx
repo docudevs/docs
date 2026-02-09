@@ -1,0 +1,71 @@
+---
+id: get-agent-status
+title: "getAgentStatus"
+description: "getAgentStatus"
+sidebar_label: "getAgentStatus"
+hide_title: true
+hide_table_of_contents: true
+api: eJytVE1v2zAM/SuCThtgJFmPuQVtUfS0ottOQQ6MzTjKZEuV5GyB4f8+Uv6oaxs97WRZFPnIx0fWMkDu5XYvIccyyEMijUUHQZnyOZNbmWPYseVHgFB5mUgLDgoM6NirliX90LOLOT5VKiO7KunXQjjT2eFbpRxSnOAqTKRPz1iA3NYy3Cy7+eBUmcumOfBjb03p0bP9brPhT4Y+dcpyNrNcBL0RvROBpaYMXAK5gbVapbGI9cWzbz3Cto5LDKpF6jOfJ0X5ovcdEUvWlpIl05DWYNzLstKa0jTHC6aRaND6+ymS+DGjglCpG4uBIeWi/DguOAc3ChzjU1gVsPDzOtvnCyE/cLxkhwCf15Flir1Bv4wQueNNM9bA/gNU0gYk/6CCZsjY210sULKnr/IcfcDs3pQnlf+nHHp2p8CvXcvuOxk1B3JE54wbA3e09GxPg7+Pwbt0BqFMEVsZ97hUctNM2zEfPxq9s+kGM04jDdpWruP0rlugdd2l0cRxPJlYQIf8YNLqAa9e7F6e5RRtMPKhoIiCNJRyJWXODivxCJ6YDeIP3EQwgmbuSmSLm6mcyDonz5aomkSS1bexv63uVhvWkzU+FBC11i0PKkXEKsVQ5rIoA/4Na6uBdgwFqpyOMo8U9AtsYDuR274bRPyZQPlRXR/B4y+nm4av3yp0N7qn4xWcgiNzRAOZKc9n4vkE2uMsn2HXyC+vXfu/il7S0zy7Syh5Sq+gK/6j42+8jTZn1NsZIUMXU2ituzRFG0Z+s9XGq3MQxdPjT9LRP1McA/s=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getAgentStatus"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/agent/status/{jobGuid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getAgentStatus
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"jobGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getAgentStatus 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"sessionId":{"type":"string"},"status":{"type":"string"},"response":{"type":["null","object"],"allOf":[{"properties":{"message":{"type":"string"},"actions":{"type":["array","null"],"items":{"properties":{"type":{"type":"string"},"description":{"type":"string"},"data":{"type":["null","object"],"additionalProperties":true}},"required":["description","type"],"title":"AgentAction"}},"suggestedConfig":{"type":["null","object"],"additionalProperties":true}},"required":["message"],"title":"AgentResponseContent"}]},"error":{"type":["string","null"]}},"required":["jobGuid","sessionId","status"],"title":"AgentStatusResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
