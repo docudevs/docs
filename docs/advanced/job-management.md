@@ -1,5 +1,6 @@
 ---
 title: Job Management
+description: Track processing job status, list jobs, retrieve results, and manage job lifecycle with polling and webhooks.
 sidebar_position: 4
 ---
 

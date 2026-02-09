@@ -1,5 +1,6 @@
 ---
 title: Cases - Document Collections
+description: Organize related documents into cases for grouped management, scoped processing, and document lifecycle tracking.
 sidebar_position: 1
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: Error Codes
+description: Reference for DocuDevs API error codes, HTTP status codes, and troubleshooting guidance.
 sidebar_position: 6
 ---
 

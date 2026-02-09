@@ -1,5 +1,6 @@
 ---
 title: LLM Tracing
+description: Enable LLM tracing to inspect prompts, token usage, and model responses for debugging and optimization.
 sidebar_position: 3
 ---
 

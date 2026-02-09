@@ -158,6 +158,82 @@ status = await client.status(job_id)
 print(f"Progress: {status.parsed.mapReduceStatus.completedChunks} / {status.parsed.mapReduceStatus.totalChunks}")
 ```
 
+## Re-running Map-Reduce on an Existing Job
+
+If you have already processed or OCR'd a document, you can run map-reduce on it again **without re-uploading the file or re-running OCR**. This is useful when you want to:
+
+- Iterate on your prompt/schema without paying for OCR again.
+- Run different chunking strategies on the same document.
+- Extract different fields from a document that was already OCR'd.
+
+Use `submit_and_wait_for_map_reduce` with the `parent_job_id` of the completed job:
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+import asyncio, os
+from docudevs.docudevs_client import DocuDevsClient
+
+client = DocuDevsClient(token=os.getenv('API_KEY'))
+
+async def reprocess_with_map_reduce():
+    # Assume we already have a completed job from a previous run
+    existing_job_id = "your-completed-job-guid"
+
+    # Re-run with map-reduce — no upload, no OCR cost
+    result = await client.submit_and_wait_for_map_reduce(
+        parent_job_id=existing_job_id,
+        prompt="Extract all line items (sku, description, qty, total)",
+        schema='{"type":"array","items":{"type":"object"}}',
+        pages_per_chunk=5,
+        overlap_pages=1,
+        dedup_key="sku",
+        parallel_processing=True,
+        timeout=300
+    )
+
+    print("Header:", result.get("header"))
+    print(f"Extracted {len(result.get('records', []))} line items.")
+
+asyncio.run(reprocess_with_map_reduce())
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+# Process an existing document with map-reduce using the depends_on query param.
+# The GUID is reused from a previous upload; dependsOn chains to the parent job.
+curl -X POST "https://api.docudevs.ai/document/process/EXISTING_JOB_GUID?dependsOn=EXISTING_JOB_GUID" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Extract line items",
+    "schema": "{\"type\":\"array\"}",
+    "mimeType": "application/pdf",
+    "mapReduce": {
+      "enabled": true,
+      "pagesPerChunk": 5,
+      "overlapPages": 1,
+      "dedupKey": "sku",
+      "parallelProcessing": true
+    }
+  }'
+```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+Since OCR is the most expensive part of processing, re-running extraction with different prompts or schemas on an already-processed document is very cost-effective.
+:::
+
 ## Troubleshooting
 
 - **Missing Rows**: Check if rows are split across pages. Increase `overlapPages`.

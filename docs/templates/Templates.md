@@ -1,5 +1,6 @@
 ---
 title: Templates
+description: Upload reusable document templates and fill them programmatically with extracted or provided data.
 sidebar_position: 3
 ---
 

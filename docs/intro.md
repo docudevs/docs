@@ -1,4 +1,6 @@
 ---
+title: DocuDevs - Turn Documents into Data
+description: DocuDevs transforms unstructured documents into structured data using AI. Process invoices, contracts, forms, and more with the Python SDK, CLI, or REST API.
 slug: intro
 sidebar_position: 1
 ---
@@ -75,27 +77,21 @@ Technical documentation and complete API coverage:
 
 ## Popular Use Cases
 
-<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', margin: '20px 0'}}>
-  <div style={{border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', padding: '16px'}}>
-    <h4>📄 Invoice Processing</h4>
-    <p>Extract invoice numbers, dates, line items, and totals from vendor invoices for automated accounting workflows.</p>
-  </div>
-  
-  <div style={{border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', padding: '16px'}}>
-    <h4>📋 Form Digitization</h4>
-    <p>Convert paper forms and applications into structured data for digital processing and storage.</p>
-  </div>
-  
-  <div style={{border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', padding: '16px'}}>
-    <h4>📑 Contract Analysis</h4>
-    <p>Extract key terms, dates, parties, and obligations from legal contracts and agreements.</p>
-  </div>
-  
-  <div style={{border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', padding: '16px'}}>
-    <h4>🧾 Receipt Management</h4>
-    <p>Process expense receipts to extract merchant, date, items, and amounts for expense reporting.</p>
-  </div>
-</div>
+### Invoice Processing
+
+Extract invoice numbers, dates, line items, and totals from vendor invoices for automated accounting workflows.
+
+### Form Digitization
+
+Convert paper forms and applications into structured data for digital processing and storage.
+
+### Contract Analysis
+
+Extract key terms, dates, parties, and obligations from legal contracts and agreements.
+
+### Receipt Management
+
+Process expense receipts to extract merchant, date, items, and amounts for expense reporting.
 
 ## Getting Started Paths
 

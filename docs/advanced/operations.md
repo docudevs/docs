@@ -1,5 +1,6 @@
 ---
 title: Operations
+description: Post-processing operations on completed jobs including generative tasks, error analysis, and multi-step document workflows.
 sidebar_position: 2
 ---
 
@@ -8,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 # Operations
 
-Perform post-processing operations on completed document jobs for error analysis, generative tasks, and workflow optimization.
+Perform post-processing operations on completed document jobs for error analysis, generative tasks, and image selection.
 
 ## Overview
 
@@ -16,6 +17,7 @@ Operations allow you to run additional analysis and processing on documents that
 
 - **Error Analysis**: Identify potential issues in extraction results.
 - **Generative Tasks**: Generate summaries, translations, or custom AI responses based on processed documents.
+- **Image Selection**: Pick relevant figures from extracted images based on a prompt.
 
 ## Available Operations
 
@@ -37,12 +39,16 @@ Generates custom AI responses based on processed document content:
 - Question answering based on document content.
 - Custom analysis with user-defined prompts.
 
+### Image Selection
+
+Selects the most relevant extracted figures based on a prompt. The parent job must have figure artifacts, which are created by running document processing or OCR with `extract_figures=True` (or `describe_figures=True`).
+
 ## How Operations Work
 
 1. **Document Processing**: First, process a document normally.
 2. **Operation Submission**: Submit an operation request on the completed job.
 3. **Analysis**: AI analyzes the original processing results.
-4. **Results**: Get detailed analysis and recommendations.
+4. **Results**: Get detailed analysis, generated content, or selected images.
 
 ## API Endpoints
 
@@ -196,6 +202,80 @@ curl -X GET https://api.docudevs.ai/operation/PARENT_JOB_GUID/generative-task \
   </TabItem>
 </Tabs>
 
+### Image Selection
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+import json
+
+job_guid = await client.submit_and_process_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract key information",
+    extract_figures=True
+)
+await client.wait_until_ready(job_guid)
+
+selection = await client.submit_and_wait_for_image_selection(
+    job_guid,
+    prompt="Return all diagrams from the document",
+    top_k=5,
+    match_mode="all",
+    use_vision=False
+)
+
+selection_payload = json.loads(selection.result)
+first = selection_payload["selected"][0]
+image_bytes = await client.get_figure_image(job_guid, first["id"])
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs operations submit JOB_GUID \
+  --type image-select \
+  --parameter prompt="Return all diagrams from the document" \
+  --parameter topK=5 \
+  --parameter matchMode=all \
+  --parameter useVision=false \
+  --wait
+
+docudevs operations result JOB_GUID --type image-select
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/operation \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "jobGuid": "JOB_GUID",
+        "type": "image-select",
+        "parameters": {
+          "customParameters": {
+            "prompt": "Return all diagrams from the document",
+            "topK": 5,
+            "matchMode": "all",
+            "useVision": false
+          }
+        }
+      }'
+```
+
+  </TabItem>
+</Tabs>
+
 ## Advanced Usage
 
 ### Document Question Answering
@@ -330,3 +410,4 @@ curl -X POST https://api.docudevs.ai/operation \
 - **Summarization**: Use generative tasks to create quick summaries for document lists.
 - **Translation**: Use generative tasks to translate document content while preserving context.
 - **Chain Operations**: Process a document, then run error analysis, then summarize it—all via API.
+- **Map-Reduce Re-processing**: Use `submit_and_wait_for_map_reduce(parent_job_id=...)` to run map-reduce on a previously processed document without re-uploading or re-running OCR. See [Map-Reduce Extraction](/docs/core/map-reduce-extraction#re-running-map-reduce-on-an-existing-job) for details.

@@ -1,5 +1,6 @@
 ---
 title: Batch Processing
+description: Process multiple documents in a single batch with configurable concurrency, shared prompts, and aggregated results.
 sidebar_position: 5
 ---
 

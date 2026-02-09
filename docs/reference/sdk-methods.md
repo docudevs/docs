@@ -1,9 +1,8 @@
 ---
 title: SDK Methods
+description: Complete Python SDK reference for DocuDevs including document processing, batch operations, cases, templates, configurations, OCR, map-reduce, and agent chat methods.
 sidebar_position: 4
 ---
-
-# SDK Method Reference
 
 Complete reference for the DocuDevs Python SDK (`docudevs-sdk`).
 
@@ -27,7 +26,7 @@ client = DocuDevsClient(
 
 ### submit_and_process_document
 
-Upload and process a document for structured data extraction.
+Upload and process a document for structured data extraction. Use `extract_figures=True` to store figure images and metadata.
 
 ```python
 job_guid = await client.submit_and_process_document(
@@ -36,7 +35,8 @@ job_guid = await client.submit_and_process_document(
     prompt="Extract invoice data",
     schema={...},  # Optional JSON schema
     ocr="PREMIUM", # Optional: DEFAULT, PREMIUM, LOW
-    llm="HIGH"  # Optional: DEFAULT, MINI, HIGH
+    llm="HIGH",  # Optional: DEFAULT, MINI, HIGH
+    extract_figures=True
 )
 ```
 
@@ -54,7 +54,7 @@ job_guid = await client.submit_and_process_document_with_configuration(
 
 ### submit_and_ocr_document
 
-Process a document with OCR only (no structured extraction).
+Process a document with OCR only (no structured extraction). Use `extract_figures=True` to store figure images and metadata.
 
 ```python
 job_guid = await client.submit_and_ocr_document(
@@ -62,7 +62,20 @@ job_guid = await client.submit_and_ocr_document(
     document_mime_type="application/pdf",
     ocr="PREMIUM",
     ocr_format="markdown", # markdown, plain, jsonl (for Excel)
-    describe_figures=True
+    describe_figures=True,
+    extract_figures=True
+)
+```
+
+### analyze_document
+
+Analyze document structure and return a job GUID.
+
+```python
+job_guid = await client.analyze_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    ocr="PREMIUM"
 )
 ```
 
@@ -184,6 +197,39 @@ Delete a template.
 await client.delete_template("form-template")
 ```
 
+## Agent Chat
+
+### agent_chat
+
+Send a chat message to the agent and receive a job GUID.
+
+```python
+response = await client.agent_chat(
+    messages=[{"role": "user", "content": "Help me extract invoice line items"}],
+    session_id="session-123"
+)
+```
+
+### agent_status
+
+Check the status of an agent chat job.
+
+```python
+status = await client.agent_status(response["jobGuid"])
+```
+
+### agent_chat_and_wait
+
+Send a message and wait for the completed response.
+
+```python
+result = await client.agent_chat_and_wait(
+    messages=[{"role": "user", "content": "Create a schema for insurance claims"}],
+    session_id="session-123"
+)
+print(result["response"]["message"])
+```
+
 ## Cases
 
 ### create_case
@@ -258,6 +304,24 @@ result = await client.submit_and_wait_for_operation_with_parameters(
 )
 ```
 
+### submit_and_wait_for_image_selection
+
+Select relevant figures from a completed job that extracted figures.
+
+```python
+selection = await client.submit_and_wait_for_image_selection(
+    job_guid,
+    prompt="Return all diagrams from the document",
+    top_k=5,
+    match_mode="all",
+    use_vision=False
+)
+
+import json
+selection_payload = json.loads(selection.result)
+selected = selection_payload.get("selected", [])
+```
+
 ## Map-Reduce Helpers
 
 ### submit_and_process_document_map_reduce
@@ -275,6 +339,52 @@ job_guid = await client.submit_and_process_document_map_reduce(
     parallel_processing=True
 )
 ```
+
+### submit_and_wait_for_map_reduce
+
+Run map-reduce on an already-processed job without re-uploading or re-running OCR. This is the map-reduce equivalent of `submit_and_wait_for_generative_task`.
+
+```python
+# First: process a document normally (OCR runs here)
+job_guid = await client.submit_and_process_document(
+    document=doc_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract summary",
+)
+await client.wait_until_ready(job_guid)
+
+# Later: re-run with map-reduce — no new upload, reuses OCR from parent job
+result = await client.submit_and_wait_for_map_reduce(
+    parent_job_id=job_guid,
+    prompt="Extract all line items (sku, description, quantity, total)",
+    schema='{"type":"array","items":{"type":"object"}}',
+    pages_per_chunk=5,
+    overlap_pages=1,
+    dedup_key="sku",
+    parallel_processing=True,
+    timeout=300,
+    result_format="json"
+)
+print(result["records"])
+```
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `parent_job_id` | str | *required* | GUID of the completed job whose document to re-process. |
+| `prompt` | str | `""` | Extraction instructions. |
+| `schema` | str | `""` | JSON schema for structured extraction. |
+| `pages_per_chunk` | int | `1` | Pages per chunk. |
+| `overlap_pages` | int | `0` | Overlapping pages between chunks. |
+| `dedup_key` | str | `None` | Required when `overlap_pages > 0`. |
+| `parallel_processing` | bool | `False` | Run chunks in parallel. |
+| `mime_type` | str | `"application/pdf"` | Document MIME type. |
+| `timeout` | int | `180` | Max seconds to wait. |
+| `poll_interval` | float | `5.0` | Seconds between status polls. |
+| `result_format` | str | `"json"` | `"json"`, `"csv"`, `"excel"`, or `None`. |
+
+All other map-reduce parameters (`header_options`, `header_schema`, `header_prompt`, `stop_when_empty`, `empty_chunk_grace`, `ocr`, `llm`, `trace`, `page_range`, `tools`, etc.) are also accepted.
 
 ## LLM Tracing
 
@@ -299,6 +409,27 @@ Get a page thumbnail image from a processed job.
 image_bytes = await client.get_image(job_guid, page_index=0)
 if image_bytes:
     with open("page_0.png", "wb") as f:
+        f.write(image_bytes)
+```
+
+### get_figures_metadata
+
+Get extracted figure metadata for a job.
+
+```python
+metadata = await client.get_figures_metadata(job_guid)
+images = metadata.get("images", []) if metadata else []
+```
+
+### get_figure_image
+
+Download a figure image by ID.
+
+```python
+figure_id = images[0]["id"]
+image_bytes = await client.get_figure_image(job_guid, figure_id)
+if image_bytes:
+    with open("figure_0.png", "wb") as f:
         f.write(image_bytes)
 ```
 

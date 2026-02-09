@@ -1,5 +1,6 @@
 ---
 title: AI Document Analysis
+description: Generate summaries, classify documents, answer questions, and transform content using AI generative tasks after OCR.
 sidebar_position: 3
 ---
 
@@ -220,7 +221,7 @@ async def analyze_multilingual_document():
             prompt=f"Provide a summary of this document in {language}. Include the main points and conclusions."
         )
         
-    result_data = json.loads(analysis.result)
+        result_data = json.loads(analysis.result)
         print(f"Summary in {language}:")
         print(result_data['generated_text'])
         print("---\n")
@@ -307,7 +308,7 @@ async def transform_document_content():
             prompt=transformation["prompt"]
         )
         
-    result_data = json.loads(result.result)
+        result_data = json.loads(result.result)
         results[transformation["name"]] = result_data['generated_text']
     
     return results

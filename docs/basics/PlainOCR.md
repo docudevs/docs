@@ -1,3 +1,9 @@
+---
+title: Plain OCR Processing
+description: Extract plain text or markdown from documents using OCR without structured data extraction.
+sidebar_position: 3
+---
+
 # Plain OCR Processing
 
 DocuDevs provides OCR-only processing for extracting plain text or markdown content from documents without structured data extraction. This feature is perfect when you only need the text content from documents like PDFs, images, or scanned documents.
@@ -144,7 +150,7 @@ curl -X POST "https://api.docudevs.ai/document/upload" \
   -F "document=@document.pdf"
 ```
 
-2. **Process with OCR:**
+1. **Process with OCR:**
 
 ```bash
 curl -X POST "https://api.docudevs.ai/document/ocr/{guid}?format=markdown" \
@@ -155,7 +161,7 @@ curl -X POST "https://api.docudevs.ai/document/ocr/{guid}?format=markdown" \
   }'
 ```
 
-3. **Check status and get results:**
+1. **Check status and get results:**
 
 ```bash
 # Check processing status

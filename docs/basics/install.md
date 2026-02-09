@@ -1,5 +1,6 @@
 ---
 title: Installation & Setup
+description: Install the DocuDevs Python SDK, configure your API key, and verify your setup with a test extraction.
 sidebar_position: 2
 ---
 

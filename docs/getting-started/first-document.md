@@ -1,5 +1,6 @@
 ---
 title: Your First Document - Detailed Walkthrough
+description: Step-by-step guide to processing documents with DocuDevs including instructions, schemas, configurations, and error handling.
 sidebar_position: 3
 ---
 
@@ -478,7 +479,7 @@ async def process_with_case_organization():
             instruction="Extract invoice data"
         )
         
-    result = await client.wait_until_ready(process_response.parsed.guid, result_format="json")
+        result = await client.wait_until_ready(process_response.parsed.guid, result_format="json")
         print(f"Processed {filename}")
     
     # List all documents in the case

@@ -1,5 +1,6 @@
 ---
 title: CLI Reference
+description: Complete CLI reference for DocuDevs including document processing, batch operations, configuration management, templates, cases, and OCR commands.
 sidebar_position: 5
 ---
 
@@ -440,6 +441,34 @@ Fetch the result payload for a completed operation.
 docudevs operations result JOB_GUID --type error-analysis
 ```
 
+## Billing
+
+Manage token packs and balances.
+
+### `billing prices`
+
+List available token pack prices.
+
+```bash
+docudevs billing prices
+```
+
+### `billing checkout`
+
+Create a checkout session for a token pack.
+
+```bash
+docudevs billing checkout PRICE_ID
+```
+
+### `billing balance`
+
+Fetch the current token balance.
+
+```bash
+docudevs billing balance
+```
+
 ## LLM Provider Management
 
 Manage LLM providers and key bindings.
@@ -584,7 +613,7 @@ docudevs result JOB_GUID
 
 These options are available for all commands:
 
-- `--api-url TEXT`: API endpoint URL (default https://api.docudevs.ai)
+- `--api-url TEXT`: API endpoint URL (default <https://api.docudevs.ai>)
 - `--token TEXT`: Authentication token (or use environment variables)
 - `--help`: Show help message and exit
 

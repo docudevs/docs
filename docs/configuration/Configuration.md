@@ -1,5 +1,6 @@
 ---
 title: Named Configurations
+description: Save and reuse processing settings as named configurations for consistent document extraction across multiple jobs.
 sidebar_position: 1
 ---
 
@@ -284,6 +285,7 @@ When creating a configuration, you can specify the following parameters:
 | `extractionMode` | Enum | Extraction method (`SIMPLE`, `STEPS`). |
 | `barcodes` | Boolean | Enable barcode and QR code scanning. |
 | `describeFigures` | Boolean | Enable AI description of figures and images. |
+| `extractFigures` | Boolean | Store figure images and metadata for later download. |
 
 ## Best Practices
 

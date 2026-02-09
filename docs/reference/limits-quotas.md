@@ -1,5 +1,6 @@
 ---
 title: Limits & Quotas
+description: DocuDevs platform limits for document size, batch size, concurrent jobs, and rate limits.
 sidebar_position: 7
 ---
 

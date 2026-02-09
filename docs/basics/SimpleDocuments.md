@@ -1,5 +1,6 @@
 ---
-title: Structured Data Extraction
+title: "Structured Data Extraction"
+description: Extract structured data from documents using prompts, JSON schemas, or Pydantic models with the DocuDevs SDK.
 sidebar_position: 1
 ---
 
