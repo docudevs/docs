@@ -1,24 +1,4 @@
 {
-  "$schema": "https://context7.com/schema/context7.json",
 "url": "https://context7.com/docudevs/docs",
-  "public_key": "pk_OfkxL1I1k03Dri7YO383u",
-  "projectTitle": "DocuDevs - AI Document Automation Platform",
-  "description": "DocuDevs transforms unstructured documents into structured data using AI. Includes Python SDK reference, CLI commands, REST API endpoints, OCR processing, map-reduce extraction, batch processing, cases, templates, schema generation, and agent chat.",
-  "folders": [
-    "docs"
-  ],
-  "excludeFolders": [
-    "src",
-    "static",
-    "tests",
-    "openapi"
-  ],
-  "excludeFiles": [
-    "sidebars.ts",
-    "tsconfig.json",
-    "docusaurus.config.ts",
-    "vite.config.ts",
-    "package.json",
-    "package-lock.json"
-  ]
+  "public_key": "pk_OfkxL1I1k03Dri7YO383u"
 }
