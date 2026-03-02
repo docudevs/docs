@@ -333,6 +333,7 @@ job_guid = await client.submit_and_process_document_map_reduce(
     document=doc_bytes,
     document_mime_type="application/pdf",
     prompt="Extract line items",
+    split_type="page",
     pages_per_chunk=5,
     overlap_pages=1,
     dedup_key="sku",
@@ -358,6 +359,7 @@ result = await client.submit_and_wait_for_map_reduce(
     parent_job_id=job_guid,
     prompt="Extract all line items (sku, description, quantity, total)",
     schema='{"type":"array","items":{"type":"object"}}',
+    split_type="page",
     pages_per_chunk=5,
     overlap_pages=1,
     dedup_key="sku",
@@ -375,6 +377,8 @@ print(result["records"])
 | `parent_job_id` | str | *required* | GUID of the completed job whose document to re-process. |
 | `prompt` | str | `""` | Extraction instructions. |
 | `schema` | str | `""` | JSON schema for structured extraction. |
+| `split_type` | str | `"page"` | Chunk strategy: `"page"` or `"markdown_header"`. |
+| `split_header_level` | int | `2` (markdown mode) | Header level (`1` or `2`) used when `split_type="markdown_header"`. |
 | `pages_per_chunk` | int | `1` | Pages per chunk. |
 | `overlap_pages` | int | `0` | Overlapping pages between chunks. |
 | `dedup_key` | str | `None` | Required when `overlap_pages > 0`. |
@@ -383,6 +387,8 @@ print(result["records"])
 | `timeout` | int | `180` | Max seconds to wait. |
 | `poll_interval` | float | `5.0` | Seconds between status polls. |
 | `result_format` | str | `"json"` | `"json"`, `"csv"`, `"excel"`, or `None`. |
+
+When `split_type="markdown_header"`, `overlap_pages` and `dedup_key` are not supported.
 
 All other map-reduce parameters (`header_options`, `header_schema`, `header_prompt`, `stop_when_empty`, `empty_chunk_grace`, `ocr`, `llm`, `trace`, `page_range`, `tools`, etc.) are also accepted.
 

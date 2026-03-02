@@ -5,7 +5,7 @@ description: "getAgentStatus"
 sidebar_label: "getAgentStatus"
 hide_title: true
 hide_table_of_contents: true
-api: eJytVE1v2zAM/SuCThtgJFmPuQVtUfS0ottOQQ6MzTjKZEuV5GyB4f8+Uv6oaxs97WRZFPnIx0fWMkDu5XYvIccyyEMijUUHQZnyOZNbmWPYseVHgFB5mUgLDgoM6NirliX90LOLOT5VKiO7KunXQjjT2eFbpRxSnOAqTKRPz1iA3NYy3Cy7+eBUmcumOfBjb03p0bP9brPhT4Y+dcpyNrNcBL0RvROBpaYMXAK5gbVapbGI9cWzbz3Cto5LDKpF6jOfJ0X5ovcdEUvWlpIl05DWYNzLstKa0jTHC6aRaND6+ymS+DGjglCpG4uBIeWi/DguOAc3ChzjU1gVsPDzOtvnCyE/cLxkhwCf15Flir1Bv4wQueNNM9bA/gNU0gYk/6CCZsjY210sULKnr/IcfcDs3pQnlf+nHHp2p8CvXcvuOxk1B3JE54wbA3e09GxPg7+Pwbt0BqFMEVsZ97hUctNM2zEfPxq9s+kGM04jDdpWruP0rlugdd2l0cRxPJlYQIf8YNLqAa9e7F6e5RRtMPKhoIiCNJRyJWXODivxCJ6YDeIP3EQwgmbuSmSLm6mcyDonz5aomkSS1bexv63uVhvWkzU+FBC11i0PKkXEKsVQ5rIoA/4Na6uBdgwFqpyOMo8U9AtsYDuR274bRPyZQPlRXR/B4y+nm4av3yp0N7qn4xWcgiNzRAOZKc9n4vkE2uMsn2HXyC+vXfu/il7S0zy7Syh5Sq+gK/6j42+8jTZn1NsZIUMXU2ituzRFG0Z+s9XGq3MQxdPjT9LRP1McA/s=
+api: eJydVE1v2zAM/SuCThsQJFmPuQVtUfS0oltPQQ6MzTjKFMsV5WyB4f8+Uv6oYwfFsJNlUeR7JB9Z6QAZ6dVGQ4Z50NuZdgV6CMblz6le6QzDWiw/AoSS9EwX4OGEAb14VTrnH352dLun0qRsNzn/FhAOfPb4XhqPHCf4EmeakgOeQK8qHS6FuFHwJs90XW/lMRUuJySx3y2X8kmREm8KYTPhoviN6pwYLHF5kBTYDYrCmiQmsTiS+FYD7MJLisE0SB3zKSnmi0RtIW5Zm5LcMvW0euNG56W1TNPtjpjEQoO13/exiNeMTozK3bgZGBJJioZxwXu4cOAYn8OagCea5tk8vxHyqsa37BDg8zzS1Ig32JcBonS8roca2FxBzZqA7B9MsAIZe7uOCWrxpDLLkAKm9y7fm+x/OTCAc5beCNN/KttYmqMcuu6Mib+2Lb9vZVhv2RG9d36I2kbtYMfBP8boQ3q90MaIzRh0uMK0HrdzOr48ugfXDnacZh7UlV7E6V80QIuqpVHHcd67mECL/OCS8gHPpNYvz3qM1hvlcOKIijWYSCZ5Jg5z9QjEnQnqN1xUcIpn9szNUhdXepW2TiSWqLqZZis1sb/N7+ZL0WPhKJwgarVdPpyKilmqPs3bog74JywKC7yjOFDpbRyTWIJuAfbVnulV1w0u/IFB5VFV7YDwzdu6luv3Ev2F7/l4Bm9gJzXigU4NyZnrvAdLOOHT7yr95bVt/1fVjcSYZ3sJucj1DLaUPz7+wstg80a9HRBS9JFCY10nCRZh4DdZjbJ6e1E8Pf5kHf0Fo7sZxA==
 sidebar_class_name: "get api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -62,7 +62,7 @@ getAgentStatus
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"getAgentStatus 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"sessionId":{"type":"string"},"status":{"type":"string"},"response":{"type":["null","object"],"allOf":[{"properties":{"message":{"type":"string"},"actions":{"type":["array","null"],"items":{"properties":{"type":{"type":"string"},"description":{"type":"string"},"data":{"type":["null","object"],"additionalProperties":true}},"required":["description","type"],"title":"AgentAction"}},"suggestedConfig":{"type":["null","object"],"additionalProperties":true}},"required":["message"],"title":"AgentResponseContent"}]},"error":{"type":["string","null"]}},"required":["jobGuid","sessionId","status"],"title":"AgentStatusResponse"}}}}}}
+  responses={{"200":{"description":"getAgentStatus 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"sessionId":{"type":"string"},"status":{"type":"string"},"response":{"type":["null","object"],"allOf":[{"properties":{"message":{"type":"string"},"actions":{"type":["array","null"],"items":{"properties":{"type":{"type":"string"},"description":{"type":"string"},"data":{"type":["null","object"],"additionalProperties":true}},"required":["description","type"],"title":"AgentAction"}},"suggestedConfig":{"type":["null","object"],"additionalProperties":true},"toolsUsed":{"type":["array","null"],"items":{"type":"string"}}},"required":["message"],"title":"AgentResponseContent"}]},"error":{"type":["string","null"]}},"required":["jobGuid","sessionId","status"],"title":"AgentStatusResponse"}}}}}}
 >
   
 </StatusCodes>

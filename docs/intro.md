@@ -28,7 +28,7 @@ Learn about the main functionality:
 
 - **[Simple Documents](/docs/basics/SimpleDocuments)** - Basic document processing
 - **[OCR Processing](/docs/basics/PlainOCR)** - Text extraction from images and scans
-- **[Templates](/docs/templates/Templates)** - Reusable document processing templates
+- **[Templates](/docs/templates/templates.md)** - Reusable document processing templates
 - **[Schema Generation](/docs/core/schema-generation)** - AI-powered output structure creation
 
 ### ⚡ Advanced Features
@@ -36,7 +36,7 @@ Learn about the main functionality:
 Power user functionality for complex workflows:
 
 - **[Cases](/docs/advanced/cases)** - Organize documents into collections ⭐ *Most Popular*
-- **[Named Configurations](/docs/configuration/Configuration)** - Save and reuse processing settings
+- **[Named Configurations](/docs/configuration/configuration.md)** - Save and reuse processing settings
 - **[Operations](/docs/advanced/operations)** - Error analysis and post-processing workflows
 
 ### 🔧 Integration & Production
@@ -108,7 +108,7 @@ Choose the path that best fits your needs:
 
 1. [Quick Start Tutorial](/docs/getting-started/quick-start) - understand the basics
 2. [Use Cases](/docs/integration/use-cases) - see real-world applications
-3. [Templates](/docs/templates/Templates) - create reusable workflows
+3. [Templates](/docs/templates/templates.md) - create reusable workflows
 4. [Best Practices](/docs/integration/best-practices) - optimize for your needs
 
 ### For System Integrators

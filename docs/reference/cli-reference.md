@@ -107,6 +107,8 @@ docudevs process-map-reduce document.pdf [OPTIONS]
 - `--pages-per-chunk INTEGER`: Pages per chunk (default: 1)
 - `--overlap INTEGER`: Overlap between chunks (default: 0)
 - `--dedup-key TEXT`: JSON path used to deduplicate rows across overlapping chunks
+- `--split-type [page|markdown-header]`: Chunking mode (default: `page`)
+- `--split-header-level INTEGER`: Header level (`1` or `2`) when `--split-type markdown-header`
 - `--header-page-limit INTEGER`: Number of pages reserved for header extraction
 - `--header-include-in-rows`: Include header pages in row processing
 - `--header-row-prompt-augmentation TEXT`: Extra context injected into each chunk prompt
@@ -117,6 +119,8 @@ docudevs process-map-reduce document.pdf [OPTIONS]
 - `--empty-chunk-grace INTEGER`: Number of empty chunks tolerated when `--stop-when-empty` is set
 - `--timeout INTEGER`: Wait timeout in seconds (default: 60)
 - `--wait/--no-wait`: Wait for processing to complete (default: wait)
+
+When using `--split-type markdown-header`, `--overlap` and `--dedup-key` are not supported.
 
 **Example:**
 
@@ -129,6 +133,12 @@ docudevs process-map-reduce large-invoice.pdf \
   --dedup-key "lineItems.sku" \
   --header-page-limit 1 \
   --header-schema '{"invoiceNumber":"string"}'
+
+# Split by markdown subsection (##)
+docudevs process-map-reduce handbook.pdf \
+  --prompt "Extract policies by section" \
+  --split-type markdown-header \
+  --split-header-level 2
 ```
 
 ### `ocr-only`
@@ -613,7 +623,7 @@ docudevs result JOB_GUID
 
 These options are available for all commands:
 
-- `--api-url TEXT`: API endpoint URL (default <https://api.docudevs.ai>)
+- `--api-url TEXT`: API endpoint URL (default `https://api.docudevs.ai`)
 - `--token TEXT`: Authentication token (or use environment variables)
 - `--help`: Show help message and exit
 

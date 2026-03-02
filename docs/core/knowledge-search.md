@@ -39,6 +39,7 @@ You maintain a "Signature Appliances" case (`kb-kitchen-pro`) that stores the ca
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -115,6 +116,85 @@ You can repeat `--tool` to stack multiple descriptors (e.g., knowledge search pl
 Combine with `docudevs knowledge-base list` to fetch available case IDs at runtime.
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.ToolDescriptor;
+import ai.docudevs.client.generated.model.ToolType;
+import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+String schema = """
+{
+  "type": "object",
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sku": {"type": "string"},
+          "canonical_name": {"type": "string"},
+          "localized_display_name": {"type": "string"},
+          "regulatory_class": {"type": "string"},
+          "marketing_summary": {"type": "string"}
+        }
+      }
+    }
+  }
+}
+""";
+
+UploadResponse upload = documentApi.uploadDocument(new File("samples/products.csv"));
+
+ToolDescriptor knowledgeSearch = new ToolDescriptor()
+    .type(ToolType.KNOWLEDGE_BASE_SEARCH)
+    .config(Map.of("caseId", "kb-kitchen-pro", "topK", 8));
+
+UploadCommand command = new UploadCommand()
+    .mimeType("text/csv")
+    .prompt(
+        "Fill canonical_name, localized_display_name (<=40 chars), regulatory_class, and "
+            + "marketing_summary using the Signature Appliances knowledge base."
+    )
+    .schema(schema)
+    .tools(List.of(knowledgeSearch));
+
+documentApi.processDocument(upload.getGuid(), null, command);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Extraction failed: " + status.getStatus());
+    }
+    Thread.sleep(2000);
+}
+
+Object result = jobApi.resultJson(upload.getGuid());
+System.out.println(result);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash

@@ -96,6 +96,7 @@ POST /operation/{parentJobId}/generative-task
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -132,6 +133,44 @@ docudevs operations status JOB_GUID
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.OperationsApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.OperationResultResponse;
+import ai.docudevs.client.generated.model.SubmitOperationRequest;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+OperationsApi operationsApi = new OperationsApi(apiClient);
+String parentJobGuid = "JOB_GUID";
+
+operationsApi.submitOperation(
+    new SubmitOperationRequest()
+        .jobGuid(parentJobGuid)
+        .type("error-analysis")
+);
+
+while (true) {
+    OperationResultResponse result = operationsApi.getOperationResult(parentJobGuid, "error-analysis");
+    if ("COMPLETED".equals(result.getStatus())) {
+        System.out.println(result.getResult());
+        break;
+    }
+    if ("ERROR".equals(result.getStatus()) || "FAILED".equals(result.getStatus())) {
+        throw new IllegalStateException("Operation failed: " + result.getError());
+    }
+    Thread.sleep(2000);
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -154,6 +193,7 @@ curl -X GET https://api.docudevs.ai/operation/JOB_GUID \
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -186,6 +226,49 @@ docudevs operations result PARENT_JOB_GUID --type generative-task
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.OperationsApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.GenerativeTaskRequest;
+import ai.docudevs.client.generated.model.OperationResultResponse;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+OperationsApi operationsApi = new OperationsApi(apiClient);
+ObjectMapper mapper = new ObjectMapper();
+String parentJobGuid = "PARENT_JOB_GUID";
+
+operationsApi.createGenerativeTask(
+    parentJobGuid,
+    new GenerativeTaskRequest()
+        .prompt("Summarize the main findings")
+        .model("DEFAULT")
+);
+
+while (true) {
+    OperationResultResponse result = operationsApi.getOperationResult(parentJobGuid, "generative-task");
+    if ("COMPLETED".equals(result.getStatus())) {
+        JsonNode payload = mapper.readTree(result.getResult());
+        System.out.println(payload.path("generated_text").asText());
+        break;
+    }
+    if ("ERROR".equals(result.getStatus()) || "FAILED".equals(result.getStatus())) {
+        throw new IllegalStateException("Generative task failed: " + result.getError());
+    }
+    Thread.sleep(2000);
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -208,6 +291,7 @@ curl -X GET https://api.docudevs.ai/operation/PARENT_JOB_GUID/generative-task \
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -253,6 +337,82 @@ docudevs operations result JOB_GUID --type image-select
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.OperationsApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.OperationParameters;
+import ai.docudevs.client.generated.model.OperationResultResponse;
+import ai.docudevs.client.generated.model.SubmitOperationRequest;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Map;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+OperationsApi operationsApi = new OperationsApi(apiClient);
+ObjectMapper mapper = new ObjectMapper();
+String jobGuid = "JOB_GUID";
+
+operationsApi.submitOperation(
+    new SubmitOperationRequest()
+        .jobGuid(jobGuid)
+        .type("image-select")
+        .parameters(
+            new OperationParameters().customParameters(
+                Map.of(
+                    "prompt", "Return all diagrams from the document",
+                    "topK", 5,
+                    "matchMode", "all",
+                    "useVision", false
+                )
+            )
+        )
+);
+
+while (true) {
+    OperationResultResponse result = operationsApi.getOperationResult(jobGuid, "image-select");
+    if ("COMPLETED".equals(result.getStatus())) {
+        JsonNode payload = mapper.readTree(result.getResult());
+        JsonNode first = payload.path("selected").get(0);
+        if (first != null) {
+            String imageId = first.path("id").asText();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.docudevs.ai/job/figure/" + jobGuid + "/" + imageId))
+                .header("Authorization", "Bearer " + System.getenv("API_KEY"))
+                .GET()
+                .build();
+            HttpResponse<byte[]> image = HttpClient.newHttpClient().send(
+                request,
+                HttpResponse.BodyHandlers.ofByteArray()
+            );
+            if (image.statusCode() / 100 == 2) {
+                Files.write(Path.of("selected_figure.png"), image.body());
+            }
+        }
+        System.out.println(payload.toPrettyString());
+        break;
+    }
+    if ("ERROR".equals(result.getStatus()) || "FAILED".equals(result.getStatus())) {
+        throw new IllegalStateException("Image selection failed: " + result.getError());
+    }
+    Thread.sleep(2000);
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -306,6 +466,7 @@ for question in questions:
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -336,6 +497,49 @@ docudevs operations error-analysis <JOB_GUID> \
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.OperationsApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.LlmType;
+import ai.docudevs.client.generated.model.OperationParameters;
+import ai.docudevs.client.generated.model.SubmitOperationResponse;
+import ai.docudevs.client.generated.model.SubmitOperationRequest;
+import java.util.List;
+import java.util.Map;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+OperationsApi operationsApi = new OperationsApi(apiClient);
+
+OperationParameters parameters = new OperationParameters()
+    .llmType(LlmType.HIGH)
+    .customParameters(
+        Map.of(
+            "focus_areas", List.of("numerical_accuracy", "date_formats"),
+            "confidence_threshold", 0.8,
+            "detailed_suggestions", true
+        )
+    );
+
+SubmitOperationResponse response = operationsApi.submitOperation(
+    new SubmitOperationRequest()
+        .jobGuid("JOB_GUID")
+        .type("error-analysis")
+        .parameters(parameters)
+);
+
+System.out.println("Operation job GUID: " + response.getJobGuid());
+System.out.println("Status: " + response.getStatus());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash

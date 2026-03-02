@@ -5,8 +5,8 @@ description: "resolveOcrProvider"
 sidebar_label: "resolveOcrProvider"
 hide_title: true
 hide_table_of_contents: true
-api: eJydU8GO2kAM/ZXRnCNgq6oHbkisKtRDObQnxGF2xsC0k8ysx6FFUf69dhJCust2pXIhif3s5/fsRscEaMjHauP0UiPkGM7w1eIW49k7QF3oZNCUQIBZL3eNrviFU3/ChWO+4sfnGlBesj1BafSy0XRJnLPTmdBXRw5VdQh637bFiM8QwErjL/9VaF8I2RSrDFkSPywW8ucgW/RJ6t4dR3GeugK5nI0VQUUCNSkFbzst5j+y4JsJkYSiFPm+m3c3ckyd4NgpdYhYGuo/ffqo22IYdkwdxuAAVC5F33d+FSyjg7Bxd2MHMFRjT8M454WvCdsJPcIaODETJ+a7NSxyEXAr+pfEha6Tez+tFSOea4/gJDzONWFaiF63qQZVRoZsJXkKQnHi1JqibuVXvGuq1AY6RdngI1C3snTil7lYgyzPPFqcD8Bu2Q6xm2lou462XsM5q9V2o1/2G4PyUPKyKN4FCzmzDAKYqUeTWXhSv8xFUVS8U2f2Ql1ijcoNoCwRltNwfY7mvvbD7GG2EEdSzFSabueG+xjYKp5TTQb9i9toLcFvmqdg+IrENwzdynYi7PRVBEazDLq4lhbhT9xXcprmyWT4jqFt5XN/iHLtzmfzFMTbgwkZiu7ur9d/NqGW9lru+o3MF3d+g+zlBb1guJPs2wmMDClte+zKWkg0Qb26Uakyev/58RuvzB/kMKgd
-sidebar_class_name: "get api-method"
+api: eJydlM2O2jAQgF/F8pkCXVU9cNuWPax6WES3J8RhiAdw69iu7bBLo7x7ZxJDAlTbqhyCM//zzTi1dB4DJO3so5IzGTA6c8CnIiyCO2iFQY5I+LPCmD45dZSzWhbOJrSJj+C90UXrPvkenWVZLPZYAp984OBJY+Q3F3Zg9a9zrlqmo0fKqSncrk20daGE1Ik+fpDNSP7AY2+5kjEFbXdkaStj5JoMIhosOOSXty2brg0dULH6qpj1SCadDFezPBNYdm3L5tI5hQpbQfTOxq63u+mU/xTGImjPQf/IUpCdODlSbf9J0udw/0wRrfJOd4myeeZDytIpNBehet0WIVWhywpKaS4PzGJQTaYBXl8M4Bzjinu2G5Q0SNLXMhr2eDscNWA6T44nxIn+hp8TYNo7XnTvIuf2kPb0NmF6gVqbuCJMsiepeRLLfvsfXqH0XMjtNk/zrvaLd7mZA6jabl1LKjc1d0U1x0MU94tHed3FWcmHkpZFEJkCY6Rg7DAWDxBpEkm8wFEkJ2inDjQccXRVECo7RdYoSEDxSRu72O/Hd+MpV8QwSmh3zkKJPTxB9MQA30Vt51knfE0Tb0BbDlYF0y5pS3YlT2TJm9i2X5OOLo11z0Mgm7reQMRvwTQNi4l3IGQrOh4gaNgwphXf9j0CFzJb1Zn25+4GvXvmStjcVFzRzW1qRieP+6JAn960XQ/2ZPH09ZmMN/nbxwvKeOCFO6HnTHJjLZH2lrSyWhqwuwp2bNvF5N9vcKXkpw==
+sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
 ---
@@ -27,7 +27,7 @@ import Heading from "@theme/Heading";
 </Heading>
 
 <MethodEndpoint
-  method={"get"}
+  method={"post"}
   path={"/internal/ocr/resolve"}
   context={"endpoint"}
 >
@@ -47,14 +47,14 @@ resolveOcrProvider
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"key","in":"query","schema":{"type":["string","null"]}},{"name":"selectionKey","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={undefined}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={undefined}
+  body={{"content":{"application/json":{"schema":{"properties":{"organizationId":{"type":"integer","format":"int64"},"key":{"type":["string","null"]},"selectionKey":{"type":["string","null"]}},"required":["organizationId"],"title":"ResolveOcrRequest"}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ resolveOcrProvider
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"resolveOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+  responses={{"200":{"description":"resolveOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"providerId":{"type":"integer","format":"int64"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"apiKey":{"type":"string"}},"required":["apiKey","endpoint","features","modelId","providerId"],"title":"ResolvedOcrProviderDto"}}}}}}
 >
   
 </StatusCodes>

@@ -31,6 +31,7 @@ To create or update a configuration, you define the processing parameters (OCR, 
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -88,6 +89,54 @@ docudevs save-configuration invoice-config config.json
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.ConfigurationApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ExtractionMode;
+import ai.docudevs.client.generated.model.LlmType;
+import ai.docudevs.client.generated.model.NamedConfiguration;
+import ai.docudevs.client.generated.model.OcrType;
+import ai.docudevs.client.generated.model.UploadCommand;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
+
+String schema = """
+{
+  "type": "object",
+  "properties": {
+    "vendor_name": {"type": "string"},
+    "invoice_number": {"type": "string"},
+    "total_amount": {"type": "number"},
+    "date": {"type": "string", "format": "date"}
+  },
+  "required": ["vendor_name", "total_amount"]
+}
+""";
+
+NamedConfiguration saved = configurationApi.saveConfiguration(
+    "invoice-config",
+    new UploadCommand()
+        .prompt("Extract invoice data including vendor details, line items, and totals.")
+        .schema(schema)
+        .ocr(OcrType.PREMIUM)
+        .llm(LlmType.HIGH)
+        .extractionMode(ExtractionMode.STEPS)
+        .barcodes(true)
+);
+
+System.out.println("Saved configuration: " + saved.getName());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -122,6 +171,7 @@ Retrieve a list of all saved configurations in your organization.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -141,6 +191,30 @@ docudevs list-configurations
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.ConfigurationApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.NamedConfiguration;
+import java.util.List;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
+List<NamedConfiguration> configs = configurationApi.listConfigurations();
+
+for (NamedConfiguration config : configs) {
+    System.out.println(config.getName() + " created=" + config.getCreatedAt());
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -159,6 +233,7 @@ Get the details of a specific configuration to inspect its settings.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -177,6 +252,29 @@ docudevs get-configuration invoice-config
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.ConfigurationApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.UploadCommand;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
+UploadCommand config = configurationApi.getConfiguration("invoice-config");
+
+System.out.println("Prompt: " + config.getPrompt());
+System.out.println("OCR: " + config.getOcr());
+System.out.println("LLM: " + config.getLlm());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -195,6 +293,7 @@ Remove a configuration when it is no longer needed.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -212,6 +311,24 @@ docudevs delete-configuration invoice-config
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.ConfigurationApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
+configurationApi.deleteConfiguration("invoice-config");
+System.out.println("Deleted configuration invoice-config");
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -230,6 +347,7 @@ Once saved, you can use a configuration to process documents. This applies all t
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -259,6 +377,45 @@ docudevs process invoice.pdf --configuration invoice-config
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+UploadResponse upload = documentApi.uploadDocument(new File("invoice.pdf"));
+documentApi.processDocumentWithConfiguration(upload.getGuid(), "invoice-config", null);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Processing failed: " + status.getStatus());
+    }
+    Thread.sleep(2000);
+}
+
+Object result = jobApi.resultJson(upload.getGuid());
+System.out.println(result);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash

@@ -22,8 +22,10 @@ const sidebars: SidebarsConfig = {
         'basics/SimpleDocuments',           // EXISTING: Core document processing
         'basics/PlainOCR',                  // EXISTING: OCR-only processing
         'core/ai-analysis',                 // NEW: AI document analysis and generative tasks
+        'core/agent-chat',                  // NEW: Agent chat interface
         'templates/Templates',              // EXISTING: Template management
         'core/schema-generation',           // NEW: AI schema generation
+        'core/calculated-fields',           // NEW: Schema calculated fields
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
         'core/knowledge-search',            // NEW: Knowledge base assisted extraction
         'core/batch-processing',            // NEW: Multi-document batch processing
@@ -54,6 +56,8 @@ const sidebars: SidebarsConfig = {
       items: [
         'reference/sdk-methods',            // NEW: Complete SDK reference
         'reference/cli-reference',          // NEW: CLI command reference
+        'reference/sdk-changelog',
+        'reference/billing-tokens',
         'reference/error-codes',            // NEW: Error reference
         'reference/limits-quotas',          // NEW: Platform limits
       ],

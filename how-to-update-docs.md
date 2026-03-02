@@ -2,6 +2,8 @@
 
 The documentation should explain all features available in the API. Best way to know what has been from previous version is to analyze docudevs-sdk client, and compare the examples in the documentation.
 
+The canonical OpenAPI file is at the repository root: `../docudevs.yaml` (generated via `cd ../api && ./gradlew exportOpenApiSpec`).
+
 Check from `docudevs-sdk/docudevs_client.py` what new methods has been added. Good place to find new functionality is also `docudevs-sdk/tests` which have a working example for each new functionality.
 
 the documentation is a Docusaurus project, and the markup files are in `docudevs-doc/docs`.
@@ -10,6 +12,15 @@ Check from `docudevs-doc/sidebars.ts` if there is already a suitable sidebar ite
 Analyze all markdown if they are missing instructions to use new methods or parameters from the docudevs-sdk.
 
 Update documents for missing features. Use Tabs for python and CuRl documentation. Generate the cUrl based on examples from existing examples and the python docudevs-sdk test cases you know. Use same logic for the python part, using the docudevs-sdk/tests as example.
+
+## SDK changelog automation
+
+Run `./scripts/install-git-hooks.sh` from the repository root to enable repo-managed hooks.
+
+On each commit, the pre-commit hook checks staged changes under `docudevs-sdk/` and `docudevs-java-sdk/`.
+If SDK files changed, it appends a new entry to `docudevs-doc/docs/reference/sdk-changelog.md` and stages that file.
+
+The summary uses LLM credentials from `python/ai-service/.env` and is written for SDK users only.
 
 <Tabs
   defaultValue="curl"

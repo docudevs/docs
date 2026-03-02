@@ -25,6 +25,7 @@ Defining a perfect JSON schema for a complex document can be tedious. DocuDevs c
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -70,6 +71,48 @@ docudevs generate-schema sample-invoice.pdf \
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+UploadResponse schemaJob = documentApi.generateSchema(
+    new File("sample-invoice.pdf"),
+    "Focus on extracting the invoice number, date, and all line items with prices.",
+    null
+);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(schemaJob.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Schema generation failed: " + status.getStatus());
+    }
+    Thread.sleep(2000);
+}
+
+Object schemaResult = jobApi.result(schemaJob.getGuid());
+System.out.println(schemaResult);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash

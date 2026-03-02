@@ -58,6 +58,7 @@ Let's start with the simplest approach - just upload the document and let DocuDe
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'cURL', value: 'curl'},
     {label: 'CLI', value: 'cli'},
   ]}>
@@ -85,6 +86,46 @@ result = await basic_processing()
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .baseUrl("https://api.docudevs.ai")
+    .build();
+
+byte[] documentBytes = Files.readAllBytes(Path.of("sample_invoice.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+    new UploadRequest("sample_invoice.pdf", "application/pdf", documentBytes),
+    ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .build()
+);
+
+JsonNode result = client.waitUntilReadyJson(
+    jobGuid,
+    WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(2))
+        .build()
+);
+
+System.out.println("Job submitted: " + jobGuid);
+System.out.println(result.toPrettyString());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 ```bash
 # Upload and process in one step
@@ -520,7 +561,7 @@ Now that you understand document processing fundamentals:
 1. **Explore Advanced Features**:
    - [Cases](/docs/advanced/cases) - Organize related documents
    - [Operations](/docs/advanced/operations) - Error analysis and post-processing
-   - [Templates](/docs/templates/Templates) - Reusable document templates
+   - [Templates](/docs/templates/templates.md) - Reusable document templates
 
 2. **Learn Integration Patterns**:
    - [Use Cases](/docs/integration/use-cases) - Real-world implementation examples  
@@ -530,6 +571,6 @@ Now that you understand document processing fundamentals:
 3. **Reference Materials**:
    - [SDK Methods](/docs/reference/sdk-methods) - Complete method documentation
    - [Error Codes](/docs/reference/error-codes) - Error handling reference
-   - [Configuration](/docs/configuration/Configuration) - Settings management
+   - [Configuration](/docs/configuration/configuration.md) - Settings management
 
 Ready to build more sophisticated document processing workflows? Continue with [Cases](/docs/advanced/cases) to learn about organizing and managing multiple documents!

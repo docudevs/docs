@@ -29,6 +29,7 @@ Tracing is opt-in and must be enabled per request by setting `trace=true`.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'cURL', value: 'curl'},
     {label: 'Web UI', value: 'ui'},
   ]}>
@@ -61,6 +62,54 @@ if trace:
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+UploadResponse upload = documentApi.uploadDocument(new File("invoice.pdf"));
+
+documentApi.processDocument(
+    upload.getGuid(),
+    null,
+    new UploadCommand()
+        .mimeType("application/pdf")
+        .prompt("Extract invoice data")
+        .trace(true)
+);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Processing failed: " + status.getStatus());
+    }
+    Thread.sleep(2000);
+}
+
+Object trace = jobApi.getTrace(upload.getGuid());
+System.out.println(trace);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -165,6 +214,7 @@ Messages may contain `image_ref` objects referencing document pages. You can ret
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'cURL', value: 'curl'},
   ]}>
   <TabItem value="python">
@@ -178,6 +228,36 @@ if image_bytes:
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+String jobGuid = "your-job-guid";
+String apiKey = System.getenv("API_KEY");
+
+HttpClient httpClient = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.docudevs.ai/job/image/" + jobGuid + "/0"))
+    .header("Authorization", "Bearer " + apiKey)
+    .GET()
+    .build();
+
+HttpResponse<byte[]> response = httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
+if (response.statusCode() / 100 != 2) {
+    throw new IllegalStateException("Image fetch failed: HTTP " + response.statusCode());
+}
+
+Files.write(Path.of("page_0.png"), response.body());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash

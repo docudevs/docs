@@ -5,8 +5,8 @@ description: "resolveLlmProvider"
 sidebar_label: "resolveLlmProvider"
 hide_title: true
 hide_table_of_contents: true
-api: eJyFU0tv2zAM/iuCzkaSDkUPuQVIMQTIhhy6U9EDazGOVtlSJdpdYPi/j7Qdz12DNpfY5ut7kK0mKJJeP+pdRRgrcGq//6GfMu0DRiDrq53Rax0xedfg3pWH6BtrMOpMB4hQIpdJg1ZX/MKpL3jmmK348bXGKC8pP2EJet1qOgeUaYmirQoOVbVz+qnreCLPCL5KmCTx22olfwZTHm0QHFdRKM5Tl0Jul3umUZGUQgjO5j2F5e8k9e0MSIhCkOwwzZp/4Bg6YdETPPpYAg2f7m51l40cp9SRBgcg2F/RXQ2V3qB76L9eiRoMzp9LBv3zXe+PGmX65Q1i0QMGY6wwA3eYEaFYI6clAqrT1Wl5RCA0G/p8UB3M12mdWPZa24hGwqMCmYg5QZ2zH9Wb8LHlZMkJwJmjW/K6k1/2pfnSHenkZUELpH4j6cQvSzsu89K5cjkW9kt59D2jcezW5/UWm6Q2h53+f94UlAfxR/HO5JgSiyAFC3UPiWUn9QZnRV7x7jXshDr7OiozFiWJsJjA/Tmaht43i5vFSvwIPlEJ/W6O5zOiVcxTzYi+wzYZS/iHlsEBX5u4NizgIMKjvojA1SyDzi6tRfgTz5Wctn2GhOxb18nn4WDlmI1N8OzE2SO4hFl/1pfjbsDVMl7L2TYQraRymazOCUEQS4+hZJPnGGhW9eEwpctk5Pf7B/b/L1Ssk+c=
-sidebar_class_name: "get api-method"
+api: eJydlM1u2zAMgF9F0NlLsmLYIbdu7SFotwVZdwpyYGzW0SZLmiQnzQy/+0jZcd02CIbl4MgUfz+SbmSEMsj5Wi5MRG9Ai/v7L3KTSevQQ1TWLAo5lx6D1Xu819XS270q0MuMhL9rDPGTLY5y3sjckgsT+QjOaZUn8+nPYA3LQr7DCvjkPDuPCgO/WV+CUX+GWI2MR4cUU5G7MgV6tL6C2Ik+fpBtJn/hcaQZolemZHlAjTl7uhsrrE8amTS11nLTtl32ymPB1+wue50JQYgqag6wGspfdTXL9qWL6GtMguCsCV1hV7MZ/xUYcq8cOz0LUpCeOBlSFv+J0fXu/hkhOPXD67MUK1ugfkjSM7cFOm2PFeX4FSq8RJn6dABfpvygKBQXAno5yrvnRrncne3oqz71ekPyQ4BxztmYxdsmFiP2N9FyJ9tU1eU2cQiMO8vb4CxNAIWBuKO3qepXZ6p1Ne0t6Zo7tnpekdsnqJzGcyM/6wf6GeDLOR7BV+bRJk59UTc2r29wH8T1ciFfVzFc8oEbJohMjiGQMzaYiFsI1IcoDnAU0QqavT21Rhxt7UXRGwW+KSAC+afb0Pl+P7mazDgjhlFBmk2T5uEETxA9McL3Ireh0xGf4tRpUIad1d1EdmTX8kSWrIlt+uR0dKmtO24C6TTNFgLSNLQti4m3J2RrOu7BK9gypjXP4g6BE5mvm572527T3vVTswddc0Zvtq7NThbXeY4uXtTdjOZk+e37Aylv+w8kjyjjgQNXQs+55K9OIpJ2JMkaqcGUNZSs2/nk3195U/jg
+sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
 ---
@@ -27,7 +27,7 @@ import Heading from "@theme/Heading";
 </Heading>
 
 <MethodEndpoint
-  method={"get"}
+  method={"post"}
   path={"/internal/llm/resolve"}
   context={"endpoint"}
 >
@@ -47,14 +47,14 @@ resolveLlmProvider
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"key","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={undefined}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={undefined}
+  body={{"content":{"application/json":{"schema":{"properties":{"organizationId":{"type":"integer","format":"int64"},"key":{"type":"string"},"selectionKey":{"type":["string","null"]}},"required":["key","organizationId"],"title":"ResolveLlmRequest"}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ resolveLlmProvider
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"resolveLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+  responses={{"200":{"description":"resolveLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"providerId":{"type":"integer","format":"int64"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"apiKey":{"type":"string"}},"required":["apiKey","apiUrl","kwargs","modelType","providerId"],"title":"ResolvedLlmProviderDto"}}}}}}
 >
   
 </StatusCodes>

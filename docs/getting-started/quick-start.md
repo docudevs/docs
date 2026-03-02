@@ -75,6 +75,7 @@ export API_KEY="your-api-key-here"
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -126,6 +127,47 @@ docudevs process your-document.pdf \
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .baseUrl("https://api.docudevs.ai")
+    .build();
+
+byte[] documentBytes = Files.readAllBytes(Path.of("your-document.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+    new UploadRequest("your-document.pdf", "application/pdf", documentBytes),
+    ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .prompt("Extract all key information from this document")
+        .build()
+);
+
+JsonNode result = client.waitUntilReadyJson(
+    jobGuid,
+    WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(2))
+        .build()
+);
+
+System.out.println("Document submitted for processing. Job ID: " + jobGuid);
+System.out.println(result.toPrettyString());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -204,9 +246,11 @@ async def analyze_document_with_ai():
         prompt="Summarize this document and explain what type of document it is and its main purpose."
     )
     
-  # Display the AI response
-  print("\nAI Analysis:")
-  print(analysis.generated_text)
+    # Display the AI response
+    import json
+    result_data = json.loads(analysis.result)
+    print("\nAI Analysis:")
+    print(result_data['generated_text'])
 
 # Run the analysis
 asyncio.run(analyze_document_with_ai())
@@ -232,12 +276,12 @@ This approach is perfect for:
 
 - [Use Cases](/docs/integration/use-cases) - See real-world application examples
 - [Cases](/docs/advanced/cases) - Organize documents into collections
-- [Templates](/docs/templates/Templates) - Create reusable document templates
+- [Templates](/docs/templates/templates.md) - Create reusable document templates
 
 ### ⚙️ **For System Integrators**
 
 - [Best Practices](/docs/integration/best-practices) - Production deployment guidelines
-- [Configuration](/docs/configuration/Configuration) - Save and reuse processing settings
+- [Configuration](/docs/configuration/configuration.md) - Save and reuse processing settings
 - [Troubleshooting](/docs/integration/troubleshooting) - Debug common issues
 
 ## Try Different Document Types
@@ -360,7 +404,7 @@ for i, result in enumerate(results):
 You've successfully processed your first document! Now you're ready to:
 
 1. **Explore Advanced Features**: Learn about [Cases](/docs/advanced/cases) for document organization
-2. **Customize Processing**: Dive into [Templates](/docs/templates/Templates) and [Configuration](/docs/configuration/Configuration)
+2. **Customize Processing**: Dive into [Templates](/docs/templates/templates.md) and [Configuration](/docs/configuration/configuration.md)
 3. **Build Integration**: Review [Best Practices](/docs/integration/best-practices) for production use
 4. **Scale Your Solution**: Discover performance optimization techniques
 

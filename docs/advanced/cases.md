@@ -49,8 +49,35 @@ Cases are ideal for scenarios where you need to:
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.CasesControllerCreateCaseRequest;
+import ai.docudevs.client.generated.model.ModelCase;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+ModelCase created = casesApi.createCase(
+    new CasesControllerCreateCaseRequest()
+        .name("Q4 2024 Vendor Invoices")
+        .description("All invoices from vendors for Q4 2024 processing")
+);
+
+System.out.println("Created case ID: " + created.getId());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -104,8 +131,33 @@ docudevs cases create \
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ModelCase;
+import java.util.List;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+List<ModelCase> cases = casesApi.listCases();
+
+for (ModelCase item : cases) {
+    System.out.println("Case " + item.getId() + ": " + item.getName());
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -143,8 +195,32 @@ docudevs cases list
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ModelCase;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+ModelCase caseDetails = casesApi.getCase(123L);
+
+System.out.println("Case: " + caseDetails.getName());
+System.out.println("Description: " + caseDetails.getDescription());
+System.out.println("Created: " + caseDetails.getCreatedAt());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -182,8 +258,36 @@ docudevs cases get 123
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.CasesControllerUpdateCaseRequest;
+import ai.docudevs.client.generated.model.ModelCase;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+ModelCase updated = casesApi.updateCase(
+    123L,
+    new CasesControllerUpdateCaseRequest()
+        .name("Q4 2024 Vendor Invoices - Updated")
+        .description("Updated description with additional context")
+);
+
+System.out.println("Updated case: " + updated.getName());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -232,8 +336,27 @@ docudevs cases update 123 \
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+casesApi.deleteCase(123L);
+System.out.println("Case deleted successfully");
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -274,8 +397,32 @@ Deleting a case will also delete all documents associated with that case. This a
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiResponse;
+import ai.docudevs.client.generated.internal.ApiClient;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+Long caseId = 123L;
+
+ApiResponse<Void> response = casesApi.uploadCaseDocumentWithHttpInfo(caseId, new File("invoice_001.pdf"));
+System.out.println("Upload status: " + response.getStatusCode());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -334,8 +481,37 @@ docudevs cases upload-document 123 invoice_001.pdf
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.CaseDocument;
+import ai.docudevs.client.generated.model.PageCaseDocument;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+PageCaseDocument documentsPage = casesApi.listCaseDocuments(123L, 0, 20);
+
+System.out.println("Total documents: " + documentsPage.getTotalSize());
+System.out.println("Page: " + documentsPage.getPageNumber() + "/" + documentsPage.getTotalPages());
+
+for (CaseDocument document : documentsPage.getContent()) {
+    System.out.println(document.getFilename() + " [" + document.getDocumentId() + "]");
+    System.out.println("  status=" + document.getProcessingStatus());
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -386,8 +562,33 @@ docudevs cases list-documents 123 --page 0 --size 20
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.CaseDocument;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+CaseDocument document = casesApi.getCaseDocument(123L, "doc-uuid-here");
+
+System.out.println("Document: " + document.getFilename());
+System.out.println("Content Type: " + document.getContentType());
+System.out.println("Processing Status: " + document.getProcessingStatus());
+System.out.println("Metadata: " + document.getMetadata());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -427,8 +628,27 @@ docudevs cases get-document 123 doc-uuid-here
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.CasesApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+CasesApi casesApi = new CasesApi(apiClient);
+casesApi.deleteCaseDocument(123L, "doc-uuid-here");
+System.out.println("Document deleted successfully");
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -573,6 +793,6 @@ except Exception as e:
 
 - Learn about [Job Management](/docs/advanced/job-management) for cleanup and data retention
 - Learn about [Operations](/docs/advanced/operations) for advanced document processing workflows
-- Explore [Named Configurations](/docs/configuration/Configuration) for consistent processing settings
+- Explore [Named Configurations](/docs/configuration/configuration.md) for consistent processing settings
 - Check out [Use Cases](/docs/integration/use-cases) for real-world implementation examples
 - Review [Best Practices](/docs/integration/best-practices) for production deployment guidelines

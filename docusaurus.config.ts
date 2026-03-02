@@ -39,7 +39,7 @@ const config: Config = {
         docsPluginId: 'classic',
         config: {
           docudevs: {
-            specPath: 'static/files/docudevs.yaml',
+            specPath: '../docudevs.yaml',
             outputDir: 'docs/openapi',
             sidebarOptions: {
               groupPathsBy: 'tag',

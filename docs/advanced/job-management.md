@@ -42,6 +42,7 @@ Delete a job when you no longer need its data. Jobs older than 14 days are autom
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'cURL', value: 'curl'},
   ]}>
   <TabItem value="python">
@@ -59,6 +60,28 @@ if result.status_code == 200:
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.PurgeResult;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+JobApi jobApi = new JobApi(apiClient);
+PurgeResult purgeResult = jobApi.deleteJob("job-guid-here");
+
+System.out.println("Deleted jobs: " + purgeResult.getJobsDeleted());
+System.out.println("Errors: " + purgeResult.getErrors());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash

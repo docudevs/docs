@@ -30,8 +30,42 @@ The simplest way to extract data is to describe what you want in plain English.
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .baseUrl("https://api.docudevs.ai")
+    .build();
+
+byte[] invoiceBytes = Files.readAllBytes(Path.of("invoice.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+    new UploadRequest("invoice.pdf", "application/pdf", invoiceBytes),
+    ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .prompt("Extract the invoice number, date, total amount, and vendor name.")
+        .build()
+);
+
+JsonNode result = client.waitUntilReadyJson(jobGuid, WaitOptions.builder().build());
+System.out.println(result.toPrettyString());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -123,8 +157,51 @@ Let's define a schema for an invoice with line items.
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .baseUrl("https://api.docudevs.ai")
+    .build();
+
+String schema = """
+{
+  "type": "object",
+  "properties": {
+    "invoice_number": {"type": "string"},
+    "total": {"type": "number"}
+  }
+}
+""";
+
+byte[] docBytes = Files.readAllBytes(Path.of("invoice.pdf"));
+
+String guid = client.submitAndProcessDocument(
+    new UploadRequest("invoice.pdf", "application/pdf", docBytes),
+    ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .schema(schema)
+        .build()
+);
+
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
+System.out.println(result.toPrettyString());
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -226,8 +303,55 @@ You can combine extraction with other features like Barcode/QR scanning or speci
   values={[
     {label: 'cURL', value: 'curl'},
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
   ]}>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+UploadResponse upload = documentApi.uploadDocument(new File("invoice.pdf"));
+
+UploadCommand command = new UploadCommand()
+    .prompt("Extract QR codes")
+    .mimeType("application/pdf")
+    .barcodes(true);
+
+documentApi.processDocument(upload.getGuid(), null, command);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Processing failed: " + status.getStatus());
+    }
+    Thread.sleep(2000);
+}
+
+Object result = jobApi.resultJson(upload.getGuid());
+System.out.println(result);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -265,4 +389,4 @@ docudevs process invoice.pdf --barcodes --prompt "Extract QR codes"
 
 - **[Map-Reduce Extraction](../core/map-reduce-extraction.md)**: Handle very large documents (50+ pages).
 - **[Batch Processing](../core/batch-processing.md)**: Process thousands of documents efficiently.
-- **[Named Configurations](../configuration/Configuration.md)**: Save your schemas and prompts for reuse.
+- **[Named Configurations](../configuration/configuration.md)**: Save your schemas and prompts for reuse.

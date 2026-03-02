@@ -406,7 +406,7 @@ Now that you have DocuDevs installed and configured:
 
 - **[Simple Documents](/docs/basics/SimpleDocuments)** - Basic document processing
 - **[Cases](/docs/advanced/cases)** - Organize related documents
-- **[Templates](/docs/templates/Templates)** - Reusable processing workflows
+- **[Templates](/docs/templates/templates.md)** - Reusable processing workflows
 
 ### Explore Advanced Features
 

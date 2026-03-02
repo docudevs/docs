@@ -32,6 +32,7 @@ Upload a document to create a new template. DocuDevs will automatically detect t
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -67,6 +68,27 @@ docudevs upload-template invoice invoice_template.pdf
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+Object response = documentApi.uploadTemplate("invoice", new File("invoice_template.pdf"));
+
+System.out.println(response);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -86,6 +108,7 @@ Get a list of all available templates in your organization.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -105,6 +128,30 @@ docudevs list-templates
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.TemplateApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.DocumentTemplate;
+import java.util.List;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+TemplateApi templateApi = new TemplateApi(apiClient);
+List<DocumentTemplate> templates = templateApi.listTemplates();
+
+for (DocumentTemplate template : templates) {
+    System.out.println(template.getName() + " created=" + template.getCreatedAt());
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -123,6 +170,7 @@ Retrieve details about a specific template, including its fillable fields.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -143,6 +191,30 @@ docudevs template-metadata invoice
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.TemplateApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.PDFField;
+import java.util.List;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+TemplateApi templateApi = new TemplateApi(apiClient);
+List<PDFField> fields = templateApi.metadata("invoice");
+
+for (PDFField field : fields) {
+    System.out.println(field.getName() + " (" + field.getType() + ")");
+}
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -161,6 +233,7 @@ Remove a template when it is no longer needed.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -178,6 +251,28 @@ docudevs delete-template invoice
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.TemplateApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.PDFField;
+import java.util.List;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+TemplateApi templateApi = new TemplateApi(apiClient);
+List<PDFField> deletedFields = templateApi.deleteTemplate("invoice");
+
+System.out.println("Deleted template invoice (fields tracked: " + deletedFields.size() + ")");
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -200,6 +295,7 @@ PDF forms typically use a flat dictionary of field names and values.
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -236,6 +332,40 @@ docudevs fill invoice data.json --output filled_invoice.pdf
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.TemplateApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.TemplateFillRequest;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Map;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+TemplateApi templateApi = new TemplateApi(apiClient);
+TemplateFillRequest fillRequest = new TemplateFillRequest().fields(
+    Map.of(
+        "customerName", "Acme Corp",
+        "invoiceNumber", "INV-2024-001",
+        "totalAmount", "1500.00",
+        "paid", true
+    )
+);
+
+File filled = templateApi.fill("invoice", fillRequest);
+Files.copy(filled.toPath(), Path.of("filled_invoice.pdf"), StandardCopyOption.REPLACE_EXISTING);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -264,6 +394,7 @@ Word templates support nested data structures, allowing you to fill tables and r
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -301,6 +432,46 @@ docudevs fill sales_report report_data.json --output filled_report.docx
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.TemplateApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.TemplateFillRequest;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Map;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+TemplateApi templateApi = new TemplateApi(apiClient);
+
+TemplateFillRequest fillRequest = new TemplateFillRequest().fields(
+    Map.of(
+        "reportTitle", "Quarterly Sales",
+        "date", "2024-04-01",
+        "items", List.of(
+            Map.of("product", "Widget A", "sales", 100, "revenue", 5000),
+            Map.of("product", "Widget B", "sales", 200, "revenue", 8000),
+            Map.of("product", "Widget C", "sales", 50, "revenue", 2500)
+        ),
+        "summary", Map.of("totalRevenue", 15500, "growth", "15%")
+    )
+);
+
+File filled = templateApi.fill("sales_report", fillRequest);
+Files.copy(filled.toPath(), Path.of("filled_report.docx"), StandardCopyOption.REPLACE_EXISTING);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -327,4 +498,4 @@ curl -X POST https://api.docudevs.ai/template/fill/sales_report \
 - **Field Naming**: Use clear, consistent names for your form fields (e.g., camelCase like `customerName`).
 - **Testing**: Upload your template and inspect the metadata to ensure all fields are detected correctly.
 - **Data Types**: Ensure the data you send matches the expected type (e.g., booleans for checkboxes).
-- **Configurations**: Combine templates with [Named Configurations](../configuration/Configuration.md) to standardize the filling process if you have complex logic.
+- **Configurations**: Combine templates with [Named Configurations](../configuration/configuration.md) to standardize the filling process if you have complex logic.

@@ -33,6 +33,7 @@ Pages are **1-indexed**, meaning the first page is page 1 (not 0).
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'cURL', value: 'curl'},
   ]}>
   <TabItem value="python">
@@ -63,6 +64,53 @@ asyncio.run(extract_first_page())
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+import java.util.List;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+UploadResponse upload = documentApi.uploadDocument(new File("document.pdf"));
+
+UploadCommand command = new UploadCommand()
+    .mimeType("application/pdf")
+    .prompt("Extract the title and summary.")
+    .pageRange(List.of(1));
+
+documentApi.processDocument(upload.getGuid(), null, command);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Processing failed: " + status.getStatus());
+    }
+    Thread.sleep(2000);
+}
+
+Object result = jobApi.resultJson(upload.getGuid());
+System.out.println(result);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash

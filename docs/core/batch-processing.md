@@ -35,6 +35,7 @@ Choose batches when:
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'cURL', value: 'curl'},
   ]}>
   <TabItem value="python">
@@ -102,6 +103,94 @@ if __name__ == "__main__":
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.BatchApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.BatchCreateResponse;
+import ai.docudevs.client.generated.model.BatchUploadResponse;
+import ai.docudevs.client.generated.model.CreateBatchRequest;
+import ai.docudevs.client.generated.model.ProcessBatchRequest;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+String orgId = System.getenv("DOCUDEVS_ORG_ID");
+
+BatchApi batchApi = new BatchApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+BatchCreateResponse batch = batchApi.createBatch(
+    new CreateBatchRequest()
+        .orgId(orgId)
+        .maxConcurrency(3)
+);
+
+String batchGuid = batch.getJobGuid();
+System.out.println("Created batch: " + batchGuid);
+
+for (String path : new String[]{"invoice_jan.pdf", "invoice_feb.pdf", "invoice_mar.pdf"}) {
+    BatchUploadResponse upload = batchApi.uploadBatchDocument(batchGuid, new File(path), orgId);
+    System.out.println("Uploaded " + path + " at index " + upload.getIndex());
+}
+
+String schema = """
+{
+  "type": "object",
+  "properties": {
+    "statements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {"type": "string"},
+          "customer": {"type": "string"},
+          "total": {"type": "number"}
+        }
+      }
+    }
+  }
+}
+""";
+
+batchApi.processBatch(
+    batchGuid,
+    new ProcessBatchRequest()
+        .orgId(orgId)
+        .mimeType("application/pdf")
+        .prompt("Extract statement details.")
+        .schema(schema)
+);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(batchGuid);
+    System.out.println(
+        "Batch status=" + status.getStatus()
+            + " completedDocs=" + status.getCompletedDocs()
+            + "/" + status.getTotalDocs()
+    );
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Batch failed: " + status.getStatus());
+    }
+    Thread.sleep(2000);
+}
+
+Object results = jobApi.resultJson(batchGuid);
+System.out.println(results);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ### 1. Create a Batch

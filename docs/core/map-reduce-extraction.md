@@ -38,11 +38,15 @@ You always receive a consistent JSON payload:
 
 | Option | Description | Default |
 | --- | --- | --- |
+| `splitType` | Chunking mode: `PAGE` or `MARKDOWN_HEADER`. | `PAGE` |
+| `splitHeaderLevel` | Header level used when `splitType=MARKDOWN_HEADER` (`1` for `#`, `2` for `##`). | `2` |
 | `pagesPerChunk` | Number of pages per extraction window. | `1` |
 | `overlapPages` | Number of pages to overlap between chunks to catch data spanning pages. | `0` |
 | `dedupKey` | JSON path to a unique field (e.g., `sku`, `date`) used to remove duplicates caused by overlap. | `null` |
 | `parallel_processing` | When `true`, chunks are processed in parallel by multiple workers for faster throughput. | `false` |
 | `header_options` | Configuration for extracting document-level metadata (header). | `null` |
+
+When `splitType=MARKDOWN_HEADER`, chunking is based on OCR markdown sections instead of pages. In this mode, `overlapPages` and `dedupKey` do not apply.
 
 ## Example: Processing a Long Invoice
 
@@ -52,6 +56,7 @@ Imagine a 50-page invoice where the first page has the **Invoice Number** and **
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'CLI', value: 'cli'},
     {label: 'cURL', value: 'curl'},
   ]}>
@@ -118,6 +123,73 @@ docudevs process-map-reduce large-invoice.pdf \
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.MapReduceCommand;
+import ai.docudevs.client.generated.model.MapReduceHeaderCommand;
+import ai.docudevs.client.generated.model.MapReduceSplitType;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+UploadResponse upload = documentApi.uploadDocument(new File("large-invoice.pdf"));
+
+MapReduceHeaderCommand header = new MapReduceHeaderCommand()
+    .enabled(true)
+    .pageLimit(1)
+    .includeInRows(false)
+    .rowPromptAugmentation("This is an invoice from Acme Corp.")
+    .schema("""
+        {"invoiceNumber":"string","issueDate":"string","billingAddress":"string"}
+        """);
+
+MapReduceCommand mapReduce = new MapReduceCommand()
+    .enabled(true)
+    .splitType(MapReduceSplitType.PAGE)
+    .pagesPerChunk(4)
+    .overlapPages(1)
+    .dedupKey("lineItems.sku")
+    .parallelProcessing(true)
+    .header(header);
+
+UploadCommand command = new UploadCommand()
+    .mimeType("application/pdf")
+    .prompt("Extract invoice line items (sku, description, quantity, unitPrice, total).")
+    .mapReduce(mapReduce);
+
+documentApi.processDocument(upload.getGuid(), null, command);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Map-reduce failed: " + status.getStatus());
+    }
+    Thread.sleep(3000);
+}
+
+Object result = jobApi.resultJson(upload.getGuid());
+System.out.println(result);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -129,11 +201,123 @@ curl -X POST https://api.docudevs.ai/document/upload-files \
   -H "Authorization: Bearer $API_KEY" \
   -F "document=@large-invoice.pdf" \
   -F "mapReduceOptions='{
+    \"splitType\": \"PAGE\",
     \"pagesPerChunk\": 4,
     \"overlapPages\": 1,
     \"dedupKey\": \"sku\",
     \"headerOptions\": {\"pageLimit\": 1}
   }'"
+```
+
+  </TabItem>
+</Tabs>
+
+## Example: Split by Markdown Headers
+
+Use this when OCR text is markdown and your document is organized by headings.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+job_id = await client.submit_and_process_document_map_reduce(
+    document=document_data,
+    document_mime_type="application/pdf",
+    prompt="Extract obligations by section.",
+    split_type="markdown_header",
+    split_header_level=2,  # split on ## headings
+    parallel_processing=True
+)
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs process-map-reduce contract.pdf \
+  --prompt "Extract obligations by section" \
+  --split-type markdown-header \
+  --split-header-level 2
+```
+
+  </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.MapReduceCommand;
+import ai.docudevs.client.generated.model.MapReduceSplitType;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.generated.model.UploadResponse;
+import java.io.File;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+UploadResponse upload = documentApi.uploadDocument(new File("contract.pdf"));
+
+UploadCommand command = new UploadCommand()
+    .mimeType("application/pdf")
+    .prompt("Extract obligations by section.")
+    .mapReduce(
+        new MapReduceCommand()
+            .enabled(true)
+            .splitType(MapReduceSplitType.MARKDOWN_HEADER)
+            .splitHeaderLevel(2)
+            .parallelProcessing(true)
+    );
+
+documentApi.processDocument(upload.getGuid(), null, command);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Map-reduce failed: " + status.getStatus());
+    }
+    Thread.sleep(3000);
+}
+
+Object result = jobApi.resultJson(upload.getGuid());
+System.out.println(result);
+```
+
+  </TabItem>
+
+  <TabItem value="curl">
+
+```bash
+curl -X POST "https://api.docudevs.ai/document/process/JOB_GUID" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "mimeType": "application/pdf",
+    "prompt": "Extract obligations by section",
+    "mapReduce": {
+      "enabled": true,
+      "splitType": "MARKDOWN_HEADER",
+      "splitHeaderLevel": 2,
+      "parallelProcessing": true
+    }
+  }'
 ```
 
   </TabItem>
@@ -152,6 +336,7 @@ Often, the first few pages contain "Header" information (Summary, Dates, Parties
 1. **Always use a `dedupKey`**: When `overlapPages > 0`, the same row might appear in two chunks. The `dedupKey` tells DocuDevs how to identify and merge them.
 2. **Start small**: Try `pagesPerChunk=4`. If the AI misses context, increase it. If it's too slow, decrease it.
 3. **Monitor Progress**: Map-Reduce jobs take longer. Use the status endpoint to track progress.
+4. **Use markdown-header split for sectioned docs**: If OCR output is markdown with clear headings, set `splitType=MARKDOWN_HEADER` and choose `splitHeaderLevel` (`1` for top-level sections, `2` for subsection chunks).
 
 ```python
 status = await client.status(job_id)
@@ -172,6 +357,7 @@ Use `submit_and_wait_for_map_reduce` with the `parent_job_id` of the completed j
   defaultValue="python"
   values={[
     {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
     {label: 'cURL', value: 'curl'},
   ]}>
   <TabItem value="python">
@@ -205,6 +391,61 @@ asyncio.run(reprocess_with_map_reduce())
 ```
 
   </TabItem>
+  <TabItem value="java">
+
+```java
+import ai.docudevs.client.generated.api.DocumentApi;
+import ai.docudevs.client.generated.api.JobApi;
+import ai.docudevs.client.generated.internal.ApiClient;
+import ai.docudevs.client.generated.model.MapReduceCommand;
+import ai.docudevs.client.generated.model.MapReduceSplitType;
+import ai.docudevs.client.generated.model.ProcessingJob;
+import ai.docudevs.client.generated.model.UploadCommand;
+
+ApiClient apiClient = new ApiClient();
+apiClient.updateBaseUri("https://api.docudevs.ai");
+apiClient.setRequestInterceptor(req ->
+    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+);
+
+DocumentApi documentApi = new DocumentApi(apiClient);
+JobApi jobApi = new JobApi(apiClient);
+
+String existingJobGuid = "your-completed-job-guid";
+
+UploadCommand command = new UploadCommand()
+    .mimeType("application/pdf")
+    .prompt("Extract all line items (sku, description, qty, total)")
+    .schema("{\"type\":\"array\",\"items\":{\"type\":\"object\"}}")
+    .mapReduce(
+        new MapReduceCommand()
+            .enabled(true)
+            .splitType(MapReduceSplitType.PAGE)
+            .pagesPerChunk(5)
+            .overlapPages(1)
+            .dedupKey("sku")
+            .parallelProcessing(true)
+    );
+
+documentApi.processDocument(existingJobGuid, existingJobGuid, command);
+
+while (true) {
+    ProcessingJob status = jobApi.getJobStatus(existingJobGuid);
+    if ("COMPLETED".equals(status.getStatus())) {
+        break;
+    }
+    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
+        throw new IllegalStateException("Re-processing failed: " + status.getStatus());
+    }
+    Thread.sleep(3000);
+}
+
+Object result = jobApi.resultJson(existingJobGuid);
+System.out.println(result);
+```
+
+  </TabItem>
+
   <TabItem value="curl">
 
 ```bash
@@ -219,6 +460,7 @@ curl -X POST "https://api.docudevs.ai/document/process/EXISTING_JOB_GUID?depends
     "mimeType": "application/pdf",
     "mapReduce": {
       "enabled": true,
+      "splitType": "PAGE",
       "pagesPerChunk": 5,
       "overlapPages": 1,
       "dedupKey": "sku",
@@ -239,3 +481,4 @@ Since OCR is the most expensive part of processing, re-running extraction with d
 - **Missing Rows**: Check if rows are split across pages. Increase `overlapPages`.
 - **Duplicate Rows**: Ensure your `dedupKey` is truly unique for each row.
 - **Slow Processing**: Reduce `pagesPerChunk` to speed up individual chunk processing.
+- **Wrong Markdown Sections**: For markdown-header chunking, switch between `splitHeaderLevel=1` and `splitHeaderLevel=2` depending on your document structure.
