@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "sync-openapi-spec": "mkdir -p static/files && cp ../docudevs.yaml static/files/docudevs.yaml",
+    "sync-openapi-spec": "echo 'OpenAPI spec already in static/files/docudevs.yaml'",
     "start": "npm run sync-openapi-spec && docusaurus start",
     "build": "npm run sync-openapi-spec && docusaurus build",
     "swizzle": "docusaurus swizzle",
