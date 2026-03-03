@@ -63,21 +63,17 @@ if result.status_code == 200:
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.PurgeResult;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-JobApi jobApi = new JobApi(apiClient);
-PurgeResult purgeResult = jobApi.deleteJob("job-guid-here");
+JsonNode purgeResult = client.deleteJob("job-guid-here");
 
-System.out.println("Deleted jobs: " + purgeResult.getJobsDeleted());
-System.out.println("Errors: " + purgeResult.getErrors());
+System.out.println("Deleted jobs: " + purgeResult.path("jobsDeleted").asInt());
+System.out.println("Errors: " + purgeResult.path("errors").asInt());
 ```
 
   </TabItem>

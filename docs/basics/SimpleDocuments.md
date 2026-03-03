@@ -309,44 +309,31 @@ You can combine extraction with other features like Barcode/QR scanning or speci
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadCommand;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+byte[] fileBytes = Files.readAllBytes(Path.of("invoice.pdf"));
+UploadRequest upload = new UploadRequest("invoice.pdf", "application/pdf", fileBytes);
+
+String guid = client.submitAndProcessDocument(
+    upload,
+    ProcessOptions.builder()
+        .prompt("Extract QR codes")
+        .mimeType("application/pdf")
+        .barcodes(true)
+        .build()
 );
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
-
-UploadResponse upload = documentApi.uploadDocument(new File("invoice.pdf"));
-
-UploadCommand command = new UploadCommand()
-    .prompt("Extract QR codes")
-    .mimeType("application/pdf")
-    .barcodes(true);
-
-documentApi.processDocument(upload.getGuid(), null, command);
-
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Processing failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
-
-Object result = jobApi.resultJson(upload.getGuid());
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
 System.out.println(result);
 ```
 

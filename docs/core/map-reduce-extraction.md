@@ -126,65 +126,38 @@ docudevs process-map-reduce large-invoice.pdf \
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.MapReduceCommand;
-import ai.docudevs.client.generated.model.MapReduceHeaderCommand;
-import ai.docudevs.client.generated.model.MapReduceSplitType;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadCommand;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.MapReduceOptions;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
+byte[] fileBytes = Files.readAllBytes(Path.of("large-invoice.pdf"));
+UploadRequest upload = new UploadRequest("large-invoice.pdf", "application/pdf", fileBytes);
 
-UploadResponse upload = documentApi.uploadDocument(new File("large-invoice.pdf"));
-
-MapReduceHeaderCommand header = new MapReduceHeaderCommand()
-    .enabled(true)
-    .pageLimit(1)
-    .includeInRows(false)
-    .rowPromptAugmentation("This is an invoice from Acme Corp.")
-    .schema("""
-        {"invoiceNumber":"string","issueDate":"string","billingAddress":"string"}
-        """);
-
-MapReduceCommand mapReduce = new MapReduceCommand()
-    .enabled(true)
-    .splitType(MapReduceSplitType.PAGE)
-    .pagesPerChunk(4)
-    .overlapPages(1)
-    .dedupKey("lineItems.sku")
-    .parallelProcessing(true)
-    .header(header);
-
-UploadCommand command = new UploadCommand()
-    .mimeType("application/pdf")
+ProcessOptions options = ProcessOptions.builder()
     .prompt("Extract invoice line items (sku, description, quantity, unitPrice, total).")
-    .mapReduce(mapReduce);
+    .mapReduce(MapReduceOptions.builder()
+        .pagesPerChunk(4)
+        .overlapPages(1)
+        .dedupKey("lineItems.sku")
+        .parallelProcessing(true)
+        .headerPageLimit(1)
+        .headerIncludeInRows(false)
+        .headerRowPromptAugmentation("This is an invoice from Acme Corp.")
+        .headerSchema("{\"invoiceNumber\":\"string\",\"issueDate\":\"string\",\"billingAddress\":\"string\"}")
+        .build())
+    .build();
 
-documentApi.processDocument(upload.getGuid(), null, command);
-
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Map-reduce failed: " + status.getStatus());
-    }
-    Thread.sleep(3000);
-}
-
-Object result = jobApi.resultJson(upload.getGuid());
+String guid = client.submitAndProcessDocument(upload, options);
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
 System.out.println(result);
 ```
 
@@ -251,52 +224,33 @@ docudevs process-map-reduce contract.pdf \
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.MapReduceCommand;
-import ai.docudevs.client.generated.model.MapReduceSplitType;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadCommand;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.MapReduceOptions;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
+byte[] fileBytes = Files.readAllBytes(Path.of("contract.pdf"));
+UploadRequest upload = new UploadRequest("contract.pdf", "application/pdf", fileBytes);
 
-UploadResponse upload = documentApi.uploadDocument(new File("contract.pdf"));
-
-UploadCommand command = new UploadCommand()
-    .mimeType("application/pdf")
+ProcessOptions options = ProcessOptions.builder()
     .prompt("Extract obligations by section.")
-    .mapReduce(
-        new MapReduceCommand()
-            .enabled(true)
-            .splitType(MapReduceSplitType.MARKDOWN_HEADER)
-            .splitHeaderLevel(2)
-            .parallelProcessing(true)
-    );
+    .mapReduce(MapReduceOptions.builder()
+        .splitType(MapReduceOptions.SplitType.MARKDOWN_HEADER)
+        .splitHeaderLevel(2)
+        .parallelProcessing(true)
+        .build())
+    .build();
 
-documentApi.processDocument(upload.getGuid(), null, command);
-
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Map-reduce failed: " + status.getStatus());
-    }
-    Thread.sleep(3000);
-}
-
-Object result = jobApi.resultJson(upload.getGuid());
+String guid = client.submitAndProcessDocument(upload, options);
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
 System.out.println(result);
 ```
 
@@ -394,53 +348,32 @@ asyncio.run(reprocess_with_map_reduce())
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.MapReduceCommand;
-import ai.docudevs.client.generated.model.MapReduceSplitType;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.MapReduceOptions;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
-
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
 String existingJobGuid = "your-completed-job-guid";
 
-UploadCommand command = new UploadCommand()
-    .mimeType("application/pdf")
+ProcessOptions options = ProcessOptions.builder()
     .prompt("Extract all line items (sku, description, qty, total)")
     .schema("{\"type\":\"array\",\"items\":{\"type\":\"object\"}}")
-    .mapReduce(
-        new MapReduceCommand()
-            .enabled(true)
-            .splitType(MapReduceSplitType.PAGE)
-            .pagesPerChunk(5)
-            .overlapPages(1)
-            .dedupKey("sku")
-            .parallelProcessing(true)
-    );
+    .mapReduce(MapReduceOptions.builder()
+        .pagesPerChunk(5)
+        .overlapPages(1)
+        .dedupKey("sku")
+        .parallelProcessing(true)
+        .build())
+    .build();
 
-documentApi.processDocument(existingJobGuid, existingJobGuid, command);
+client.processDocument(existingJobGuid, options);
 
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(existingJobGuid);
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Re-processing failed: " + status.getStatus());
-    }
-    Thread.sleep(3000);
-}
-
-Object result = jobApi.resultJson(existingJobGuid);
+JsonNode result = client.waitUntilReadyJson(existingJobGuid, WaitOptions.defaults());
 System.out.println(result);
 ```
 

@@ -94,64 +94,32 @@ docudevs operations generative-task <JOB_ID> \
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.api.OperationsApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.GenerativeTaskRequest;
-import ai.docudevs.client.generated.model.OcrCommand;
-import ai.docudevs.client.generated.model.OcrType;
-import ai.docudevs.client.generated.model.OperationResultResponse;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+byte[] fileBytes = Files.readAllBytes(Path.of("report.pdf"));
+UploadRequest upload = new UploadRequest("report.pdf", "application/pdf", fileBytes);
+
+// Step 1: OCR the document
+String ocrGuid = client.ocrDocument(upload, "PREMIUM");
+client.waitUntilReadyJson(ocrGuid, WaitOptions.defaults());
+
+// Step 2: Generate summary
+client.createGenerativeTask(
+    ocrGuid,
+    "Summarize this document in 2-3 paragraphs, highlighting the key findings and recommendations."
 );
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
-OperationsApi operationsApi = new OperationsApi(apiClient);
-
-UploadResponse upload = documentApi.uploadDocument(new File("report.pdf"));
-UploadResponse ocrJob = documentApi.ocrDocument(
-    upload.getGuid(),
-    "markdown",
-    new OcrCommand().ocr(OcrType.PREMIUM)
-);
-
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(ocrJob.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("OCR failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
-
-operationsApi.createGenerativeTask(
-    ocrJob.getGuid(),
-    new GenerativeTaskRequest().prompt(
-        "Summarize this document in 2-3 paragraphs, highlighting the key findings and recommendations."
-    )
-);
-
-while (true) {
-    OperationResultResponse result = operationsApi.getOperationResult(ocrJob.getGuid(), "generative-task");
-    if ("COMPLETED".equals(result.getStatus())) {
-        System.out.println(result.getResult());
-        break;
-    }
-    if ("ERROR".equals(result.getStatus()) || "FAILED".equals(result.getStatus())) {
-        throw new IllegalStateException("Generative task failed: " + result.getError());
-    }
-    Thread.sleep(2000);
-}
+JsonNode result = client.waitForGenerativeTask(ocrGuid, WaitOptions.defaults());
+System.out.println(result.path("result"));
 ```
 
   </TabItem>
@@ -248,70 +216,40 @@ docudevs operations generative-task <JOB_ID> \
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.api.OperationsApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.GenerativeTaskRequest;
-import ai.docudevs.client.generated.model.OcrCommand;
-import ai.docudevs.client.generated.model.OcrType;
-import ai.docudevs.client.generated.model.OperationResultResponse;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
-OperationsApi operationsApi = new OperationsApi(apiClient);
+byte[] fileBytes = Files.readAllBytes(Path.of("contract.pdf"));
+UploadRequest upload = new UploadRequest("contract.pdf", "application/pdf", fileBytes);
 
-UploadResponse upload = documentApi.uploadDocument(new File("contract.pdf"));
-UploadResponse ocrJob = documentApi.ocrDocument(
-    upload.getGuid(),
-    "markdown",
-    new OcrCommand().ocr(OcrType.DEFAULT)
-);
+// Step 1: OCR the document
+String ocrGuid = client.ocrDocument(upload, "DEFAULT");
+client.waitUntilReadyJson(ocrGuid, WaitOptions.defaults());
 
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(ocrJob.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("OCR failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
-
+// Step 2: Ask questions
 List<String> questions = List.of(
     "What is the contract start date and end date?",
     "Who are the parties involved in this contract?"
 );
 
 for (String question : questions) {
-    operationsApi.createGenerativeTask(
-        ocrJob.getGuid(),
-        new GenerativeTaskRequest().prompt("Based on this document, answer: " + question)
+    client.createGenerativeTask(
+        ocrGuid,
+        "Based on this document, answer: " + question
     );
 
-    while (true) {
-        OperationResultResponse result = operationsApi.getOperationResult(ocrJob.getGuid(), "generative-task");
-        if ("COMPLETED".equals(result.getStatus())) {
-            System.out.println("Q: " + question);
-            System.out.println("A: " + result.getResult());
-            break;
-        }
-        if ("ERROR".equals(result.getStatus()) || "FAILED".equals(result.getStatus())) {
-            throw new IllegalStateException("Generative task failed: " + result.getError());
-        }
-        Thread.sleep(2000);
-    }
+    JsonNode result = client.waitForGenerativeTask(ocrGuid, WaitOptions.defaults());
+    System.out.println("Q: " + question);
+    System.out.println("A: " + result.path("result"));
 }
 ```
 

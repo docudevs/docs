@@ -65,46 +65,33 @@ if trace:
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadCommand;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
+byte[] fileBytes = Files.readAllBytes(Path.of("invoice.pdf"));
+UploadRequest upload = new UploadRequest("invoice.pdf", "application/pdf", fileBytes);
 
-UploadResponse upload = documentApi.uploadDocument(new File("invoice.pdf"));
-
-documentApi.processDocument(
-    upload.getGuid(),
-    null,
-    new UploadCommand()
+String guid = client.submitAndProcessDocument(
+    upload,
+    ProcessOptions.builder()
         .mimeType("application/pdf")
         .prompt("Extract invoice data")
         .trace(true)
+        .build()
 );
 
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Processing failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
+client.waitUntilReadyJson(guid, WaitOptions.builder().build());
 
-Object trace = jobApi.getTrace(upload.getGuid());
+JsonNode trace = client.getTrace(guid);
 System.out.println(trace);
 ```
 

@@ -71,20 +71,20 @@ docudevs upload-template invoice invoice_template.pdf
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.UploadRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-Object response = documentApi.uploadTemplate("invoice", new File("invoice_template.pdf"));
+byte[] fileBytes = Files.readAllBytes(Path.of("invoice_template.pdf"));
+UploadRequest upload = new UploadRequest("invoice_template.pdf", "application/pdf", fileBytes);
 
-System.out.println(response);
+client.uploadTemplate("invoice", upload);
+System.out.println("Template uploaded.");
 ```
 
   </TabItem>
@@ -131,22 +131,17 @@ docudevs list-templates
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.TemplateApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.DocumentTemplate;
-import java.util.List;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-TemplateApi templateApi = new TemplateApi(apiClient);
-List<DocumentTemplate> templates = templateApi.listTemplates();
+JsonNode templates = client.listTemplates();
 
-for (DocumentTemplate template : templates) {
-    System.out.println(template.getName() + " created=" + template.getCreatedAt());
+for (JsonNode template : templates) {
+    System.out.println(template.path("name").asText() + " created=" + template.path("createdAt").asText());
 }
 ```
 
@@ -194,22 +189,17 @@ docudevs template-metadata invoice
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.TemplateApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.PDFField;
-import java.util.List;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-TemplateApi templateApi = new TemplateApi(apiClient);
-List<PDFField> fields = templateApi.metadata("invoice");
+JsonNode metadata = client.getTemplateMetadata("invoice");
 
-for (PDFField field : fields) {
-    System.out.println(field.getName() + " (" + field.getType() + ")");
+for (JsonNode field : metadata) {
+    System.out.println(field.path("name").asText() + " (" + field.path("type").asText() + ")");
 }
 ```
 
@@ -254,21 +244,14 @@ docudevs delete-template invoice
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.TemplateApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.PDFField;
-import java.util.List;
+import ai.docudevs.client.DocuDevsClient;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-TemplateApi templateApi = new TemplateApi(apiClient);
-List<PDFField> deletedFields = templateApi.deleteTemplate("invoice");
-
-System.out.println("Deleted template invoice (fields tracked: " + deletedFields.size() + ")");
+client.deleteTemplate("invoice");
+System.out.println("Deleted template invoice");
 ```
 
   </TabItem>
@@ -335,33 +318,23 @@ docudevs fill invoice data.json --output filled_invoice.pdf
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.TemplateApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.TemplateFillRequest;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Map;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-TemplateApi templateApi = new TemplateApi(apiClient);
-TemplateFillRequest fillRequest = new TemplateFillRequest().fields(
-    Map.of(
-        "customerName", "Acme Corp",
-        "invoiceNumber", "INV-2024-001",
-        "totalAmount", "1500.00",
-        "paid", true
-    )
-);
+byte[] filled = client.fillTemplate("invoice", Map.of(
+    "customerName", "Acme Corp",
+    "invoiceNumber", "INV-2024-001",
+    "totalAmount", "1500.00",
+    "paid", true
+));
 
-File filled = templateApi.fill("invoice", fillRequest);
-Files.copy(filled.toPath(), Path.of("filled_invoice.pdf"), StandardCopyOption.REPLACE_EXISTING);
+Files.write(Path.of("filled_invoice.pdf"), filled);
 ```
 
   </TabItem>
@@ -435,39 +408,28 @@ docudevs fill sales_report report_data.json --output filled_report.docx
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.TemplateApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.TemplateFillRequest;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-TemplateApi templateApi = new TemplateApi(apiClient);
+byte[] filled = client.fillTemplate("sales_report", Map.of(
+    "reportTitle", "Quarterly Sales",
+    "date", "2024-04-01",
+    "items", List.of(
+        Map.of("product", "Widget A", "sales", 100, "revenue", 5000),
+        Map.of("product", "Widget B", "sales", 200, "revenue", 8000),
+        Map.of("product", "Widget C", "sales", 50, "revenue", 2500)
+    ),
+    "summary", Map.of("totalRevenue", 15500, "growth", "15%")
+));
 
-TemplateFillRequest fillRequest = new TemplateFillRequest().fields(
-    Map.of(
-        "reportTitle", "Quarterly Sales",
-        "date", "2024-04-01",
-        "items", List.of(
-            Map.of("product", "Widget A", "sales", 100, "revenue", 5000),
-            Map.of("product", "Widget B", "sales", 200, "revenue", 8000),
-            Map.of("product", "Widget C", "sales", 50, "revenue", 2500)
-        ),
-        "summary", Map.of("totalRevenue", 15500, "growth", "15%")
-    )
-);
-
-File filled = templateApi.fill("sales_report", fillRequest);
-Files.copy(filled.toPath(), Path.of("filled_report.docx"), StandardCopyOption.REPLACE_EXISTING);
+Files.write(Path.of("filled_report.docx"), filled);
 ```
 
   </TabItem>

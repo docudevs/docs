@@ -55,25 +55,19 @@ Cases are ideal for scenarios where you need to:
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.CasesControllerCreateCaseRequest;
-import ai.docudevs.client.generated.model.ModelCase;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+JsonNode created = client.createCase(
+    "Q4 2024 Vendor Invoices",
+    "All invoices from vendors for Q4 2024 processing"
 );
 
-CasesApi casesApi = new CasesApi(apiClient);
-ModelCase created = casesApi.createCase(
-    new CasesControllerCreateCaseRequest()
-        .name("Q4 2024 Vendor Invoices")
-        .description("All invoices from vendors for Q4 2024 processing")
-);
-
-System.out.println("Created case ID: " + created.getId());
+System.out.println("Created case ID: " + created.path("id").asLong());
 ```
 
   </TabItem>
@@ -137,22 +131,17 @@ docudevs cases create \
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ModelCase;
-import java.util.List;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-CasesApi casesApi = new CasesApi(apiClient);
-List<ModelCase> cases = casesApi.listCases();
+JsonNode cases = client.listCases();
 
-for (ModelCase item : cases) {
-    System.out.println("Case " + item.getId() + ": " + item.getName());
+for (JsonNode item : cases) {
+    System.out.println("Case " + item.path("id").asLong() + ": " + item.path("name").asText());
 }
 ```
 
@@ -201,22 +190,18 @@ docudevs cases list
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ModelCase;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-CasesApi casesApi = new CasesApi(apiClient);
-ModelCase caseDetails = casesApi.getCase(123L);
+JsonNode caseDetails = client.getCase(123L);
 
-System.out.println("Case: " + caseDetails.getName());
-System.out.println("Description: " + caseDetails.getDescription());
-System.out.println("Created: " + caseDetails.getCreatedAt());
+System.out.println("Case: " + caseDetails.path("name").asText());
+System.out.println("Description: " + caseDetails.path("description").asText());
+System.out.println("Created: " + caseDetails.path("createdAt").asText());
 ```
 
   </TabItem>
@@ -264,26 +249,20 @@ docudevs cases get 123
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.CasesControllerUpdateCaseRequest;
-import ai.docudevs.client.generated.model.ModelCase;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-CasesApi casesApi = new CasesApi(apiClient);
-ModelCase updated = casesApi.updateCase(
+JsonNode updated = client.updateCase(
     123L,
-    new CasesControllerUpdateCaseRequest()
-        .name("Q4 2024 Vendor Invoices - Updated")
-        .description("Updated description with additional context")
+    "Q4 2024 Vendor Invoices - Updated",
+    "Updated description with additional context"
 );
 
-System.out.println("Updated case: " + updated.getName());
+System.out.println("Updated case: " + updated.path("name").asText());
 ```
 
   </TabItem>
@@ -342,16 +321,13 @@ docudevs cases update 123 \
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+import ai.docudevs.client.DocuDevsClient;
 
-CasesApi casesApi = new CasesApi(apiClient);
-casesApi.deleteCase(123L);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+client.deleteCase(123L);
 System.out.println("Case deleted successfully");
 ```
 
@@ -403,22 +379,21 @@ Deleting a case will also delete all documents associated with that case. This a
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiResponse;
-import ai.docudevs.client.generated.internal.ApiClient;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.UploadRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-CasesApi casesApi = new CasesApi(apiClient);
-Long caseId = 123L;
+long caseId = 123L;
+byte[] fileBytes = Files.readAllBytes(Path.of("invoice_001.pdf"));
+UploadRequest upload = new UploadRequest("invoice_001.pdf", "application/pdf", fileBytes);
 
-ApiResponse<Void> response = casesApi.uploadCaseDocumentWithHttpInfo(caseId, new File("invoice_001.pdf"));
-System.out.println("Upload status: " + response.getStatusCode());
+client.uploadCaseDocument(caseId, upload);
+System.out.println("Upload status: OK");
 ```
 
   </TabItem>
@@ -487,26 +462,21 @@ docudevs cases upload-document 123 invoice_001.pdf
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.CaseDocument;
-import ai.docudevs.client.generated.model.PageCaseDocument;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-CasesApi casesApi = new CasesApi(apiClient);
-PageCaseDocument documentsPage = casesApi.listCaseDocuments(123L, 0, 20);
+JsonNode documentsPage = client.listCaseDocuments(123L, 0, 20);
 
-System.out.println("Total documents: " + documentsPage.getTotalSize());
-System.out.println("Page: " + documentsPage.getPageNumber() + "/" + documentsPage.getTotalPages());
+System.out.println("Total documents: " + documentsPage.path("totalSize").asInt());
+System.out.println("Page: " + documentsPage.path("pageNumber").asInt() + "/" + documentsPage.path("totalPages").asInt());
 
-for (CaseDocument document : documentsPage.getContent()) {
-    System.out.println(document.getFilename() + " [" + document.getDocumentId() + "]");
-    System.out.println("  status=" + document.getProcessingStatus());
+for (JsonNode document : documentsPage.path("content")) {
+    System.out.println(document.path("filename").asText() + " [" + document.path("documentId").asText() + "]");
+    System.out.println("  status=" + document.path("processingStatus").asText());
 }
 ```
 
@@ -568,23 +538,19 @@ docudevs cases list-documents 123 --page 0 --size 20
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.CaseDocument;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-CasesApi casesApi = new CasesApi(apiClient);
-CaseDocument document = casesApi.getCaseDocument(123L, "doc-uuid-here");
+JsonNode document = client.getCaseDocument(123L, "doc-uuid-here");
 
-System.out.println("Document: " + document.getFilename());
-System.out.println("Content Type: " + document.getContentType());
-System.out.println("Processing Status: " + document.getProcessingStatus());
-System.out.println("Metadata: " + document.getMetadata());
+System.out.println("Document: " + document.path("filename").asText());
+System.out.println("Content Type: " + document.path("contentType").asText());
+System.out.println("Processing Status: " + document.path("processingStatus").asText());
+System.out.println("Metadata: " + document.path("metadata"));
 ```
 
   </TabItem>
@@ -634,16 +600,13 @@ docudevs cases get-document 123 doc-uuid-here
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.CasesApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+import ai.docudevs.client.DocuDevsClient;
 
-CasesApi casesApi = new CasesApi(apiClient);
-casesApi.deleteCaseDocument(123L, "doc-uuid-here");
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+client.deleteCaseDocument(123L, "doc-uuid-here");
 System.out.println("Document deleted successfully");
 ```
 

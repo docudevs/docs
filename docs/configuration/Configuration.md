@@ -92,21 +92,13 @@ docudevs save-configuration invoice-config config.json
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.ConfigurationApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ExtractionMode;
-import ai.docudevs.client.generated.model.LlmType;
-import ai.docudevs.client.generated.model.NamedConfiguration;
-import ai.docudevs.client.generated.model.OcrType;
-import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
-
-ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
 String schema = """
 {
@@ -121,18 +113,17 @@ String schema = """
 }
 """;
 
-NamedConfiguration saved = configurationApi.saveConfiguration(
-    "invoice-config",
-    new UploadCommand()
-        .prompt("Extract invoice data including vendor details, line items, and totals.")
-        .schema(schema)
-        .ocr(OcrType.PREMIUM)
-        .llm(LlmType.HIGH)
-        .extractionMode(ExtractionMode.STEPS)
-        .barcodes(true)
-);
+ProcessOptions options = ProcessOptions.builder()
+    .prompt("Extract invoice data including vendor details, line items, and totals.")
+    .schema(schema)
+    .ocr("PREMIUM")
+    .llm("HIGH")
+    .extractionMode("STEPS")
+    .barcodes(true)
+    .build();
 
-System.out.println("Saved configuration: " + saved.getName());
+JsonNode saved = client.saveConfiguration("invoice-config", options);
+System.out.println("Saved configuration: " + saved.path("name").asText());
 ```
 
   </TabItem>
@@ -194,22 +185,17 @@ docudevs list-configurations
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.ConfigurationApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.NamedConfiguration;
-import java.util.List;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
-List<NamedConfiguration> configs = configurationApi.listConfigurations();
+JsonNode configs = client.listConfigurations();
 
-for (NamedConfiguration config : configs) {
-    System.out.println(config.getName() + " created=" + config.getCreatedAt());
+for (JsonNode config : configs) {
+    System.out.println(config.path("name").asText() + " created=" + config.path("createdAt").asText());
 }
 ```
 
@@ -255,22 +241,18 @@ docudevs get-configuration invoice-config
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.ConfigurationApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.UploadCommand;
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
-UploadCommand config = configurationApi.getConfiguration("invoice-config");
+JsonNode config = client.getConfiguration("invoice-config");
 
-System.out.println("Prompt: " + config.getPrompt());
-System.out.println("OCR: " + config.getOcr());
-System.out.println("LLM: " + config.getLlm());
+System.out.println("Prompt: " + config.path("prompt").asText());
+System.out.println("OCR: " + config.path("ocr").asText());
+System.out.println("LLM: " + config.path("llm").asText());
 ```
 
   </TabItem>
@@ -314,16 +296,13 @@ docudevs delete-configuration invoice-config
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.ConfigurationApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+import ai.docudevs.client.DocuDevsClient;
 
-ConfigurationApi configurationApi = new ConfigurationApi(apiClient);
-configurationApi.deleteConfiguration("invoice-config");
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+client.deleteConfiguration("invoice-config");
 System.out.println("Deleted configuration invoice-config");
 ```
 
@@ -380,37 +359,24 @@ docudevs process invoice.pdf --configuration invoice-config
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
+byte[] fileBytes = Files.readAllBytes(Path.of("invoice.pdf"));
+UploadRequest upload = new UploadRequest("invoice.pdf", "application/pdf", fileBytes);
 
-UploadResponse upload = documentApi.uploadDocument(new File("invoice.pdf"));
-documentApi.processDocumentWithConfiguration(upload.getGuid(), "invoice-config", null);
+String guid = client.uploadDocument(upload);
+client.processDocumentWithConfiguration(guid, "invoice-config");
 
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Processing failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
-
-Object result = jobApi.resultJson(upload.getGuid());
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
 System.out.println(result);
 ```
 

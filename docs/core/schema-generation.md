@@ -74,40 +74,26 @@ docudevs generate-schema sample-invoice.pdf \
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+byte[] fileBytes = Files.readAllBytes(Path.of("sample-invoice.pdf"));
+UploadRequest upload = new UploadRequest("sample-invoice.pdf", "application/pdf", fileBytes);
+
+String guid = client.generateSchema(
+    upload,
+    "Focus on extracting the invoice number, date, and all line items with prices."
 );
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
-
-UploadResponse schemaJob = documentApi.generateSchema(
-    new File("sample-invoice.pdf"),
-    "Focus on extracting the invoice number, date, and all line items with prices.",
-    null
-);
-
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(schemaJob.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Schema generation failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
-
-Object schemaResult = jobApi.result(schemaJob.getGuid());
+JsonNode schemaResult = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
 System.out.println(schemaResult);
 ```
 

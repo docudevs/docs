@@ -119,26 +119,19 @@ Combine with `docudevs knowledge-base list` to fetch available case IDs at runti
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.ToolDescriptor;
-import ai.docudevs.client.generated.model.ToolType;
-import ai.docudevs.client.generated.model.UploadCommand;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.ToolDescriptor;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
-
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
 String schema = """
 {
@@ -161,35 +154,20 @@ String schema = """
 }
 """;
 
-UploadResponse upload = documentApi.uploadDocument(new File("samples/products.csv"));
+byte[] fileBytes = Files.readAllBytes(Path.of("samples/products.csv"));
+UploadRequest upload = new UploadRequest("products.csv", "text/csv", fileBytes);
 
-ToolDescriptor knowledgeSearch = new ToolDescriptor()
-    .type(ToolType.KNOWLEDGE_BASE_SEARCH)
-    .config(Map.of("caseId", "kb-kitchen-pro", "topK", 8));
-
-UploadCommand command = new UploadCommand()
-    .mimeType("text/csv")
+ProcessOptions options = ProcessOptions.builder()
     .prompt(
         "Fill canonical_name, localized_display_name (<=40 chars), regulatory_class, and "
             + "marketing_summary using the Signature Appliances knowledge base."
     )
     .schema(schema)
-    .tools(List.of(knowledgeSearch));
+    .tools(List.of(ToolDescriptor.knowledgeBaseSearch("kb-kitchen-pro", 8)))
+    .build();
 
-documentApi.processDocument(upload.getGuid(), null, command);
-
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Extraction failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
-
-Object result = jobApi.resultJson(upload.getGuid());
+String guid = client.submitAndProcessDocument(upload, options);
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
 System.out.println(result);
 ```
 

@@ -67,45 +67,32 @@ asyncio.run(extract_first_page())
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.DocumentApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import ai.docudevs.client.generated.model.UploadCommand;
-import ai.docudevs.client.generated.model.UploadResponse;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
+
+byte[] fileBytes = Files.readAllBytes(Path.of("document.pdf"));
+UploadRequest upload = new UploadRequest("document.pdf", "application/pdf", fileBytes);
+
+String guid = client.submitAndProcessDocument(
+    upload,
+    ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .prompt("Extract the title and summary.")
+        .pageRange(List.of(1))
+        .build()
 );
 
-DocumentApi documentApi = new DocumentApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
-
-UploadResponse upload = documentApi.uploadDocument(new File("document.pdf"));
-
-UploadCommand command = new UploadCommand()
-    .mimeType("application/pdf")
-    .prompt("Extract the title and summary.")
-    .pageRange(List.of(1));
-
-documentApi.processDocument(upload.getGuid(), null, command);
-
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(upload.getGuid());
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Processing failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
-
-Object result = jobApi.resultJson(upload.getGuid());
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
 System.out.println(result);
 ```
 

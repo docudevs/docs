@@ -106,41 +106,31 @@ if __name__ == "__main__":
   <TabItem value="java">
 
 ```java
-import ai.docudevs.client.generated.api.BatchApi;
-import ai.docudevs.client.generated.api.JobApi;
-import ai.docudevs.client.generated.internal.ApiClient;
-import ai.docudevs.client.generated.model.BatchCreateResponse;
-import ai.docudevs.client.generated.model.BatchUploadResponse;
-import ai.docudevs.client.generated.model.CreateBatchRequest;
-import ai.docudevs.client.generated.model.ProcessBatchRequest;
-import ai.docudevs.client.generated.model.ProcessingJob;
-import java.io.File;
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-ApiClient apiClient = new ApiClient();
-apiClient.updateBaseUri("https://api.docudevs.ai");
-apiClient.setRequestInterceptor(req ->
-    req.header("Authorization", "Bearer " + System.getenv("API_KEY"))
-);
+DocuDevsClient client = DocuDevsClient.builder()
+    .apiKey(System.getenv("API_KEY"))
+    .build();
 
-String orgId = System.getenv("DOCUDEVS_ORG_ID");
-
-BatchApi batchApi = new BatchApi(apiClient);
-JobApi jobApi = new JobApi(apiClient);
-
-BatchCreateResponse batch = batchApi.createBatch(
-    new CreateBatchRequest()
-        .orgId(orgId)
-        .maxConcurrency(3)
-);
-
-String batchGuid = batch.getJobGuid();
+// 1. Create Batch
+String batchGuid = client.createBatch(3);
 System.out.println("Created batch: " + batchGuid);
 
+// 2. Upload Documents
 for (String path : new String[]{"invoice_jan.pdf", "invoice_feb.pdf", "invoice_mar.pdf"}) {
-    BatchUploadResponse upload = batchApi.uploadBatchDocument(batchGuid, new File(path), orgId);
-    System.out.println("Uploaded " + path + " at index " + upload.getIndex());
+    byte[] fileBytes = Files.readAllBytes(Path.of(path));
+    UploadRequest upload = new UploadRequest(path, "application/pdf", fileBytes);
+    client.uploadBatchDocument(batchGuid, upload);
+    System.out.println("Uploaded " + path);
 }
 
+// 3. Process Batch
 String schema = """
 {
   "type": "object",
@@ -160,32 +150,16 @@ String schema = """
 }
 """;
 
-batchApi.processBatch(
-    batchGuid,
-    new ProcessBatchRequest()
-        .orgId(orgId)
-        .mimeType("application/pdf")
-        .prompt("Extract statement details.")
-        .schema(schema)
-);
+ProcessOptions options = ProcessOptions.builder()
+    .prompt("Extract statement details.")
+    .schema(schema)
+    .build();
 
-while (true) {
-    ProcessingJob status = jobApi.getJobStatus(batchGuid);
-    System.out.println(
-        "Batch status=" + status.getStatus()
-            + " completedDocs=" + status.getCompletedDocs()
-            + "/" + status.getTotalDocs()
-    );
-    if ("COMPLETED".equals(status.getStatus())) {
-        break;
-    }
-    if ("ERROR".equals(status.getStatus()) || "TIMEOUT".equals(status.getStatus())) {
-        throw new IllegalStateException("Batch failed: " + status.getStatus());
-    }
-    Thread.sleep(2000);
-}
+client.processBatch(batchGuid, options);
+System.out.println("Processing started...");
 
-Object results = jobApi.resultJson(batchGuid);
+// 4. Wait and Fetch Results
+JsonNode results = client.waitUntilReadyJson(batchGuid, WaitOptions.defaults());
 System.out.println(results);
 ```
 
