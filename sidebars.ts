@@ -26,6 +26,7 @@ const sidebars: SidebarsConfig = {
         'templates/Templates',              // EXISTING: Template management
         'core/schema-generation',           // NEW: AI schema generation
         'core/calculated-fields',           // NEW: Schema calculated fields
+        'core/source-locations',            // NEW: Field-level evidence boxes
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
         'core/knowledge-search',            // NEW: Knowledge base assisted extraction
         'core/batch-processing',            // NEW: Multi-document batch processing
@@ -43,6 +44,7 @@ const sidebars: SidebarsConfig = {
         'advanced/operations',    
         'advanced/page-range',          // NEW: Page range extraction
         'advanced/tracing',                 // EXISTING: LLM tracing
+        'advanced/include-current-date',    // NEW: Pass current date to LLM
       ],
     },
 

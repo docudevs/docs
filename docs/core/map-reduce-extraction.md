@@ -318,7 +318,7 @@ Use `submit_and_wait_for_map_reduce` with the `parent_job_id` of the completed j
 
 ```python
 import asyncio, os
-from docudevs.docudevs_client import DocuDevsClient
+from docudevs import DocuDevsClient, array_schema
 
 client = DocuDevsClient(token=os.getenv('API_KEY'))
 
@@ -330,7 +330,7 @@ async def reprocess_with_map_reduce():
     result = await client.submit_and_wait_for_map_reduce(
         parent_job_id=existing_job_id,
         prompt="Extract all line items (sku, description, qty, total)",
-        schema='{"type":"array","items":{"type":"object"}}',
+        schema=array_schema({"type": "object"}),
         pages_per_chunk=5,
         overlap_pages=1,
         dedup_key="sku",
@@ -351,8 +351,10 @@ asyncio.run(reprocess_with_map_reduce())
 import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.MapReduceOptions;
 import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Map;
 
 DocuDevsClient client = DocuDevsClient.builder()
     .apiKey(System.getenv("API_KEY"))
@@ -362,7 +364,7 @@ String existingJobGuid = "your-completed-job-guid";
 
 ProcessOptions options = ProcessOptions.builder()
     .prompt("Extract all line items (sku, description, qty, total)")
-    .schema("{\"type\":\"array\",\"items\":{\"type\":\"object\"}}")
+    .schema(Schema.arrayOf(Map.of("type", "object")))
     .mapReduce(MapReduceOptions.builder()
         .pagesPerChunk(5)
         .overlapPages(1)

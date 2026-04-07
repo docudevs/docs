@@ -460,4 +460,4 @@ curl -X POST https://api.docudevs.ai/template/fill/sales_report \
 - **Field Naming**: Use clear, consistent names for your form fields (e.g., camelCase like `customerName`).
 - **Testing**: Upload your template and inspect the metadata to ensure all fields are detected correctly.
 - **Data Types**: Ensure the data you send matches the expected type (e.g., booleans for checkboxes).
-- **Configurations**: Combine templates with [Named Configurations](../configuration/configuration.md) to standardize the filling process if you have complex logic.
+- **Configurations**: Combine templates with [Named Configurations](../configuration/Configuration.md) to standardize the filling process if you have complex logic.

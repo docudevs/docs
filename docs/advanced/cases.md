@@ -641,6 +641,130 @@ docudevs cases delete-document 123 doc-uuid-here
   </TabItem>
 </Tabs>
 
+## Document Summaries
+
+When documents are uploaded to a case, DocuDevs automatically generates AI-powered summaries for each document. These summaries include a text overview, document type classification, key entities, and a section breakdown — useful for quick triage, compliance checks, and building evaluation workflows.
+
+### Getting a Document Summary
+
+Retrieve the AI-generated summary for a specific document:
+
+<Tabs
+  defaultValue="curl"
+  values={[
+    {label: 'cURL', value: 'curl'},
+    {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
+    {label: 'CLI', value: 'cli'},
+  ]}>
+  <TabItem value="curl">
+
+```bash
+curl -X GET "https://api.docudevs.ai/cases/123/documents/doc-uuid/summary" \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+  <TabItem value="python">
+
+```python
+result = await client.get_document_summary(case_id=123, document_id="doc-uuid")
+summary = result.parsed
+print(summary["filename"])        # "invoice-q4.pdf"
+print(summary["summary"]["document_type"])  # "invoice"
+print(summary["summary"]["summary"])        # "Monthly invoice from Acme Corp..."
+```
+
+  </TabItem>
+  <TabItem value="java">
+
+```java
+JsonNode summary = client.getDocumentSummary(123, "doc-uuid");
+System.out.println(summary.path("filename").asText());
+System.out.println(summary.path("summary").path("document_type").asText());
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs cases get-summary 123 doc-uuid
+```
+
+  </TabItem>
+</Tabs>
+
+The response includes:
+
+| Field | Description |
+|-------|-------------|
+| `documentId` | The document GUID |
+| `filename` | Original filename |
+| `summary` | AI-generated summary object (see below), or `null` if not yet generated |
+
+The `summary` object contains:
+
+| Field | Description |
+|-------|-------------|
+| `summary` | Text overview of the document content |
+| `document_type` | Classified document type (e.g., "invoice", "contract") |
+| `key_entities` | Important entities extracted from the document |
+| `section_overview` | Breakdown of document sections |
+| `word_count` | Approximate word count |
+
+### Listing All Case Summaries
+
+Retrieve summaries for every document in a case at once — useful for getting a birds-eye view of all documents:
+
+<Tabs
+  defaultValue="curl"
+  values={[
+    {label: 'cURL', value: 'curl'},
+    {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
+    {label: 'CLI', value: 'cli'},
+  ]}>
+  <TabItem value="curl">
+
+```bash
+curl -X GET "https://api.docudevs.ai/cases/123/summaries" \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+  <TabItem value="python">
+
+```python
+result = await client.list_case_summaries(case_id=123)
+for doc in result.parsed:
+    print(f"{doc['filename']}: {doc['summary']['document_type']}")
+```
+
+  </TabItem>
+  <TabItem value="java">
+
+```java
+JsonNode summaries = client.listCaseSummaries(123);
+for (JsonNode doc : summaries) {
+    System.out.println(doc.path("filename").asText() + ": " +
+        doc.path("summary").path("document_type").asText());
+}
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs cases list-summaries 123
+```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+Summaries are generated asynchronously after document upload. If a document was just uploaded, the `summary` field may be `null` until processing completes.
+:::
+
 ## User vs Organization Scope
 
 Cases support two levels of scope:
@@ -756,6 +880,6 @@ except Exception as e:
 
 - Learn about [Job Management](/docs/advanced/job-management) for cleanup and data retention
 - Learn about [Operations](/docs/advanced/operations) for advanced document processing workflows
-- Explore [Named Configurations](/docs/configuration/configuration.md) for consistent processing settings
+- Explore [Named Configurations](/docs/configuration/) for consistent processing settings
 - Check out [Use Cases](/docs/integration/use-cases) for real-world implementation examples
 - Review [Best Practices](/docs/integration/best-practices) for production deployment guidelines

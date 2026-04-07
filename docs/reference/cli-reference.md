@@ -364,6 +364,22 @@ Remove a document from a case.
 docudevs cases delete-document CASE_ID DOCUMENT_ID
 ```
 
+### `cases get-summary`
+
+Get the AI-generated summary for a document in a case.
+
+```bash
+docudevs cases get-summary CASE_ID DOCUMENT_ID
+```
+
+### `cases list-summaries`
+
+List AI-generated summaries for all documents in a case.
+
+```bash
+docudevs cases list-summaries CASE_ID
+```
+
 ## Knowledge Base Management
 
 Manage knowledge bases derived from cases.

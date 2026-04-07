@@ -276,12 +276,12 @@ This approach is perfect for:
 
 - [Use Cases](/docs/integration/use-cases) - See real-world application examples
 - [Cases](/docs/advanced/cases) - Organize documents into collections
-- [Templates](/docs/templates/templates.md) - Create reusable document templates
+- [Templates](/docs/templates/) - Create reusable document templates
 
 ### ⚙️ **For System Integrators**
 
 - [Best Practices](/docs/integration/best-practices) - Production deployment guidelines
-- [Configuration](/docs/configuration/configuration.md) - Save and reuse processing settings
+- [Configuration](/docs/configuration/) - Save and reuse processing settings
 - [Troubleshooting](/docs/integration/troubleshooting) - Debug common issues
 
 ## Try Different Document Types
@@ -325,7 +325,7 @@ instruction = "Extract all form fields and their values"
 ### Add Custom Schema
 
 ```python
-import json
+from docudevs import json_schema
 
 # Define a proper JSON Schema
 schema = {
@@ -344,7 +344,7 @@ job_id = await client.submit_and_process_document(
     document=document_data,
     document_mime_type="application/pdf",
     prompt="Extract invoice data according to the schema",
-    schema=json.dumps(schema)  # Schema must be a JSON string
+    schema=json_schema(schema)
 )
 ```
 
@@ -381,7 +381,7 @@ await client.process_batch(
     batch_guid=batch_guid,
     mime_type="application/pdf",
     prompt="Extract invoice data",
-    schema=json.dumps(schema),
+    schema=json_schema(schema),
 )
 
 # 4. Wait for all results
@@ -404,7 +404,7 @@ for i, result in enumerate(results):
 You've successfully processed your first document! Now you're ready to:
 
 1. **Explore Advanced Features**: Learn about [Cases](/docs/advanced/cases) for document organization
-2. **Customize Processing**: Dive into [Templates](/docs/templates/templates.md) and [Configuration](/docs/configuration/configuration.md)
+2. **Customize Processing**: Dive into [Templates](/docs/templates/) and [Configuration](/docs/configuration/)
 3. **Build Integration**: Review [Best Practices](/docs/integration/best-practices) for production use
 4. **Scale Your Solution**: Discover performance optimization techniques
 

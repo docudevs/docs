@@ -144,8 +144,7 @@ This example computes `laskettu_verotusarvot_yhteensa` from two extracted fields
   <TabItem value="python">
 
 ```python
-import json
-from docudevs.docudevs_client import DocuDevsClient
+from docudevs import DocuDevsClient, json_schema
 
 client = DocuDevsClient(token="YOUR_API_KEY")
 
@@ -172,7 +171,7 @@ job_guid = await client.submit_and_process_document(
     document=open("invoice.pdf", "rb").read(),
     document_mime_type="application/pdf",
     prompt="Extract net amount and vat rate as numbers.",
-    schema=json.dumps(schema),
+    schema=json_schema(schema),
 )
 
 result = await client.wait_until_ready(job_guid, result_format="json")

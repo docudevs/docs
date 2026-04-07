@@ -191,6 +191,8 @@ result = await processing_with_instructions()
 For even more control, define exactly how you want the output structured:
 
 ```python
+from docudevs import json_schema
+
 async def processing_with_schema():
     instruction = "Extract invoice data according to the provided schema"
     
@@ -231,7 +233,7 @@ async def processing_with_schema():
         document=document_data,
         document_mime_type="application/pdf",
         prompt=instruction,
-        schema=json.dumps(schema)
+        schema=json_schema(schema)
     )
     result = await client.wait_until_ready(job_id, result_format="json")
     
@@ -561,7 +563,7 @@ Now that you understand document processing fundamentals:
 1. **Explore Advanced Features**:
    - [Cases](/docs/advanced/cases) - Organize related documents
    - [Operations](/docs/advanced/operations) - Error analysis and post-processing
-   - [Templates](/docs/templates/templates.md) - Reusable document templates
+   - [Templates](/docs/templates/) - Reusable document templates
 
 2. **Learn Integration Patterns**:
    - [Use Cases](/docs/integration/use-cases) - Real-world implementation examples  
@@ -571,6 +573,6 @@ Now that you understand document processing fundamentals:
 3. **Reference Materials**:
    - [SDK Methods](/docs/reference/sdk-methods) - Complete method documentation
    - [Error Codes](/docs/reference/error-codes) - Error handling reference
-   - [Configuration](/docs/configuration/configuration.md) - Settings management
+   - [Configuration](/docs/configuration/) - Settings management
 
 Ready to build more sophisticated document processing workflows? Continue with [Cases](/docs/advanced/cases) to learn about organizing and managing multiple documents!

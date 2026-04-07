@@ -46,7 +46,7 @@ export default function Home() {
                         <Link className="button button--secondary button--lg" to="/docs/intro">
                             Start with the Quick Start
                         </Link>
-                        <Link className="button button--outline button--lg margin-left--md" to="/docs/openapi/reference/DocuDevsApi">
+                        <Link className="button button--outline button--lg margin-left--md" to="/docs/openapi/docudevs-api">
                             Explore the API
                         </Link>
                     </div>

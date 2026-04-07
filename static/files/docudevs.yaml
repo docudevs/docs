@@ -103,6 +103,76 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/BillingPrice"
+  /billing/usage/by-jobs:
+    get:
+      tags:
+      - billing
+      operationId: getUsageByJobs
+      parameters:
+      - name: orgId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: guids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getUsageByJobs 200 response
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: integer
+                  format: int64
+  /billing/usage/ledger:
+    get:
+      tags:
+      - billing
+      operationId: getRecentLedger
+      parameters:
+      - name: orgId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      responses:
+        "200":
+          description: getRecentLedger 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LedgerEntryResponse"
+  /billing/usage/summary:
+    get:
+      tags:
+      - billing
+      operationId: getUsageSummary
+      parameters:
+      - name: orgId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getUsageSummary 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsageSummaryResponse"
   /billing/webhook:
     post:
       tags:
@@ -320,6 +390,49 @@ paths:
       responses:
         "200":
           description: deleteCaseDocument 200 response
+  /cases/{caseId}/documents/{documentId}/summary:
+    get:
+      tags:
+      - cases
+      operationId: getDocumentSummary
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Document summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocumentSummaryResponse"
+  /cases/{caseId}/summaries:
+    get:
+      tags:
+      - cases
+      operationId: listCaseSummaries
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: All document summaries for the case
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocumentSummaryResponse"
   /cases/{caseId}/upload:
     post:
       tags:
@@ -426,6 +539,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Unit"
+  /configuration/{name}/excel-template:
+    post:
+      tags:
+      - configuration
+      operationId: uploadExcelTemplate
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+            encoding:
+              file:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: uploadExcelTemplate 200 response
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
   /document/analyze:
     post:
       tags:
@@ -1103,6 +1249,12 @@ paths:
         required: true
         schema:
           type: string
+      - name: configuration
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
       responses:
         "200":
           description: resultExcel 200 response
@@ -1123,6 +1275,23 @@ paths:
       responses:
         "200":
           description: resultJson 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/result/{uuid}/schema:
+    get:
+      tags:
+      - job
+      operationId: resultSchema
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: resultSchema 200 response
           content:
             application/json:
               schema: {}
@@ -1596,6 +1765,61 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Settings"
+  /settings/webhook:
+    get:
+      tags:
+      - webhook
+      operationId: getWebhookSettings
+      responses:
+        "200":
+          description: getWebhookSettings 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookSettings"
+    put:
+      tags:
+      - webhook
+      operationId: updateWebhookSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebhookSettings"
+        required: true
+      responses:
+        "200":
+          description: updateWebhookSettings 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookSettings"
+  /document/track-changes:
+    post:
+      tags:
+      - track-changes
+      operationId: extractTrackChanges
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: string
+                  format: binary
+              required:
+              - document
+        required: true
+      responses:
+        "200":
+          description: extractTrackChanges 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackChangesResult"
+        "400":
+          description: Only .docx files are supported
   /template/fill/{name}:
     post:
       tags:
@@ -2126,6 +2350,16 @@ components:
       - endpoint
       - modelId
       - name
+    DailyUsageEntry:
+      properties:
+        date:
+          type: string
+        tokens:
+          type: integer
+          format: int64
+      required:
+      - date
+      - tokens
     DependencyInfo:
       properties:
         guid:
@@ -2151,6 +2385,20 @@ components:
       - PROCESSING
       - COMPLETED
       - FAILED
+    DocumentSummaryResponse:
+      properties:
+        documentId:
+          type: string
+        filename:
+          type: string
+        summary:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+      required:
+      - documentId
+      - filename
     DocumentTemplate:
       properties:
         name:
@@ -2177,6 +2425,24 @@ components:
           format: date-time
       required:
       - name
+    ExcelTemplateConfig:
+      properties:
+        startRow:
+          type: integer
+          format: int32
+        startCol:
+          type: integer
+          format: int32
+        sheetName:
+          type:
+          - string
+          - "null"
+        includeHeaders:
+          type: boolean
+      required:
+      - includeHeaders
+      - startCol
+      - startRow
     ExtractionMode:
       enum:
       - SIMPLE
@@ -2210,6 +2476,23 @@ components:
           format: int64
       required:
       - caseId
+    LedgerEntryResponse:
+      properties:
+        tokenDelta:
+          type: integer
+          format: int64
+        reason:
+          type: string
+        jobGuid:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type: string
+      required:
+      - createdAt
+      - reason
+      - tokenDelta
     LlmKeyBindingDto:
       properties:
         key:
@@ -2751,6 +3034,18 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/MapReduceRuntimeStatus"
+        qualityScore:
+          type:
+          - number
+          - "null"
+          format: double
+          description: "OCR quality score (0.0–1.0 trimmed-mean confidence)"
+        qualityCategory:
+          type:
+          - string
+          - "null"
+          description: "Quality classification: Very Confident, Confident, Likely Handwriting\
+            \ Problems, or Many Problems"
       required:
       - completedDocs
       - dependencyStatus
@@ -2991,6 +3286,7 @@ components:
     ToolType:
       enum:
       - KNOWLEDGE_BASE_SEARCH
+      - KNOWLEDGE_BASE_EVALUATE
     Unit: {}
     UpdateKeyBindingRequestDto:
       properties:
@@ -3131,6 +3427,22 @@ components:
           items:
             type: integer
             format: int32
+        excelTemplate:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ExcelTemplateConfig"
+        includeCurrentDate:
+          type:
+          - boolean
+          - "null"
+        webhookUrl:
+          type:
+          - string
+          - "null"
+          description: "Per-request webhook URL for completion notification (overrides\
+            \ org-level setting)"
     UploadResponse:
       properties:
         guid:
@@ -3144,6 +3456,27 @@ components:
       required:
       - guid
       - status
+    UsageSummaryResponse:
+      properties:
+        totalTokensUsed:
+          type: integer
+          format: int64
+        balance:
+          type: integer
+          format: int64
+        byType:
+          additionalProperties:
+            type: integer
+            format: int64
+        dailyUsage:
+          type: array
+          items:
+            $ref: "#/components/schemas/DailyUsageEntry"
+      required:
+      - balance
+      - byType
+      - dailyUsage
+      - totalTokensUsed
     UserInfo:
       properties:
         id:
@@ -3160,3 +3493,89 @@ components:
           - integer
           - "null"
           format: int64
+    WebhookSettings:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - "null"
+          description: "Webhook URL to receive job completion notifications"
+    TrackChange:
+      type: object
+      properties:
+        text:
+          type: string
+        author:
+          type:
+          - string
+          - "null"
+        date:
+          type:
+          - string
+          - "null"
+      required:
+      - text
+    Comment:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - "null"
+        text:
+          type: string
+        author:
+          type:
+          - string
+          - "null"
+        date:
+          type:
+          - string
+          - "null"
+        initials:
+          type:
+          - string
+          - "null"
+      required:
+      - text
+    TrackChangesSummary:
+      type: object
+      properties:
+        totalInsertions:
+          type: integer
+        totalDeletions:
+          type: integer
+        totalComments:
+          type: integer
+        authors:
+          type: array
+          items:
+            type: string
+      required:
+      - totalInsertions
+      - totalDeletions
+      - totalComments
+      - authors
+    TrackChangesResult:
+      type: object
+      properties:
+        insertions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrackChange"
+        deletions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrackChange"
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+        summary:
+          $ref: "#/components/schemas/TrackChangesSummary"
+      required:
+      - insertions
+      - deletions
+      - comments
+      - summary

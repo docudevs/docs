@@ -49,9 +49,8 @@ You maintain a "Signature Appliances" case (`kb-kitchen-pro`) that stores the ca
 import asyncio
 from pathlib import Path
 from pydantic import BaseModel, Field
-import json
 
-from docudevs.docudevs_client import DocuDevsClient
+from docudevs import DocuDevsClient, json_schema
 
 class CatalogRow(BaseModel):
     sku: str = Field(pattern=r"^SKU-\d{5}$")
@@ -83,7 +82,7 @@ async def enrich_products():
             "Fill canonical_name, localized_display_name (<=40 chars), regulatory_class, "
             "and marketing_summary using the Signature Appliances knowledge base."
         ),
-        schema=json.dumps(CatalogResult.model_json_schema()),
+        schema=json_schema(CatalogResult),
         tools=[tool],
     )
 
@@ -223,6 +222,54 @@ Server-side validation ensures the case belongs to your organization before exec
 
   </TabItem>
 </Tabs>
+
+## Knowledge Base Evaluation
+
+For deeper analysis scenarios — such as compliance checking, document completeness audits, or cross-document reasoning — use the `KNOWLEDGE_BASE_EVALUATE` tool type. Unlike the lightweight search tool, evaluation gives the LLM access to full document summaries and content, with a strategy pre-phase that determines the optimal approach.
+
+### Configuration
+
+```json
+{
+  "tools": [
+    {
+      "type": "KNOWLEDGE_BASE_EVALUATE",
+      "config": {
+        "caseId": "123",
+        "strategy": "auto"
+      }
+    }
+  ]
+}
+```
+
+### Available Strategies
+
+| Strategy | Description | Best for |
+|----------|-------------|----------|
+| `auto` | LLM reviews document summaries and picks the best strategy | General use — recommended default |
+| `full_read` | Browses summaries, then reads full document text | Small document sets, compliance audits |
+| `search` | Semantic + vector search only | Large cases, specific fact retrieval |
+| `hybrid` | All tools available (browse, read, search) | Complex multi-document reasoning |
+
+### How Auto Strategy Works
+
+1. The system first retrieves AI-generated summaries of all documents in the case
+2. A strategy-resolution LLM reviews the summaries and the extraction task
+3. Based on document count, types, and the task requirements, it selects `full_read`, `search`, or `hybrid`
+4. Only the selected tools are made available to the extraction LLM
+
+### Tools Provided to the LLM
+
+| Tool | Strategies | Description |
+|------|-----------|-------------|
+| `kb_browse_summaries` | full_read, hybrid | Lists AI-generated summaries for all case documents |
+| `kb_read_document` | full_read, hybrid | Reads the full OCR text of a specific document by ID |
+| `kb_search` | search, hybrid | Semantic + vector search across all case documents |
+
+:::tip When to use Evaluate vs Search
+Use **KNOWLEDGE_BASE_SEARCH** when you need fast, targeted lookups (e.g., "find the price for item X"). Use **KNOWLEDGE_BASE_EVALUATE** when the LLM needs to reason across documents or discover what's missing (e.g., "verify all required compliance sections are present").
+:::
 
 ## Operational notes
 

@@ -22,6 +22,53 @@ client = DocuDevsClient(
 )
 ```
 
+## Schema Helpers
+
+Convenience functions for building JSON Schema strings from Pydantic models or dicts.
+
+### json_schema
+
+Convert a Pydantic model or dict to a JSON Schema string. Use for single-object extraction.
+
+```python
+from docudevs import json_schema
+from pydantic import BaseModel, Field
+
+class Invoice(BaseModel):
+    number: str = Field(description="Invoice number")
+    total: float
+
+# From a Pydantic model
+schema = json_schema(Invoice)
+
+# From a dict
+schema = json_schema({"type": "object", "properties": {"name": {"type": "string"}}})
+```
+
+### array_schema
+
+Wrap a Pydantic model or dict as an array schema. Use for map-reduce extraction where each chunk produces multiple items.
+
+```python
+from docudevs import array_schema
+from pydantic import BaseModel
+
+class LineItem(BaseModel):
+    sku: str
+    description: str
+    quantity: int
+
+# Produces {"type": "array", "items": <LineItem schema>}
+schema = array_schema(LineItem)
+
+# From a dict
+schema = array_schema({"type": "object", "properties": {"sku": {"type": "string"}}})
+```
+
+Both helpers accept:
+- **Pydantic model classes** — calls `model_json_schema()` automatically
+- **Dicts** — used as-is
+
 ## Document Processing
 
 ### submit_and_process_document
@@ -266,6 +313,27 @@ await client.upload_case_document(
         document=File(payload=data, file_name="doc.pdf")
     )
 )
+```
+
+### get_document_summary
+
+Get the AI-generated summary for a specific document in a case.
+
+```python
+result = await client.get_document_summary(case_id=123, document_id="doc-uuid")
+summary = result.parsed
+print(summary["filename"])  # "invoice.pdf"
+print(summary["summary"]["document_type"])  # "invoice"
+```
+
+### list_case_summaries
+
+List AI-generated summaries for all documents in a case.
+
+```python
+result = await client.list_case_summaries(case_id=123)
+for doc in result.parsed:
+    print(f"{doc['filename']}: {doc['summary']['document_type']}")
 ```
 
 ## Operations

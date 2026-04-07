@@ -216,7 +216,7 @@ curl -X POST https://api.docudevs.ai/document/upload-files/sync \
   <TabItem value="python">
 
 ```python
-import json
+from docudevs import json_schema
 
 schema = {
     "type": "object",
@@ -226,11 +226,10 @@ schema = {
     }
 }
 
-# Schema must be passed as a JSON string
 guid = await client.submit_and_process_document(
     document=doc_bytes,
     document_mime_type="application/pdf",
-    schema=json.dumps(schema)
+    schema=json_schema(schema)
 )
 ```
 
@@ -258,7 +257,7 @@ The Python SDK integrates seamlessly with **Pydantic**, allowing you to define y
 ```python
 from pydantic import BaseModel, Field
 from typing import List
-import json
+from docudevs import json_schema
 
 # 1. Define your data model
 class LineItem(BaseModel):
@@ -273,7 +272,7 @@ class Invoice(BaseModel):
     total: float
 
 # 2. Generate schema from model
-schema = json.dumps(Invoice.model_json_schema())
+schema = json_schema(Invoice)
 
 # 3. Process document
 guid = await client.submit_and_process_document(
@@ -376,4 +375,4 @@ docudevs process invoice.pdf --barcodes --prompt "Extract QR codes"
 
 - **[Map-Reduce Extraction](../core/map-reduce-extraction.md)**: Handle very large documents (50+ pages).
 - **[Batch Processing](../core/batch-processing.md)**: Process thousands of documents efficiently.
-- **[Named Configurations](../configuration/configuration.md)**: Save your schemas and prompts for reuse.
+- **[Named Configurations](../configuration/Configuration.md)**: Save your schemas and prompts for reuse.

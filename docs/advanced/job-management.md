@@ -118,6 +118,121 @@ DocuDevs automatically cleans up old jobs on a scheduled basis:
 
 No action is required on your part—old jobs are automatically removed to manage storage efficiently.
 
+## Reusing Previous Results (`dependsOn`)
+
+DocuDevs can chain jobs together so you **parse a document once** and then run multiple operations on the same result without re-processing. This saves time and cost when you need to extract different schemas or run different prompts against the same document.
+
+Use the `dependsOn` query parameter when processing a document to reference a previous job:
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+from docudevs.docudevs_client import DocuDevsClient
+import os
+
+client = DocuDevsClient(token=os.getenv("API_KEY"))
+
+# First extraction — parse and extract with schema A
+guid_a = await client.submit_and_process_document(
+    document=open("invoice.pdf", "rb"),
+    document_mime_type="application/pdf",
+    schema=schema_a,
+    prompt="Extract invoice header fields",
+)
+result_a = await client.wait_until_ready(guid_a, result_format="json")
+
+# Second extraction — reuse the parsed document with schema B (no re-OCR)
+process_resp = await client.process_document(
+    guid=guid_a,
+    body={"schema": schema_b, "prompt": "Extract line items"},
+    depends_on=guid_a,
+)
+result_b = await client.wait_until_ready(guid_a, result_format="json")
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+# First extraction
+GUID=$(curl -s -X POST https://api.docudevs.ai/document/upload \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "document=@invoice.pdf" | jq -r '.guid')
+
+curl -X POST "https://api.docudevs.ai/document/process/$GUID" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"schema": "...", "prompt": "Extract header fields"}'
+
+# Second extraction — reuse parsed document
+curl -X POST "https://api.docudevs.ai/document/process/$GUID?dependsOn=$GUID" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"schema": "...", "prompt": "Extract line items"}'
+```
+
+  </TabItem>
+</Tabs>
+
+The dependent job waits for the parent to complete, then reuses its OCR/parsed content. This is especially useful for:
+
+- Extracting **multiple schemas** from the same document
+- Running **different prompts** against the same content
+- Performing **operations** (generative tasks) on already-processed jobs via `/operation/{jobGuid}/generative-task`
+
+## Quality Score
+
+Every completed job includes a **quality score** (0.0–1.0) and a **quality category** that indicate how confident the OCR engine was about the extracted text. Use this to build automated quality gates.
+
+| Category | Score Range | Description |
+|----------|-----------|-------------|
+| `Very Confident` | 0.85–1.0 | High quality, reliable extraction |
+| `Confident` | 0.70–0.85 | Good quality, minor issues possible |
+| `Likely Handwriting Problems` | 0.40–0.70 | May need review or PREMIUM OCR |
+| `Many Problems` | 0.0–0.40 | Consider re-processing with PREMIUM OCR |
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+# Check quality after processing
+status_resp = await client.status(guid=guid)
+job = status_resp.parsed
+print(f"Quality: {job.quality_score:.2f} ({job.quality_category})")
+
+# Auto-retry with PREMIUM OCR if quality is low
+result = await client.submit_and_process_with_quality_gate(
+    document=open("scan.pdf", "rb"),
+    document_mime_type="application/pdf",
+    schema=my_schema,
+    prompt="Extract fields",
+    min_quality=0.7,  # auto-retries with PREMIUM if below
+)
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+# Check quality after processing
+curl -s "https://api.docudevs.ai/job/status/$GUID" \
+  -H "Authorization: Bearer $API_KEY" | jq '{qualityScore, qualityCategory}'
+```
+
+  </TabItem>
+</Tabs>
+
 :::info Case Documents
 Documents uploaded to [Cases](/docs/advanced/cases) are **not automatically purged**. Case documents persist until the case is deleted or documents are manually removed from the case.
 :::
@@ -232,3 +347,72 @@ Delete a job and its associated storage data.
 - Learn about [Cases](/docs/advanced/cases) for long-term document storage
 - Explore [LLM Tracing](/docs/advanced/tracing) for debugging extractions
 - Check [Operations](/docs/advanced/operations) for post-processing workflows
+
+## Webhooks
+
+Instead of polling for job status, you can configure a **webhook URL** to receive HTTP POST notifications when jobs complete or fail. This is ideal for event-driven architectures.
+
+### Configuration
+
+Set your webhook URL in the **Settings → Webhooks** page in the UI, or via the API/SDK:
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+# Configure organization-level webhook
+await client.update_webhook_settings(url="https://example.com/webhooks/docudevs")
+
+# Check current webhook settings
+settings = await client.get_webhook_settings()
+print(settings)  # {"url": "https://example.com/webhooks/docudevs"}
+
+# Disable webhooks
+await client.update_webhook_settings(url=None)
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+# Set webhook URL
+curl -X PUT "https://api.docudevs.ai/settings/webhook" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com/webhooks/docudevs"}'
+
+# Get current settings
+curl "https://api.docudevs.ai/settings/webhook" \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+</Tabs>
+
+You can also set a **per-request webhook URL** by including `webhookUrl` in your upload command, which overrides the organization default for that specific job.
+
+### Payload
+
+When a job reaches a terminal state (`COMPLETED` or `ERROR`), DocuDevs sends a POST request to your webhook URL:
+
+```json
+{
+  "jobGuid": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "COMPLETED",
+  "error": null,
+  "qualityScore": 0.92,
+  "qualityCategory": "Very Confident"
+}
+```
+
+### Best Practices
+
+- **Return a 2xx status** quickly — webhook delivery is best-effort with no retries
+- **Verify the payload** in your handler (the `jobGuid` can be used to fetch full results)
+- **Use HTTPS** endpoints for security
+- **Handle duplicates** — in rare cases the same notification may be sent more than once

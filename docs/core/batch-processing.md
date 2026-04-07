@@ -42,9 +42,8 @@ Choose batches when:
 
 ```python
 import asyncio
-import json
 import os
-from docudevs.docudevs_client import DocuDevsClient
+from docudevs import DocuDevsClient, json_schema
 
 async def run_batch():
     client = DocuDevsClient(token=os.environ["API_KEY"])
@@ -78,7 +77,7 @@ async def run_batch():
         batch_guid=batch_guid,
         mime_type="application/pdf",
         prompt="Extract statement details.",
-        schema=json.dumps(schema),
+        schema=json_schema(schema),
     )
     print("Processing started...")
 
