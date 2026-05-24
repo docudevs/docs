@@ -3,7 +3,7 @@ info:
   title: DocuDevs API
   description: DocuDevs Document processing API. Easiest way to convert your documents
     to data
-  version: 1.2.0
+  version: 1.3.0
 paths:
   /agent/chat:
     post:
@@ -46,12 +46,6 @@ paths:
       tags:
       - billing
       operationId: getBalance
-      parameters:
-      - name: orgId
-        in: query
-        required: true
-        schema:
-          type: string
       responses:
         "200":
           description: getBalance 200 response
@@ -68,13 +62,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-              - $ref: "#/components/schemas/BillingCheckoutRequest"
-              - properties:
-                  orgId:
-                    type: string
-              required:
-              - orgId
+              $ref: "#/components/schemas/BillingCheckoutRequest"
         required: true
       responses:
         "200":
@@ -88,12 +76,6 @@ paths:
       tags:
       - billing
       operationId: listPrices
-      parameters:
-      - name: orgId
-        in: query
-        required: true
-        schema:
-          type: string
       responses:
         "200":
           description: listPrices 200 response
@@ -109,11 +91,6 @@ paths:
       - billing
       operationId: getUsageByJobs
       parameters:
-      - name: orgId
-        in: query
-        required: true
-        schema:
-          type: string
       - name: guids
         in: query
         required: true
@@ -128,17 +105,45 @@ paths:
                 additionalProperties:
                   type: integer
                   format: int64
+  /billing/usage/events:
+    get:
+      tags:
+      - billing
+      operationId: getUsageEvents
+      parameters:
+      - name: guids
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 500
+      - name: includeRelated
+        in: query
+        required: true
+        schema:
+          type: boolean
+          default: true
+      responses:
+        "200":
+          description: getUsageEvents 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UsageEventResponse"
   /billing/usage/ledger:
     get:
       tags:
       - billing
       operationId: getRecentLedger
       parameters:
-      - name: orgId
-        in: query
-        required: true
-        schema:
-          type: string
       - name: limit
         in: query
         required: true
@@ -160,12 +165,6 @@ paths:
       tags:
       - billing
       operationId: getUsageSummary
-      parameters:
-      - name: orgId
-        in: query
-        required: true
-        schema:
-          type: string
       responses:
         "200":
           description: getUsageSummary 200 response
@@ -390,6 +389,31 @@ paths:
       responses:
         "200":
           description: deleteCaseDocument 200 response
+  /cases/{caseId}/documents/{documentId}/download:
+    get:
+      tags:
+      - cases
+      operationId: downloadCaseDocument
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: downloadCaseDocument 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
   /cases/{caseId}/documents/{documentId}/summary:
     get:
       tags:
@@ -540,6 +564,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/Unit"
   /configuration/{name}/excel-template:
+    get:
+      tags:
+      - configuration
+      operationId: downloadExcelTemplate
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: downloadExcelTemplate 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
     post:
       tags:
       - configuration
@@ -572,6 +616,76 @@ paths:
               schema:
                 additionalProperties:
                   type: string
+  /configuration/{name}/lookup-file:
+    get:
+      tags:
+      - configuration
+      operationId: downloadLookupFile
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: downloadLookupFile 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+    post:
+      tags:
+      - configuration
+      operationId: uploadLookupFile
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+            encoding:
+              file:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: uploadLookupFile 200 response
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+    delete:
+      tags:
+      - configuration
+      operationId: deleteLookupFile
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: deleteLookupFile 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
   /document/analyze:
     post:
       tags:
@@ -626,13 +740,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-              - $ref: "#/components/schemas/BatchCreateRequest"
-              - properties:
-                  orgId:
-                    type: string
-              required:
-              - orgId
+              $ref: "#/components/schemas/BatchCreateRequest"
       responses:
         "200":
           description: createBatch 200 response
@@ -640,6 +748,76 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BatchCreateResponse"
+  /document/batch/{guid}/lookup-file:
+    get:
+      tags:
+      - batch
+      operationId: downloadBatchLookupFile
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: downloadBatchLookupFile 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+    post:
+      tags:
+      - batch
+      operationId: uploadBatchLookupFile
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+            encoding:
+              file:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: uploadBatchLookupFile 200 response
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+    delete:
+      tags:
+      - batch
+      operationId: deleteBatchLookupFile
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: deleteBatchLookupFile 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
   /document/batch/{guid}/process:
     post:
       tags:
@@ -655,16 +833,39 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-              - $ref: "#/components/schemas/UploadCommand"
-              - properties:
-                  orgId:
-                    type: string
-              required:
-              - orgId
+              $ref: "#/components/schemas/UploadCommand"
       responses:
         "200":
           description: processBatch 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchCreateResponse"
+  /document/batch/{guid}/process/with-configuration/{configurationName}:
+    post:
+      tags:
+      - batch
+      operationId: processBatchWithConfiguration
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: configurationName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trace
+        in: query
+        schema:
+          type:
+          - boolean
+          - "null"
+      responses:
+        "200":
+          description: processBatchWithConfiguration 200 response
           content:
             application/json:
               schema:
@@ -680,16 +881,6 @@ paths:
         required: true
         schema:
           type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                orgId:
-                  type: string
-              required:
-              - orgId
-        required: true
       responses:
         "200":
           description: scheduleBatch 200 response
@@ -716,11 +907,8 @@ paths:
                 document:
                   type: string
                   format: binary
-                orgId:
-                  type: string
               required:
               - document
-              - orgId
             encoding:
               document:
                 contentType: application/octet-stream
@@ -898,6 +1086,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadResponse"
+  /document/track-changes:
+    post:
+      tags:
+      - track-changes
+      summary: "Extract tracked changes (insertions, deletions) and comments from\
+        \ a Word document."
+      description: "Extract tracked changes (insertions, deletions) and comments from\
+        \ a Word document. Supports .docx files only. Returns structured data with\
+        \ author and date metadata."
+      operationId: extractTrackChanges
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  type: string
+                  format: binary
+              required:
+              - document
+            encoding:
+              document:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: extractTrackChanges 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackChangesResult"
   /document/upload:
     post:
       tags:
@@ -1025,6 +1244,51 @@ paths:
             application/json:
               schema:
                 type: string
+  /integration/secrets:
+    get:
+      tags:
+      - integration
+      operationId: list
+      responses:
+        "200":
+          description: list 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SecretSummary"
+    post:
+      tags:
+      - integration
+      operationId: createOrUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSecretRequest"
+        required: true
+      responses:
+        "200":
+          description: createOrUpdate 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SecretSummary"
+  /integration/secrets/{name}:
+    delete:
+      tags:
+      - integration
+      operationId: delete
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: delete 200 response
   /internal/llm/resolve:
     post:
       tags:
@@ -1059,6 +1323,60 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResolvedOcrProviderDto"
+  /internal/operation/status:
+    post:
+      tags:
+      - Internal Operation
+      operationId: internalGetOperationStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InternalOperationStatusRequest"
+        required: true
+      responses:
+        "200":
+          description: internalGetOperationStatus 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalOperationStatusResponse"
+  /internal/operation/submit:
+    post:
+      tags:
+      - Internal Operation
+      operationId: internalSubmitOperation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InternalSubmitOperationRequest"
+        required: true
+      responses:
+        "200":
+          description: internalSubmitOperation 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitOperationResponse"
+  /internal/operation/timeout:
+    post:
+      tags:
+      - Internal Operation
+      operationId: internalMarkOperationTimeout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InternalOperationTimeoutRequest"
+        required: true
+      responses:
+        "200":
+          description: internalMarkOperationTimeout 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalOperationStatusResponse"
   /job/dependencies/{guid}:
     get:
       tags:
@@ -1204,6 +1522,71 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Page_ProcessingJob_"
+  /job/params/{guid}:
+    get:
+      tags:
+      - job
+      operationId: getProcessingParams
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getProcessingParams 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/result/{guid}/document-outline:
+    get:
+      tags:
+      - job
+      operationId: getDocumentOutline
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: batchIndex
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      responses:
+        "200":
+          description: getDocumentOutline 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/result/{guid}/source-locations:
+    get:
+      tags:
+      - job
+      operationId: getSourceLocations
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: batchIndex
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      responses:
+        "200":
+          description: getSourceLocations 200 response
+          content:
+            application/json:
+              schema: {}
   /job/result/{uuid}:
     get:
       tags:
@@ -1536,6 +1919,96 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LlmProviderDto"
+  /managed-execution:
+    get:
+      tags:
+      - managed-execution
+      operationId: listManagedExecutions
+      parameters:
+      - name: status
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
+      responses:
+        "200":
+          description: listManagedExecutions 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ManagedExecutionSummary"
+    post:
+      tags:
+      - managed-execution
+      operationId: dispatchManagedExecution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DispatchExecutionRequest"
+        required: true
+      responses:
+        "200":
+          description: dispatchManagedExecution 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DispatchExecutionResponse"
+  /managed-execution/{executionId}:
+    get:
+      tags:
+      - managed-execution
+      operationId: getManagedExecution
+      parameters:
+      - name: executionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getManagedExecution 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ManagedExecutionSummary"
+  /managed-execution/{executionId}/cancel:
+    post:
+      tags:
+      - managed-execution
+      operationId: cancelManagedExecution
+      parameters:
+      - name: executionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: cancelManagedExecution 200 response
+  /managed-execution/{executionId}/logs:
+    get:
+      tags:
+      - managed-execution
+      operationId: getManagedExecutionLogs
+      parameters:
+      - name: executionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getManagedExecutionLogs 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExecutionLogLine"
   /ocr/keys:
     get:
       tags:
@@ -1752,12 +2225,6 @@ paths:
       tags:
       - settings
       operationId: settings
-      parameters:
-      - name: email
-        in: query
-        required: true
-        schema:
-          type: string
       responses:
         "200":
           description: settings 200 response
@@ -1769,10 +2236,10 @@ paths:
     get:
       tags:
       - webhook
-      operationId: getWebhookSettings
+      operationId: getWebhook
       responses:
         "200":
-          description: getWebhookSettings 200 response
+          description: getWebhook 200 response
           content:
             application/json:
               schema:
@@ -1780,7 +2247,7 @@ paths:
     put:
       tags:
       - webhook
-      operationId: updateWebhookSettings
+      operationId: updateWebhook
       requestBody:
         content:
           application/json:
@@ -1789,37 +2256,11 @@ paths:
         required: true
       responses:
         "200":
-          description: updateWebhookSettings 200 response
+          description: updateWebhook 200 response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/WebhookSettings"
-  /document/track-changes:
-    post:
-      tags:
-      - track-changes
-      operationId: extractTrackChanges
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                document:
-                  type: string
-                  format: binary
-              required:
-              - document
-        required: true
-      responses:
-        "200":
-          description: extractTrackChanges 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TrackChangesResult"
-        "400":
-          description: Only .docx files are supported
   /template/fill/{name}:
     post:
       tags:
@@ -2298,6 +2739,28 @@ components:
       required:
       - content
       - role
+    Comment:
+      properties:
+        id:
+          type:
+          - string
+          - "null"
+        text:
+          type: string
+        author:
+          type:
+          - string
+          - "null"
+        date:
+          type:
+          - string
+          - "null"
+        initials:
+          type:
+          - string
+          - "null"
+      required:
+      - text
     CreateLlmProviderRequest:
       properties:
         name:
@@ -2350,6 +2813,19 @@ components:
       - endpoint
       - modelId
       - name
+    CreateSecretRequest:
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+      required:
+      - name
+      - value
     DailyUsageEntry:
       properties:
         date:
@@ -2379,6 +2855,35 @@ components:
       required:
       - dependencyStatus
       - guid
+    DispatchExecutionRequest:
+      properties:
+        flowConfigId:
+          type: integer
+          format: int64
+        resourceClass:
+          type: string
+        inputs:
+          additionalProperties: true
+        timeoutSeconds:
+          type: integer
+          format: int32
+      required:
+      - flowConfigId
+      - inputs
+      - resourceClass
+      - timeoutSeconds
+    DispatchExecutionResponse:
+      properties:
+        executionId:
+          type: string
+        status:
+          type: string
+        resourceClass:
+          type: string
+      required:
+      - executionId
+      - resourceClass
+      - status
     DocumentStatus:
       enum:
       - PENDING
@@ -2439,16 +2944,53 @@ components:
           - "null"
         includeHeaders:
           type: boolean
+        sheets:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/SheetWriteTarget"
       required:
       - includeHeaders
       - startCol
       - startRow
+    ExecutionLogLine:
+      properties:
+        timestamp:
+          type:
+          - string
+          - "null"
+        level:
+          type:
+          - string
+          - "null"
+        taskId:
+          type:
+          - string
+          - "null"
+        taskRunId:
+          type:
+          - string
+          - "null"
+        message:
+          type:
+          - string
+          - "null"
+        flowId:
+          type:
+          - string
+          - "null"
+        namespace:
+          type:
+          - string
+          - "null"
     ExtractionMode:
       enum:
       - SIMPLE
       - STEPS
       - OCR
       - GENERATIVE
+      - PIPELINE
     GenerativeTaskRequest:
       properties:
         prompt:
@@ -2469,6 +3011,77 @@ components:
           format: int32
       required:
       - prompt
+    InternalOperationStatusRequest:
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        childJobGuid:
+          type: string
+      required:
+      - childJobGuid
+      - organizationId
+    InternalOperationStatusResponse:
+      properties:
+        jobGuid:
+          type: string
+        parentJobGuid:
+          type:
+          - string
+          - "null"
+        operationType:
+          type:
+          - string
+          - "null"
+        status:
+          type: string
+        error:
+          type:
+          - string
+          - "null"
+      required:
+      - jobGuid
+      - status
+    InternalOperationTimeoutRequest:
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        childJobGuid:
+          type: string
+        parentJobGuid:
+          type:
+          - string
+          - "null"
+        error:
+          type: string
+      required:
+      - childJobGuid
+      - error
+      - organizationId
+    InternalSubmitOperationRequest:
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        jobGuid:
+          type: string
+        type:
+          type: string
+        parameters:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/OperationParameters"
+        pipelineNodeId:
+          type:
+          - string
+          - "null"
+      required:
+      - jobGuid
+      - organizationId
+      - type
     KnowledgeBasesController.PromoteKnowledgeBaseRequest:
       properties:
         caseId:
@@ -2548,6 +3161,80 @@ components:
       - NANO
       - MINI
       - HIGH
+    LookupFileConfig:
+      properties:
+        topK:
+          type: integer
+          format: int32
+        fileName:
+          type:
+          - string
+          - "null"
+        contentType:
+          type:
+          - string
+          - "null"
+        uploadedAt:
+          type:
+          - string
+          - "null"
+        runtimeArtifactType:
+          type:
+          - string
+          - "null"
+      required:
+      - topK
+    ManagedExecutionSummary:
+      properties:
+        executionId:
+          type: string
+        flowId:
+          type: string
+        status:
+          type: string
+        resourceClass:
+          type: string
+        triggerType:
+          type: string
+        startedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        completedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        durationSeconds:
+          type:
+          - integer
+          - "null"
+          format: int32
+        taskRunCount:
+          type:
+          - integer
+          - "null"
+          format: int32
+        finalState:
+          type:
+          - string
+          - "null"
+        errorMessage:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - executionId
+      - flowId
+      - resourceClass
+      - status
+      - triggerType
     MapReduceCommand:
       properties:
         enabled:
@@ -2677,6 +3364,7 @@ components:
       enum:
       - PAGE
       - MARKDOWN_HEADER
+      - DOCUMENT_OUTLINE
     NamedConfiguration:
       properties:
         id:
@@ -2866,6 +3554,15 @@ components:
       properties:
         name:
           type: string
+        webhookUrl:
+          type:
+          - string
+          - "null"
+        pipelineMaxConcurrentNodes:
+          type:
+          - integer
+          - "null"
+          format: int32
       required:
       - name
     PDFField:
@@ -2952,6 +3649,69 @@ components:
       - CURSOR_NEXT
       - CURSOR_PREVIOUS
       - OFFSET
+    PipelineNodeStatusSummary:
+      properties:
+        id:
+          type: string
+        type:
+          type:
+          - string
+          - "null"
+        status:
+          type: string
+        childOperationGuid:
+          type:
+          - string
+          - "null"
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - id
+      - status
+      - warnings
+    PipelineOcrStatusSummary:
+      properties:
+        status:
+          type:
+          - string
+          - "null"
+        effectiveOcrMode:
+          type:
+          - string
+          - "null"
+    PipelineStatusSummary:
+      properties:
+        version:
+          type:
+          - string
+          - "null"
+        phase:
+          type:
+          - string
+          - "null"
+        ocr:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/PipelineOcrStatusSummary"
+        nodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/PipelineNodeStatusSummary"
+        chosenFinal:
+          type:
+          - string
+          - "null"
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - nodes
+      - warnings
     ProcessingJob:
       properties:
         status:
@@ -3039,13 +3799,16 @@ components:
           - number
           - "null"
           format: double
-          description: "OCR quality score (0.0–1.0 trimmed-mean confidence)"
         qualityCategory:
           type:
           - string
           - "null"
-          description: "Quality classification: Very Confident, Confident, Likely Handwriting\
-            \ Problems, or Many Problems"
+        pipeline:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/PipelineStatusSummary"
       required:
       - completedDocs
       - dependencyStatus
@@ -3143,12 +3906,44 @@ components:
       - features
       - modelId
       - providerId
+    SecretSummary:
+      properties:
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+        updatedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - name
     Settings:
       properties:
         apiKey:
           type: string
       required:
       - apiKey
+    SheetWriteTarget:
+      properties:
+        sheetName:
+          type: string
+        startRow:
+          type: integer
+          format: int32
+        startCol:
+          type: integer
+          format: int32
+        includeHeaders:
+          type: boolean
+      required:
+      - includeHeaders
+      - sheetName
+      - startCol
+      - startRow
     Slice_CaseDocument_:
       properties:
         content:
@@ -3236,6 +4031,11 @@ components:
       enum:
       - ASC
       - DESC
+    SourceLocationGranularity:
+      enum:
+      - AUTO
+      - BLOCK
+      - WORD
     SubmitOperationRequest:
       properties:
         jobGuid:
@@ -3287,6 +4087,63 @@ components:
       enum:
       - KNOWLEDGE_BASE_SEARCH
       - KNOWLEDGE_BASE_EVALUATE
+      - LOOKUP_FILE_SEARCH
+      - REFERENCE_DICTIONARY_LOOKUP
+    TrackChange:
+      properties:
+        text:
+          type: string
+        author:
+          type:
+          - string
+          - "null"
+        date:
+          type:
+          - string
+          - "null"
+      required:
+      - text
+    TrackChangesResult:
+      properties:
+        insertions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrackChange"
+        deletions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrackChange"
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+        summary:
+          $ref: "#/components/schemas/TrackChangesSummary"
+      required:
+      - comments
+      - deletions
+      - insertions
+      - summary
+    TrackChangesSummary:
+      properties:
+        totalInsertions:
+          type: integer
+          format: int32
+        totalDeletions:
+          type: integer
+          format: int32
+        totalComments:
+          type: integer
+          format: int32
+        authors:
+          type: array
+          items:
+            type: string
+      required:
+      - authors
+      - totalComments
+      - totalDeletions
+      - totalInsertions
     Unit: {}
     UpdateKeyBindingRequestDto:
       properties:
@@ -3433,16 +4290,31 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/ExcelTemplateConfig"
+        lookupFile:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/LookupFileConfig"
         includeCurrentDate:
           type:
           - boolean
           - "null"
-        webhookUrl:
+        sourceLocations:
           type:
-          - string
+          - boolean
           - "null"
-          description: "Per-request webhook URL for completion notification (overrides\
-            \ org-level setting)"
+        sourceLocationGranularity:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/SourceLocationGranularity"
+        pipeline:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
     UploadResponse:
       properties:
         guid:
@@ -3456,6 +4328,53 @@ components:
       required:
       - guid
       - status
+    UsageEventResponse:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        processingJobId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        jobGuid:
+          type:
+          - string
+          - "null"
+        eventType:
+          type: string
+        eventSubtype:
+          type:
+          - string
+          - "null"
+        quantity:
+          type: string
+        unit:
+          type: string
+        source:
+          type: string
+        occurredAt:
+          type: string
+        metadata:
+          additionalProperties: true
+        dedupeKey:
+          type:
+          - string
+          - "null"
+      required:
+      - eventType
+      - metadata
+      - occurredAt
+      - organizationId
+      - quantity
+      - source
+      - unit
     UsageSummaryResponse:
       properties:
         totalTokensUsed:
@@ -3494,88 +4413,8 @@ components:
           - "null"
           format: int64
     WebhookSettings:
-      type: object
       properties:
         url:
           type:
           - string
           - "null"
-          description: "Webhook URL to receive job completion notifications"
-    TrackChange:
-      type: object
-      properties:
-        text:
-          type: string
-        author:
-          type:
-          - string
-          - "null"
-        date:
-          type:
-          - string
-          - "null"
-      required:
-      - text
-    Comment:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - "null"
-        text:
-          type: string
-        author:
-          type:
-          - string
-          - "null"
-        date:
-          type:
-          - string
-          - "null"
-        initials:
-          type:
-          - string
-          - "null"
-      required:
-      - text
-    TrackChangesSummary:
-      type: object
-      properties:
-        totalInsertions:
-          type: integer
-        totalDeletions:
-          type: integer
-        totalComments:
-          type: integer
-        authors:
-          type: array
-          items:
-            type: string
-      required:
-      - totalInsertions
-      - totalDeletions
-      - totalComments
-      - authors
-    TrackChangesResult:
-      type: object
-      properties:
-        insertions:
-          type: array
-          items:
-            $ref: "#/components/schemas/TrackChange"
-        deletions:
-          type: array
-          items:
-            $ref: "#/components/schemas/TrackChange"
-        comments:
-          type: array
-          items:
-            $ref: "#/components/schemas/Comment"
-        summary:
-          $ref: "#/components/schemas/TrackChangesSummary"
-      required:
-      - insertions
-      - deletions
-      - comments
-      - summary

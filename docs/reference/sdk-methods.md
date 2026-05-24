@@ -1,6 +1,6 @@
 ---
 title: SDK Methods
-description: Complete Python SDK reference for DocuDevs including document processing, batch operations, cases, templates, configurations, OCR, map-reduce, and agent chat methods.
+description: Complete Python SDK reference for DocuDevs including document processing, pipeline mode, batch operations, cases, templates, configurations, OCR, map-reduce, and agent chat methods.
 sidebar_position: 4
 ---
 
@@ -138,6 +138,92 @@ result = await client.wait_until_ready(
     result_format="json" # json, csv, excel, or None (legacy object)
 )
 ```
+
+## Pipeline Processing
+
+Pipeline mode uploads one document, runs one shared OCR pass, and executes a JSON-defined graph of nodes. Use it when classification, validation, or quality checks should decide which extraction runs next.
+
+### process_pipeline_document
+
+Upload and process a document with a raw pipeline definition.
+
+```python
+pipeline = {
+    "version": "2026-05",
+    "nodes": [
+        {
+            "id": "extract_data",
+            "type": "extract",
+            "source": "$ocr.content",
+            "prompt": "Extract the requested fields.",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"}
+                }
+            }
+        },
+        {
+            "id": "final_result",
+            "type": "final",
+            "dependsOn": ["extract_data"],
+            "output": "$nodes.extract_data.result"
+        }
+    ],
+    "finals": [{"node": "final_result"}]
+}
+
+job_guid = await client.process_pipeline_document(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    pipeline=pipeline,
+    ocr="AUTO",
+    trace=True
+)
+
+result = await client.wait_until_ready(job_guid, result_format="json")
+nodes = await client.get_pipeline_nodes(job_guid)
+```
+
+### process_uploaded_pipeline_document
+
+Run pipeline processing on a document that was already uploaded.
+
+```python
+await client.process_uploaded_pipeline_document(
+    guid=uploaded_guid,
+    pipeline=pipeline,
+    mime_type="application/pdf",
+    ocr="AUTO"
+)
+```
+
+### save_pipeline_configuration and get_pipeline_configuration
+
+Save and retrieve named pipeline configurations.
+
+```python
+await client.save_pipeline_configuration(
+    "router-pipeline",
+    pipeline=pipeline,
+    mime_type="application/pdf",
+    ocr="AUTO"
+)
+
+saved_pipeline = await client.get_pipeline_configuration("router-pipeline")
+```
+
+### get_pipeline_nodes
+
+Read node-level runtime status from a pipeline job.
+
+```python
+nodes = await client.get_pipeline_nodes(job_guid)
+for node in nodes:
+    print(node["id"], node["status"])
+```
+
+For the full pipeline JSON contract, node types, and branching examples, see [Pipeline Mode](/docs/reference/pipeline-mode).
 
 ## Batch Processing
 

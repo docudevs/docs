@@ -28,6 +28,7 @@ const sidebars: SidebarsConfig = {
         'core/calculated-fields',           // NEW: Schema calculated fields
         'core/source-locations',            // NEW: Field-level evidence boxes
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
+        'reference/pipeline-mode',          // NEW: Pipeline extraction graphs
         'core/knowledge-search',            // NEW: Knowledge base assisted extraction
         'core/batch-processing',            // NEW: Multi-document batch processing
       ],

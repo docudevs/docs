@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://docs.docudevs.ai/reference/pipeline.schema.json",
+  "title": "DocuDevs Pipeline Definition",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["version", "nodes", "finals"],
+  "properties": {
+    "version": {
+      "const": "2026-05"
+    },
+    "description": {
+      "type": "string"
+    },
+    "ocr": {
+      "$ref": "#/$defs/ocrOptions"
+    },
+    "concurrency": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxNodes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "mode": {
+          "enum": ["inline", "queue"]
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resource"
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "finals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["node"],
+        "properties": {
+          "node": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ocrOptions": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "mode": {
+          "enum": ["DEFAULT", "PREMIUM", "AUTO", "LOW", "NONE", "EXCEL"]
+        },
+        "sourceLocations": {
+          "type": "boolean"
+        },
+        "sourceLocationGranularity": {
+          "enum": ["auto", "block", "word"]
+        },
+        "qualityArtifact": {
+          "type": "boolean"
+        },
+        "images": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "enum": ["auto", "always", "never"]
+            }
+          ]
+        },
+        "extractFigures": {
+          "type": "boolean"
+        },
+        "describeFigures": {
+          "type": "boolean"
+        }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "nodeType": {
+      "enum": ["extract", "validate", "transform", "final", "OCR_CORRECT", "operation"]
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+        },
+        "type": {
+          "$ref": "#/$defs/nodeType"
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "when": {
+          "$ref": "#/$defs/condition"
+        },
+        "onError": {
+          "enum": ["fail", "continue"]
+        },
+        "source": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "schema": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "llm": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "tier": {
+              "enum": ["default", "nano", "mini", "high"]
+            }
+          }
+        },
+        "sourceLocations": {
+          "type": "boolean"
+        },
+        "sourceLocationGranularity": {
+          "enum": ["auto", "block", "word"]
+        },
+        "imageIndices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "validator": {
+          "type": "string"
+        },
+        "transform": {
+          "type": "string"
+        },
+        "output": true,
+        "operation": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "sourceMap": {
+          "enum": ["preserve", "compress", "none"]
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["eq"],
+          "properties": {
+            "eq": {
+              "$ref": "#/$defs/binaryOperands"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ne"],
+          "properties": {
+            "ne": {
+              "$ref": "#/$defs/binaryOperands"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["exists"],
+          "properties": {
+            "exists": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["and"],
+          "properties": {
+            "and": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["or"],
+          "properties": {
+            "or": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["not"],
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/condition"
+            }
+          }
+        }
+      ]
+    },
+    "binaryOperands": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}
