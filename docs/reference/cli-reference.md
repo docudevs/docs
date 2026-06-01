@@ -262,6 +262,8 @@ Fetch metadata for a template.
 docudevs template-metadata TEMPLATE_NAME
 ```
 
+For newly uploaded PDF templates, metadata extraction is asynchronous. If the template was just uploaded, wait briefly and run the command again.
+
 ### `delete-template`
 
 Delete a template.
@@ -282,9 +284,11 @@ docudevs fill TEMPLATE_NAME data.json --output filled.pdf
 
 ```json
 {
-  "name": "John Doe",
-  "address": "123 Main St",
-  "date": "2024-01-15"
+  "fields": {
+    "name": "John Doe",
+    "address": "123 Main St",
+    "date": "2024-01-15"
+  }
 }
 ```
 

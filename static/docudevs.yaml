@@ -686,6 +686,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Unit"
+  /document/acroform-metadata:
+    post:
+      tags:
+      - document
+      operationId: extractAcroFormMetadata
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  type: string
+                  format: binary
+              required:
+              - document
+            encoding:
+              document:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: extractAcroFormMetadata 200 response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
   /document/analyze:
     post:
       tags:
@@ -1539,6 +1565,30 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/result/{guid}/acroform-metadata:
+    get:
+      tags:
+      - job
+      operationId: getAcroFormMetadata
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: batchIndex
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      responses:
+        "200":
+          description: getAcroFormMetadata 200 response
+          content:
+            application/json:
+              schema: {}
   /job/result/{guid}/document-outline:
     get:
       tags:
@@ -2261,6 +2311,204 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WebhookSettings"
+  /submission-portals:
+    get:
+      tags:
+      - submission-portals
+      operationId: listPortals
+      responses:
+        "200":
+          description: listPortals 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubmissionPortalResponse"
+    post:
+      tags:
+      - submission-portals
+      operationId: createPortal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubmissionPortalRequest"
+        required: true
+      responses:
+        "200":
+          description: createPortal 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionPortalResponse"
+  /submission-portals/by-slug/{slug}:
+    get:
+      tags:
+      - submission-portals
+      operationId: getBySlug
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getBySlug 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionPortalResponse"
+  /submission-portals/default-for-configuration/{configurationName}:
+    get:
+      tags:
+      - submission-portals
+      operationId: getDefaultForConfiguration
+      parameters:
+      - name: configurationName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getDefaultForConfiguration 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionPortalResponse"
+  /submission-portals/{id}:
+    get:
+      tags:
+      - submission-portals
+      operationId: getPortal
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getPortal 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionPortalResponse"
+    put:
+      tags:
+      - submission-portals
+      operationId: updatePortal
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSubmissionPortalRequest"
+        required: true
+      responses:
+        "200":
+          description: updatePortal 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionPortalResponse"
+    delete:
+      tags:
+      - submission-portals
+      operationId: deletePortal
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: deletePortal 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
+  /submission-portals/{id}/submissions:
+    post:
+      tags:
+      - submission-portals
+      operationId: submit
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                documents:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - documents
+            encoding:
+              documents:
+                contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: submit 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionSubmitResponse"
+  /submission-records/{receiptCode}:
+    get:
+      tags:
+      - submission-portals
+      operationId: getRecord
+      parameters:
+      - name: receiptCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getRecord 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionRecordResponse"
+  /submission-records/{receiptCode}/download:
+    get:
+      tags:
+      - submission-portals
+      operationId: download
+      parameters:
+      - name: receiptCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: download 200 response
+          content:
+            application/json:
+              schema: {}
   /template/fill/{name}:
     post:
       tags:
@@ -2826,6 +3074,45 @@ components:
       required:
       - name
       - value
+    CreateSubmissionPortalRequest:
+      properties:
+        slug:
+          type: string
+        configurationName:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+        submitButtonLabel:
+          type:
+          - string
+          - "null"
+        successMessage:
+          type:
+          - string
+          - "null"
+        inputMode:
+          $ref: "#/components/schemas/SubmissionInputMode"
+        resultMode:
+          $ref: "#/components/schemas/SubmissionResultMode"
+        downloadFormat:
+          $ref: "#/components/schemas/SubmissionDownloadFormat"
+        isDefaultForConfiguration:
+          type: boolean
+        active:
+          type: boolean
+      required:
+      - active
+      - configurationName
+      - downloadFormat
+      - inputMode
+      - isDefaultForConfiguration
+      - resultMode
+      - slug
+      - title
     DailyUsageEntry:
       properties:
         date:
@@ -4036,6 +4323,154 @@ components:
       - AUTO
       - BLOCK
       - WORD
+    SubmissionDownloadFormat:
+      enum:
+      - AUTO
+      - EXCEL
+      - CSV
+      - JSON
+    SubmissionInputMode:
+      enum:
+      - SINGLE_FILE
+      - MULTI_FILE
+    SubmissionPortalResponse:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        slug:
+          type: string
+        configurationName:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+        submitButtonLabel:
+          type: string
+        successMessage:
+          type:
+          - string
+          - "null"
+        inputMode:
+          $ref: "#/components/schemas/SubmissionInputMode"
+        resultMode:
+          $ref: "#/components/schemas/SubmissionResultMode"
+        downloadFormat:
+          $ref: "#/components/schemas/SubmissionDownloadFormat"
+        isDefaultForConfiguration:
+          type: boolean
+        active:
+          type: boolean
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        updatedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - active
+      - configurationName
+      - downloadFormat
+      - inputMode
+      - isDefaultForConfiguration
+      - resultMode
+      - slug
+      - submitButtonLabel
+      - title
+    SubmissionRecordResponse:
+      properties:
+        receiptCode:
+          type: string
+        portalSlug:
+          type: string
+        jobGuid:
+          type:
+          - string
+          - "null"
+        jobType:
+          type: string
+        status:
+          $ref: "#/components/schemas/SubmissionRecordStatus"
+        resultMode:
+          $ref: "#/components/schemas/SubmissionResultMode"
+        downloadFormat:
+          $ref: "#/components/schemas/SubmissionDownloadFormat"
+        fileCount:
+          type: integer
+          format: int32
+        originalFileNames:
+          type: array
+          items:
+            type: string
+        errorMessage:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        completedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - downloadFormat
+      - fileCount
+      - jobType
+      - originalFileNames
+      - portalSlug
+      - receiptCode
+      - resultMode
+      - status
+    SubmissionRecordStatus:
+      enum:
+      - CREATED
+      - UPLOADING
+      - PROCESSING
+      - COMPLETED
+      - FAILED
+      - PARTIAL
+    SubmissionResultMode:
+      enum:
+      - DOWNLOAD
+      - THANK_YOU
+    SubmissionSubmitResponse:
+      properties:
+        receiptCode:
+          type: string
+        jobGuid:
+          type: string
+        jobType:
+          type: string
+        status:
+          $ref: "#/components/schemas/SubmissionRecordStatus"
+        resultMode:
+          $ref: "#/components/schemas/SubmissionResultMode"
+        downloadFormat:
+          $ref: "#/components/schemas/SubmissionDownloadFormat"
+        fileCount:
+          type: integer
+          format: int32
+      required:
+      - downloadFormat
+      - fileCount
+      - jobGuid
+      - jobType
+      - receiptCode
+      - resultMode
+      - status
     SubmitOperationRequest:
       properties:
         jobGuid:
@@ -4217,6 +4652,58 @@ components:
           type:
           - string
           - "null"
+    UpdateSubmissionPortalRequest:
+      properties:
+        slug:
+          type:
+          - string
+          - "null"
+        configurationName:
+          type:
+          - string
+          - "null"
+        title:
+          type:
+          - string
+          - "null"
+        description:
+          type:
+          - string
+          - "null"
+        submitButtonLabel:
+          type:
+          - string
+          - "null"
+        successMessage:
+          type:
+          - string
+          - "null"
+        inputMode:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/SubmissionInputMode"
+        resultMode:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/SubmissionResultMode"
+        downloadFormat:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/SubmissionDownloadFormat"
+        isDefaultForConfiguration:
+          type:
+          - boolean
+          - "null"
+        active:
+          type:
+          - boolean
+          - "null"
     UploadCommand:
       properties:
         ocr:
@@ -4297,6 +4784,10 @@ components:
           allOf:
           - $ref: "#/components/schemas/LookupFileConfig"
         includeCurrentDate:
+          type:
+          - boolean
+          - "null"
+        acroFormMetadata:
           type:
           - boolean
           - "null"

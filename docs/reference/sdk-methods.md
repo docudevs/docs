@@ -73,7 +73,7 @@ Both helpers accept:
 
 ### submit_and_process_document
 
-Upload and process a document for structured data extraction. Use `extract_figures=True` to store figure images and metadata.
+Upload and process a document for structured data extraction. Use `extract_figures=True` to store figure images and metadata. For fillable PDFs, `acro_form_metadata=True` stores AcroForm metadata as a separate job artifact that you can fetch later with `get_acroform_metadata(...)`.
 
 ```python
 job_guid = await client.submit_and_process_document(
@@ -83,7 +83,10 @@ job_guid = await client.submit_and_process_document(
     schema={...},  # Optional JSON schema
     ocr="PREMIUM", # Optional: DEFAULT, PREMIUM, LOW
     llm="HIGH",  # Optional: DEFAULT, MINI, HIGH
-    extract_figures=True
+    extract_figures=True,
+    acro_form_metadata=True,
+    source_locations=True,
+    source_location_granularity="block",
 )
 ```
 
@@ -281,9 +284,10 @@ Upload a new document template.
 
 ```python
 with open("form.pdf", "rb") as f:
-    await client.upload_template(
+    response = await client.upload_template(
         name="form-template",
-        document=f,
+        document=f.read(),
+        file_name="form.pdf",
         mime_type="application/pdf"
     )
 ```
@@ -300,8 +304,22 @@ templates = await client.list_templates()
 
 Get metadata (fields) for a template.
 
+For PDF templates uploaded moments earlier, the raw endpoint may still be preparing metadata. In that case prefer `wait_for_template_metadata(...)`.
+
 ```python
 meta = await client.metadata("form-template")
+```
+
+### wait_for_template_metadata
+
+Wait until PDF template metadata is ready and return the decoded field list.
+
+```python
+fields = await client.wait_for_template_metadata(
+    "form-template",
+    timeout=60,
+    poll_interval=1,
+)
 ```
 
 ### fill
@@ -315,6 +333,20 @@ request = TemplateFillRequest(fields={"name": "John"})
 response = await client.fill("form-template", request)
 ```
 
+### fill_with_retry
+
+Fill a template while retrying transient readiness errors that can happen immediately after upload.
+
+```python
+request = TemplateFillRequest(fields={"name": "John"})
+response = await client.fill_with_retry(
+    "form-template",
+    request,
+    timeout=30,
+    poll_interval=1,
+)
+```
+
 ### delete_template
 
 Delete a template.
@@ -322,6 +354,36 @@ Delete a template.
 ```python
 await client.delete_template("form-template")
 ```
+
+## AcroForm PDF Metadata
+
+### extract_acroform_metadata
+
+Upload a PDF directly to `/document/acroform-metadata` and return the rich AcroForm metadata structure without creating a job GUID.
+
+```python
+metadata = await client.extract_acroform_metadata(
+    document=pdf_bytes,
+    file_name="fillable-form.pdf",
+    mime_type="application/pdf",
+)
+```
+
+### get_acroform_metadata
+
+Fetch the stored AcroForm metadata artifact from an async processed job.
+
+```python
+job_guid = await client.submit_and_process_document(
+    document=pdf_bytes,
+    document_mime_type="application/pdf",
+    acro_form_metadata=True,
+)
+
+metadata = await client.get_acroform_metadata(job_guid)
+```
+
+The direct helper is for metadata-only PDF uploads. The async helper is for workflows where the same job also needs source locations, rendered page images, extraction, or overlays.
 
 ## Agent Chat
 

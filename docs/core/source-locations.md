@@ -80,6 +80,7 @@ Version 1 supports:
 - `simple` extraction mode
 - documents with stable page-aware text layout
 - PDF and image inputs
+- AcroForm-backed field refs when async PDF jobs request both `sourceLocations=true` and `acroFormMetadata=true`
 
 Version 1 does not support:
 
@@ -107,6 +108,30 @@ Behavior:
 - `block`: returns layout-block geometry
 - `word`: narrows to matched words when possible
 - `auto`: prefers word matches and falls back to block geometry
+
+For existing fillable PDFs, source locations remain an async-job feature. The direct `/document/acroform-metadata` endpoint returns form metadata only; it does not create OCR/layout artifacts or a job GUID.
+
+When an async PDF job requests both `sourceLocations=true` and `acroFormMetadata=true`, the manifest can include AcroForm-backed evidence entries such as:
+
+```json
+{
+  "sourceRefs": ["/acroform/fields/0"],
+  "acroFormRefs": ["/acroform/fields/0"],
+  "resolution": "acroform-field",
+  "pageAnchors": [
+    {
+      "pageNumber": 1,
+      "unit": "point",
+      "bbox": {
+        "left": 94.7,
+        "top": 652.4,
+        "right": 215.0,
+        "bottom": 667.9
+      }
+    }
+  ]
+}
+```
 
 ## Python SDK
 

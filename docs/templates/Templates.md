@@ -15,6 +15,11 @@ Upload and reuse document templates (PDF, Word, Excel) to automatically fill the
 
 Templates allow you to treat documents as reusable forms. You upload a document once, and DocuDevs analyzes it to find fillable fields. You can then fill these templates repeatedly with new data via the API.
 
+For PDFs, there are two distinct workflows:
+
+- **Template workflow**: upload a reusable AcroForm PDF, inspect field names, and fill it repeatedly.
+- **Metadata workflow**: inspect AcroForm fields, widgets, and page coordinates for an existing PDF without creating a reusable template. See [AcroForm Metadata for Existing PDFs](#acroform-metadata-for-existing-pdfs).
+
 **Supported Formats:**
 
 - **PDF Forms**: Standard AcroForms.
@@ -26,7 +31,7 @@ Templates allow you to treat documents as reusable forms. You upload a document 
 
 ### Uploading a Template
 
-Upload a document to create a new template. DocuDevs will automatically detect the fields available for filling.
+Upload a document to create a new template. DocuDevs stores the template immediately, then prepares PDF field metadata in the background when the file is an AcroForm PDF.
 
 <Tabs
   defaultValue="python"
@@ -39,7 +44,7 @@ Upload a document to create a new template. DocuDevs will automatically detect t
   <TabItem value="python">
 
 ```python
-from docudevs.docudevs_client import DocuDevsClient
+from docudevs import DocuDevsClient
 import os
 import asyncio
 
@@ -47,15 +52,21 @@ client = DocuDevsClient(token=os.getenv('API_KEY'))
 
 async def upload_invoice_template():
     with open('invoice_template.pdf', 'rb') as f:
-        # Upload template with name "invoice"
         response = await client.upload_template(
             name="invoice",
-            document=f,
+            document=f.read(),
+            file_name="invoice_template.pdf",
             mime_type="application/pdf"
         )
-        
-        # The response contains the detected form fields
-        print(f"Template uploaded. Detected fields: {response.parsed.form_fields}")
+
+    print(f"Upload status: {response.status_code}")
+
+    fields = await client.wait_for_template_metadata(
+        "invoice",
+        timeout=60,
+        poll_interval=1,
+    )
+    print(fields)
 
 # asyncio.run(upload_invoice_template())
 ```
@@ -161,6 +172,8 @@ curl -X GET https://api.docudevs.ai/template/list \
 
 Retrieve details about a specific template, including its fillable fields.
 
+For PDF templates, `GET /template/metadata/{name}` returns `202 Accepted` with `Retry-After: 1` while field extraction is still pending. The Python SDK helper `wait_for_template_metadata(...)` handles this polling for you.
+
 <Tabs
   defaultValue="python"
   values={[
@@ -172,10 +185,14 @@ Retrieve details about a specific template, including its fillable fields.
   <TabItem value="python">
 
 ```python
-metadata = await client.metadata("invoice")
-print(f"Fields for {metadata.name}:")
-for field in metadata.form_fields:
-    print(f"- {field.name} ({field.type})")
+fields = await client.wait_for_template_metadata(
+    "invoice",
+    timeout=60,
+    poll_interval=1,
+)
+
+for field in fields:
+    print(f"- {field['name']} ({field['type']})")
 ```
 
   </TabItem>
@@ -208,9 +225,11 @@ for (JsonNode field : metadata) {
   <TabItem value="curl">
 
 ```bash
-curl -X GET https://api.docudevs.ai/template/metadata/invoice \
+curl -i -X GET https://api.docudevs.ai/template/metadata/invoice \
   -H "Authorization: Bearer $API_KEY"
 ```
+
+If the response is `202 Accepted`, wait for the `Retry-After` interval and request the metadata again.
 
   </TabItem>
 </Tabs>
@@ -270,6 +289,8 @@ curl -X DELETE https://api.docudevs.ai/template/invoice \
 
 Once a template is uploaded, you can fill it with data. The data structure depends on the template type.
 
+If you fill a template immediately after upload, prefer `fill_with_retry(...)` in the Python SDK. It retries transient readiness races while background template preparation finishes.
+
 ### Filling a PDF Form
 
 PDF forms typically use a flat dictionary of field names and values.
@@ -296,8 +317,13 @@ async def fill_invoice():
             "paid": True
         }
     )
-    
-    response = await client.fill(name="invoice", body=fill_request)
+
+    response = await client.fill_with_retry(
+        name="invoice",
+        body=fill_request,
+        timeout=30,
+        poll_interval=1,
+    )
     
     # Save the filled PDF
     with open("filled_invoice.pdf", "wb") as f:
@@ -454,6 +480,74 @@ curl -X POST https://api.docudevs.ai/template/fill/sales_report \
 
   </TabItem>
 </Tabs>
+
+## AcroForm Metadata for Existing PDFs
+
+Use AcroForm metadata when you need field IDs, widget IDs, page numbers, or page-anchor coordinates from an existing fillable PDF.
+
+- Use the **direct metadata endpoint** when you only need the AcroForm structure.
+- Use the **async job flow** when you also need processed-job images, source locations, extraction, or overlays tied to a job GUID.
+
+The direct endpoint accepts PDF uploads only. Non-PDF uploads return `400 Bad Request`. A normal PDF without an AcroForm still returns `200 OK` with `fields: []`.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+import json
+
+with open("fillable-form.pdf", "rb") as f:
+    pdf_bytes = f.read()
+
+direct_metadata = await client.extract_acroform_metadata(
+    document=pdf_bytes,
+    file_name="fillable-form.pdf",
+    mime_type="application/pdf",
+)
+
+print(f"Direct fields: {len(direct_metadata.get('fields', []))}")
+print(json.dumps(direct_metadata.get("fields", [])[:3], indent=2))
+
+job_guid = await client.submit_and_process_document(
+    document=pdf_bytes,
+    document_mime_type="application/pdf",
+    acro_form_metadata=True,
+    source_locations=True,
+    source_location_granularity="block",
+)
+
+job_metadata = await client.get_acroform_metadata(job_guid)
+source_locations = await client.get_source_locations(job_guid)
+
+print(f"Async metadata fields: {len(job_metadata.get('fields', []))}")
+print(source_locations)
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/document/acroform-metadata \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "document=@fillable-form.pdf"
+```
+
+For processed jobs, fetch the stored artifact after a normal async document-processing run:
+
+```bash
+curl -X GET https://api.docudevs.ai/job/result/JOB_GUID/acroform-metadata \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+</Tabs>
+
+For OCR-backed evidence overlays on the same job, combine `acro_form_metadata=True` with `source_locations=True` and then read [Source Locations](/docs/core/source-locations).
 
 ## Best Practices
 
