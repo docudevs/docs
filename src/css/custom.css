@@ -1,47 +1,186 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Global DocuDevs documentation theme.
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #ff00ff; /* Fuchsia */
-  --ifm-color-primary-dark: #cc00cc;
-  --ifm-color-primary-darker: #990099;
-  --ifm-color-primary-darkest: #660066;
-  --ifm-color-primary-light: #ff33ff;
-  --ifm-color-primary-lighter: #ff66ff;
-  --ifm-color-primary-lightest: #ff99ff;
-  --ifm-code-font-size: 100%;
-  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 0, 0.1); /* Amber */
+	--docu-paper: #f4f1e8;
+	--docu-paper-strong: #fffdf6;
+	--docu-ink: #050505;
+	--docu-muted: #474136;
+	--docu-line: rgba(5, 5, 5, 0.2);
+	--docu-pink: #ffd2df;
+	--docu-cyan: #19d6e5;
+	--docu-yellow: #f5ed00;
+	--docu-orange: #f15a24;
+	--ifm-color-primary: #050505;
+	--ifm-color-primary-dark: #000000;
+	--ifm-color-primary-darker: #000000;
+	--ifm-color-primary-darkest: #000000;
+	--ifm-color-primary-light: #2b2b2b;
+	--ifm-color-primary-lighter: #3a3a3a;
+	--ifm-color-primary-lightest: #555555;
+	--ifm-background-color: var(--docu-paper);
+	--ifm-background-surface-color: var(--docu-paper-strong);
+	--ifm-font-color-base: var(--docu-ink);
+	--ifm-font-color-secondary: var(--docu-muted);
+	--ifm-code-font-size: 96%;
+	--ifm-navbar-background-color: rgba(244, 241, 232, 0.96);
+	--ifm-navbar-link-color: var(--docu-ink);
+	--ifm-navbar-link-hover-color: var(--docu-orange);
+	--docusaurus-highlighted-code-line-bg: rgba(25, 214, 229, 0.16);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #00ff00; /* Lime */
-  --ifm-color-primary-dark: #00cc00;
-  --ifm-color-primary-darker: #009900;
-  --ifm-color-primary-darkest: #006600;
-  --ifm-color-primary-light: #33ff33;
-  --ifm-color-primary-lighter: #66ff66;
-  --ifm-color-primary-lightest: #99ff99;
-  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 0, 0.3); /* Amber */
+	--docu-paper: #08090b;
+	--docu-paper-strong: #111317;
+	--docu-ink: #fffdf6;
+	--docu-muted: rgba(255, 253, 246, 0.72);
+	--docu-line: rgba(255, 253, 246, 0.16);
+	--ifm-color-primary: #19d6e5;
+	--ifm-color-primary-dark: #15bfcc;
+	--ifm-color-primary-darker: #12a9b5;
+	--ifm-color-primary-darkest: #0e8791;
+	--ifm-color-primary-light: #4be2ed;
+	--ifm-color-primary-lighter: #79eaf2;
+	--ifm-color-primary-lightest: #aaf3f7;
+	--ifm-background-color: var(--docu-paper);
+	--ifm-background-surface-color: var(--docu-paper-strong);
+	--ifm-font-color-base: var(--docu-ink);
+	--ifm-font-color-secondary: var(--docu-muted);
+	--ifm-navbar-background-color: rgba(8, 9, 11, 0.94);
+	--ifm-navbar-link-color: var(--docu-ink);
+	--ifm-navbar-link-hover-color: var(--docu-cyan);
+	--docusaurus-highlighted-code-line-bg: rgba(241, 90, 36, 0.2);
+}
+
+html {
+	background: var(--docu-paper);
 }
 
 body {
-  background-color: #ffffff; /* White background for readability */
-  color: #000000; /* Black text for readability */
-  font-family: 'Arial', sans-serif; /* Modern font for readability */
+	background: var(--docu-paper);
+	color: var(--docu-ink);
+	font-family:
+		Inter,
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		sans-serif;
 }
 
-.navbar__title, .navbar__item {
-  color: #ff00ff; /* Fuchsia */
+.navbar {
+	backdrop-filter: blur(18px);
+	border-bottom: 1px solid var(--docu-line);
+	box-shadow: none;
+}
+
+.navbar__brand,
+.navbar__item,
+.navbar__link {
+	color: var(--docu-ink);
+	font-weight: 800;
+}
+
+.navbar__title {
+	color: var(--docu-ink);
+	font-weight: 900;
+}
+
+.navbar__link--active,
+.navbar__link:hover {
+	color: var(--docu-orange);
+}
+
+[data-theme='dark'] .navbar__link--active,
+[data-theme='dark'] .navbar__link:hover {
+	color: var(--docu-cyan);
+}
+
+.dropdown__menu {
+	background: var(--docu-paper-strong);
+	border: 1px solid var(--docu-line);
+	border-radius: 8px;
+	box-shadow: 0 18px 42px rgba(5, 5, 5, 0.14);
+}
+
+.theme-doc-sidebar-container,
+.table-of-contents {
+	border-color: var(--docu-line) !important;
+}
+
+.theme-doc-sidebar-menu,
+.table-of-contents {
+	font-size: 0.9rem;
+}
+
+.menu__link {
+	border-radius: 6px;
+	color: var(--docu-muted);
+	font-weight: 700;
+}
+
+.menu__link--active,
+.menu__link:hover {
+	background: rgba(241, 90, 36, 0.1);
+	color: var(--docu-ink);
+}
+
+[data-theme='dark'] .menu__link--active,
+[data-theme='dark'] .menu__link:hover {
+	background: rgba(25, 214, 229, 0.12);
+}
+
+.theme-doc-markdown {
+	color: var(--docu-ink);
+}
+
+.theme-doc-markdown h1,
+.theme-doc-markdown h2,
+.theme-doc-markdown h3 {
+	color: var(--docu-ink);
+	font-weight: 900;
+	letter-spacing: 0;
+}
+
+.theme-doc-markdown a {
+	color: var(--docu-orange);
+	font-weight: 700;
+}
+
+[data-theme='dark'] .theme-doc-markdown a {
+	color: var(--docu-cyan);
+}
+
+.theme-doc-markdown code {
+	border: 1px solid var(--docu-line);
+}
+
+.pagination-nav__link,
+.card {
+	background: var(--docu-paper-strong);
+	border: 1px solid var(--docu-line);
+	border-radius: 8px;
+}
+
+.button {
+	border-radius: 6px;
+	font-weight: 800;
 }
 
 .footer {
-  background-color: #000000; /* Black background for contrast */
-  color: #00ff00; /* Lime text for readability */
+	background: var(--docu-ink);
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+	color: var(--docu-paper);
 }
 
-/* Additional custom styles can be added here */
+.footer a,
+.footer__title,
+.footer__copyright {
+	color: var(--docu-paper);
+}
+
+.footer a:hover {
+	color: var(--docu-yellow);
+}

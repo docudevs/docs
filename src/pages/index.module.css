@@ -1,68 +1,534 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.docsHome {
+	--paper: #f4f1e8;
+	--paper-strong: #fffdf6;
+	--ink: #050505;
+	--muted: #474136;
+	--line: rgba(5, 5, 5, 0.2);
+	--pink: #ffd2df;
+	--cyan: #19d6e5;
+	--yellow: #f5ed00;
+	--orange: #f15a24;
+	background: var(--paper);
+	color: var(--ink);
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.docsHome a:hover {
+	text-decoration: none;
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.heroSection {
+	border-bottom: 1px solid var(--line);
+	display: grid;
+	grid-template-columns: minmax(0, 0.98fr) minmax(26rem, 1.02fr);
+	min-height: calc(100vh - var(--ifm-navbar-height));
 }
 
-.tagline {
-  margin: 1rem auto 2rem;
-  max-width: 720px;
-  font-size: 1.125rem;
+.heroCopy {
+	align-content: center;
+	border-right: 1px solid var(--line);
+	display: grid;
+	padding: clamp(3rem, 7vw, 7rem) clamp(1.25rem, 4vw, 4.5rem);
 }
 
-.featuresSection {
-  padding: 4rem 0;
+.eyebrow {
+	color: var(--orange);
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0;
+	margin: 0 0 1rem;
+	text-transform: uppercase;
 }
 
-.featuresGrid {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  margin-top: 2rem;
+.heroTitle {
+	color: var(--ink);
+	font-size: clamp(3.1rem, 7.2vw, 7rem);
+	font-weight: 900;
+	letter-spacing: 0;
+	line-height: 0.88;
+	margin: 0;
+	max-width: 10.5ch;
 }
 
-.featureCard {
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 12px;
-  padding: 1.5rem;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.heroText {
+	color: var(--muted);
+	font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+	line-height: 1.5;
+	margin: 1.6rem 0 0;
+	max-width: 42rem;
 }
 
-.featureCard:hover {
-  border-color: var(--ifm-color-primary);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+.heroActions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin-top: 2rem;
 }
 
-.featureTitle {
-  margin-bottom: 0.5rem;
+.button {
+	align-items: center;
+	border-radius: 6px;
+	display: inline-flex;
+	font-size: 0.95rem;
+	font-weight: 800;
+	min-height: 3rem;
+	padding: 0.85rem 1.1rem;
 }
 
-.featureDescription {
-  margin-bottom: 0.75rem;
-  color: var(--ifm-font-color-secondary);
+.primaryButton {
+	background: var(--ink);
+	border: 1px solid var(--ink);
+	color: #ffffff;
 }
 
-.featureLink {
-  font-weight: 600;
-  color: var(--ifm-color-primary);
+.primaryButton:hover {
+	color: #ffffff;
+}
+
+.secondaryButton {
+	background: transparent;
+	border: 1px solid var(--ink);
+	color: var(--ink);
+}
+
+.secondaryButton:hover {
+	color: var(--ink);
+}
+
+.heroMeta {
+	border-top: 1px solid var(--line);
+	display: grid;
+	gap: 0;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	margin-top: 2.5rem;
+	max-width: 42rem;
+}
+
+.heroMeta span {
+	border-right: 1px solid var(--line);
+	color: var(--muted);
+	font-size: 0.78rem;
+	font-weight: 800;
+	padding: 0.85rem 0.75rem 0.85rem 0;
+	text-transform: uppercase;
+}
+
+.heroMeta span:last-child {
+	border-right: 0;
+}
+
+.heroVisual {
+	align-content: center;
+	align-self: center;
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+	grid-template-rows: repeat(2, minmax(0, 1fr));
+	padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+.posterPanel {
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	color: var(--ink);
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	min-height: 0;
+	overflow: hidden;
+	padding: 1.3rem;
+	position: relative;
+}
+
+.posterStart {
+	grid-column: 1;
+	grid-row: 1;
+	min-height: 18rem;
+}
+
+.posterEvidence {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+	min-height: 36rem;
+}
+
+.posterReference {
+	grid-column: 1;
+	grid-row: 2;
+	min-height: 18rem;
+}
+
+.posterPink {
+	background:
+		radial-gradient(circle at 10% 78%, rgba(25, 214, 229, 0.82) 0 24%, transparent 24.5%),
+		linear-gradient(180deg, var(--pink), #ffe7ef);
+}
+
+.posterCyan {
+	background:
+		radial-gradient(circle at 64% 18%, rgba(255, 255, 255, 0.62) 0 22%, transparent 22.5%),
+		linear-gradient(180deg, var(--cyan), #8decf3);
+}
+
+.posterYellow {
+	background:
+		repeating-conic-gradient(
+			from 232deg at 96% 86%,
+			rgba(177, 24, 21, 0.22) 0deg 1.6deg,
+			rgba(177, 24, 21, 0.04) 1.6deg 3.6deg,
+			transparent 3.6deg 4.8deg
+		),
+		var(--yellow);
+}
+
+.posterHeader {
+	display: flex;
+	font-size: 0.72rem;
+	font-weight: 900;
+	justify-content: space-between;
+	text-transform: uppercase;
+}
+
+.posterNumber {
+	align-self: center;
+	font-size: clamp(4.4rem, 8vw, 7rem);
+	font-weight: 950;
+	line-height: 0.85;
+}
+
+.posterNote {
+	align-self: end;
+	color: rgba(5, 5, 5, 0.7);
+	font-size: 0.78rem;
+	font-weight: 800;
+	text-transform: uppercase;
+}
+
+.codeBlock {
+	background: rgba(5, 5, 5, 0.88);
+	border: 1px solid rgba(5, 5, 5, 0.28);
+	border-radius: 8px;
+	color: #ffffff;
+	font-size: 0.8rem;
+	line-height: 1.45;
+	margin: 0;
+	overflow: auto;
+	padding: 1rem;
+	white-space: pre;
+}
+
+.compactCodeBlock {
+	font-size: 0.76rem;
+	margin-top: 0.8rem;
+	overflow-wrap: anywhere;
+	white-space: pre-wrap;
+}
+
+.documentImage {
+	align-self: center;
+	border: 1px solid rgba(5, 5, 5, 0.22);
+	border-radius: 6px;
+	box-shadow: 0 18px 32px rgba(5, 5, 5, 0.2);
+	justify-self: center;
+	max-height: 23rem;
+	max-width: min(100%, 13rem);
+	object-fit: cover;
+}
+
+.sourceLine {
+	background: rgba(255, 255, 255, 0.54);
+	border: 1px solid rgba(5, 5, 5, 0.18);
+	border-radius: 6px;
+	font-size: 0.78rem;
+	font-weight: 800;
+	padding: 0.75rem;
+}
+
+.routeList {
+	align-self: end;
+	display: grid;
+	gap: 0.55rem;
+}
+
+.routeList span {
+	background: rgba(255, 255, 255, 0.52);
+	border: 1px solid rgba(5, 5, 5, 0.2);
+	border-radius: 6px;
+	font-family: var(--ifm-font-family-monospace);
+	font-size: 0.72rem;
+	font-weight: 800;
+	overflow-wrap: anywhere;
+	padding: 0.75rem;
+}
+
+.posterStart .posterNumber {
+	align-self: end;
+	font-size: clamp(3.7rem, 5.4vw, 5.8rem);
+}
+
+.posterReference .routeList {
+	align-self: center;
+}
+
+.quickSection,
+.tracksSection,
+.workflowSection {
+	border-bottom: 1px solid var(--line);
+	padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 4vw, 4.5rem);
+}
+
+.sectionHeader {
+	align-items: end;
+	display: flex;
+	gap: 2rem;
+	justify-content: space-between;
+	margin-bottom: 2rem;
+}
+
+.sectionHeader h2,
+.workflowSection h2 {
+	color: var(--ink);
+	font-size: clamp(2.1rem, 4vw, 4.4rem);
+	font-weight: 900;
+	letter-spacing: 0;
+	line-height: 0.95;
+	margin: 0;
+	max-width: 12ch;
+}
+
+.quickGrid {
+	display: grid;
+	gap: 0;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.quickCard {
+	background: var(--paper-strong);
+	border: 1px solid var(--line);
+	color: var(--ink);
+	display: grid;
+	min-height: 19rem;
+	padding: 1.35rem;
+}
+
+.quickCard + .quickCard {
+	border-left: 0;
+}
+
+.quickCard:hover,
+.trackLink:hover {
+	color: var(--ink);
+	transform: translateY(-2px);
+}
+
+.cardNumber {
+	color: var(--orange);
+	font-size: clamp(3rem, 6vw, 5rem);
+	font-weight: 950;
+	line-height: 0.85;
+}
+
+.cardLabel {
+	font-size: 0.75rem;
+	font-weight: 900;
+	margin-top: 1rem;
+	text-transform: uppercase;
+}
+
+.quickCard h3,
+.trackLink h3,
+.workflowItem h3 {
+	color: var(--ink);
+	font-size: 1.35rem;
+	font-weight: 900;
+	letter-spacing: 0;
+	margin: 0.9rem 0 0;
+}
+
+.quickCard p,
+.trackLink p,
+.workflowItem p {
+	color: var(--muted);
+	line-height: 1.55;
+	margin: 0.75rem 0 0;
+}
+
+.cardAction {
+	align-self: end;
+	color: var(--orange);
+	font-weight: 900;
+	margin-top: 1.25rem;
+}
+
+.trackGrid {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.trackLink {
+	background: #ffffff;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	color: var(--ink);
+	min-height: 14rem;
+	padding: 1.25rem;
+	transition:
+		transform 160ms ease,
+		border-color 160ms ease;
+}
+
+.trackLink:hover {
+	border-color: var(--orange);
+}
+
+.workflowSection {
+	background: var(--ink);
+	color: #ffffff;
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.workflowSection h2 {
+	color: #ffffff;
+}
+
+.workflowGrid {
+	display: grid;
+	gap: 0;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.workflowItem {
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	min-height: 16rem;
+	padding: 1.25rem;
+}
+
+.workflowItem + .workflowItem {
+	border-left: 0;
+}
+
+.workflowItem span {
+	color: var(--yellow);
+	font-size: 3.2rem;
+	font-weight: 950;
+	line-height: 0.85;
+}
+
+.workflowItem h3,
+.workflowItem p {
+	color: #ffffff;
+}
+
+.workflowItem p {
+	color: rgba(255, 255, 255, 0.72);
+}
+
+@media screen and (max-width: 1100px) {
+	.heroSection {
+		grid-template-columns: 1fr;
+	}
+
+	.heroCopy {
+		border-right: 0;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.heroTitle {
+		max-width: 12ch;
+	}
+
+	.heroVisual {
+		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	}
+
+	.trackGrid,
+	.workflowSection {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.workflowGrid {
+		grid-column: 1 / -1;
+	}
+}
+
+@media screen and (max-width: 760px) {
+	.quickGrid,
+	.trackGrid,
+	.workflowGrid,
+	.workflowSection {
+		grid-template-columns: 1fr;
+	}
+
+	.heroSection {
+		min-height: auto;
+	}
+
+	.heroCopy {
+		padding: 2.25rem 1.25rem 1.4rem;
+	}
+
+	.heroTitle {
+		font-size: clamp(2.65rem, 13vw, 4rem);
+		max-width: 10ch;
+	}
+
+	.heroText {
+		font-size: 1rem;
+		margin-top: 1.1rem;
+	}
+
+	.heroActions {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		margin-top: 1.3rem;
+	}
+
+	.heroMeta {
+		display: none;
+	}
+
+	.heroVisual {
+		display: flex;
+		gap: 0.75rem;
+		overflow-x: auto;
+		padding: 1rem;
+		scroll-snap-type: x proximity;
+	}
+
+	.posterPanel {
+		flex: 0 0 15rem;
+		min-height: 20rem;
+		scroll-snap-align: start;
+	}
+
+	.documentImage {
+		max-height: 12rem;
+	}
+
+	.quickCard + .quickCard,
+	.workflowItem + .workflowItem {
+		border-left: 1px solid var(--line);
+		border-top: 0;
+	}
+
+	.workflowItem + .workflowItem {
+		border-color: rgba(255, 255, 255, 0.18);
+	}
+
+	.sectionHeader {
+		align-items: start;
+		display: grid;
+	}
+
+	.heroActions,
+	.heroMeta {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.button {
+		justify-content: center;
+		min-height: 2.85rem;
+		padding: 0.78rem 0.8rem;
+	}
 }

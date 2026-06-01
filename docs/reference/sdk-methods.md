@@ -141,37 +141,30 @@ result = await client.wait_until_ready(
 
 ## Pipeline Processing
 
-Pipeline mode uploads one document, runs one shared OCR pass, and executes a JSON-defined graph of nodes. Use it when classification, validation, or quality checks should decide which extraction runs next.
+Pipeline mode uploads one document, runs one shared OCR pass, and executes a graph of nodes. Use the SDK builder so dependencies, source paths, and final outputs refer to previous nodes directly.
 
 ### process_pipeline_document
 
-Upload and process a document with a raw pipeline definition.
+Upload and process a document with a pipeline builder definition.
 
 ```python
-pipeline = {
-    "version": "2026-05",
-    "nodes": [
-        {
-            "id": "extract_data",
-            "type": "extract",
-            "source": "$ocr.content",
-            "prompt": "Extract the requested fields.",
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"}
-                }
-            }
-        },
-        {
-            "id": "final_result",
-            "type": "final",
-            "dependsOn": ["extract_data"],
-            "output": "$nodes.extract_data.result"
-        }
-    ],
-    "finals": [{"node": "final_result"}]
-}
+from docudevs import P, Pipeline
+
+pipeline = Pipeline().ocr(mode="AUTO")
+extract_data = pipeline.extract(
+    "extract_data",
+    source=P.ocr.content,
+    prompt="Extract the requested fields.",
+    schema={
+        "type": "object",
+        "properties": {"name": {"type": "string"}},
+    },
+)
+pipeline.final(
+    "final_result",
+    depends_on=[extract_data],
+    output=extract_data.result,
+)
 
 job_guid = await client.process_pipeline_document(
     document=document_bytes,
