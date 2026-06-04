@@ -13,6 +13,8 @@ DocuDevs can return page-aware evidence for structured extraction results.
 
 Use this when you want the extracted value and the location on the document page where it came from.
 
+If you want the model itself to return visible-object bounding boxes inside an image, see [Object Detection](./object-detection.md). Source locations are different: they are a separate evidence artifact keyed to extracted fields.
+
 Typical examples:
 
 - contract clauses with page numbers and bounding boxes

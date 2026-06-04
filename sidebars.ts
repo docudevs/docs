@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
         'core/schema-generation',           // NEW: AI schema generation
         'core/calculated-fields',           // NEW: Schema calculated fields
         'core/source-locations',            // NEW: Field-level evidence boxes
+        'core/object-detection',            // NEW: Model-emitted bounding boxes for image tasks
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
         'reference/pipeline-mode',          // NEW: Pipeline extraction graphs
         'core/knowledge-search',            // NEW: Knowledge base assisted extraction

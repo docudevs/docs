@@ -455,6 +455,28 @@ docudevs operations generative-task PARENT_JOB_GUID --prompt "Summarize the find
 - `--no-wait` returns immediately with the operation job GUID
 - `--temperature` and `--max-tokens` mirror API parameters
 
+### `operations pdf-acroform`
+
+Convert a completed PDF job into a generated fillable AcroForm PDF.
+
+```bash
+docudevs operations pdf-acroform PARENT_JOB_GUID \
+  --ocr PREMIUM \
+  --page 1 \
+  --page 2 \
+  --min-confidence 0.35 \
+  --max-fields-per-page 300 \
+  --timeout 1200 \
+  --poll-interval 10 \
+  --output medical-examination-form-fillable.pdf
+```
+
+- Parent job must refer to a PDF
+- `--ocr PREMIUM` is the safest default when the parent job may not already have thumbnails
+- `--force-ocr` regenerates page images before detection
+- `--output` requires the default wait mode because the command downloads the generated PDF after completion
+- The JSON response includes `operationJobGuid` for later metadata or field-definition retrieval through the SDK or HTTP API
+
 ### `operations status`
 
 List operations created for a job.

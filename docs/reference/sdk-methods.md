@@ -371,7 +371,7 @@ metadata = await client.extract_acroform_metadata(
 
 ### get_acroform_metadata
 
-Fetch the stored AcroForm metadata artifact from an async processed job.
+Fetch the stored AcroForm metadata artifact from an async processed job or a `pdf-acroform` operation job.
 
 ```python
 job_guid = await client.submit_and_process_document(
@@ -384,6 +384,8 @@ metadata = await client.get_acroform_metadata(job_guid)
 ```
 
 The direct helper is for metadata-only PDF uploads. The async helper is for workflows where the same job also needs source locations, rendered page images, extraction, or overlays.
+
+For generated AcroForm PDFs, this metadata reflects the widgets embedded in the output PDF. Use `get_pdf_acroform_field_definitions(...)` when you need the normalized editable boxes that were used to generate those widgets.
 
 ## Agent Chat
 
@@ -529,6 +531,87 @@ selection = await client.submit_and_wait_for_image_selection(
 import json
 selection_payload = json.loads(selection.result)
 selected = selection_payload.get("selected", [])
+```
+
+### submit_pdf_acroform_operation
+
+Queue `pdf-acroform` on a completed PDF job.
+
+```python
+response = await client.submit_pdf_acroform_operation(
+    job_guid=parent_job_guid,
+    llm_type="DEFAULT",
+    ocr="PREMIUM",
+    page_range=[1, 2],
+    min_confidence=0.35,
+    max_fields_per_page=300,
+)
+
+print(response.parsed["jobGuid"])
+```
+
+### submit_and_wait_for_pdf_acroform_operation
+
+Run `pdf-acroform`, wait for completion, and download the generated fillable PDF.
+
+```python
+conversion = await client.submit_and_wait_for_pdf_acroform_operation(
+    parent_job_guid,
+    ocr="PREMIUM",
+    min_confidence=0.35,
+    max_fields_per_page=300,
+    save_to="fillable.pdf",
+)
+
+print(conversion.operation_job_guid)
+```
+
+### get_pdf_acroform
+
+Download the generated PDF bytes for a `pdf-acroform` or `pdf-acroform-apply` operation job.
+
+```python
+pdf_bytes = await client.get_pdf_acroform(operation_job_guid, save_to="fillable.pdf")
+```
+
+### get_pdf_acroform_field_definitions
+
+Fetch the normalized editable field definitions for a `pdf-acroform` operation.
+
+`entryBbox` uses normalized page-image coordinates from `0..1`, which makes this artifact the correct input for review tooling and manual edits.
+
+```python
+definitions = await client.get_pdf_acroform_field_definitions(operation_job_guid)
+fields = definitions["fieldDefinitions"] if definitions else []
+```
+
+### submit_pdf_acroform_apply_operation
+
+Queue reviewed field definitions to regenerate the PDF without rerunning visual detection.
+
+```python
+response = await client.submit_pdf_acroform_apply_operation(
+    parent_job_guid,
+    field_definitions=edited_fields,
+    source_operation_guid=operation_job_guid,
+)
+
+print(response.parsed["jobGuid"])
+```
+
+### submit_and_wait_for_pdf_acroform_apply_operation
+
+Submit reviewed field definitions, wait for completion, and download the regenerated PDF.
+
+```python
+applied = await client.submit_and_wait_for_pdf_acroform_apply_operation(
+    parent_job_guid,
+    field_definitions=edited_fields,
+    source_operation_guid=operation_job_guid,
+    save_to="fillable-reviewed.pdf",
+)
+
+print(applied.operation_job_guid)
 ```
 
 ## Map-Reduce Helpers

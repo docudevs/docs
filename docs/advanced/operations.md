@@ -1,6 +1,6 @@
 ---
 title: Operations
-description: Post-processing operations on completed jobs including generative tasks, error analysis, and multi-step document workflows.
+description: Post-processing operations on completed jobs including error analysis, generative tasks, image selection, and AcroForm PDF generation.
 sidebar_position: 2
 ---
 
@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 # Operations
 
-Perform post-processing operations on completed document jobs for error analysis, generative tasks, and image selection.
+Perform post-processing operations on completed document jobs for error analysis, generative tasks, image selection, and AcroForm PDF generation.
 
 ## Overview
 
@@ -18,6 +18,7 @@ Operations allow you to run additional analysis and processing on documents that
 - **Error Analysis**: Identify potential issues in extraction results.
 - **Generative Tasks**: Generate summaries, translations, or custom AI responses based on processed documents.
 - **Image Selection**: Pick relevant figures from extracted images based on a prompt.
+- **PDF AcroForm Conversion**: Turn a normal PDF into a generated fillable AcroForm PDF, inspect generated field metadata, and reapply reviewed field definitions.
 
 ## Available Operations
 
@@ -42,6 +43,17 @@ Generates custom AI responses based on processed document content:
 ### Image Selection
 
 Selects the most relevant extracted figures based on a prompt. The parent job must have figure artifacts, which are created by running document processing or OCR with `extract_figures=True` (or `describe_figures=True`).
+
+### PDF AcroForm Conversion
+
+Converts a completed PDF job into a generated fillable AcroForm PDF. This is useful when the source document has visible entry areas but no native AcroForm fields.
+
+The conversion workflow has two companion artifacts:
+
+- `get_acroform_metadata(operation_job_guid)` returns the generated PDF's embedded widget metadata in PDF page-point coordinates.
+- `get_pdf_acroform_field_definitions(operation_job_guid)` returns normalized editable field definitions with `entryBbox` values in `0..1` page-image coordinates.
+
+Use the field-definition artifact for review UIs or manual edits, then send the reviewed list back through `pdf-acroform/apply` to regenerate the PDF without rerunning visual detection.
 
 ## How Operations Work
 
@@ -370,6 +382,128 @@ curl -X POST https://api.docudevs.ai/operation \
 
   </TabItem>
 </Tabs>
+
+### PDF AcroForm Conversion
+
+Run `pdf-acroform` on a completed PDF job to generate a fillable AcroForm PDF, then inspect or edit the generated field definitions.
+
+The parent job must point to a PDF. The operation also needs rendered page images, so the safest setup is to create the parent job with `ocr="PREMIUM"` or pass `force_ocr=True` when thumbnails are missing.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'CLI', value: 'cli'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+import json
+
+parent_job_guid = await client.submit_and_process_document(
+    document=pdf_bytes,
+    document_mime_type="application/pdf",
+    ocr="PREMIUM",
+    extraction_mode="OCR",
+    acro_form_metadata=True,
+)
+await client.wait_until_ready(parent_job_guid, timeout=900, poll_interval=5)
+
+conversion = await client.submit_and_wait_for_pdf_acroform_operation(
+    parent_job_guid,
+    llm_type="DEFAULT",
+    ocr="PREMIUM",
+    min_confidence=0.35,
+    max_fields_per_page=300,
+    timeout=1200,
+    poll_interval=10,
+    save_to="medical-examination-form-fillable.pdf",
+)
+
+generated_metadata = await client.get_acroform_metadata(conversion.operation_job_guid)
+definitions_artifact = await client.get_pdf_acroform_field_definitions(
+    conversion.operation_job_guid
+)
+
+print(json.dumps(generated_metadata.get("fields", [])[:3], indent=2))
+print(json.dumps(definitions_artifact["fieldDefinitions"][:3], indent=2))
+
+reviewed_fields = [dict(field) for field in definitions_artifact["fieldDefinitions"]]
+for field in reviewed_fields:
+    field["reviewStatus"] = "accepted"
+
+applied = await client.submit_and_wait_for_pdf_acroform_apply_operation(
+    parent_job_guid,
+    field_definitions=reviewed_fields,
+    source_operation_guid=conversion.operation_job_guid,
+    save_to="medical-examination-form-reviewed.pdf",
+)
+
+print(applied.operation_job_guid)
+```
+
+  </TabItem>
+  <TabItem value="cli">
+
+```bash
+docudevs operations pdf-acroform PARENT_JOB_GUID \
+  --ocr PREMIUM \
+  --min-confidence 0.35 \
+  --max-fields-per-page 300 \
+  --timeout 1200 \
+  --poll-interval 10 \
+  --output medical-examination-form-fillable.pdf
+```
+
+The CLI prints the `operationJobGuid`. Use the SDK or raw HTTP API to fetch `acroform-metadata` and `pdf-acroform-field-definitions`, or to submit reviewed field definitions back through `pdf-acroform/apply`.
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/operation \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jobGuid": "PARENT_JOB_GUID",
+    "type": "pdf-acroform",
+    "parameters": {
+      "llmType": "DEFAULT",
+      "customParameters": {
+        "ocr": "PREMIUM",
+        "fieldNameStyle": "source_snake_case",
+        "minConfidence": 0.35,
+        "maxFieldsPerPage": 300
+      }
+    }
+  }'
+
+curl -X GET https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/pdf-acroform \
+  -H "Authorization: Bearer $API_KEY" \
+  --output medical-examination-form-fillable.pdf
+
+curl -X GET https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/acroform-metadata \
+  -H "Authorization: Bearer $API_KEY"
+
+curl -X GET https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/pdf-acroform-field-definitions \
+  -H "Authorization: Bearer $API_KEY"
+
+curl -X POST https://api.docudevs.ai/job/PARENT_JOB_GUID/pdf-acroform/apply \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sourceOperationGuid": "OPERATION_JOB_GUID",
+    "fieldDefinitions": [],
+    "minConfidence": 0.0,
+    "maxFieldsPerPage": 300
+  }'
+```
+
+  </TabItem>
+</Tabs>
+
+The generated PDF from either the initial conversion or the reviewed apply flow is always downloaded through `GET /job/result/{guid}/pdf-acroform`.
 
 ## Advanced Usage
 

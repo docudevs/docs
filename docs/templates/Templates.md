@@ -19,6 +19,7 @@ For PDFs, there are two distinct workflows:
 
 - **Template workflow**: upload a reusable AcroForm PDF, inspect field names, and fill it repeatedly.
 - **Metadata workflow**: inspect AcroForm fields, widgets, and page coordinates for an existing PDF without creating a reusable template. See [AcroForm Metadata for Existing PDFs](#acroform-metadata-for-existing-pdfs).
+- **Conversion workflow**: start from a normal PDF, run the `pdf-acroform` operation to generate a fillable AcroForm PDF, inspect editable field definitions, and optionally regenerate the PDF after review. See [PDF AcroForm Conversion](../advanced/operations.md#pdf-acroform-conversion).
 
 **Supported Formats:**
 
@@ -489,6 +490,8 @@ Use AcroForm metadata when you need field IDs, widget IDs, page numbers, or page
 - Use the **async job flow** when you also need processed-job images, source locations, extraction, or overlays tied to a job GUID.
 
 The direct endpoint accepts PDF uploads only. Non-PDF uploads return `400 Bad Request`. A normal PDF without an AcroForm still returns `200 OK` with `fields: []`.
+
+If the source PDF is visually form-like but `fields` comes back empty, the document does not already contain embedded AcroForm widgets. In that case, use the `pdf-acroform` operation to generate a new fillable PDF and inspect its editable field definitions. The full conversion and review loop is documented in [Operations](../advanced/operations.md#pdf-acroform-conversion).
 
 <Tabs
   defaultValue="python"
