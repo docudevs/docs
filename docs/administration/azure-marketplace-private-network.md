@@ -232,6 +232,27 @@ named gate.
 
 Lead the allowlist with the publisher registry endpoints for this release:
 
+:::caution Restricted private-preview qualification
+
+The current restricted BYO VNet qualification package uses the existing
+Standard publisher registry in Sweden Central. Standard ACR does not expose a
+dedicated regional data endpoint, so qualification networks must allow all of
+the following outbound paths on TCP 443:
+
+- `ddmkt7d52dee38b83.azurecr.io`
+- `*.blob.core.windows.net`
+- the `Storage.swedencentral` service tag, where the firewall supports Azure
+  service-tag rules
+
+This broader Blob Storage allowance is a temporary qualification contract,
+not the intended production allowlist. Use it only for the restricted preview
+package whose endpoint manifest has an empty `dataEndpoints` array. A later
+production release will move the publisher registry to Premium and publish
+dedicated data endpoints so customers can replace the broad Blob allowance
+with exact release-specific endpoints.
+
+:::
+
 The release endpoint source of truth is
 `infra/marketplace/release-network-endpoints.json` in the DocuDevs application
 repository. The currently checked-in manifest has `releaseVersion`
