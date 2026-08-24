@@ -80,9 +80,12 @@ Complete all of the following before starting the Marketplace wizard:
    script is not a fallback: Azure deployment scripts require public
    networking and do not support storage-account firewall rules for their
    execution storage.
-5. Outbound HTTPS (TCP 443) from the Container Apps subnet to every endpoint
-   listed in
-   [Configure controlled outbound connectivity](#configure-controlled-outbound-connectivity).
+5. Controlled public HTTPS egress (TCP 443) from the Container Apps subnet to
+   the public endpoints listed in
+   [Configure controlled outbound connectivity](#configure-controlled-outbound-connectivity),
+   plus private-endpoint reachability for the provisioned PaaS services. The
+   PostgreSQL readiness probe uses TCP-only port 5432; the other private PaaS
+   probes use HTTPS on port 443.
 6. A workstation, jump host, or VPN path with private DNS resolution and
    network reachability into the VNet, so you can complete post-installation
    setup and verification.
@@ -215,10 +218,15 @@ resolver), or the private endpoints will not resolve.
 
 ## Configure controlled outbound connectivity
 
-Private-only deployments still need controlled outbound access. All of the
-following must be reachable over TCP 443 from the Container Apps subnet.
-A firewall, NSG, or forced-tunnel design that blocks any required destination
-fails the deployment at a named gate.
+Private-only deployments need two distinct network paths. Public publisher,
+platform, Entra, and Azure Monitor destinations require controlled outbound
+HTTPS on TCP 443 from the Container Apps subnet. The provisioned PaaS private
+endpoints require private DNS resolution and reachability on their service
+ports: PostgreSQL is probed with TCP-only port 5432, while Storage, Search,
+OpenAI, and Document Intelligence are probed over HTTPS on port 443. A
+firewall, NSG, forced-tunnel design, private DNS configuration, or private
+endpoint route that blocks any required destination fails the deployment at a
+named gate.
 
 ### 1. Publisher registry (release-specific)
 
@@ -282,9 +290,10 @@ Where your firewall supports FQDN/service-tag rules, also allow:
   network-readiness gate reports which destination category failed, but the
   cleanest result is to allow the list up front.
 - **NSG rules** on the Container Apps subnet must permit outbound TCP 443 to
-  these destinations; service-tag-based NSG rules cover the tagged categories,
-  but the publisher ACR and MCR FQDNs need firewall/proxy-level FQDN rules
-  because NSGs cannot filter by FQDN.
+  the public destinations above and private PaaS HTTPS endpoints, plus TCP
+  5432 to the PostgreSQL private endpoint; service-tag-based NSG rules cover
+  the tagged public categories, but the publisher ACR and MCR FQDNs need
+  firewall/proxy-level FQDN rules because NSGs cannot filter by FQDN.
 - **Public Azure Monitor ingestion and query** endpoints are reached over the
   public internet even in private-only deployments (see the next section).
 
