@@ -98,6 +98,18 @@ selected, deployment cannot proceed predictably. The identity runs
 control-plane preflight and deployment scripts against your linked resources;
 it is never attached to DocuDevs runtime applications.
 
+Two principal boundaries apply to the deployment script. The
+installing/deployment principal and the Managed Application authorization it
+uses must be allowed to create
+`Microsoft.Resources/deploymentScripts` and the service-created temporary
+public-network Container Instance and storage resources in the managed
+resource group. The selected customer user-assigned identity is attached to
+that script for the linked-resource ARM operations and still needs the subnet,
+customer-DNS, and read permissions listed below. Register the required
+providers and ensure Azure Policy permits those temporary public resources.
+Do not attach this identity to the API, UI, worker, or jobs, and do not try to
+provide private-only execution storage for the deployment script.
+
 Grant the identity these role assignments:
 
 | Role | Scope |
@@ -212,6 +224,15 @@ fails the deployment at a named gate.
 
 Lead the allowlist with the publisher registry endpoints for this release:
 
+The release endpoint source of truth is
+`infra/marketplace/release-network-endpoints.json` in the DocuDevs application
+repository. The currently checked-in manifest has `releaseVersion`
+`v0.0.0-unreleased`, and
+`infra/marketplace/release-network-endpoints.PLACEHOLDER.md` is still present.
+That combination is fixture-only, non-publishable metadata, not a production
+customer allowlist. Do not use the current table to authorize a production
+installation.
+
 | Destination | Purpose |
 | --- | --- |
 | `ddmkt7d52dee38b83.azurecr.io` | Publisher ACR login server (image pulls). |
@@ -225,6 +246,14 @@ endpoints published for the version you install — they can change between
 releases. Because the publisher registry belongs to a different tenant, a
 customer-side private endpoint to it is not available; controlled outbound
 HTTPS from the delegated subnet is the only supported path.
+
+For an approved release, the release workflow must first upgrade the publisher
+ACR to Premium with dedicated data endpoints, query those endpoints with
+`az acr show-endpoints`, and regenerate the manifest. The release-specific
+`releaseVersion` and endpoint values must then be copied into this guide,
+validated with `npm run typecheck` and `npm run build`, and committed before
+the documentation or Marketplace package is published. The repository
+placeholder marker is removed only as part of that approved release refresh.
 
 ### 2. Platform, Microsoft Container Registry, and Entra FQDNs
 
