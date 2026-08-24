@@ -50,6 +50,14 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
+    {
+      type: 'category',
+      label: 'Administration',
+      items: [
+        'administration/azure-marketplace-private-network',
+      ],
+    },
+
     // Integration & Best Practices - Removed temporarily
     // TODO: Add integration guides when more specific patterns emerge
 
