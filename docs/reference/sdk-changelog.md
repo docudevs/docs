@@ -9,6 +9,42 @@ description: User-focused updates for the DocuDevs Python and Java SDKs.
 
 
 
+
+
+<!-- sdk-changelog-fingerprint: e935869c57fdd86e -->
+## 2026-08-21 06:59 UTC
+
+### Highlights
+- Clarifies where to edit manual client files and how they are synchronized with generated packages.
+
+### Python SDK
+- Generate API code using the repository-root docudevs.yaml file.
+- Use the provided Makefile to copy manual sources into the generated docudevs/ package and to synchronize generated and manual files.
+
+### Java SDK
+- No Java SDK user-facing updates in this commit.
+
+### Migration Notes
+- If you maintain manual client files, ensure you edit the root-level sources and then run the Makefile to propagate them into the packaged/generated module.
+
+<!-- sdk-changelog-fingerprint: bff3298225eba84b -->
+## 2026-06-11 12:35 UTC
+
+### Highlights
+- SDK usability improvements for common document processing flows.
+
+### Python SDK
+- submit_pdf_acroform_operation no longer accepts CommonForms-related parameters (use_commonforms, commonforms_model, commonforms_fast, commonforms_confidence).
+- submit_and_wait_for_pdf_acroform_operation no longer accepts CommonForms-related parameters.
+
+### Java SDK
+- No Java SDK user-facing updates in this commit.
+
+### Migration Notes
+- If your code passed CommonForms-related keyword arguments to submit_pdf_acroform_operation or submit_and_wait_for_pdf_acroform_operation, remove those arguments and rely on the remaining public parameters.
+- Expectation: PDF acroform submissions should continue to work using the remaining public parameters (min_confidence, max_fields_per_page, force_ocr, etc.).
+- If you relied on toggling CommonForms behavior via the public Python SDK methods, please contact support for recommended alternatives or configuration options.
+
 <!-- sdk-changelog-fingerprint: 84d924bdf9d28b00 -->
 ## 2026-05-18 10:53 UTC
 

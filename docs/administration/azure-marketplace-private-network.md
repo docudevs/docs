@@ -222,7 +222,9 @@ platform, but they still traverse the data plane: both the login server and
 the region-specific layer-data endpoint must be allowed, or pulls stall in
 `ErrImagePull` / `ImagePullBackOff`. Always allow the release-specific
 endpoints published for the version you install — they can change between
-releases.
+releases. Because the publisher registry belongs to a different tenant, a
+customer-side private endpoint to it is not available; controlled outbound
+HTTPS from the delegated subnet is the only supported path.
 
 ### 2. Platform, Microsoft Container Registry, and Entra FQDNs
 
