@@ -160,6 +160,39 @@ az role assignment create \
   --scope "$CUSTOMER_DNS_ZONE_ID"
 ```
 
+## Managed application access and bootstrap gates
+
+The identity you select in the Networking step is only for validating and
+using your existing VNet, subnets, and customer-managed DNS zones. The package
+creates a separate orchestration identity inside the managed resource group to
+start and monitor the readiness, database-bootstrap, search-bootstrap, and
+deployment-canary jobs.
+
+The DocuDevs Marketplace plan uses **Restricted** customer access. Its Partner
+Center configuration must include this allowed control action:
+
+```text
+Microsoft.App/jobs/start/action
+```
+
+This publisher-side setting is required because the Marketplace deny
+assignment overrides ordinary Azure role assignments. Granting Contributor,
+Owner, or Container Apps Jobs Operator to another identity does not repair a
+missing plan exception. If a deployment reports
+`DenyAssignmentAuthorizationFailed` while starting a job, contact DocuDevs;
+the Marketplace plan configuration must be corrected, and you must deploy a
+new managed application instance from the corrected plan.
+
+The exception permits the start operation; Azure still requires the caller to
+have a corresponding RBAC grant. Be selective when granting customers or
+automation identities permission to start Container Apps jobs in the managed
+resource group. The start API supports execution-template overrides, so a
+principal with that RBAC permission could run alternate commands under a
+job's managed identity and use secrets available to that job. DocuDevs removes
+the provisioning-only PostgreSQL password from the bootstrap job before the
+installation can complete and verifies that final runtime jobs do not retain
+database-password or token-store secrets.
+
 ## Prepare the Container Apps and private-endpoint subnets
 
 Container Apps environment subnet:
@@ -469,6 +502,7 @@ curl -sS -o /dev/null -w 'dns+tls+tcp: %{http_code} time: %{time_total}s\n' \
 | Selection | Incompatible scope, location, or subnet capacity was chosen. Fix the wizard selection. |
 | Control-plane preflight | Problems with delegation, subnet occupancy, DNS zone selection, identity access, deployment-script policy, ACI availability, or the temporary storage account. Register `Microsoft.ContainerInstance` and `Microsoft.Storage` and confirm policy allows public-network deployment scripts. |
 | Environment provisioning | An Azure operation was rejected; missing Container Apps platform, DNS, NSG, or UDR requirements are called out when the environment cannot become ready. |
+| Job-start authorization | A transient `AuthorizationFailed` is retried for up to five minutes while role assignments propagate. `DenyAssignmentAuthorizationFailed` is not a VNet or customer-role problem: the gate stops immediately and identifies the required Partner Center action `Microsoft.App/jobs/start/action`. Contact DocuDevs and install a corrected plan instance; do not add broader customer roles to work around it. |
 | Publisher image-pull gate | A recognized `ErrImagePull`, `ImagePullBackOff`, or registry-timeout condition produces exactly this message: **`DocuDevs image pull failed: outbound HTTPS to ddmkt7d52dee38b83.azurecr.io or its ACR layer-data endpoint is blocked. Allow the release-specific publisher ACR endpoints from the Container Apps subnet, then retry the deployment.`** The diagnostic includes the image digest and the latest non-secret ARM condition. If the pull did not reach a registry-timeout diagnosis before the gate budget elapsed, the gate instead reports that either the publisher registry (`ddmkt7d52dee38b83.azurecr.io`) or Container Apps platform egress may be blocked. |
 | In-environment connectivity | Reports the destination category and hostname, DNS result, TCP/TLS outcome, and the likely NSG, UDR, firewall, proxy, or resolver cause, without exposing credentials. If the job itself failed without a registry signal, the gate reports: `DocuDevs network readiness job <JOB_NAME> failed. Open the Container Apps job logs for <JOB_NAME> in the Container Apps environment to find which probe target failed; this gate reads only ARM execution status and cannot read job stdout.` An Azure Monitor probe failure means first-release telemetry needs approved public Azure Monitor egress. |
 | Post-deployment client access | Failures limited to your workstation, peered network, VPN, ExpressRoute, or DNS-forwarding path — not the deployment. Re-run the [verification steps](#verify-private-dns-ui-api-setup-uri-and-msal-callback) from a correctly connected client. |
