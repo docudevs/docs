@@ -1,0 +1,71 @@
+---
+id: upload-excel-template
+title: "uploadExcelTemplate"
+description: "uploadExcelTemplate"
+sidebar_label: "uploadExcelTemplate"
+hide_title: true
+hide_table_of_contents: true
+api: eJyFVMuO2zAM/BVBpxZw4rS9+bbd3cOeGrTpKciBsZlErW2pEp2uYfjfS8pO4jyAnkw9OByOhu40wT7obK1zW+/MvvFAxtZ6k2jrcFi8FTrTjSstFK/vOZYrrFwJhDrRDjxUSOgFotM1L/hu/CTa1Bw7oAPHHv80xiMjkW8w0SE/YAU66zS1TnICeVPvdd9vhssY6KstWrnBzAhrkrBqSjJclNKd9dWsAIoYFzTnhTYZDLLamRLvayRakoEB9dbU4FuuOmW4HvI2vIl1bgvJmYCNdFYDJjhXmjzqlNqckGZcBaFizGtU6TtuBGfrMPD7vFjIp8CQe+Oi8A+VVnxRnTKZ/0SRaf1fQQCmckBRGDmCcnklzK3oA9n/8uDS/NoHK4ZwNlB0AL9vptMr+6SdWKBPUZJndMk29c7G+oZETP1i8+YFj0E9Ld/0LYHzoQQV96v4dXMMgTlLwly9QuCGSP2FVpFVzOHIParWNl4VY1KQk2iURPNpGLA/zb/MF5p7ljYqiLKN7h36VrFxNen8itxZQsJ3SvkKm53RGl9GF0ZRbmcq0dk4GTe6sOUPoiZndN0WAv70Zd/LNs8B2zNbc3gEb2ArqvGgFSZIzO+wgzLgHbmzQfSH76MDPyou/JD0uAl1KxJB2ciKw9/Ynoa5l2E4IBToY/3h6HmoMoujcEl9NKR9ckp6ynN0NLl+52D5BZxttvz2Y8WXt+O/oLKF5Ajw+KbnkFViF/8DN86tqQ==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadExcelTemplate"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/configuration/{name}/excel-template"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadExcelTemplate
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"file":{"type":"string","format":"binary"}},"required":["file"]},"encoding":{"file":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadExcelTemplate 200 response","content":{"application/json":{"schema":{"additionalProperties":{"type":"string"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

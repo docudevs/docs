@@ -1,0 +1,63 @@
+---
+id: list-portals
+title: "listPortals"
+description: "listPortals"
+sidebar_label: "listPortals"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVNtuGjEQ/ZWVnwmkF/UhbzSQlJZAFKAXoSgyu8Pi1rt27DEpQvx7Z8xySzZ5KNKyXs/MmZkzl7VAmXtxMRU+zArlvTLlmTUOpfbiviGMBSeRLnuZuBBaebythA3hwFtTeiDztXh/fs6vDHzqlGWLU/2EFJKdBRmnpkQokW2ktVql0Uvrt2fDtfDpAgrJJ1xZICjpnFyRnUIookPrODZUW/cqO+hOhSLsHBypl0FrzmNuXCHJG4s+fRSbhvA65Ef4Hp0qcxZQZHOVh23aA1lArRYq1PWSEwoOMVUKu5A4AmYcPwdEU/blDHQtnA9pCt7f0CNzeBtRlTbgjcmiGpShYLVRb3Dd7z5c9fpd0r2Z9Me97cf9Pgsx2he/t4fYxAoH/QKwM/wx6A/bHUIbf2kPvj38Gk7qwe4O9kyMeSq1kdlVVYsDYnsyHhJa9+dlt0/vy9F3+v86Gg7qYTunQJy478Bcki+6ujyu3xGlM2M0yJLVZYpqCfWy1IFEyNr4BtVH/ZSR8hmqImYYbPaftpHsx6AcZGxTBVjXjC94PC77W0yclLPq/7om3DFeS/12mu92c7yJv8brY09oBeDC8PbIgYO1Ehf00arZN5zJ3ETuKscdk4YOLH3Svu2J5272Qj4UtEwS2gk8K0Q3GzSTrvS0HzB5kqsETUJkLmllJCsTXJJVRp4lVAlJ+CT1W+x3zQ/Ncy6pNR4LGfuojLsgZpcc0qsdd4HwF1tWSxV7Krg429vUX1u1C/LE0vV6Jj1MnN5s+PoxgFvRPR2X0ik5Y2KmPO0LkBktuYvpWvwBUhFt2hSWOV5KHeLSfL5ZN/dH9bjujqmA/wDH1BLZ
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listPortals"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/submission-portals"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listPortals
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listPortals 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"slug":{"type":"string"},"configurationName":{"type":"string"},"title":{"type":"string"},"description":{"type":["string","null"]},"submitButtonLabel":{"type":"string"},"successMessage":{"type":["string","null"]},"inputMode":{"enum":["SINGLE_FILE","MULTI_FILE"],"title":"SubmissionInputMode"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"isDefaultForConfiguration":{"type":"boolean"},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","configurationName","downloadFormat","inputMode","isDefaultForConfiguration","resultMode","slug","submitButtonLabel","title"],"title":"SubmissionPortalResponse"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

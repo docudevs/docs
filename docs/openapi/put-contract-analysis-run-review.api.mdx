@@ -1,0 +1,71 @@
+---
+id: put-contract-analysis-run-review
+title: "putContractAnalysisRunReview"
+description: "putContractAnalysisRunReview"
+sidebar_label: "putContractAnalysisRunReview"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV01v2kAQ/SvWnlrJCTSpeuBGEypFlaqIpifEYbEHcGt7nd0xCbL83zuz6y+wSdJUyik5ELMfb2dn3nseCoFyY8RkIQKVopYBnslUxnsTmTMNuwgejFj6QmWgJUYqvQnFRGQ5XlWrp9XieZ7O7XLhi0xqmQCCZtxCpPSFNumcN/siShlB4paeNdznkQbCRJ2DL0ywhUSKSSFwn/EmgzpKN6Is/QYn0BFBu1D+Hw2l3gB+h/2rsZZuMRj8qsI9r+BMQor8KLMsjgKbudFvo1Iea6EyzXnFCAx/02DyGL8RKuiMwHHgNF+EkcmUiRhxcD5QWkOAEE6NAWMS6OIs6oW+SPM4FkvaQFULIQ2ggya1ljYhCInpBxqFw5GpIOfjboan73OFMDhjVK4DmMXgdpunIulVkgq2gR95srJ0e3YjpRUovzSzVjqR6IYuLyxUnYqfKDE/cVxLjEX3xr3NPqfpMLo6BwM3JhJhhDGf5WQ0q9DmsAZty+MOl6Zb98F6Pma2/g6HP80hV4ZT8OUzl4IOTTKKMQ32rInnM9Bh48mje7D+ANc7GbgdsJcK0eqMoiiPFWoHKJbUOI5ejMf8LwRDfpE5tTzpWx7t8GoI4b9axNblhlj+Mnl33W1ovvWrd3N4N4cDcyBWK32Ces/bBkYJSUsm2QmEfzaTo3S46Pyj1/eRf9RsG1JLLwi/aSm6L/H2Hp20nbKTSu1laR3l5WZB51CDs1VVM2RLSW3DRIx6XdSIgjSjwoZajqqWalR00lCOiuYCJUGxxczbjmL2SJeJ4USH0FbyQPvt8KDk2+lW4Aun3Q5gR7LtaKXUdqAv0IZeyyMBLsbLvo4ali1bonbiO/E2G/ffVR26RulaWZJW9b+mq1zDznjT2xtxXOhm8rq6sEeOFlCuCIw3nHszacjd0HuQew+VRzXekeF5e7q5V2fJ8EwoURI+zbooxafzy/MxR0SlwURa5VSdJ/HGqwnm1QzziGJew7GDOBvJITziKIsltasEnOvYmrDl30AX72TC/ya1XOq+noYO1ThphUTF2FLIDFkUK2ngl47LkoeJmJqyvaDHndSRXMWOPMQ/fiayrGVsoBd980IVH+aVL3z0WLBDt6qNOmVJ72Sc8zd6/GML7S7CXfwbHtpN1Rsf3ZalZKveggzJcjnpbv7KHXV2xyjt/l7fwmG7HdMggAyfXLvseNztrztau6p+3yQqtD/oJHOUP22oyt7cNUE8VohYppuc9E/zDpL//gJ66Q2a
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"putContractAnalysisRunReview"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/contract-analysis/runs/{runId}/reviews/{criterionId}/{targetKey}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+putContractAnalysisRunReview
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"runId","in":"path","required":true,"schema":{"type":"string"}},{"name":"criterionId","in":"path","required":true,"schema":{"type":"string"}},{"name":"targetKey","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"resultFingerprint":{"type":"string"},"disposition":{"type":"string"},"correctedAssessment":{"type":["string","null"]},"evidence":{"type":"array","items":{"properties":{"id":{"type":"string"},"documentId":{"type":"string"},"quote":{"type":"string"},"sourceElementIds":{"type":"array","items":{"type":"string"}},"pageNumbers":{"type":"array","items":{"type":"integer","format":"int32"}},"evidenceStatus":{"type":"string"}},"required":["documentId","evidenceStatus","id","pageNumbers","quote","sourceElementIds"],"title":"ReviewEvidenceReference"}},"reason":{"type":["string","null"]},"expectedReviewRevision":{"type":"integer","format":"int64"},"idempotencyKey":{"type":"string"}},"required":["disposition","expectedReviewRevision","idempotencyKey","resultFingerprint"],"title":"PutContractAnalysisReviewRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"putContractAnalysisRunReview 200 response","content":{"application/json":{"schema":{"properties":{"runId":{"type":"string"},"resultFingerprint":{"type":"string"},"criterionId":{"type":"string"},"targetKey":{"type":"string"},"disposition":{"type":"string"},"correctedAssessment":{"type":["string","null"]},"evidence":{"type":"array","items":{"properties":{"id":{"type":"string"},"documentId":{"type":"string"},"quote":{"type":"string"},"sourceElementIds":{"type":"array","items":{"type":"string"}},"pageNumbers":{"type":"array","items":{"type":"integer","format":"int32"}},"evidenceStatus":{"type":"string"}},"required":["documentId","evidenceStatus","id","pageNumbers","quote","sourceElementIds"],"title":"ReviewEvidenceReference"}},"actor":{"type":"string"},"reason":{"type":["string","null"]},"timestamp":{"type":"string"},"reviewRevision":{"type":"integer","format":"int64"}},"required":["actor","criterionId","disposition","evidence","resultFingerprint","reviewRevision","runId","targetKey","timestamp"],"title":"ContractAnalysisReviewResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

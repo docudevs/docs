@@ -24,7 +24,7 @@ Stay with normal extraction when the uploaded file already contains every fact y
 ## How it works
 
 - **Step 1 — Prepare a case:** Create a case and upload reference documents via the DocuDevs UI or CLI (`docudevs cases create`, `docudevs cases upload-document`). Promote it to a knowledge base with `docudevs knowledge-base add <case_id>`.
-- **Step 2 — Discover the case ID:** `docudevs knowledge-base list` (or the API `GET /knowledge-base`) returns the IDs you can target.
+- **Step 2 — Discover the case ID:** `docudevs knowledge-base list` (or the API `GET /knowledge-bases`) returns the IDs you can target. The Python SDK exposes the same CRUD surface as `list_knowledge_bases`, `get_knowledge_base`, `promote_knowledge_base`, and `delete_knowledge_base` on `DocuDevsClient`.
 - **Step 3 — Attach a tool descriptor:** Pass `{"type":"KNOWLEDGE_BASE_SEARCH","config":{"caseId":"<id>","topK":5}}` alongside your extraction request.
 - **Step 4 — Process documents:** The worker resolves the descriptor into a knowledge search tool wired to your case-specific index.
 - **Step 5 — Review search hits:** Download the job result or open the processing timeline in DocuDevs to confirm when the knowledge search tool ran and what context it injected.

@@ -1,0 +1,71 @@
+---
+id: lookup
+title: "lookup"
+description: "lookup"
+sidebar_label: "lookup"
+hide_title: true
+hide_table_of_contents: true
+api: eJxtU01v2zAM/SuCTivgJdl28y1AiyFAMQzFdgp6YG0m1mJbqkhnNQz/95Gy62VLcgmlJ3689+jB+oAR2Pl2V9rc1t6fumAzGyBCg4yRbL4fbCsHgdmfsBXUtXIIwJXEEV87F1GyOXaYWSoqbMDmg+U+aBJxdO3RjuOzPqbgW0JS/PNmo38lUhFd0BmWCYxg5v2xNCl8y9iyPocQalekkde/SHOGi54hKiF2Uwe5dPWNUTLr4/Fb4nQDw7cghGjL12hmDz42IIgtgfEjO6kxjpcq7Oeul3X+9hMN2HGtJXft2TE+Jr5P71RH/WU3NZEq4kjl1acjcjJJHMjt2qVKtB6SP2My6ODT9HOve19093gms/2+s/+XX0ANGpHZiIoFEgljTViZByBRlM1v6A17I26cRWTT+y6ack4iRUQUkPqC0lT70+rLaqOiBk/cQHJrXqaF1T/TLIozvvE61CC7JuldTD5OjPd2ZizJ+bSTomslHRQbhhcg/BnrcdTr1w5jL/cSniE6eFFBZKVLRxqLmgeoCa/GWFbOfniazb0z0vDmePMltL2yh7rTk4Qn7JfPZnyWhxVCiTENMGHbosDAF1lX+63fzWL814cfsiN/ANTpRaE=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"lookup"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/invites/{token}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+lookup
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"token","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"lookup 200 response","content":{"application/json":{"schema":{"properties":{"email":{"type":"string"},"orgName":{"type":"string"},"expiresAt":{"type":"string","format":"date-time"}},"required":["email","expiresAt","orgName"],"title":"InviteLookupResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

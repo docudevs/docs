@@ -38,7 +38,7 @@ You always receive a consistent JSON payload:
 
 | Option | Description | Default |
 | --- | --- | --- |
-| `splitType` | Chunking mode: `PAGE` or `MARKDOWN_HEADER`. | `PAGE` |
+| `splitType` | Chunking mode: `PAGE`, `MARKDOWN_HEADER`, or `DOCUMENT_OUTLINE`. | `PAGE` |
 | `splitHeaderLevel` | Header level used when `splitType=MARKDOWN_HEADER` (`1` for `#`, `2` for `##`). | `2` |
 | `pagesPerChunk` | Number of pages per extraction window. | `1` |
 | `overlapPages` | Number of pages to overlap between chunks to catch data spanning pages. | `0` |
@@ -47,6 +47,8 @@ You always receive a consistent JSON payload:
 | `header_options` | Configuration for extracting document-level metadata (header). | `null` |
 
 When `splitType=MARKDOWN_HEADER`, chunking is based on OCR markdown sections instead of pages. In this mode, `overlapPages` and `dedupKey` do not apply.
+
+When `splitType=DOCUMENT_OUTLINE`, chunking is based on inferred document structure instead of fixed page windows. In this mode, `dedupKey` and `splitHeaderLevel` do not apply; `pagesPerChunk` and `overlapPages` are still accepted, but act as a page-window fallback budget rather than a fixed chunk size — see [Document Outline Split Type](#document-outline-split-type) below.
 
 ## Example: Processing a Long Invoice
 
@@ -276,6 +278,32 @@ curl -X POST "https://api.docudevs.ai/document/process/JOB_GUID" \
 
   </TabItem>
 </Tabs>
+
+## Document Outline Split Type
+
+Use `DOCUMENT_OUTLINE` for structured business documents — contracts, policies, reports, statements of work, manuals — where a logical section (or a table or figure) often spans multiple pages. Unlike `PAGE`, which slices by a fixed page window, `DOCUMENT_OUTLINE` infers the document's structure from OCR markdown and layout data first, then chunks along confident structural boundaries; it only falls back to page windows with overlap for regions that are oversized or structurally uncertain. The resulting outline is persisted as a reusable artifact and used for reduction, so overlap reconciliation is based on outline-node identity rather than a `dedupKey`.
+
+```python
+job_id = await client.submit_and_process_document_map_reduce(
+    document=document_data,
+    document_mime_type="application/pdf",
+    prompt="Extract obligations by section.",
+    split_type="document_outline",
+    pages_per_chunk=3,
+    parallel_processing=True,
+)
+
+result = await client.wait_until_ready(job_id, result_format="json")
+outline = await client.get_document_outline(job_id)
+```
+
+Notes:
+
+- `pagesPerChunk` is optional; when omitted, chunk sizing is determined automatically. When provided, it acts as a page budget for page-fallback windows and as a soft target for grouping, not a strict chunk size.
+- `overlapPages` applies only to page-fallback windows and structural boundary context.
+- `dedupKey` and `splitHeaderLevel` are not supported with this split type and are rejected.
+- The outline artifact can also be (re)built after the fact as a standalone follow-up operation — see [Document Outline](/docs/advanced/operations#document-outline) — without re-running the whole extraction.
+- `DOCUMENT_OUTLINE` is available through the REST API and the Python SDK. It is not yet exposed by the Java SDK's `MapReduceOptions.SplitType` enum or by the CLI's `--split-type` option.
 
 ## Header Capture Strategy
 

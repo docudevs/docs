@@ -1,0 +1,71 @@
+---
+id: create-contract-analysis-run
+title: "createContractAnalysisRun"
+description: "createContractAnalysisRun"
+sidebar_label: "createContractAnalysisRun"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV0tzGjkQ/itTOmOb3aT24BuxnYQktilvcqJ8EKMGZGtGs3rYpij++3ZLGmZgBuykKrdwgEFqtfrx9dc9a+b4wrLzKct16QzP3QkvuVpZaU+MLy27HzBdgeFO6nIs2DnLDXAHF0l6lITvfMkGzMB/Hqz7oMWKna+DSigdPfKqUjIPWs4erC5pzeZLKDg9VYbucBJskC3zpTZf9OyTl4IW3KoCvNk6I8sF2wzYY6mfFYgFfOAWxm0ZiTcuwKAtc20K7uLSP+/pVKEF9KoThs/dHTxJK6NlUWLa0lZ6pSgWXa1SQFFp9DNffYVVr366WLX1pq1aLYpgqOZy4WOcP+ImmApl3PFTShXfw2YjFPYwZ7MHyB1ZzJW6nePOmkHpCxK5vPo4+vHtO0rdjG5u8ed6fDPGn8/jT5/phJNOkQPfkvZNMNBbp4sJN7wAB8Yev1MISY5wNWll1hkPqAm94KqdtD7PKp4/8gVcQzHbuYxxY/gKJaWDwnax83AENUarvvxvIm6lAUG21BqSfCseNeYnbdvuIuSDGnipMAAgrqW1qPpS575A/P+E+SIdeS08c6mgxEz0+wnc7uK4q0BABaXAmy4MmmJCcR+1cz9oe1Hr19cy9HAc6zDtRjJXXoD4E8JfDOGe7l1K7YvvEfR2OK5LwIlcO3XbY3KrYxwwN/GEAVvp0sas/j0chuSCzY2sXODpw60oQ/GsPs8Gv9qIsAGO+6lk2xKPdamD/cY67nwfJILTXrkf5pV2gXYSLN7cKFJa3iwPL5D7n2hFe3BLYOhEaZBCug3Ba/hIGdxsAkTemH1CI7ilpmml0ogv8t8t8d9ZZ8g5C0POgBEU7prp5eqFF1XsFnvTSON6ZwgZ1ilvZPYmi2F3XGhk05TQLByeCRqZ7QTQ6urdVl136G3rbRTsN9ppq4c2UrF1bnF6f6zXTXc5uFHSMG5LcSLaVsj6aXWLuft4e6c//P5radgr5zrUQQIt3X8JTzYbTcZsH6DbzdrKDMs2hxAvOnCaXXGLVOOyZ77KnM4w4U/IPtlKe5PVzljaEdxx1I+7EUjsr9N3p0MiDAJ4wQONJSdjXWR1YWR1ZWSxNHZs3DKQgxd3VikuS1LqI//Equl5NYiFHMp3SQWGMuv1DMsAiWuzoWWsJIPonuLjE0fUzShcUwrhErjAkZry9RgK4CKS80nAMYkrH9rnPlFvBvWJUZ5D5Y7K3rc4YHL7L5XFLL2VpBo1/JncwO9zFriKTkfap7U1U7xceCwN3I866fM/a3mgHQ==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createContractAnalysisRun"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/contract-analysis/runs"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createContractAnalysisRun
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"anchorJobGuid":{"type":"string"},"knowledgeBaseId":{"type":"integer","format":"int64"},"mode":{"type":"string"},"draftRevision":{"type":["integer","null"],"format":"int64"},"idempotencyKey":{"type":"string"},"model":{"type":["string","null"]},"configurationFingerprint":{"type":["string","null"]},"llmType":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","NANO","MINI","HIGH"],"title":"LlmType"}]},"customParameters":{"type":["null","object"],"additionalProperties":true},"trialId":{"type":["string","null"]},"packageMembers":{"type":"array","items":{"properties":{"jobGuid":{"type":"string"},"role":{"type":"string"}},"required":["jobGuid","role"],"title":"ContractPackageMemberRequest"}},"expectedMissingDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}},"excludedDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}}},"required":["anchorJobGuid","excludedDocuments","expectedMissingDocuments","idempotencyKey","knowledgeBaseId","mode","packageMembers"],"title":"ContractAnalysisRunRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createContractAnalysisRun 200 response","content":{"application/json":{"schema":{"properties":{"runId":{"type":"string"},"operationJobGuid":{"type":"string"},"mode":{"type":"string"},"status":{"type":"string"},"resultUrl":{"type":["string","null"]},"profileFingerprint":{"type":["string","null"]},"packageFingerprint":{"type":["string","null"]},"executionFingerprint":{"type":["string","null"]}},"required":["mode","operationJobGuid","runId","status"],"title":"ContractAnalysisRunResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

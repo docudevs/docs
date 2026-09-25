@@ -1,0 +1,63 @@
+---
+id: get-default-embedding-binding
+title: "getDefaultEmbeddingBinding"
+description: "getDefaultEmbeddingBinding"
+sidebar_label: "getDefaultEmbeddingBinding"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV0tv2kAQ/ivWnqOQJlUPudGAIqQGUJvmglA1eAfYdO11d8e0CPHfO2Mb8zIklx4qwcU2M/PNzDcPr1eKYBbU/Uh1kwlqbdJZNPRuYTT6oMZXymXogYxLe1rdqxlSB6eQW6rVP5tULupKeQyZSwMy3Erd3tzIRWOIvckE4Kx5xPrRBoCxYpcSpiQQkGXWxEUMrdcgOCsV4jkmIHeZlwjJlF51if4VFyaYUpWWGUp+aW4tA7vJK8YkmYG1gylLDjGM3popw2HM0LPh1PkEqPzr00e1lnxLL/2ck/FvGt3dilFWkftcqNYmgbyQyAqQme/eNoo0ZtYtE+alD0mztTYslqDCO+MJJjEWvKHlEzJK3Ijq8VeOgQZFHQtk4OLJA9jhDnnkc2T12KPmIA3Ynt4twTaOohjjJlK3tv+2eOkpBiGn+cniBALKQ6NoG/gLj85e850NJCBb0oNLp2aWM8aO2cQ5i5CqdVUCU4hH2xCbvF4JB1V+Deh1DkwiGbLi58lptA810rc8ScAv1XrMfhdgjS6G71udO6Z5InEMu/1Or//446X9pddpP/cGfYYvHvja65d3O37qod/M58sh+J7DrvfO73ZBRfamfUrSgVC36ZzaIXvlgB2N097wVCzuTevRHBytgIZxamDwHCMdciXvGRZ7sXNZaJeFdllol4X23y+0GPhkOEhPLrSzQ10ZDyyHvjF970KwOIN4+QDVwfRNiwN2T8R9KqZ9f03MVEjVwbfgR35X7z4rs48Eae6qA7lUFWjODy3caIZWdRKWuqdTVyReBdJxcd7BRYjaw5469FoL5UY6KeKOiTEEOaOzwXXUhcCriaLfsIzIRXxQX/C2ipYu95GujIJIuEVAumWzPNSH67vrm+KV4QIlUNS+3FqSRlRlG20/RLb57gVZ15DwD7UyCyYV1Lx8yZRcjNSWi8K+ZIPrMWfnIl+tJlwiHpz1Wv7mOeANcT8aS397AxPhaiSNO0fQ8jbk1fwTWUW14xgzKgchlziOvlDW450SPXafucJ/ASp4qkw=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getDefaultEmbeddingBinding"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/embeddings/default"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getDefaultEmbeddingBinding
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getDefaultEmbeddingBinding 200 response","content":{"application/json":{"schema":{"properties":{"defaultRevision":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"providerType":{"type":"string"},"apiUrl":{"type":"string"},"deploymentName":{"type":"string"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"requestOptions":{"additionalProperties":true},"credentialId":{"type":["integer","null"],"format":"int64"},"credential":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"authType":{"type":"string"},"status":{"type":"string"},"credentialVersion":{"type":"integer","format":"int64"},"secretConfigured":{"type":"boolean"}},"required":["authType","credentialVersion","id","name","secretConfigured","status"],"title":"ModelCredentialSummary"}]},"validationStatus":{"enum":["PENDING_VALIDATION","VALID","INVALID"],"title":"EmbeddingRevisionValidationStatus"},"validationError":{"type":["string","null"]},"createdAt":{"type":["string","null"]}},"required":["apiUrl","deploymentName","dimensions","id","providerType","requestOptions","revisionNumber","similarityMetric","validationStatus"],"title":"EmbeddingRevisionDto"}]},"pendingDefaultRevision":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"providerType":{"type":"string"},"apiUrl":{"type":"string"},"deploymentName":{"type":"string"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"requestOptions":{"additionalProperties":true},"credentialId":{"type":["integer","null"],"format":"int64"},"credential":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"authType":{"type":"string"},"status":{"type":"string"},"credentialVersion":{"type":"integer","format":"int64"},"secretConfigured":{"type":"boolean"}},"required":["authType","credentialVersion","id","name","secretConfigured","status"],"title":"ModelCredentialSummary"}]},"validationStatus":{"enum":["PENDING_VALIDATION","VALID","INVALID"],"title":"EmbeddingRevisionValidationStatus"},"validationError":{"type":["string","null"]},"createdAt":{"type":["string","null"]}},"required":["apiUrl","deploymentName","dimensions","id","providerType","requestOptions","revisionNumber","similarityMetric","validationStatus"],"title":"EmbeddingRevisionDto"}]},"casesOnDefaultRevision":{"type":"integer","format":"int32"},"casesOnOlderRevisions":{"type":"integer","format":"int32"},"legacyCases":{"type":"integer","format":"int32"}},"required":["casesOnDefaultRevision","casesOnOlderRevisions","legacyCases"],"title":"EmbeddingDefaultBindingDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

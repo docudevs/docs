@@ -1,0 +1,71 @@
+---
+id: add-domain
+title: "addDomain"
+description: "addDomain"
+sidebar_label: "addDomain"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1z2jAQ/SsanQmkH9MDNxpyyKmZhJ4YDou1GDW2pEoyCfX4v3dXMuAkJAc4MLK0b/ft01u1MkIZ5HQpQ7ByNZLWoYeorblTcipBqbmtQRs5kh7/NhjiT6v2ctrKwpqIJvISnKt0kVCTP8Ea3gvFFmvglfOcM2oM/KVyOlrFvUMqEaLXppRdlytoj4rp9HHEKOpYceBMqcdgM52HzIVQr2DRN5g2grMm5IJfr69TXQyF1445DvsSdCwO8dTkhV1pdepoKTXlKNFTOtNUFfewsb4GyspHP75L4mh9CUb/O0p91OMEfg/6ULyR3KHXm57uwj7hZ1GoZnHItz8/Q1dBxKuoa2Rw4ZE+L8M2Tl2IPe+LdwKeU2BgnoFz+rvuumSeD3xB+WqMW8tD4Cw5bSQdxC19TWhQJplFoF12xsNpMm5foHZc8eT0gfzabGwSoGc1t0Uzx10Qs/s7+ZbL8ZAXNZlSkOcKDIGSMWAsbiGQ/6J4hr2IVpB3SYMo9rbxQvWgwCckJ2SFQs79ZfxtfM2MuLcaklkM1JglEEcNXjE6+iniS5y4ikP4an2VBiLJk9+Rg1MDX8GW5aODtl1DwN++6jreJsk8PSRLWu7Aa1izIssVJdwiKBqA6bKVT0gh8iYP5dWCy3N41SSmbwe0Gx0Qs6JAFz+NXQ1u+P7X44KC1/3TVlvFGA/P/OzR/1Sy4ZIMadzTXisrMGUDJcfmnPz7DzNg1NM=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"addDomain"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/sso/domains"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+addDomain
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"domain":{"type":"string"}},"required":["domain"],"title":"AddSsoDomainRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"addDomain 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"domain":{"type":"string"},"verificationToken":{"type":"string"},"verifiedAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["domain","organizationId","verificationToken"],"title":"SsoDomainResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

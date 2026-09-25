@@ -1,0 +1,71 @@
+---
+id: create-portal
+title: "createPortal"
+description: "createPortal"
+sidebar_label: "createPortal"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVltv2jAU/iuRn0PbXbQH3ijQjY1CVWAXIVSZxIC3JPZ8oUUo/33n2CEJImVSH7Y9DIlcfC45l+879p4YutakPSfaLlOuNRdZSwplaKLJIiRCMkUNLA5i0iaRYtSwOycmIVHsp2XaXIt4R9p7EonMsMzgI5Uy4ZEzvPyuRYZrOtqwlOKTVOjWcKbdemLXeDc7yeAb2iierUkeor8VX1v//RFNWaOW4SZplsRMR4pLtK7k84NCSDKbJGQBii51c22NEdmQLlnyO/UoYlrfwp+u2XldnklrbkXs1FhmU1SbDEbvh/2Hm8GwD7q3s+F04F8WZTpkUrZjULrIseTaJicOe+Mvo+G40wNv0w+d0aeHb+NZs7P7yh4rJB6zRND4RqiUmrrHzmw6Bm/9r93+EO7dyWe4fpyMR81ue8eOMHHdYysK34Klbr2RtVYthUgYzVCdRoZvWZMs9zjjisUYWKHYhI6TfOrlPxfRUVlDD8hDlrV0uw79VdKeB/eeBBDoUaRGWeb7JUWmPdJfX13h7QiXR5wKQCM4mPgcX8IoHtdBycHHmqkSlSFZFe1G0bu3WP5/moM1d/+p9yepFxbgjDvmTKlreIpBuWV46jK0Mn6h7V+j/CkIG8bA6QAo+JrnbgY8T2/wljKzEbiVSqExWknNBt4uG3bfkCDP76s9tv9EU+l55vlaVbOBppXwEHi5cBxhudxAwbrwmHmV5AzccAhWACtGIs9WwkGiCKsnIttjWx107gYnwZVCfEhhFgYw6jAQ+DYaXAR9qmHsmeCR7gIjAqjEFiZhsBNWBXFhpFECAKPgH6Ta+3518ebiCpGKvUipo0fma+e7FpRtaxxjxLAncykTyh1XrHIzy3f0ufPUBtsO0v1+STWbqSTPcRl6rOAMNYfHLVWcLrEyc5xiG0ZjGN7t+Z78YDvchfye0JpiDKieWIzlZH/Iw4NFBzonzVndRQ2Zd+PJFJSXxakudQOPKPqIpIFrmxA8F6K1223c2p4kNFtbDw3vE3+/AATMmL0=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createPortal"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/submission-portals"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createPortal
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"slug":{"type":"string"},"configurationName":{"type":"string"},"title":{"type":"string"},"description":{"type":["string","null"]},"submitButtonLabel":{"type":["string","null"]},"successMessage":{"type":["string","null"]},"inputMode":{"enum":["SINGLE_FILE","MULTI_FILE"],"title":"SubmissionInputMode"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"isDefaultForConfiguration":{"type":"boolean"},"active":{"type":"boolean"}},"required":["active","configurationName","downloadFormat","inputMode","isDefaultForConfiguration","resultMode","slug","title"],"title":"CreateSubmissionPortalRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createPortal 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"slug":{"type":"string"},"configurationName":{"type":"string"},"title":{"type":"string"},"description":{"type":["string","null"]},"submitButtonLabel":{"type":"string"},"successMessage":{"type":["string","null"]},"inputMode":{"enum":["SINGLE_FILE","MULTI_FILE"],"title":"SubmissionInputMode"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"isDefaultForConfiguration":{"type":"boolean"},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","configurationName","downloadFormat","inputMode","isDefaultForConfiguration","resultMode","slug","submitButtonLabel","title"],"title":"SubmissionPortalResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

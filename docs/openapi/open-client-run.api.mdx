@@ -1,0 +1,71 @@
+---
+id: open-client-run
+title: "openClientRun"
+description: "openClientRun"
+sidebar_label: "openClientRun"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE1v2zAM/SuCThuQ1tkHdsita3voqUXanYIcGFtx1NmSJslpDcP/fY+yk7jpUCyHhKL4yKdHMp2MVAa5WEmnnaq0UXI9k9YpT1Fbc1fIBZ/MdaWVicvGyJl05KlWUXnGddLggKiy0QUutYHtKO5ge/Wn0V4hR/SNmsmQ71RNctHJ2DrGhOi1KWXfr4dgFeJPW7QckVsTUZFNcq7SeeKTPQdr2HdK5TyzjVqFlDhWjwrYIkzKaKQqlQejrfU1xcH14zsKT0mupmgwijpWDL+fvn850AS0P39gcgRnTRi4fJ3P+adQIffaMf1zMQVCxAEDev/76L5P5T/IjGRo0c5y/5wF39nQlIXMnu0m67hbfXboeZYn3IVvTEAk11ue2nH7SrVjJd7KO++521ub/KNUNzZvbtQ+iKuHO3lO8HjJRo16Ar3LVQiYAQZcilsK6GMUL9SKaAUK7dFa0drGi2IEBb4pKBLy4zYMub9cfrucSzDix9aU5BoHk3URgzBiUOYNreOURPUaM1cRJhh5Gl+l6UqirSREA3AxDvlxV9CyiXKYmR1rjfiu21BQv3zV9+yGlh5jvYK5J69pw2phdwod2EaXtlQF9Y7acSDkp+U4a58Fqv6T8ugk07I0VDV8gvlbtYf97NeI2ykqsA1cf7i6HqpcPHGCE/TdCPazA+Iqz5WLH8auJxP4cP/4hODNuNu1LRjj6YX/JPCdaNr06rQ5ydfJikzZUMmxQ07+/AVhQp5c
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"openClientRun"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/job/{guid}/pipeline/client-runs"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+openClientRun
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"ttlSeconds":{"type":"integer","format":"int64"}},"required":["ttlSeconds"],"title":"OpenClientRunRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"openClientRun 200 response","content":{"application/json":{"schema":{}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

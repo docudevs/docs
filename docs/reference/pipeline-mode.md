@@ -226,6 +226,72 @@ Use `get_pipeline_nodes(guid)` to inspect routing after the run. Matching branch
 - `operation`: submits a child operation job and consumes `operations/{childGuid}/result.json`.
 - `final`: maps a completed node result into the public `{guid}/result.json`.
 
+A job-level [`reasoningEffort`](/docs/basics/SimpleDocuments#reasoning-effort) request field applies to every node's LLM calls in the pipeline; there is no per-node reasoning-effort override — only `llm_tier` is settable per node.
+
+## Declared Resources
+
+A pipeline can declare reusable named resources in a top-level `resources` array and reference them from a node's `tools[].resource` field instead of repeating the same tool configuration on every node.
+
+```json
+{
+  "version": "2026-05",
+  "resources": [
+    { "id": "holiday-calendar", "type": "DATE_RANGE_LOOKUP", "caseId": "case-123" }
+  ],
+  "nodes": [
+    {
+      "id": "extract_dates",
+      "type": "extract",
+      "source": "$ocr.content",
+      "prompt": "Extract event dates.",
+      "schema": { "type": "object" },
+      "tools": [{ "type": "DATE_RANGE_LOOKUP", "resource": "holiday-calendar" }]
+    }
+  ],
+  "finals": [{ "node": "extract_dates" }]
+}
+```
+
+At execution time the worker merges every field from the named resource (everything except `id` and `type`) into the tool descriptor that references it. A node whose `tools[].resource` names an id that is not declared in `resources` fails at execution with a pipeline execution error, and pipeline submission is rejected up front for the same mismatch.
+
+Declared resources are raw pipeline JSON only — the Python `Pipeline` builder has no `.resource()`/`.resources()` helper today. Build the JSON directly (or via `pipeline.raw_node(...)`) and pass it to `save_pipeline_configuration(...)` or `process_pipeline_document(...)`.
+
+## Inputs and Structured Node Input
+
+A pipeline can declare a top-level `inputs` map that resolves named values once per job (or, for a client pipeline, once per segment) and exposes them to node expressions as `$inputs` (the whole map) or `$inputs.<name>` (and deeper dotted paths under it).
+
+Each entry has a `kind`:
+
+- `literal`: use `value` verbatim.
+- `nodeArtifact`: read a prior node's own result from `pipeline/nodes/<nodeId>/result.json` in the same job.
+- `clientArtifact`: read an artifact produced by a local step of an active client-pipeline run — see [Client Pipelines](/docs/core/client-pipelines).
+
+An optional RFC 6901 JSON `pointer` (max depth 32) can drill into the resolved value before it is bound to `$inputs.<name>`.
+
+```json
+{
+  "version": "2026-05",
+  "inputs": {
+    "validatedGenes": { "kind": "literal", "value": ["TP53", "EGFR"] }
+  },
+  "nodes": [
+    {
+      "id": "extract_variants",
+      "type": "extract",
+      "source": "$ocr.content",
+      "input": "$inputs.validatedGenes",
+      "prompt": "Extract variant calls for these validated genes.",
+      "schema": { "type": "object" }
+    }
+  ],
+  "finals": [{ "node": "extract_variants" }]
+}
+```
+
+An `extract` node's `input` field is distinct from `source`: `source` supplies the primary document text the model reads, while `input` hands the model additional structured JSON delivered as delimited data alongside the source — not as the primary document text. Use it for reference data the model should treat as context, such as a validated list of values or a prior node's structured result.
+
+Like declared resources, `inputs` and node-level `input` are raw pipeline JSON — the Python `Pipeline` builder's `extract()`/`ocr_correct()` methods do not take an `input=` keyword yet. The full JSON Schema for both fields is in [`pipeline.schema.json`](./pipeline.schema.json).
+
 ## OCR Quality
 
 When OCR quality is available, the worker stores `layout/ocr-quality.json` and exposes the normalized context to pipeline nodes as `$ocr.quality`. The stable routing fields are `category`, `score`, and `escalate`; use a `validate` node such as `bucket` when you need to route on numeric ranges without adding numeric operators to `when`.

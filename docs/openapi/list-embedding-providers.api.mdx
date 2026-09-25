@@ -1,0 +1,63 @@
+---
+id: list-embedding-providers
+title: "listEmbeddingProviders"
+description: "listEmbeddingProviders"
+sidebar_label: "listEmbeddingProviders"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1Vltv2jAU/iuRn1Hp2mkPfWMFVWgrRWvXF4SmQ3wAd06c2cd0CPHfd+wECDQwOmm8EOfcPn/nlpUgmDlxMxK9bIJSqnyWDK1ZKInWiXFLmAItkDJ5X4oboZWjreJOryUsusLkDtnVSlxdXoY/iS61qgjGR00T1k02xuwnNTlhTsEcikKrNMZuv7jgYyVcOscMwhMtC2SvYC0s2U4RZjF2YQNiUiUSJWu6il3P0LL21NgMqHz16aNYt0QOGdZUHVlGGQSYw0Rj3c3EGI2QB6FyXZyC19Qs1kDo6BsulFMl/lJnJHKvNeMwkxdMKdAMWj9MWfLPF7BVlIFnju1fja6vglFRpeEpqjbcHgr13epGkcRCm2XGyRoc404qFgdQ7kw8TmVKg1W0vEf2kjZ6tfjLM60PsbCiZ+CaCgfQwxp5ZD2yempRMkgFui/rKdjhiMkYN5G6s/2/yTtafeBpfjQ5joC8axTtgD9zk+0V30kgDtmSbk0+VTNvm8u+SoGK4tEOYlPUVuCgul+D9+0dmERSpEOceyNR3249PfosA7sU6zHHXYBWMk6Ex+3dMfdZwDHsDbr9wd2P587Xfrfz1H8YsPt44P/+oHyqxdnOok1/Ph863wvYs9bYehVUZG/KpySdG1526JTaIXtlg71pp73mqVjc69Y3ffBmBDS0UwODpxjpkil5h5TUAm/B4a3xOZ3ZzaXVl9y88gCd4ed3mp9FZ0v4Qr6f9YP7nMC62wBVFnYzv6rrJgY3+y0yGH+ts9Yh+8yQ5ibs2hmGEAXQnA9t3Oi6dlHTVvnUxItXCLom9V1cuKQz7IvDmFtheAillrCrFJ0LW58NLpIeOJ5dlLzCMiGT8DZe8DhLlsbbRFZGLkiYcwjltJku4sPF9cVl3CnGUQZx4JRjLV41afq8OMC3rQrC39QuNKi4RX25gEoiRmJHRK0lYh3POXLQWK0mnD5uq/U6vOYu4flxMxqH6rcqJDOc2PMcQYZdyYP7J7KK6KQpFlS2iY+fF4ffIOtxLUN3vSfO7h8SHjYp
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listEmbeddingProviders"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/embeddings/providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listEmbeddingProviders
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listEmbeddingProviders 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"enabled":{"type":"boolean"},"isDefault":{"type":"boolean"},"latestRevision":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"providerType":{"type":"string"},"apiUrl":{"type":"string"},"deploymentName":{"type":"string"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"requestOptions":{"additionalProperties":true},"credentialId":{"type":["integer","null"],"format":"int64"},"credential":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"authType":{"type":"string"},"status":{"type":"string"},"credentialVersion":{"type":"integer","format":"int64"},"secretConfigured":{"type":"boolean"}},"required":["authType","credentialVersion","id","name","secretConfigured","status"],"title":"ModelCredentialSummary"}]},"validationStatus":{"enum":["PENDING_VALIDATION","VALID","INVALID"],"title":"EmbeddingRevisionValidationStatus"},"validationError":{"type":["string","null"]},"createdAt":{"type":["string","null"]}},"required":["apiUrl","deploymentName","dimensions","id","providerType","requestOptions","revisionNumber","similarityMetric","validationStatus"],"title":"EmbeddingRevisionDto"}]},"activeCaseCount":{"type":"integer","format":"int32"},"activeKnowledgeBaseCount":{"type":"integer","format":"int32"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["activeCaseCount","activeKnowledgeBaseCount","enabled","id","isDefault","name"],"title":"EmbeddingProviderDto"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

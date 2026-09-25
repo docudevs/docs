@@ -1,0 +1,71 @@
+---
+id: get-segment-status
+title: "Segment-scoped status."
+description: "Segment-scoped status. The SDK polls this rather than the public job status, which is what lets a non-final segment finish without the job appearing complete."
+sidebar_label: "Segment-scoped status."
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVEtv2zAM/iuEThvgxl17y61Ai6HYZWi7U5GDYjOxOkVSRTppYPi/j3ScNM0ewDCgWA4OJfH5fSQ7w3ZJZvpokkvoXUAzK0yNVGWX2MVgpuYelysMfEZVTFgDseWWJvDQINxff4EUvSfgxhFkyw1mkW2QD0Jq595V8BTno1UBm8ZVDYjuprEMHpnAQojhbOGC9UC7WCAnRw1sHDex5cGZerEpoc0uLKGKqyTWODGFkbQksiR7W0u6S+Qx4/shpigkm+1KlLNW2pkgB1VsXS2PTmtMkrnIGZ9bl1HccG6xMFQ1uLJm2hneJrUh1uim74uDm8o7iXXXavR/9zYCcBtqfPlbdy4wLjGL6iLmleXd1eWFBJipOaUYCEktLs7P9e8t0afIgWjB3ky8VlECBFZDIUKYHUAvn0itu9d8ev0VRhBv4sjIQIJUMTWl8Fh2in1f7nuu3GF4lttAZXcEaF+OeMj1MTJyv+fWhUUcMHDsFYTrWLXXuCa4+nprTlv58KjC0GgpxwqJtKXEYAI3lhwSw8ZugaO0WVhjZtjGNkM9GpG+1Jat+JdX2vn+NLmcnBupO0XilR0gGUn99QSdZte9Avz/z9zYcowvXCZvpU+l8jZ7LWPH9KMRa9GcjnN2WDCFOaJbFd5O0J5xfTmZhpF0aeZGMNYQXTe3hN+y73u9fm4xb+VexLXkbOfaEjLxtSOVpRkX1hP+AfgPd+OUfYTfVTle2rBV/q1v9STid9zut4oO9DvGPAbwnUO/YaifiX6DtpYlpLDvVK6qChMfGf+0PHQ9HbbF55sHWVg/AAvMR+Q=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Segment-scoped status."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/job/{guid}/pipeline/client-runs/{clientRunId}/segments/{segmentIndex}/status"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Segment-scoped status. The SDK polls this rather than the public job status, which is what lets a non-final segment finish without the job appearing complete.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"clientRunId","in":"path","required":true,"schema":{"type":"string"}},{"name":"segmentIndex","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getSegmentStatus 200 response","content":{"application/json":{"schema":{}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

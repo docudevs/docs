@@ -1,0 +1,71 @@
+---
+id: retry-case-embedding-reindex
+title: "retryCaseEmbeddingReindex"
+description: "retryCaseEmbeddingReindex"
+sidebar_label: "retryCaseEmbeddingReindex"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVd9vmzAQ/leQnzYpa7p22kPeUEIrpDaLaDdtivrg4kviDbBrG9YI8b/vzhCSLGkb9YkD7jt/98Pf1czxpWWjOYvyRxBCFsvgGgow3ElVWPYwYEp3b7FgI2bAmfWYW+j9E5CFgGc2YJobnoMDQwFrVuALIlJ0RuiAyQLfNHcrtA08ldIARnSmhAGz6QpyzkY1c2tNKFk4WIJB14UyOXftp69fWNM8ENxqpAeWEBfn5/QQYFMjNTF9jWeA7sEGj+FThScVjiJwrTOZ+lyHvy2FqXeIaUOVcLI9VIqTyGJmjrvSQ6Aoc6r0LIlmYRJPr9E/nk6in62ZROHkFz7D8X38I0LjKoxvogka43A6jm5aO4nu4wQtLIKTLqPT+wy3jbtrD8XjkXUlBZipb8aG8RxpGURgwKLMMvaAnrkSkL3tZqCStpuGkwqwAUxL5GneBF1eEEjIHArrR/A0gJW5zLiRbn2LnZfpDqzLAZ0qSJ0yVxIysZ/ojk+qcp3hEIuJSksk4caqbMfjBBbwrPGI92EXXGbvQ2ooqP3vImyMMrdgLV++0ffUAMfMQveaW7N7s+cv1XKvvS8V7XhBBnTxXsh4bzYP5u7IiPSX83AyXr9eE6dQhxpK90TVwSNQGVeKJFQr67xaohKO2JD00Q7rViabIWyQn0wLHfqgXj8Xyhe/I0bZT6CyQTiL2f9M+p+bGgWoBCk2mhQeAWdBxC1qmQv+8nXgVIA6WKG8BWtVmkB0IEt/BHfcl8jYNvbns8uzcz94mEnOvU52Yu+5BlSBYLtQtjXY49gPqINnN9QZxwWBQUuTebn15Zn79UEdGvV75KBCvtlUI+zaioqLsLp+RP/vJmsa+vxUAv4fzdGscAT4I1UQd5SQlmxsy4JnFg4Y9tuBfUi6wf4Y4HlHmXcfeUHdqnhW0huaf2C93YMNXaYVcEFaiAzan2GagnY7sINdRGuvH6HZt7t7nMB/R5OoYg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"retryCaseEmbeddingReindex"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/embedding-reindex/retry"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+retryCaseEmbeddingReindex
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"retryCaseEmbeddingReindex 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"status":{"enum":["PREPARING","INDEXING","READY","ACTIVE","FAILED","CANCELLED","RETIRED"],"title":"EmbeddingGenerationStatus"},"providerName":{"type":["string","null"]},"modelName":{"type":["string","null"]},"revisionId":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"vectorFieldName":{"type":"string"},"completedDocumentCount":{"type":"integer","format":"int32"},"expectedDocumentCount":{"type":"integer","format":"int32"},"failedDocumentCount":{"type":"integer","format":"int32"},"pendingDocumentCount":{"type":"integer","format":"int32"},"errorMessage":{"type":["string","null"]},"createdAt":{"type":["string","null"]}},"required":["completedDocumentCount","dimensions","expectedDocumentCount","failedDocumentCount","id","pendingDocumentCount","revisionId","revisionNumber","similarityMetric","status","vectorFieldName"],"title":"EmbeddingGenerationDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

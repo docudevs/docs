@@ -1,0 +1,71 @@
+---
+id: process-batch-with-configuration
+title: "processBatchWithConfiguration"
+description: "processBatchWithConfiguration"
+sidebar_label: "processBatchWithConfiguration"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VMFu2zAM/RVBpw3w6qy95dY1w9DLVnQbdghyYGQmVudYrkSnNQz/+0jZMdy4QDEMWC6xJfI98pHPrSbYB71c6y2QyfUm0a5CD2RdeZvppa68MxjCJ7n9ZSm/ceXO7us+Qie6Ag8HJPQC0uqSXzhrX9uML20pCEA5P3t8rK1HxiRfY6KDyfEAetlqairJCeRtudddl4wwZkr2Vc7+HZM8mBHnsUbf6Hkiy+FcgSAdlnVR6E3XbYQvVK4MGCTycrGQvwyD8baKcrwhl+IUdcJgZG6PsCRBgaoqrIlR6UMQqHZSFKPyUMj2xA9u+0X0nbeZ6AM8M6WpvcfSNJMQy1R79My6c/4A1B9dXYo2Ex3XI/oMi/snS4WAxfZuPALh/amdTn7J38ghFEi5i2vmAsVt4rkudZo5Ux9YmjRuZdrKPnXpgJY+MdKHF7uRtrNV6eKMdy5qMNS9YtgVHoO6vrvV57WOl6uBXA18LK0kXKjPEHgEpJ6gUeQUUx55KqpxtVenioPcZEDA+HwbeuyPF1cXC5mP9HmAON5hHwcSFTVSIpI6V+lFneNECZ8prQrgRWbg2hdxU6KAa30qh7N7Yyd6OZhyIOSnuY4SNjcdTz6X+TBu224h4E9fdJ0c9/4R42c2wLaQFdpBEdiLv7GZuO0IRS1Fa7HREbyV4NcTz7odTaLf3Q9r+l4x4qsqDIdQNlPOUzFRAPkU/EfOuZrdhpNyhIzdKAL0cdfGYEUThNkXQZQb/XL37fsPttwfmg39ng==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"processBatchWithConfiguration"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/batch/{guid}/process/with-configuration/{configurationName}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+processBatchWithConfiguration
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"configurationName","in":"path","required":true,"schema":{"type":"string"}},{"name":"trace","in":"query","schema":{"type":["boolean","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"processBatchWithConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"maxConcurrency":{"type":"integer","format":"int32"}},"required":["jobGuid","maxConcurrency"],"title":"BatchCreateResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

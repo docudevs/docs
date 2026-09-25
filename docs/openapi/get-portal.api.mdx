@@ -1,0 +1,71 @@
+---
+id: get-portal
+title: "getPortal"
+description: "getPortal"
+sidebar_label: "getPortal"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVW1v2jAQ/iuRP20SLd2L9oFvrNCOjcJUYC+qqsokR/CWxK59pkNR/vvukpCmJeuHIUEc393ju+fOD7lAGTsxuBHOr1PlnNLZidEWZeLEbU9oA1YibU4iMRAx4NfSJnrCSCtTQLAcnYuMXshDRWRSGa2MxC2tLdx7ZYGi0XroCRduIZVikAvcmzIiQ4jBkutG21RitfXhvSiKWw53RmcOHEe8PTvjRwQutMpwVu2cAjIHB3+CCzUhZ8gR0phEhWUd/V+Ow/JWIsZylaiqQ6iCJrmbVnaZTxJm5HmWVFLi41ZBDq3KYjZQBhsV+4rAWUlQhxcqTLotTwp9zKl2OKTEGXDv8KNH1NlUriHphHM+DMG5K/rKGF5GVJnxeKWj0g0yn7LbYjK7nI7vLibTMflerabLSfVy21QhFs0YTRqIouyjT44AR/Pvs+l8OCK05afh7Mvdz/mqG+z6MZ6J0Q9ZomV0UffiEXG4Ws4JbfzjfDyl5/niG/1+Xsxn3bCjp0BcuBvBRtJZtHXe7l+L0rXWCciM3WWIagfdttCCRIiG+ALVrXmKyPkEVVpW6E30n7FF+87dHBLsGsYjHtttf4mJJ+2s579rCA+Md1JfXdrrw30t+NP7190mKNKara5FqJQfkpeB6B/LVj9XUVHWstEle/XRIx36EexcMPw6Ec9Paoy8SEk2AlIFvi1EOAecBmPpSCEweJD7AHVAdO5INIK99jaI6iDHFuqFJHyyugr7zem70zNuqtEOU1lOUi2XVEvQVNh53QXCH+ybRKpyprwt73ZVfado98SAJIwo39Jp7JPna+lgZZOi4O17D3ZP+7TcSavkmskhAY+U4zUxvCEYOEqnkVPx6rqer9cBt7grzXpTZntmQiae32j5G/bVn0TBIrMFGZG28umVYUgCZbAVciTc/J/QTMLleElz8xdvG1D6
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getPortal"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/submission-portals/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getPortal
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getPortal 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"slug":{"type":"string"},"configurationName":{"type":"string"},"title":{"type":"string"},"description":{"type":["string","null"]},"submitButtonLabel":{"type":"string"},"successMessage":{"type":["string","null"]},"inputMode":{"enum":["SINGLE_FILE","MULTI_FILE"],"title":"SubmissionInputMode"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"isDefaultForConfiguration":{"type":"boolean"},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","configurationName","downloadFormat","inputMode","isDefaultForConfiguration","resultMode","slug","submitButtonLabel","title"],"title":"SubmissionPortalResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

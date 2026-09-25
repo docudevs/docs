@@ -1,0 +1,71 @@
+---
+id: upload-lookup-file
+title: "uploadLookupFile"
+description: "uploadLookupFile"
+sidebar_label: "uploadLookupFile"
+hide_title: true
+hide_table_of_contents: true
+api: eJx9U8GO0zAQ/RVrTiClmwK33BYWpJWQqGA5VT1M42lrNomN7RSiKP/OjJN203bFKRN73syb5zc9RNwHKNZQ2mZn9q3HaGwDmwyso/HnUUMBrass6q/WPrfui6kIMnDosaZIXvA9NPzDiemTgWk4dhgPHHv63RpPXCb6ljII5YFqhKKH2DnBhOhNs4dh2IzJFOJHqzvJYFqRmihh3VbRcNOY76yvFxpjqvFSzXnhHA0F+dsJy5seGQgYuSBsTYO+465zhusRt+FDakqrBTMrNtF5Gmuic5Upk0i5LSPFBXchrLnmZVWZOx0EZ5sw8nu/XMpHUyi9cUn1W5kVZ6kTjMnP5Jg3/xUEPdcCtTZyhdXqQpVrxUem/yfBffmdD1Z84GyI6e35ZQvIL1yT9/L4Q14l5GI3Qk2zs6mziaIhPNiyfaBjUPerR7hufb6UoOZJFT9qSSEwWwHcqc8YeJSo/mCnolVM4MjTqc62XukJFOQm+SMDvg1j7Xd3H+6WwNPKDDUmwSbTjhOrcWQ1zXzB7KxcpL8xdxWywblU66vkvCTH9RJlUEzbMFeEPX4QETm977cY6KevhkGO2fjsx2LN4RG9wa3oxZulTZCY5d9hFeiG2dkU8Ob7ZLm3iru+yng6xKYTcbBq5Y/DZ+pO2zuI+w+EmnzqP159GrsskvdfoK9t5ZCdQPdlSS7O0m9cKzt/dtfq248nTt5Oy19bLRgpPL3mOWSV2Ln/AJIbpnc=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadLookupFile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/configuration/{name}/lookup-file"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadLookupFile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"file":{"type":"string","format":"binary"}},"required":["file"]},"encoding":{"file":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadLookupFile 200 response","content":{"application/json":{"schema":{"additionalProperties":{"type":"string"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

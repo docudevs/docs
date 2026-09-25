@@ -1,0 +1,71 @@
+---
+id: sync
+title: "sync"
+description: "sync"
+sidebar_label: "sync"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1v2zAM/SuGzmnTbsMOuXVNB/QwrEg6YECQAyOzjjZZ8kQ5bRb4v4+UnDT9Sofk4Mgi+UQ9ks8bFaEiNZopIq/mA+UbDBCNd9elGilaO60GKuCfFil+8eVajTZKexfRRVlC01ijU8DwF3kne6SXWIOsmiBw0SDJmzelvrSGI6eoA6b4uG4wnR6DcRUf5Vpr1bzrBiqaaNmmpuSnnMYk56C6TowBqfGOMvCHszP5K5F0MI3k0qdesKXYujL4sYmHCpz5u6Nlm7YyDFdhYOQ7H2qIeevzJ8UZMsTKlBhuk+supL8oO1CE2NLrJqjtN4xQQoQfwR4i6qnzz/odZ6nBNVGL4V3cx3Lt3/ktz6lmxug//FLpL727M1UbcJ/NhfcWwSUCyI/xDlobJ97iYVR0TL5GbpOvPox9DcbR66gWKEorXYXgw2HQrSuWF4f6dK/wTD+eRFPj9qRb7tYjw5kiODa2bcojY7s86CZVZfY6r28UcfB8Rp71/67b50/mmhEcagmZbIe0y/P9cpYZo8a49CJLjWch4CMgLvltyN0y7F1klCePanX1AHWTG+il+uwNnOG7Jr763MZet2NcUXFxc62eZ7MzyqJmwILvqpGIwSTgtLgCYumIxT2si+gLlp0Vq0mx9m0oyj6IxCIzy/hspYx9fvrx9CzJB1+xhiRLDmp8JOFJLrsuj/gQh43lGqUeyLOd+cnSPsjxzP9SyOPdzWYBhCwDXSfbzFlgdZ/xcgXBwEKImMksLBG4jvyyUb+RXdRlltGTvrQrsK3k8EJSu8E24kJrbOJB3/lefW++T2/ZedF/b2pfSkyAe/kW8XOkpOMSB2nU096Gp85VLVTimzHl9w9NVmLj
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"sync"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/sso/sync"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+sync
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"oidcClientSecret":{"type":["string","null"]}},"title":"SsoSyncRequest"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"sync 200 response","content":{"application/json":{"schema":{"properties":{"organizationId":{"type":"integer","format":"int64"},"providerType":{"type":"string"},"status":{"type":"string"},"samlMetadataUrl":{"type":["string","null"]},"samlMetadataXml":{"type":["string","null"]},"oidcIssuerUrl":{"type":["string","null"]},"oidcClientId":{"type":["string","null"]},"oidcScopes":{"type":["string","null"]},"oidcSecretConfigured":{"type":"boolean"},"ssoDefaultRole":{"type":["string","null"]},"enforceSsoForDomains":{"type":"boolean"},"lastSyncError":{"type":["string","null"]},"lastSyncedAt":{"type":["string","null"],"format":"date-time"},"lastTestedAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["enforceSsoForDomains","oidcSecretConfigured","organizationId","providerType","status"],"title":"SsoConnectionResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

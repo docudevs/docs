@@ -1,0 +1,71 @@
+---
+id: update
+title: "update"
+description: "update"
+sidebar_label: "update"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1v2zAM/SuGThvgNtkHdsgtawushwFF0J6CHBhLibXZlibRaQ3D/32k5NhOUuTQHlJa/NDj46NagbD3YrEWpSq3ynmxSYWxygFqUz1KsRC1lYBKpMKCg1IhBy3Wrajog9xakktXZFnAnGyn/tXaKUpFV6tU+CxXJYhFK7CxIaNCtVeOQnfGlYDx6Md30XWbmK48/jSy4ZzMUHSFbIK1hc4CsNkfbyo+G4tbx7BRK89fzhRqvHItPDpd7enKqi4KsekIFgLW/loMBaFGriNeAge/A0WrCJDQdufNhgNvTeUjiq/zOf+TymdOWwY+8JmQLzkG050f7JPYn3QwMhtbuGQ4FVRGF5Np9F0z9BPOJo5zqiYuXR00KrnEK0ROUHDnN6hJOJQLWabsx5JPmF/3PfUdDHg34/yOk+vp7rowvPfmQumk8dzIKOgsD8InYS/ErF+RWatlR8c8m9Wo1oc3KG1kMDI5tnIk8IS4nQlt9wjvTVbfq4NPlk+P4hza4GSjJJkkpIJMeU/FOOE2eQBPisDkFZoETUJqOpBIksbULpF9kmcP9QhUn7w+1v5y++12zois8VhCUFu/2gMjJ2gGFaB6w5ktgJaf0msXVBW5Gp+TVCxIozSKnMqzo2234NWLK7qOj4k+R4u+JvMATsOW2aDXRWrPNo1hB4VXFxiGfRGfVr0SPid027vY+kOoGm4dipq/yPyrmviCdfwi5AokLQ/fHh138Y6bZ04fEy/2s0uPGcsg6auxm4nAnpbPd78oets/dqWRnOTglcVMvwGlCU3HZ43PWlFAta9hz7GxKP/9BzvM+Ys=
+sidebar_class_name: "patch api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"update"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/members/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+update
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"role":{"type":["string","null"]},"status":{"type":["string","null"]}},"title":"UpdateMemberRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"update 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"email":{"type":"string"},"role":{"type":"string"},"status":{"type":"string"},"invitedAt":{"type":["string","null"],"format":"date-time"},"acceptedAt":{"type":["string","null"],"format":"date-time"}},"required":["email","role","status"],"title":"MemberResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

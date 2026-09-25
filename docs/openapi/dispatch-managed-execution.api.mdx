@@ -1,0 +1,71 @@
+---
+id: dispatch-managed-execution
+title: "dispatchManagedExecution"
+description: "dispatchManagedExecution"
+sidebar_label: "dispatchManagedExecution"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1z2jAQ/SsenQnQpNMDt5RwyKFTJklPDIfFWoxa21KlNR/j8X/vrm0cg5ukUw5G0n683fdWKhVBEtRspTLIIUF9g0eMCzI2V+uRsg49yOZRq5nSJjigePetcV10niPl8XeBgb5afVKzUsU2J8xJluBcauI6yeRnYGc+C/EOM5CV8wJBBoPstqk9zG2+NYnglYpODhnXcLIEPcNsrc+AmqMvn1UlwMEWPsZ5CiH0YgJ5kyfiYXJXUG0CrY3UAemyB0u+QHYjk6Et6Bm5dh0+RL+7VVXV9G08amHwovoO97rEAdJaTigVqIeW4I7Zp4ZWhrrAakvmxM7moeHudjqVP40h9sbVsrytWMTe0TmcS/pPvbpZuZDrlfpAQMXfVflItytu+0hDRluc95lsm62qmsx/44lzZ0g7K9PvLAsxUuy3491keF9GSvh6er0JiyNkTsq5nuzpoP9z38M5nNYjvLU1R+fubFw84D5E98tHdd1LZ5RFxqpGLFqMIXB+CRhHCwgsIEUHOEVkIwbas6bRiQuKdBsUxKKBgPOzNTS5P43vxlORT8hgBqSoHDLsURi1HEZ9Ei8q7LQmPNLEpWBySVn4tJ6wmt833qOdaMDGstxAwB8+rSo5ZsY9vzsrXu7BG9gIS6s1J90haL67s1WpfiG7qHkz6TcvUoK4p4WUMpj6anSOuI9jdPSu77o3Jsvvzy/svGlfwsxqifFwkLnl70wpeVclup77+qxUKeRJwQ2zvckpvz9TPfrW
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"dispatchManagedExecution"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/managed-execution"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+dispatchManagedExecution
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"flowConfigId":{"type":"integer","format":"int64"},"resourceClass":{"type":"string"},"inputs":{"additionalProperties":true},"timeoutSeconds":{"type":"integer","format":"int32"}},"required":["flowConfigId","inputs","resourceClass","timeoutSeconds"],"title":"DispatchExecutionRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"dispatchManagedExecution 200 response","content":{"application/json":{"schema":{"properties":{"executionId":{"type":"string"},"status":{"type":"string"},"resourceClass":{"type":"string"}},"required":["executionId","resourceClass","status"],"title":"DispatchExecutionResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

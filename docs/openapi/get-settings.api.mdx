@@ -1,0 +1,63 @@
+---
+id: get-settings
+title: "getSettings"
+description: "getSettings"
+sidebar_label: "getSettings"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVktvGjEQ/isrn2mSPtRDbijQiEPVKBCpUpTD4B3Aidfe2LO0FO1/78wujwU2pNpTT3iZp+fz99lrRTCP6vpRxejVU0/5HAOQ8W6Uqms1RxojkXHs01MBY+5dRPZfq09XV/KTYtTB5BJx6J+wQ7KN4GDtHaEjiYE8t0ZXVS6fowSuVdQLzEBWeZAeyNRlYjFtFDixElBRrWiVIzcQKXBxVfYUL8AOXbo3Pm6tPeUKa2W3Mx8y4J5UCoQfyGQooboIgVu9w2B82i1FDpEGBd4G0PjgyNgubYDTaPttfaip9xbBqbIUWF4LEzCV1Kcxve2QuA4ZshI9jn7cmOv9FiVOlvoMjGuOFEKAFacxhFk8hcAcjMcwyHMMbXtj09cvUsKHOTjzZ3fKdpX2wadBdV+tSC95r7PNeZr4FzznhWmfukARkD+7xRZ52jH2CNvNCE4G2DaBQ7AHVeQe5rKio0O9ZdW2raobLjB9ZpskAWt/zNhyjHonDDnF0qQYJpVrC0Zn6Bwhs9+RgMcDD+EcnY6cf2bvOHuT6lGMBYZ384rrjTWsDaNzorDxHGueWPwHP+TjRTfezcy8qLA+pXlP9HmAMygs3XuL57Oi4+FrZOS/+TA4YXQjq2WdGq+cHobgw/mkW9eONJDwCcauLPovGNg61zdAbKHpwfl/Q5dvdrzc0/WpXQmk9MH1eKTwm4u4QftSEr15Y3O6DGnhNxe/NAy04I9LeRvwBcC7rya4qTHwuhjgMib9u5E6zrszyiJjxiS8e40xciUJuEiGEFlMKPkFq4R8woLEMkbJyhchSTdBUSzC4lrkYp3748Xni6tKUHykDCoFc5Bh3XfS2M9BT7vzT/ibLnMrYiqno2Z9vdfdO2jBqeVzvZ5CRFaGspS/X1kmVvw/L5fAL4ypTOJR6LFAYGgrqXxBdlF9rTGXKS7BFtVFevzsKZ8aE78dThihv1gjUHc=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getSettings"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/sso"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getSettings
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getSettings 200 response","content":{"application/json":{"schema":{"properties":{"subscription":{"properties":{"status":{"type":"string"},"trialEnd":{"type":["string","null"],"format":"date-time"},"currentPeriodEnd":{"type":["string","null"],"format":"date-time"},"pastDueGraceUntil":{"type":["string","null"],"format":"date-time"},"cancelAtPeriodEnd":{"type":"boolean"}},"required":["cancelAtPeriodEnd","status"],"title":"SsoSubscriptionResponse"},"domains":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"domain":{"type":"string"},"verificationToken":{"type":"string"},"verifiedAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["domain","organizationId","verificationToken"],"title":"SsoDomainResponse"}},"connection":{"type":["null","object"],"allOf":[{"properties":{"organizationId":{"type":"integer","format":"int64"},"providerType":{"type":"string"},"status":{"type":"string"},"samlMetadataUrl":{"type":["string","null"]},"samlMetadataXml":{"type":["string","null"]},"oidcIssuerUrl":{"type":["string","null"]},"oidcClientId":{"type":["string","null"]},"oidcScopes":{"type":["string","null"]},"oidcSecretConfigured":{"type":"boolean"},"ssoDefaultRole":{"type":["string","null"]},"enforceSsoForDomains":{"type":"boolean"},"lastSyncError":{"type":["string","null"]},"lastSyncedAt":{"type":["string","null"],"format":"date-time"},"lastTestedAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["enforceSsoForDomains","oidcSecretConfigured","organizationId","providerType","status"],"title":"SsoConnectionResponse"}]}},"required":["domains","subscription"],"title":"SsoSettingsResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

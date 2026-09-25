@@ -5,7 +5,7 @@ description: "createCase"
 sidebar_label: "createCase"
 hide_title: true
 hide_table_of_contents: true
-api: eJylVE1z2jAQ/SuePTtAO50euNEkB07NpOmJ4bBYG6NWllRJJqEe//fu2oBNyGQmKQck7/e+fasGEpYR5isoMFKEdQ7OU8CknV0qmEMRCBNdsxJyCPSnppi+ObWHeQOFs4lskit6b3TRuU1/RWdFFostVSg3HyRo0pyAvyxWJGfaez4hpqBtCW0OimIRtJcgg351NMjB1sbAum37QnQgJeouHNeddDIST2qN11xacMZQmFyfOrjvy4f2PEQKNXWC6J2NfY2fZzM5zioaYZGxPjs6cGUfREKrcZ+aY5QUTo3m8OhChRxVVF+/CEQulGj139N8TigOzpdOdaSwfHeq/x1TfsBLLdIbZqPMio2vkuasUrNXH/R9jR4XwL3gi1CifdnaOfcrSlsnG+EdUygHj2nLX9N+b3KQWd8P+3H7jJU3NPB9KP48yYCrto+u6/ZQ2I0r6hvaxWxxt7xwOynlUjH3MqZWQTFyMHGYZLcYmWYpe8J9llzGFN0x87K9q0OmDk5RNIwdcnzWxj72bPJJ6pFGK7SjFnpAsgMir/IAEj2nqTeobTfGYDrad2CNHpmtgMiCptmw6GcwbStihi/w07Li6w6Dxo0AsRIubQkVE3a+auA37WVs/cpdPUhaMTe1pL9YvzY/eiyKgnx603Y9mvPd9x8PbLw5PHaVU+IT8EkeQv6fg9Cqa79b5k7WgEFb1liKbR9Tfv8AfGvaRg==
+api: eJylVE1v2zAM/SsGz27SbsMOuaVpMBTDsKLrdgl6YCzW0SZLmiSnzQL/95F2EuejK9Auh0iWxEfykY9rSFhGGM2gwEgR7nNwngIm7ey1ghEUgTDRhC8hh0C/a4rp0qkVjNZQOJvIJtmi90YXrdnwZ3RWzmKxoApl54OAJs0O+MtiRbKmlecVYgraltDkoCgWQXsB6e9n2wc52NoYuG+aLhAdSMl1C8dxJ52M4EmsccKhBWcMhcFkl8FtFz40hxAp1NQeRO9s7GJ8d34hy0FELXLWEaKyWBcFxfjAMa04tjdyodV+ppoxSgq7VHN4cKFCRpWrjx+EJBdKtPrPrkI7HnvjU6M6Urh+tav/LVQOOn627tGQKulSWqgHmztnCK2gYZH0kqbVnJRi+09k9xrwdRHTFuQLJVSY8AeFeBDlizRtajtOL2S1Z8cO6CxpJkko9uqNtkf9/M8cTunclOikKY7UIA3fHJftUNkVpYUTvXvHAsnBY1rw17CbCjlIH9/26p8+YeUN9WruMz100veMtg+upWYT2JUr6itaxmx8c31itruUTcW6ylg2IjcGE4NBNsXIEkrZI66y5DKW35JVla1cHTK1MYpyIwwy/nLbCHAxeD84l4gk1QrtXhIdJdmGk2e7HBI9paE3qNverYNpRd3StTdEF0IjH6zXcz76HkzTyDETGHh0zni7xKBxLlTMRCkLQsVdOZqt4RetpHDdQDm7E7fy3NTi/mS4NPnWYswDyacX397vVfrm67c7fjzfDPPKKbEJ+CiDnv9HII3Vpt+OqvZsDQZtWWMpbztM+f0FVGcpdg==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -62,7 +62,7 @@ createCase
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"createCase 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name","organizationId"],"title":"Case"}}}}}}
+  responses={{"201":{"description":"Case created successfully","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"description":{"type":["string","null"]},"isKnowledgeBase":{"type":"boolean"},"activeEmbeddingGenerationId":{"type":["integer","null"],"format":"int64"},"embeddingMetadataVersion":{"type":"integer","format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["embeddingMetadataVersion","isKnowledgeBase","name","organizationId"],"title":"Case"}}}}}}
 >
   
 </StatusCodes>

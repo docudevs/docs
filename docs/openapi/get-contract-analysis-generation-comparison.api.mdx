@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-generation-comparison
+title: "getContractAnalysisGenerationComparison"
+description: "getContractAnalysisGenerationComparison"
+sidebar_label: "getContractAnalysisGenerationComparison"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VT1v2zAQ/SsEpxaQI7cNOngzkjRIpyBIpyDDWTrLbChSISmngqH/3jtJlqVIQVMU6GSKvM93750PMkDm5epBPhn7ojHNcLEBj4vC2a3S6OVjJG2BDoKy5iaVK5lhuLAmOEjC2oCuvPLXaDqLC5sX4JS3RkaSTpBjQMcJDtLQB/knFJ4CRVIZ+iog7Ojs8LlUDil+cCVG0ic7zEGuDjJUBXspEzBDR6Zb63II7dXXc1nXUR866+v4bjfXpfrrLD44ZTKK+cjGvrDGEwT0/nm55J8UfeJUwRnI+n7nEBcvUAmHp9QiGWKQEFRoAjtDUWiVNDbxT36lu1MFBDjBHFSbb9rJtMhI8qQuHWzDHe6VV23IPwJGRZXOUVH/6vqNykBXUDVhtrxEg/dq2/U8a4IacwrnB4/gHFQ8uIB5cw9pqjgA6NsBRjzBmoY/GOrDDCCTKt5u4Q1cBkVGM3MhpgQVNFd+22pmTg13HZmIWlzz+fJ8SqeTn2AyWA9aWCdYL0J5ARvPRGL3sd/7BUli3NlOw40+SRUrGY+l7+NDK9E6Pi6BOOniL6BLEJ+AIPsJKnU8EoEyW9tMuAPq0iblJe69WN/eyNft9I98YNwZjQRphiZjhzNxBZ4oEAQrL1jSm9kTK0RlSyfSzsnzSwoBKD69tgyXn86+nC2Zd4RuyKHhZL87gjjCKI44isFMRkiOSu6pG/BXiAsNtHMoR+l0I+wG5dcLlsm06ldhv23bhTGCesS6xm1uzQ3wJkbuqD3OeThwrh9O1zVfP5foKrqn456MYcPToM2cKs9nYsYWtMdJe/0Skx/uOrV9FJR0tu2jjA2LeA+65C86PmF12v68tP9j1ili9SM57RBS2nMMQWu3ThIswiDCZGfzP0Mvo+ure9Ljb9BMkEU=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisGenerationComparison"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/generations/{generationJobGuid}/comparison"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisGenerationComparison
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"generationJobGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Three-way regeneration comparison","content":{"application/json":{"schema":{"properties":{"generationJobGuid":{"type":"string"},"baseDraftRevision":{"type":"integer","format":"int64"},"currentDraftRevision":{"type":"integer","format":"int64"},"currentDraftFingerprint":{"type":"string"},"classification":{"type":"string"},"elements":{"type":"array","items":{"additionalProperties":true}}},"required":["baseDraftRevision","classification","currentDraftFingerprint","currentDraftRevision","elements","generationJobGuid"],"title":"ProfileGenerationComparisonResponse"}}}},"404":{"description":"Generation proposal or case is absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

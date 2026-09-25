@@ -5,7 +5,7 @@ description: "listTemplates"
 sidebar_label: "listTemplates"
 hide_title: true
 hide_table_of_contents: true
-api: eJydUz1v2zAQ/SsEZzV2O3ozkKDIlA7pZHg4U2eLKUUy5MmtKui/946yHNVDWkSLKN177959cNAEp6w3O03YRgeEel/pEDEB2eAfa73RzmZ6vkSzrnTCHIPPfN4M+st6La8as0k2CueWoRiiZg7TTfCEnoQFMTprSqbVSxbqoLNpsAU5UR+RxSAl6Jln2WFJGZP4IzsZ8NDiAp0pWX/SIxeRTuDtb5g8zYCd9p1zLBcOL2hIqgXnno4c+U/lUTrw2tmEdZETFKuQJSewp2XacT9eC55k3nxc9KrJUAEm5IbVW3oHVuljSC0wRNcM/kSW0zO3i/UHuf+o5z6YrmX78zyZIE/13sg5Y4vUBNmeExJ/RqCGP1bzlq0EL0P1x1AcL7Ld4zmr7bdHfZvjGpw9KR6YwZy5SCHcqQfIPDxSP6FXFBR3/szzVH3okqovpCwRrh9Yn6N50l7ffZY2xpCpBf82/lKYWlb2l6frdhD+ohVjrC/TSK5saql6cbeqIiftbTiRhIbhABm/JzeO8vu1w9Tzfz6eIVk4SFd2shwNQo2prOkPZIjeGoNRengG15WLcnubxv1iDl8fnnl0fwDDXFvL
+api: eJydU8Fu2zAM/RVBZy9J21tuwVIMPXQdhu4U5MDITKxWllSJTpsF/veRdpx5OWTDfLFs8j3ykU9HTbDLer7ShHV0QKjXhQ4RE5AN/qHUc+1spudTNOtCJ8wx+Mzn+VHfzmbyKjGbZKNgLhGKU9SAYbgJntCToCBGZ01XafqSBXrU2VRYg5zoEJHJICU4MM5yh13JmKQ/sn0DHmocZWdK1u90yyLSDrz9CX1PQ8JK+8Y5pgubFzQkasG5py1H/pn5HTdVCK8/khvznuJFX2DNedFGdNbjI3x8Dt40KbHur6Hs6Qec5XHsMJ2Bhd6GVAMPSEJ3t1Ix57DELTSOvgeH16q2sp+3xiYsO7GigSnJkuD003gorTR5WkfPd02NScjrLBd0JW3Ue8nJn8hyecY2sfxP7F/0LINpam5/cBsD5CmuGZIr1khVEG/vkPgzAlX8MR3uwFTyxXJ+G7qOR9WWuM9q8e1BX9Y4B4eeFNvJYM4sUgATdQ+ZrUXqHQ6KguLJ79lt6hCapMoTKEuE9QPzczT33DeTu8lMBhlDphr8b3t20tRY2x9dnd1L+EFTzrG+20dv3V736O4XHZ0MuOJCEjoeN5CRrd628vutwXTg/3zcQ7KwkbmsxB4VQskulmv0ipyiF8ZglCnuwTXdRb687e16tIkv98+8vF+9dJLw
 sidebar_class_name: "get api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ listTemplates
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"listTemplates 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"name":{"type":"string"},"organization":{"type":["null","object"],"allOf":[{"properties":{"name":{"type":"string"}},"required":["name"],"title":"Organization"}]},"contenttype":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name"],"title":"DocumentTemplate"}}}}}}}
+  responses={{"200":{"description":"listTemplates 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"name":{"type":"string"},"organization":{"type":["null","object"],"allOf":[{"properties":{"name":{"type":"string"},"webhookUrl":{"type":["string","null"]},"pipelineMaxConcurrentNodes":{"type":["integer","null"],"format":"int32"},"ssoDefaultRole":{"type":["string","null"]}},"required":["name"],"title":"Organization"}]},"contenttype":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["name"],"title":"DocumentTemplate"}}}}}}}
 >
   
 </StatusCodes>

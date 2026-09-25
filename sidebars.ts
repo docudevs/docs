@@ -30,7 +30,12 @@ const sidebars: SidebarsConfig = {
         'core/object-detection',            // NEW: Model-emitted bounding boxes for image tasks
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
         'reference/pipeline-mode',          // NEW: Pipeline extraction graphs
+        'core/client-pipelines',
         'core/knowledge-search',            // NEW: Knowledge base assisted extraction
+        'core/date-range-lookup',
+        'core/lookup-files',
+        'core/contract-analysis',
+        'core/workbook-normalization',
         'core/batch-processing',            // NEW: Multi-document batch processing
       ],
     },
@@ -54,12 +59,28 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Administration',
       items: [
+        'administration/members-and-roles',
+        'administration/single-sign-on',
+        'administration/bring-your-own-llm',
+        'administration/bring-your-own-ocr',
+        'administration/bring-your-own-embeddings',
+        'administration/model-credentials',
+        'administration/integration-connections',
         'administration/azure-marketplace-private-network',
       ],
     },
 
     // Integration & Best Practices - Removed temporarily
     // TODO: Add integration guides when more specific patterns emerge
+    {
+      type: 'category',
+      label: 'Integrations',
+      items: [
+        'integration/webhooks',
+        'integration/submission-portals',
+        'integration/edge-runtimes',
+      ],
+    },
 
     // Reference - Technical details
     {

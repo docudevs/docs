@@ -1,0 +1,71 @@
+---
+id: attest-contract-analysis-trial
+title: "attestContractAnalysisTrial"
+description: "attestContractAnalysisTrial"
+sidebar_label: "attestContractAnalysisTrial"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VU1v2zAM/SuGThuQ1N0Hdsgtazugpw1ZdwpyYG0m0WpbmiQnNQz/95GSHTuJmw4bsB5SWSKfyEfyqRYONlbMliJRhTOQuCkUkFVW2qkzEjIrVhOhNBpwUhX3qZgJcA6tu2nt5635A1uLidBgIEeHhlFrUdAH+Xgs8p4IWdCnBreltcFfpTRIoM6UOBE22WIOYlYLV2l2s+RXbETTTA5ICVj8B6BVMKYEPqu0YgtOHAvHS9A6k4nPNP5pVcF7PZQ2zIOTaPnLoFbGMSFnl/AV0LqHo2V3NhFFmWVi1TTDoJc9GsXnpMsYzjM692T7kBYhbkqiOc3Yb1itChuCe399zf9StImRmp0v1y0ih6hDoCD/khPog32BmK4Pxkm7xGj5EmRqYO0WuJNWDimn/nC4QUPZrJXJwYWtTx8PPl8IAI0mHDcKbEvp8DUjDckTbIZmdmAHxkDFveowt6N9LfAZk5IZe+0mQyniHs0oDSftdFyIkXxPaXshjvH8BqU6Cqur0gh1feUvNnjbgE3je/yP25fgSXK2itVJKxviJmGYifipUPsM0w1OH0k4bFwH/Whi6ty1zGjnTPjiIHxx3YbcxOFqQuUBWPTycfcMueZUhnLQj3qnAoMiymKtfPlaCm5VUt7izkbzb/fiNOPDIS9ymseIgk7QWgJjh6voDiyNnov2UEVORZTKjqYxqlRporR1snySggPCp9MwJeLd1Yera9/AxFcOfnBahQ3ZRh3TUUd11HF9FOWhFR0+u1hnQLpMsKXJvD74MizFSRkIZHYQ8q4Sre4c1aJrHO/RPyJtQaiXtlxuuqCuGfiHyZqGt6lEhtR9ScsdkNsjs03PUSotr6lMawLFs1wOwifeLNp5ehtxEGM5dkNe8IjvICv5i5ZPWA2ePH67/uO1La3Niiy3CCkpICceDm/CPdMHhuidzzSeYw4e8yRB7S7argbT9+3r9wcyfmzf1lyl7GNgz+NAvz5Q5fMOryjv1SKDYlOSzNB5wOS/35xoA9I=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"attestContractAnalysisTrial"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/trials/{trialId}/attest"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+attestContractAnalysisTrial
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"trialId","in":"path","required":true,"schema":{"type":"string"}},{"name":"caseId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"reportId":{"type":"string"},"reason":{"type":["string","null"]}},"required":["reportId"],"title":"TrialAttestationRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"attestContractAnalysisTrial 200 response","content":{"application/json":{"schema":{"properties":{"attestationId":{"type":"string"},"trialId":{"type":"string"},"reportId":{"type":"string"},"runId":{"type":"string"},"draftRevision":{"type":"integer","format":"int64"},"draftFingerprint":{"type":"string"},"suiteFingerprint":{"type":"string"},"packageFingerprints":{"type":"array","items":{"type":"string"}},"executionFingerprint":{"type":"string"},"reviewerId":{"type":"string"}},"required":["attestationId","draftFingerprint","draftRevision","executionFingerprint","packageFingerprints","reportId","reviewerId","runId","suiteFingerprint","trialId"],"title":"TrialAttestationResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

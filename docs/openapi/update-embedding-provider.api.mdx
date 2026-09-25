@@ -1,0 +1,71 @@
+---
+id: update-embedding-provider
+title: "updateEmbeddingProvider"
+description: "updateEmbeddingProvider"
+sidebar_label: "updateEmbeddingProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1V0tv4zYQ/isCTy3gxtndogffFFvbGps4geMEKIwgoKWxza0kqiTlxDD033dI6i1ZmwTYHGKK/OY9wxmeiKI7SSZr4kUbCAIW75w7wQ8sACHJ04jwBARVjMfzgExImgRUQQktkGREEipoBEpTTdYnEuMH4lmARyzGVULVHtcC/k+ZAOSlRAojIv09RJRMTkQdE0MRK9gZjlsuIqrs1l9/kix7suQg1RUPjprG54iOlV7SJAmZbzQdf5c81nsV80RoOxQDqb+scoXINZFKoDEoMk7DkDxlI403hq0MYghJE/YgwmFMAEnIjxFquvip5IAhTqIVso6rvGKBTe98+UyQUrKIhVQwdbwBZOsPy8k9eZuotiwDwcBvvoOvtCiKsdYoGt7V3Kjjh3x8DCYaxmioE+StGut4jgjEdBNCg2zDeQg0rmuKdD7MmNTYWqIUSG05KFfOYEvTUPUhsnrerZsMW9Sop2JKCyIP/bm+tI5Drlk7nc2GTNCfNs8+X17qnwCkL5hx9PkSchDsFNSo1QdTu0jc7gkL3lRlo1Z1FKnTF656DNhQAEYkRJulWsKBSWYtOJ9uYXi7NZfIBw0QuZRFik4WPyWy1dNf8TXr24VeOzpX33VIT1kP6nO+mmtcu0X8y2q1ov21wTubfTRV+7PBkYqqVPYeVYo/YnNqJN+gIhKQUk15vGW7VPSnfetiKVXskzqyzdDY18O9tKF2A93wAMJpyek+jSIqjiTTt+KBhiwwd8J9aTvEaaT1uPMWs/ni7+dH93o+c1fz2wWyNx/4O1/YVU1OeRkV9fnYZt4Q6AnBRT0Lut0FjcOCD1w1BGt7zxZYp5waxZN7sVGtnTroXAE95dTjwSGPzBS3fqe+YgeYUglTnsbqjdVsqb7F/AUv0B1cvZP8Te4c5a3lnV5v2TOga9UB8ihUd36e130eLBqc8SCasqfxDr6xOKhn7OJ24SGT6dKbeYvV3L1+vl1c/4s7N97KxRR2i+9778ZFwPR56T3O721mz7yv7sP16vlqbtK+V4tpJbbWIabWr/0tSwCi4XVZOqsPBK9MKs0fvSSXluIclm63eEtC8O7kyek+mD7tgHe0GJTQiNhZe6uKJF3Hdf09lCc3qTJFafIlM1PWmwYoFIPvjz0P7GPD35tHCT46JmQMBViOCz3l+MSCDDF6olpWzwrvlUaJHTTzN0xZQM0RodovJoNqpz0Q1E5qc8BlX5evoO3mXjTbZhe/rM1l9knVnJfzZ1ZjQs7HARZvucmgPBQz7qczOEjHvZuTttfLQ73QljnoDh+k1C9GJLhwPCqx2SvnhR4dxR0cYA/Y/50jT4UT5ERSn2D4qL5/i3ZMPl18ubg0QxiXKqJxzfk22E73cdpWsCwEBa9qnISUmZpL7chmE2FNqkSoxVOvJ8xk5R4V0LjTaYMJjlHNMr2NgcC+O1k/6a4hmPUszjiB9TK6fktDCR2VyiGe/FZUw+8OSutVNd+k8dE2p1R/4fI/ONqXtOk/e6BmvEfp9mBqZfyRt8KCsPNoyEYFhev7kKhB7FOtmO7c1fQfRG/yR3eEUwluC/qikxT/Gy15NYOavROO/PEupTuNtUz13w/Kd7CF
+sidebar_class_name: "patch api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"updateEmbeddingProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/embeddings/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+updateEmbeddingProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":["string","null"]},"providerType":{"type":["string","null"]},"apiUrl":{"type":["string","null"]},"deploymentName":{"type":["string","null"]},"dimensions":{"type":["integer","null"],"format":"int32"},"similarityMetric":{"type":["string","null"]},"requestOptions":{"type":["null","object"],"additionalProperties":true},"credentialId":{"type":["integer","null"],"format":"int64"},"enabled":{"type":["boolean","null"]},"forceDisable":{"type":"boolean"},"setAsDefault":{"type":"boolean"}},"required":["forceDisable","setAsDefault"],"title":"UpdateEmbeddingProviderRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"updateEmbeddingProvider 200 response","content":{"application/json":{"schema":{"properties":{"provider":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"enabled":{"type":"boolean"},"isDefault":{"type":"boolean"},"latestRevision":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"providerType":{"type":"string"},"apiUrl":{"type":"string"},"deploymentName":{"type":"string"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"requestOptions":{"additionalProperties":true},"credentialId":{"type":["integer","null"],"format":"int64"},"credential":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"authType":{"type":"string"},"status":{"type":"string"},"credentialVersion":{"type":"integer","format":"int64"},"secretConfigured":{"type":"boolean"}},"required":["authType","credentialVersion","id","name","secretConfigured","status"],"title":"ModelCredentialSummary"}]},"validationStatus":{"enum":["PENDING_VALIDATION","VALID","INVALID"],"title":"EmbeddingRevisionValidationStatus"},"validationError":{"type":["string","null"]},"createdAt":{"type":["string","null"]}},"required":["apiUrl","deploymentName","dimensions","id","providerType","requestOptions","revisionNumber","similarityMetric","validationStatus"],"title":"EmbeddingRevisionDto"}]},"activeCaseCount":{"type":"integer","format":"int32"},"activeKnowledgeBaseCount":{"type":"integer","format":"int32"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["activeCaseCount","activeKnowledgeBaseCount","enabled","id","isDefault","name"],"title":"EmbeddingProviderDto"},"changeKind":{"enum":["NONE","CREDENTIAL_ONLY","METADATA_ONLY","SEMANTIC_REVISION","DEFAULT_BINDING"],"title":"EmbeddingChangeKind"},"revisionCreated":{"type":"boolean"},"reindexRequired":{"type":"boolean"},"existingCasesReindexed":{"type":"boolean"},"affectedCaseCount":{"type":"integer","format":"int32"},"affectedKnowledgeBaseCount":{"type":"integer","format":"int32"}},"required":["affectedCaseCount","affectedKnowledgeBaseCount","changeKind","existingCasesReindexed","provider","reindexRequired","revisionCreated"],"title":"EmbeddingProviderMutationDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

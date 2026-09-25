@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-run-result
+title: "getContractAnalysisRunResult"
+description: "getContractAnalysisRunResult"
+sidebar_label: "getContractAnalysisRunResult"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVE1vEzEQ/SuWTyAtTfkQh9wCLVU5oQCnqIfJ7jQxdWzXHqesVvvfmdkvAlmpkEu8npnnN2+e3WiCXdLLjS69owglvQIHtk4mvYrZJX1XaB8wAhnvbiu91Dukj0PqashcZ7fGlC3pQgeIcEDCKKCNdvzBRQzFxYU2jj8C0J7XER+ziciYFDMWOpV7PIBeNprqIEWJonE73bZ3kpyCdwmTxN9cXspfhamMJgizZ3gprlAjBB8tvaIjAYEQrCm79hY/kiA1J0xClObJ9Of2XZwTPJHos9/eZDOfdPAVzgYSAeU0G8IYffwd2YyhQrtsrb5rO2m4xdURjIWtPT1h671FcHpK+hegT7yLMXDwmfQH558sVjv8AAlPddnwmAkZZMou9L2PB2BACb1/xzM9nf+ml2ZGxvPuislLg2oMToakbz0z/69d0nocfSu/4j+cw+ewm/d+cH5ncHbvUi/O7stC7sui6ei1iziWG3fvO20Gkle+zFd4TGr15Vb/TWUKyuLAFlXswBJTYu2l4EJdQ2I3knqCWpFXzOLIBlW1z1FVQ1GSSAUEjM/R1GO/vnh7cSleCD7RATqnD9eTO1OjBGrUQLEIalLhD56Twwh/0iJYMJ3JcrTdpekUmnlR+uHJ33Ic4iATD3HPrKSqabbsp+/Rtq1sP2aMNe/z8gjR9A7nh6UySdY8l3uwCc8ITldcv1gPRnup+MBZ4sMmuFoUA5vli5cPWE+PVyue3yNU7Gsh0MdWZYmBTqrO3hN5vSYL3Vx/Yw/+AtJL5sc=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisRunResult"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/contract-analysis/runs/{runId}/result"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisRunResult
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"runId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getContractAnalysisRunResult 200 response","content":{"application/json":{"schema":{"properties":{"runId":{"type":"string"},"operationJobGuid":{"type":"string"},"mode":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]},"resultAvailable":{"type":"boolean"},"result":{"type":["string","null"]},"resultFingerprint":{"type":["string","null"]},"knowledgeBaseId":{"type":["integer","null"],"format":"int64"}},"required":["mode","operationJobGuid","resultAvailable","runId","status"],"title":"ContractAnalysisRunStatusResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

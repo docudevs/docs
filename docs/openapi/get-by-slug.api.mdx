@@ -1,0 +1,71 @@
+---
+id: get-by-slug
+title: "getBySlug"
+description: "getBySlug"
+sidebar_label: "getBySlug"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVW1v2jAQ/iuRP20SLd2L9oFvtNCOjcJUYC+qqsokB3hLYtc+00Uo/313TqDpyPphSBDHd/f47rnzw06gXDvRuxXOLzPlnNL5idEWZerEXUdoA1YibY4S0RNrwPNilvq16AgjrcwAwXL0TuT0Qh6uMqqc1kbihtYWHryyQPFoPXSEizeQSdHbCSxMiEGr8rUoyzt2dkbnDhzb356d8SMBF1tlOItmDhGZo70/nRPrHCFHjpDGpCoOeXd/Og7bNY41lqtCVR2ikqdUbilxhDVYgst9mjIDK20zSahs+vBelJ2qxuP0QwYrtfYVYZNASIsXKkzbLc8KfcqpdtinxBlwr/DcI+p8LJeQtsI5H8fg3DV95RpeRlS58Xitk+AGuc/YbTaaXI2H95ej8ZB8rxfj+ah6uTtUIWaHsRkdIMrQR58eAQ6m3ybjaX9AaPOP/cnn+x/TRTvYzVM8E6Mf81TL5LLuxRNifzGfEtrw+8VwTM+L2Vf6/TSbTtphB8+BuHA3gJWks2jrotm/BqVLrVOQObvLGNUW2m2xBYmQ9PEFqhvzlJDzCaosVOhN8p+xZfOG3e4TbBvGIx6bbX+JiWft7Ozv+PEQ7hlvpf5LEJWb/X0t+dP5190mKNKWja5FJ8gNiUlPdI9lqrssTjil7o5/y1DVSgce6yQGOvYD2Lqo/2Uk/j7zYORFRgISkT7wvSHqOeA0GkpHWoHRoywi1BERuyX5iArtbZTUQY4t1BVJ+GR1Ffab03enZ9xeox1mMsxULZRUVXReRHWxrTdfIPzGrkmlCuPlbbjmFRGtet0RNRW06oUndWJDR7P/breUDhY2LUvefvBgC9qn5VZaJZfMFOl4ohyvifgVQcJRageVFa9u6rF7HXHn21KuN2VeMC0y9fxGy19Q7P8rSlafDciERJfPr0x9Ui6DjaAjRec/i8OIXA3nNFB/ACtsVQQ=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getBySlug"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/submission-portals/by-slug/{slug}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getBySlug
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"slug","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getBySlug 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"slug":{"type":"string"},"configurationName":{"type":"string"},"title":{"type":"string"},"description":{"type":["string","null"]},"submitButtonLabel":{"type":"string"},"successMessage":{"type":["string","null"]},"inputMode":{"enum":["SINGLE_FILE","MULTI_FILE"],"title":"SubmissionInputMode"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"isDefaultForConfiguration":{"type":"boolean"},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","configurationName","downloadFormat","inputMode","isDefaultForConfiguration","resultMode","slug","submitButtonLabel","title"],"title":"SubmissionPortalResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

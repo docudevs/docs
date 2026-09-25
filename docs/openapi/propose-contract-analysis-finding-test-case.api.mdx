@@ -1,0 +1,71 @@
+---
+id: propose-contract-analysis-finding-test-case
+title: "proposeContractAnalysisFindingTestCase"
+description: "proposeContractAnalysisFindingTestCase"
+sidebar_label: "proposeContractAnalysisFindingTestCase"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWEtz4jgQ/isunXarIGQftQduLJPZmt2aWoowJyoHYTegxFheSSahKP77dkvyE5kw5Do5JLalbnV//fVDOTLDN5qNlyyWmVE8NkOe8fSghR4aJXiq2dOAyRwUN0JmXxI2ZrmSudQw9QITv/+zyBKRbRagzZRrYAOWc8V3YEDRAUeW4QuKx7iIegZMZKSMmy0+K/ivEApQvVEFDJiOt7DjbHxk5pCTlMgMbEDh1rVUO27cpz9+Z6fTkxPHc/+UyYFkyBfIDD3yPE9FbI0fPWuZ0bdaObkCygjQ9KYK62B1pkYEsg07kX5dpAY9RBNy/GiCu2Il0FkPU2DdcLUB8w8cgqsOnsACvOUQG0gmWoPWO+g5XQH3/vVqeCzQwDnshRatnf3gYpQS2OUS4YwPfZbrGDKOfi8slaoNXCl+oDgb2OmA4OnUjPuyBV/Q6z5Hzoz0YFaYhAI48OFuhgWZZIRJyciZI3mH1HPHs67txFnHklxm2pHp1/t7+pOARr9yYwG/MnUilI1KZWjgjXT2hyVTl3DByMlCxTDv5b0mnM8128+9qfJd9Fq/l1Pc49lHqrZlImxUb27xLN5K9bdc/VX0iOY8fuEbeC/3/bavsFvZenetwc8XjlYyDVndSZtSg9/f4HBJs1nTtprCdTp9FVqj6k8yLijRvsP8xIs0ybAsLUXcizRlTzbMKfQGoVu5QgoSyCFL8KRpXSU+UmzC+hqG9uNYwtRGMk6LBJIfEN4M4a1dpKSxLYofLxUfa+JX9mqB3UoZLD7haN4OBfYHJffQNH0lsSzwrGndw3qNf8UeJgZFV4VpltilYwxOfatn3EVR5EkiCF2ezhoQ2q7X4UR1/uCadm6rVgOLjuc9rZnapB0AHuq4W+ddw+PpY6irhTKiI9A/5L0vvDinxSWhOXd4wqXtXWxbvSpUczqpcKHAe+z9mBTocWcdrRObUDzs2P+RVO4OhLb3t2eExoBxxpZyLGmPcVSOKhPn5VTVPaszLLVHo3IQumI+rNRbb26Z/vA0vDRtpb1qSe1CgZekMRu9ZPI1hWQDwxVBMzq6u9RplDs39ejsFjfC3DZDa/6oJB9hRcPjvL41PbzxXe7Y6G9BNRsDl596sVUu68+NKtmgtbsAVu+hYtk81rW08/2da8z9+SWllmlTscoxykWRraVloQ8pZccn2OtoMvvCurGrFsscihDNGGxakcBd9MA1lkUTvfJDZGSEkdhjpYwOyKOo7PGaVhJuOOrHVWc/++Xut7t7O0RiuHfctnGPladMVHImKkkTedZERJvI86ZlcpVeBt7MKE+5sD2gUKnthZZSS9ahFCoZVxf0klX+CtLiFcW4YharC5utDFuiLSo/HknpN5WeTvQZ2aYwOEt83GNM+IpgX+IEJDQ9I4HWqADO/KjuP+ynuU/ZnyMyIORfWWsyqjR7nhb0ho8vlhfetxPFfws8wVsJWeAWp+6c4YJU1MJnd67ToJSYxDHk5uLep0Y6z/59XODmlf83xU4mJKP4K9Edf1tDZV4NMvbbkaU82xRYinHd6aSf/wFdoUKZ
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"proposeContractAnalysisFindingTestCase"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/test-suite/proposals"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+proposeContractAnalysisFindingTestCase
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"runId":{"type":"string"},"resultFingerprint":{"type":"string"},"criterionId":{"type":"string"},"targetKey":{"type":"string"},"name":{"type":"string"},"expectedAssessment":{"type":"string"},"reason":{"type":"string"},"expectedSuiteRevision":{"type":"integer","format":"int64"},"idempotencyKey":{"type":"string"},"scenarioTags":{"type":"array","items":{"type":"string"}}},"required":["criterionId","expectedAssessment","expectedSuiteRevision","idempotencyKey","name","reason","resultFingerprint","runId","targetKey"],"title":"ProposeFindingTestCaseRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"proposeContractAnalysisFindingTestCase 200 response","content":{"application/json":{"schema":{"properties":{"proposedCaseId":{"type":"string"},"sourceRunId":{"type":"string"},"suite":{"properties":{"suiteId":{"type":"string"},"revision":{"type":"integer","format":"int64"},"fingerprint":{"type":"string"},"cases":{"type":"array","items":{"properties":{"id":{"type":"string"},"name":{"type":"string"},"anchorJobGuid":{"type":"string"},"packageFingerprint":{"type":"string"},"packageMembers":{"type":"array","items":{"properties":{"jobGuid":{"type":"string"},"role":{"type":"string"}},"required":["jobGuid","role"],"title":"ContractPackageMemberRequest"}},"expectedMissingDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}},"excludedDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}},"scenarioTags":{"type":"array","items":{"type":"string"}},"expectations":{"type":"array","items":{"properties":{"id":{"type":"string"},"criterionId":{"type":"string"},"targetKey":{"type":"string"},"expectedAssessment":{"type":"string"},"importance":{"type":"string"},"scenarioTags":{"type":"array","items":{"type":"string"}},"approved":{"type":"boolean"},"expectedEffectiveAttributes":{"type":["null","object"],"additionalProperties":true}},"required":["approved","criterionId","expectedAssessment","id","importance","scenarioTags","targetKey"],"title":"TestSuiteExpectation"}},"proposalSourceRunId":{"type":["string","null"]},"proposalSourceResultFingerprint":{"type":["string","null"]},"proposalSourceTargetKey":{"type":["string","null"]},"proposalRationale":{"type":["string","null"]}},"required":["anchorJobGuid","excludedDocuments","expectations","expectedMissingDocuments","id","name","packageFingerprint","packageMembers","scenarioTags"],"title":"TestSuiteCase"}},"scenarioTags":{"type":"array","items":{"type":"string"}}},"required":["cases","fingerprint","revision","scenarioTags","suiteId"],"title":"ProfileTestSuiteResponse"}},"required":["proposedCaseId","sourceRunId","suite"],"title":"ProposeFindingTestCaseResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

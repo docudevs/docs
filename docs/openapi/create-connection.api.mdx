@@ -1,0 +1,71 @@
+---
+id: create-connection
+title: "createConnection"
+description: "createConnection"
+sidebar_label: "createConnection"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVctu2zAQ/BWBZ8VO2qIH39w8gJxqJGkvhg9rcWOzpUiWpJwIhv69u5Ksh20EaNCiPlh8zCy5s0NyLyJsgpgthTIRNx6iskasUmEdNp17KWYi8wgRr60xmNWIVHj8VWCIX6wsxWwvMkt8E7kJzmmV1eTpj0BgGgvZFnPglvMcOioM3DOQI39j6egrQvTKbESVcjxey/o7yJUuz2KeFWr5HXTRxAIpFS8KejFa44hHxICUUPxDksSQeeXq9DvA8oBIhSm0FisCAkm0G2a1tlYjmDoKy6Y8Sqa2wNNkx6mljUr9tqk8UUXNoa+PCvPQVIWWGq0VfYH1QHDWhCbDD5eX/BmldVLohFDJgdbs9D1lVnIoWW019J1mlK71OVBUnvr8iWv7P41xx/TwiHEAAu+BC6Mi5v/OIGlbADmPb4QY6CUJfBEVaUXcwsl3cv+KMXvZhgYdWLN1UVVVJ3Kdu2FyjFvLt4+z5OhUOIhb6k0HN9U06wi8HbbhQ38v3b5C7jT290wvxomL+qnxvrrhQ9Hao6TMs61lbvO8sVlxg7uQzBf3J0G6SW7kdH4SOh4ZhkChmTBJbiGQKWPyAmUSbULb25FPk9IWPpEtKfAMFQ0oPs2GJvbV5OPkkqvPKuVgBtk2miYjUc+aVER8jVOnQdUeLLyuj3Ct9/hl6JSrFac6b7k2BNrv1xDwm9dVxcNUA0+qLqm5A69gzSIt2fxbBElnf7bci59YNg7hK+XiibfCcPIWH7jj66VKD4x5lqGLb2JXA/ssvj4+EXjdvlS5lczx8MKvGP3PhOD3rkmJAPXYXmgwmwI2jG1i8u83oUaDwg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createConnection"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/integration/connections"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createConnection
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"connectorFamily":{"type":"string"},"fieldValues":{"additionalProperties":{"type":"string"}},"secrets":{"additionalProperties":{"type":"string"}},"description":{"type":["string","null"]},"active":{"type":"boolean"}},"required":["active","connectorFamily","fieldValues","name","secrets"],"title":"CreateConnectionRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createConnection 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"connectorFamily":{"type":"string"},"fieldValues":{"additionalProperties":{"type":"string"}},"secretFieldsSet":{"type":"array","items":{"type":"string"}},"description":{"type":["string","null"]},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","connectorFamily","fieldValues","name","secretFieldsSet"],"title":"ConnectionResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: apply-contract-analysis-generation
+title: "applyContractAnalysisGeneration"
+description: "applyContractAnalysisGeneration"
+sidebar_label: "applyContractAnalysisGeneration"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VlFv2zYQ/isEnzbAid0sGDC/eU1adBiwwM2egjycpbPNliJVknJiGP7vuyNlybZkZ/Ww5sGhJN7Hu+++O95GBlh4OX6SX4190Zgv8GoGHq9KZ+dKo5fPA2lLdBCUNZ9yOZZQlnr93prgIAsTA3rtlf+Ipt4jB7IEBwUGdAy8kYYeyC4jWAIYSGXoqYSwpLXDb5VySLjBVTiQPltiAXK8kWFdspUyARfoaOvcugJCevXrrdxuBw30ojn9Dzv7WKnvPsUHp8yCMJ/TZvThd5uveUdGkaIJvOTIVRbPGX7xFCq9a6GIMeIpKOKMnroudU8bSHwtMQuY3zmYhymulFcJ9s3oj2w/ECC6knBD70E5ZhE7+gZ5rtgz0A8HPh9GQNk9dKZFcwh+/9PT7ttAmkpr+bzd7pP+tMMidoMKmsEekr7YAetB32ssiOW72k3KxBFCG8CZyE8ROuhJx2lfJizwaVLBsSOsn/jCl+RLIupmNOJ/OfrMqTKRJhlEYS4c+YAvtKgLSiz2K+V/FVd+gajyfyMmSLH9qQzCgmra7+0C52DN5Rew8H0VxuQFINOL7ZVZgVY5UJo/V7SvG2JXjwdWj06B/i/HTkIgbdQt8XKYKUJOHHh/AYVRkL6O31X7+Z1ZqxEMZ6qsZlr5JR/1HTI4Lt5Ount0ciy3vpI7x+FpYvpT1xdbLy+9enuz+FN5c/UTGbejdz0FbgRUYUnVy1XbVroTyouGvmh927Vu70tuDPFkYZ3gO5LtYea5LUTr37rWsbuJbAnEf852DQY1lDm1kcAuFBS1qAzRYfUK88vbTWZz7G0EBaWIGD2r0SihiNDu79Lf8jGpx4sYxnEibm5Od9pdg80temFsECV4L8ihKguVI25qEaXrZXCE8vZUQxPN0vIAREyHOOXQbDGWw8PByQ83adDZDncj1DCrYa+gxh22tUH7O4WyHUZv6AzOzLSdR+5foSg1nrgC2qZ3YqwYnRsa9tKqzNzGnNY5urNZdYcrLyYPn+Qxcc1HXvAdzonIKNEExgbX4h48CSmIF1iLYFmiK9KWWNvKUbKSkecvlBwgfPqa/JXvrn+5HsU+RpQXEEVaj3yRIbFLmNhlTByk7MDTRqMBX8Ow1FQdDF05HRUfs3k8BnOfGTeDazMTp0o6SOlBw4tmff0v5ZXkv2QN0XGbDR/zt9PbLb+mTDuaOp9ouQJqdTPmn0boXHleU5LnoD12ImsKW/40rcvuZ0Hn9Ua8u2YMK4yKouInWn7FdTum83T9A0/tkrXlS3tJFwFdUUxB2vc+HXn1yGgtTqebsfvJYpJlWIaze5/3ivvhr8+PtHlWT/9FbH3SwQtfJPQbfbZl2M3S8d1GamrFVWyFMmHy3z9y1L0l
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"applyContractAnalysisGeneration"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/generations/{generationJobGuid}/apply"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+applyContractAnalysisGeneration
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"generationJobGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"generationJobGuid":{"type":"string"},"expectedDraftRevision":{"type":"integer","format":"int64"},"expectedDraftFingerprint":{"type":"string"},"decisions":{"additionalProperties":{"properties":{"action":{"type":"string"},"reason":{"type":["string","null"]}},"required":["action"],"title":"ProfileProposalElementDecision"}}},"required":["decisions","expectedDraftFingerprint","expectedDraftRevision","generationJobGuid"],"title":"ProfileProposalApplyRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Applied reviewed profile generation","content":{"application/json":{"schema":{"properties":{"generationJobGuid":{"type":"string"},"draftRevision":{"type":"integer","format":"int64"},"draftFingerprint":{"type":"string"},"appliedLineageIds":{"type":"array","items":{"type":"string"}},"retainedLineageIds":{"type":"array","items":{"type":"string"}},"invalidatedSuiteRevision":{"type":["string","null"]},"invalidatedTrialIds":{"type":"array","items":{"type":"string"}},"invalidatedAttestationIds":{"type":"array","items":{"type":"string"}},"invalidatedReadinessIds":{"type":"array","items":{"type":"string"}},"requiresSuiteRerun":{"type":"boolean"},"publishedRevision":{"type":"integer","format":"int64"}},"required":["appliedLineageIds","draftFingerprint","draftRevision","generationJobGuid","invalidatedAttestationIds","invalidatedReadinessIds","invalidatedTrialIds","publishedRevision","requiresSuiteRerun","retainedLineageIds"],"title":"ProfileProposalApplyResponse"}}}},"401":{"description":"An authenticated reviewer is required"},"404":{"description":"Generation proposal or case is absent"},"409":{"description":"Draft changed or proposal conflicts remain unresolved","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"}},"required":["code","message"],"title":"ProfileGenerationApplyConflictResponse"}}}},"422":{"description":"Applied profile does not pass structural validation"}}}
+>
+  
+</StatusCodes>
+
+
+      

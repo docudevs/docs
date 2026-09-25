@@ -1,0 +1,71 @@
+---
+id: get-managed-execution-logs
+title: "getManagedExecutionLogs"
+description: "getManagedExecutionLogs"
+sidebar_label: "getManagedExecutionLogs"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE1v2zAM/SsCTxvgJdl2y61Ag6FABwzFdipyYG0m0SrLqkSnNQz/95G246VNlyyX6IOPeiTfcwuM2wTLeyjR45aKT/RCec228rDOoAoUUTc3BSxhS/x9iFodgm4rQWcQMGJJTFFTteBlI/FTKkFnYL0cBeSdrCM91TaSJOVYUwYp31GJsGyBm6DQxNH6LXTdWoNTqHyipPdfFgv9Kyjl0Yae5z+JGQk2B7S8mleeybPiMQRn8760+e+kSdpTEhgjNsqcqewfD1EbwnagwrakxFiGv5D7A/EMfO0crLsMHO3JnQ9hTI/a4Usxd7W/FCaUkjTifNDGVc+XEukMU8D8bCrlZdlps447f2s9yez0l/3fqECZ864aZdZLSpSyhPmJLuftka66uRvQ1m+qYSgDnesqr69pn8zVjxt4S2K61EUpkjAy2Vw6J8UpYGZWmGTKbJ6xMVwZUc5eBm+aqo6mGEFJbwpklPxym4bcn2dfZwuQukOVWMgrqdEPUpgZizdT9WYs/xXDSYJMLzwPDsU8krKOvZCG1rxn2QyWr03Xd0c8tBMyCmnbB0z0K7qu0+OnmmIj57LcY7T4oL0TAxc26VqmsUGX6ITd5CT4cDda+aOR595lfXCTVy/t0dW6k+UjNW8+Ep0Kb0dYUOxpDBFXeU6Bj7An5tWvxCSfb6ufor0/LdGsXw==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getManagedExecutionLogs"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/managed-execution/{executionId}/logs"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getManagedExecutionLogs
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"executionId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getManagedExecutionLogs 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"timestamp":{"type":["string","null"]},"level":{"type":["string","null"]},"taskId":{"type":["string","null"]},"taskRunId":{"type":["string","null"]},"message":{"type":["string","null"]},"flowId":{"type":["string","null"]},"namespace":{"type":["string","null"]}},"title":"ExecutionLogLine"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

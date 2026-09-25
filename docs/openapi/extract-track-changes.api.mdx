@@ -1,0 +1,71 @@
+---
+id: extract-track-changes
+title: "Extract tracked changes (insertions, deletions) and comments from a Word document."
+description: "Extract tracked changes (insertions, deletions) and comments from a Word document. Supports .docx files only. Returns structured data with author and date metadata."
+sidebar_label: "Extract tracked changes (insertions, deletions) and comments from a Word document."
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVsFu2zAM/RVBpw1wkq695bY1PfS0ou2wQ9CDYjOxVlnyJLqtEfjfR8pO4tppNmDooTdZJB/JR1L0VqLaBDlfSvQqfZykubIbCPIhkRmE1OsStbNyLq9eWAFFVINMdIrik7YBPCuFRGRgIB4/C2VJxxUFWAxi7V0hlPjpfCYyl1Z8OxV3VVk6T+Ip3b2ItTaE56ypp+IWsPI2iIC+SulIDjOFSjxrzIWqMHc+eqBLEAWgYulUJtKV4BWHcJ1R0NAGfc8xX3aZJdLD7woCfnNZLedbmTqLFA8fi8qgLpXH2dr5YsKgfB3SHIp4Kj07QE049LVLhc9Yl0AeKWBtN+SEARRJ5Epb5WvZNK1jTbkw3XvbBxKATV3GdgPQLrT7FluVpdFpzG7mUgSckDdQBWG/RifSIF6EkmrRxnp+dhbRXxX1CD+CFMXOkvLosdP3/yswwNvUHLqiR47yXtWEqRGKMLZBCmdMJSXSFvwgWh5otpUxkULuhFMaA/qjL2py1GjYWY+CWKp9J3/M8HeT9+/R6+x0gO+aHUVlNWplwn9wcNnmHPMPVVHw1I2L5FCZ62PNqanPN+D7o0tXF+ecY7RaHGmJvxpdjgtxyqYl82TZBgUYsrJDGPofJZGMuDjeT+Gu43LoKT1AZz3U3uQf6vAG9C0EenHj+0Xg9I7njp/t0gUk41JhTl+z3Ys4e72i2NXaRUo66AUpLuApiK8313K4wPbCRQcnqDNSCIFoZIOpuFKBugTFs6oFOtpe9okyEbWr/H5rBZbEvZBIkoYW+8v0YnrG9ePICxVfRqsKeJe9Ocyst8E+ypbuepgneFYapS1zV3kT5zVWvbcgk/GvSc4NQjrb7UoF+OFN0/A1rXWe+SUdn5TXasVdseTnJQeV0cjNl1v5CHV8LCJlk7haWd1UHNGxH4Am2Rl9TVMosac+2ojNQ6+Nb77f3ZPyqvvPKFzGNgzcNdD+yEE2zR8k5llb
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Extract tracked changes (insertions, deletions) and comments from a Word document."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/track-changes"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Extract tracked changes (insertions, deletions) and comments from a Word document. Supports .docx files only. Returns structured data with author and date metadata.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"extractTrackChanges 200 response","content":{"application/json":{"schema":{"properties":{"insertions":{"type":"array","items":{"properties":{"text":{"type":"string"},"author":{"type":["string","null"]},"date":{"type":["string","null"]}},"required":["text"],"title":"TrackChange"}},"deletions":{"type":"array","items":{"properties":{"text":{"type":"string"},"author":{"type":["string","null"]},"date":{"type":["string","null"]}},"required":["text"],"title":"TrackChange"}},"comments":{"type":"array","items":{"properties":{"id":{"type":["string","null"]},"text":{"type":"string"},"author":{"type":["string","null"]},"date":{"type":["string","null"]},"initials":{"type":["string","null"]}},"required":["text"],"title":"Comment"}},"summary":{"properties":{"totalInsertions":{"type":"integer","format":"int32"},"totalDeletions":{"type":"integer","format":"int32"},"totalComments":{"type":"integer","format":"int32"},"authors":{"type":"array","items":{"type":"string"}}},"required":["authors","totalComments","totalDeletions","totalInsertions"],"title":"TrackChangesSummary"}},"required":["comments","deletions","insertions","summary"],"title":"TrackChangesResult"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

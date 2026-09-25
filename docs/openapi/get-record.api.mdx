@@ -1,0 +1,71 @@
+---
+id: get-record
+title: "getRecord"
+description: "getRecord"
+sidebar_label: "getRecord"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVUtv2kAQ/ivWnlrJCWly42aBk9ISQDz6UBRViz2YTddeZx+0yPJ/74xtHENIDuVgxjsz38zO43PBLE8M6z8w49apMEao7CJX2nJp2KPPVA6aWzwcxazPErBziJSOmc9yrnkKFjR5FyzDF7TQEIHI7UDFgDYiw6Oc2y3KGp6d0IAwVjvwmYm2kHLWL5jd5+RqrBZZwsrykYxNrjIDhvTXV1f0F4OJNGJjMt1UPFR7B3uME6nMQmbJg+e5FFGVfu/JkFvRCZtrupwVdZBu4q9zwutWNVlIl5xVP6n1nRPxi+7hoPRZ5qRkj7XRslKeATCWW1dlAplLyX8wD4NlOESA1Ww8DYajyR3Ks/l0EC4W9ctgej8bh7XRbTAaV8IsmC9HwZi6Z4WVFGbR9rau2aIOVlaFdtLeN7c+hB5Ov08oJKItPweTr79+Tldv4bX+iBarP5lUPL5VOuW2ixisllNEC38MwjElvviGzy+L6eQ87PAYCKE3QsJAubqxTfUEdjoBjUibJiAd3VyTvdIiERmXt+g3wdk0HT+uNd/TeFpIzbkJ9BlorfQ9GMMTeL+pkQZuIQ7sO2adBGM0vrAireoVqTSX8H/eZXelHk5L3y3Yy+CdK8vRaPsnC9wZj3ZE35mr+WENS/r5b60sYiFzbFVDKRWZIEf0Wa9DQroyNb2ik1FZccpGVcVqchiqyA1hZ7xgNmKnIVslCSnSgodbH2Fbsb7kcOmF3CADWO8P33tWecgeOyQFb6+c9uLGyZAGS88RH7Wmxv50eXN5VVODsSmv2KVhQbyU1171KKN21iz8tb1ccqRIhHBaVpRUleGIi5syIE6/2xpswhbDknFRrLmBlZZlScfPDvQez1HccS34mqqEBB0LQzLWfIPcDq/yanmTfZg3c/XRw7Bn8z0sUkZrtOPS0RuKv2F/8hEoaUe2wGPcU0qjtgiiCHLb8X1F1fQVaIfkLlziSP0D6BZFQQ==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getRecord"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/submission-records/{receiptCode}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getRecord
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"receiptCode","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getRecord 200 response","content":{"application/json":{"schema":{"properties":{"receiptCode":{"type":"string"},"portalSlug":{"type":"string"},"jobGuid":{"type":["string","null"]},"jobType":{"type":"string"},"status":{"enum":["CREATED","UPLOADING","PROCESSING","COMPLETED","FAILED","PARTIAL"],"title":"SubmissionRecordStatus"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"fileCount":{"type":"integer","format":"int32"},"originalFileNames":{"type":"array","items":{"type":"string"}},"errorMessage":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"completedAt":{"type":["string","null"],"format":"date-time"}},"required":["downloadFormat","fileCount","jobType","originalFileNames","portalSlug","receiptCode","resultMode","status"],"title":"SubmissionRecordResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

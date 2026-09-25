@@ -1,0 +1,71 @@
+---
+id: create-contract-analysis-trial
+title: "createContractAnalysisTrial"
+description: "createContractAnalysisTrial"
+sidebar_label: "createContractAnalysisTrial"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVktz2zYQ/iscnNoZ2nKTTg+6qYrbcXOIR3WmB40PELmSEIMACoCyNRr+9+4CfImkFKc5OBT2vfvhw56Y5zvH5muWaeUtz/wNV1wenXA33gouHXtOmTZguRdaPeRszjIL3MOy1l/U6k+kzVJmuOUFeLDk9cQU/iAb7gCNUyYU/jLc7/Hbwr+lsIA+vS0hZS7bQ8HZ/MT80ZCVUB52YFF1q23BfTz67VdWVc/RHJz/XedHsqECQHn65MZIkYWMZ9+cVnTWOTeW6vECXNBV2V7bv/Tmz1LkvdgOy1c7VmFapfCwgoNwIrqKGuteeqqUkho1TDNloYmfhZp2LXIojMa0s+NnOE6qFDoH2Y9ai5qgqIKVb8WujCP6A4VgDer471iVzuvisTeuTjso4dw33yDzVBjPc0HeuXzsdY/G1jRoGSd8JWTVn/h60PhRL/qtwwS88JIag+G3QkJA2yoCANFQDcEUDpzRysUpf7i7o/9ycJkVxodBXgNyggZJ44Gl/xdcoYSH6dnbUl2QtNftKio996WbFF3H3AU4X7lsKcMuCzyC/B9tX8ZltuJPOisL7JP7rt+PH878Li0mhWn/qN1XJd4ZbIC+ceR0qoxRqB4UA1CoIfe1SpgqGG399bsk5ZdtIMfzLkbTH0bLFSBEj5OM0NPizlESiPSemFvL6RJicwo3MfE3g9W0b8KE1yz29aLcc7sDf4n1on/IF5ibcwVcSj3zJZdTSlOMJwpqB/IOTDoz1Ih+shutJXAVO8nxqi+RiydMB9DqV54OOjVZ2VlmbR5nQfv9GkJw0cxv1fBVNeLabsRTqEg77DVIa3E1jLYKml2oEa+fc8UEm41CDDkpbXnzXY9AVzSl8m6KR+f48O01rTRGOx86j3vJnM1elH6VkO/gZoOvmpud4vpSzUwM7GajbWlWb0spozdh1a0m92+8MBImVo0OoQNKvjuj8E5tuC10knpJ6A4urwQ9ndEC0HDV2YPeX1fUVgf813MgnvwEB5csHh/YsPWtsGHTBLuXIebRGRncJvfcIZ345JUfE68TzPmAKE2OurRJ3lAwSXLuiZ9RGhvEfrn9eHsX7iwOruDhGWs2zTDxpBl50sw8aYZ+lmV7lz28+ZmRXITrXtqwckU8rNkAD+hk3i60DSTqJeEMFA1+wy3aE8bQ2elETr5aWVV0jECxOMs1fh44Km+os/g25MLRNw5giw5glHe7kbCfVvXt+zmhgFP1NKSuiNIPXJb0Cz9fAozqWiriyD3wHN9PyiAKlzHOzRO56IxHW1CVNhaLLAPjr+o+9+7e45e/n1B5U6/xReBYZvkrEQX+DYlq0z5Q4ezEJFe7ku9IN/qkf/8Btnl/vg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createContractAnalysisTrial"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/trials"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createContractAnalysisTrial
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"anchorJobGuid":{"type":"string"},"suiteRevision":{"type":["integer","null"],"format":"int64"},"trialKind":{"type":"string"},"idempotencyKey":{"type":"string"},"model":{"type":["string","null"]},"configurationFingerprint":{"type":["string","null"]},"customParameters":{"type":["null","object"],"additionalProperties":true},"suiteCaseId":{"type":["string","null"]}},"required":["anchorJobGuid","idempotencyKey","trialKind"],"title":"ProfileTrialRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"createContractAnalysisTrial 200 response","content":{"application/json":{"schema":{"properties":{"trialId":{"type":"string"},"runId":{"type":"string"},"operationJobGuid":{"type":"string"},"status":{"type":"string"},"trialKind":{"type":"string"},"suiteRevision":{"type":"integer","format":"int64"},"estimatedWork":{"properties":{"estimatedDocuments":{"type":"integer","format":"int32"},"estimatedCriteria":{"type":"integer","format":"int32"},"estimatedUnits":{"type":"integer","format":"int32"}},"required":["estimatedCriteria","estimatedDocuments","estimatedUnits"],"title":"TrialWorkEstimate"},"report":{"type":["null","object"],"allOf":[{"properties":{"reportId":{"type":"string"},"runId":{"type":"string"},"status":{"type":"string"},"reportFingerprint":{"type":"string"},"assertions":{"type":"array","items":{"properties":{"expectationId":{"type":"string"},"criterionId":{"type":"string"},"targetKey":{"type":"string"},"expectedAssessment":{"type":"string"},"actualAssessment":{"type":["string","null"]},"importance":{"type":"string"},"passed":{"type":"boolean"},"reasonCode":{"type":"string"}},"required":["criterionId","expectationId","expectedAssessment","importance","passed","reasonCode","targetKey"],"title":"TrialAssertionResponse"}}},"required":["assertions","reportFingerprint","reportId","runId","status"],"title":"TrialReportResponse"}]}},"required":["estimatedWork","operationJobGuid","runId","status","suiteRevision","trialId","trialKind"],"title":"ProfileTrialResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

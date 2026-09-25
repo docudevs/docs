@@ -5,7 +5,7 @@ description: "uploadCaseDocument"
 sidebar_label: "uploadCaseDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVU1v2zAM/SuGThvgNN0w7JBbmmRDhq41mu4U9CDbTKLOtjyJ7uYG/u8j5c98bGt3k0TxkXp8IvcC5daKyVpE0oIVD77QORiJSmfLWExEkSdaxjMyznVUpJCh8EUujUwBwbDnXmS0oauMQD6+UBntcok7Whv4USgDBIWmAF/YaAepFJO9wDJnL5UhbMHQ1Y02qcT66OMHUVUPtTtYvNJxyT6RptuUAi3TIkFFieCY/UaxRIfa4+eGX4KKXkW7uM2+j2zRqGw7DByqTJqSIg/zXve+D2SALNIx+x2BNqnd19gyzxMVORrHOkLAEUUDmRL2ITqz4g5srjNb5/r+8tKhg42MyhnjbCE8uue1jvSMATnD8I+W/f/MjIp7TtaDcmRFkrAejsvit4V+SQ1JTmYrM/XcKepFToUFs3x1Xm05DsI0VSbzRiVQS/WM8aB8fdhOI3VUumjVM1yVWHP3muzCRIcBf4pz4ek3yVbCLaiDIgLDR4iQMWUcK6ZRJsGggo2CqKgRWEt4K5RYuPQgK1JGChY38+XNZwIL7m5ni9Wq3sxuvwbXi/vFnNafpstrWlAUVJhwcq3MGriDEF90+PryRPQBEOIp/oXggR/RASNUVC8WRB7/p+/RX+6q4Pf9aqCbgUpOpHuG4wFdBy2yqr/5v36wcIXfaW60ubZ1a2WFiLFrx+N9nWM1blO0rr1utKNhUKg5PFlvGizFcdDO2HWN/hHscOEtpCUdofdTlh5qjz7CE0nLK3VhvC4sW5w+fUFWW2NfXrxzsqDMU+l6TDMJ6pd6/FRv8NaDzLpPgPALx3kiaWpwoU3iWpSjoZ1KvpicFMuRv2PS6Np+H5L9m0mqio9pZlAbn6xp+SSNkiHzRIMqVpbXRPdGJhZOMuo6qHhz12jmrUcxz2baHMqsZFJkUvCOlt+h7IdhxS1jBzKmv8EZ1MZZHWfkuk3vfG6kVX7rNI0iyHFw/aTJ88Ds9BTcru7pcthMzlTH7MPATR27JfFEav0NQcm/5A==
+api: eJxtU02P0zAQ/SvWnEBKm11AHHJbdjnsiRUsp6oHN5m2Folt7EkhivLfmXHSpF16sz1f78177oH0IUKxgVJHjLDNwHkMmoyzzxUU0Pra6eqRg0+ubBu0BBl4HXSDhEEqe7B84VTpwDUZGMs3r+nI54C/WxOQW1FoMYNYHrHRUPRAnZcqYwkPGDh170KjaXz6/AmGYTuWY6QvruqkpnSczRD42LQ1GQZCudStKk2p69LfB2FChlnxrTqjXyZHCsYeLgfvjNWhgyEDaReRXlPmuWKzlNi2rmE7DJcEN8uQLQfQlq6S7DfTJw5ja9De16ZM+85dSUgrnoG6YfrX3WV96SF6Z+NI6sPdfeqOsQzGSw/ueNZJjdJhpWJblhjjnjEzOWF3VXBTYpb36MQA3sVRcpazgDzZJO9HrYf8TCwm2fcuLctQjROQJzxF9fDyDG+HzsEZLuslKHljUrBWX3Vk7Uj90Z0ip3htJ5ZTda4Nah4rkSR9BhyNY+/79cf1nago2BttBdTk0ZGrErLqgu0VttkghH8p97VmP3OzNtTJVmkR5/+SQTHbftkFG/coa+O0vt9x/Geoh0Ge2c1ssGLDx5MORu9kU/yFKhPlzAvf6zrif4hm48O775Ml3iueeRPp9KhtJ2vRdSs3Pv7Cbvmmg3j0iGyQkBCMwcdxziq5cym+9dnke84uefn245Xzd9M/bVwlZZI8qTMfmTs7+x8+wYu7
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ uploadCaseDocument
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"},"datasetType":{"type":["string","null"]}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ uploadCaseDocument
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"uploadCaseDocument 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"caseId":{"type":"integer","format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"documentId":{"type":"string"},"filename":{"type":"string"},"contentType":{"type":["string","null"]},"sizeBytes":{"type":["integer","null"],"format":"int64"},"blobPath":{"type":"string"},"metadata":{"type":["null","object"],"additionalProperties":true},"processingStatus":{"enum":["PENDING","PROCESSING","COMPLETED","FAILED"],"title":"DocumentStatus"},"processingJobId":{"type":["integer","null"],"format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["blobPath","caseId","documentId","filename","organizationId","processingStatus"],"title":"CaseDocument"}}}}}}
+  responses={{"201":{"description":"Document uploaded successfully"}}}
 >
   
 </StatusCodes>

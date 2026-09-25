@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-run-reviews
+title: "getContractAnalysisRunReviews"
+description: "getContractAnalysisRunReviews"
+sidebar_label: "getContractAnalysisRunReviews"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVU1vE0EM/SujOYG0NKVFHHKLaEAVEkIBTlEP7q6TDOxXPZ6UaLX/HXs/0k13QyGXzKzHnufnZ09lGbbeztc2LnImiPkN5JAevPNvCPcOH729i2xRIgG7Ir9N7NxukT90pxfd4VXIV93xyJZAkCEjaeDK5rIRLwrqHVmXy6YE3sma8CE4QgnKFDCyPt5hBnZeWT6U6uSZXL61dX2nh31Z5B692q8uL/UvQR+TKxXaS8CMuJg+htytCWPOGgXKMnVxk+Dsp9dQ1RgKEMFB8TNmDYSSlBZ2LaA2vTHyBndI+aPskEr5yJOnJA1hrKN4ws5Akt5nPExaEyd5edfyMBW9IMKYMVl4IdBnOESx7g9GNg9pau/EQThLMI/x3wlw07iTIg563Zm0HkLBOGnxRaAYlym23v5vSJ6rRTW4xS8hu29E+KKjFAWlOmLZFJQBt5+ur5pQPRXfGDicue5JyOthxiPnSGk6RddzMJGxiJ4dp3pXK+JlF22FG6SmPHq5yL2gM9IDP1TEVKXZZegZsvJMBL1Xb/en2pqm7P27ER0tulOBnwp2oLapbhmBiI6z5KkphnkMaBuNgy5SNwXq5hf9zxiRm2S27YpuEDbFlFk2t7PRBJ0JTD+rGrD1jI7+Lt8UDZMdyBsRzA3uvVl8vbXPwRyNN52sjLRdLD0sDKnDhVmClxZk8wgHw4URGHvpSnMQNZlei14tCTBIfLG2tbRvL64vLrXKUgrOoClvN60lNdOTYHoWjNBgnng4AXoUBuNvnpUpyJyXyIHSZlQ0HE28Mm0x9W/eF3Xw7uwEl7pV1T14/EFpXevnh4Akc3Atyz2Qg3ulUV4aEZWupTQbSD2OEB5Hvn216hT62qh0ppD3IyNXce0hDbqT5S8dwZ0Ca22gHUIijaAAWtsijrHkgdfofdHn7KiiT8vvIsQ/McqiVQ==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisRunReviews"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/contract-analysis/runs/{runId}/reviews"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisRunReviews
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"runId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getContractAnalysisRunReviews 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"runId":{"type":"string"},"resultFingerprint":{"type":"string"},"criterionId":{"type":"string"},"targetKey":{"type":"string"},"disposition":{"type":"string"},"correctedAssessment":{"type":["string","null"]},"evidence":{"type":"array","items":{"properties":{"id":{"type":"string"},"documentId":{"type":"string"},"quote":{"type":"string"},"sourceElementIds":{"type":"array","items":{"type":"string"}},"pageNumbers":{"type":"array","items":{"type":"integer","format":"int32"}},"evidenceStatus":{"type":"string"}},"required":["documentId","evidenceStatus","id","pageNumbers","quote","sourceElementIds"],"title":"ReviewEvidenceReference"}},"actor":{"type":"string"},"reason":{"type":["string","null"]},"timestamp":{"type":"string"},"reviewRevision":{"type":"integer","format":"int64"}},"required":["actor","criterionId","disposition","evidence","resultFingerprint","reviewRevision","runId","targetKey","timestamp"],"title":"ContractAnalysisReviewResponse"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

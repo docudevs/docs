@@ -30,6 +30,8 @@ Learn about the main functionality:
 - **[OCR Processing](/docs/basics/PlainOCR)** - Text extraction from images and scans
 - **[Templates](/docs/templates/)** - Reusable document processing templates
 - **[Schema Generation](/docs/core/schema-generation)** - AI-powered output structure creation
+- **[Contract Analysis](/docs/core/contract-analysis)** - Review contracts against published knowledge-base profiles
+- **[Workbook Normalization](/docs/core/workbook-normalization)** - Turn messy spreadsheets into structured tables
 
 ### ⚡ Advanced Features
 
@@ -38,11 +40,24 @@ Power user functionality for complex workflows:
 - **[Cases](/docs/advanced/cases)** - Organize documents into collections ⭐ *Most Popular*
 - **[Named Configurations](/docs/configuration/)** - Save and reuse processing settings
 - **[Operations](/docs/advanced/operations)** - Error analysis and post-processing workflows
+- **[Client Pipelines](/docs/core/client-pipelines)** - Mix server pipeline steps with your own local Python functions
+
+### 🛡️ Administration
+
+Organization-admin workflows in the DocuDevs UI:
+
+- **[Members and Roles](/docs/administration/members-and-roles)** - Invite teammates, assign roles, suspend access, and protect the last admin
+- **[Single Sign-On](/docs/administration/single-sign-on)** - Set up SSO, verify domains, and control how users join
+- **[Bring Your Own LLM](/docs/administration/bring-your-own-llm)**, **[OCR](/docs/administration/bring-your-own-ocr)**, and **[Embeddings](/docs/administration/bring-your-own-embeddings)** - Run processing on your own model accounts
+- **[Model Credentials](/docs/administration/model-credentials)** - Shared API-key and Microsoft Entra credentials for your providers
+- **[Integration Connections](/docs/administration/integration-connections)** - Store connector credentials for integration flows
 
 ### 🔧 Integration & Production
 
 Ready to deploy? These guides will help:
 
+- **[Webhooks](/docs/integration/webhooks)** - Get notified when jobs finish
+- **[Submission Portals](/docs/integration/submission-portals)** - Let people submit documents through a hosted form
 - **[Use Cases](/docs/integration/use-cases)** - Real-world implementation examples
 - **[Best Practices](/docs/integration/best-practices)** - Production deployment guidelines  
 - **[Troubleshooting](/docs/integration/troubleshooting)** - Debug common issues

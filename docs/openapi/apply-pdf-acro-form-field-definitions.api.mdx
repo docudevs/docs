@@ -1,0 +1,71 @@
+---
+id: apply-pdf-acro-form-field-definitions
+title: "applyPdfAcroFormFieldDefinitions"
+description: "applyPdfAcroFormFieldDefinitions"
+sidebar_label: "applyPdfAcroFormFieldDefinitions"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1z2jAQ/SsandoZJ9Dkxo3mo5NTGJKeGA6LtQaltuRKMgnD+L93V8Y2BtppywH0sfu0eu9p2csAay8nC/lmV3KZSFuig6CteVJyIqEs891MZdPU2UfrikeNubrHTBvNMV4msgQHBQZ0jLKXhiaUSKtowrdKKwrRJq6EDY0d/qy0QwIPrsJE+nSDBcjJXoZdyZk+OG3Wsq6XTTD68NWqHUek1gRC5SEXptNY6OjNW8NrPVTp+BpBo+dZdlp0fxg4BzuuMGAR10GpGAT57AiDS61rKtZWLsXnlqJ4vQ5s0ZaeSFPluVxSQqHNnTWZVmhSPA41VbFC14UmMiN2ga4mla1WOUpOho/It5+hm8F6kK+JifVlANq6vZFcbs/14pwESgk65MzCkcBTFnze0E4Y9algccGXBNBwezMe849CnzpdMvJfuEZQlmhh6Ar/qSs5dqhA550jG7/GnQsRPkCo/MWtAr0f8N2bckhqW0Gfcnpyd84R3S/VqtChc9G8JaKuI+H/xmU8O2wsv9bSkmhJ89ImckTVjfb9Q6xHpcqugHDYKqMITNHM8rx/Zw8fUJQ5Xn43Czbb8jfvoLf/ievHl6w8rrkvZDaSfCDm3qbVPW69mM6e5CkR3SYPCrqTIDekRDudyQnX4gE8OSOId9iJYAW5aktmETsqVqhDkucdBQEIn3Z9g/3l+vZ6zMozgwVE1x0aWaRJkACCFRAsgYhXEUMRBsV2vgn4EUZlDtQBCb1yeXRx1KfpuImcDFrlsUQ0bUQixjcsLeXs9yvw+N3ldc3LJJuj1rig4RacBu4c3IWV9jwmVTLIPZ6V1704+Wl+8PNnQeddLLvtlYbtsoW84hkNf+Bu2OlrbnkbBEWNiatoAu6as64O76EFOHvpddJmTNMUy/DH2OWR7WfPL68UvDr8SxRWcY6Dd/67oe9YrC273h/X9jIHs66iF2WDyZ9fL8138w==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"applyPdfAcroFormFieldDefinitions"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/job/{parentGuid}/pdf-acroform/apply"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+applyPdfAcroFormFieldDefinitions
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"parentGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"fieldDefinitions":{"type":"array","items":{"additionalProperties":true}},"sourceOperationGuid":{"type":["string","null"]},"minConfidence":{"type":["number","null"],"format":"double"},"maxFieldsPerPage":{"type":["integer","null"],"format":"int32"}},"required":["fieldDefinitions"],"title":"PdfAcroFormApplyRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"applyPdfAcroFormFieldDefinitions 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

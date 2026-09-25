@@ -1,0 +1,71 @@
+---
+id: get-default-for-configuration
+title: "getDefaultForConfiguration"
+description: "getDefaultForConfiguration"
+sidebar_label: "getDefaultForConfiguration"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVW1v2jAQ/iuRP20SlO5F+8A3VmjHRqEqsBdVVWWSA7wlsWufaRHKf99dCG/FRdOQQhzf+fHdc+fHK4Fy5kTzTjg/yZRzSud1oy3K1In7mtAGrESa7CaiKWaAbZhKn+Klthc6n6qZX5tFTRhpZQYIluFWIqcPWhLve/V5riZUTgYjcU5jC49eWSB0tB5qwsVzyKRorgQuDQM4tCqfiaK4Z2dndO7Asf39+Tm/EnCxVaYM4lSEEflHGwDamAJDyJEhpDGpikuvxm/HOKu9OIxlElCtd1XJLrY7ygRhBpbgcp+mTNhU20wSKps+fRQFZZT6WSCfWoCakBcqTMOWg8x3MVUOm5A4Ai4tfvaIOu/JCaRBOOfjGJy7pkfO4DSiyo3Ha52UbpD7jN2G3f5Vr/Nw2e11yPd63Bt11x/32yzEcNtl3S1EURaWSvYSsD340e8NWm1CG31p9b89/BqMw2C3u/VMjH7KUy2Ty6oWO8TWeDQgtM7Pi06P3hfD7/T/dTjoh2Hbh0CcuHvtAOwonWidgszZXcaoFhC2xRYkQtLCE1Tv9VNCznVUWZmhN8l/ri32j9zdJsBQMx7xuF/2U0wclLPq/1ATbhgPUn9TatDt5rwW/Kv982EnbJKiua5Eq1QnkpumaBzLXCNZY9SJrvoBDY3VEStFycJUl7xXQbd17NuwcFHrpitexrg18iAjwYlIT/icUal4wVnUkY60BaMnuYxQR7TlguQmWmpvo6Ra5NhCVZSET1a3xn539uHsnNvBaIeZLHuwkl1KOqq4iYic6CU7Qe0QCM/YMKlUZYN6WwrFmrngBcE4r3BHtuZxT1Gp5xQrw61WE+lgbNOi4OlHD3ZJ8zRcSKvkhKmlayRRjsdUyCntCEeRb2VcvLmt+vptxK0VyqialPmSeZSp5y8a/oFl8KoqWOvmIBOSeA5m7dcinTS4h3B0f/Bdte2/q86I2vcvFW2USg==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getDefaultForConfiguration"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/submission-portals/default-for-configuration/{configurationName}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getDefaultForConfiguration
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"configurationName","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getDefaultForConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"slug":{"type":"string"},"configurationName":{"type":"string"},"title":{"type":"string"},"description":{"type":["string","null"]},"submitButtonLabel":{"type":"string"},"successMessage":{"type":["string","null"]},"inputMode":{"enum":["SINGLE_FILE","MULTI_FILE"],"title":"SubmissionInputMode"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"isDefaultForConfiguration":{"type":"boolean"},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","configurationName","downloadFormat","inputMode","isDefaultForConfiguration","resultMode","slug","submitButtonLabel","title"],"title":"SubmissionPortalResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

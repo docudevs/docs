@@ -1,0 +1,63 @@
+---
+id: list-connections
+title: "listConnections"
+description: "listConnections"
+sidebar_label: "listConnections"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1v2zAM/SuCzlnSfWCH3IK1HXor9nUJemAkJtEmW6pEZwsM//eRstPESZFDc4ls8pF8j09uNcEm6/lSu5pwk4BcqPXTRIeI/cOD1XPtXaYvoa7RyKusJzphjnxCxrb6w82N/FnMJrlYSlxgFCepA4oLmMANaxIcxOidKd1mv7OAW53NFiuQE+0jcjlICfaMc4RVaRqTzEiuH8HZY+5ABhOn1433wmcdUgXcTUKfP+mOI1DhSf1MydUbCZh+6JDuoXJ+/2rO2qG3v8A3fXew1sn44B9HU53hGJjRJKR7gefvSNcIXoJHAh/ZDhkHspwIrPnulN0qBI9QF3oJgdAu6EqJE70sJ78jx1oxton2jdhOLPPcuIRWMMOAl2KPpR22dCkbdyFHXqgdPfbt4K6u/CbXDclVK6RtEH9vuORER6AtP8xOrsLMjACuXodCfeh9G0xzi7usFo8P+rzfS1AOFXtdsWUN5sxqCWCq7iCzUUj9hb2ioLjXjr2j9qFJyg6gLBEWErg+R3Nf+/304/RGNhJDpgqKHXpDF5pqzPNV32jCfzSLHlyxRZN8uVVFg/Hn4GVLpRxLv+WmktS2K8j4M/muk9fPDSa+Lks+7iA5WIlGS/HjFsHydZwvW/0HOUUvjMEomu9k0eL+829A93Syn693P3ip/wHQHp/K
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listConnections"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/integration/connections"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listConnections
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listConnections 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"connectorFamily":{"type":"string"},"fieldValues":{"additionalProperties":{"type":"string"}},"secretFieldsSet":{"type":"array","items":{"type":"string"}},"description":{"type":["string","null"]},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","connectorFamily","fieldValues","name","secretFieldsSet"],"title":"ConnectionResponse"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

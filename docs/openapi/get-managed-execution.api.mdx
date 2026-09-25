@@ -1,0 +1,71 @@
+---
+id: get-managed-execution
+title: "getManagedExecution"
+description: "getManagedExecution"
+sidebar_label: "getManagedExecution"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1P3DAQ/SuWT60U2C3c9oYAVRyQKqCnFYchmd11cWxjj4FVlP/emWxIw25KVU5xPF/Pb95MownWSS+WugYHa6yO8BXLTMY7fV9oHzCC/FxVeqHXSNc7r8vBqdABItRIGCVNox3/sO+QhiMLbRxfBaANnyM+ZRORE1LMWOhUbrAGvWg0bYOEJorGrXXb3otzCt4lTGI/mc/lU2Eqowld+UlQih3VWyRXLL0jdCSxEII1Zfek2a8kCZoRgBDlwWR25cZPOERX6JX1L38xJQLKadLEuHyOJZ5bSNMefFivMd5199PJI2F1Rn+syzdzoV22Vlq38rEGdtEVEB6R4a60QkUdLH42uso7NdwiU1qlcQbDFDPoqRRsOj3pHgbp8Sa7c58d/W/syjiwt0wrfoCb/TBGH68xJVbEx55lRPgcEe1YxMs9qfeq2G/0oIn3/eUKZMhKg/dVfJvrGuKWy7VS8Z+q58w8hhvfT2o3mTxwCz07GO1ZM8LcdvO58h0NPZYLX+YLfE7q7MeV3q89GOVQ82ApnpuSKWfmJOBYXULiGSL1AltFXrFYnnms1Jb5UFUflMTCpALnZ2va5f52fHo8l34Hn4hxC6h+o/CbVP9mNX70O3DDuBC+0ixY4M3D2XK03Xx3hEztukIvxm3ktmwYgPg2zQMk/Blt28r1U0buyWLJx2eIBh6EL157lUlyZvJXYBMewBp2kP5y02vnqxIxTMHtL8FthRywWf74+IjbvdXaipI3CBWPj8DYeZyVJQYaxR6sPdmtg1q+X96xyn4DyU4WsQ==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getManagedExecution"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/managed-execution/{executionId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getManagedExecution
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"executionId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getManagedExecution 200 response","content":{"application/json":{"schema":{"properties":{"executionId":{"type":"string"},"flowId":{"type":"string"},"status":{"type":"string"},"resourceClass":{"type":"string"},"triggerType":{"type":"string"},"startedAt":{"type":["string","null"],"format":"date-time"},"completedAt":{"type":["string","null"],"format":"date-time"},"durationSeconds":{"type":["integer","null"],"format":"int32"},"taskRunCount":{"type":["integer","null"],"format":"int32"},"finalState":{"type":["string","null"]},"errorMessage":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"}},"required":["executionId","flowId","resourceClass","status","triggerType"],"title":"ManagedExecutionSummary"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: generate-contract-analysis-profile
+title: "generateContractAnalysisProfile"
+description: "generateContractAnalysisProfile"
+sidebar_label: "generateContractAnalysisProfile"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVEtv2zAM/iuCThuQ1t1W7JBb0A5DTy36OBU90LKSqLUlT6TTGYb/+0i/4rQpNuxkWdT3kfz4aDTBBvXyUb/48JrbbGNPUkB7UsawdrlF/bTQobQRyAV/leml3lgvv/YieIpgaOUhr9HhTY/QC11ChMKSjULcaM8/jDNMywQL7Tz/lUBbPkf7q3LRMi/Fyi40mq0tQC8bTXUpKOfJbmzkp+sQC6D+6vu5btsngWMZPHKYjPh6diafzKKJrpR4+fEQlRqi5ks1pcOkhpOwngQHZZk70xmSZxRwMwuH9WAYud7Vc0h/Vi6bxYkUnd/odqbWfWc58gIJqMKjpsIiwuYYrJ2L9ThFsIe89Tz5YZ3IUS5kd1VaOLoe390O8jG78J//o4ASh0Xi77M1xPF02POPsQZKSF3uqFYOVeYQUm41FaIa2kyuIUWpxH/XxITsuNwfa7rQYywzYxpCbsG/U7zjnyH2xDOBh4wvpoQfPOzA5QI5UFt8H2j197HikdoGmcAyIHVjxiO01Mnh5GLS9JPWJuMMJ2bgPIGBNBm9deO4Dl36QwqXwVSXdodqdXOl30Y5GeVQcJWkgoZ1YD0FcKp+ADppjleoFQXFrndcI1WHKqpsAKFYMiBgfrZiz/3l9NvpmRRF8iugK/awO8Zw1aiOGuVRe30OIp3KSfY3JWUOvHWYuop51zmddG+XHjLJclpT0wbsO/JAP76bFOTqb6UgTNc0QvMQ87aVa56SWPM9H3cQnfRAtxD3TbeGHO27yKcB0J9uhwb8rNjl0YyGS/C1iAl5JX98fLH1fum2T/xyayHjTSoR9MaVMbakGezduMmOndru5vrunnv3D8GPLDg=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"generateContractAnalysisProfile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/generate"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+generateContractAnalysisProfile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Profile generation operation","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}},"400":{"description":"Profile generation request rejected"},"404":{"description":"Profile capability is disabled or profile is absent","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"disabled":{"type":"boolean"}},"required":["code","disabled","message"],"title":"ProfileCapabilityUnavailableResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

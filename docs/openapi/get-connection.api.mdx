@@ -1,0 +1,71 @@
+---
+id: get-connection
+title: "getConnection"
+description: "getConnection"
+sidebar_label: "getConnection"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVMlu2zAQ/RWCpxZwY3dBD74ZWYrcgnS5GDmMxbHNliIZcuRWEPTvnZFlRV6aQ30xqVnf45tpNMEm6/lSW0+4SUA2eP000SHi/nJv9FxvkK6D91h05omOkKBEwiShjfZ8YS9r2GQ9nyLQls8JnyubkDNQqnCic7HFEvS80VRHiciUrN/otn0S5xyDz5jF/mE2kz+DuUg2dlVPulDsog4xXKsIDMCTREGMzhZd99OfWUKbUemYBBvZfSHueWinJwETp/OVc8LDOqQSSMB5+vxJt5Me7BmErgPpLaQ7KK2rL/qsLTrzA1y1rw7GWGkT3MNRV6f0MHVYJKQ7Cc9fkUZOkBLUQjxh+Y/gIxpf0PYeB7DsCEztboxuFYJD8B28hEBoFvRKihFfhp3fkWWuOLaK5j9j27GKlocGz8k+prZ/pXPauApZcgLtRUqPBxW18pu8pjpOybrfhn4oulFgqc/1dDQ/02Lwz9PGmrYbi3XowPfVb0JR3eAuq8XDvT4tORjlULKqFYu2wJyZLwm4UreQWSqkfkOtKCguuGP1qDpUSZk+KIuFqQTOz9a8z/3+6uPVTN4khkwldILo55cBqSOoF3WjCf/QNDqwnSyq5Lqp6mg4XiPDKwkRfJvzsPEDbLmwuDbNCjJ+T65t5fNzhYmHZsnHHSQLK+GJl4uxWc7M+BpcxrOuhsHXbx57pbxVXO1it4eZ8aKYnYiFb3z8hfV+gbUyBlsEw1tAqu8Ni6LASKOQsxUjG2xQxpfbb6ylv/EU2Gg=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getConnection"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/integration/connections/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getConnection
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getConnection 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"name":{"type":"string"},"connectorFamily":{"type":"string"},"fieldValues":{"additionalProperties":{"type":"string"}},"secretFieldsSet":{"type":"array","items":{"type":"string"}},"description":{"type":["string","null"]},"active":{"type":"boolean"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["active","connectorFamily","fieldValues","name","secretFieldsSet"],"title":"ConnectionResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

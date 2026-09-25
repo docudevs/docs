@@ -19,6 +19,7 @@ Operations allow you to run additional analysis and processing on documents that
 - **Generative Tasks**: Generate summaries, translations, or custom AI responses based on processed documents.
 - **Image Selection**: Pick relevant figures from extracted images based on a prompt.
 - **PDF AcroForm Conversion**: Turn a normal PDF into a generated fillable AcroForm PDF, inspect generated field metadata, and reapply reviewed field definitions.
+- **Document Outline**: (Re)build a structural outline artifact for a completed job without rerunning the extraction.
 
 ## Available Operations
 
@@ -54,6 +55,10 @@ The conversion workflow has two companion artifacts:
 - `get_pdf_acroform_field_definitions(operation_job_guid)` returns normalized editable field definitions with `entryBbox` values in `0..1` page-image coordinates.
 
 Use the field-definition artifact for review UIs or manual edits, then send the reviewed list back through `pdf-acroform/apply` to regenerate the PDF without rerunning visual detection.
+
+### Document Outline
+
+Rebuilds the structural-outline artifact for an already-completed job as a follow-up operation, instead of re-running the whole extraction. This is the same outline-building logic used by the `DOCUMENT_OUTLINE` map-reduce split type — see [Map-Reduce Extraction](/docs/core/map-reduce-extraction#document-outline-split-type) — exposed here as a standalone operation so you can get or regenerate just the outline.
 
 ## How Operations Work
 
@@ -504,6 +509,74 @@ curl -X POST https://api.docudevs.ai/job/PARENT_JOB_GUID/pdf-acroform/apply \
 </Tabs>
 
 The generated PDF from either the initial conversion or the reviewed apply flow is always downloaded through `GET /job/result/{guid}/pdf-acroform`.
+
+### Document Outline
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+outline_result = await client.submit_and_wait_for_document_outline_operation(
+    job_guid,
+    pages_per_chunk=3,
+    overlap_pages=1,
+    parallel_processing=True,
+    timeout=180,
+)
+
+print(outline_result.result)
+print(outline_result.document_outline)
+```
+
+If the job already has an outline artifact — for example, a job originally processed with `splitType=DOCUMENT_OUTLINE` — fetch it directly without submitting a new operation:
+
+```python
+outline = await client.get_document_outline(job_guid)
+```
+
+Or wait for a still-running job and fetch its outline in one call:
+
+```python
+combined = await client.wait_until_ready_with_document_outline(job_guid)
+
+print(combined.result)
+print(combined.document_outline)
+```
+
+  </TabItem>
+
+  <TabItem value="curl">
+
+```bash
+curl -X POST https://api.docudevs.ai/operation \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jobGuid": "JOB_GUID",
+    "type": "document-outline",
+    "parameters": {
+      "customParameters": {
+        "pagesPerChunk": 3,
+        "overlapPages": 1,
+        "parallelProcessing": true
+      }
+    }
+  }'
+
+# Poll the operation job, then fetch the outline artifact.
+curl https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/document-outline \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+  </TabItem>
+</Tabs>
+
+`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command and no Java SDK method for this operation today — use the Python SDK or the raw HTTP API directly.
 
 ## Advanced Usage
 

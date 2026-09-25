@@ -1,0 +1,71 @@
+---
+id: submit
+title: "submit"
+description: "submit"
+sidebar_label: "submit"
+hide_title: true
+hide_table_of_contents: true
+api: eJx9VW1v2jAQ/iuRP20SlK6d9oFvWUg7NkYQL3tRVU0mOcBdEmf2hQ6h/Ped7RBCofuCLj7fc+e75x72DPlas/4D0+UyE1oLmXcLqZCnmj12mCxAcaTDYcL67g6yDiu44hkgKBO6Zzl9kFsk5BI5WQXHDdkK/pRCAYWiKqHDdLyBjLP+nuGusBE5whoUXV1JlXF0Rx/es6p6dOGg8aNMdiYmlnQ7R2NmZYqCisCeiesmHC3qEb9QpnIUoM1XIuMyo1DdSs2V4jtTL0LWPteoRL5uV7QUOVc7Kqlqv+ihhfpIHshjmZjIl/nqsud12qJIRWxb2pMxAnYpIfDMwFcvO2YPdCFz7d5xc31t4UHHShQGoxmKRz7vcJmqbzWrnfJJm5jXO6UgBkIOZALnPaFynuTyvqQ5v+Jzj7zg08ixtBkgLzPTvWAa+vNwQKUuJqPIHwzH92RPplEQzmbuI4i+Tkahu3TnD0fWmPjT+dAfGXKiwNSkmTXUnUIsVTJzyVz3iClf69ccUg+i72OTktDmn/zxl18/o8VreE08oSXyOU8lT+5qZhwR/cU8IrTwRxCOTOGzb/T7eRaNL8MOToEIeiVSCGTpBvbf5bi9YedEPIFrox0ndpxP52TKJ01qBnWxbGvh9ECyylH2EhsJiORhI41oFFI7ySBJ6LPeuc709iKpWufaqshK2lbURQxoowaw1Z4/GbKXORvnoN47j0gdA4HlaxNw5YVcE8HRe+Y7D6VHy7Elzns7WSqvWVbjsUrSYeTVDvvd1e3VtZmQeUbG7fLUctc89aSaZnwIf7FXpJwEkcJLldpts124qLYd1rdjajeCxrAx7aOI/X7JNSxUWlXmmJSRNKn/QOaWK8GXpk0kxYnQxqbGrwgUzoprdIG9mdYUeutR1otFH6QyN0K55Wlpvsj8DTsn95VRvg3whGhqsjtH4HJ0a7YdAi+JdtU5BPlxDAW2rp/JlvlLaFg1iWZzurys/xsyu+J2UeoRNib1iHj6Dw0DXVg=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"submit"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/submission-portals/{id}/submissions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+submit
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"documents":{"type":"array","items":{"type":"string","format":"binary"}}},"required":["documents"]},"encoding":{"documents":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"submit 200 response","content":{"application/json":{"schema":{"properties":{"receiptCode":{"type":"string"},"jobGuid":{"type":"string"},"jobType":{"type":"string"},"status":{"enum":["CREATED","UPLOADING","PROCESSING","COMPLETED","FAILED","PARTIAL"],"title":"SubmissionRecordStatus"},"resultMode":{"enum":["DOWNLOAD","THANK_YOU"],"title":"SubmissionResultMode"},"downloadFormat":{"enum":["AUTO","EXCEL","CSV","JSON"],"title":"SubmissionDownloadFormat"},"fileCount":{"type":"integer","format":"int32"}},"required":["downloadFormat","fileCount","jobGuid","jobType","receiptCode","resultMode","status"],"title":"SubmissionSubmitResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

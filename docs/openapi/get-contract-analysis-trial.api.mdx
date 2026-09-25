@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-trial
+title: "getContractAnalysisTrial"
+description: "getContractAnalysisTrial"
+sidebar_label: "getContractAnalysisTrial"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VktP20AQ/ivWnlrJYApVD7lFQBHlUBRR9RDlsLEnyYK9a3bHgSjyf+/M+hHHcSioUk+xPa9vvnllK1AunRhNRWw0WhnjidQy3TjlTtAqmToxC4XJwUpURt8mYiSWgJe18rjWfWBVEYpcWpkBgmWXW6HphQy8IzINhdL0mktc0bOF50JZII9oCwiFi1eQSTHaCtzkbObITi9FWYatp1g6+AdHM1Z2udEOHMvPz874JwEXW5Vzgm+kF5B20JhTWCYMNLIDmeepij1D0aNjL9sOitwyf6iqmA0Zh/AIXKGPSNoK/DDzm0INKzmUWLhBkY96p/QRw0IhTGCtnKrA1xqKMlyCpWQXxmYSq0/fvrINOFT0CZLfxj4dptmKr0xcZMST+6vfi/M9v5eWQBHsj9r90uqdwcpu70wHIodDaRyEoq5ChSnH8o3ChFzXKr6qkBuLO0RToYuUp8XMHyFGtpdp+nPhR2afxcr0w93yRiNUHr/TG9icPuKglnSOQVCnd8TSWrnh2UPI3EDFX3PKpl0TA17jitejcpSWhu8ONoPSyj8kY8LmXAbHoMdYyHRIadpohVUBZqStMqZD6hgGneVMRBfs3JgUpK6YlDTqlyYZMu21VjfzsMfUYGZ7yFoce0G7fPVbcNzUb9Lsq7IPqVPioa4Id73XdFrbV/1oE6+5CzU7Oll+Vwxss4MQ/Z0Udo7Ibpd1gNxbs1Ap1Hh2STOU9+138kyna2XqE+dZp/syEtGTNi8pJEs4mdP9cdG2OkNllFdBXXRwPKPqeEbbGnbpb9bC+FapIfNKuYK1C8b3t6KPshU2iyegYDG1B9WIDU6Da+lo8jB4kZsATUAQ1lTQYGMKGyTNtmJJIpFXGUmr9S6+nF6cnvn2Ng4z6Td+fWAp8aBhJ2joCRp+9iC2PY/wilGeSuXHorCp3w2eu6nocUdORu0Rb+irj+kegU2dvUVTe6r3iiCz3+2W/f2yaVny5+cCLK2NKT2uJWnPmWFap4ly/Ew1XZAvOEihPeLi06Ru2M8Bxx5KrdmDmrfgWqYFv9HjE2+stkH578p/DFuzWfI2W4FM6NJx4pVwHMeQY8fs4J8K/ydq2/7m+oFm5g9/yoVR
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisTrial"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/trials/{trialId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisTrial
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"trialId","in":"path","required":true,"schema":{"type":"string"}},{"name":"caseId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getContractAnalysisTrial 200 response","content":{"application/json":{"schema":{"properties":{"trialId":{"type":"string"},"runId":{"type":"string"},"operationJobGuid":{"type":"string"},"status":{"type":"string"},"trialKind":{"type":"string"},"suiteRevision":{"type":"integer","format":"int64"},"estimatedWork":{"properties":{"estimatedDocuments":{"type":"integer","format":"int32"},"estimatedCriteria":{"type":"integer","format":"int32"},"estimatedUnits":{"type":"integer","format":"int32"}},"required":["estimatedCriteria","estimatedDocuments","estimatedUnits"],"title":"TrialWorkEstimate"},"report":{"type":["null","object"],"allOf":[{"properties":{"reportId":{"type":"string"},"runId":{"type":"string"},"status":{"type":"string"},"reportFingerprint":{"type":"string"},"assertions":{"type":"array","items":{"properties":{"expectationId":{"type":"string"},"criterionId":{"type":"string"},"targetKey":{"type":"string"},"expectedAssessment":{"type":"string"},"actualAssessment":{"type":["string","null"]},"importance":{"type":"string"},"passed":{"type":"boolean"},"reasonCode":{"type":"string"}},"required":["criterionId","expectationId","expectedAssessment","importance","passed","reasonCode","targetKey"],"title":"TrialAssertionResponse"}}},"required":["assertions","reportFingerprint","reportId","runId","status"],"title":"TrialReportResponse"}]}},"required":["estimatedWork","operationJobGuid","runId","status","suiteRevision","trialId","trialKind"],"title":"ProfileTrialResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

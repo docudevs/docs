@@ -1,0 +1,71 @@
+---
+id: record-contract-analysis-source-authority-decision
+title: "recordContractAnalysisSourceAuthorityDecision"
+description: "recordContractAnalysisSourceAuthorityDecision"
+sidebar_label: "recordContractAnalysisSourceAuthorityDecision"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVktv4zYQ/isETy1gx940KFDf3E3QblGggbM9GTmMpbHNXZlUScqJa+i/d4bUW94kDdBTc3Aoct785uOcpYedk4u1/KrNU4bpDqcbcDjNrdmqDJ18nEiTowWvjP6UyoW0mBibfjTaW0j8UkN2cso9mMImuCz83ljlT7eYKEcaciJzsHBAj5bdnKWmD7KSkBMyN5FK01cOfk9ri38VyiJ58bbAiXTJHg8gF2fpTzlrKe1xh5ZEt8YewMetH29kWT5GdXT+Z5OeWCehEFF7XkKeZyoJOcy+OAqL9lrjlCtl6BVlS19m49AeMV3hMabwFvcTmVYZfw6ijYrzVukdC3TDSVPFsUB233HNOZecBbie19YEZnggE78rjbDj8jVC61pqInWRZfKxlV4mvpfFJVFvDhvnje5GvjEmQ9Dsd4e6QsBvZvNLoV5xnFrY+nH51p36RdkL19gFwbqp2aC8k/ElNXXrJkMOvPIZZ3Mf8fwNmK4icsh/OURh2HC50S7C43o+538pusSqPJZWrkJPYCpcsD+F2oFI20Z4Jx7t+3DoOvJgLZy41zwe3NhD/z5fvyQqv92BVn83pPCmyKqWf5twxT/f7CaiHmN71tqzd1bsv+zcysSv4Pb/086mGlB9PKZL/4KPjl5KwlOv6LUYskJ995P2FWmJolvpMW30cduHWYdCbEsrL7HJ3TNDoHnrymGgbS92TL5KSquKbtgeGbyZfxgTzlIL5hhKlGmEiCfURCgnGv9B9WasWjkVCeSwURmTFKmlysGG3n9BVriqvAdEslTTYOinsaGHIdfVKQq6gy3xW1S9vn6Dal0psvEFE8/hh87sKv3bwYOGjr3hiSU3zodBhIaMhZz1Jx03O0cUlbN65pkllY8pVE5mQ16fda+WGXzVzh53z3DIM7w8S8yHfNN2QE0f7c6YFUZnNQe0B52Oj1PUhR5vpQcdPS95Itua0KIVSm9NUtzi0Ynl/Sc5vJTmkBcckKAqJugcmWeFK3EHjkjSiyc4CW8YG0dqGnGiioq0UnJ8Qg0PZJ9OYyzyw9UPV/PwGNAFHiAQTjU+RiyIGgyiRoOIcBANHkQHEL3IGzb0+OxneQYqEGJhs/BABqwMp2K+7EXDOc2IHEmnBxjaG0JGdt9mIoE9o5JcnM9s+k+blSVvE4wsja9rWh7BKm7KMDfXDSoXW8gcjrJpHin53aqigO8Fw+FSlvVcoDmqI2QFf9HyK57a2bxkxt8jpMTrHEE8/Bj9TCvKrJVHE005qTWWSYK5f1H2sdOt9388fCbhTTXFH0waLhyeuEXoNwRqQt5xPuK9s8xA7wrqEjqPNvnvHxaNg+I=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"recordContractAnalysisSourceAuthorityDecision"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/source-authority/decisions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+recordContractAnalysisSourceAuthorityDecision
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"observedRevision":{"type":"integer","format":"int64"},"decisionType":{"type":"string"},"content":{"additionalProperties":true},"reason":{"type":"string"},"elementLineageId":{"type":["string","null"]},"elementAction":{"type":["string","null"]},"tombstone":{"type":"boolean"},"generationJobGuid":{"type":["string","null"]},"draftRevision":{"type":["integer","null"],"format":"int64"}},"required":["content","decisionType","observedRevision","reason","tombstone"],"title":"ProfileSourceAuthorityDecisionRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Recorded source-authority decision","content":{"application/json":{"schema":{"properties":{"revision":{"type":"integer","format":"int64"},"decisions":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"profileType":{"type":"string"},"actorId":{"type":"string"},"revision":{"type":"integer","format":"int64"},"decisionType":{"type":"string"},"content":{"additionalProperties":true},"reason":{"type":"string"},"contentHash":{"type":"string"},"elementLineageId":{"type":["string","null"]},"elementAction":{"type":["string","null"]},"tombstone":{"type":"boolean"},"generationJobGuid":{"type":["string","null"]},"draftRevision":{"type":["integer","null"],"format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"}},"required":["actorId","caseId","content","contentHash","decisionType","organizationId","profileType","reason","revision","tombstone"],"title":"ProfileExpertDecision"}}},"required":["decisions","revision"],"title":"ProfileSourceAuthorityResponse"}}}},"401":{"description":"An authenticated actor is required"},"404":{"description":"Profile capability is disabled or case is absent"},"409":{"description":"Source-authority revision conflict"},"422":{"description":"Source-authority decision rejected"}}}
+>
+  
+</StatusCodes>
+
+
+      

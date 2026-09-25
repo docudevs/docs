@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-source-authority
+title: "getContractAnalysisSourceAuthority"
+description: "getContractAnalysisSourceAuthority"
+sidebar_label: "getContractAnalysisSourceAuthority"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1v2zAM/SuCThuQNNlW7JBbsBZdhx2KrjsFOzA2k2hVJFei02aB//tIf8WOuy3YKY5EPlKPT08HTbCOerbQj84/W0zXOF5CxHEW/MpYjPrHSPsMA5Dx7jbVM71G+uQdBUho7sDuo4nffB4SnOe08cHQXo90BgG2SBgE+6Ad/+HUhJEZY6SN438Z0Ia/Az7lJiBDU8hxpGOywS3o2UHTPpMs4wjXGDh05cMWqFr6eKmL4oekx8y7yJ1yxvvpVH5SjEkwmbTMwVV3Y2jaUykmJvJeZMiEj4KOJAuyzJqkPOjkZ5TUQ6cZJoRpIFMVCrgrIc5qc6SPFY/xEAIIVYZwG4cVTHqMXXTAXW6tDGVYxIc1OPOrndRZndUjOS+4FsVDGdlmRArGrWWfJeFDD+2495+M/bFWd3BpauTQYO86FIqayroQe1UHEJ8hbl7dR4tb3v9qHMK6x9KiiWrmcYyeJ9Q75Wuh5LfLSN51T7b03iI4qbtGV1+4L355k5t/FE4DrOh+QO95okmYH8J0Tn+p0clLOXhMhm9zUXSv7qKd/eh4y5sR9Zk+me1At32ZtQPsKKhLIDdHhqwweFelXb+IBK7qGtznSaPd299CDmFOPO2+thnBY8DL6eXQaOpMlUAGS2PFakxUqYmwZGdVPiihRtZgGYWYohR6F+Isc2Vj3fjaikuvZR+d6UnfwePkUA2imDRePklq6DHU2JN44o2lN698KYaajyuf5Fe4i2p+d6tP+2035UPkr7hYgjGyfiThQl1D5OtI6hn2irziFnY8HrXnwiqtk6LssLSA8Xm30rF+d/HhYlrajo+0hVLa9UPCB1cNT6ohSlVMqS5VvW7bu0b4QpPMgimvWx5sab8ljacPoahk1iq6fRUrSfe45LUBmyyrDTcvsIeDwH0Ptihk+SnHsOd1/txBMKKQ8qVs1KJnK7ARBydobU+/ua9F/VbJjXjtZM1L44SKHdhc/vHnI+6Pr3EhHrJBSNkppINqc54kmFEnbfA6yuPbKvHm+oHV/BtxteSC
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisSourceAuthority"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/source-authority"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisSourceAuthority
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Source-authority decisions","content":{"application/json":{"schema":{"properties":{"revision":{"type":"integer","format":"int64"},"decisions":{"type":"array","items":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"profileType":{"type":"string"},"actorId":{"type":"string"},"revision":{"type":"integer","format":"int64"},"decisionType":{"type":"string"},"content":{"additionalProperties":true},"reason":{"type":"string"},"contentHash":{"type":"string"},"elementLineageId":{"type":["string","null"]},"elementAction":{"type":["string","null"]},"tombstone":{"type":"boolean"},"generationJobGuid":{"type":["string","null"]},"draftRevision":{"type":["integer","null"],"format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"}},"required":["actorId","caseId","content","contentHash","decisionType","organizationId","profileType","reason","revision","tombstone"],"title":"ProfileExpertDecision"}}},"required":["decisions","revision"],"title":"ProfileSourceAuthorityResponse"}}}},"404":{"description":"Profile capability is disabled or case is absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: upload-batch-lookup-file
+title: "uploadBatchLookupFile"
+description: "uploadBatchLookupFile"
+sidebar_label: "uploadBatchLookupFile"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVMGO0zAQ/RXLJ5DSpsAtt10K0kpIVLCcqh6m8bQxm8TGdgpRlH9nxk676XaROHXi8Zt58/ymgwxw9LLYyj2EspK7TBqLDoI27YOShexsbUDdc/KLMU+d/axrlJm04KDBgI7Bg2zpg24fO60oqVuKLYSKYoe/Ou2QagXXYSZ9WWEDshhk6C1jfHC6Pcpx3KXL6MO9UT3fKE0bsA0cNl0dNDUN+cG4ZqEgxBrP1axj4kGj568Ds7zpkUkGAxWUe92C66nrnOE24XZ0iG1pFGNmxSY6j6kmWFvrMiqVmzJgWFAXhIZqXlflueOBt6b1id/71Yp/FPrSacs1/qW1oKvijKUJZprMGfz0XGIuCCilOQX15kqal7Inuv/BhJrTi1eGbWGND9EF9MaFzJUpu4ZY5dFF+cA+GPM6QheHhNXtwcT+OrCcck2YNZ68uNs8yJcELsn1VFnQ+5boPXFmwFJ8Ak8DBfEbehGMIFlONKPoTefEmY7nTLRKJinrU+13yw/LlaSZeYgGomyTf9PcIg4u0uRiGv2K30XFgH9Cbmsgx1PBztXRilGVrTzTIHTarkwW04bMpSHfVywnIYZhDx5/uHoc+ZiWgTxabCk8gdOwZ+Fo25T2HNNDHKD2eEPu4hH55ttkw7eCur5KejqEtmeVoO74i8In7M8bPfJGVAgKXeyfUh9Tl0Xch2foa5s6ZmfQXVmiDbPrNybm/4GLzzZfvz+yfNMfQmMUY7jw9KyXkFQiI/8F8oCrOg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadBatchLookupFile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/document/batch/{guid}/lookup-file"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadBatchLookupFile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"file":{"type":"string","format":"binary"}},"required":["file"]},"encoding":{"file":{"contentType":"application/octet-stream"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"uploadBatchLookupFile 200 response","content":{"application/json":{"schema":{"additionalProperties":{"type":"string"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

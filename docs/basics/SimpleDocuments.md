@@ -371,6 +371,61 @@ docudevs process invoice.pdf --barcodes --prompt "Extract QR codes"
   </TabItem>
 </Tabs>
 
+## Reasoning Effort
+
+Some models expose a configurable reasoning effort level. Set the optional `reasoningEffort` request field to override the model's default reasoning effort for every LLM call made while processing that job — including alternate-tier steps, pipeline nodes, and map-reduce chunk tasks.
+
+`reasoningEffort` is a plain string, not a closed enum: DocuDevs forwards the value verbatim to the underlying model provider (for example, OpenAI-style values such as `low`, `medium`, or `high`), so newly supported effort levels do not require a DocuDevs release. An empty or whitespace-only value is rejected.
+
+<Tabs
+  defaultValue="python"
+  values={[
+    {label: 'Python SDK', value: 'python'},
+    {label: 'Java SDK', value: 'java'},
+    {label: 'cURL', value: 'curl'},
+  ]}>
+  <TabItem value="python">
+
+```python
+guid = await client.submit_and_process_document(
+    document=doc_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract the invoice number, date, total amount, and vendor name.",
+    reasoning_effort="low",
+)
+```
+
+  </TabItem>
+  <TabItem value="java">
+
+```java
+String guid = client.submitAndProcessDocument(
+    upload,
+    ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .prompt("Extract the invoice number, date, total amount, and vendor name.")
+        .reasoningEffort("low")
+        .build()
+);
+```
+
+  </TabItem>
+  <TabItem value="curl">
+
+```bash
+# config.json: {"reasoningEffort": "low"}
+curl -X POST https://api.docudevs.ai/document/upload-files \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "document=@invoice.pdf" \
+  -F "metadata=@config.json" \
+  -F "instructions=Extract the invoice number, date, total amount, and vendor name."
+```
+
+  </TabItem>
+</Tabs>
+
+There is no `--reasoning-effort` CLI flag today; use the Python SDK, the Java SDK, or the raw HTTP API.
+
 ## Next Steps
 
 - **[Map-Reduce Extraction](../core/map-reduce-extraction.md)**: Handle very large documents (50+ pages).

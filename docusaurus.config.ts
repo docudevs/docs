@@ -39,7 +39,7 @@ const config: Config = {
         docsPluginId: 'classic',
         config: {
           docudevs: {
-            specPath: '../docudevs.yaml',
+            specPath: '../docudevs/docudevs.yaml',
             outputDir: 'docs/openapi',
             sidebarOptions: {
               groupPathsBy: 'tag',
@@ -60,6 +60,9 @@ const config: Config = {
           docItemComponent: "@theme/ApiItem",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
+        },
+        theme: {
+          customCss: './src/css/custom.css',
         },
         blog: false
       },

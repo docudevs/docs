@@ -1,0 +1,71 @@
+---
+id: discovery
+title: "discovery"
+description: "discovery"
+sidebar_label: "discovery"
+hide_title: true
+hide_table_of_contents: true
+api: eJx9U8Fu2zAM/RWBpw0wkmy75VYgxdBb0XWnIAdFZhJtsqWKdDbD8L+PtOPUXbrl4FjmI9/TI9kB2yPBegtEEXYFxITZso/1QwlrKD25eMbcQgHJZlshY1Z4B7UcFBEr62sJy2MNL82IzfjS+IxSgnODBZA7YWVh3QG3SdOIs6+P0Pc7BVOKNSFp/PNqpX8lkss+qZC5DCNhM+GFx8WasWbNsCkF7wbpyx+kad2MNmW9GPuRRE5nX2J+HsTciCqmW70XIluFx0u+ejRBthOmgLoJAXaCjb50r1gR6g8e8/9zsD7E7HBWGfYxBrS1uDV3dvvq/TWneHs1MZc9B63xjeJmcvFpMrDXX/Evs6Wa9PsUdRCOyMMI8EkOS5mV5RzmhX/QeyHbRNds8Ezm7vEB/q5/DepLJaYY0eyQSIzQhIW5tySNYvPLtoajkSYLD5s2NtmUlyTSSGnZSn2J0lj70+LLYqVdSpG4skMHp0Gd6X0j6Goz429epqCWSoUmh2FUhiuP61HMioi1J+HQUNftLeH3HPpeP487oCsiaLsP2quDDYQ3vNfphQ9Pl7Z+NMLyrp6f2M7X7WxDoyDQDTrb7JVJWHWETmhLHTORMGbdOYeJZ1k3y6JVrs3+ev8so/EHMQdrHA==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"discovery"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/sso/discovery"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+discovery
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"domain","in":"query","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"discovery 200 response","content":{"application/json":{"schema":{"properties":{"providerType":{"type":"string"},"domain":{"type":"string"},"samlProviderId":{"type":["string","null"]},"oidcProviderIdentifier":{"type":["string","null"]},"enforced":{"type":"boolean"}},"required":["domain","enforced","providerType"],"title":"SsoDiscoveryResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: list-case-summaries
+title: "listCaseSummaries"
+description: "listCaseSummaries"
+sidebar_label: "listCaseSummaries"
+hide_title: true
+hide_table_of_contents: true
+api: eJxtU01v2zAM/SuCThtgJNkHdvAtWIuht6LbTkEOjM3E6mRJlehshuH/PtJ2HLfNybJIPj6+R3Wa4JR0vtMFJEx6n2kfMAIZ7x5KnWtrEn3n0M+mriEaTsl0gAg1EkYp7LTjH84UAC7JtHH8F4AqPkd8aUxERqLYYKZTUWENOu80tUGqjCM8YeTUo4810Hj17avu+72Up+CdEOOKz5uNfEpMRTRBGHLy1lpV+qKp0ZFKF5KKwRRVqIQUYxee2ziScgjBmmIYcP2cBKNbsApRxiczdrwAixIz40TRuJPumbGxOA5/Izhyaa+xnXaNtUzGH56xIJEaytIIEbCPi76iVN8vtdstmSz6MgQZstL4bkoYfWqfJuFYxl6wXot2y1Q2tPLi+Alp8Jj9y/V6WIt1N5rbr9OiwrijH8ZbULjDc1Lbxwf9tuUcvBBVLHWBKbFcUrBS95AYl9RfaBV5xZadWRHV+ibODieJlEDA+BxNI/an1ZfVRjQPPlENg6XTUsqkSkZVy1lfUZu9I/xH62CB95exmmiHhRh0uDyPTOfzml+lYBsq7ixpXXfg+O9o+16uXxqUFdjx8cy5cBCh+MmUJsmZ5T6CTfiO0byv+sPTtAUfFfe8yXS6BNeKKmAb+ePjH2yvz7Lfc2aFUPJbEwZjcFsUGGhR9u51yCucV+PH/S9eqP+oKHLy
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listCaseSummaries"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/summaries"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listCaseSummaries
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"All document summaries for the case","content":{"application/json":{"schema":{"properties":{"documentId":{"type":"string"},"filename":{"type":"string"},"summary":{"type":["null","object"],"additionalProperties":true}},"required":["documentId","filename"],"title":"DocumentSummaryResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

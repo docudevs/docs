@@ -1,0 +1,71 @@
+---
+id: get-case-embedding-status
+title: "getCaseEmbeddingStatus"
+description: "getCaseEmbeddingStatus"
+sidebar_label: "getCaseEmbeddingStatus"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV1Fv2jAQ/iuRnzYpKl077YE3BmmF1LKKsmkT4sEkB7hz7NR20iLEf9+dEwKU0KK+rrzg5O583919Pl9WzPG5Ze0xi9IpJIlQ8+AaFBjuhFaWTUKms+qpn7A2m4Prcgu19r3jLrcsZBk3PAUHhnZbMYUPqB6jLtqFTCh8yrhb4NrAYy4M4HbO5BAyGy8g5ay9Ym6ZkZVQDuZgUHWmTcpd+erbV7ZeT8jcZogNLFlcnJ/TXwI2NiIjmEdBBqgbbIxx71ijG+XInGeZFLGPsvVgaY/VDqrMUA6cKD1WIZ2CNvTKA5+KWt06g5BImOqkWcBjJ4od0ZipXEp0oKcPEDuqCpfyx8xneh+dOBWZLQuHyqDylHzcDaO7zrA/uEb9/qAX/S6Xw6jT+4P/ne6o/yvCxVWnfxP1cNHtDLrRTbkeRqP+EFcIzQknyXud/i2hKrage0RdiATMfnLGmySEZcSTKkvybTUDhbAVS09KwMZgkCNO86bR5QUZJSIFZf3ROM3AilRIboRb3gJijhvrXWBRtbkSIJOjZIl1miF5yfcNn4I8qiTxECY9HeeI1HV1XjL8BKjwnCGO99nOuJDv9GqMNrcYGJ+/WuH1bt8YH4u0IU97RTsWZXMEIR2nPWod0KahwvXZOizsG6cjT1Nulj2n2Xrim4dKRMLdRyf46AQfneC/7gRHS950AP4q/YQRzOE7Th87yZ9qLYGrci5RQxAqgeej8i5X8R65Xpo7s2yWSm5dRMV8HSapjcCkQnF5X/egU6teA9wLZgdauB0+6ynsZW6qGWynGA1zo68C/cKTxkzaFNxCV9OyH41x7G2zFsGwrVUJa92CjZ0fj2faR1/BIPb1oLBB567PXvqthRuOBthDY6IHTu9ocBZE3OIt4IInvgycDnDSLfBiCJY6N0FSGVmS4O3CPTuNLff+cnZ5du7bsrYu5X4SrmZ5DCageIPtp0Id8R7AmhMOnl0rk1x4WuTGs6nMxtgXhUzbdZm2CcGCLNA/qa1WU5T/NHK9ptePORDtxrgs8KjxKaUL775EWFpj0mdcWjhAVA/77NOwotHnAH02Iq1eckUsKrjM6YnIA8vtN40/mAvgCV0ZiKAUduIYMrdjdvBpQZ8wNUGuoxFy6x9d8KKA
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getCaseEmbeddingStatus"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/embedding"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getCaseEmbeddingStatus
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getCaseEmbeddingStatus 200 response","content":{"application/json":{"schema":{"properties":{"caseId":{"type":"integer","format":"int64"},"caseName":{"type":"string"},"mode":{"type":"string"},"active":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"status":{"enum":["PREPARING","INDEXING","READY","ACTIVE","FAILED","CANCELLED","RETIRED"],"title":"EmbeddingGenerationStatus"},"providerName":{"type":["string","null"]},"modelName":{"type":["string","null"]},"revisionId":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"vectorFieldName":{"type":"string"},"compressionLabel":{"type":"string"},"completedDocumentCount":{"type":"integer","format":"int32"},"expectedDocumentCount":{"type":"integer","format":"int32"},"failedDocumentCount":{"type":"integer","format":"int32"},"errorMessage":{"type":["string","null"]}},"required":["completedDocumentCount","compressionLabel","dimensions","expectedDocumentCount","failedDocumentCount","id","revisionId","revisionNumber","similarityMetric","status","vectorFieldName"],"title":"EmbeddingGenerationSummaryDto"}]},"candidate":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"status":{"enum":["PREPARING","INDEXING","READY","ACTIVE","FAILED","CANCELLED","RETIRED"],"title":"EmbeddingGenerationStatus"},"providerName":{"type":["string","null"]},"modelName":{"type":["string","null"]},"revisionId":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"vectorFieldName":{"type":"string"},"compressionLabel":{"type":"string"},"completedDocumentCount":{"type":"integer","format":"int32"},"expectedDocumentCount":{"type":"integer","format":"int32"},"failedDocumentCount":{"type":"integer","format":"int32"},"errorMessage":{"type":["string","null"]}},"required":["completedDocumentCount","compressionLabel","dimensions","expectedDocumentCount","failedDocumentCount","id","revisionId","revisionNumber","similarityMetric","status","vectorFieldName"],"title":"EmbeddingGenerationSummaryDto"}]},"compressionLabel":{"type":["string","null"]},"knowledgeBase":{"type":"boolean"},"canReindex":{"type":"boolean"},"canCancel":{"type":"boolean"},"canRetry":{"type":"boolean"},"lastError":{"type":["string","null"]},"lastTerminalStatus":{"type":["string","null"]}},"required":["canCancel","canReindex","canRetry","caseId","caseName","knowledgeBase","mode"],"title":"CaseEmbeddingStatusDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

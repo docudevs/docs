@@ -1,0 +1,71 @@
+---
+id: get-embedding-provider
+title: "getEmbeddingProvider"
+description: "getEmbeddingProvider"
+sidebar_label: "getEmbeddingProvider"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1Vktv2kAQ/ivWnloJhTSpeuBGAUWoDUFpmgtC1WIPsOna6+6OSRHiv3dm/cCAoaRSubDreX/z2o1AuXCiMxGDeAZRpJJFMLZmpSKwTkxbwqRgJSqTDCPREQvAiq9kEy2RSitjQBbpTDYioQsxq4hIKqFTKnFJZwu/MmWBFKHNoCVcuIRYis5G4Dr1EgnCwmucGxtLzD99+ii22ymLu9QkDhxL3Fxf818ELrQqZQdPuBcQZ1CKkubQkJEEWVimqVahj6794ljDpuZTajl2VLk9CuYSP1tF8BWrQ0vOMAESOdNQVzMzRoNMmKhcH+Yy09hM1hLB4SOslFO5nznPRCSZ1uSHmb1AiJwwqfXD3KfhHwOwhZVRRlDavwrd3rBQWqD95Fkbopep+m51IymCVJt1TEkZncIuUkRmp9yF/jgVKy2twvU9kJawUSvXI8H64MvHa5ZUOnyRelwDj6uV2EMqXXJSST2M6inY+eGTMW0CdSf7f5N3svpkhsuTyXEoMXONpJ3jz9Tee8V31hEHJIk9k8zVIrPNZb+tj4TJzsUmq618nPj4GrRXMRCIqFCznXsTge5Vmr5lcSztWmynZHcltYp853+rYocki9mP8WDUH47ufjx3vw773afhw4jU+wv9D0f5qWanGjllfz4fKt8zOLDW2HoVFGCX5ZODTg0fdfEc2yF6eYMdtdNe8xQo7nXrUR8cjYCGdmpA8BwifTQ57jJEtYKedNAzWYIXdnMu9SUxrzRAF/D5jeIXwdkSWRq9HfWDeM74utsARRZ2M7+o6yYEyzXmEeRf64KdRwppHS9NsbL9hqYN3BFtKFlduywC196oaOtX9dz40Asf+ibM+rByQXc8FIdmKyIfuNgC0heCc/yCIIGrYCAdTS8MXuU6QBPQ3l3RQAvWJrNBVAg5phDqkguqnC/iw9Xt1bXfKsZhLP3IKd4UFE1w/FI59K6qCoTf2E61VH6LZvkCyrGYiB0WtZbgc4fSQ7lYknXm22xmlERqru2WP1Ov0BTpTKbcA1ZxSv3EjpQrFvxcagdHLlUPD/Husaig9wFZa3S1+CiTdd5qGd/o+BPW+cvKd9MSJEfP1nNCNwwhxZrI0ROHH1JVbdwNnqio/gDlEXRK
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getEmbeddingProvider"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/embeddings/providers/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getEmbeddingProvider
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getEmbeddingProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"enabled":{"type":"boolean"},"isDefault":{"type":"boolean"},"latestRevision":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"providerType":{"type":"string"},"apiUrl":{"type":"string"},"deploymentName":{"type":"string"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"requestOptions":{"additionalProperties":true},"credentialId":{"type":["integer","null"],"format":"int64"},"credential":{"type":["null","object"],"allOf":[{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"authType":{"type":"string"},"status":{"type":"string"},"credentialVersion":{"type":"integer","format":"int64"},"secretConfigured":{"type":"boolean"}},"required":["authType","credentialVersion","id","name","secretConfigured","status"],"title":"ModelCredentialSummary"}]},"validationStatus":{"enum":["PENDING_VALIDATION","VALID","INVALID"],"title":"EmbeddingRevisionValidationStatus"},"validationError":{"type":["string","null"]},"createdAt":{"type":["string","null"]}},"required":["apiUrl","deploymentName","dimensions","id","providerType","requestOptions","revisionNumber","similarityMetric","validationStatus"],"title":"EmbeddingRevisionDto"}]},"activeCaseCount":{"type":"integer","format":"int32"},"activeKnowledgeBaseCount":{"type":"integer","format":"int32"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["activeCaseCount","activeKnowledgeBaseCount","enabled","id","isDefault","name"],"title":"EmbeddingProviderDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

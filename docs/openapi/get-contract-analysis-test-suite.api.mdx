@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-test-suite
+title: "getContractAnalysisTestSuite"
+description: "getContractAnalysisTestSuite"
+sidebar_label: "getContractAnalysisTestSuite"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV01v20YQ/SvEnlpAtpy26EE3wXGCtAhgKO5J8GFEjqS1Se52d6hEEPjfO7P88IqiJSe59iSSuzP79s2bDx0Uwcar2VKlpiQHKV1BCfnea39FTkPu1eNEGYsOSJvyU6ZmaoN0226et3sf0NOXShOqibLgoEBCJ24PquQXNkrBI1tPlC75zQJt+dnhv5V2yE7JVThRPt1iAWp2ULS3YqVLwg063ro2rgBqPv35h6rrRzH31pQevVj8dnMjPxn61GkrYC9ATdgi6VzwCUIAliROwNpcp+HG0ycvng4RNuuED9LNuV58CS89aM/ElRtVC8Cd9rqxv3gj/sJm6Cxb06g74dBHK+Ac7IVSwsKfItPjoJqAjCxAmW6N+8usPlavmFpIn2GDHy7gbLd9xmIVVPBWwE9njnYmH0NdxyJa9h7a/awR0iSGqpPBfYxtwaYsh+AGv1lMCbPP2nt2/d6kVcFy+A74WWsSi2HZIWXeqzxXjyHMOb4aBIfgY8GMOcjQYpnxSbeOobiQl2dxDkkbsDbuLwL6Oo8dTcdMpnmVYfY/hT9MoU/Zir08hOL8dlSdjEPp+vlSkb5cZnSdwHGF/Rv3o6tdRs09ly1f4CvVQhfWOOLiMx7NH6eCq7gzO4yhrwyXBShjdHfrNf/qHc6JTVcVxSV22SiGO+DqiXdJFCHLtLAL+X1EofSvoSb684+JHCVmokLVirgY3DwmO9JS383uXuIeLi/xNR7yL6ZyKS6q8lJKDQzQVzmNFvrLxg+nsjhntICGTzy3fcjtUa8aqzmDVDhT4FvuQ5qO9riTjjaIzVg8brlX/1QqDy7c9P7jGSEaME7U0o0lETbWq5SjHuKim33qOhz39tGJ/fOEtzXtNBgI4oFupqbPpfmaY7bBq5UAnh6aua+e2uZwPz2ZM6eccXTlW7+6XJtARwtawvQedz6Z339SQ4z9YhfMhI9JMcRXDK6TO/Ccn5R8hX1CJuHDd5yyyZ51mnTNxstKBgTsn1ebgU29u/79+iZMM8ZTAaGftLMsXznpuEk6chJhJ+noOcLZB5fwG01tDjpUoMrloRIH6pZqQB07mfVDc8deO6Ye8Sel4YVBjveWAYvDw0Ec/ePyupbP3F0cZ+SSH3csFFgJvzygZ9rLM8dyzeM+nmDv52L1y6IV5K+JHDp2p07dpWh7B3klb/z4LMWg+xNQS/ZvETKegwVBszhPU7QUmZ1M4TLz97r7ePfAwv0PeOh9EA==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisTestSuite"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/test-suite"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisTestSuite
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getContractAnalysisTestSuite 200 response","content":{"application/json":{"schema":{"properties":{"suiteId":{"type":"string"},"revision":{"type":"integer","format":"int64"},"fingerprint":{"type":"string"},"cases":{"type":"array","items":{"properties":{"id":{"type":"string"},"name":{"type":"string"},"anchorJobGuid":{"type":"string"},"packageFingerprint":{"type":"string"},"packageMembers":{"type":"array","items":{"properties":{"jobGuid":{"type":"string"},"role":{"type":"string"}},"required":["jobGuid","role"],"title":"ContractPackageMemberRequest"}},"expectedMissingDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}},"excludedDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}},"scenarioTags":{"type":"array","items":{"type":"string"}},"expectations":{"type":"array","items":{"properties":{"id":{"type":"string"},"criterionId":{"type":"string"},"targetKey":{"type":"string"},"expectedAssessment":{"type":"string"},"importance":{"type":"string"},"scenarioTags":{"type":"array","items":{"type":"string"}},"approved":{"type":"boolean"},"expectedEffectiveAttributes":{"type":["null","object"],"additionalProperties":true}},"required":["approved","criterionId","expectedAssessment","id","importance","scenarioTags","targetKey"],"title":"TestSuiteExpectation"}},"proposalSourceRunId":{"type":["string","null"]},"proposalSourceResultFingerprint":{"type":["string","null"]},"proposalSourceTargetKey":{"type":["string","null"]},"proposalRationale":{"type":["string","null"]}},"required":["anchorJobGuid","excludedDocuments","expectations","expectedMissingDocuments","id","name","packageFingerprint","packageMembers","scenarioTags"],"title":"TestSuiteCase"}},"scenarioTags":{"type":"array","items":{"type":"string"}}},"required":["cases","fingerprint","revision","scenarioTags","suiteId"],"title":"ProfileTestSuiteResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

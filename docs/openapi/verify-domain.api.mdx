@@ -1,0 +1,71 @@
+---
+id: verify-domain
+title: "verifyDomain"
+description: "verifyDomain"
+sidebar_label: "verifyDomain"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1v2zAM/SuCThuQxdkHdvAtQHboaUXbnYIcVItJtNqWKtLZPMP/faTluFkSFENzCS3ySY+PT+o0mR3qfK0Rvd7MtA8QDTlf31id6wNEt21XvjKu1jMdTDQVEERBdLrmDy5yllOczzlPe44jPDcuAm9AsYGZxmIPldF5p6kNA6Im2EHk0q2PlaG09PWL7vuNwDH4GgEF8WmxkD8LWEQXhNgZLcUV6gjhHQvPm9ckIBNC6Yqhm+wnCrI74RKi9EouncNNTPzWJwTrpixFl3OirFTcmdr9mcT6j+5m2iYpX4qRoqt3khqaGuk++Cd4rQrskk75jvkrdK0h+ECOB8XgIgJ/vg3bBPtGbH/qiPVRggsBrynAO5KjUiS4R58GfnecdS+/2SvW4C3ZrXsvTg4eaXAwOzTXGbs9S0Qw65zts4QbjLz1Q4vjuStfNCs4oFre3ujz06akBBXbTrGrCkBkVQQwV98MssNI/TKtIq/YnXwSqdY3UdkRhJJhwUzSANPeH+ef5wtRXqhXZrDDeOMSWTV1+Q+pyTQEvykLpZTI/GI5uH4QIF33ox2Ro9xNE2hF9r3oxXVd92gQfsSy72X5uYHY8jqHBxOdeRSN+CmwDiVmpbemRLigNN1K/e5u9MJ7xQdepToumlrmcTBlI18cPkGbnpt+w1V7MJZvmZyeEsuigEAnkIv7L6/L5Ijb7/cP7KG/HfO1Lw==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"verifyDomain"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/sso/domains/{id}/verify"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+verifyDomain
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"verifyDomain 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"organizationId":{"type":"integer","format":"int64"},"domain":{"type":"string"},"verificationToken":{"type":"string"},"verifiedAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["domain","organizationId","verificationToken"],"title":"SsoDomainResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

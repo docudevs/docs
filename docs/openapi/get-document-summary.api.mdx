@@ -1,0 +1,71 @@
+---
+id: get-document-summary
+title: "getDocumentSummary"
+description: "getDocumentSummary"
+sidebar_label: "getDocumentSummary"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VD1v2zAQ/SsCpxYQLKctOngLkCDIFqTtZHg4S2eLKUUy5MmtIei/906Sabn20qWTSN7Xu3fv1CmCfVSrtSohYlSbXDmPAUg7+1ypldojPbiybdDSt7ZpIBxVrjwEaJAwSGSnLF/YVTJwTK605ZsHqvkc8L3VATkVhRZzFcsaG1CrTtHRS5S2hHsM7LpzoQEan75+UX2fp9TVBOHf00cK2u452Uaco3dW2mT7p+VSPhXGMmgv/bL3qdUspl5LxwAtiS94b3Q5cFO8RQnoZgV9EOZIj+lniK/BcK/a4NjbDeOpeLKtlW2NYTBu+4YlyZSgqrQAAfMyqyskMG8zWtaX3KW6nII0GZw1Pc33dWKJOesl1yVDN/XAWqjdpJZBHjyblSoGSRXdqIu+OAHhpzOmvjhTre3ODU3PgD3gIWb3L8/qbyDJmGbGAygxRiZRAhbZI0QmhbJfcMzIZTzIA/OUHV0bsoRFLBUQcH62xjH33eLzYimT8C5SA8OgJyVyh+eKZwYusKWREv6mwhtgxXKyNphBJwM7p4XL1SrtTQIlrxdjO3HEU6sZkoR33ZbjfgTT9/L83qIoZs3HAwQNW2GQd7PSUc48nB2YiFdIk7zVh9dJNB8zrnizg+kRrLR8ANPKjY8/8Xjef1nb/1h1xlO/Ye8aoeLfifQ+OtyXJXqahV6tsfwbkoSfHr+z8v8A3aXA/A==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getDocumentSummary"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/documents/{documentId}/summary"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getDocumentSummary
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"documentId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Document summary","content":{"application/json":{"schema":{"properties":{"documentId":{"type":"string"},"filename":{"type":"string"},"summary":{"type":["null","object"],"additionalProperties":true}},"required":["documentId","filename"],"title":"DocumentSummaryResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

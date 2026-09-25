@@ -5,7 +5,7 @@ description: "createLlmProvider"
 sidebar_label: "createLlmProvider"
 hide_title: true
 hide_table_of_contents: true
-api: eJzNVcFu2zAM/RVBZy/pimGH3Lqmh2LdFnTdKeiBsdhErWxpkpw0CPzvI604VtMgA3ZaDrFMUhT53qO8kxGWQU7m8u7um5h5u9YKfZCPhbQOPURt61slJ7L0CBHvTNXHyEJ6/N1giF+s2srJTpa2jlhHXoJzRpfd7vFzsDXbQrnCCnjlPOeOGgO/1VAhP+PW0VOG6HW9lG1BSfQvb066KqvQPHTWE16FzthtRbV8f5N73scUsm6MkY8U+7IBvwx5TOei9hfPWEYGApTS3AmYWVZ49A2mIr/i9mQZIUJswrnj24Sh9qjYvc916Dzvs0g4UTlRR8MHXR8zcp/okO3bvPtCPQZn65Awv7y44IfCUHrtuLlTFAsKE/0+quAfCdYqg0dTimWnnifrK4jJ9PkTA/a/KOEs4cesZqclANVVPH9Q49Tfw95LIymCwDyUekIfh/oyoWSMTqNlebQdNGe55+QYV5Zn31lSVSEdxBW9jY2pxu5wUxSS+b8froKbV6icwWG0h956HgdLRt9gPGZt8PQc9UPaT98Q0dOT0aLrJ9tBvcdjastmiusgrma38hiIg5MXXIKgVksMgZLxhpG4gUB6iGIDWxGtoKFYk0TE1jZeqP2mwB5iGSg/eUPK/XF0ObrgihjQCuoMooS/IAJExsCb0g6Ci/gax86ArjlXkwYjkTOXRA5TlV/kK6aPXLvdAgISAW3LZiLME3RzWq7Ba1gwOHMW6AqBz5/Md/KlQ/c6Df6HvdLWYBou5N0l0Bb9jquyRBfPxj5mCpv9+PlAwYv9l4RVQVYPG/7K0P9E8o3cAdGNXmfbSQP1soElx6ac/PsDbhJbww==
+api: eJzNVk1v2kAQ/SurPTuQfqgHbhR8QCEJAhqpQlE02BNwsva6u2sSC/HfO+MPbAglVdtDc4jN7s7b2Tdv3norHays7C3keHwtJkZvohCNlfee1CkacJFORqHsycAgOByruF4jPWnwR4bWfdVhLntbGejEYeL4FdJURUER3X2yOuExG6wxBn5LDWO7CC3/SiBGfro8pae0zkTJSu48Aom+GXVyKtYhqnkxemI2xFTpPKZcbg6wF/UaTyaZUvKe1j6/gFnZ9ppiio6/fMLAMREQhhGfBNSklbgzGVI88RLSRhEopqlBiYiLVcFSuZUnH7WJgdjhqS+fqwNeYX4mv+IoBolIDPc7Wgcus+dOtStLExmOWtQ8tlnzStZpAxc5xewNjus7LYsrd4dwVRIGbaoTW1bw4+UlP0K0gYlSpuqUYAQtE3UcZfCHcolaNLdYfsvu/6Krs/I5LmZrt5LAsO/Ob5Sl4e8s+xudNrHn+0Sp20eaOVbCFCG80InKRQMkYnRAiYMA54BKHQqnBYi0EktH3OCGNBOAMcSXsEixTlBiaCi8Qxv/c1lkbl2XHpMs5jP2J6OHK/87Afk382n/YTAe0cvDzB9M/Xm7fa5ZOIP98fo11kGJ96iD+ejOJ9DhaNb/OvaHZ5BmZfRBFe7IoaOyS9498LEX1ImdwvOYxYqhfd6t1OpObmWXxTGYfOi03P3adwrUqiFOuNCprVq+UYDvCht6x2EYHN1a832VavIuEgm4Nf3qKhV30/3t5kl2mWlzffmvEKcKm+uo6aDaLZqRlkk0g8fe0MzUTlA3zGEnXjYCaWkxSh51Ud6KjqEOsiFurCBBymMe9pP8whlwFwVoLYFxQEf4YKlNnHiBnNuMnJd6y4lcZ0aEVZDlGe5Iwt/UApMfOp86l5wR8xlD0mKopF8Q/6JVgIPU9vp0+Oq6qYIoYaysdN+yNgtJtSnbufn2WHP1aGq7XYJF4n+342Gql6H7ckGvGyAfWDI5C7a3NXkM7c/m88xXqhyUt8tFJbQNqIwTeXPT7Lw6oh8EmLqza+9bApvczua0eFl9/LAoaNTAC38Y0f+eZHMsiCiavxjbSgXJKoMVry0x+e8nVnJHSg==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ createLlmProvider
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"type":["null","object"],"additionalProperties":true},"apiKey":{"type":"string"},"status":{"type":["string","null"]}},"required":["apiKey","apiUrl","modelType","name"],"title":"CreateLlmProviderRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"type":["null","object"],"additionalProperties":true},"credentialId":{"type":["integer","null"],"format":"int64"},"apiKey":{"type":["string","null"],"deprecated":true},"status":{"type":["string","null"]}},"required":["apiUrl","modelType","name"],"title":"CreateLlmProviderRequest"}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ createLlmProvider
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"createLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
+  responses={{"200":{"description":"createLlmProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"apiUrl":{"type":"string"},"modelType":{"type":"string"},"deploymentName":{"type":["string","null"]},"kwargs":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]},"credentialId":{"type":["integer","null"],"format":"int64"},"credential":{"type":["null","object"],"allOf":[{"description":"Read-only credential metadata attached to a provider. Never carries secret material.","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"authType":{"enum":["API_KEY","ENTRA_CLIENT_SECRET"],"title":"ModelCredentialAuthType"},"status":{"enum":["ACTIVE","DISABLED"],"title":"ModelCredentialStatus"},"credentialVersion":{"type":"integer","format":"int64"}},"required":["authType","credentialVersion","id","name","status"],"title":"ProviderCredentialSummaryDto"}]}},"required":["apiUrl","id","kwargs","modelType","name","status"],"title":"LlmProviderDto"}}}}}}
 >
   
 </StatusCodes>

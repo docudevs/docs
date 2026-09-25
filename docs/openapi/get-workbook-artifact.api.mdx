@@ -1,0 +1,71 @@
+---
+id: get-workbook-artifact
+title: "Retrieve a plan, source-map, or bounded summary artifact published for this workbook result."
+description: "Retrieve the plan, source-map, or bounded summary artifact for a workbook normalization result"
+sidebar_label: "Retrieve a plan, source-map, or bounded summary artifact published for this workbook result."
+hide_title: true
+hide_table_of_contents: true
+api: eJy1VE1v2zAM/SuCThvgxtnWU24BWgzZaSg27FDkQNtMrMaWVH0k8wz/95G246TNWmwFlktkSXwi3+NjKwNsvVzcyweTyXUiC/S5UzYoo+VC3mFwCvcoQonCVqAT4U10OV7VYBNhnMhM1AUWwse6BtcIcEFtIA9iQ4cgDsbtMmN2QhtXQ6V+ASMLhz5WQSbSWHT91qqg57YYfowByxGH7lhwUGNAx3m2UtMH342qoEPFaVoIJa0dPkblkJCCi5hIn5dYg1y0MjSWYzxVo7ey65IJBk7vnEM9pWFZVeZwVSkfqNKppKnUndLFq8+jjjVzzAzSxROF/DEQJ9ddt2YMb4326Dns43zOf09zORJEjFtrKAW9FWdF5EYH1IHjwNpK5T276YPn4PaUU0e/RF7/6YWV3pNSLxXKojvcoEOdo+wxri8xvpgsETZmxFl5ztkgfN85E6o23C3URiyMJKVLMzZDLz7psZAptWc6BKctS9+lR8y0PSJ1vYgb0yuuQsX63pg83uDei+XX1YWu0yEvaqJNWGdy9J5JpYCZuAWv0AdxgEYEI4jdPbogGlJQFGOQ55MCAhA+nfoB+8Ps02zO/FjjQw09+2PPTa6Cf/TUiVB2VyiVf87s7HmN7akj/r+bR5sF/BlSwidDUf3RVZzGIOQwZ/o+H0IWo4+P0Lw1tTMZoiT2OKxtM/D43VVdx9uPEckzi3ta7sEpyFhsGg6F8rym/tlA5fEVMt7djXZ9L17KfNwE3bCyUEX+ouUOm+MA4knypjf/bqS8Ia2JvG5Nd0uEAl1PzXC8zHO04SzwYkrwGJpM+Pn2G7nyN/USJVo=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Retrieve a plan, source-map, or bounded summary artifact published for this workbook result."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/job/result/{guid}/workbook/{artifact}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Retrieve the plan, source-map, or bounded summary artifact for a workbook normalization result
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"artifact","in":"path","description":"Allow-listed workbook artifact kind","required":true,"schema":{"enum":["plan","source-map","summary"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Workbook supporting artifact","content":{"application/json":{"schema":{}}}},"400":{"description":"Invalid workbook artifact kind or reference"},"404":{"description":"Job, published workbook result, or artifact not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

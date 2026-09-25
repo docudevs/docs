@@ -142,6 +142,196 @@ result = await client.wait_until_ready(
 )
 ```
 
+### Low-Level Document Processing
+
+These primitives back the `submit_and_*` convenience helpers above. Use them directly when you need to separate upload from processing, or drive a custom flow.
+
+### upload_document
+
+Upload a single document and return the raw response (`parsed.guid` on success).
+
+```python
+response = await client.upload_document(body=UploadDocumentBody(document=file_obj))
+guid = response.parsed.guid
+```
+
+### upload_files
+
+Upload multiple files in one request.
+
+```python
+response = await client.upload_files(body=UploadFilesBody(...))
+```
+
+### process_document
+
+Process an already-uploaded document.
+
+```python
+await client.process_document(guid, body=upload_command, depends_on=None)
+```
+
+`depends_on` is an optional parent job GUID; when set, the scheduler waits for the parent job before dispatching this one.
+
+### process_document_with_configuration
+
+Process an already-uploaded document using a named configuration.
+
+```python
+await client.process_document_with_configuration(guid, configuration="invoice-config")
+```
+
+### ocr_document
+
+Process an already-uploaded document with OCR-only mode.
+
+```python
+await client.ocr_document(guid, body=ocr_command, ocr_format="markdown")
+```
+
+### generate_schema
+
+Generate a JSON schema from a sample document using AI. Returns a job GUID whose result (via `wait_until_ready` or `result_json`) is the generated schema as a JSON string.
+
+```python
+job_guid = await client.generate_schema(
+    document=sample_bytes,
+    document_mime_type="application/pdf",
+    instructions="Extract invoice header fields",
+)
+```
+
+### analyze_document_and_wait
+
+Analyze document structure and wait for the result in one call (combines `analyze_document` and `wait_until_ready`).
+
+```python
+result = await client.analyze_document_and_wait(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    ocr="PREMIUM",
+    timeout=180,
+)
+```
+
+## Job Results and Status
+
+### status
+
+Get raw job status.
+
+```python
+response = await client.status(guid)
+```
+
+### result
+
+Get the raw (legacy) job result response.
+
+```python
+response = await client.result(guid)
+```
+
+### result_json
+
+Get a job result explicitly as JSON via `/job/result/{uuid}/json`. Falls back to the legacy result endpoint on a 404 (older server) or 415 (non-JSON result).
+
+```python
+data = await client.result_json(guid)
+```
+
+### result_csv
+
+Get a job result as CSV text via `/job/result/{uuid}/csv`. Raises if the result is not JSON-backed (415).
+
+```python
+csv_text = await client.result_csv(guid)
+```
+
+### result_excel
+
+Get a job result as XLSX bytes via `/job/result/{uuid}/excel`. Pass `configuration` to inject the result into a configuration's uploaded Excel template.
+
+```python
+xlsx_bytes = await client.result_excel(guid, save_to="result.xlsx", configuration="invoice-config")
+```
+
+### get_source_locations
+
+Get resolved source locations for a structured-result job (requires `source_locations=True` at submission).
+
+```python
+locations = await client.get_source_locations(guid)
+```
+
+### wait_until_ready_with_source_locations
+
+Wait for completion, then return both the JSON result and the source-location artifact as a `StructuredResultWithSources(result=..., source_locations=...)`.
+
+```python
+bundle = await client.wait_until_ready_with_source_locations(guid, timeout=180)
+print(bundle.result, bundle.source_locations)
+```
+
+### submit_and_wait_for_document_with_source_locations
+
+Convenience helper: submit a document with `source_locations=True`, then wait and return both the result and source-location artifact.
+
+```python
+bundle = await client.submit_and_wait_for_document_with_source_locations(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract invoice data",
+)
+```
+
+## Workbook
+
+Workbook artifacts are published by `WORKBOOK` extraction-mode jobs (single XLSX input, no target schema). See [Workbook Normalization](/docs/core/workbook-normalization) for the extraction-mode contract.
+
+### get_workbook_plan
+
+Fetch the caller-inspectable transformation plan for a workbook result.
+
+```python
+plan = await client.get_workbook_plan(guid)
+```
+
+### get_workbook_source_map
+
+Fetch the caller-inspectable source map for a workbook result.
+
+```python
+source_map = await client.get_workbook_source_map(guid)
+```
+
+### get_workbook_summary
+
+Fetch the published summary artifact for a workbook result.
+
+```python
+summary = await client.get_workbook_summary(guid)
+```
+
+## Client Pipelines
+
+Client pipelines run a hybrid graph: remote DocuDevs segments interleaved with local Python callables that execute in your own process. See [Client Pipelines](/docs/core/client-pipelines) for the execution model and constraints.
+
+### run_client_pipeline
+
+Run a hybrid client pipeline end to end: uploads the document, then executes the graph, calling back into local functions between remote segments. Not resumable — if the process stops, a later attempt runs the graph from the beginning.
+
+```python
+result = await client.run_client_pipeline(
+    document=document_bytes,
+    document_mime_type="application/pdf",
+    pipeline=my_hybrid_pipeline,
+    timeout=900.0,
+    poll_interval=2.0,
+    on_event=None,
+)
+```
+
 ## Pipeline Processing
 
 Pipeline mode uploads one document, runs one shared OCR pass, and executes a graph of nodes. Use the SDK builder so dependencies, source paths, and final outputs refer to previous nodes directly.
@@ -221,6 +411,18 @@ for node in nodes:
 
 For the full pipeline JSON contract, node types, and branching examples, see [Pipeline Mode](/docs/reference/pipeline-mode).
 
+### build_upload_command_pipeline
+
+Build the raw `UploadCommand` for pipeline extraction without submitting it. Used internally by `process_pipeline_document` and `process_uploaded_pipeline_document`; call it directly when you need the command object itself (for example to save it as a configuration with `save_pipeline_configuration`).
+
+```python
+command = client.build_upload_command_pipeline(
+    pipeline=pipeline,
+    mime_type="application/pdf",
+    ocr="AUTO",
+)
+```
+
 ## Batch Processing
 
 ### submit_and_process_batch
@@ -234,6 +436,120 @@ batch_guid = await client.submit_and_process_batch(
     prompt="Extract data",
     max_concurrency=5
 )
+```
+
+### submit_and_process_batch_with_configuration
+
+Upload and process multiple documents as a batch using a saved configuration.
+
+```python
+batch_guid = await client.submit_and_process_batch_with_configuration(
+    documents=[file1_bytes, file2_bytes],
+    document_mime_type="application/pdf",
+    configuration_name="invoice-config",
+    max_concurrency=5,
+)
+```
+
+### Low-Level Batch Processing
+
+These primitives back the `submit_and_process_batch*` convenience helpers above.
+
+### create_batch
+
+Create a new batch job and return its GUID.
+
+```python
+batch_guid = await client.create_batch(max_concurrency=5)
+```
+
+### upload_batch_document
+
+Upload a single document into an existing batch.
+
+```python
+info = await client.upload_batch_document(batch_guid, document_bytes, "application/pdf", file_name="invoice.pdf")
+```
+
+### process_batch
+
+Finalize and start processing a batch that has already had documents uploaded.
+
+```python
+await client.process_batch(
+    batch_guid,
+    prompt="Extract data",
+    schema="",
+    mime_type="application/pdf",
+)
+```
+
+### process_batch_with_configuration
+
+Finalize and start processing a batch using a saved configuration.
+
+```python
+await client.process_batch_with_configuration(batch_guid, "invoice-config")
+```
+
+### schedule_batch
+
+Call the concurrency-aware scheduling endpoint for a batch explicitly.
+
+```python
+await client.schedule_batch(batch_guid)
+```
+
+## Lookup Files
+
+Lookup files are reference data (for example a product catalog or vendor list) attached to a configuration or a single batch so extraction prompts can resolve against it. See [Lookup Files](/docs/core/lookup-files) for the extraction-time behavior.
+
+### upload_configuration_lookup_file
+
+Attach a lookup file to a named configuration. Applies to every job that uses the configuration until replaced or deleted.
+
+```python
+await client.upload_configuration_lookup_file("invoice-config", file_bytes, file_name="vendors.csv")
+```
+
+### get_configuration_lookup_file
+
+Download the lookup file attached to a configuration.
+
+```python
+data = await client.get_configuration_lookup_file("invoice-config")
+```
+
+### delete_configuration_lookup_file
+
+Remove the lookup file attached to a configuration.
+
+```python
+await client.delete_configuration_lookup_file("invoice-config")
+```
+
+### upload_batch_lookup_file
+
+Attach a lookup file scoped to one batch. Overrides any configuration-level lookup file for that batch only.
+
+```python
+await client.upload_batch_lookup_file(batch_guid, file_bytes, file_name="vendors.csv")
+```
+
+### get_batch_lookup_file
+
+Download the lookup file attached to a batch.
+
+```python
+data = await client.get_batch_lookup_file(batch_guid)
+```
+
+### delete_batch_lookup_file
+
+Remove the lookup file attached to a batch.
+
+```python
+await client.delete_batch_lookup_file(batch_guid)
 ```
 
 ## Configurations
@@ -274,6 +590,14 @@ Delete a configuration.
 
 ```python
 await client.delete_configuration("invoice-config")
+```
+
+### upload_excel_template
+
+Attach an Excel template to a named configuration. When `result_excel(...)` (or `wait_until_ready(..., result_format="excel")`) is later called with that configuration, the result is injected into the template at its configured cell offset, preserving the template's formatting and formulas.
+
+```python
+await client.upload_excel_template("invoice-config", template=excel_bytes)
 ```
 
 ## Templates
@@ -353,6 +677,299 @@ Delete a template.
 
 ```python
 await client.delete_template("form-template")
+```
+
+### upload_template_images
+
+Upload images (logos, signatures) to blob storage for use in template filling. Returns a dict mapping each image key to its blob path reference, for use with `image_ref(...)` in a `fill(...)` call.
+
+```python
+paths = await client.upload_template_images("invoice", {
+    "logo": "path/to/logo.png",
+    "signature": signature_bytes,
+})
+```
+
+### image_ref
+
+Static helper. Build an image reference for a `TemplateFillRequest` field from a path returned by `upload_template_images(...)`.
+
+```python
+from docudevs.docudevs_client import DocuDevsClient
+
+request = TemplateFillRequest(fields={
+    "company_name": "ACME Corp",
+    "logo": DocuDevsClient.image_ref(paths["logo"], width_mm=50),
+})
+await client.fill("invoice", request)
+```
+
+## LLM and OCR Providers
+
+Manage bring-your-own LLM and OCR providers and the logical key bindings that route requests to them. See [Bring Your Own LLM](/docs/administration/bring-your-own-llm) and [Bring Your Own OCR](/docs/administration/bring-your-own-ocr) for the provider model and setup steps.
+
+:::warning
+`create_llm_provider`, `update_llm_provider`, `create_ocr_provider`, and `update_ocr_provider` are thin convenience wrappers that currently send outdated field names and do not match the current provider contract. Use the generated API functions (see [Bring Your Own LLM](/docs/administration/bring-your-own-llm)) or call the REST API directly instead of these four methods.
+:::
+
+### list_llm_providers
+
+List LLM providers for the organization.
+
+```python
+providers = await client.list_llm_providers()
+```
+
+### create_llm_provider
+
+Create an LLM provider. See the warning above before using this method.
+
+```python
+async def create_llm_provider(self, name: str, type_: str, base_url: str | None = None, api_key: str | None = None, model: str | None = None, description: str | None = None)
+```
+
+### get_llm_provider
+
+Get a single LLM provider by id.
+
+```python
+provider = await client.get_llm_provider(provider_id)
+```
+
+### update_llm_provider
+
+Patch update LLM provider fields (only sends provided keys). See the warning above before using this method.
+
+```python
+async def update_llm_provider(self, provider_id: int, *, name: str | None = None, base_url: str | None = None, model: str | None = None, description: str | None = None)
+```
+
+### delete_llm_provider
+
+Soft delete an LLM provider.
+
+```python
+await client.delete_llm_provider(provider_id)
+```
+
+### list_llm_keys
+
+List logical LLM key bindings.
+
+```python
+keys = await client.list_llm_keys()
+```
+
+### update_llm_key_binding
+
+Assign or clear the provider bound to a logical LLM key. Pass `provider_id=None` to clear the binding.
+
+```python
+await client.update_llm_key_binding("DEFAULT", provider_id)
+```
+
+### list_ocr_providers
+
+List OCR providers for the organization.
+
+```python
+providers = await client.list_ocr_providers()
+```
+
+### create_ocr_provider
+
+Create an OCR provider (Azure Document Intelligence configuration). See the warning above before using this method.
+
+```python
+async def create_ocr_provider(self, name: str, endpoint: str | None = None, api_key: str | None = None, model: str | None = None, description: str | None = None)
+```
+
+### get_ocr_provider
+
+Get an OCR provider by id.
+
+```python
+provider = await client.get_ocr_provider(provider_id)
+```
+
+### update_ocr_provider
+
+Patch update OCR provider fields. See the warning above before using this method.
+
+```python
+async def update_ocr_provider(self, provider_id: int, *, name: str | None = None, endpoint: str | None = None, model: str | None = None, description: str | None = None)
+```
+
+### delete_ocr_provider
+
+Soft delete an OCR provider.
+
+```python
+await client.delete_ocr_provider(provider_id)
+```
+
+### list_ocr_keys
+
+List OCR key bindings.
+
+```python
+keys = await client.list_ocr_keys()
+```
+
+### update_ocr_key_binding
+
+Assign or clear the provider bound to an OCR key binding.
+
+```python
+await client.update_ocr_key_binding("DEFAULT", provider_id)
+```
+
+## Embeddings
+
+Manage bring-your-own embedding providers, the organization's default embedding binding, and per-case reindexing. See [Bring Your Own Embeddings](/docs/administration/bring-your-own-embeddings) for the provider/revision/generation model.
+
+### list_embedding_providers
+
+List embedding providers and their revisions for the organization.
+
+```python
+providers = await client.list_embedding_providers()
+```
+
+### create_embedding_provider
+
+Create an embedding provider and its initial embedding revision. Changing endpoint, model, dimensions, or metric later creates a new revision; existing cases keep their current generation until an explicit reindex is started.
+
+```python
+provider = await client.create_embedding_provider(
+    name="Org Azure OpenAI embeddings",
+    provider_type="azure-openai",
+    api_url="https://my-resource.openai.azure.com",
+    deployment_name="text-embedding-3-large",
+    dimensions=3072,
+    similarity_metric="cosine",
+    credential_id=credential_id,
+)
+```
+
+### get_embedding_provider
+
+Get an embedding provider with all of its revisions.
+
+```python
+provider = await client.get_embedding_provider(provider_id)
+```
+
+### update_embedding_provider
+
+Update embedding provider fields. Semantic changes (`provider_type`, `api_url`, `deployment_name`, `dimensions`, `similarity_metric`, `request_options`) create a new revision and report that existing cases need an explicit reindex; changing only the credential reference does not reindex existing cases.
+
+```python
+async def update_embedding_provider(self, provider_id: int, *, name=None, provider_type=None, api_url=None, deployment_name=None, dimensions=None, similarity_metric=None, request_options=None, credential_id=None, enabled=None, force_disable=False, set_as_default=False)
+```
+
+### delete_embedding_provider
+
+Delete an embedding provider. Its disabled revisions become unavailable.
+
+```python
+await client.delete_embedding_provider(provider_id)
+```
+
+### get_default_embedding_binding
+
+Get the organization's default embedding binding and rollout counters.
+
+```python
+binding = await client.get_default_embedding_binding()
+```
+
+### set_default_embedding_binding
+
+Bind the organization default to an existing embedding revision. The binding applies to new case generations only; existing cases keep their active generation until reindexed.
+
+```python
+await client.set_default_embedding_binding(revision_id)
+```
+
+### get_embedding_overview
+
+Get the organization embedding rollout overview (counts of cases by revision).
+
+```python
+overview = await client.get_embedding_overview()
+```
+
+### get_case_embedding_status
+
+Get embedding generation status for a case, including its active and any in-progress candidate generation.
+
+```python
+status = await client.get_case_embedding_status(case_id)
+```
+
+### start_case_embedding_reindex
+
+Start reindexing a case with the organization's default revision. Documents uploaded during the reindex are dual-written to both the active and candidate generations; cutover is atomic per case.
+
+```python
+await client.start_case_embedding_reindex(case_id)
+```
+
+### cancel_case_embedding_reindex
+
+Cancel a running case reindex; the active generation keeps serving.
+
+```python
+await client.cancel_case_embedding_reindex(case_id)
+```
+
+### retry_case_embedding_reindex
+
+Retry a failed case reindex candidate.
+
+```python
+await client.retry_case_embedding_reindex(case_id)
+```
+
+## Model Credentials
+
+Shared credentials referenced by embedding providers (and other bring-your-own integrations) by id, so secrets are never round-tripped back to callers. See [Model Credentials](/docs/administration/model-credentials).
+
+### list_model_credentials
+
+List safe metadata (no secrets) for shared model credentials.
+
+```python
+credentials = await client.list_model_credentials()
+```
+
+### create_model_credential
+
+Create a shared API-key or Entra client-secret credential. Secrets are write-only; the returned object contains metadata and the credential ID, which can be passed to embedding-provider methods.
+
+```python
+credential = await client.create_model_credential(
+    name="Org Azure OpenAI key",
+    secret="...",
+    auth_type="API_KEY",
+)
+```
+
+### rotate_model_credential
+
+Rotate a shared credential's secret without changing embedding vectors.
+
+```python
+await client.rotate_model_credential(credential_id, secret="new-secret")
+```
+
+### delete_model_credential
+
+Delete a shared credential that is no longer referenced by any provider.
+
+```python
+await client.delete_model_credential(credential_id)
 ```
 
 ## AcroForm PDF Metadata
@@ -442,6 +1059,54 @@ List all cases.
 cases = await client.list_cases()
 ```
 
+### get_case
+
+Get a specific case. Accepts an int or str case id (coerced to int).
+
+```python
+case = await client.get_case(123)
+```
+
+### update_case
+
+Update an existing case.
+
+```python
+await client.update_case(123, body)
+```
+
+### delete_case
+
+Delete a case.
+
+```python
+await client.delete_case(123)
+```
+
+### list_case_documents
+
+List documents within a case (paginated).
+
+```python
+page = await client.list_case_documents(123, page=0, size=20)
+```
+
+### get_case_document
+
+Get details for a document stored in a case.
+
+```python
+document = await client.get_case_document(123, "doc-uuid")
+```
+
+### delete_case_document
+
+Delete a document from a case.
+
+```python
+await client.delete_case_document(123, "doc-uuid")
+```
+
 ### upload_case_document
 
 Upload a document to a case.
@@ -479,6 +1144,237 @@ for doc in result.parsed:
     print(f"{doc['filename']}: {doc['summary']['document_type']}")
 ```
 
+## Knowledge Bases
+
+A knowledge base is a case promoted for retrieval and downstream features such as contract analysis. See [Cases](/docs/advanced/cases).
+
+### list_knowledge_bases
+
+List cases marked as knowledge bases.
+
+```python
+knowledge_bases = await client.list_knowledge_bases()
+```
+
+### promote_knowledge_base
+
+Mark a case as a knowledge base.
+
+```python
+await client.promote_knowledge_base(case_id)
+```
+
+### get_knowledge_base
+
+Retrieve a knowledge base by its case id.
+
+```python
+kb = await client.get_knowledge_base(case_id)
+```
+
+### delete_knowledge_base
+
+Remove the knowledge base designation from a case. The case itself is not deleted.
+
+```python
+await client.delete_knowledge_base(case_id)
+```
+
+## Contract Analysis
+
+Contract analysis compiles a knowledge base into a reviewable profile, runs immutable analysis runs against it, and supports expert review and test-suite curation. See [Contract Analysis](/docs/core/contract-analysis) for the profile/draft/publish lifecycle and the run/review model.
+
+### get_contract_analysis_profile
+
+Get a contract-analysis profile draft or its currently published version.
+
+```python
+profile = await client.get_contract_analysis_profile(case_id, view="draft")
+```
+
+### generate_contract_analysis_profile
+
+Start profile compilation from the eligible knowledge-base documents. Returns a generation job whose proposal can be compared and applied.
+
+```python
+generation = await client.generate_contract_analysis_profile(case_id)
+```
+
+### get_contract_analysis_generation_comparison
+
+Get the immutable three-way comparison (previous / current / proposed) for a generated proposal.
+
+```python
+comparison = await client.get_contract_analysis_generation_comparison(case_id, generation_job_guid)
+```
+
+### apply_contract_analysis_generation
+
+Apply an explicitly reviewed generation against the exact draft snapshot it was compared to.
+
+```python
+async def apply_contract_analysis_generation(self, case_id, generation_job_guid, *, expected_draft_revision: int, expected_draft_fingerprint: str, decisions: Mapping[str, Mapping[str, Any]])
+```
+
+### get_contract_analysis_source_authority
+
+Get the source-authority decision history for a profile.
+
+```python
+history = await client.get_contract_analysis_source_authority(case_id)
+```
+
+### record_contract_analysis_source_authority_decision
+
+Record a source-authority decision at an observed decision revision.
+
+```python
+async def record_contract_analysis_source_authority_decision(self, case_id, *, observed_revision: int, decision_type: str, content: Mapping[str, Any], reason: str, element_lineage_id: str | None = None, element_action: str | None = None, tombstone: bool = False, generation_job_guid: str | None = None, draft_revision: int | None = None)
+```
+
+### update_contract_analysis_draft
+
+Replace the draft profile at the observed revision (optimistic concurrency on `draft_revision`).
+
+```python
+await client.update_contract_analysis_draft(case_id, draft_revision=3, profile=updated_profile)
+```
+
+### publish_contract_analysis_profile
+
+Publish a validated draft profile at the observed revision.
+
+```python
+await client.publish_contract_analysis_profile(
+    case_id,
+    draft_revision=3,
+    acknowledged_warning_codes=["missing_termination_clause"],
+)
+```
+
+### get_contract_analysis_test_suite
+
+Get the current immutable test-suite revision for a knowledge base.
+
+```python
+suite = await client.get_contract_analysis_test_suite(case_id)
+```
+
+### update_contract_analysis_test_suite
+
+Create the next suite revision from the observed revision and a list of test cases.
+
+```python
+await client.update_contract_analysis_test_suite(case_id, revision=2, cases=[...])
+```
+
+### create_contract_analysis_trial
+
+Explicitly launch an exploratory or scored draft-profile trial.
+
+```python
+trial = await client.create_contract_analysis_trial(
+    case_id,
+    anchor_job_guid=job_guid,
+    idempotency_key="trial-1",
+    trial_kind="scored",
+)
+```
+
+### get_contract_analysis_trial
+
+Read status and the immutable report for a trial.
+
+```python
+trial = await client.get_contract_analysis_trial(case_id, trial_id)
+```
+
+### attest_contract_analysis_trial
+
+Record an authenticated expert's approval of a passing trial report.
+
+```python
+await client.attest_contract_analysis_trial(case_id, trial_id, report_id=report_id)
+```
+
+### submit_contract_analysis
+
+Submit contract analysis for a completed parent job against a published knowledge-base profile.
+
+```python
+submission = await client.submit_contract_analysis(job_guid, knowledge_base_id=knowledge_base_id)
+```
+
+### submit_and_wait_for_contract_analysis
+
+Submit contract analysis and poll until its result is available.
+
+```python
+result = await client.submit_and_wait_for_contract_analysis(
+    job_guid,
+    knowledge_base_id=knowledge_base_id,
+    timeout=120,
+)
+```
+
+### create_contract_analysis_run
+
+Create an immutable, multi-document contract-analysis run and return its run identity. `mode` is `"published"` (default) or `"draft_trial"`.
+
+```python
+run = await client.create_contract_analysis_run(
+    anchor_job_guid,
+    knowledge_base_id=knowledge_base_id,
+    idempotency_key="run-1",
+)
+```
+
+### get_contract_analysis_run
+
+Get status for exactly one immutable run.
+
+```python
+run = await client.get_contract_analysis_run(run_id)
+```
+
+### get_contract_analysis_run_result
+
+Get the result for exactly one immutable run.
+
+```python
+result = await client.get_contract_analysis_run_result(run_id)
+```
+
+### get_contract_analysis_run_reviews
+
+Get current human review dispositions for an immutable run.
+
+```python
+reviews = await client.get_contract_analysis_run_reviews(run_id)
+```
+
+### put_contract_analysis_run_review
+
+Append an expert disposition (accepted, corrected, dismissed, unresolved) to one captured finding without changing the machine result.
+
+```python
+await client.put_contract_analysis_run_review(
+    run_id, criterion_id, target_key,
+    result_fingerprint=fingerprint,
+    disposition="accepted",
+    expected_review_revision=0,
+    idempotency_key="review-1",
+)
+```
+
+### propose_contract_analysis_finding_test_case
+
+Add an unapproved finding expectation to a new test-suite revision, seeded from one immutable run finding.
+
+```python
+async def propose_contract_analysis_finding_test_case(self, case_id: int, *, run_id: str, result_fingerprint: str, criterion_id: str, target_key: str, name: str, expected_assessment: str, reason: str, expected_suite_revision: int, idempotency_key: str, scenario_tags: list[str] | None = None)
+```
+
 ## Operations
 
 ### submit_and_wait_for_error_analysis
@@ -487,6 +1383,54 @@ Run error analysis on a completed job.
 
 ```python
 analysis = await client.submit_and_wait_for_error_analysis(job_guid)
+```
+
+### submit_operation
+
+Submit an operation for a completed job without parameters or waiting.
+
+```python
+response = await client.submit_operation(job_guid, "error-analysis")
+```
+
+### submit_operation_with_parameters
+
+Submit an operation with an optional LLM type override and custom parameters, without waiting.
+
+```python
+async def submit_operation_with_parameters(self, job_guid: str, operation_type: str, llm_type: Optional[str] = None, custom_parameters: Optional[dict] = None)
+```
+
+### submit_and_wait_for_operation
+
+Submit an operation (no extra parameters) and poll until it completes.
+
+```python
+result = await client.submit_and_wait_for_operation(job_guid, "error-analysis", timeout=120)
+```
+
+### get_operation_status
+
+Get the status of all operations submitted for a job.
+
+```python
+statuses = await client.get_operation_status(job_guid)
+```
+
+### get_operation_result
+
+Get the result of one specific operation type for a job.
+
+```python
+result = await client.get_operation_result(job_guid, "error-analysis")
+```
+
+### create_generative_task
+
+Create a generative task for a completed job without waiting for it. Prefer `submit_and_wait_for_generative_task` unless you need to poll independently.
+
+```python
+async def create_generative_task(self, parent_job_id: str, prompt: str, model: Optional[str] = None, temperature: Optional[float] = None, max_tokens: Optional[int] = None)
 ```
 
 ### submit_and_wait_for_generative_task
@@ -614,6 +1558,43 @@ applied = await client.submit_and_wait_for_pdf_acroform_apply_operation(
 print(applied.operation_job_guid)
 ```
 
+## Document Outline
+
+Document-outline extraction produces a structural outline of a document (sections/headers), either as a map-reduce split strategy or as a standalone follow-up operation on an existing job. See [Operations](/docs/advanced/operations).
+
+### submit_document_outline_operation
+
+Submit a document-outline-only follow-up operation for an existing OCR/extraction job.
+
+```python
+async def submit_document_outline_operation(self, job_guid: str, *, llm_type: Optional[str] = None, pages_per_chunk: Optional[int] = None, overlap_pages: Optional[int] = None, parallel_processing: Optional[bool] = None)
+```
+
+### submit_and_wait_for_document_outline_operation
+
+Submit an outline-only operation and wait for the outline artifact.
+
+```python
+outline = await client.submit_and_wait_for_document_outline_operation(job_guid, timeout=180)
+print(outline.document_outline)
+```
+
+### get_document_outline
+
+Get the document-outline artifact for a `DOCUMENT_OUTLINE` map-reduce job or outline operation.
+
+```python
+outline = await client.get_document_outline(guid)
+```
+
+### wait_until_ready_with_document_outline
+
+Wait for completion, then return both the JSON result and the document-outline artifact as a `StructuredResultWithDocumentOutline(result=..., document_outline=...)`.
+
+```python
+bundle = await client.wait_until_ready_with_document_outline(guid, timeout=180)
+```
+
 ## Map-Reduce Helpers
 
 ### submit_and_process_document_map_reduce
@@ -683,6 +1664,31 @@ print(result["records"])
 When `split_type="markdown_header"`, `overlap_pages` and `dedup_key` are not supported.
 
 All other map-reduce parameters (`header_options`, `header_schema`, `header_prompt`, `stop_when_empty`, `empty_chunk_grace`, `ocr`, `llm`, `trace`, `page_range`, `tools`, etc.) are also accepted.
+
+### build_upload_command_map_reduce
+
+Build the raw `UploadCommand` with map-reduce parameters without submitting it. Used internally by `submit_and_process_document_map_reduce` and `process_document_map_reduce`.
+
+```python
+command = client.build_upload_command_map_reduce(
+    mime_type="application/pdf",
+    prompt="Extract line items",
+    pages_per_chunk=5,
+)
+```
+
+### process_document_map_reduce
+
+Process an already-uploaded document using map-reduce chunking parameters. Takes the same map-reduce parameters as `submit_and_process_document_map_reduce`, but skips the upload step.
+
+```python
+await client.process_document_map_reduce(
+    guid,
+    prompt="Extract line items",
+    pages_per_chunk=5,
+    overlap_pages=1,
+)
+```
 
 ## LLM Tracing
 

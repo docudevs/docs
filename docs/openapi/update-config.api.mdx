@@ -1,0 +1,71 @@
+---
+id: update-config
+title: "updateConfig"
+description: "updateConfig"
+sidebar_label: "updateConfig"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVktv2zAM/iuGzm7TPbBDbl3SAT0MKNIWGBD0wMhsos2WPIlOmwX+7yOlOK9myRBgp+UQ6/GRksjvo7RUBNOg+mMVglNPuXI1eiDj7G2h+qqpCyAcOPtspipXHn82GOizKxaqv1TaWUJL0oS6Lo2Ohr3vwVkZC3qGFUir9uKWDIZVb24K9A+LGqVP8asCeWOnqs1VgKr8igS8Njz6coMZd6Bc2aYs1dMe+Ft1AuxMoW9DaNCf9CvQQWn4fBKJU8h7zScMJ3Ya3BCfoSlp5Eo8jkX77LzG++C+OD90FRi75V1NHHsAq9o2JcV4LMTRQbN8N+KcZDIkG1CPMb2MThkepfSy1x235BuMA6F2NqRTvr+6kk+BQXtTS9r32JIxIutMeAtncsX5KVjza83IdQQMu5uiZ8984gooDX36KPw5TTACasL/xL2IQ+2RUnqamNm3fPo3LM1VCYHuF1bfeO/8cacdFItrOoLcSryw7oJMhd1KD8ziM805RHCubeL/ObZ/J+ODScz3NbLH/zXbt3SfFG9Ri8moE2nbRuH/WdPsq0KaObkZ6oZkJaAZd3pMmp7uMKLp0eamuHmFqk5M2hXmJjRvRHd4KkpsM7UnqN2JjXx2xzuxbK2wR/jNzGF6r8qh4cmY51VMh043Q5yH7PruVu1HcT0pjYo3lnEoNIbAC4nBZXYDgUseZS+wyMhlHMw5V8Fs4RqfFSujIDMSCPbPsyH5fnf54fIqlj0XqIJYTi1UuE5ets7ezqbWMiV8pV5d8ukiiVNxSplNz4JYvcUDU2jGi8j4cjmBgBz4tpVhzrbnN8GYm3PwBiYSk7HIeYbAGefOUv1AhqhBugkuVuycQ9nILt7cCm3eWVxrjTUdxT5tUfPu8YGxk9UjpXKFmHh4kQcM//eVUCEGIRarOLbkumGnDUwFm1zK7zcW7i3d
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"updateConfig"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/sso/config"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+updateConfig
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"providerType":{"type":"string"},"samlMetadataUrl":{"type":["string","null"]},"samlMetadataXml":{"type":["string","null"]},"oidcIssuerUrl":{"type":["string","null"]},"oidcClientId":{"type":["string","null"]},"oidcScopes":{"type":["string","null"]},"ssoDefaultRole":{"type":["string","null"]},"enforceSsoForDomains":{"type":"boolean"}},"required":["enforceSsoForDomains","providerType"],"title":"UpdateSsoConfigRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"updateConfig 200 response","content":{"application/json":{"schema":{"properties":{"organizationId":{"type":"integer","format":"int64"},"providerType":{"type":"string"},"status":{"type":"string"},"samlMetadataUrl":{"type":["string","null"]},"samlMetadataXml":{"type":["string","null"]},"oidcIssuerUrl":{"type":["string","null"]},"oidcClientId":{"type":["string","null"]},"oidcScopes":{"type":["string","null"]},"oidcSecretConfigured":{"type":"boolean"},"ssoDefaultRole":{"type":["string","null"]},"enforceSsoForDomains":{"type":"boolean"},"lastSyncError":{"type":["string","null"]},"lastSyncedAt":{"type":["string","null"],"format":"date-time"},"lastTestedAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["enforceSsoForDomains","oidcSecretConfigured","organizationId","providerType","status"],"title":"SsoConnectionResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

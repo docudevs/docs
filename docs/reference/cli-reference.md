@@ -61,11 +61,11 @@ docudevs process document.pdf [OPTIONS]
 - `--ocr [DEFAULT|NONE|PREMIUM|AUTO|EXCEL]`: OCR processing type (default: DEFAULT)
 - `--llm [DEFAULT|MINI|HIGH]`: LLM model to use (default: DEFAULT)
 - `--barcodes`: Enable barcode and QR detection for this run
-- `--extraction-mode [OCR|SIMPLE|STEPS]`: Force a specific extraction pipeline
+- `--extraction-mode [OCR|SIMPLE|STEPS|WORKBOOK]`: Force a specific extraction pipeline. `WORKBOOK` requires a nonblank `--prompt`, rejects `--schema`, and only accepts an `.xlsx` input file.
 - `--describe-figures`: Request figure descriptions when supported
 - `--timeout INTEGER`: Timeout in seconds (default: 60)
 - `--wait/--no-wait`: Wait for processing to complete (default: wait)
-- `--tool JSON`: Attach a tool descriptor (can be used multiple times)
+- `--tool JSON`: Attach a tool descriptor as JSON or `@path` (must include `type`; can be used multiple times)
 
 **Examples:**
 
@@ -102,8 +102,9 @@ docudevs process-map-reduce document.pdf [OPTIONS]
 - `--ocr [DEFAULT|NONE|PREMIUM|AUTO|EXCEL]`: OCR processing type (default: DEFAULT)
 - `--llm [DEFAULT|MINI|HIGH]`: LLM model to use (default: DEFAULT)
 - `--barcodes`: Enable barcode/QR detection
-- `--extraction-mode [OCR|SIMPLE|STEPS]`: Pipeline override
+- `--extraction-mode [OCR|SIMPLE|STEPS|WORKBOOK]`: Pipeline override. `WORKBOOK` is rejected for map-reduce processing.
 - `--describe-figures`: Request figure descriptions when supported
+- `--tool JSON`: Attach a tool descriptor as JSON or `@path` (must include `type`; can be used multiple times)
 - `--pages-per-chunk INTEGER`: Pages per chunk (default: 1)
 - `--overlap INTEGER`: Overlap between chunks (default: 0)
 - `--dedup-key TEXT`: JSON path used to deduplicate rows across overlapping chunks
@@ -187,6 +188,46 @@ docudevs wait JOB_GUID [OPTIONS]
 docudevs wait 550e8400-e29b-41d4-a716-446655440000
 ```
 
+## Batch Processing
+
+Upload and process multiple documents as one batch job.
+
+### `batch process`
+
+```bash
+docudevs batch process FILE [FILE ...] [OPTIONS]
+```
+
+**Options:**
+
+- `--prompt/--prompt-file`: Extraction instructions (same as `process`)
+- `--schema/--schema-file`: JSON schema (same as `process`)
+- `--mime-type TEXT`: Explicit MIME type for all documents
+- `--ocr [DEFAULT|NONE|PREMIUM|AUTO|EXCEL]`: OCR processing type
+- `--llm [DEFAULT|MINI|HIGH]`: LLM model to use
+- `--barcodes`: Enable barcode and QR code detection
+- `--extraction-mode [OCR|SIMPLE|STEPS|WORKBOOK]`: Extraction mode override. `WORKBOOK` is rejected for batch processing.
+- `--describe-figures`: Request figure descriptions when supported
+- `--max-concurrency INTEGER`: Maximum concurrent document processing within the batch
+- `--format [json|csv|excel]`: Output format for results (implies `--wait`)
+- `--output PATH`: Save results to this file (auto-generated from `--format` if omitted)
+- `--configuration TEXT`: Named configuration for configuration-backed batch processing. Cannot be combined with `--prompt`, `--schema`, `--ocr`, `--llm`, `--barcodes`, `--extraction-mode`, or `--describe-figures`.
+- `--lookup-file PATH`: Batch-scoped lookup file that overrides any configuration lookup file for this batch
+- `--timeout INTEGER`: Timeout in seconds (default: 300)
+- `--wait/--no-wait`: Wait for processing to complete (default: wait)
+
+**Examples:**
+
+```bash
+# Batch-process several invoices with a shared prompt
+docudevs batch process invoice-1.pdf invoice-2.pdf invoice-3.pdf \
+  --prompt "Extract invoice data" \
+  --max-concurrency 5
+
+# Batch-process using a saved configuration and export to Excel
+docudevs batch process *.pdf --configuration invoice-config --format excel --output batch-results.xlsx
+```
+
 ## Configuration Management
 
 Manage named processing configurations for reusable workflows.
@@ -232,6 +273,22 @@ Delete a saved configuration.
 
 ```bash
 docudevs delete-configuration CONFIG_NAME
+```
+
+### `configuration lookup-file upload`
+
+Attach a lookup file to a named configuration. It applies to every job that uses the configuration until replaced or deleted.
+
+```bash
+docudevs configuration lookup-file upload CONFIG_NAME vendors.csv
+```
+
+### `configuration lookup-file delete`
+
+Remove the lookup file attached to a configuration.
+
+```bash
+docudevs configuration lookup-file delete CONFIG_NAME
 ```
 
 ## Template Management
@@ -308,6 +365,11 @@ docudevs cases list
 
 Create a new case.
 
+**Options:**
+
+- `--name TEXT`: Case name (required)
+- `--description TEXT`: Optional case description
+
 ```bash
 docudevs cases create --name "Quarterly Invoices" --description "Q4 2024 invoice processing"
 ```
@@ -340,8 +402,14 @@ docudevs cases delete CASE_ID
 
 Upload a document into a case.
 
+**Options:**
+
+- `--filename TEXT`: Custom filename for the uploaded document (defaults to the source file's name)
+- `--mime-type TEXT`: Explicit MIME type for the document (defaults to detection from the filename)
+- `--metadata TEXT`: Document metadata as a JSON object or comma-separated `key=value` pairs
+
 ```bash
-docudevs cases upload-document CASE_ID invoice.pdf
+docudevs cases upload-document CASE_ID invoice.pdf --metadata '{"department": "finance"}'
 ```
 
 ### `cases list-documents`
@@ -420,6 +488,207 @@ Demote a case from knowledge base status.
 docudevs knowledge-base remove CASE_ID
 ```
 
+## Contract Analysis
+
+Manage a knowledge base's contract-analysis profile, generations, test suite, trials, and immutable analysis runs. All commands are nested under `knowledge-base contract-analysis`. See [Contract Analysis](/docs/core/contract-analysis) for the profile/draft/publish lifecycle and the run/review model.
+
+### `knowledge-base contract-analysis get`
+
+Get a contract-analysis profile draft or its published version.
+
+```bash
+docudevs knowledge-base contract-analysis get CASE_ID --view draft
+```
+
+- `--view [draft|published]`: Which version to fetch (default: `draft`)
+
+### `knowledge-base contract-analysis generate`
+
+Start profile compilation from the eligible knowledge-base documents.
+
+```bash
+docudevs knowledge-base contract-analysis generate CASE_ID
+```
+
+### `knowledge-base contract-analysis generation-compare`
+
+Show the previous, current, and proposed values for a regeneration.
+
+```bash
+docudevs knowledge-base contract-analysis generation-compare CASE_ID GENERATION_JOB_GUID
+```
+
+### `knowledge-base contract-analysis generation-apply`
+
+Apply explicit per-element decisions against the latest comparison fingerprint.
+
+```bash
+docudevs knowledge-base contract-analysis generation-apply CASE_ID GENERATION_JOB_GUID --decisions decisions.json
+```
+
+- `--decisions PATH`: JSON object mapping each changed lineage ID to an explicit action and optional reason (required)
+
+### `knowledge-base contract-analysis update`
+
+Replace the draft profile at the observed revision.
+
+```bash
+docudevs knowledge-base contract-analysis update CASE_ID --draft-revision 3 --profile profile.json
+```
+
+- `--draft-revision INTEGER`: Observed draft revision (required)
+- `--profile PATH` (aliases `--profile-file`, `--input`): Draft profile JSON file (required)
+
+### `knowledge-base contract-analysis publish`
+
+Publish a validated draft profile at the observed revision.
+
+```bash
+docudevs knowledge-base contract-analysis publish CASE_ID --draft-revision 3 --acknowledge-warning missing_termination_clause
+```
+
+- `--draft-revision INTEGER`: Observed draft revision (required)
+- `--acknowledge-warning` (aliases `--acknowledge-warning-code`, `--warning-code`): Warning code to acknowledge (repeatable)
+- `--trial-attestation-id TEXT`: Optional trial attestation ID backing the publish
+
+### `knowledge-base contract-analysis suite-get`
+
+Read the current immutable contract-analysis test suite.
+
+```bash
+docudevs knowledge-base contract-analysis suite-get CASE_ID
+```
+
+### `knowledge-base contract-analysis suite-update`
+
+Create the next suite revision from a JSON array of test cases.
+
+```bash
+docudevs knowledge-base contract-analysis suite-update CASE_ID --revision 2 --cases cases.json
+```
+
+- `--revision INTEGER`: Observed suite revision (required)
+- `--cases PATH`: JSON array of test cases (required)
+
+### `knowledge-base contract-analysis trial`
+
+Launch an explicit draft-profile trial and print its trial/run identities.
+
+```bash
+docudevs knowledge-base contract-analysis trial CASE_ID \
+  --anchor-job-guid JOB_GUID \
+  --idempotency-key trial-1 \
+  --kind scored
+```
+
+- `--anchor-job-guid TEXT`: Anchor job GUID (required)
+- `--idempotency-key TEXT`: Idempotency key (required)
+- `--suite-revision INTEGER`: Optional suite revision to trial against
+- `--kind [exploratory|scored]`: Trial kind (default: `exploratory`)
+- `--suite-case-id TEXT`: Optional single suite case to trial
+
+### `knowledge-base contract-analysis trial-get`
+
+Get exactly one trial by immutable trial ID.
+
+```bash
+docudevs knowledge-base contract-analysis trial-get CASE_ID TRIAL_ID
+```
+
+### `knowledge-base contract-analysis trial-attest`
+
+Record expert sign-off for an exact immutable trial report.
+
+```bash
+docudevs knowledge-base contract-analysis trial-attest CASE_ID TRIAL_ID --report-id REPORT_ID
+```
+
+- `--report-id TEXT`: Report ID to attest (required)
+- `--reason TEXT`: Optional reason
+
+### `knowledge-base contract-analysis run-create`
+
+Create a run and return its immutable run ID.
+
+```bash
+docudevs knowledge-base contract-analysis run-create KNOWLEDGE_BASE_ID \
+  --anchor-job-guid JOB_GUID \
+  --idempotency-key run-1
+```
+
+- `--anchor-job-guid TEXT`: Anchor job GUID (required)
+- `--idempotency-key TEXT`: Idempotency key (required)
+- `--mode [published|draft_trial]`: Run mode (default: `published`)
+- `--draft-revision INTEGER`: Required when `--mode draft_trial`
+- `--package-members PATH`: JSON array of selected package documents (maximum 32)
+- `--expected-missing PATH`: JSON array of unavailable expected package documents
+- `--excluded-documents PATH`: JSON array of explicitly excluded package documents
+
+### `knowledge-base contract-analysis run-get`
+
+Get status for exactly one immutable run ID.
+
+```bash
+docudevs knowledge-base contract-analysis run-get RUN_ID
+```
+
+### `knowledge-base contract-analysis run-result`
+
+Get the result for exactly one immutable run ID.
+
+```bash
+docudevs knowledge-base contract-analysis run-result RUN_ID
+```
+
+### `knowledge-base contract-analysis run-reviews`
+
+List the current human review dispositions for an immutable run.
+
+```bash
+docudevs knowledge-base contract-analysis run-reviews RUN_ID
+```
+
+### `knowledge-base contract-analysis review`
+
+Append a human disposition to one captured result finding.
+
+```bash
+docudevs knowledge-base contract-analysis review RUN_ID CRITERION_ID TARGET_KEY \
+  --result-fingerprint sha256:... \
+  --disposition accepted \
+  --expected-review-revision 0 \
+  --idempotency-key review-1
+```
+
+- `--result-fingerprint TEXT`: Result fingerprint being reviewed (required)
+- `--disposition [accepted|corrected|dismissed|unresolved]`: Disposition (required)
+- `--expected-review-revision INTEGER`: Observed review revision (required)
+- `--idempotency-key TEXT`: Idempotency key (required)
+- `--corrected-assessment TEXT`: Optional corrected assessment
+- `--reason TEXT`: Optional reason
+- `--evidence PATH`: Optional JSON array of immutable evidence references
+
+### `knowledge-base contract-analysis propose-test-case`
+
+Propose an unapproved suite expectation from one immutable finding.
+
+```bash
+docudevs knowledge-base contract-analysis propose-test-case CASE_ID \
+  --run-id RUN_ID \
+  --result-fingerprint sha256:... \
+  --criterion-id hours \
+  --target-key item:clause-1 \
+  --name "Hours threshold" \
+  --expected-assessment meets_requirement \
+  --reason "Correction" \
+  --expected-suite-revision 3 \
+  --idempotency-key proposal-1
+```
+
+- `--run-id`, `--result-fingerprint`, `--criterion-id`, `--target-key`, `--name`, `--reason`, `--expected-suite-revision`, `--idempotency-key`: All required
+- `--expected-assessment [meets_requirement|deviates_from_requirement|not_found|needs_review|not_applicable]`: Required
+- `--scenario-tag TEXT`: Optional scenario tag (repeatable)
+
 ## Operations Management
 
 Run post-processing operations such as error analysis and generative tasks.
@@ -432,9 +701,25 @@ Submit an operation by type.
 docudevs operations submit JOB_GUID --type error-analysis --parameter quality=deep
 ```
 
-- `--llm-type` optional LLM override (`DEFAULT`, `MINI`, `HIGH`)
-- `--parameter` key/value pairs passed to the operation
-- `--wait` to block until the operation completes
+- `--type TEXT`: Operation type to execute (required)
+- `--llm-type [DEFAULT|MINI|HIGH]`: Optional LLM override
+- `--parameter key=value`: Custom operation parameter (repeatable)
+- `--wait/--no-wait`: Wait for the operation result (default: `--no-wait`)
+- `--timeout INTEGER`: Wait timeout in seconds (default: 120)
+- `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
+
+### `operations contract-analysis`
+
+Run contract analysis against a published knowledge-base profile.
+
+```bash
+docudevs operations contract-analysis JOB_GUID --knowledge-base-id KNOWLEDGE_BASE_ID
+```
+
+- `--knowledge-base-id INTEGER` (alias `--knowledge-base`): Knowledge base ID (required)
+- `--wait/--no-wait`: Wait for the result (default: wait)
+- `--timeout FLOAT`: Wait timeout in seconds (default: 120)
+- `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
 
 ### `operations error-analysis`
 
@@ -444,6 +729,12 @@ Convenience command for error analysis.
 docudevs operations error-analysis JOB_GUID --timeout 180
 ```
 
+- `--llm-type [DEFAULT|MINI|HIGH]`: Optional LLM fallback
+- `--parameter key=value`: Custom parameter (repeatable)
+- `--wait/--no-wait`: Wait for completion (default: wait)
+- `--timeout INTEGER`: Wait timeout in seconds (default: 120)
+- `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
+
 ### `operations generative-task`
 
 Create a generative task from a completed job.
@@ -452,8 +743,12 @@ Create a generative task from a completed job.
 docudevs operations generative-task PARENT_JOB_GUID --prompt "Summarize the findings" --model DEFAULT
 ```
 
-- `--no-wait` returns immediately with the operation job GUID
-- `--temperature` and `--max-tokens` mirror API parameters
+- `--prompt TEXT`: Prompt for the generative task (required)
+- `--model TEXT`: Optional LLM model override
+- `--temperature FLOAT` and `--max-tokens INTEGER` mirror API parameters
+- `--wait/--no-wait`: Wait for task completion (default: wait); `--no-wait` returns immediately with the operation job GUID
+- `--timeout INTEGER`: Wait timeout in seconds (default: 120)
+- `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
 
 ### `operations pdf-acroform`
 
@@ -472,8 +767,14 @@ docudevs operations pdf-acroform PARENT_JOB_GUID \
 ```
 
 - Parent job must refer to a PDF
-- `--ocr PREMIUM` is the safest default when the parent job may not already have thumbnails
-- `--force-ocr` regenerates page images before detection
+- `--llm-type [DEFAULT|MINI|HIGH]`: LLM type for visual field detection (default: `DEFAULT`)
+- `--ocr [PREMIUM|DEFAULT|AUTO]`: OCR mode used when page images are missing (default: `PREMIUM`, the safest choice when the parent job may not already have thumbnails)
+- `--page INTEGER`: 1-based page number to inspect (repeatable)
+- `--min-confidence FLOAT`: Minimum accepted field detection confidence
+- `--max-fields-per-page INTEGER`: Maximum generated fields per page
+- `--force-ocr/--no-force-ocr` regenerates page images before detection even if thumbnails already exist
+- `--wait/--no-wait`: Wait for completion (default: wait)
+- `--timeout INTEGER` / `--poll-interval FLOAT`: Wait timeout and polling interval (defaults: 180 / 5.0)
 - `--output` requires the default wait mode because the command downloads the generated PDF after completion
 - The JSON response includes `operationJobGuid` for later metadata or field-definition retrieval through the SDK or HTTP API
 
@@ -495,35 +796,15 @@ docudevs operations result JOB_GUID --type error-analysis
 
 ## Billing
 
-Manage token packs and balances.
-
-### `billing prices`
-
-List available token pack prices.
-
-```bash
-docudevs billing prices
-```
-
-### `billing checkout`
-
-Create a checkout session for a token pack.
-
-```bash
-docudevs billing checkout PRICE_ID
-```
-
-### `billing balance`
-
-Fetch the current token balance.
-
-```bash
-docudevs billing balance
-```
+The CLI has no `billing` command group and the Python SDK client has no billing helper methods (there is no `list_billing_prices`, `create_billing_checkout_session`, or `get_billing_balance`). Token packs and balance are managed in the DocuDevs web app; see [Billing Tokens](/docs/reference/billing-tokens).
 
 ## LLM Provider Management
 
 Manage LLM providers and key bindings.
+
+:::warning
+`llm create` and `llm update` call SDK convenience wrappers that currently send outdated field names and do not match the current provider contract. Use the generated API functions (see [Bring Your Own LLM](/docs/administration/bring-your-own-llm)) or the REST API directly instead of these two commands.
+:::
 
 ### `llm providers`
 
@@ -584,6 +865,10 @@ docudevs llm bind KEY --provider-id PROVIDER_ID
 ## OCR Provider Management
 
 Manage OCR providers and key bindings.
+
+:::warning
+`ocr create` and `ocr update` call SDK convenience wrappers that currently send outdated field names and do not match the current provider contract. Use the generated API functions (see [Bring Your Own OCR](/docs/administration/bring-your-own-ocr)) or the REST API directly instead of these two commands.
+:::
 
 ### `ocr providers`
 

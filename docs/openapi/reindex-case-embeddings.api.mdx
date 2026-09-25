@@ -1,0 +1,71 @@
+---
+id: reindex-case-embeddings
+title: "reindexCaseEmbeddings"
+description: "reindexCaseEmbeddings"
+sidebar_label: "reindexCaseEmbeddings"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVd9v2jAQ/lcsP20SK6yd9sBbBGkVqWWIdtMm1Ac3PsCbE7u2w4qi/O+7S0IKo7SoTzk7952/++HPJQ9i6flwzuPsAaRU+ZJdQQ5OBGVyz+973Nh2lUg+5A5ULuFpJDx0CM973AonMgjgKFjJc1ygd4puCOtxlePKirBC28FjoRxgtOAK6HGfriATfFjysLGEUnmAJTh0XRiXidBsff3Cq+qe4N4iNfCEOB8M6CPBp05ZYnmMI0NXtsVi6NTgKXkgtLBWq7TOsf/bU4hyh5R1VIGgmgOVPIkoZhVEKGoI5EVGFZ7O4mk0SyZX6J9MxvHPxpzF0fgXfqPRXfIjRuMySq7jMRqjaDKKrxt7Ft8lM7SwAEEFTad3uT037LY5FI9H1mslwU3qRmwZz5GWQwQGzAut+T16ZkaCftvNwVr5dgpOKsAWMCmQp3sTdHFOIKkyyH09eqcBvMqUFk6FzQ0g53QH1uaATmtIg3GXCrTcT3THJzWZ1TjAcmzSAkmEkSma8TiBBTxZPOJ92IVQ+n1ICzm1/12EnTPuBrwXyzf6njoQmFkUXnOrdm/1/Fgt99p7rGgvF6RHF+9IxnuzeTB3L4xIdzkPJ+P16zUOBjWoonRPUBwMj4q4MiSb1vhQqyQq4JD3SRd9v2zkserDFvOpDVQr5sLUJW/pUM5jWHsWTRP+//ndz21lGN7/FNtLeo6AMxYLjwoW2F+xYcEwVL81ihrbmMIx2YI8/ZEiiLowzjexP59dnA3qccMcMlGrYyvvLVtGebO9xPfodRMZ4Cn0rRb4GmC8wulaX+uazOu3gqDD7tE4LAu2Z0WVRPeyfEC/705XFW0/FuA2uI/mGnstHqho+BBJ5cnGHiyE9nDArHsG+IdZO8EfGZ79IuN2U+QbqpDQBa3Q/AOb58euoluzAiFJ9JBB8zNKU7BhB3bw6NDb1s3L9NvtHY7aP0vNnKs=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"reindexCaseEmbeddings"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/embedding-reindex"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+reindexCaseEmbeddings
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"reindexCaseEmbeddings 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"status":{"enum":["PREPARING","INDEXING","READY","ACTIVE","FAILED","CANCELLED","RETIRED"],"title":"EmbeddingGenerationStatus"},"providerName":{"type":["string","null"]},"modelName":{"type":["string","null"]},"revisionId":{"type":"integer","format":"int64"},"revisionNumber":{"type":"integer","format":"int32"},"dimensions":{"type":"integer","format":"int32"},"similarityMetric":{"type":"string"},"vectorFieldName":{"type":"string"},"completedDocumentCount":{"type":"integer","format":"int32"},"expectedDocumentCount":{"type":"integer","format":"int32"},"failedDocumentCount":{"type":"integer","format":"int32"},"pendingDocumentCount":{"type":"integer","format":"int32"},"errorMessage":{"type":["string","null"]},"createdAt":{"type":["string","null"]}},"required":["completedDocumentCount","dimensions","expectedDocumentCount","failedDocumentCount","id","pendingDocumentCount","revisionId","revisionNumber","similarityMetric","status","vectorFieldName"],"title":"EmbeddingGenerationDto"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

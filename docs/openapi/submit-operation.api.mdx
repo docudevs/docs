@@ -5,7 +5,7 @@ description: "submitOperation"
 sidebar_label: "submitOperation"
 hide_title: true
 hide_table_of_contents: true
-api: eJy1VEtz2jAQ/isenWmgPXKjJQ9m0sIk5MRwWNsKiMqWK61IGMb/vbvyA5sQppdywNK+9e23exQIGyfGK2EKaQGVyZ1YD063WSrGwvk4UzhvZGIgrPzjpcPvJj2I8VEkJkeZIx+hKLRKgt1w58iYZC7Zygz4VFiOjEo6vu1MfO9Vykc8FJIzoVX5RpSDWnBBUYCFTKK07qReidxrTXWZeCcT5BeA1vNX0pzn1Dpb9kJf9ZW5z9hkens3eXlcktXP2a8ZfR5m9w9sigo11/dYhy3XVGLiHZps8Y+FpqlitEAvOoWi9bIsT/Fb8DtRKVdZtUJZmXLwBtAavk59z/0WPlX9E2U/QsjKAlcQESrAvo1G/EmlS6wqQv8/MCIio6jxouz/gQ8tI5efEcMhoHcXVZl0DjaX3D4FsHE5z9zmuQZuDURZBnyvQhdS4dbwnBWGWsIMxy3dhqZjw9A9nYbu9h2yQsseaM2bBmdv7I9MRUCqSuWvJgBSP2JqEj+VexdNFkzwftGtkg8ZtTaiziUEESVgh5voFhx1EaM3OERoImLAnhobHYy3UVo7OdakgEDxSeuq2KObr2Gu6fEZBH7kVG2LVNSFqldV20yU7zgsNKicA3mrA7UCip3Fxh3bMsIkPB5jcPLF6rJkMeFqaZGt6LgHqyBmRFY8ylsJqbRhF/yWZCJ+VNT+UpNhD9pzCR9oXg4aj0mSyAKv2q47JFjMn3nPxPVqzUzKPhbeeO3S/1gETlarmgyCjPYa5BsfOC6qmPz7CxjfCvA=
+api: eJy1VU1v2zAM/SuGzunHtp5yy9quDdA1QT9ORQ+0rCbqZEuT6LRG4P8+UnYcu0mDAcNyiCVRfKQen6i1QFgEMX4S1ikPqG0RxPNoO5tmYixCmeYaZ5s1MRJe/S5VwO82q8R4LaQtUBXIQ3DOaBn3nbwG2kxrQS5VDjxynpFRq8CzV5telTrjIVZOcST0uliIetQu7DE48JArVD5szU+iKI2hvGz6qiTyCcCY2QtZPsY0Jn8YQB/0VUWZ85aLyx+Tx5sH2nU7uZ3R5+f0dkqf6+nVNXugRsNp3rTo9TNlKsuANp//Zb5Zppk0MPNevuhLVddb/K4GPVSKVTcV0V5lDL7htWWxl9/9sJJ3TRlFPUSIUXkhONJDw9vX01P+ZCpIr12UQS+dpJEIKg76H9TQ6fHhM1kEBCzDXlOuQoDFPrdPedu4fIzcxTnEacMak0r4Z4d5ay8SfVkIlEZ0Odt1OSdSPUg8ApJIFXRIJDhItdFYJTTLdIDU/Av/0mb7qf2cv5Howm6NqbVGQbHDbsTveWyBe2SS+F+0Uefd2R4LWIE27DJglmMPCNptUnQ/lpb7l7Okce4cuKTZie3tYVLuts3s8h1yZ9RAjpvTjj6cftiKmhtNWenixUY22hNdWFleqFVIJnPuGMOkOyMPcipaQjWRRAsFYIfj5BKCZoG8QZWgTai2KypZUtnSJ1nrFNiSAQLhkzU02F+Ovx2fxo5Jx88h1r6gfDuukj5Zg7y6WqJ6xxNnQBcMVHoTZRN57D0ZXMAlc0yL63UKQT16U9e8TMx6eiKeaLgCr7mMPCOwpYJM+dhlf6mqVTgd5qi9aCswJaewI+F6tPGYSKkcHtz73JPBfHbPHTxtH6086l14eOMHjf7HIt735hGkDXGNXgwoFmXUv2gw+fcHi+KEZQ==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ submitOperation
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"type":{"type":"string"},"parameters":{"type":["null","object"],"allOf":[{"properties":{"llmType":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","MINI","HIGH"],"title":"LlmType"}]},"customParameters":{"type":["null","object"],"additionalProperties":true}},"title":"OperationParameters"}]}},"required":["jobGuid","type"],"title":"SubmitOperationRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"type":{"type":"string"},"parameters":{"type":["null","object"],"allOf":[{"properties":{"llmType":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","NANO","MINI","HIGH"],"title":"LlmType"}]},"customParameters":{"type":["null","object"],"additionalProperties":true}},"title":"OperationParameters"}]}},"required":["jobGuid","type"],"title":"SubmitOperationRequest"}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ submitOperation
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"submitOperation 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}}}}
+  responses={{"200":{"description":"Operation submitted","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}},"400":{"description":"Operation request rejected"},"404":{"description":"Contract-analysis capability is disabled","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"disabled":{"type":"boolean"}},"required":["code","disabled","message"],"title":"ProfileCapabilityUnavailableResponse"}}}}}}
 >
   
 </StatusCodes>

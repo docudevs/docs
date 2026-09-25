@@ -1,0 +1,71 @@
+---
+id: update-contract-analysis-draft
+title: "updateContractAnalysisDraft"
+description: "updateContractAnalysisDraft"
+sidebar_label: "updateContractAnalysisDraft"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWE1v4zYQ/SsETy1gx2kaFGh6cmLvrreLXcNJ2kPgw1iibW4oUiUpJ4Lh/94ZUrJlK3E2OWzRojkkEjV8nHnzxcmae1g4fnHH77V5UCJdiO4MnOjm1sylEo5PO9zkwoKXRo9SfsGLPAUvroz2FhLf16BKJ93AwtzzDs/BQia8sAS65hpfcE+CkLi5w6XGtxz8Ep+t+KuQViCmt4XocJcsRQb8Ys19mdMuqb1YCIuic2Mz8HHpl3O+2UzjduH8pUlL2pOgQkJ7eoQ8VzIJGve+OqNpbQeeCpdYmdNXBPx4/eVzd26l0Kkq2cwUOgVbsgr8N+aXgjlhVzIRuOhBaseAfYTkHoGZt0IwVI6tQMk0nHhCJFiizEukjw4kaiZiJZ2MurxoXkAg+oM1aSoJGNS4AUuUbTZNEu8ODtqBIFleekLjt8F54/gh+OyD9/kkWou8bg7dEhZcbrSLxpydnrZJjKgpS6qg6EIVFSytwuKN3vkTFWH1+exB+iVLTYZO6GpR4FGKkf9YDqUykLrgispqBjplC6Gr0GWAxM1RN9d2kPPgi/AkdJERk++Hn4eT/s3o83sUHkz6727w7/j28tPo+sNwgM/v+qNP+NBgtuL0OmIhbW9yezFT0i1F+vZwidJ3XBdKoayZfRWJ51MU2sXoEbkOB6W+zEPy7rMkrDXWNRQCa6GknPYiC+v78olJGwohyVbqRVCW0v+pD5lwDhZPbToI9AC9k68g2874Y2vxyLlCBJwHsBox/zOGXCHEUWMONThQoXJrg5hjx09EbiwWCoqnXXIdj7tCJybLESa9NoVNxMAkRYbFYJS+Su8qoy6VmY33iL+rZTrx8Gkzkb5F/KUy2krKTl0yjhvXIPL3urteYiesWI2VN9Y28guqcf5UdR3pkLmxltadiQfp87Z0Bc4SyGEmlfQlozosHcxQAdYokLgMM0dV+RX1+RtT4/kMQDdWujQ+zoxRAvRz+bHdsQNuB+nV1uBbDSuQira0+P21zdig4jU6l5rYHAn43qyIxxwT5tWVHztaAepVmw44PkDo1KS3FDpGfi10VZF3yPvZ2fORuutLFJ0upFEXCr80lqJ3jq4srPjO7thvlv93wn+BIf9MJ3zJjkYgHYMb0uF7WUOVci9fjg9eOHQtDc1neeFr+i54b3+sc711HMU2vXrA67Uu7b360k6JNdlNWcNHyPJ4yTy4255uaLKbm0ByZSE1woFYOdYfj/ihKduPdbukppQgZ0g7bThhQ3AYdJ49QMm8oaK8wjhkJVYHHAHiJkdfkBMgmnHijNg/nfx8chqC0jifQcjfagyNDLKaQlZzyGoS97TcBowXj76XKxw7CLawKmRGIPhwbqbwudhOu9shOtauPZZ5dZ+hqFiipoS1XhPGrVWbDS0j8xZn27spRZGV1M/CvXzXQOegnGipva2T/IdJFZo/MjzvSXPqZNFlDNaC3vDxXpS7wT3c95YCUmwopEH8eBXP6d4QxG5zqzZvOvWOfpKI3B+VnTZCeXxLc9esmvCzUH24hQf65wH+DnqaYHbI77C25gr0oghFh0dI+vkbI1Lshw==
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"updateContractAnalysisDraft"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/draft"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+updateContractAnalysisDraft
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"description":"JSON-friendly boundary request; the service retains a Jackson tree for validation.","properties":{"draftRevision":{"type":"integer","format":"int64"},"profile":{"additionalProperties":true}},"required":["draftRevision","profile"],"title":"UpdateProfileDraftHttpRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Updated contract-analysis draft","content":{"application/json":{"schema":{"description":"Wire response with domain-neutral JSON payloads for profile and generation artifacts.","properties":{"status":{"enum":["GENERATING","DRAFT","PUBLISHED","FAILED"],"title":"ProfileStatus"},"draftRevision":{"type":"integer","format":"int64"},"publishedRevision":{"type":"integer","format":"int64"},"profile":{"type":["null","object"]},"validation":{"type":["null","object"],"allOf":[{"properties":{"errors":{"type":"array","items":{"properties":{"code":{"type":"string"},"path":{"type":"string"},"message":{"type":"string"}},"required":["code","message","path"],"title":"ProfileValidationIssue"}},"warnings":{"type":"array","items":{"properties":{"code":{"type":"string"},"path":{"type":"string"},"message":{"type":"string"}},"required":["code","message","path"],"title":"ProfileValidationIssue"}},"warningCodes":{"type":"array","items":{"type":"string"}}},"required":["errors","warnings"],"title":"ProfileValidationReport"}]},"generation":{"type":["null","object"]},"uncompiledSourceDocumentIds":{"type":"array","items":{"type":"string"}},"draftBlobPath":{"type":["string","null"]},"publishedBlobPath":{"type":["string","null"]}},"required":["draftRevision","publishedRevision","status","uncompiledSourceDocumentIds"],"title":"KnowledgeBaseProfileHttpResponse"}}}},"400":{"description":"Invalid draft request"},"404":{"description":"Profile capability is disabled or profile is absent","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"disabled":{"type":"boolean"}},"required":["code","disabled","message"],"title":"ProfileCapabilityUnavailableResponse"}}}},"409":{"description":"Draft revision conflict","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"expectedRevision":{"type":"integer","format":"int64"},"actualRevision":{"type":"integer","format":"int64"}},"required":["actualRevision","code","expectedRevision","message"],"title":"ProfileRevisionConflictResponse"}}}},"422":{"description":"Profile validation or source-authority failure","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"validation":{"properties":{"errors":{"type":"array","items":{"properties":{"code":{"type":"string"},"path":{"type":"string"},"message":{"type":"string"}},"required":["code","message","path"],"title":"ProfileValidationIssue"}},"warnings":{"type":"array","items":{"properties":{"code":{"type":"string"},"path":{"type":"string"},"message":{"type":"string"}},"required":["code","message","path"],"title":"ProfileValidationIssue"}},"warningCodes":{"type":"array","items":{"type":"string"}}},"required":["errors","warnings"],"title":"ProfileValidationReport"}},"required":["code","message","validation"],"title":"ProfileValidationErrorResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

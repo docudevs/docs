@@ -196,6 +196,22 @@ print(combined.result)
 print(combined.source_locations)
 ```
 
+Or do submit, wait, and fetch in a single call with `submit_and_wait_for_document_with_source_locations(...)`, which takes the same arguments as `submit_and_process_document(...)` plus `timeout`/`poll_interval`:
+
+```python
+combined = await client.submit_and_wait_for_document_with_source_locations(
+    document=doc_bytes,
+    document_mime_type="application/pdf",
+    prompt="Extract the main clauses from this contract.",
+    schema=schema,
+    source_location_granularity="block",
+    timeout=180,
+)
+
+print(combined.result)
+print(combined.source_locations)
+```
+
   </TabItem>
   <TabItem value="curl">
 

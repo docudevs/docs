@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-profile
+title: "getContractAnalysisProfile"
+description: "getContractAnalysisProfile"
+sidebar_label: "getContractAnalysisProfile"
+hide_title: true
+hide_table_of_contents: true
+api: eJzdVk1vEz0Q/iuWTyClTYHqPeSWtqGEF5UqbeFQ9TDZnSQGr73Y3oRVlP/OzH5lNwmhlThx2g/PPDPzzJfXMsDcy8Gj/G7sSmM8x5MpeDxJnZ0pjV4+9aRN0UFQ1oxjOZBzDJfWBAdRGBrQuVf+thSWPZmCgwQDOsZcS0MfpBIRIun2pDL0lUJY0LvDH5lySJDBZdiTPlpgAnKwliFPWUuZgHN0JDqzLoFQ/vrvXG42vQZ6qXBVA//I0OXPQfbBKTMnyRhnkGlGjh3MAiE/sbpPrfEUO2m8PTvjR4w+ciplEki4jv8EKgJE2jAQ0RmawEqQplpFBXP9b5411y1fupBfyWFRWxYrFRYitgkoc2IwI2NafLz7fCNSyLWF2AuipDYqwMRijqZKkgAX1Iy886ecEMfZC6qMxgcIWfGGJks47dejm9FkeD++uSbhq8nw/T09bx8uPo3vPoyu6P39cPyJXoiXoIJm9qps35VYm17J3QSXyqsyyD8mkPzKplr5BcYv1auIbqQfpcm0Jlk7/YZRkE8ktAStYggd1D25ngStP8+KOu2yhM5Z51sOgXPAhaUCJsX/rnxkY9yvLnaWK/3QQYLew/yQ0qZdvo8l9Fa+gtxPxpcm4rH3GRY4K3CGMP+ZQC4J4mgwux7suFCltUXMMfMTTK2jicD1tG2u43WXmcgmKcHEdzZzEV7ZKEtoGIzjF/ldddSFttPbDvGP28lVGH9qN9JzxHcY6Tbuoabs1SPjeHAtIv+v98gFDf2K1Q8hpJNqtnFeyI3zQ3N1bIrObQZbMdwL4fN94QpbRJDCVGkVckGDOFYepmRftOYj/Yap56H8gvH8zM74fQNQFitfWodTazWC+V17NBpb4P0avWwCfjCwBKVZpUMv2+5wdXRn075e2Gqz1405kP3uhcD31+UW3/Trq0E/2l2DxSKe2SLeymeukitcejG8Hctdt5rDupY4ZREFTgSywqkYgacMBLGCXAQryOKSkiJyqkDaj6WS5xNqWiB8Oi2XiXxz+u70rJhd1ocEiuxWdwaKU9R0iJoPsSWk42STuoA/Qz/VtJIZNXO6qJKCrN3bExMxaC49zVWqrL4uY5TeBTnIGOs16z44vdnw7/I2w9tpW0cz0B73HGxqWr6aVDX1WpC1g45/x3x7baJ2y1hE8r1nCU6xnb9vsx58Jm/brH2piCom7QIhps3PHpSHwyjCNLTU9rqWXW9K+Hp0Tx3wCzHBwyY=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisProfile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisProfile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"view","in":"query","required":true,"schema":{"type":"string","default":"draft"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Contract-analysis profile","content":{"application/json":{"schema":{"description":"Wire response with domain-neutral JSON payloads for profile and generation artifacts.","properties":{"status":{"enum":["GENERATING","DRAFT","PUBLISHED","FAILED"],"title":"ProfileStatus"},"draftRevision":{"type":"integer","format":"int64"},"publishedRevision":{"type":"integer","format":"int64"},"profile":{"type":["null","object"]},"validation":{"type":["null","object"],"allOf":[{"properties":{"errors":{"type":"array","items":{"properties":{"code":{"type":"string"},"path":{"type":"string"},"message":{"type":"string"}},"required":["code","message","path"],"title":"ProfileValidationIssue"}},"warnings":{"type":"array","items":{"properties":{"code":{"type":"string"},"path":{"type":"string"},"message":{"type":"string"}},"required":["code","message","path"],"title":"ProfileValidationIssue"}},"warningCodes":{"type":"array","items":{"type":"string"}}},"required":["errors","warnings"],"title":"ProfileValidationReport"}]},"generation":{"type":["null","object"]},"uncompiledSourceDocumentIds":{"type":"array","items":{"type":"string"}},"draftBlobPath":{"type":["string","null"]},"publishedBlobPath":{"type":["string","null"]}},"required":["draftRevision","publishedRevision","status","uncompiledSourceDocumentIds"],"title":"KnowledgeBaseProfileHttpResponse"}}}},"400":{"description":"Invalid profile view"},"404":{"description":"Profile capability is disabled or profile is absent","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"disabled":{"type":"boolean"}},"required":["code","disabled","message"],"title":"ProfileCapabilityUnavailableResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,8 +1,7 @@
 openapi: 3.1.0
 info:
   title: DocuDevs API
-  description: DocuDevs Document processing API. Easiest way to convert your documents
-    to data
+  description: DocuDevs Document processing API. Easiest way to convert your documents to data
   version: 1.3.0
 paths:
   /agent/chat:
@@ -41,162 +40,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AgentStatusResponse"
-  /billing/balance:
-    get:
-      tags:
-      - billing
-      operationId: getBalance
-      responses:
-        "200":
-          description: getBalance 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BillingBalanceResponse"
-  /billing/checkout:
-    post:
-      tags:
-      - billing
-      operationId: createCheckoutSession
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BillingCheckoutRequest"
-        required: true
-      responses:
-        "200":
-          description: createCheckoutSession 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BillingCheckoutResponse"
-  /billing/prices:
-    get:
-      tags:
-      - billing
-      operationId: listPrices
-      responses:
-        "200":
-          description: listPrices 200 response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/BillingPrice"
-  /billing/usage/by-jobs:
-    get:
-      tags:
-      - billing
-      operationId: getUsageByJobs
-      parameters:
-      - name: guids
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: getUsageByJobs 200 response
-          content:
-            application/json:
-              schema:
-                additionalProperties:
-                  type: integer
-                  format: int64
-  /billing/usage/events:
-    get:
-      tags:
-      - billing
-      operationId: getUsageEvents
-      parameters:
-      - name: guids
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: limit
-        in: query
-        required: true
-        schema:
-          type: integer
-          format: int32
-          default: 500
-      - name: includeRelated
-        in: query
-        required: true
-        schema:
-          type: boolean
-          default: true
-      responses:
-        "200":
-          description: getUsageEvents 200 response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/UsageEventResponse"
-  /billing/usage/ledger:
-    get:
-      tags:
-      - billing
-      operationId: getRecentLedger
-      parameters:
-      - name: limit
-        in: query
-        required: true
-        schema:
-          type: integer
-          format: int32
-          default: 50
-      responses:
-        "200":
-          description: getRecentLedger 200 response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/LedgerEntryResponse"
-  /billing/usage/summary:
-    get:
-      tags:
-      - billing
-      operationId: getUsageSummary
-      responses:
-        "200":
-          description: getUsageSummary 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UsageSummaryResponse"
-  /billing/webhook:
-    post:
-      tags:
-      - billing
-      operationId: handleWebhook
-      parameters:
-      - name: Stripe-Signature
-        in: header
-        schema:
-          type:
-          - string
-          - "null"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-        required: true
-      responses:
-        "200":
-          description: handleWebhook 200 response
-          content:
-            application/json:
-              schema:
-                type: string
   /cases:
     get:
       tags:
@@ -337,6 +180,10 @@ paths:
                 document:
                   type: string
                   format: binary
+                datasetType:
+                  type:
+                  - string
+                  - "null"
               required:
               - document
             encoding:
@@ -438,6 +285,81 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DocumentSummaryResponse"
+  /cases/{caseId}/embedding:
+    get:
+      tags:
+      - Embedding Generations
+      operationId: getCaseEmbeddingStatus
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getCaseEmbeddingStatus 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseEmbeddingStatusDto"
+  /cases/{caseId}/embedding-reindex:
+    post:
+      tags:
+      - Embedding Generations
+      operationId: reindexCaseEmbeddings
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: reindexCaseEmbeddings 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingGenerationDto"
+    delete:
+      tags:
+      - Embedding Generations
+      operationId: cancelCaseEmbeddingReindex
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: cancelCaseEmbeddingReindex 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingGenerationDto"
+  /cases/{caseId}/embedding-reindex/retry:
+    post:
+      tags:
+      - Embedding Generations
+      operationId: retryCaseEmbeddingReindex
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: retryCaseEmbeddingReindex 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingGenerationDto"
   /cases/{caseId}/summaries:
     get:
       tags:
@@ -686,6 +608,114 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Unit"
+  /contract-analysis/runs:
+    post:
+      tags:
+      - contract-analysis-runs
+      operationId: createContractAnalysisRun
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContractAnalysisRunRequest"
+        required: true
+      responses:
+        "200":
+          description: createContractAnalysisRun 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunResponse"
+  /contract-analysis/runs/{runId}:
+    get:
+      tags:
+      - contract-analysis-runs
+      operationId: getContractAnalysisRun
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getContractAnalysisRun 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunStatusResponse"
+  /contract-analysis/runs/{runId}/result:
+    get:
+      tags:
+      - contract-analysis-runs
+      operationId: getContractAnalysisRunResult
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getContractAnalysisRunResult 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunStatusResponse"
+  /contract-analysis/runs/{runId}/reviews:
+    get:
+      tags:
+      - contract-analysis-reviews
+      operationId: getContractAnalysisRunReviews
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getContractAnalysisRunReviews 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContractAnalysisReviewResponse"
+  /contract-analysis/runs/{runId}/reviews/{criterionId}/{targetKey}:
+    put:
+      tags:
+      - contract-analysis-reviews
+      operationId: putContractAnalysisRunReview
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criterionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: targetKey
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PutContractAnalysisReviewRequest"
+        required: true
+      responses:
+        "200":
+          description: putContractAnalysisRunReview 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisReviewResponse"
   /document/acroform-metadata:
     post:
       tags:
@@ -1071,6 +1101,25 @@ paths:
           type:
           - string
           - "null"
+      - name: clientRunId
+        in: query
+        schema:
+          type:
+          - string
+          - "null"
+      - name: segmentIndex
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      - name: final
+        in: query
+        schema:
+          type:
+          - boolean
+          - "null"
       requestBody:
         content:
           application/json:
@@ -1270,6 +1319,226 @@ paths:
             application/json:
               schema:
                 type: string
+  /embeddings/default:
+    get:
+      tags:
+      - Embedding Providers
+      operationId: getDefaultEmbeddingBinding
+      responses:
+        "200":
+          description: getDefaultEmbeddingBinding 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingDefaultBindingDto"
+    put:
+      tags:
+      - Embedding Providers
+      operationId: updateDefaultEmbeddingBinding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetDefaultEmbeddingBindingRequest"
+        required: true
+      responses:
+        "200":
+          description: updateDefaultEmbeddingBinding 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingDefaultBindingDto"
+  /embeddings/overview:
+    get:
+      tags:
+      - Embedding Generations
+      operationId: getEmbeddingOverview
+      responses:
+        "200":
+          description: getEmbeddingOverview 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingOverviewDto"
+  /embeddings/providers:
+    get:
+      tags:
+      - Embedding Providers
+      operationId: listEmbeddingProviders
+      responses:
+        "200":
+          description: listEmbeddingProviders 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmbeddingProviderDto"
+    post:
+      tags:
+      - Embedding Providers
+      operationId: createEmbeddingProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEmbeddingProviderRequest"
+        required: true
+      responses:
+        "200":
+          description: createEmbeddingProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingProviderMutationDto"
+  /embeddings/providers/{id}:
+    get:
+      tags:
+      - Embedding Providers
+      operationId: getEmbeddingProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getEmbeddingProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingProviderDto"
+    delete:
+      tags:
+      - Embedding Providers
+      operationId: deleteEmbeddingProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: deleteEmbeddingProvider 200 response
+          content:
+            application/json:
+              schema: {}
+    patch:
+      tags:
+      - Embedding Providers
+      operationId: updateEmbeddingProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEmbeddingProviderRequest"
+        required: true
+      responses:
+        "200":
+          description: updateEmbeddingProvider 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingProviderMutationDto"
+  /integration/connections:
+    get:
+      tags:
+      - integration
+      operationId: listConnections
+      responses:
+        "200":
+          description: listConnections 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConnectionResponse"
+    post:
+      tags:
+      - integration
+      operationId: createConnection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateConnectionRequest"
+        required: true
+      responses:
+        "200":
+          description: createConnection 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionResponse"
+  /integration/connections/{id}:
+    get:
+      tags:
+      - integration
+      operationId: getConnection
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getConnection 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionResponse"
+    put:
+      tags:
+      - integration
+      operationId: updateConnection
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateConnectionRequest"
+        required: true
+      responses:
+        "200":
+          description: updateConnection 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionResponse"
+    delete:
+      tags:
+      - integration
+      operationId: deleteConnection
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: deleteConnection 200 response
+          content:
+            application/json:
+              schema: {}
   /integration/secrets:
     get:
       tags:
@@ -1315,94 +1584,22 @@ paths:
       responses:
         "200":
           description: delete 200 response
-  /internal/llm/resolve:
-    post:
-      tags:
-      - Internal LLM
-      operationId: resolveLlmProvider
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ResolveLlmRequest"
+  /invites/{token}:
+    get:
+      operationId: lookup
+      parameters:
+      - name: token
+        in: path
         required: true
+        schema:
+          type: string
       responses:
         "200":
-          description: resolveLlmProvider 200 response
+          description: lookup 200 response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResolvedLlmProviderDto"
-  /internal/ocr/resolve:
-    post:
-      operationId: resolveOcrProvider
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ResolveOcrRequest"
-        required: true
-      responses:
-        "200":
-          description: resolveOcrProvider 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ResolvedOcrProviderDto"
-  /internal/operation/status:
-    post:
-      tags:
-      - Internal Operation
-      operationId: internalGetOperationStatus
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/InternalOperationStatusRequest"
-        required: true
-      responses:
-        "200":
-          description: internalGetOperationStatus 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalOperationStatusResponse"
-  /internal/operation/submit:
-    post:
-      tags:
-      - Internal Operation
-      operationId: internalSubmitOperation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/InternalSubmitOperationRequest"
-        required: true
-      responses:
-        "200":
-          description: internalSubmitOperation 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SubmitOperationResponse"
-  /internal/operation/timeout:
-    post:
-      tags:
-      - Internal Operation
-      operationId: internalMarkOperationTimeout
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/InternalOperationTimeoutRequest"
-        required: true
-      responses:
-        "200":
-          description: internalMarkOperationTimeout 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalOperationStatusResponse"
+                $ref: "#/components/schemas/InviteLookupResponse"
   /job/dependencies/{guid}:
     get:
       tags:
@@ -1613,6 +1810,40 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/result/{guid}/pdf-acroform:
+    get:
+      tags:
+      - job
+      operationId: getPdfAcroFormResult
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getPdfAcroFormResult 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/result/{guid}/pdf-acroform-field-definitions:
+    get:
+      tags:
+      - job
+      operationId: getPdfAcroFormFieldDefinitions
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getPdfAcroFormFieldDefinitions 200 response
+          content:
+            application/json:
+              schema: {}
   /job/result/{guid}/source-locations:
     get:
       tags:
@@ -1637,6 +1868,40 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/result/{guid}/workbook/{artifact}:
+    get:
+      tags:
+      - job
+      summary: "Retrieve a plan, source-map, or bounded summary artifact published\
+        \ for this workbook result."
+      description: "Retrieve the plan, source-map, or bounded summary artifact for\
+        \ a workbook normalization result"
+      operationId: getWorkbookArtifact
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: artifact
+        in: path
+        description: Allow-listed workbook artifact kind
+        required: true
+        schema:
+          enum:
+          - plan
+          - source-map
+          - summary
+      responses:
+        "200":
+          description: Workbook supporting artifact
+          content:
+            application/json:
+              schema: {}
+        "400":
+          description: Invalid workbook artifact kind or reference
+        "404":
+          description: "Job, published workbook result, or artifact not found"
   /job/result/{uuid}:
     get:
       tags:
@@ -1650,10 +1915,16 @@ paths:
           type: string
       responses:
         "200":
-          description: result 200 response
+          description: Workbook normalization results use the version-1 envelope;
+            legacy result shapes remain unchanged
           content:
             application/json:
-              schema: {}
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/WorkbookResult"
+                - {}
+        "404":
+          description: Result not found
   /job/result/{uuid}/csv:
     get:
       tags:
@@ -1781,6 +2052,168 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PurgeResult"
+  /job/{guid}/pipeline/client-runs:
+    post:
+      tags:
+      - pipeline
+      operationId: openClientRun
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenClientRunRequest"
+        required: true
+      responses:
+        "200":
+          description: openClientRun 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/{guid}/pipeline/client-runs/{clientRunId}/fail:
+    post:
+      tags:
+      - pipeline
+      operationId: failClientRun
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientRunId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: failClientRun 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/{guid}/pipeline/client-runs/{clientRunId}/nodes/{nodeId}/result:
+    put:
+      tags:
+      - pipeline
+      operationId: putClientNodeResult
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientRunId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: nodeId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: putClientNodeResult 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/{guid}/pipeline/client-runs/{clientRunId}/refresh:
+    post:
+      tags:
+      - pipeline
+      operationId: refreshClientRun
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientRunId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenClientRunRequest"
+        required: true
+      responses:
+        "200":
+          description: refreshClientRun 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/{guid}/pipeline/client-runs/{clientRunId}/segments/{segmentIndex}/status:
+    get:
+      tags:
+      - pipeline
+      summary: Segment-scoped status.
+      description: "Segment-scoped status. The SDK polls this rather than the public\
+        \ job status, which is what lets a non-final segment finish without the job\
+        \ appearing complete."
+      operationId: getSegmentStatus
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientRunId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: segmentIndex
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: getSegmentStatus 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/{parentGuid}/pdf-acroform/apply:
+    post:
+      tags:
+      - job
+      operationId: applyPdfAcroFormFieldDefinitions
+      parameters:
+      - name: parentGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PdfAcroFormApplyRequest"
+        required: true
+      responses:
+        "200":
+          description: applyPdfAcroFormFieldDefinitions 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitOperationResponse"
   /knowledge-bases:
     get:
       tags:
@@ -1794,7 +2227,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Case"
+                  $ref: "#/components/schemas/KnowledgeBaseResponse"
     post:
       tags:
       - knowledge-bases
@@ -1826,7 +2259,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Case"
+                $ref: "#/components/schemas/KnowledgeBaseResponse"
     delete:
       tags:
       - knowledge-bases
@@ -1841,6 +2274,423 @@ paths:
       responses:
         "200":
           description: demoteKnowledgeBase 200 response
+  /knowledge-bases/{caseId}/profiles/contract-analysis:
+    get:
+      tags:
+      - knowledge-base-profiles
+      operationId: getContractAnalysisProfile
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: view
+        in: query
+        required: true
+        schema:
+          type: string
+          default: draft
+      responses:
+        "200":
+          description: Contract-analysis profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeBaseProfileHttpResponse"
+        "400":
+          description: Invalid profile view
+        "404":
+          description: Profile capability is disabled or profile is absent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/draft:
+    put:
+      tags:
+      - knowledge-base-profiles
+      operationId: updateContractAnalysisDraft
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileDraftHttpRequest"
+        required: true
+      responses:
+        "200":
+          description: Updated contract-analysis draft
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeBaseProfileHttpResponse"
+        "400":
+          description: Invalid draft request
+        "404":
+          description: Profile capability is disabled or profile is absent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+        "409":
+          description: Draft revision conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileRevisionConflictResponse"
+        "422":
+          description: Profile validation or source-authority failure
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileValidationErrorResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/generate:
+    post:
+      tags:
+      - knowledge-base-profiles
+      operationId: generateContractAnalysisProfile
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Profile generation operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitOperationResponse"
+        "400":
+          description: Profile generation request rejected
+        "404":
+          description: Profile capability is disabled or profile is absent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/generations/{generationJobGuid}/apply:
+    post:
+      tags:
+      - knowledge-base-profiles
+      operationId: applyContractAnalysisGeneration
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: generationJobGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileProposalApplyRequest"
+        required: true
+      responses:
+        "200":
+          description: Applied reviewed profile generation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileProposalApplyResponse"
+        "401":
+          description: An authenticated reviewer is required
+        "404":
+          description: Generation proposal or case is absent
+        "409":
+          description: Draft changed or proposal conflicts remain unresolved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileGenerationApplyConflictResponse"
+        "422":
+          description: Applied profile does not pass structural validation
+  /knowledge-bases/{caseId}/profiles/contract-analysis/generations/{generationJobGuid}/comparison:
+    get:
+      tags:
+      - knowledge-base-profiles
+      operationId: getContractAnalysisGenerationComparison
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: generationJobGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Three-way regeneration comparison
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileGenerationComparisonResponse"
+        "404":
+          description: Generation proposal or case is absent
+  /knowledge-bases/{caseId}/profiles/contract-analysis/publish:
+    post:
+      tags:
+      - knowledge-base-profiles
+      operationId: publishContractAnalysisProfile
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishProfileRequest"
+        required: true
+      responses:
+        "200":
+          description: Published contract-analysis profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeBaseProfileHttpResponse"
+        "400":
+          description: Invalid publication request
+        "404":
+          description: Profile capability is disabled or profile is absent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+        "409":
+          description: Draft revision conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileRevisionConflictResponse"
+        "422":
+          description: Profile validation or source-authority failure
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileValidationErrorResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/source-authority:
+    get:
+      tags:
+      - knowledge-base-profiles
+      operationId: getContractAnalysisSourceAuthority
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Source-authority decisions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileSourceAuthorityResponse"
+        "404":
+          description: Profile capability is disabled or case is absent
+  /knowledge-bases/{caseId}/profiles/contract-analysis/source-authority/decisions:
+    post:
+      tags:
+      - knowledge-base-profiles
+      operationId: recordContractAnalysisSourceAuthorityDecision
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileSourceAuthorityDecisionRequest"
+        required: true
+      responses:
+        "200":
+          description: Recorded source-authority decision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileSourceAuthorityResponse"
+        "401":
+          description: An authenticated actor is required
+        "404":
+          description: Profile capability is disabled or case is absent
+        "409":
+          description: Source-authority revision conflict
+        "422":
+          description: Source-authority decision rejected
+  /knowledge-bases/{caseId}/profiles/contract-analysis/test-suite:
+    get:
+      tags:
+      - contract-analysis-trials
+      operationId: getContractAnalysisTestSuite
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getContractAnalysisTestSuite 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileTestSuiteResponse"
+    put:
+      tags:
+      - contract-analysis-trials
+      operationId: updateContractAnalysisTestSuite
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileTestSuiteRequest"
+        required: true
+      responses:
+        "200":
+          description: updateContractAnalysisTestSuite 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileTestSuiteResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/test-suite/proposals:
+    post:
+      tags:
+      - contract-analysis-trials
+      operationId: proposeContractAnalysisFindingTestCase
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProposeFindingTestCaseRequest"
+        required: true
+      responses:
+        "200":
+          description: proposeContractAnalysisFindingTestCase 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProposeFindingTestCaseResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/trials:
+    post:
+      tags:
+      - contract-analysis-trials
+      operationId: createContractAnalysisTrial
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileTrialRequest"
+        required: true
+      responses:
+        "200":
+          description: createContractAnalysisTrial 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileTrialResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/trials/{trialId}:
+    get:
+      tags:
+      - contract-analysis-trials
+      operationId: getContractAnalysisTrial
+      parameters:
+      - name: trialId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getContractAnalysisTrial 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileTrialResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/trials/{trialId}/attest:
+    post:
+      tags:
+      - contract-analysis-trials
+      operationId: attestContractAnalysisTrial
+      parameters:
+      - name: trialId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrialAttestationRequest"
+        required: true
+      responses:
+        "200":
+          description: attestContractAnalysisTrial 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrialAttestationResponse"
   /llm/keys:
     get:
       tags:
@@ -1969,6 +2819,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LlmProviderDto"
+  /llm/providers/{id}/verify:
+    post:
+      tags:
+      - LLM Providers
+      operationId: verifyLlmProvider
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: verifyLlmProvider 200 response
+          content:
+            application/json:
+              schema: {}
   /managed-execution:
     get:
       tags:
@@ -2059,6 +2927,294 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ExecutionLogLine"
+  /members:
+    get:
+      tags:
+      - members
+      operationId: list_1
+      responses:
+        "200":
+          description: list_1 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MemberResponse"
+    post:
+      tags:
+      - members
+      operationId: invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteMemberRequest"
+        required: true
+      responses:
+        "200":
+          description: invite 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemberResponse"
+  /members/accept:
+    post:
+      tags:
+      - members
+      operationId: accept
+      responses:
+        "200":
+          description: accept 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemberResponse"
+  /members/join-policy:
+    get:
+      tags:
+      - members
+      operationId: getJoinPolicy
+      responses:
+        "200":
+          description: getJoinPolicy 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JoinPolicyResponse"
+    put:
+      tags:
+      - members
+      operationId: setJoinPolicy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JoinPolicyRequest"
+        required: true
+      responses:
+        "200":
+          description: setJoinPolicy 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JoinPolicyResponse"
+  /members/{id}:
+    delete:
+      tags:
+      - members
+      operationId: remove
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: remove 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
+    patch:
+      tags:
+      - members
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMemberRequest"
+        required: true
+      responses:
+        "200":
+          description: update 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemberResponse"
+  /model-credentials:
+    get:
+      tags:
+      - Model Credentials
+      operationId: listModelCredentials
+      responses:
+        "200":
+          description: listModelCredentials 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ModelCredentialDto"
+    post:
+      tags:
+      - Model Credentials
+      operationId: createModelCredential
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateModelCredentialRequest"
+        required: true
+      responses:
+        "200":
+          description: createModelCredential 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelCredentialDto"
+  /model-credentials/{id}:
+    get:
+      tags:
+      - Model Credentials
+      operationId: getModelCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: getModelCredential 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelCredentialDto"
+    delete:
+      tags:
+      - Model Credentials
+      operationId: deleteModelCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: deleteModelCredential 200 response
+          content:
+            application/json:
+              schema: {}
+    patch:
+      tags:
+      - Model Credentials
+      operationId: updateModelCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateModelCredentialRequest"
+        required: true
+      responses:
+        "200":
+          description: updateModelCredential 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelCredentialDto"
+  /model-credentials/{id}/disable:
+    post:
+      tags:
+      - Model Credentials
+      operationId: disableModelCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: disableModelCredential 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelCredentialDto"
+  /model-credentials/{id}/enable:
+    post:
+      tags:
+      - Model Credentials
+      operationId: enableModelCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: enableModelCredential 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelCredentialDto"
+  /model-credentials/{id}/rotate:
+    post:
+      tags:
+      - Model Credentials
+      operationId: rotateModelCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RotateModelCredentialRequest"
+        required: true
+      responses:
+        "200":
+          description: rotateModelCredential 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelCredentialDto"
+  /model-credentials/{id}/validate:
+    post:
+      tags:
+      - Model Credentials
+      operationId: validateModelCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: validateModelCredential 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelCredentialDto"
   /ocr/keys:
     get:
       tags:
@@ -2200,11 +3356,19 @@ paths:
         required: true
       responses:
         "200":
-          description: submitOperation 200 response
+          description: Operation submitted
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubmitOperationResponse"
+        "400":
+          description: Operation request rejected
+        "404":
+          description: Contract-analysis capability is disabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
   /operation/{jobGuid}:
     get:
       tags:
@@ -2311,6 +3475,151 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WebhookSettings"
+  /sso:
+    get:
+      tags:
+      - sso
+      operationId: getSettings
+      responses:
+        "200":
+          description: getSettings 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoSettingsResponse"
+  /sso/checkout:
+    post:
+      tags:
+      - sso
+      operationId: checkout
+      responses:
+        "200":
+          description: checkout 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoCheckoutResponse"
+  /sso/config:
+    put:
+      tags:
+      - sso
+      operationId: updateConfig
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSsoConfigRequest"
+        required: true
+      responses:
+        "200":
+          description: updateConfig 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoConnectionResponse"
+  /sso/discovery:
+    get:
+      tags:
+      - sso
+      operationId: discovery
+      parameters:
+      - name: domain
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: discovery 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoDiscoveryResponse"
+  /sso/domains:
+    post:
+      tags:
+      - sso
+      operationId: addDomain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddSsoDomainRequest"
+        required: true
+      responses:
+        "200":
+          description: addDomain 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoDomainResponse"
+  /sso/domains/{id}:
+    delete:
+      tags:
+      - sso
+      operationId: deleteDomain
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: deleteDomain 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
+  /sso/domains/{id}/verify:
+    post:
+      tags:
+      - sso
+      operationId: verifyDomain
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: verifyDomain 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoDomainResponse"
+  /sso/portal:
+    post:
+      tags:
+      - sso
+      operationId: portal
+      responses:
+        "200":
+          description: portal 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoPortalResponse"
+  /sso/sync:
+    post:
+      tags:
+      - sso
+      operationId: sync
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SsoSyncRequest"
+      responses:
+        "200":
+          description: sync 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SsoConnectionResponse"
   /submission-portals:
     get:
       tags:
@@ -2669,6 +3978,12 @@ paths:
                 $ref: "#/components/schemas/UserInfo"
 components:
   schemas:
+    AddSsoDomainRequest:
+      properties:
+        domain:
+          type: string
+      required:
+      - domain
     AgentAction:
       properties:
         type:
@@ -2803,62 +4118,6 @@ components:
       - index
       - jobGuid
       - totalDocuments
-    BillingBalanceResponse:
-      properties:
-        organizationId:
-          type: integer
-          format: int64
-        balance:
-          type: integer
-          format: int64
-        status:
-          type:
-          - string
-          - "null"
-      required:
-      - balance
-      - organizationId
-    BillingCheckoutRequest:
-      properties:
-        priceId:
-          type: string
-      required:
-      - priceId
-    BillingCheckoutResponse:
-      properties:
-        sessionId:
-          type: string
-        checkoutUrl:
-          type: string
-      required:
-      - checkoutUrl
-      - sessionId
-    BillingPrice:
-      properties:
-        priceId:
-          type: string
-        productId:
-          type: string
-        currency:
-          type:
-          - string
-          - "null"
-        unitAmount:
-          type:
-          - integer
-          - "null"
-          format: int64
-        tokensGranted:
-          type: integer
-          format: int64
-        nickname:
-          type:
-          - string
-          - "null"
-      required:
-      - priceId
-      - productId
-      - tokensGranted
     Case:
       properties:
         id:
@@ -2882,6 +4141,14 @@ components:
           - "null"
         isKnowledgeBase:
           type: boolean
+        activeEmbeddingGenerationId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        embeddingMetadataVersion:
+          type: integer
+          format: int64
         createdAt:
           type:
           - string
@@ -2893,6 +4160,7 @@ components:
           - "null"
           format: date-time
       required:
+      - embeddingMetadataVersion
       - isKnowledgeBase
       - name
       - organizationId
@@ -2958,6 +4226,55 @@ components:
       - filename
       - organizationId
       - processingStatus
+    CaseEmbeddingStatusDto:
+      properties:
+        caseId:
+          type: integer
+          format: int64
+        caseName:
+          type: string
+        mode:
+          type: string
+        active:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EmbeddingGenerationSummaryDto"
+        candidate:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EmbeddingGenerationSummaryDto"
+        compressionLabel:
+          type:
+          - string
+          - "null"
+        knowledgeBase:
+          type: boolean
+        canReindex:
+          type: boolean
+        canCancel:
+          type: boolean
+        canRetry:
+          type: boolean
+        lastError:
+          type:
+          - string
+          - "null"
+        lastTerminalStatus:
+          type:
+          - string
+          - "null"
+      required:
+      - canCancel
+      - canReindex
+      - canRetry
+      - caseId
+      - caseName
+      - knowledgeBase
+      - mode
     CasesController.CreateCaseRequest:
       properties:
         name:
@@ -3009,6 +4326,297 @@ components:
           - "null"
       required:
       - text
+    ConnectionResponse:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        name:
+          type: string
+        connectorFamily:
+          type: string
+        fieldValues:
+          additionalProperties:
+            type: string
+        secretFieldsSet:
+          type: array
+          items:
+            type: string
+        description:
+          type:
+          - string
+          - "null"
+        active:
+          type: boolean
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        updatedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - active
+      - connectorFamily
+      - fieldValues
+      - name
+      - secretFieldsSet
+    ContractAnalysisReviewResponse:
+      properties:
+        runId:
+          type: string
+        resultFingerprint:
+          type: string
+        criterionId:
+          type: string
+        targetKey:
+          type: string
+        disposition:
+          type: string
+        correctedAssessment:
+          type:
+          - string
+          - "null"
+        evidence:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewEvidenceReference"
+        actor:
+          type: string
+        reason:
+          type:
+          - string
+          - "null"
+        timestamp:
+          type: string
+        reviewRevision:
+          type: integer
+          format: int64
+      required:
+      - actor
+      - criterionId
+      - disposition
+      - evidence
+      - resultFingerprint
+      - reviewRevision
+      - runId
+      - targetKey
+      - timestamp
+    ContractAnalysisRunRequest:
+      properties:
+        anchorJobGuid:
+          type: string
+        knowledgeBaseId:
+          type: integer
+          format: int64
+        mode:
+          type: string
+        draftRevision:
+          type:
+          - integer
+          - "null"
+          format: int64
+        idempotencyKey:
+          type: string
+        model:
+          type:
+          - string
+          - "null"
+        configurationFingerprint:
+          type:
+          - string
+          - "null"
+        llmType:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/LlmType"
+        customParameters:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        trialId:
+          type:
+          - string
+          - "null"
+        packageMembers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractPackageMemberRequest"
+        expectedMissingDocuments:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractPackageDocumentRequest"
+        excludedDocuments:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractPackageDocumentRequest"
+      required:
+      - anchorJobGuid
+      - excludedDocuments
+      - expectedMissingDocuments
+      - idempotencyKey
+      - knowledgeBaseId
+      - mode
+      - packageMembers
+    ContractAnalysisRunResponse:
+      properties:
+        runId:
+          type: string
+        operationJobGuid:
+          type: string
+        mode:
+          type: string
+        status:
+          type: string
+        resultUrl:
+          type:
+          - string
+          - "null"
+        profileFingerprint:
+          type:
+          - string
+          - "null"
+        packageFingerprint:
+          type:
+          - string
+          - "null"
+        executionFingerprint:
+          type:
+          - string
+          - "null"
+      required:
+      - mode
+      - operationJobGuid
+      - runId
+      - status
+    ContractAnalysisRunStatusResponse:
+      properties:
+        runId:
+          type: string
+        operationJobGuid:
+          type: string
+        mode:
+          type: string
+        status:
+          type: string
+        error:
+          type:
+          - string
+          - "null"
+        resultAvailable:
+          type: boolean
+        result:
+          type:
+          - string
+          - "null"
+        resultFingerprint:
+          type:
+          - string
+          - "null"
+        knowledgeBaseId:
+          type:
+          - integer
+          - "null"
+          format: int64
+      required:
+      - mode
+      - operationJobGuid
+      - resultAvailable
+      - runId
+      - status
+    ContractPackageDocumentRequest:
+      properties:
+        documentId:
+          type:
+          - string
+          - "null"
+        filename:
+          type: string
+        reason:
+          type:
+          - string
+          - "null"
+        dependentCriterionIds:
+          type: array
+          items:
+            type: string
+      required:
+      - dependentCriterionIds
+      - filename
+    ContractPackageMemberRequest:
+      properties:
+        jobGuid:
+          type: string
+        role:
+          type: string
+      required:
+      - jobGuid
+      - role
+    CreateConnectionRequest:
+      properties:
+        name:
+          type: string
+        connectorFamily:
+          type: string
+        fieldValues:
+          additionalProperties:
+            type: string
+        secrets:
+          additionalProperties:
+            type: string
+        description:
+          type:
+          - string
+          - "null"
+        active:
+          type: boolean
+      required:
+      - active
+      - connectorFamily
+      - fieldValues
+      - name
+      - secrets
+    CreateEmbeddingProviderRequest:
+      properties:
+        name:
+          type: string
+        providerType:
+          type: string
+        apiUrl:
+          type: string
+        deploymentName:
+          type: string
+        dimensions:
+          type: integer
+          format: int32
+        similarityMetric:
+          type: string
+        requestOptions:
+          additionalProperties: true
+        credentialId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        setAsDefault:
+          type: boolean
+      required:
+      - apiUrl
+      - deploymentName
+      - dimensions
+      - name
+      - providerType
+      - requestOptions
+      - setAsDefault
+      - similarityMetric
     CreateLlmProviderRequest:
       properties:
         name:
@@ -3026,16 +4634,68 @@ components:
           - "null"
           - object
           additionalProperties: true
+        credentialId:
+          type:
+          - integer
+          - "null"
+          format: int64
         apiKey:
-          type: string
+          type:
+          - string
+          - "null"
+          deprecated: true
         status:
           type:
           - string
           - "null"
       required:
-      - apiKey
       - apiUrl
       - modelType
+      - name
+    CreateModelCredentialRequest:
+      properties:
+        name:
+          type: string
+        authType:
+          type: string
+        secret:
+          type:
+          - string
+          - "null"
+        description:
+          type:
+          - string
+          - "null"
+        tenantId:
+          type:
+          - string
+          - "null"
+        clientId:
+          type:
+          - string
+          - "null"
+        scope:
+          type:
+          - string
+          - "null"
+        cloud:
+          type:
+          - string
+          - "null"
+        secretExpiresAt:
+          type:
+          - string
+          - "null"
+        apiKey:
+          type:
+          - string
+          - "null"
+        clientSecret:
+          type:
+          - string
+          - "null"
+      required:
+      - authType
       - name
     CreateOcrProviderRequest:
       properties:
@@ -3113,16 +4773,6 @@ components:
       - resultMode
       - slug
       - title
-    DailyUsageEntry:
-      properties:
-        date:
-          type: string
-        tokens:
-          type: integer
-          format: int64
-      required:
-      - date
-      - tokens
     DependencyInfo:
       properties:
         guid:
@@ -3217,6 +4867,340 @@ components:
           format: date-time
       required:
       - name
+    EmbeddingChangeKind:
+      enum:
+      - NONE
+      - CREDENTIAL_ONLY
+      - METADATA_ONLY
+      - SEMANTIC_REVISION
+      - DEFAULT_BINDING
+    EmbeddingDefaultBindingDto:
+      properties:
+        defaultRevision:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EmbeddingRevisionDto"
+        pendingDefaultRevision:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EmbeddingRevisionDto"
+        casesOnDefaultRevision:
+          type: integer
+          format: int32
+        casesOnOlderRevisions:
+          type: integer
+          format: int32
+        legacyCases:
+          type: integer
+          format: int32
+      required:
+      - casesOnDefaultRevision
+      - casesOnOlderRevisions
+      - legacyCases
+    EmbeddingGenerationDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+        status:
+          $ref: "#/components/schemas/EmbeddingGenerationStatus"
+        providerName:
+          type:
+          - string
+          - "null"
+        modelName:
+          type:
+          - string
+          - "null"
+        revisionId:
+          type: integer
+          format: int64
+        revisionNumber:
+          type: integer
+          format: int32
+        dimensions:
+          type: integer
+          format: int32
+        similarityMetric:
+          type: string
+        vectorFieldName:
+          type: string
+        completedDocumentCount:
+          type: integer
+          format: int32
+        expectedDocumentCount:
+          type: integer
+          format: int32
+        failedDocumentCount:
+          type: integer
+          format: int32
+        pendingDocumentCount:
+          type: integer
+          format: int32
+        errorMessage:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type:
+          - string
+          - "null"
+      required:
+      - completedDocumentCount
+      - dimensions
+      - expectedDocumentCount
+      - failedDocumentCount
+      - id
+      - pendingDocumentCount
+      - revisionId
+      - revisionNumber
+      - similarityMetric
+      - status
+      - vectorFieldName
+    EmbeddingGenerationStatus:
+      enum:
+      - PREPARING
+      - INDEXING
+      - READY
+      - ACTIVE
+      - FAILED
+      - CANCELLED
+      - RETIRED
+    EmbeddingGenerationSummaryDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+        status:
+          $ref: "#/components/schemas/EmbeddingGenerationStatus"
+        providerName:
+          type:
+          - string
+          - "null"
+        modelName:
+          type:
+          - string
+          - "null"
+        revisionId:
+          type: integer
+          format: int64
+        revisionNumber:
+          type: integer
+          format: int32
+        dimensions:
+          type: integer
+          format: int32
+        similarityMetric:
+          type: string
+        vectorFieldName:
+          type: string
+        compressionLabel:
+          type: string
+        completedDocumentCount:
+          type: integer
+          format: int32
+        expectedDocumentCount:
+          type: integer
+          format: int32
+        failedDocumentCount:
+          type: integer
+          format: int32
+        errorMessage:
+          type:
+          - string
+          - "null"
+      required:
+      - completedDocumentCount
+      - compressionLabel
+      - dimensions
+      - expectedDocumentCount
+      - failedDocumentCount
+      - id
+      - revisionId
+      - revisionNumber
+      - similarityMetric
+      - status
+      - vectorFieldName
+    EmbeddingMigrationSummaryDto:
+      properties:
+        enabled:
+          type: boolean
+        waitingForCompatibleDeployment:
+          type: boolean
+        inProgress:
+          type: boolean
+        legacyCaseCount:
+          type: integer
+          format: int32
+        candidateCaseCount:
+          type: integer
+          format: int32
+        completedCaseCount:
+          type: integer
+          format: int32
+        failedCaseCount:
+          type: integer
+          format: int32
+        totalCaseCount:
+          type: integer
+          format: int32
+        latestError:
+          type:
+          - string
+          - "null"
+      required:
+      - candidateCaseCount
+      - completedCaseCount
+      - enabled
+      - failedCaseCount
+      - inProgress
+      - legacyCaseCount
+      - totalCaseCount
+      - waitingForCompatibleDeployment
+    EmbeddingOverviewDto:
+      properties:
+        providers:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmbeddingProviderDto"
+        defaultBinding:
+          $ref: "#/components/schemas/EmbeddingDefaultBindingDto"
+        cases:
+          type: array
+          items:
+            $ref: "#/components/schemas/CaseEmbeddingStatusDto"
+        automaticMigration:
+          $ref: "#/components/schemas/EmbeddingMigrationSummaryDto"
+      required:
+      - automaticMigration
+      - cases
+      - defaultBinding
+      - providers
+    EmbeddingProviderDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        enabled:
+          type: boolean
+        isDefault:
+          type: boolean
+        latestRevision:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EmbeddingRevisionDto"
+        activeCaseCount:
+          type: integer
+          format: int32
+        activeKnowledgeBaseCount:
+          type: integer
+          format: int32
+        createdAt:
+          type:
+          - string
+          - "null"
+        updatedAt:
+          type:
+          - string
+          - "null"
+      required:
+      - activeCaseCount
+      - activeKnowledgeBaseCount
+      - enabled
+      - id
+      - isDefault
+      - name
+    EmbeddingProviderMutationDto:
+      properties:
+        provider:
+          $ref: "#/components/schemas/EmbeddingProviderDto"
+        changeKind:
+          $ref: "#/components/schemas/EmbeddingChangeKind"
+        revisionCreated:
+          type: boolean
+        reindexRequired:
+          type: boolean
+        existingCasesReindexed:
+          type: boolean
+        affectedCaseCount:
+          type: integer
+          format: int32
+        affectedKnowledgeBaseCount:
+          type: integer
+          format: int32
+      required:
+      - affectedCaseCount
+      - affectedKnowledgeBaseCount
+      - changeKind
+      - existingCasesReindexed
+      - provider
+      - reindexRequired
+      - revisionCreated
+    EmbeddingRevisionDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+        revisionNumber:
+          type: integer
+          format: int32
+        providerType:
+          type: string
+        apiUrl:
+          type: string
+        deploymentName:
+          type: string
+        dimensions:
+          type: integer
+          format: int32
+        similarityMetric:
+          type: string
+        requestOptions:
+          additionalProperties: true
+        credentialId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        credential:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ModelCredentialSummary"
+        validationStatus:
+          $ref: "#/components/schemas/EmbeddingRevisionValidationStatus"
+        validationError:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type:
+          - string
+          - "null"
+      required:
+      - apiUrl
+      - deploymentName
+      - dimensions
+      - id
+      - providerType
+      - requestOptions
+      - revisionNumber
+      - similarityMetric
+      - validationStatus
+    EmbeddingRevisionValidationStatus:
+      enum:
+      - PENDING_VALIDATION
+      - VALID
+      - INVALID
     ExcelTemplateConfig:
       properties:
         startRow:
@@ -3278,6 +5262,7 @@ components:
       - OCR
       - GENERATIVE
       - PIPELINE
+      - WORKBOOK
     GenerativeTaskRequest:
       properties:
         prompt:
@@ -3326,6 +5311,17 @@ components:
           type:
           - string
           - "null"
+        operationStatus:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/OperationRuntimeStatus"
+        operationStatusVersion:
+          type:
+          - integer
+          - "null"
+          format: int64
       required:
       - jobGuid
       - status
@@ -3369,6 +5365,151 @@ components:
       - jobGuid
       - organizationId
       - type
+    InviteLookupResponse:
+      properties:
+        email:
+          type: string
+        orgName:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+      required:
+      - email
+      - expiresAt
+      - orgName
+    InviteMemberRequest:
+      properties:
+        email:
+          type: string
+        role:
+          type: string
+      required:
+      - email
+      - role
+    JoinPolicyRequest:
+      properties:
+        ssoDefaultRole:
+          type:
+          - string
+          - "null"
+    JoinPolicyResponse:
+      properties:
+        ssoDefaultRole:
+          type:
+          - string
+          - "null"
+    KnowledgeBaseProfileHttpResponse:
+      description: Wire response with domain-neutral JSON payloads for profile and
+        generation artifacts.
+      properties:
+        status:
+          $ref: "#/components/schemas/ProfileStatus"
+        draftRevision:
+          type: integer
+          format: int64
+        publishedRevision:
+          type: integer
+          format: int64
+        profile:
+          type:
+          - "null"
+          - object
+        validation:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ProfileValidationReport"
+        generation:
+          type:
+          - "null"
+          - object
+        uncompiledSourceDocumentIds:
+          type: array
+          items:
+            type: string
+        draftBlobPath:
+          type:
+          - string
+          - "null"
+        publishedBlobPath:
+          type:
+          - string
+          - "null"
+      required:
+      - draftRevision
+      - publishedRevision
+      - status
+      - uncompiledSourceDocumentIds
+    KnowledgeBaseResponse:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        userId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+        isKnowledgeBase:
+          type: boolean
+        activeEmbeddingGenerationId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        embeddingMetadataVersion:
+          type: integer
+          format: int64
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        updatedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        profileType:
+          type:
+          - string
+          - "null"
+          enum:
+          - contract-analysis
+          maxLength: 64
+          allowableValues:
+          - contract-analysis
+        profileStatus:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ProfileStatus"
+        publishedRevision:
+          type:
+          - integer
+          - "null"
+          format: int64
+          maximum: 2147483647
+          minimum: 1
+      required:
+      - embeddingMetadataVersion
+      - isKnowledgeBase
+      - name
+      - organizationId
     KnowledgeBasesController.PromoteKnowledgeBaseRequest:
       properties:
         caseId:
@@ -3376,23 +5517,6 @@ components:
           format: int64
       required:
       - caseId
-    LedgerEntryResponse:
-      properties:
-        tokenDelta:
-          type: integer
-          format: int64
-        reason:
-          type: string
-        jobGuid:
-          type:
-          - string
-          - "null"
-        createdAt:
-          type: string
-      required:
-      - createdAt
-      - reason
-      - tokenDelta
     LlmKeyBindingDto:
       properties:
         key:
@@ -3435,6 +5559,17 @@ components:
           type:
           - string
           - "null"
+        credentialId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        credential:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ProviderCredentialSummaryDto"
       required:
       - apiUrl
       - id
@@ -3652,6 +5787,144 @@ components:
       - PAGE
       - MARKDOWN_HEADER
       - DOCUMENT_OUTLINE
+    MemberResponse:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        email:
+          type: string
+        role:
+          type: string
+        status:
+          type: string
+        invitedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        acceptedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - email
+      - role
+      - status
+    ModelCredentialAuthType:
+      enum:
+      - API_KEY
+      - ENTRA_CLIENT_SECRET
+    ModelCredentialDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+        authType:
+          type: string
+        tenantId:
+          type:
+          - string
+          - "null"
+        clientId:
+          type:
+          - string
+          - "null"
+        scope:
+          type:
+          - string
+          - "null"
+        cloud:
+          type:
+          - string
+          - "null"
+        secretConfigured:
+          type: boolean
+        credentialVersion:
+          type: integer
+          format: int64
+        status:
+          type: string
+        secretExpiresAt:
+          type:
+          - string
+          - "null"
+        lastValidatedAt:
+          type:
+          - string
+          - "null"
+        lastValidatedVersion:
+          type:
+          - integer
+          - "null"
+          format: int64
+        lastValidationStatus:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type:
+          - string
+          - "null"
+        updatedAt:
+          type:
+          - string
+          - "null"
+        lastValidationError:
+          type:
+          - string
+          - "null"
+        chatReferenceCount:
+          type: integer
+          format: int64
+        embeddingReferenceCount:
+          type: integer
+          format: int64
+      required:
+      - authType
+      - chatReferenceCount
+      - credentialVersion
+      - embeddingReferenceCount
+      - id
+      - name
+      - secretConfigured
+      - status
+    ModelCredentialStatus:
+      enum:
+      - ACTIVE
+      - DISABLED
+    ModelCredentialSummary:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        authType:
+          type: string
+        status:
+          type: string
+        credentialVersion:
+          type: integer
+          format: int64
+        secretConfigured:
+          type: boolean
+      required:
+      - authType
+      - credentialVersion
+      - id
+      - name
+      - secretConfigured
+      - status
     NamedConfiguration:
       properties:
         id:
@@ -3755,6 +6028,13 @@ components:
       - NONE
       - AUTO
       - LOW
+    OpenClientRunRequest:
+      properties:
+        ttlSeconds:
+          type: integer
+          format: int64
+      required:
+      - ttlSeconds
     OperationInfo:
       properties:
         jobGuid:
@@ -3771,6 +6051,12 @@ components:
           type:
           - string
           - "null"
+        operationStatus:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/OperationRuntimeStatus"
       required:
       - createdAt
       - jobGuid
@@ -3822,6 +6108,37 @@ components:
       - resultAvailable
       - status
       - updatedAt
+    OperationRuntimeStatus:
+      properties:
+        stage:
+          type:
+          - string
+          - "null"
+        completedDocuments:
+          type:
+          - integer
+          - "null"
+          format: int32
+        totalDocuments:
+          type:
+          - integer
+          - "null"
+          format: int32
+        completedChunks:
+          type:
+          - integer
+          - "null"
+          format: int32
+        totalChunks:
+          type:
+          - integer
+          - "null"
+          format: int32
+        warningCount:
+          type:
+          - integer
+          - "null"
+          format: int32
     OperationStatusResponse:
       properties:
         parentJobGuid:
@@ -3850,6 +6167,10 @@ components:
           - integer
           - "null"
           format: int32
+        ssoDefaultRole:
+          type:
+          - string
+          - "null"
       required:
       - name
     PDFField:
@@ -3867,7 +6188,9 @@ components:
           items:
             type: string
         value:
-          type: string
+          type:
+          - string
+          - "null"
         defaultValue:
           type:
           - string
@@ -3885,7 +6208,6 @@ components:
       - name
       - options
       - type
-      - value
     Page_CaseDocument_:
       allOf:
       - $ref: "#/components/schemas/Slice_CaseDocument_"
@@ -3936,6 +6258,28 @@ components:
       - CURSOR_NEXT
       - CURSOR_PREVIOUS
       - OFFSET
+    PdfAcroFormApplyRequest:
+      properties:
+        fieldDefinitions:
+          type: array
+          items:
+            additionalProperties: true
+        sourceOperationGuid:
+          type:
+          - string
+          - "null"
+        minConfidence:
+          type:
+          - number
+          - "null"
+          format: double
+        maxFieldsPerPage:
+          type:
+          - integer
+          - "null"
+          format: int32
+      required:
+      - fieldDefinitions
     PipelineNodeStatusSummary:
       properties:
         id:
@@ -4023,6 +6367,11 @@ components:
         organizationId:
           type: integer
           format: int64
+        userId:
+          type:
+          - integer
+          - "null"
+          format: int64
         dependsOnGuid:
           type:
           - string
@@ -4081,12 +6430,47 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/MapReduceRuntimeStatus"
+        operationStatus:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/OperationRuntimeStatus"
+        operationLeaseOwner:
+          type:
+          - string
+          - "null"
+        operationLeaseToken:
+          type:
+          - string
+          - "null"
+        operationLeaseExpiresAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        operationStatusVersion:
+          type: integer
+          format: int64
         qualityScore:
           type:
           - number
           - "null"
           format: double
         qualityCategory:
+          type:
+          - string
+          - "null"
+        clientRunId:
+          type:
+          - string
+          - "null"
+        clientRunDeadline:
+          type:
+          - string
+          - "null"
+          format: date-time
+        clientRunStatus:
           type:
           - string
           - "null"
@@ -4107,9 +6491,482 @@ components:
       - jobType
       - maxConcurrency
       - nextDocIndex
+      - operationStatusVersion
       - organizationId
       - status
       - totalDocs
+    ProfileCapabilityUnavailableResponse:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        disabled:
+          type: boolean
+      required:
+      - code
+      - disabled
+      - message
+    ProfileExpertDecision:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        caseId:
+          type: integer
+          format: int64
+        profileType:
+          type: string
+        actorId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        decisionType:
+          type: string
+        content:
+          additionalProperties: true
+        reason:
+          type: string
+        contentHash:
+          type: string
+        elementLineageId:
+          type:
+          - string
+          - "null"
+        elementAction:
+          type:
+          - string
+          - "null"
+        tombstone:
+          type: boolean
+        generationJobGuid:
+          type:
+          - string
+          - "null"
+        draftRevision:
+          type:
+          - integer
+          - "null"
+          format: int64
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - actorId
+      - caseId
+      - content
+      - contentHash
+      - decisionType
+      - organizationId
+      - profileType
+      - reason
+      - revision
+      - tombstone
+    ProfileGenerationApplyConflictResponse:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    ProfileGenerationComparisonResponse:
+      properties:
+        generationJobGuid:
+          type: string
+        baseDraftRevision:
+          type: integer
+          format: int64
+        currentDraftRevision:
+          type: integer
+          format: int64
+        currentDraftFingerprint:
+          type: string
+        classification:
+          type: string
+        elements:
+          type: array
+          items:
+            additionalProperties: true
+      required:
+      - baseDraftRevision
+      - classification
+      - currentDraftFingerprint
+      - currentDraftRevision
+      - elements
+      - generationJobGuid
+    ProfileProposalApplyRequest:
+      properties:
+        generationJobGuid:
+          type: string
+        expectedDraftRevision:
+          type: integer
+          format: int64
+        expectedDraftFingerprint:
+          type: string
+        decisions:
+          additionalProperties:
+            $ref: "#/components/schemas/ProfileProposalElementDecision"
+      required:
+      - decisions
+      - expectedDraftFingerprint
+      - expectedDraftRevision
+      - generationJobGuid
+    ProfileProposalApplyResponse:
+      properties:
+        generationJobGuid:
+          type: string
+        draftRevision:
+          type: integer
+          format: int64
+        draftFingerprint:
+          type: string
+        appliedLineageIds:
+          type: array
+          items:
+            type: string
+        retainedLineageIds:
+          type: array
+          items:
+            type: string
+        invalidatedSuiteRevision:
+          type:
+          - string
+          - "null"
+        invalidatedTrialIds:
+          type: array
+          items:
+            type: string
+        invalidatedAttestationIds:
+          type: array
+          items:
+            type: string
+        invalidatedReadinessIds:
+          type: array
+          items:
+            type: string
+        requiresSuiteRerun:
+          type: boolean
+        publishedRevision:
+          type: integer
+          format: int64
+      required:
+      - appliedLineageIds
+      - draftFingerprint
+      - draftRevision
+      - generationJobGuid
+      - invalidatedAttestationIds
+      - invalidatedReadinessIds
+      - invalidatedTrialIds
+      - publishedRevision
+      - requiresSuiteRerun
+      - retainedLineageIds
+    ProfileProposalElementDecision:
+      properties:
+        action:
+          type: string
+        reason:
+          type:
+          - string
+          - "null"
+      required:
+      - action
+    ProfileRevisionConflictResponse:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        expectedRevision:
+          type: integer
+          format: int64
+        actualRevision:
+          type: integer
+          format: int64
+      required:
+      - actualRevision
+      - code
+      - expectedRevision
+      - message
+    ProfileSourceAuthorityDecisionRequest:
+      properties:
+        observedRevision:
+          type: integer
+          format: int64
+        decisionType:
+          type: string
+        content:
+          additionalProperties: true
+        reason:
+          type: string
+        elementLineageId:
+          type:
+          - string
+          - "null"
+        elementAction:
+          type:
+          - string
+          - "null"
+        tombstone:
+          type: boolean
+        generationJobGuid:
+          type:
+          - string
+          - "null"
+        draftRevision:
+          type:
+          - integer
+          - "null"
+          format: int64
+      required:
+      - content
+      - decisionType
+      - observedRevision
+      - reason
+      - tombstone
+    ProfileSourceAuthorityResponse:
+      properties:
+        revision:
+          type: integer
+          format: int64
+        decisions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileExpertDecision"
+      required:
+      - decisions
+      - revision
+    ProfileStatus:
+      enum:
+      - GENERATING
+      - DRAFT
+      - PUBLISHED
+      - FAILED
+    ProfileTestSuiteResponse:
+      properties:
+        suiteId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        fingerprint:
+          type: string
+        cases:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestSuiteCase"
+        scenarioTags:
+          type: array
+          items:
+            type: string
+      required:
+      - cases
+      - fingerprint
+      - revision
+      - scenarioTags
+      - suiteId
+    ProfileTrialRequest:
+      properties:
+        anchorJobGuid:
+          type: string
+        suiteRevision:
+          type:
+          - integer
+          - "null"
+          format: int64
+        trialKind:
+          type: string
+        idempotencyKey:
+          type: string
+        model:
+          type:
+          - string
+          - "null"
+        configurationFingerprint:
+          type:
+          - string
+          - "null"
+        customParameters:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        suiteCaseId:
+          type:
+          - string
+          - "null"
+      required:
+      - anchorJobGuid
+      - idempotencyKey
+      - trialKind
+    ProfileTrialResponse:
+      properties:
+        trialId:
+          type: string
+        runId:
+          type: string
+        operationJobGuid:
+          type: string
+        status:
+          type: string
+        trialKind:
+          type: string
+        suiteRevision:
+          type: integer
+          format: int64
+        estimatedWork:
+          $ref: "#/components/schemas/TrialWorkEstimate"
+        report:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/TrialReportResponse"
+      required:
+      - estimatedWork
+      - operationJobGuid
+      - runId
+      - status
+      - suiteRevision
+      - trialId
+      - trialKind
+    ProfileValidationErrorResponse:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        validation:
+          $ref: "#/components/schemas/ProfileValidationReport"
+      required:
+      - code
+      - message
+      - validation
+    ProfileValidationIssue:
+      properties:
+        code:
+          type: string
+        path:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+      - path
+    ProfileValidationReport:
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileValidationIssue"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileValidationIssue"
+        warningCodes:
+          type: array
+          items:
+            type: string
+      required:
+      - errors
+      - warnings
+    ProposeFindingTestCaseRequest:
+      properties:
+        runId:
+          type: string
+        resultFingerprint:
+          type: string
+        criterionId:
+          type: string
+        targetKey:
+          type: string
+        name:
+          type: string
+        expectedAssessment:
+          type: string
+        reason:
+          type: string
+        expectedSuiteRevision:
+          type: integer
+          format: int64
+        idempotencyKey:
+          type: string
+        scenarioTags:
+          type: array
+          items:
+            type: string
+      required:
+      - criterionId
+      - expectedAssessment
+      - expectedSuiteRevision
+      - idempotencyKey
+      - name
+      - reason
+      - resultFingerprint
+      - runId
+      - targetKey
+    ProposeFindingTestCaseResponse:
+      properties:
+        proposedCaseId:
+          type: string
+        sourceRunId:
+          type: string
+        suite:
+          $ref: "#/components/schemas/ProfileTestSuiteResponse"
+      required:
+      - proposedCaseId
+      - sourceRunId
+      - suite
+    ProviderCredentialSummaryDto:
+      description: Read-only credential metadata attached to a provider. Never carries
+        secret material.
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        authType:
+          $ref: "#/components/schemas/ModelCredentialAuthType"
+        status:
+          $ref: "#/components/schemas/ModelCredentialStatus"
+        credentialVersion:
+          type: integer
+          format: int64
+      required:
+      - authType
+      - credentialVersion
+      - id
+      - name
+      - status
+    PublishProfileRequest:
+      properties:
+        draftRevision:
+          type: integer
+          format: int64
+        acknowledgedWarningCodes:
+          type: array
+          items:
+            type: string
+        trialAttestationId:
+          type:
+          - string
+          - "null"
+          description: Required only for a 2026-09 profile; omitted requests preserve
+            v1 behavior.
+      required:
+      - acknowledgedWarningCodes
+      - draftRevision
     PurgeResult:
       properties:
         jobsDeleted:
@@ -4122,20 +6979,34 @@ components:
       required:
       - errors
       - jobsDeleted
-    ResolveLlmRequest:
+    PutContractAnalysisReviewRequest:
       properties:
-        organizationId:
-          type: integer
-          format: int64
-        key:
+        resultFingerprint:
           type: string
-        selectionKey:
+        disposition:
+          type: string
+        correctedAssessment:
           type:
           - string
           - "null"
+        evidence:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewEvidenceReference"
+        reason:
+          type:
+          - string
+          - "null"
+        expectedReviewRevision:
+          type: integer
+          format: int64
+        idempotencyKey:
+          type: string
       required:
-      - key
-      - organizationId
+      - disposition
+      - expectedReviewRevision
+      - idempotencyKey
+      - resultFingerprint
     ResolveOcrRequest:
       properties:
         organizationId:
@@ -4151,48 +7022,38 @@ components:
           - "null"
       required:
       - organizationId
-    ResolvedLlmProviderDto:
+    ReviewEvidenceReference:
       properties:
-        providerId:
-          type: integer
-          format: int64
-        apiUrl:
+        id:
           type: string
-        modelType:
+        documentId:
           type: string
-        deploymentName:
-          type:
-          - string
-          - "null"
-        kwargs:
-          additionalProperties: true
-        apiKey:
+        quote:
+          type: string
+        sourceElementIds:
+          type: array
+          items:
+            type: string
+        pageNumbers:
+          type: array
+          items:
+            type: integer
+            format: int32
+        evidenceStatus:
           type: string
       required:
-      - apiKey
-      - apiUrl
-      - kwargs
-      - modelType
-      - providerId
-    ResolvedOcrProviderDto:
+      - documentId
+      - evidenceStatus
+      - id
+      - pageNumbers
+      - quote
+      - sourceElementIds
+    RotateModelCredentialRequest:
       properties:
-        providerId:
-          type: integer
-          format: int64
-        endpoint:
-          type: string
-        modelId:
-          type: string
-        features:
-          additionalProperties: true
-        apiKey:
+        secret:
           type: string
       required:
-      - apiKey
-      - endpoint
-      - features
-      - modelId
-      - providerId
+      - secret
     SecretSummary:
       properties:
         name:
@@ -4208,6 +7069,13 @@ components:
           format: date-time
       required:
       - name
+    SetDefaultEmbeddingBindingRequest:
+      properties:
+        revisionId:
+          type: integer
+          format: int64
+      required:
+      - revisionId
     Settings:
       properties:
         apiKey:
@@ -4323,6 +7191,188 @@ components:
       - AUTO
       - BLOCK
       - WORD
+    SsoCheckoutResponse:
+      properties:
+        sessionId:
+          type: string
+        checkoutUrl:
+          type: string
+      required:
+      - checkoutUrl
+      - sessionId
+    SsoConnectionResponse:
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        providerType:
+          type: string
+        status:
+          type: string
+        samlMetadataUrl:
+          type:
+          - string
+          - "null"
+        samlMetadataXml:
+          type:
+          - string
+          - "null"
+        oidcIssuerUrl:
+          type:
+          - string
+          - "null"
+        oidcClientId:
+          type:
+          - string
+          - "null"
+        oidcScopes:
+          type:
+          - string
+          - "null"
+        oidcSecretConfigured:
+          type: boolean
+        ssoDefaultRole:
+          type:
+          - string
+          - "null"
+        enforceSsoForDomains:
+          type: boolean
+        lastSyncError:
+          type:
+          - string
+          - "null"
+        lastSyncedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        lastTestedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        updatedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - enforceSsoForDomains
+      - oidcSecretConfigured
+      - organizationId
+      - providerType
+      - status
+    SsoDiscoveryResponse:
+      properties:
+        providerType:
+          type: string
+        domain:
+          type: string
+        samlProviderId:
+          type:
+          - string
+          - "null"
+        oidcProviderIdentifier:
+          type:
+          - string
+          - "null"
+        enforced:
+          type: boolean
+      required:
+      - domain
+      - enforced
+      - providerType
+    SsoDomainResponse:
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        domain:
+          type: string
+        verificationToken:
+          type: string
+        verifiedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        updatedAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - domain
+      - organizationId
+      - verificationToken
+    SsoPortalResponse:
+      properties:
+        portalUrl:
+          type: string
+      required:
+      - portalUrl
+    SsoSettingsResponse:
+      properties:
+        subscription:
+          $ref: "#/components/schemas/SsoSubscriptionResponse"
+        domains:
+          type: array
+          items:
+            $ref: "#/components/schemas/SsoDomainResponse"
+        connection:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/SsoConnectionResponse"
+      required:
+      - domains
+      - subscription
+    SsoSubscriptionResponse:
+      properties:
+        status:
+          type: string
+        trialEnd:
+          type:
+          - string
+          - "null"
+          format: date-time
+        currentPeriodEnd:
+          type:
+          - string
+          - "null"
+          format: date-time
+        pastDueGraceUntil:
+          type:
+          - string
+          - "null"
+          format: date-time
+        cancelAtPeriodEnd:
+          type: boolean
+      required:
+      - cancelAtPeriodEnd
+      - status
+    SsoSyncRequest:
+      properties:
+        oidcClientSecret:
+          type:
+          - string
+          - "null"
     SubmissionDownloadFormat:
       enum:
       - AUTO
@@ -4507,6 +7557,93 @@ components:
           additionalProperties: true
       required:
       - fields
+    TestSuiteCase:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        anchorJobGuid:
+          type: string
+        packageFingerprint:
+          type: string
+        packageMembers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractPackageMemberRequest"
+        expectedMissingDocuments:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractPackageDocumentRequest"
+        excludedDocuments:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractPackageDocumentRequest"
+        scenarioTags:
+          type: array
+          items:
+            type: string
+        expectations:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestSuiteExpectation"
+        proposalSourceRunId:
+          type:
+          - string
+          - "null"
+        proposalSourceResultFingerprint:
+          type:
+          - string
+          - "null"
+        proposalSourceTargetKey:
+          type:
+          - string
+          - "null"
+        proposalRationale:
+          type:
+          - string
+          - "null"
+      required:
+      - anchorJobGuid
+      - excludedDocuments
+      - expectations
+      - expectedMissingDocuments
+      - id
+      - name
+      - packageFingerprint
+      - packageMembers
+      - scenarioTags
+    TestSuiteExpectation:
+      properties:
+        id:
+          type: string
+        criterionId:
+          type: string
+        targetKey:
+          type: string
+        expectedAssessment:
+          type: string
+        importance:
+          type: string
+        scenarioTags:
+          type: array
+          items:
+            type: string
+        approved:
+          type: boolean
+        expectedEffectiveAttributes:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+      required:
+      - approved
+      - criterionId
+      - expectedAssessment
+      - id
+      - importance
+      - scenarioTags
+      - targetKey
     ToolDescriptor:
       properties:
         type:
@@ -4524,6 +7661,7 @@ components:
       - KNOWLEDGE_BASE_EVALUATE
       - LOOKUP_FILE_SEARCH
       - REFERENCE_DICTIONARY_LOOKUP
+      - DATE_RANGE_LOOKUP
     TrackChange:
       properties:
         text:
@@ -4579,7 +7717,183 @@ components:
       - totalComments
       - totalDeletions
       - totalInsertions
+    TrialAssertionResponse:
+      properties:
+        expectationId:
+          type: string
+        criterionId:
+          type: string
+        targetKey:
+          type: string
+        expectedAssessment:
+          type: string
+        actualAssessment:
+          type:
+          - string
+          - "null"
+        importance:
+          type: string
+        passed:
+          type: boolean
+        reasonCode:
+          type: string
+      required:
+      - criterionId
+      - expectationId
+      - expectedAssessment
+      - importance
+      - passed
+      - reasonCode
+      - targetKey
+    TrialAttestationRequest:
+      properties:
+        reportId:
+          type: string
+        reason:
+          type:
+          - string
+          - "null"
+      required:
+      - reportId
+    TrialAttestationResponse:
+      properties:
+        attestationId:
+          type: string
+        trialId:
+          type: string
+        reportId:
+          type: string
+        runId:
+          type: string
+        draftRevision:
+          type: integer
+          format: int64
+        draftFingerprint:
+          type: string
+        suiteFingerprint:
+          type: string
+        packageFingerprints:
+          type: array
+          items:
+            type: string
+        executionFingerprint:
+          type: string
+        reviewerId:
+          type: string
+      required:
+      - attestationId
+      - draftFingerprint
+      - draftRevision
+      - executionFingerprint
+      - packageFingerprints
+      - reportId
+      - reviewerId
+      - runId
+      - suiteFingerprint
+      - trialId
+    TrialReportResponse:
+      properties:
+        reportId:
+          type: string
+        runId:
+          type: string
+        status:
+          type: string
+        reportFingerprint:
+          type: string
+        assertions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrialAssertionResponse"
+      required:
+      - assertions
+      - reportFingerprint
+      - reportId
+      - runId
+      - status
+    TrialWorkEstimate:
+      properties:
+        estimatedDocuments:
+          type: integer
+          format: int32
+        estimatedCriteria:
+          type: integer
+          format: int32
+        estimatedUnits:
+          type: integer
+          format: int32
+      required:
+      - estimatedCriteria
+      - estimatedDocuments
+      - estimatedUnits
     Unit: {}
+    UpdateConnectionRequest:
+      properties:
+        fieldValues:
+          additionalProperties:
+            type: string
+        secrets:
+          additionalProperties:
+            type: string
+        description:
+          type:
+          - string
+          - "null"
+        active:
+          type:
+          - boolean
+          - "null"
+      required:
+      - fieldValues
+      - secrets
+    UpdateEmbeddingProviderRequest:
+      properties:
+        name:
+          type:
+          - string
+          - "null"
+        providerType:
+          type:
+          - string
+          - "null"
+        apiUrl:
+          type:
+          - string
+          - "null"
+        deploymentName:
+          type:
+          - string
+          - "null"
+        dimensions:
+          type:
+          - integer
+          - "null"
+          format: int32
+        similarityMetric:
+          type:
+          - string
+          - "null"
+        requestOptions:
+          type:
+          - "null"
+          - object
+          additionalProperties: true
+        credentialId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        enabled:
+          type:
+          - boolean
+          - "null"
+        forceDisable:
+          type: boolean
+        setAsDefault:
+          type: boolean
+      required:
+      - forceDisable
+      - setAsDefault
     UpdateKeyBindingRequestDto:
       properties:
         providerId:
@@ -4610,11 +7924,69 @@ components:
           - "null"
           - object
           additionalProperties: true
+        credentialId:
+          type:
+          - integer
+          - "null"
+          format: int64
         apiKey:
           type:
           - string
           - "null"
+          deprecated: true
         status:
+          type:
+          - string
+          - "null"
+    UpdateMemberRequest:
+      properties:
+        role:
+          type:
+          - string
+          - "null"
+        status:
+          type:
+          - string
+          - "null"
+    UpdateModelCredentialRequest:
+      properties:
+        name:
+          type:
+          - string
+          - "null"
+        description:
+          type:
+          - string
+          - "null"
+        tenantId:
+          type:
+          - string
+          - "null"
+        clientId:
+          type:
+          - string
+          - "null"
+        scope:
+          type:
+          - string
+          - "null"
+        cloud:
+          type:
+          - string
+          - "null"
+        secretExpiresAt:
+          type:
+          - string
+          - "null"
+        status:
+          type:
+          - string
+          - "null"
+        apiKey:
+          type:
+          - string
+          - "null"
+        clientSecret:
           type:
           - string
           - "null"
@@ -4652,6 +8024,67 @@ components:
           type:
           - string
           - "null"
+    UpdateProfileDraftHttpRequest:
+      description: JSON-friendly boundary request; the service retains a Jackson tree
+        for validation.
+      properties:
+        draftRevision:
+          type: integer
+          format: int64
+        profile:
+          additionalProperties: true
+      required:
+      - draftRevision
+      - profile
+    UpdateProfileTestSuiteRequest:
+      properties:
+        revision:
+          type: integer
+          format: int64
+        cases:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestSuiteCase"
+        reason:
+          type:
+          - string
+          - "null"
+      required:
+      - cases
+      - revision
+    UpdateSsoConfigRequest:
+      properties:
+        providerType:
+          type: string
+        samlMetadataUrl:
+          type:
+          - string
+          - "null"
+        samlMetadataXml:
+          type:
+          - string
+          - "null"
+        oidcIssuerUrl:
+          type:
+          - string
+          - "null"
+        oidcClientId:
+          type:
+          - string
+          - "null"
+        oidcScopes:
+          type:
+          - string
+          - "null"
+        ssoDefaultRole:
+          type:
+          - string
+          - "null"
+        enforceSsoForDomains:
+          type: boolean
+      required:
+      - enforceSsoForDomains
+      - providerType
     UpdateSubmissionPortalRequest:
       properties:
         slug:
@@ -4718,6 +8151,10 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/LlmType"
+        reasoningEffort:
+          type:
+          - string
+          - "null"
         extractionMode:
           type:
           - "null"
@@ -4819,74 +8256,6 @@ components:
       required:
       - guid
       - status
-    UsageEventResponse:
-      properties:
-        id:
-          type:
-          - integer
-          - "null"
-          format: int64
-        organizationId:
-          type: integer
-          format: int64
-        processingJobId:
-          type:
-          - integer
-          - "null"
-          format: int64
-        jobGuid:
-          type:
-          - string
-          - "null"
-        eventType:
-          type: string
-        eventSubtype:
-          type:
-          - string
-          - "null"
-        quantity:
-          type: string
-        unit:
-          type: string
-        source:
-          type: string
-        occurredAt:
-          type: string
-        metadata:
-          additionalProperties: true
-        dedupeKey:
-          type:
-          - string
-          - "null"
-      required:
-      - eventType
-      - metadata
-      - occurredAt
-      - organizationId
-      - quantity
-      - source
-      - unit
-    UsageSummaryResponse:
-      properties:
-        totalTokensUsed:
-          type: integer
-          format: int64
-        balance:
-          type: integer
-          format: int64
-        byType:
-          additionalProperties:
-            type: integer
-            format: int64
-        dailyUsage:
-          type: array
-          items:
-            $ref: "#/components/schemas/DailyUsageEntry"
-      required:
-      - balance
-      - byType
-      - dailyUsage
-      - totalTokensUsed
     UserInfo:
       properties:
         id:
@@ -4903,9 +8272,352 @@ components:
           - integer
           - "null"
           format: int64
+        organizationName:
+          type:
+          - string
+          - "null"
+        role:
+          type:
+          - string
+          - "null"
+        status:
+          type:
+          - string
+          - "null"
     WebhookSettings:
       properties:
         url:
           type:
           - string
           - "null"
+    WorkbookArtifactKind:
+      enum:
+      - plan
+      - sourceMap
+      - summary
+    WorkbookCardinality:
+      enum:
+      - oneToOne
+      - manyToOne
+    WorkbookColumnRole:
+      enum:
+      - identifier
+      - dimension
+      - measure
+      - attribute
+    WorkbookColumnType:
+      enum:
+      - string
+      - integer
+      - decimal
+      - boolean
+      - date
+      - datetime
+    WorkbookIntegerEncoding:
+      enum:
+      - decimalString
+    WorkbookIssueSeverity:
+      enum:
+      - info
+      - warning
+      - error
+      - fatal
+    WorkbookResult:
+      description: "Version 1 workbook-normalization result. Ordinary extraction results\
+        \ keep their existing, untyped response shapes; this envelope applies only\
+        \ when \\`extractionMode\\` is \\`WORKBOOK\\`. Values in \\[WorkbookResultRow.values\\\
+        ] and \\[WorkbookResultContext.values\\] are restricted by the worker contract\
+        \ to strings, JSON integers, booleans, or null. Decimal values and integers\
+        \ outside the JSON safe range are strings."
+      properties:
+        version:
+          type: integer
+          format: int32
+        status:
+          $ref: "#/components/schemas/WorkbookResultStatus"
+        workbook:
+          $ref: "#/components/schemas/WorkbookResultWorkbook"
+        context:
+          $ref: "#/components/schemas/WorkbookResultContext"
+        tables:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkbookResultTable"
+        relationships:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkbookResultRelationship"
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkbookResultIssue"
+        artifacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkbookResultArtifact"
+            description: "Opaque, job-relative references published with a workbook\
+              \ result."
+      required:
+      - artifacts
+      - context
+      - issues
+      - relationships
+      - status
+      - tables
+      - version
+      - workbook
+    WorkbookResultArtifact:
+      description: "Opaque, job-relative references published with a workbook result."
+      properties:
+        kind:
+          $ref: "#/components/schemas/WorkbookArtifactKind"
+        path:
+          type: string
+      required:
+      - kind
+      - path
+    WorkbookResultColumn:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: "#/components/schemas/WorkbookColumnType"
+        nullable:
+          type: boolean
+        role:
+          $ref: "#/components/schemas/WorkbookColumnRole"
+        sourceColumns:
+          type: array
+          items:
+            type: string
+        sourceHeaderRefs:
+          type: array
+          items:
+            type: string
+        originalHeaderPaths:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        unit:
+          type:
+          - string
+          - "null"
+        scale:
+          type:
+          - string
+          - "null"
+        encoding:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/WorkbookIntegerEncoding"
+        interpretationEvidence:
+          type: array
+          items:
+            type: string
+        description:
+          type:
+          - string
+          - "null"
+      required:
+      - id
+      - interpretationEvidence
+      - name
+      - nullable
+      - originalHeaderPaths
+      - role
+      - sourceColumns
+      - sourceHeaderRefs
+      - type
+    WorkbookResultContext:
+      properties:
+        values:
+          additionalProperties: true
+        evidenceRefs:
+          type: array
+          items:
+            type: string
+      required:
+      - evidenceRefs
+      - values
+    WorkbookResultIssue:
+      properties:
+        code:
+          type: string
+        severity:
+          $ref: "#/components/schemas/WorkbookIssueSeverity"
+        message:
+          type: string
+        affectedIds:
+          type: array
+          items:
+            type: string
+        sourceRefs:
+          type: array
+          items:
+            type: string
+      required:
+      - affectedIds
+      - code
+      - message
+      - severity
+      - sourceRefs
+    WorkbookResultRelationship:
+      properties:
+        id:
+          type: string
+        from:
+          $ref: "#/components/schemas/WorkbookResultRelationshipEndpoint"
+        to:
+          $ref: "#/components/schemas/WorkbookResultRelationshipEndpoint"
+        cardinality:
+          $ref: "#/components/schemas/WorkbookCardinality"
+        evidenceRefs:
+          type: array
+          items:
+            type: string
+        validation:
+          $ref: "#/components/schemas/WorkbookResultRelationshipValidation"
+      required:
+      - cardinality
+      - evidenceRefs
+      - from
+      - id
+      - to
+      - validation
+    WorkbookResultRelationshipEndpoint:
+      properties:
+        tableId:
+          type: string
+        columnIds:
+          type: array
+          items:
+            type: string
+      required:
+      - columnIds
+      - tableId
+    WorkbookResultRelationshipValidation:
+      properties:
+        parentKeyUnique:
+          type: boolean
+        matchedRows:
+          type: integer
+          format: int32
+        unmatchedRows:
+          type: integer
+          format: int32
+        nullKeyRows:
+          type: integer
+          format: int32
+        childKeyUnique:
+          type: boolean
+        parentNullKeyRows:
+          type: integer
+          format: int32
+      required:
+      - childKeyUnique
+      - matchedRows
+      - nullKeyRows
+      - parentKeyUnique
+      - parentNullKeyRows
+      - unmatchedRows
+    WorkbookResultRow:
+      properties:
+        id:
+          type: string
+        kind:
+          $ref: "#/components/schemas/WorkbookRowKind"
+        values:
+          additionalProperties: true
+        sourceRef:
+          type: string
+        cellStates:
+          additionalProperties:
+            type: string
+      required:
+      - cellStates
+      - id
+      - kind
+      - sourceRef
+      - values
+    WorkbookResultSheet:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        index:
+          type: integer
+          format: int32
+        hidden:
+          type: boolean
+        veryHidden:
+          type: boolean
+        hiddenRows:
+          type: array
+          items:
+            type: integer
+            format: int32
+      required:
+      - hidden
+      - hiddenRows
+      - id
+      - index
+      - name
+      - veryHidden
+    WorkbookResultStatus:
+      enum:
+      - complete
+      - needsReview
+    WorkbookResultTable:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        grain:
+          type: string
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkbookResultColumn"
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkbookResultRow"
+        sourceRegions:
+          type: array
+          items:
+            type: string
+      required:
+      - columns
+      - grain
+      - id
+      - name
+      - rows
+      - sourceRegions
+    WorkbookResultWorkbook:
+      properties:
+        filename:
+          type: string
+        sheets:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkbookResultSheet"
+        contentHash:
+          type:
+          - string
+          - "null"
+      required:
+      - filename
+      - sheets
+    WorkbookRowKind:
+      enum:
+      - detail
+      - subtotal
+      - total
