@@ -15,8 +15,7 @@ Create Stripe prices for token packs and set `metadata.tokens_granted` on each
 price (integer). DocuDevs reads this metadata when creating checkout sessions
 and when processing Stripe webhooks.
 
-You can optionally restrict which token packs are exposed in DocuDevs by setting
-an allowlist of price IDs or a single product ID (for self-hosted deployments).
+The token packs available to your organization are configured in DocuDevs.
 
 ## Token consumption rules
 

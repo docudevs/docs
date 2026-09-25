@@ -141,7 +141,7 @@ Every output table, row, and value carries local IDs and source references. The 
 
 Only one unencrypted native `.xlsx` file is accepted. `.xls`, `.xlsb`, `.xlsm`, CSV, image-only input, macro execution, external-link resolution, and formula execution are unsupported. Native `.xlsx` files may contain inert embedded objects, printer settings, hyperlinks, or linked-workbook metadata; these are disclosed as review findings and are never executed or fetched.
 
-Limits are deployment configuration, not performance promises:
+The following limits apply to workbook normalization:
 
 | Limit | Default |
 | --- | ---: |
@@ -159,7 +159,7 @@ Limits are deployment configuration, not performance promises:
 
 Large-workbook mode keeps source cells in a private, disk-backed store and does not materialize the full cell tuple or coordinate list in memory, so raising the inspected-cell ceiling does not require holding the whole workbook in memory.
 
-Deployment overrides use positive integer `WORKBOOK_` variables, in the units shown by the field suffix — for example `WORKBOOK_MAX_COMPRESSED_BYTES` and `WORKBOOK_MAX_WORK_UNIT_SECONDS`. Zero, negative, fractional, and malformed values are rejected. Limit exhaustion is an explicit error, never silent truncation. Malformed or unsupported workbooks return a structured error with a code and do not execute workbook content.
+Limit exhaustion is an explicit error, never silent truncation. Malformed or unsupported workbooks return a structured error with a code and do not execute workbook content.
 
 ## Scope and future work
 

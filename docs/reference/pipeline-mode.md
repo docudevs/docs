@@ -344,7 +344,7 @@ The main result still comes from `wait_until_ready()` / `GET /job/result/{guid}`
 
 ## Queue Mode
 
-Inline execution remains the default. Queue-backed extract nodes can be enabled by deployment configuration or requested per pipeline with:
+Inline execution remains the default. Request queue-backed extract nodes per pipeline with:
 
 ```python
 pipeline = Pipeline().execution_mode("queue")

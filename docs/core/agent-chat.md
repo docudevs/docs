@@ -59,10 +59,3 @@ asyncio.run(chat_with_agent())
 ## UI
 
 The web app exposes Agent Chat at `/app/agent`, including optional document upload for context.
-
-## Self-Hosted Configuration
-
-Set the agent queue name for both API and worker services:
-
-- API: `AZURE_AGENT_QUEUE_NAME`
-- Worker: `AGENT_QUEUE_NAME` or `AZURE_AGENT_QUEUE_NAME`
