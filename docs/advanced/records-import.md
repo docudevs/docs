@@ -89,6 +89,18 @@ The URL must be `https`, must not contain user information and must not point at
 | `COMPLETED` | Applied. |
 | `FAILED` | Not applied. |
 
+### Retry a failed import
+
+`POST /cases/{caseId}/records/imports/{importId}/retry` queues a failed import again with a new job (`202`). The worker resumes from its saved progress and does not re-apply table changes that were already merged. The staged input is kept for 7 days after a failure. The call returns `409` when the import has not failed, when the system retries it itself, or when its staged input is gone or changed, and `503` when it could not be queued.
+
+```python
+await client.retry_import(case_id, import_id)
+```
+
+```bash
+docudevs records import-retry 42 301
+```
+
 Rows that cannot be mapped (for example a missing key) are rejected and counted in `rowsRejected`; the other rows are still applied. Writes to a case are applied one at a time, in order.
 
 ## Snapshot sync

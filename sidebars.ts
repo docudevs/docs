@@ -50,6 +50,8 @@ const sidebars: SidebarsConfig = {
         'advanced/records-import',          // Importing records
         'advanced/category-trees',          // Category trees and activation
         'advanced/case-search',             // Case search
+        'advanced/classification',          // Classification and matching
+        'advanced/case-memo',               // Case memo
         'advanced/job-management',          // NEW: Job lifecycle and cleanup
         'configuration/Configuration',      // EXISTING: Named configurations
         'advanced/operations',    

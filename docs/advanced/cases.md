@@ -364,6 +364,8 @@ docudevs cases delete 123
 Deleting a case will also delete all documents associated with that case. This action cannot be undone.
 :::
 
+Deleting a [records](./records-datasets.md) case also removes its records, search documents and stored files. The call returns `409` while an import or tree activation is running for the case; wait for it to finish and retry. A records case does not accept document uploads (`409`): import records instead.
+
 ## Document Management within Cases
 
 ### Uploading Documents to Cases

@@ -271,6 +271,48 @@ For deeper analysis scenarios — such as compliance checking, document complete
 Use **KNOWLEDGE_BASE_SEARCH** when you need fast, targeted lookups (e.g., "find the price for item X"). Use **KNOWLEDGE_BASE_EVALUATE** when the LLM needs to reason across documents or discover what's missing (e.g., "verify all required compliance sections are present").
 :::
 
+## Records Search
+
+When the reference data is a [records dataset](../advanced/records-datasets.md) (a catalogue, a chart of accounts, a vendor master) use the `RECORDS_SEARCH` tool type. The model looks up a value from the document among your records and gets back the most similar ones with their category labels, so a schema field such as the GL account of an invoice line or the catalogue product of an order line can be resolved while the document is extracted.
+
+```json
+{
+  "tools": [
+    {
+      "type": "RECORDS_SEARCH",
+      "config": {
+        "caseId": "51",
+        "topK": 10,
+        "subtree": "4.12",
+        "attributes": {"brand": "Acme"}
+      }
+    }
+  ]
+}
+```
+
+| Config key | Meaning |
+|------------|---------|
+| `caseId` | Required. A records knowledge base of your organization. |
+| `topK` | Hits per lookup, 1 to 50 (default 10). The model can ask for fewer, never more. |
+| `subtree` | Optional category code; only records labelled in that subtree are returned. |
+| `attributes` | Optional `{name: value}` map of strings; only records with matching metadata are returned. |
+
+Unknown keys are rejected. The request fails with `400` when the case is not a records knowledge base, `404` when it is not found. Each hit contains the record `key`, the matched text (`chunk`), the `label` and its `labelPath`, and the `score`. Search uses the knowledge base's active embedding provider and its search settings, and fails instead of falling back when the provider cannot be resolved.
+
+```python
+tool = {"type": "RECORDS_SEARCH", "config": {"caseId": "51", "topK": 5}}
+job_id = await client.submit_and_process_document(
+    document=payload,
+    document_mime_type="application/pdf",
+    prompt="For each invoice line, fill product_key with the catalogue record that matches the item.",
+    schema=json_schema(InvoiceLines),
+    tools=[tool],
+)
+```
+
+To match many values in one run, use a [classify job with the record target](../advanced/classification.md#matching-rows-to-records).
+
 ## Operational notes
 
 - **Security:** Every tool invocation is scoped to the authenticated organization and the supplied `caseId`. There is no cross-tenant leakage.
