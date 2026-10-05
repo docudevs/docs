@@ -11,6 +11,18 @@ DocuDevs can call a URL you configure whenever a processing job finishes, instea
 
 DocuDevs sends a `POST` request to your URL only when a job reaches a **terminal** status: `COMPLETED`, `ERROR`, or `FAILED`. Intermediate status transitions (queued, processing, and so on) do not trigger a call.
 
+### Records import, tree activation and classify jobs
+
+The same webhook fires for `RECORD_IMPORT`, `TREE_ACTIVATION` and `CLASSIFY` jobs, once per job, when the job finishes. The payload has the same shape; `qualityScore` and `qualityCategory` are always `null` for these job types.
+
+| Job type | `status` | `error` |
+| --- | --- | --- |
+| `RECORD_IMPORT` (imports, syncs and rebuilds) | `COMPLETED` or `ERROR` | The failure reason when `ERROR`, for example when the import could not be queued or stopped reporting progress |
+| `TREE_ACTIVATION` | `COMPLETED` or `ERROR` | The failure reason when `ERROR` |
+| `CLASSIFY` | `COMPLETED` or `ERROR` | The failure reason when `ERROR`; a cancelled classify job reports `ERROR` with a cancellation reason |
+
+A job that is already finished never sends a second notification, and a failed delivery never changes the job's outcome.
+
 Delivery is best-effort: a failed delivery is logged on the DocuDevs side and is not retried, and it never affects the underlying job. Treat the webhook as a convenience notification, not a guaranteed delivery channel — poll the job or case status if you need certainty.
 
 ## Payload
