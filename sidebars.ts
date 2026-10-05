@@ -52,6 +52,7 @@ const sidebars: SidebarsConfig = {
         'advanced/case-search',             // Case search
         'advanced/classification',          // Classification and matching
         'advanced/case-memo',               // Case memo
+        'advanced/records-classify-app',    // Records and classify in the app
         'advanced/job-management',          // NEW: Job lifecycle and cleanup
         'configuration/Configuration',      // EXISTING: Named configurations
         'advanced/operations',    
