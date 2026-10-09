@@ -61,24 +61,16 @@ On a classify job's results, the **Ask agent about this row** link opens the age
 
 ## Python SDK
 
-`agent_chat_and_wait` does not take a case, so start the chat with `agent_chat` and poll the status:
+`agent_chat_and_wait` takes the same case arguments as `agent_chat` and returns the completed status:
 
 ```python
-import asyncio
-
-job = await client.agent_chat(
+status = await client.agent_chat_and_wait(
     [{"role": "user", "content": "Investigate the flagged rows of classify job 55."}],
     session_id="week-41",
     case_id=42,
     playbook="investigate-flagged",
     context="classify:55:17",
 )
-
-while True:
-    status = await client.agent_status(job["jobGuid"])
-    if status["status"] in ("COMPLETED", "ERROR"):
-        break
-    await asyncio.sleep(2)
 
 print(status["response"]["message"])
 for action in status.get("pendingActions") or []:
