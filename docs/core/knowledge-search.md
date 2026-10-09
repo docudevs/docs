@@ -313,6 +313,22 @@ job_id = await client.submit_and_process_document(
 
 To match many values in one run, use a [classify job with the record target](../advanced/classification.md#matching-rows-to-records).
 
+## Records Match
+
+`RECORDS_MATCH` resolves one value to one record of a records knowledge base: the GL account of an invoice line, or the vendor a supplier name refers to. The model compares the value with the most similar records and returns the chosen record, or `declined` with a reason.
+
+```json
+{"type": "RECORDS_MATCH", "config": {"caseId": "51", "topK": 10, "llmLevel": "MINI"}}
+```
+
+| Config key | Meaning |
+|------------|---------|
+| `caseId` | Required. A records knowledge base of your organization. |
+| `topK` | Candidate records the model compares, 1 to 50 (default 10). |
+| `llmLevel` | `DEFAULT`, `NANO`, `MINI` (default) or `HIGH`. |
+
+The result holds `key`, `label`, `labelPath`, `declined` and `reason`. Matching writes nothing: it creates no records, labels or memo entries. When the knowledge base has no active embedding generation the tool is not offered, and nothing falls back to another vector space. To match many values at once, use a [classify job with the record target](../advanced/classification.md#matching-rows-to-records).
+
 ## Operational notes
 
 - **Security:** Every tool invocation is scoped to the authenticated organization and the supplied `caseId`. There is no cross-tenant leakage.

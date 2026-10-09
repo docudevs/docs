@@ -13,7 +13,7 @@ DocuDevs sends a `POST` request to your URL only when a job reaches a **terminal
 
 ### Records import, tree activation and classify jobs
 
-The same webhook fires for `RECORD_IMPORT`, `TREE_ACTIVATION` and `CLASSIFY` jobs, once per job, when the job finishes. The payload has the same shape; `qualityScore` and `qualityCategory` are always `null` for these job types.
+The same webhook fires for `RECORD_IMPORT`, `TREE_ACTIVATION`, `CLASSIFY` and `AGENT_RUN` jobs, once per job, when the job finishes. A headless agent run fires it when it completes, fails or is cancelled ([Headless agent runs](../advanced/agent-runs.md#webhook)). The payload has the same shape; `qualityScore` and `qualityCategory` are always `null` for these job types.
 
 | Job type | `status` | `error` |
 | --- | --- | --- |

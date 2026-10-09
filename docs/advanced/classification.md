@@ -53,7 +53,7 @@ Invalid settings return `400`. `404` means the case, knowledge base or tree vers
 | --- | --- |
 | `target` | `category` (default) or `record` (matching, below). |
 | `treeVersionId` | Tree version to use; default is the active version. Category target only. |
-| `targetDepth` | Tree levels to report besides the chosen leaf, for example `[4, 5]`. Category target only. |
+| `targetDepth` | Tree levels to report besides the chosen leaf, for example `[4, 5]`. Category target only. Precedence: this value, then the case default (`classifyDefaults.targetDepth` on the [records dataset](./records-datasets.md)), then every level of the tree from 1 to its maximum depth. A shallower leaf carries the `shallow` flag. |
 | `instructions` | Free text added to the prompt. It is stored in a blob and is never returned by the API. |
 | `memo` | `use`: `active` (default) or `none`. `version` pins an older memo version. `include` lists ids of proposed memo entries to try in this run. See [Case memo](./case-memo.md). |
 | `llmLevel` | `DEFAULT`, `NANO`, `MINI` (default) or `HIGH`. Bring-your-own models are honoured. |
@@ -65,6 +65,7 @@ Invalid settings return `400`. `404` means the case, knowledge base or tree vers
 | `perRowMaxPromptTokens` | Per-row prompt cap; the prompt is shrunk to fit. |
 | `recordsKnowledgeBaseId` | Knowledge base to classify against. Required for `target: record`; otherwise the case itself. |
 | `inputMapping` | Maps input columns onto dataset field names (see below). |
+| `investigate` | `{enabled, playbook, maxRows, flags}`. When `enabled` is true, a headless [agent run](./agent-runs.md) investigates the job's flagged rows after it completes. |
 
 ### Candidate strategy
 

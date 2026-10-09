@@ -946,6 +946,82 @@ Get the result of a completed job.
 docudevs result JOB_GUID
 ```
 
+## Case Agent and Evaluation
+
+### `agent actions`
+
+List the pending-action inbox of a case.
+
+```bash
+docudevs agent actions CASE_ID [--status STATUS] [--limit N] [--before ID]
+```
+
+### `agent confirm`
+
+Confirm a pending action as the signed-in person. The stored request is replayed.
+
+```bash
+docudevs agent confirm ACTION_ID
+```
+
+### `agent reject`
+
+Reject a pending action, optionally with a reason.
+
+```bash
+docudevs agent reject ACTION_ID [--reason TEXT]
+```
+
+### `agent run start`
+
+Start a headless agent run. `PLAYBOOK` is `general` (needs `--goal`) or `investigate-flagged` (needs `job_id` in `--params-file`). `--budget-tokens` is authorised when the run starts.
+
+```bash
+docudevs agent run start CASE_ID investigate-flagged --params-file params.json --budget-tokens 60000 --wait
+```
+
+`params.json` holds `max_rows`, `flags` and `job_id`.
+
+### `agent run status`
+
+Show a run's state and report. `--wait` polls until it finishes.
+
+```bash
+docudevs agent run status CASE_ID RUN_ID --wait
+```
+
+### `agent run cancel`
+
+Cancel a run after its current turn.
+
+```bash
+docudevs agent run cancel CASE_ID RUN_ID
+```
+
+### `eval holdout`
+
+Start a holdout evaluation. `--variants-file` is a JSON list of `{"name", "memo_include"?, "config"?}`; the first entry is the baseline.
+
+```bash
+docudevs eval holdout CASE_ID --variants-file variants.json --sample-size 200 --seed 7 --group-field base_product_id --wait
+```
+
+### `eval status`
+
+Show an evaluation, waiting for it with `--wait`.
+
+```bash
+docudevs eval status CASE_ID EVAL_ID --wait
+```
+
+### `eval compare`
+
+Score two completed evaluations against each other. Choose variants with `--baseline-variant` and `--candidate-variant`.
+
+```bash
+docudevs eval compare CASE_ID BASELINE_EVAL_ID CANDIDATE_EVAL_ID --baseline-variant baseline --candidate-variant with-rule
+```
+
 ## Global Options
 
 These options are available for all commands:

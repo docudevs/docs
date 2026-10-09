@@ -932,6 +932,154 @@ Retry a failed case reindex candidate.
 await client.retry_case_embedding_reindex(case_id)
 ```
 
+## Case Agent and Evaluation
+
+Case-bound agent chat, pending actions, headless runs, holdout evaluations and memo A/B. See [Case agent](../advanced/case-agent.md), [Agent actions](../advanced/agent-actions.md), [Headless agent runs](../advanced/agent-runs.md) and [Holdout evaluation](../advanced/case-evals.md).
+
+### agent_chat
+
+Send a chat message to the agent. With `case_id` the agent works on that case, with `playbook` (`general` or `investigate-flagged`) and an optional `context` (`classify:{jobId}:{rowId}`). Returns the job, with `jobGuid`.
+
+```python
+job = await client.agent_chat(
+    [{"role": "user", "content": "Summarise the flagged rows of job 55."}],
+    session_id="week-41",
+    case_id=42,
+    playbook="investigate-flagged",
+)
+```
+
+### agent_status
+
+Get the status of an agent chat job, its response and its `pendingActions` (summaries with `id`, `tool`, `toolClass`, `summary` and `expiresAt`).
+
+```python
+status = await client.agent_status(job["jobGuid"])
+```
+
+### start_agent_run
+
+Start a headless agent run on a case. `params` may hold `max_rows`, `flags` and `job_id`; `budget` may hold `max_total_tokens`, which is authorised when the run starts. Returns `{runId, jobGuid}`.
+
+```python
+started = await client.start_agent_run(
+    42,
+    "investigate-flagged",
+    params={"job_id": 55, "max_rows": 10},
+    budget={"max_total_tokens": 60000},
+)
+```
+
+### get_agent_run
+
+Get the state, budget, progress, pending action ids and report of a run.
+
+```python
+run = await client.get_agent_run(42, started["runId"])
+```
+
+### wait_for_agent_run
+
+Poll a run until it completes. Raises `AgentRunFailed` when the run fails or is cancelled, and `TimeoutError` when it runs longer than `timeout`.
+
+```python
+run = await client.wait_for_agent_run(42, started["runId"], timeout=1800)
+```
+
+### cancel_agent_run
+
+Cancel a run; it stops after its current turn. Agent tokens cannot cancel.
+
+```python
+await client.cancel_agent_run(42, started["runId"])
+```
+
+### list_agent_runs
+
+List the runs of a case, newest first, as `{items, continuation?}`. Pass `origin_job_id` for the runs of one classify job and `status` for one state.
+
+```python
+runs = await client.list_agent_runs(42, origin_job_id=55, status="COMPLETED")
+```
+
+### list_agent_actions
+
+List the case inbox: `{items, nextBefore?}`, newest first. `status` is `pending`, `confirmed`, `rejected` or `expired`.
+
+```python
+pending = await client.list_agent_actions(42, status="pending", limit=20)
+```
+
+### confirm_agent_action
+
+Confirm a pending action as the signed-in person. The stored request is replayed; a repeated confirm returns the stored result.
+
+```python
+result = await client.confirm_agent_action(9001)
+```
+
+### reject_agent_action
+
+Reject a pending action, optionally with a reason.
+
+```python
+await client.reject_agent_action(9002, reason="Use the 7.31 subtree instead")
+```
+
+### start_holdout_eval
+
+Start a holdout evaluation. Each variant is `{"name", "memo_include"?, "config"?}`; the first variant is the baseline. Pass `group_field` so the held-out split groups near-duplicates. Returns `{evalId, status, jobGuid}`.
+
+```python
+started = await client.start_holdout_eval(
+    42,
+    [{"name": "baseline"}, {"name": "with-rule", "memo_include": ["m_88"]}],
+    sample_size=200,
+    seed=7,
+    group_field="base_product_id",
+)
+```
+
+### get_holdout_eval
+
+Get the status, variants and, once completed, the report of an evaluation.
+
+```python
+evaluation = await client.get_holdout_eval(42, started["evalId"])
+```
+
+### wait_for_eval
+
+Poll an evaluation until it completes. Raises `EvalFailed` when it fails and `TimeoutError` when it runs longer than `timeout`.
+
+```python
+evaluation = await client.wait_for_eval(42, started["evalId"], timeout=3600)
+```
+
+### compare_holdout_evals
+
+Score two completed evaluations against each other without classifying again. Answers `409` when the samples differ.
+
+```python
+comparison = await client.compare_holdout_evals(42, 301, 302, baseline_variant="baseline")
+```
+
+### evaluate_memo_entry
+
+Evaluate a proposed memo entry (memo A/B): run A uses the active memo, run B adds the entry. Returns `{evalId, status}`. It approves nothing.
+
+```python
+memo_eval = await client.evaluate_memo_entry(42, entry["id"], sample_size=200, seed=7, group_field="base_product_id")
+```
+
+### search_categories
+
+Search or browse the categories of a tree version by name, code or parent.
+
+```python
+hits = await client.search_categories(42, version_id, query="fiction", size=20)
+```
+
 ## Model Credentials
 
 Shared credentials referenced by embedding providers (and other bring-your-own integrations) by id, so secrets are never round-tripped back to callers. See [Model Credentials](/docs/administration/model-credentials).

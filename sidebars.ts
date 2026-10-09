@@ -52,6 +52,10 @@ const sidebars: SidebarsConfig = {
         'advanced/case-search',             // Case search
         'advanced/classification',          // Classification and matching
         'advanced/case-memo',               // Case memo
+        'advanced/case-agent',              // Case agent: chat bound to one case
+        'advanced/agent-actions',           // Agent actions and the pending-action inbox
+        'advanced/agent-runs',              // Headless agent runs and budgets
+        'advanced/case-evals',              // Holdout evaluation and memo A/B
         'advanced/records-classify-app',    // Records and classify in the app
         'advanced/job-management',          // NEW: Job lifecycle and cleanup
         'configuration/Configuration',      // EXISTING: Named configurations

@@ -56,6 +56,10 @@ async def chat_with_agent():
 asyncio.run(chat_with_agent())
 ```
 
+## Case-bound chat
+
+Pass `caseId` to work on one case. The agent then follows the case's active memo instructions, works through case-bound tools and proposes changes that a person confirms. `playbook` and `context` select an investigation. See [Case agent](../advanced/case-agent.md) and [Agent actions](../advanced/agent-actions.md).
+
 ## UI
 
-The web app exposes Agent Chat at `/app/agent`, including optional document upload for context.
+The web app exposes Agent Chat at `/app/agent`, including optional document upload for context. With `?caseId=` in the URL the page opens the case agent.

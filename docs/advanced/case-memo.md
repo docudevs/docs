@@ -51,7 +51,7 @@ POST /cases/42/memo/entries
 {"id": "m_88", "status": "proposed", "revision": 41, "memoVersion": 41}
 ```
 
-Any organization member with access to the knowledge base can write entries. Requests that carry the header `X-DocuDevs-Actor: agent` are treated as agent actions: an agent can propose instructions and leave feedback, but approving returns `403`. Treat this as a guard against accidents rather than a security boundary, because the header comes from the caller.
+Any organization member with access to the knowledge base can write entries. Agents act with a short-lived agent token that the server recognises. An agent can propose instructions and leave feedback, but approving returns `403`. The `X-DocuDevs-Actor` header is ignored. See [Agent actions](./agent-actions.md).
 
 ## How a classify job uses the memo
 
@@ -61,7 +61,7 @@ A token budget caps the memo text per row (about 1,500 tokens). If it is exceede
 
 When a job classifies rows of one case against another case's knowledge base, the knowledge base's entries are loaded first, then the work case's global and document entries.
 
-To try a proposed instruction before approving it, list its id in `config.memo.include`, run the job, and compare the results with a run that leaves it out.
+To try a proposed instruction before approving it, list its id in `config.memo.include`, run the job, and compare the results with a run that leaves it out. To measure the effect over a grouped holdout sample before approving, use the [memo A/B evaluation](./case-evals.md#test-a-proposed-memo-entry).
 
 When a category tree is activated, the activation report lists memo entries whose scope names a retired or missing category. DocuDevs does not remap them: they keep working on the old codes until you update or retire them.
 

@@ -41,6 +41,7 @@ Writes are asynchronous: DocuDevs stages your request and a worker applies it. R
 | `embeddedText.template` | Text that is embedded, using `{name}` placeholders. The default is one line per text field. With `skipEmptyFields` (default), a template line whose placeholders are empty is dropped. |
 | `examplePolicy` | `mode` is `full` (default) or `perLabelCap`, which keeps at most `perLabelCap` hits per label in search results and fetches `overFetch` times `topK` hits first. |
 | `indexSettings` | Default search settings: `topK` 1-200 (default 10), `exhaustive`, `oversampling` 1.0-20.0 (default 10), `hybrid` (default false), `semanticRerank` (default false). A search call can override them. |
+| `classifyDefaults.targetDepth` | Tree levels a category classify job returns when it names none, for example `[4, 5]`. A non-empty list of distinct whole numbers of at least 1. Changing it does not reindex. A PUT that omits it clears it. See [Classification](./classification.md#config). |
 
 Changing the text fields or the embedded text template of a dataset that already holds records changes what future writes embed. The call is refused with `409` unless you confirm with `?reindex=true`. Confirming records the change (the dataset's `mappingVersion` increases) but does not re-embed existing records: they keep their previous embedded text until you write them again, for example with a snapshot sync of the full export, which re-embeds every record whose embedded text changed. Changing only the label, metadata, example policy or index settings needs no confirmation.
 
