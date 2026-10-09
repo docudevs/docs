@@ -62,6 +62,8 @@ Without a budget, the run stops at `maxRows`, at the turn limit, or when it has 
 | `report` | `summary`, `proposals` (by reference) and `questions`. Absent until the run saves one. |
 | `error` | Why the run failed, or the budget reason when it stopped on the budget. |
 
+`originJobId` (optional) names the classify job the run investigates. It must be a classify job of the same case; otherwise the request returns `404`. The run is then listed under that job.
+
 `GET /cases/{caseId}/agent/runs` lists the runs of a case, newest first, with `limit` (1 to 200, default 50), `continuation`, `status` and `originJobId`. Filter by `originJobId` to see the runs of one classify job.
 
 ## Cancel a run
@@ -79,13 +81,16 @@ A classify job can start a run when it completes. Add `investigate` to the job c
       "enabled": true,
       "playbook": "investigate-flagged",
       "maxRows": 10,
+      "maxTotalTokens": 60000,
       "flags": ["declined", "modelNamedDifferentBestFit", "sourcesDisagree"]
     }
   }
 }
 ```
 
-`playbook` defaults to `investigate-flagged`, `maxRows` to 10 (1 to 500), and `flags` to `declined`, `modelNamedDifferentBestFit` and `sourcesDisagree`. The run's `originJobId` is the job, so the job's results and the run's proposals can be read together. The trigger has no budget of its own. A triggered run therefore has no `maxTotalTokens` bound, and its costly tools become pending actions for a person. To give a run a budget, start it from the API with a `budget`.
+`playbook` defaults to `investigate-flagged`, `maxRows` to 10 (1 to 500), and `flags` to `declined`, `modelNamedDifferentBestFit` and `sourcesDisagree`. The run's `originJobId` is the job, so the job's results and the run's proposals can be read together.
+
+`maxTotalTokens` (optional, at least 1) bounds the run's tokens, as `budget.maxTotalTokens` does for a direct run. When it is absent the run takes the server's default, `AGENT_RUN_DEFAULT_BUDGET_TOKENS` (300000 tokens), so a triggered run is never unbounded. Its costly tools become pending actions for a person.
 
 ## Webhook
 

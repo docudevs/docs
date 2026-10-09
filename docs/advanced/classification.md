@@ -65,7 +65,7 @@ Invalid settings return `400`. `404` means the case, knowledge base or tree vers
 | `perRowMaxPromptTokens` | Per-row prompt cap; the prompt is shrunk to fit. |
 | `recordsKnowledgeBaseId` | Knowledge base to classify against. Required for `target: record`; otherwise the case itself. |
 | `inputMapping` | Maps input columns onto dataset field names (see below). |
-| `investigate` | `{enabled, playbook, maxRows, flags}`. When `enabled` is true, a headless [agent run](./agent-runs.md) investigates the job's flagged rows after it completes. |
+| `investigate` | `{enabled, playbook, maxRows, flags, maxTotalTokens}`. When `enabled` is true, a headless [agent run](./agent-runs.md) investigates the job's flagged rows after it completes. `maxTotalTokens` bounds that run; without it the run takes the server default of 300000 tokens. |
 
 ### Candidate strategy
 
