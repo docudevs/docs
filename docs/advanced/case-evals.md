@@ -27,7 +27,7 @@ Historical labels can contain errors, and conventions can change. A holdout scor
 {
   "sampleSize": 200,
   "seed": 7,
-  "grouping": {"mode": "nearDuplicate", "threshold": 0.93},
+  "grouping": {"mode": "nearDuplicate", "threshold": 0.98},
   "config": {"llmLevel": "MINI", "targetDepth": [4, 5]},
   "variants": [
     {"name": "baseline"},
@@ -71,7 +71,7 @@ Holdout accuracy depends on what the classifier can see. A held-out record is le
 
 So the grouping decides which records leave the evidence together with a sampled record:
 
-- **`nearDuplicate` (default).** For each sampled record, the platform finds its nearest neighbours in the knowledge base by text similarity and leaves out every neighbour whose cosine similarity is at least `threshold` (default 0.93, above 0 and at most 1). Each record is looked up once, so the cost grows with the sample size. Use a lower threshold to group more loosely, and a higher one to group only close copies.
+- **`nearDuplicate` (default).** For each sampled record, the platform finds its nearest neighbours in the knowledge base by text similarity and leaves out every neighbour whose cosine similarity is at least `threshold` (default 0.98, above 0 and at most 1). Each record is looked up once, so the cost grows with the sample size. Use a lower threshold to group more loosely, and a higher one to group only close copies. The default was calibrated on a live labelled sample on 2026-10-09: a lower threshold such as 0.93 left out evidence for distinct products and lowered accuracy.
 - **`field`.** `groupField` names a record metadata key that identifies one product, such as a base product id or a normalised name. Every record that shares its value is held out together. This is the explicit choice when your data has a reliable key.
 - **`none`.** Ungrouped. The report carries the `ungrouped` warning. Read such a run only for its paired difference between variants, as a sign of direction, and do not quote its absolute accuracy.
 
@@ -92,7 +92,7 @@ started = await client.start_holdout_eval(
     variants,
     sample_size=200,
     seed=7,
-    grouping={"mode": "nearDuplicate", "threshold": 0.93},
+    grouping={"mode": "nearDuplicate", "threshold": 0.98},
     config={"llmLevel": "MINI"},
 )
 finished = await client.wait_for_eval(case_id, started["evalId"], timeout=3600)
@@ -116,7 +116,7 @@ memo_eval = await client.evaluate_memo_entry(
 ## CLI
 
 ```bash
-docudevs eval holdout 42 --variants-file variants.json --sample-size 200 --seed 7 --grouping-mode nearDuplicate --grouping-threshold 0.93 --config-file config.json --wait
+docudevs eval holdout 42 --variants-file variants.json --sample-size 200 --seed 7 --grouping-mode nearDuplicate --grouping-threshold 0.98 --config-file config.json --wait
 docudevs eval holdout 42 --variants-file variants.json --sample-size 200 --seed 7 --group-field base_product_id --config-file config.json --wait
 docudevs eval status 42 301 --wait
 docudevs eval compare 42 301 302 --baseline-variant baseline --candidate-variant with-rule
