@@ -1,0 +1,71 @@
+---
+id: get-case-classify
+title: "Get the status, counts, usage and pinned versions of a classify job"
+description: "Get the status, counts, usage and pinned versions of a classify job"
+sidebar_label: "Get the status, counts, usage and pinned versions of a classify job"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9Vk1v2zAM/SuCThvgNtlW7JBblxZFBwwbum6XogfFZhw1sqRKdNogyH8f6a8kTVA4RbGTLemRIp+eSK0kqjzK0Z1MVYST1KgY9XQp7xPpPASF2tnrTI5kDjgmxLgFJNKroApACGy+kpYGhGM3ZJBIbWnkFc7oP8BjqQOQHwwlJDKmMyiUHK0kLj1baYuQQyDo1IVCYT319Uyu10nn+sFN3tXzPZtH72yEyBafh0P+ZBDToD1nTuCfczJNHXmxyKvKe6PTipfBQ2TIamtTH5g11LXDOuA+sSQtb/3Ac+ueDGQ5fOMjOcYSVaCT3AJHDNrmvBRRYRkPLlEiV6Xe2uOuXUykLY2R9wQK7ineOlRmG7aJpcYdjCkA/CUZNVI7zriAwjXGRzD945BVvw0DpC5k8VZNDLzRRepKi3FfL7jL3qtZZM5CXyikRlvoK5GpUXneH6206Q2Oc+19T/R6+3LfbZJoUu923gS88Z80VBL7qNHwRm3hGtfck/cyqhz2D4FGhcdbNwcb+yqKLAxwSTjKzJhirIzpB39Bx96WW+6S3RwOkPCnSp058Map7PLZk994jq9c8K2IMoVwgrqoPKQBaJi9ybb02RttX7LRNp3mZiVdrzhUKXeLRlf4uuLYSuMAcb8r6E3TNSgOjuRseLbfN767ibAOxZQiyqqAd9evAAXOQNSbJ6KOPBHV1kLZTHhtSe9iUccZhZsKJdoGLSjBKhGcuaY9Vy2ZmuJIDpiPOFjVtKwHrdFgVdGyrnro1FWsNwleuLS8gEUU57+u5ctYu0X+KagRChJYCuTT5mxwKi5VpOuD4kktBTpKxlLYKJauDCJrjCKv0Bkq8r9oC6f8dPrldMhi8C5ioapa2vT796FoJ5XuoiE848AbRW8JFmKoym5NXy0n1sNoo6vNs2dUS4vEMaOIGb5aTQj3J5j1mqcfSwhLmqffhQqa+0T1QMp05H86rakyEfYi6x4Z8sNNo+2PglV5KOJmUlkOaaFMySPWOyw3jzB+O/3HXWti1vwWmIHKqIxx2vXaeZqCxy2rvXcUP8c6OV9d3tKd+QeyTZe2
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get the status, counts, usage and pinned versions of a classify job"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/classify/{jobId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get the status, counts, usage and pinned versions of a classify job
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"jobId":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"knowledgeBaseCaseId":{"type":"integer","format":"int64"},"target":{"type":"string"},"status":{"type":"string"},"jobGuid":{"type":["string","null"]},"rowsTotal":{"type":["integer","null"],"format":"int64"},"treeVersionId":{"type":["integer","null"],"format":"int64"},"memoVersion":{"type":"integer","format":"int64"},"caseMemoVersion":{"type":["integer","null"],"format":"int64"},"recordsTableVersion":{"type":["integer","null"],"format":"int64"},"counts":{"properties":{"total":{"type":"integer","format":"int64"},"done":{"type":"integer","format":"int64"},"declined":{"type":"integer","format":"int64"},"flagged":{"type":"integer","format":"int64"},"failed":{"type":"integer","format":"int64"},"skipped":{"type":"integer","format":"int64"}},"required":["declined","done","failed","flagged","skipped","total"],"title":"ClassifyCounts"},"usage":{"properties":{"promptTokens":{"type":"integer","format":"int64"},"completionTokens":{"type":"integer","format":"int64"},"llmCalls":{"type":"integer","format":"int64"}},"required":["completionTokens","llmCalls","promptTokens"],"title":"ClassifyUsage"},"uploadExpiresAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["caseId","counts","jobId","knowledgeBaseCaseId","memoVersion","status","target","usage"],"title":"ClassifyStatusResponse"}}}},"404":{"description":"Job not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

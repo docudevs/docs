@@ -1,0 +1,71 @@
+---
+id: delete-case-record
+title: "Delete one record"
+description: "Delete one record"
+sidebar_label: "Delete one record"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE2P2jAQ/SuWT62UErpFPXDbFlQh9VCt2tOKw5AM4N3E9toTWhTlv3fGCYEVHLaXnmKP33y9eZNWE+yinj/qAiJ+CFi4UEa9zrTzGICMs6tSz3WJFRJ+ZcxDguhMewhQszGIe6stXxgoYVbybCzfPNCezwFfGhOQA1FoMNOx2GMNet5qOnrxMpZwh4GhWxdqoN70eaa7LhtDP+PxX+NGCsbuOMpawNE7GzHK+930Tj4lxiIYL20y+r4o0BOWiotQPrgCYxT3TBeOC7QkLuB9ZYrETP4Uxa+9yMtezBuZPoupvQskBL6h00w/uc23xpQ36ufWCKiJt1q7pOHxnPIcbnRmEshQJd79FFcJfGqbY0m02XR6Tc2XCuyzkgkkxOwaIdpQ1hGT19gy1fUasEgSUs6iCicNsX727qyvpCqe7FznoqOYt72cunwQZt5yCV1SwdYlMoZ+Fq5oFniI6v7HSl9lPj3KoeY5XgxXHCZqCZFHRuo3HBU5xeM+8BTV0TVBlYNTlJcSCDg+v8Y+9sfJp8lUSPEuUg1JDoNebzX8qrBxloR/KPcVsLY5UhOqJKXERL+YkV3n42qdtpRtMhEe656TC7ZtNwz6FaquE/NLg+HIdj4eIBjYCFe8q6WJcmbit1BFvCprlLt+9zBo673idDfLHYxgZTsPUDVy46OUNv4PZI3/Y9Yk1DXD9gglb5s03b/0Yr/wudpn+VeMulwsvy9/LlnNfwFz979t
+sidebar_class_name: "delete api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Delete one record"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/cases/{caseId}/records/{key}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Delete one record
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"key","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Accepted for processing","content":{"application/json":{"schema":{"properties":{"importId":{"type":"integer","format":"int64"},"jobGuid":{"type":"string"},"status":{"type":"string"}},"required":["importId","jobGuid","status"],"title":"RecordImportAccepted"}}}},"400":{"description":"Blank key"},"404":{"description":"Case not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

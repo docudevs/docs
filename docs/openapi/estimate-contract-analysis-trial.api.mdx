@@ -1,0 +1,71 @@
+---
+id: estimate-contract-analysis-trial
+title: "estimateContractAnalysisTrial"
+description: "estimateContractAnalysisTrial"
+sidebar_label: "estimateContractAnalysisTrial"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVktv2zAM/iuGThvgNt0DO+TWpd3QDcOKrMUOQQ+KzSRaHEnTo20Q+L+PlO1YsdOkWQ+pLJEUye8TyQ1zfG7ZcMIyJZ3hmTvjkhdrK+yZM4IXlj2kTGkw3Aklb3I2ZGCdWHEHo1rjsla4I3mWMs0NX4EDQ3Y3TOIHamXcAqqnTEj80twtcG3grxcG0KozHlJmswWsOBtumFtr0hLSwRwMis6UwUurrU8fWVk+VOrozWeVr0mHQgDpaMm1LkQWfB78sUrSXmtcG4rICbBBVmYLZb6p6Vcv8uhuiwmQc1aiW144GMOjsKIyVUlMIvekLwpKVdfNlIU0fhdyv+mVyqGITdZHjUUUwbBmYu4rBL7gIRiNMu6IlrdOrW4jLFrpIISwTv9A5shrnueCrPPiNkoNYdJEP6rgO3il5tmSz4+IlTHqk07y42yhW064gtKFTs1EAYFg1zX7xhX2SISyy6OwYbWStgL4/cUF/cvBZkZoFzA8zOIEVZLGBkv/l1nNHflvZZYHjq9U5ldo3x5l/of3RJqt4sggNOjwqXr3Urzysg5c/ZvTfWH0rorADAmmhDRIhmfAn0cLL5evzQDK30jt3Z1agjxB6ad3p2qhk6C8+wVIgvyEq8aAXIYTFEbKuh8iM+re5q8qgZjlZ8g8UXEU14ib/aVmK7y3hsSCNTDH5HLDZ65fFg96/EIpPa7TLUCRH3XdOebuoULcofluZPszknae9wE0Xsh9TPs+A3ok7xN4h2d787CbvG76e+Q+qf7W1bEsQwk+obqS3+AWioYJjSEH13EeGLLBUqqnAvI5nE3RZTvYVGNDOdCVC3bQm1MG1ZwyaK5Ea1SXx+1scP3MV5oC6fX6tjt1eHmxQ5dWrG7X7cbLzTmS6bXipgPvMLtViBppxF8hZypQt0aFyu0VPNrk8vaGdQHYHjZFOcEMZmAtGiOF8+SaW6SNS574OnEqwUAesTUla+VNkjeVnE5y7qjM42mVG/bu/MP5RXh4CN6Kh2dcT3kNCEkDfNIgnzTQ7/i5fYgOnt1AFxynQzTsTZiJKlZMWIcVaGS4HScbYtRdeocaDZ/jhkS8XhDp0O5mQ/buTVGWtI2EMThITnD5yFFvSmnGCTYXltaIxgxtQS+E7XTA3ozrIvI2obv3hVZvcrmmnPLC0xcul7Bup+SSxqkF8BwrInlQHY6qe87uyESr3JtIyrTRuMwy0O6g7EP0GG9//rpD4Wk9TxPZcdfwJxrV8Tc4qkLcoa+FvQ0ruJx75CueVzbp7x9zCFdx
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"estimateContractAnalysisTrial"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/trials/estimate"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+estimateContractAnalysisTrial
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"anchorJobGuid":{"type":"string"},"suiteRevision":{"type":["integer","null"],"format":"int64"},"trialKind":{"type":"string"},"model":{"type":["string","null"]},"configurationFingerprint":{"type":["string","null"]},"customParameters":{"type":["null","object"],"additionalProperties":true},"suiteCaseId":{"type":["string","null"]},"packageId":{"type":["string","null"]}},"required":["anchorJobGuid","trialKind"],"title":"ProfileTrialEstimateRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"estimateContractAnalysisTrial 200 response","content":{"application/json":{"schema":{"properties":{"estimatedWork":{"properties":{"estimatedDocuments":{"type":"integer","format":"int32"},"estimatedCriteria":{"type":"integer","format":"int32"},"estimatedUnits":{"type":"integer","format":"int32"}},"required":["estimatedCriteria","estimatedDocuments","estimatedUnits"],"title":"TrialWorkEstimate"},"maxChunks":{"type":"integer","format":"int32"},"maxInputTokens":{"type":"integer","format":"int32"},"maxOutputTokens":{"type":"integer","format":"int32"},"timeoutSeconds":{"type":"integer","format":"int32"},"maxRetries":{"type":"integer","format":"int32"},"maxCostMicroUsd":{"type":"integer","format":"int64"},"executionConfigurationId":{"type":"string"},"executionFingerprint":{"type":"string"},"estimateFingerprint":{"type":"string"},"draftRevision":{"type":"integer","format":"int64"},"suiteRevision":{"type":"integer","format":"int64"},"suiteCaseId":{"type":"string"},"packageFingerprint":{"type":"string"},"trialKind":{"type":"string"}},"required":["draftRevision","estimateFingerprint","estimatedWork","executionConfigurationId","executionFingerprint","maxChunks","maxCostMicroUsd","maxInputTokens","maxOutputTokens","maxRetries","packageFingerprint","suiteCaseId","suiteRevision","timeoutSeconds","trialKind"],"title":"ProfileTrialEstimateResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: confirm-agent-action
+title: "Confirm an agent action (human only)"
+description: "Replays the stored request with the confirming person's own credentials. Idempotent: a repeated confirm returns the stored result without replaying. Only the person the agent acted for can confirm. Agent tokens are refused."
+sidebar_label: "Confirm an agent action (human only)"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVk1vGzcQ/SsEL00AVXJjo0B1U5Oi8MmGnZ4EH0ZLSqK9S275YUcQ9N/7hqTktawmhnvsabmceTOPw/ngVkZaBTmdS1ppG+XdSCodGm/6aJyVU3mj+5Y2QcS1FiE6r5Xw+u+kQxRPJq7zfuPs0vjO2JXotQ/O/hSEe7KigTaMGmrDWFwq3fUu4n8qCDZ6TRHGKhYbMXl75CektrhxKTIETOBkLK5su8maxV1eZv6CGja6dF40ZPfGx2KWhdE9aLggr2FsmYJWYzmSDkaIT3upcN4KyYBZk4Mwkj156nSEM0RqKy1+oGoURIaD1FNcY82BMWAup9EnPZKhWeuO5HQr46bPCBv1SnuogmFHsWz9eiF3uzuGh97ZoAMjPp2d8eflZVw9AAqGHEWWUt+3psnkJ/eBVbYDp73no0VTDILtW4jAPgV9+VZlsA01dHv9uQzR45qgb1Pbyjuo+fRDlXu3+DOZHyhF59oBs6pQBZ9bCuGkNKSuI785KcO9rp06KcrXetJepJhOu6rFMTxGZo88W9zrJlcYte3VMmfSyyt6DxV4Gx7slDelDGcItdcDb5yhgC+cejd6N8z4+Z595QpoNLFlsre5nEsx3dTw7HJW5AK/PQrmfJBw5eJfJt75J3nAvv/g6E3cf37fvN1xyXilG6P+A3AWv5PiA5wCvZ+jQacBVn/rEeYwxD5DT0PqAd8OObrO2gaGhoY8RqX9vbz0Q2U8l1yt2WGFDlLjWlsFRvvcKP0PVJjMxdn56w44aOQjgS6fO39Gi4VunV1hgjhB1kHgBVq8l9nUxQlTBQZVzItkVVH87bXi12cf5fxqJJ4oYIZwpvGfCfDO469OD94DORPD8cxckmnx+6i9WdbOnSO/L33ZuxD34ZzKSZ5qk+I9TLZG7SbVR549S5dvt0bzi2vSF/0YxOz6Uh4P8oOQFx1HEc2n4fYN3gCMxR8UTJ7rtOEgwg9oRrFxyQtVQTm8SBqCfUhDsf3L+Hx8ltsU2HeU51Adkp/rfMc0PkxojuSHdYKicJjkH4+5bp9n3P/g/VFrM+pvcQIPeFAgkMnnOVfSYP84Q0sriYDVNJffPhdQUmtOHKhutwtU7l++3e14u86HOZaP5A0tOFMweZQJvEbKLREe/Z0b+HBTu8JH8W9s6yZZrvdHahP/YfmgN+WdlNv9WpNCPbL3Ipg1je7jAPLqPcPPokNpXF/dfkWx/ANeQbLH
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Confirm an agent action (human only)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/agent/actions/{id}/confirm"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Replays the stored request with the confirming person's own credentials. Idempotent: a repeated confirm returns the stored result without replaying. Only the person the agent acted for can confirm. Agent tokens are refused.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"sessionId":{"type":["string","null"]},"runId":{"type":["string","null"]},"jobGuid":{"type":["string","null"]},"tool":{"type":"string"},"toolClass":{"type":"string"},"summary":{"type":"string"},"method":{"type":"string"},"path":{"type":"string"},"status":{"type":"string"},"request":{"type":["null","object"],"allOf":[{"properties":{"method":{"type":"string"},"path":{"type":"string"},"query":{"type":["null","object"],"additionalProperties":true},"body":{"type":["null","object"],"additionalProperties":true}},"required":["method","path"],"title":"StoredActionRequest"}]},"resultStatus":{"type":["integer","null"],"format":"int32"},"result":{"type":["null","object"],"additionalProperties":true},"createdBy":{"type":["integer","null"],"format":"int64"},"decidedBy":{"type":["integer","null"],"format":"int64"},"decidedAt":{"type":["string","null"],"format":"date-time"},"expiresAt":{"type":"string","format":"date-time"},"createdAt":{"type":"string","format":"date-time"}},"required":["caseId","createdAt","expiresAt","id","method","path","status","summary","tool","toolClass"],"title":"PendingActionResponse"}}}},"403":{"description":"Agent token, or the action belongs to another user"},"404":{"description":"Action not found"},"409":{"description":"The action expired, was rejected, is being confirmed, or its stored request failed verification"}}}
+>
+  
+</StatusCodes>
+
+
+      

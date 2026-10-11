@@ -1,0 +1,71 @@
+---
+id: list-case-agent-actions
+title: "List the agent actions of a case"
+description: "The case inbox: actions the agent proposed that need a person's confirmation, newest first. Pending actions past their expiry read as expired."
+sidebar_label: "List the agent actions of a case"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVktvEzEQ/iuWL4C0JAUqDuEU2gohIVG1cKoq4awniVuvvdjetlGU/86M7d1s86ChvXDKZme+2W/es+RBzDwfXXExAxP4dcEl+NKpOihr+Ij/mAMrhQemzMQ+jJgoSeBZwPcRwmpna+tB4isRmAF8EqwG56155VlpzVS5ShCqQOk9+MDwjQ8Ddg5GKjPrbNYCZWhYOQYPtXIL5kCgNZ/+ghzwgls0Ha19lUhPKx9OkN6YqIyTHVSqhRMVBCSBri25wT+oTH4gquCKPKtFmOOzg98N2eaj4BoouC/nUAk+WvKwqAmlTIAZOFSdWnIkvfp4zFerojPtgwiNb03/bsAt+LatK9Rz6DGKTKM1v+6b0KpS4WkLazrJxGNaH94/ojUBFMJLjUZfrylUvsb4gifo+6Mj+nlcLd9v0QSmPFAtoVTUtVZlTNfwxpPKsvd1qhxwQSWDKkDle3EXzgli273fUJcH5ahos36YMjrnc23tTxpGonlS5cZOvjTqCaVgre4xywpZcKKF9zulvqkqgancJcOyn1u5UxQrfqe9VL27RNQe2LJ9NyJ7bMTJDZRxYgitv09joz1O0XOopBr969ekVFRQQp/3vkbNi/CJlc9Gr/rD4Kpln7kiNKigiexlwJ6Sadhc5PCsYlWAb3S43AjmIS3bYp/veImjMoD8vPi3tqZxXyr5AuA4/KXEeziJ9N4GhWMJsWme+z52Dd0NyQ4eDtlIZzf814b6PAoaKMVG0ov1XG9bLvdsv0N7pZE3WlsbaVxGKgYewuc0jf8lzpvr+Bw/SAvxV5rsv1iwaUnSPqZv4BKdwScmJp52szVRoGmxkmArKmm47vPgm6LSXhHoeNe4/2lujb03LEWJWYdXwp3QSrK0zCLueBtHG5sZi4eAbYyMpNpZwWcQ2vCP+JCy5ofLlLzVMF4cQ9HteWWmNsYzsz+1ZXMKd56Nz79uxa4T0kOVT5eSBj7eIAgYsDPhFd0n92JBgcVFdodtxha2cUxmkCcJlplA+yj1yfa7wYfBURxs1odKxEWXdzAFsXcutceOneKZRH5t8lyuF+j/d33lxgtYacNaCzwr0OfGxSWWcpY6jZIz6lou3Zb4mxOH9Ta3tFSu+HI5Qa2fTq9W9DqPf1wlUnkx0VSlU6E9Hma3sOgfWlhnDVHhdO7sUW5PqkN0u1NprXxNf5wi7d2U9ubt9UXusTdsX9DaK8cs+t9s2eTQxbUyxzTgjCAGSTguS6j7fm2dWUS966gvZz+wxf4AaqgQNQ==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List the agent actions of a case"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/agent/actions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+The case inbox: actions the agent proposed that need a person's confirmation, newest first. Pending actions past their expiry read as expired.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"status","in":"query","schema":{"type":["string","null"]}},{"name":"limit","in":"query","schema":{"type":["integer","null"],"format":"int32"}},{"name":"before","in":"query","schema":{"type":["integer","null"],"format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"items":{"type":"array","items":{"properties":{"id":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"sessionId":{"type":["string","null"]},"runId":{"type":["string","null"]},"jobGuid":{"type":["string","null"]},"tool":{"type":"string"},"toolClass":{"type":"string"},"summary":{"type":"string"},"method":{"type":"string"},"path":{"type":"string"},"status":{"type":"string"},"request":{"type":["null","object"],"allOf":[{"properties":{"method":{"type":"string"},"path":{"type":"string"},"query":{"type":["null","object"],"additionalProperties":true},"body":{"type":["null","object"],"additionalProperties":true}},"required":["method","path"],"title":"StoredActionRequest"}]},"resultStatus":{"type":["integer","null"],"format":"int32"},"result":{"type":["null","object"],"additionalProperties":true},"createdBy":{"type":["integer","null"],"format":"int64"},"decidedBy":{"type":["integer","null"],"format":"int64"},"decidedAt":{"type":["string","null"],"format":"date-time"},"expiresAt":{"type":"string","format":"date-time"},"createdAt":{"type":"string","format":"date-time"}},"required":["caseId","createdAt","expiresAt","id","method","path","status","summary","tool","toolClass"],"title":"PendingActionResponse"}},"nextBefore":{"type":["integer","null"],"format":"int64","description":"Pass as `before` to read the next page; absent on the last page"}},"required":["items"],"title":"PendingActionList"}}}},"400":{"description":"Unknown status or invalid limit"},"404":{"description":"Case not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

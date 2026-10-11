@@ -5,6 +5,22 @@ description: User-focused updates for the DocuDevs Python and Java SDKs.
 
 # SDK Changelog
 
+
+<!-- sdk-changelog-fingerprint: ca7d5121ec49631b -->
+## 2026-10-10 10:30 UTC
+
+### Highlights
+- SDK usability improvements for common document processing flows.
+
+### Python SDK
+- Python SDK improvements focused on easier day-to-day usage.
+
+### Java SDK
+- No Java SDK user-facing updates in this commit.
+
+### Migration Notes
+- No breaking SDK changes in this update.
+
 <!-- sdk-changelog-fingerprint: d4cc57296e1d6a61 -->
 ## 2026-09-23 13:31 UTC
 

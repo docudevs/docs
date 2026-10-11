@@ -1,0 +1,71 @@
+---
+id: cancel-case-agent-run
+title: "Cancel an agent run"
+description: "Stops the run after its current turn. Idempotent for a cancelled run; answers 409 for a run that already finished. Agent tokens cannot cancel runs."
+sidebar_label: "Cancel an agent run"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNWFtv2zYU/iuEXrYBauy22YAmT2naDR0wJMgFfQjyQEuUxVoiNV7iCIb/e79DSop8aeZ0xbA8OLLIc3gu3/nOoVeJ43ObnNwlfC6US+7TJBc2M7JxUqvkJLl2urHMlYIZrxgvnDBMOssybwwEmPNGHbFPuagb7ehFoQ3jLOMqE1UlchI7ZVzZpTCWHU/fdRtImyu5Y7wyguctK6SSthT5ETubB8V6IZQlRUq7Th9J2aMkTXQjDCcLP+WwMS6ecyuC6JVX2NJww2sBc8m7VaLwJWy1AjJpIsm5hrsSz0b87aURUOWMF2lis1LUPDlZJa5tSEoqJ+bCYCuMr7mLr347TtbrdFAN236o5vsoLqx7r/OWZDKtKMT0yJumklkIweSLpUytdpQjp8bwFrqVrypKrXSitqPTrTNSzceHz1oncDb82rI9vLCNVlYEDW+mU/q3CZaLBXQdbGVjKI1ORoUxfIdEJu2zeNjmpuLtTOvFrt9YtI47vyckWMLDnHTuW9NYk+pPPRtbcTcyo4/4rjlf9OwPL/O9agNm7W5cLzsX2BOomS5iFRHUNwJZ88crvbSH2/X2TbJd9X9p65iBlqHypXoAEuWcO2FT9hrlyX6dTk/Deh9hlouC+8qxZSnAFTNLMIBbRRU45tu43Dz8d9oeyaHmC0Fu6iVbauPKkRkI2QGnfxPz65iKF+Zv29Tzilsri5ZBFc7VVjBydk68R9HjRowjl5+yvqrYrA3Wj1Zf9aIDYslIJ11FdvfUdhkxgpWZz+fCje0PVgOdsy8iC1zOq+qiCPy3affnwLysBPNWwtqQ4Zq3zDZCgYFvuqRbIv8U7J2zDIioYLLWlWVKwErOADoU9U8gaa0KSYGC9pRpsHHwLRrIpGXegtj3IfVGO17dBKr/V4mIKga0ki84E9GFxTghZRVXc48ex2qdo5GQS9y7EoUM01jW5xEoW0AEZpfCoG85VgmOWni9NxfvYwbW97SGRmg/aCX+kZZQb8SmwMcLtsd2eGvFobRnwLJoqWr+46JbicKFkA65Pe3qjC0lYukJUx0qiaU94GHGBw/9Zn/hXzQc/Y5FuXCKEo9xxCCIoeTRDVlhdB0dbEAJ3wX/gO8gPiDG8gcqz84dj8MqzDnhNbgWadoGr/V1zU37jHvrKKItr8YE1JPfQEw8zyUZxqvL0Qmh6UJFmACw+qyKbW7baN93IzPG+u53AX0VY7reSc33RIz8B53AorMszmr7fNg85+ODMC0LsyjjQWo4Lzoh8pQgyBXIKvbu3TA8N64l3kL77vgRyvcFpfuisj3UtnHOwiGDgo5f9uXsNjgEaWHMi8rtc9k+JRNM34AIn+o4kjuLCURiU2Z9VjKOpoa3jyX3Fg0tjunbbKCJPZdg1kADmO+x88w9a9oQjZw6oZN1kPVN/p2yW9Ec5v5+/BqGrT0gHc2MI55Ohwl/AN6IlJ/mxXEr6OG2J23XQclVN1N3M/fx9O3u9HemuoKIsd68EcUZMIge74rSnYiBSynFJFRor/K4+93u7r7tb1/JQjQxdpaablsoQhfChxvOSTKhyNrJKgZ4PQmWTuieNlmFeK0n0VKKPQB19XSl+fjI6ybE5FYtlF4qdoMMn7DADGlH5lIVOiS/C98HnfkP4sGys8tPO+wxLNJDTSFDkWcYcAjCEDhiH7lFwaNfcZplqKuAcBxrtTcs74QsrQBKHPqxaqPu10dvj6aB0+B/zcNdprv5nXep6PMUp/IN00aXt//plbrjJ4eOOwH8ZQCVN1WgypDrWEWE+5OhnOKvBqE0wkJfIl3OgfuS4ALZ1WoGoVtTrdf0Giig5nmHxwduJJ9RdqlRS0vPAFqBfiWeCePPV119/8K+ZX7fahQ1mgdeefqGx4Von34LoCv8f3hqjFAYGWn8pgsm3I5r5/GYV1QHI9mdazSZHCXOskw07tm996Pavby4vsHmWfeDAs3CZBJfUgrxGezUzTBvhHerpB+esR510t9Xf35K8w==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Cancel an agent run"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/agent/runs/{runId}/cancel"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Stops the run after its current turn. Idempotent for a cancelled run; answers 409 for a run that already finished. Agent tokens cannot cancel runs.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"runId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"type":["array","null"],"items":{"type":"string","format":"byte"}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"runId":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"playbook":{"type":"string"},"status":{"type":"string"},"trigger":{"type":"string"},"originJobId":{"type":["integer","null"],"format":"int64"},"jobGuid":{"type":"string"},"params":{"description":"Playbook parameters of a run","properties":{"maxRows":{"type":["integer","null"],"format":"int32","description":"Most rows the run investigates, 1 to 500; the playbook default when absent"},"flags":{"type":["array","null"],"description":"Flags that make a row worth investigating; the playbook default when absent","items":{"type":"string"}},"jobId":{"type":["integer","null"],"format":"int64","description":"Classify job whose flagged rows are investigated; required by the investigate-flagged playbook"}},"title":"AgentRunParams"},"budget":{"type":["null","object"],"allOf":[{"description":"What a headless run may spend. The run stops, and costly tools need a person's confirmation, once the budget is used.","properties":{"maxTotalTokens":{"type":["integer","null"],"format":"int64","description":"Tokens the run may use in total, language model and authorised classify work together; at least 1"}},"title":"AgentRunBudget"}]},"turnsDone":{"type":"integer","format":"int32"},"rowsDone":{"type":"integer","format":"int32"},"tokensUsed":{"type":"integer","format":"int64"},"remainingTokens":{"type":["integer","null"],"format":"int64","description":"Tokens left in the budget; absent without a budget"},"cursor":{"type":["string","null"],"description":"Opaque cursor the next turn continues from"},"report":{"type":["null","object"],"allOf":[{"description":"The report the run saved; absent until it saves one","properties":{"summary":{"type":["string","null"]},"proposals":{"type":"array","items":{"additionalProperties":true}},"questions":{"type":"array","items":{"type":"string"}}},"required":["proposals","questions"],"title":"AgentRunReport"}],"description":"The report the run saved; absent until it saves one"},"pendingActionIds":{"type":"array","description":"Every agent action the run proposed, in any status","items":{"type":"integer","format":"int64"}},"usage":{"properties":{"turns":{"type":"integer","format":"int32"},"rows":{"type":"integer","format":"int32"},"tokens":{"type":"integer","format":"int64"}},"required":["rows","tokens","turns"],"title":"AgentRunUsage"},"error":{"type":["string","null"],"description":"Why the run stopped without a person ending it, such as an exhausted token budget; absent otherwise"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["caseId","jobGuid","params","pendingActionIds","playbook","rowsDone","runId","status","tokensUsed","trigger","turnsDone","usage"],"title":"AgentRunStatusResponse"}}}},"403":{"description":"An agent token cannot cancel a run"},"404":{"description":"Case or run not found"},"409":{"description":"The run already finished"}}}
+>
+  
+</StatusCodes>
+
+
+      

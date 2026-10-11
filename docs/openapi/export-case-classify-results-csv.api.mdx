@@ -1,0 +1,71 @@
+---
+id: export-case-classify-results-csv
+title: "Export classify results as CSV"
+description: "Streams one row per result with input columns, code and path per target level, flags, alternative, evidence keys, memo version and review state. Cells starting with =, +, -, @ or a tab are prefixed with an apostrophe. Accepts the same filters and routing override as the results endpoint."
+sidebar_label: "Export classify results as CSV"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVU1v2zAM/SuEThvmJllb7BBgwIq0GLrLhnbbpchBselYqyy5kpzWMPzfR1qJk36hwYrelktsiXwinx6fWxHk0ovplUilx4NUS+9V3oh5IjL0qVNVUNaIqbgMDmXpwRoEZ2+hQgcOfa0D3KpQgDJVHSC1ui6NT+ghQ5Amg0rSJgcH6ZYYQOMKdQK5pmMTkDqgMzKoFSaAK5WhSRGusaG9EksLK3SeCuihHAXgLfggA45ghlp7fnFBmWUs4nMCHxI4SOALWAeSzlyAdAiVw1zdYRajJMFV1gdnq4KATtIUq+AhFAhelgi54qp8PNPWPbylQpzinmJgbN0DmqyyyoSRSISlNiXTdZ4RYXhXWRdmxOpsTepFzJn5FQVX0tFZfA6R3wpDL5TEl0DZiVDMOXNHzw5vauWQQIOrMRE+LbCUYtqK0FScRefjEh2F5taVMsSlT8ei65IB+o9dvBEy3+UG+KZG14jHSFeC+CYiacvUWov5LkC82ItNMS9CLazVKM2TWL2+XobYNhYh7jd4dHivQRbzqxrMMFUs49exFKX4DxhzvmlfWePRc+DhZMJ/9wf8+zVlpJZ4MaFHw7swTkmr9Dyc0dEvEceT48f53+wCjA2Q29pkTJ8geReWR4Hmvlc8aW4qxqxxP26j1LvxxnLGba/QbrwerVHaz4kyue3LUUEzC6c2rU9x5eHkx7l4aFLDJj+U1AhNvk2R8GmEKWEEZ9Ir9ORZsoFgyaYMDXaAxtYOsnWS551MBkn4a/8h7I+jo9FEUFtsHSWpbzrczFk/6rDpZDAH8orZ5e+HVbZblv+76suuunaiXo6VlqR9uoPaaSYySip+uzzFTgf/HD5ktLhxvl1h0UgUVCwnt+2Csn453XW8HOeKPTlTXi40u2MutSd7JAa3dreSuubCBI/oM6GPjG2fpI2D7RO7dqZ9Qnc8aK/SB7fZRs/5xSkOf5qgZ3X+bsPBe3juSteL0jS7Zw6Nxot9suC3OzUqp5tTYIEyo+8Ftx33osB3sgbDZJ4G7/t69pPM8C+O5DJN
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Export classify results as CSV"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/classify/{jobId}/results.csv"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Streams one row per result with input columns, code and path per target level, flags, alternative, evidence keys, memo version and review state. Cells starting with =, +, -, @ or a tab are prefixed with an apostrophe. Accepts the same filters and routing override as the results endpoint.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"flag","in":"query","schema":{"type":["string","null"]}},{"name":"reviewRequired","in":"query","schema":{"type":["boolean","null"]}},{"name":"level","in":"query","schema":{"type":["integer","null"],"format":"int32"}},{"name":"code","in":"query","schema":{"type":["string","null"]}},{"name":"decision","in":"query","schema":{"type":["string","null"]}},{"name":"routing","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"text/csv":{"schema":{}}}},"404":{"description":"Job not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

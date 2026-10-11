@@ -1,0 +1,71 @@
+---
+id: list-case-memo
+title: "List the memo entries of a case"
+description: "Returns the latest revision of every entry. version= returns the snapshot at that memo version."
+sidebar_label: "List the memo entries of a case"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VkuP2zYQ/isETw2g2Jt20YOBHBbZRWMkRYptk8vCB1oaW1xTpEKOdisY/u+dISVbfsZAgF5sSfP65j1riWoZ5ORJ5irA2woqJ2eZLCDkXteonZUT+QjYeBsEliCMQggoPLzoQFThFgJewLcCLPp2JOiZv78njp1QsKoOpUOhkN7ph+30rCOZSVeDV2xtWpA9owN+IDh/MppM1sqrCpC4CedaWnohJsZL3JnUDLFWWNKzh++N9kBK0DeQyZCXUCk5WUtsa5bSFmEJnlgXzlcK06ffb+Vmk21VR95O8feGnJPHmp5kQK/tkki2MUbOhgpC7n5WAypswk+p6ML7Yx27mCQlJ2Iz49CG2tkAgUV/vbnhv/0y+bIiFbkjbRaZqura6DymdfwcmGU9sF57TjrqpJAL4lsH+JpskVMIVRjwKu8V+7f9vm9AFwPeLmob9irV8ZVGE8sJPSnjR1ZX2p62m7sCLuUxkytoLzMULm8qCvW0uFwQg6Z4SoAom6jRMCJusb8jdnYiFd0pvOiqeUBnh97PnTOgLJNVg6Xzn855m8iXgW5L56MK5WkM8C9e1mC0XYUhS6TQeJk/Q47stzLmyyKOkf1E5UaFoBdduT5CaAzuaerLq2+RM2X27ObTM5XmXvcolybRXsqSyl7BQe4S0s/kdyeXO198gvY67AcgWcNQ+ecYzk3MjQca/MXdpQQMPCmI+S3qKpYVhRYfXpTZz/8Pp87hFpoWvGwGOwhIZxPzJXxjBYkTVYe0iTKhF0LZ9iicg1LdL7mMZ8RgImTbMb4dxrsu6EbBQTYe2PI3Da8plkOzKebZ3qCbHYY7IAuS5O2p+frVrqx7tYItZyKCE+RzQicW2tCKlFH49liY96mwtIIXriHX2Qjt1NLxvl0CxjVLK3Qix7xYw3id9utmXKUlrO3CxfR1gO9p+tzDSxB3f02PUrUl3nczSlCX5EAdZpcsMBIPKmjO4atqBTpBeaB1haJ1jRf9YAtMoUpSpL9fZhP5bvTb6IbdrF3ASsXJ3W08DmAskHhecBmQDS4aJdibQ5jr3bL6H06crtd4iI1ro3Scm403cYbE0KcbjItksj1u+oOsJGeZY72eE+mrN5sNf05LncdZoYOaG661hTIBuv3RnzLcKWxd8n1whrWv9qt4+464hnl3iOy4Z/ziNbOfhn82U788dl31RpyLan8R2HZos4fTxTaOtRJUQU3DCBLxLs+hxoHY0RHD0Led88fDP9RK/wFZPdZ6
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List the memo entries of a case"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/memo"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns the latest revision of every entry. version= returns the snapshot at that memo version.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"type","in":"query","schema":{"type":["string","null"]}},{"name":"scope","in":"query","schema":{"type":["string","null"]}},{"name":"status","in":"query","schema":{"type":["string","null"]}},{"name":"version","in":"query","schema":{"type":["integer","null"],"format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"memoVersion":{"type":"integer","format":"int64"},"items":{"type":"array","items":{"properties":{"id":{"type":"string"},"revision":{"type":"integer","format":"int64"},"type":{"type":"string"},"scope":{"properties":{"kind":{"type":"string"},"code":{"type":["string","null"]},"key":{"type":["string","null"]},"documentId":{"type":["string","null"]}},"required":["kind"],"title":"MemoScope"},"status":{"type":"string"},"tombstone":{"type":"boolean"},"authorKind":{"type":"string"},"authorId":{"type":["string","null"]},"contentHash":{"type":"string"},"text":{"type":["string","null"]},"links":{"type":["null","object"],"allOf":[{"properties":{"classificationResults":{"type":["array","null"],"items":{"properties":{"jobId":{"type":"string"},"rowId":{"type":"integer","format":"int64"}},"required":["jobId","rowId"],"title":"MemoResultLink"}},"recordKeys":{"type":["array","null"],"items":{"type":"string"}}},"title":"MemoLinks"}]},"createdAt":{"type":["string","null"],"format":"date-time"},"lastEvalId":{"type":["integer","null"],"format":"int64","description":"Id of the latest evaluation run for this entry, if any"}},"required":["authorKind","contentHash","id","revision","scope","status","tombstone","type"],"title":"MemoEntryView"}}},"required":["items","memoVersion"],"title":"MemoList"}}}},"400":{"description":"Unknown type, scope or status filter"},"404":{"description":"Case not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

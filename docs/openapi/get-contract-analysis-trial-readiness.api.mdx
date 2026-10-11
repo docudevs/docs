@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-trial-readiness
+title: "getContractAnalysisTrialReadiness"
+description: "getContractAnalysisTrialReadiness"
+sidebar_label: "getContractAnalysisTrialReadiness"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1v2zAM/SuCThuQ1t0HdsgtaIuhtyLrTkEPjM0kWhVJleh0huH/PtIfqZukW9eTZUt8fHokn2tNsE56utC5dxQhpzNwYKtk0hlFAzbp+4n2ASOQ8e6m0FO9RrrsD8/6s3dydI5QGIcp6YkOEGGLhFGwa+34hSNzSMgQE20cvwWgDa8jPpYmIiNTLHGiU77BLehprakKEmUc4RojH135uAXqPn37qpvmXsJT8C5hkojPFxfyKDDl0QRh/Ba+isPUgMNpRAp0JEgQgjV5e/fsVxK4ekQwRFGGTJc8Ml414r303iI43Ux0K+WMCBPtdRzOLXTibbfmxK60Vt/z+SLCiua4M8l0Of8pBetWGsL/jBm0/5Gjg2h8GsVBjFBJrQi34+8926YRoXb4/mhfEsvhuAbrdyJsORrIx+qSGytdljH2ZTuuADyL/9dzS+vzh7Zt306kGTfx4lSqEe4J1Q7r/drFXpFs0nfeqXIetgUPDBmyQv82+pWx+HIU5sMUNE17r/+cJKGOtPG9TbRGwEM+1dmD808WizWeLeVKWd15QZOFjkbKjgwoiyNY41a+1b5nf+Xz8gp3Sc1ub/Qhz/2mLLYsneIsOQOxbhJwrq4h8dSSeoJKkVecm2tCqvJlVEUflGSHywCMz7vdWOlP51/OL6RTgk/EdRJSvb3xjdWgjxoEUq1CaizRC7L7diL8TVmwYNo+LKNtHaaVb6EP5GOQ6d5MBwV753qhYd8cXWYu/oZJC15dC87PaJtGPj+WGNm6FrzccePAUjRm3y5MkjWXc8W/AjyivndK/WHe995HxTlPXmkYJyetugNbyhsvH7B6/jc0Yn8bpsyOJQy6zVmeY6BR2JEvy69g33rfr++4gf8AAMxqHw==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisTrialReadiness"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/readiness"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisTrialReadiness
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getContractAnalysisTrialReadiness 200 response","content":{"application/json":{"schema":{"properties":{"ready":{"type":"boolean"},"trialAttestationId":{"type":["string","null"]},"draftRevision":{"type":"integer","format":"int64"},"suiteRevision":{"type":"integer","format":"int64"},"requiredScenarios":{"type":"array","items":{"type":"string"}},"coveredScenarios":{"type":"array","items":{"type":"string"}},"outstandingScenarios":{"type":"array","items":{"type":"string"}},"mandatoryCasesCurrent":{"type":"boolean"},"attestationCurrent":{"type":"boolean"},"blockers":{"type":"array","items":{"type":"string"}}},"required":["attestationCurrent","blockers","coveredScenarios","draftRevision","mandatoryCasesCurrent","outstandingScenarios","ready","requiredScenarios","suiteRevision"],"title":"ProfileTrialReadinessResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

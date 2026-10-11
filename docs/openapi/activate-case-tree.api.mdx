@@ -1,0 +1,71 @@
+---
+id: activate-case-tree
+title: "Activate a tree version"
+description: "Starts a processing job that validates every record label against the version, applies the successor mapping, embeds the category texts and re-derives the label paths. The active pointer moves only when the job succeeds; poll GET /job/status/{guid}. The job report lists valid, retired and missing codes with counts."
+sidebar_label: "Activate a tree version"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVsFuGzcQ/RWCpxZYS25qFKhychMj0CGokbgnw4fRLiUx5ZJbkitZEPTvfUNSK3mVBAFa5BQfDIo7M5x58+aRexlpFeTsUdYU1JVXtfNNkE+VbFSove6idlbO5MdIPgZBovOuViFouxKf3ELENUWxIaMbiioItVF+J3IUYWihjKAVaRsiLJXA14B4laCuMxr2vBn6miM6L1psI3AlVLtQTf5aI+7KIWhUz5yAbRD+qlFeb4p/PqajuA4T8YANqiM+is5pGxWiOrZ01uzEdq1s8uHU07k45jUsjRHv7h7EFPvTECn2Ybpf9bo55Ihs7lXnfBRGB6SRKq6wF7VXTcqq1RmV2gE5sdVxjWVvY5jISrpOeWIo5w3ATAmirjeA/MErBYOOPLUK6XIv9tLiBwy5J/CopOYecIlYe/VPz6fKWfS9qmSo16olOdvLuOvYi8teKQ/TpfMtxbz12408HKohdGnF/xr9KburEP9wzY59agdrG3mZWl4nEKafApNqfxb8JdsYFFFQwo5w6QM6tXCAdamVATvIq/KBzOTEoveZREwm5uuxRUyvY4eOlOJWiegSIwpp0pZGh8skJPawDbcYS+91M+bt0Rin6EyviPy57RgWND6C6anaUYoJlabRuYT7F7YF7BA9G6Jxkoxx2/e5hDOLhXNGkZXjgb0tHOORtJn452MZBPOgkDUNMcNpXTwv4TVWLqgBCzZRz7XpuVTiaQcYtlYJHB6MEwJ5WiYp8xOlHl9WUV1CAgpFHY0qJLgdOPAhEwsBc8jQgRAZq1fXry4pdPJEa2vVITec9818fNk5zP87qMFlY8ao34/U0WVtSWrweYGRqEa3DNa8+ZYpG584By2XJwbnitGEdBrrBw7KMnKYlj5O83kYpz4w2TlNr6gZR8k9vGjhkG014PLFrt0eoc9tu7m+vuzU3CY1vbwHZPK4ufRg3eSBLhqWaLuE1jbZ4/fPCMrp8hEaRDZc764MfcWxCEHWuC3OUcRg99YeBxDyvHYs350DD6ssmDM5BpkHBz8HfT1Mj3LPgIWBySyRd8/UdgzbfjTerL1MDLt0iRQF3Leu7t+qTRC39/MLJgwfedGC5ed3NRwm4o4CCB3FlnbccwwDsoxi53ovmuIU+Asuc0L8UgNi/zL5dXLN6HLtLaVhKRfJIDSUNOMI8zi9s7vgx2Pivz0mikRwDdPOABBuTO9N0q1EyvyaC7CdDU+IxEveOb/5B2pigtdMa7ju9wv4/OXN4cDbIKvHXf6I5Ya8pgUzEU+URgdeYyCWZIL6Srt/+lDU42fxpezLJtkd045Mz7+w/FvtTs8gfr18x1NPOB2eYLyGYkCQufT8/U0+6uqBo5z8L+4VTjt7ZDX8qu3Tmc7c//nxAcaL8pZqwQXsetryMw3/U67lacQGaW8vDdlVTyu2zTH571+A5jMR
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Activate a tree version"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/trees/{versionId}/activate"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Starts a processing job that validates every record label against the version, applies the successor mapping, embeds the category texts and re-derives the label paths. The active pointer moves only when the job succeeds; poll GET /job/status/\{guid\}. The job report lists valid, retired and missing codes with counts.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"versionId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"description":"Tree activation options; both fields are optional. successorMapping maps a retired or missing category code to the active code its records move to and overrides the successors recorded in the tree.","properties":{"successorMapping":{"additionalProperties":{"type":"string"}},"allowMissing":{"type":"boolean","description":"Activate even when record labels name codes that are not in the tree; those records are excluded as evidence and listed in the report."}},"required":["allowMissing","successorMapping"],"title":"TreeActivationRequest"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Activation accepted","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string","description":"Processing job to poll with GET /job/status/{guid}"},"importId":{"type":"integer","format":"int64","description":"Id of the activation in GET /cases/{caseId}/records/imports; use it to read the activation report"}},"required":["importId","jobGuid"],"title":"TreeActivationAccepted"}}}},"400":{"description":"Invalid successor mapping"},"404":{"description":"Case or version not found"},"409":{"description":"The version is already active, or another activation is running"}}}
+>
+  
+</StatusCodes>
+
+
+      

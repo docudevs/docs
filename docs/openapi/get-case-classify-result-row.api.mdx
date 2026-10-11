@@ -1,0 +1,71 @@
+---
+id: get-case-classify-result-row
+title: "Read one result row of a classify job"
+description: "Returns the stored row with the same review overlay as the results page and without diagnostics. evidenceKeys name the records the row was decided on."
+sidebar_label: "Read one result row of a classify job"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVEtv00AQ/iurPYFk4gARh9yqtkKFA1UEJ9TDZHcSb+vsbnfHCZbl/86M7aSlFZygIpes5/198+g0wTbr5XdtIOMbU0PObtPqm0JbzCa5SC54vdQrpCb5rKhClSkktCqFgzo4qkYZ7FAl3Ds8qLDHVEOrYDRPmJuasoqwRQXeDk6hIWUdbH3I5EyeKXa16A1+xjYrL9FGXxOSneJIPo5p0bCpVcHPdKFDxARS5JXlMrdI5wzkfMKxGlKvwoENIySOSpgEbqclBTsIbPYstBOUEajid8L7xjFEvaTUYKGzqXAHetlpaqN4OU+4xcSmm5B2QKPow0L3fXEKfRvW/ygyM/FXI9+Ie47BZ8zi8W4+l79fJ+DLHbuawFE8iRZirJ0ZqC9vs5h0j5KCtU5UUF8naRE5CS2l9fwr9GK+eJ7iU1irkIZG+0BqExpvBbjmvlVh6u/QSoa81KU0L5fd2MO+PE5v2Q3U9+U0eWU3ENYPjG3CwImjWki5CKa5wH1WZ9dX+unMn5Ty2DFsFVMwyDn8Vhxm6hIy4yIey1ZRUMwOjz6pNjRJ2ckpi8YCAcdnbR5jv529n801Q4u8ADsY2Ju6u0KQ4T4uzkBH2ChQR3yK4T0ttntozf+7q9MkEv6gMtbA48sENKmW8seejncos+3ytJmno8TC405NdYpoXAYe4YrLkwhdt2bXb6nuexHfN5halvNzD8nBWhrPB8C6LG+eqg3UGf/A56vVtFuv1e9ATELwUuUe6ka++HmH7cORkQ1+wawjVy+cdOxGf8OGFc8x3xvhetSdGYORHnk9OyFyiU67/vHyKy//T0u1Rms=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Read one result row of a classify job"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/classify/{jobId}/results/{rowId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns the stored row with the same review overlay as the results page and without diagnostics. evidenceKeys name the records the row was decided on.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"rowId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"additionalProperties":true}}}},"404":{"description":"Job or row not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

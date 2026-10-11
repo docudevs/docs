@@ -1,0 +1,71 @@
+---
+id: retry-case-record-import
+title: "Retry a failed import"
+description: "Queues the failed import again with a new job. The worker resumes from its saved progress and does not re-apply table changes that were already merged. Staged input is kept for 7 days after a failure."
+sidebar_label: "Retry a failed import"
+hide_title: true
+hide_table_of_contents: true
+api: eJzdVU1v4zYQ/SsDnlpAsd3dtEXdU9At2gAFmjpZ9BDkMJbGFjeSqCUpewXD/71vSMXrZpGgh6KHXhJa88GZN+8NDybyNpjlvSk5yIWX0vkqmIfCVBJKb/toXWeW5o9BBgkUa6EN20Yqsm3vfCTesu1ob2NNTJ3s6YNbz+gOfnvnH8WTlzC0CN1415KNgQLvEN57t4UpEHcVVQ4OnYtwvuC+b0aKvG6Eypq7bbqWI+3FC3HjhauRWvFbqWZ0i/K1mK4fItlAj9JH2jhP31PFI7JvImrgVPTgZWYK43rxrG1dV2jMS/TjT+h9lVq/Tl3Bq2fPrSBYwTmYDj/grSAhrDBWQek51jh7+ThYL8gW/SCFCWUtLZvlwcSx1yjbRdmKhysqaznmT99dmuOxOKXOeP6ryR80PPSuCxI04s3ijf77+2Rzx/RRB1zlcSJX6ZC2i+quA7FlQmz+IWjM4awKzBF4RptvODXxT+pDM5HjEM6cQ/S226oJNPplsGeJ7p+MhemGpjEPcBr6xnH13jevuD1n8p/eRrlwHUj2693dzS29X/2WGJOTITSzHCQnDuQ6oXXjykf9u/4RvJUAYGhfJ4c926ghOVgLl0895hWu4qs1nbCoGNVECwqADGfTvj8nxIQT4qKNjQJ1ztbVNGNk0ByXi8sXp6wa27ihS5VeLn540bHmLMgs9kKlpUqxoMh6TACFMURpCwJySdXPhLhV4GDLEk73fbt4++V9uimmVVK6oanSrWuZ+JhAgQxrp1rtXcjShDKWZq5iDPND1uRxPu2uec4GwxOAaoLIk7A2Lo1lQvGdK4d3sgt0dXNtnhPlZNRDqzMH10usLJ03Amb0MwfwHlxgQOJQf7eDFGh0g8dKy0FBLRgyIz+sIef+ZvZ2tlBMtKWWk6amPbDSWqeNdVqzz4s7fBbo/2k1T1sgyqc47xvdRCryLO889fxOBfguT7v46dEqJskk65l68vQhnlr5gxSHwxqxWBvHo34G1WBf3uO4Y2+1vbTzKxv0DOZtuAnyygi+Wk26/Zpe6mL6yJ3ycMfNoL9wfJTx87uiz8F/eOsJo6Mu0xrTw57WzrP5qiwxsrPAL14CfWFO6rz5/fYOev0LrPnfow==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Retry a failed import"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/records/imports/{importId}/retry"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Queues the failed import again with a new job. The worker resumes from its saved progress and does not re-apply table changes that were already merged. Staged input is kept for 7 days after a failure.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"importId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Import queued again","content":{"application/json":{"schema":{"properties":{"importId":{"type":"integer","format":"int64"},"status":{"type":"string"},"jobGuid":{"type":["string","null"]},"uploadUrl":{"type":["string","null"],"description":"Write-only HTTPS URL for uploading the file as one block blob; present while awaiting upload"},"expiresAt":{"type":["string","null"],"format":"date-time"}},"required":["importId","status"],"title":"RecordImportResponse"}}}},"404":{"description":"Import not found"},"409":{"description":"Import has not failed, is retried by the system, or its staged input is gone or changed"},"503":{"description":"The import could not be queued"}}}
+>
+  
+</StatusCodes>
+
+
+      

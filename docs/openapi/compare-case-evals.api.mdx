@@ -1,0 +1,71 @@
+---
+id: compare-case-evals
+title: "Score two completed evaluations against each other"
+description: "Scores only; nothing is classified again. Answers 409 when the evaluations were run on different samples or trees or are not completed."
+sidebar_label: "Score two completed evaluations against each other"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVslu2zAQ/RWCpxZQbDU1CsQ5pUlQ5NQgSy+GD7Q0spjIpEpSdgRB/94ZUrblpUGMXppDQpGz8c2bxzTcibnl4wlPhIUzWIrC8mnEU7CJkaWTWvExf0y0Acu0KupLprTLpZozaVlSCGtlJiFlYi6kGrArZVdgLBvFF2yVg2IuB0ZRK0GxLMNTYKZSGIylMsvwUzlmxaIsKINhzkBYCDTEXCzRdOYgHfCI6xKMj3SXYl10hGbXWPqtrzzi+C0WaG3oUg1X+EGGaIEeEZd0nVK4HNcGflfSAAZypoKI2ySHheDjhru6JC+pHMzBoGmmzUK4sPVtxNt2GtzBuu86rckn0WitHC1FWRYy8WUOXywh2PSCH4GWuZXe3nMHL4+rdQxEkjNEHgxbSZfryq3Rr6kZAX66vyGInARLuWZ470Iqjw4h9oGrRQiWSmUq3Gle61S/hJEi4BC8Jtw6gzWil6qK4pBdnQfTmWfLOlAPhkuWQiaqwlnmNJP4J5MGQVl2ufpF/3P+TaRTCmj7dJrs436IKRbhpCsIVNq5DkR+CJTCcO0+Pf2GLZESobPn8fkhmUIYiZRjIkmgRDJR7o8yc5c7cEr3X/TsRyXTd1BHI+uEq2wvYmeyjx6sUesc9sC6Wl+t9TiN4vgQiWf1qvRK9RkyikdHEMNGkdhsW+01J9OVSoPTxZGZ7dQq6FfkxUr1Q6A07iiXvyGqUq5JtUqNLY6CCo35kLTJDpsgUe3QS/C4UzY0ozY9bKXm9s0nPzbc8ZHRjY8M5rYzh0OzaQlJZaZ9rzrob3RS3cDSsqv7O74/Q5tDWixI0pFMCaA+oTihw4DdCovEcmwlapohJOUSucZqXRmWdk5+urAegfHx1IbYXwZfBzFVRMAthCdtp+unq+d+5T3h/o+euW4+HLy5YVlgSrp+ZQo/pZ434cGmF2+8edx2qYNTkxPT0LRpiATPpmhb2kYyGXyzJrj08zGj/uJjmUpLa6RNhoHgHaQ+PXTj+pn9rdpuU6iamonI0BcuX6HePsgtyUIOIsXGUAXh8DrkOXuiEFvnA/Fqo7VHkIR3bae9Cbz/+fiExrPu6V7olHyMWNF/BfjbF6r9vb1c+b2GF0LNKzEn2xCTfv4A+aQ65w==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Score two completed evaluations against each other"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/evals:compare"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Scores only; nothing is classified again. Answers 409 when the evaluations were run on different samples or trees or are not completed.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"description":"Score two completed evaluations against each other without classifying again.","properties":{"baselineEvalId":{"type":"integer","format":"int64"},"candidateEvalId":{"type":"integer","format":"int64"},"baselineVariant":{"type":["string","null"],"description":"Variant of the baseline evaluation; defaults to its first variant"},"candidateVariant":{"type":["string","null"],"description":"Variant of the candidate evaluation; defaults to its first variant"}},"required":["baselineEvalId","candidateEvalId"],"title":"EvalCompareRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Comparison accepted","content":{"application/json":{"schema":{"properties":{"evalId":{"type":"integer","format":"int64"},"jobGuid":{"type":["string","null"]},"status":{"type":"string"}},"required":["evalId","status"],"title":"EvalAccepted"}}}},"400":{"description":"Unknown variant"},"404":{"description":"Case or evaluation not found"},"409":{"description":"Samples differ, or an evaluation is not completed"}}}
+>
+  
+</StatusCodes>
+
+
+      

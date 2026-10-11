@@ -1,0 +1,71 @@
+---
+id: prepare-contract-analysis-test-package
+title: "prepareContractAnalysisTestPackage"
+description: "prepareContractAnalysisTestPackage"
+sidebar_label: "prepareContractAnalysisTestPackage"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVsFS2zAQ/RWPTu1MQtLAtNPcaGA6aYchQ+kpk4NibxKDLamSDHgy/vfuynLsOCZAD+2lHIItS293n57easssXxs2nrNQCqt5aPtc8CQ3selbHfPEsEWPSQWa21iKacTGTGlQXMPELzj382/B2BkP7/kaWI/hDJ6CBU3gWybwBZeG3ABi9FgsCIjbDT5r+JXFGhDa6gx6zIQbSDkbb5nNFa2KhYU1aJy6kjrlthz6eMaKYlEux9BfZJTTGqoDhKVHrlQShy7xwZ2RgsZqcKWpLBuDcXNFuJH6m1x+zeKoEdsgC2LNCqrI1XYF6dJVtZvCteY51WQhNYfId0cwtUyg40PRJGW+Q/DzsWYbW1rIqj2YNXO7KQlxMPCkILQQXcXGIPSFDLMU2XlD+pFfMm1UMK8y7TGRJQlbYKRVnEC5y111Avf8Pw8QgQIRYaSJxlS0U9vRPNuktVjrxmsk+jyPFU37TIZJFkH0n8I/ptAdzSfbcfjM9eqCWzhSXePsRzST8NqhKyfyKUx8OJwZR5Aqib4Q5t8hf/nE7btBnXmXDI4csoPABy7SIHCmJfHasNGau6Ltkm7AKClMyeBoOHRKAxPqWJHjvcqoA1wXVEBVnW83T1/UtNvkVvgftMJX2/n9ZetNHVsTme0hdLeF0xH7h1J7tY6apOwX2GvQ+YI8/L4VhVPIWzffxbUb6Xq6NGVk7MhjNrgX8jGBaA39JXZsM9iWjbsYqDILMzi4LgwsIvd96iR9Es1N3Zsvn3iqym7X2vCa/3aLnTe6Zz2rbJo7eSyOdbn5vvvWILXXNoC9xdYjzxjqTjKLMvpBZ/gbYRsSr0WNRjA66w8/9Uefu3yvcaZisZLuEHh9UfYX8GCC89mUtcW0+1jVGKAQQnBs04KT4JIbPGE2eOR5YGWAyT3goQtymemgosLQFzxSHPHxqymxP5ycngzdBQs1mHJnNJ4ir+GgEnFQqTggGQe1jvey3RkE0TNQCcfLJsJnOim9iiQ+Zy2JI8h4dzutVO5P7J7OcWxf6bgVGzo9iLndEtZPnRQFDaP2NZI+x8cHjpfpJRFN0ogNPaMwVnjBhoP0dy7M3t14M3kfUNyusqrWLqi7PPAkozd8vHf77Usq6HawAR6hXVIG5cdJGad/SxD14gPnL3rVivMwBGWPzl00XGV2/eMWJy/91TyVEa3R/JFUj78uUenqdubsxrYs4WKd0caOWYlJf78BDfl1Rg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"prepareContractAnalysisTestPackage"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/test-packages"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+prepareContractAnalysisTestPackage
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"anchorJobGuid":{"type":"string"},"packageMembers":{"type":"array","items":{"properties":{"jobGuid":{"type":"string"},"role":{"type":"string"}},"required":["jobGuid","role"],"title":"ContractPackageMemberRequest"}},"expectedMissingDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}},"excludedDocuments":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"filename":{"type":"string"},"reason":{"type":["string","null"]},"dependentCriterionIds":{"type":"array","items":{"type":"string"}}},"required":["dependentCriterionIds","filename"],"title":"ContractPackageDocumentRequest"}},"context":{"properties":{"asOfDate":{"type":["string","null"],"format":"date"}},"title":"ContractAnalysisPackageContext"},"idempotencyKey":{"type":"string"}},"required":["anchorJobGuid","context","excludedDocuments","expectedMissingDocuments","idempotencyKey","packageMembers"],"title":"ProfileTestPackageRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"prepareContractAnalysisTestPackage 200 response","content":{"application/json":{"schema":{"properties":{"packageId":{"type":"string"},"fingerprint":{"type":"string"},"anchorJobGuid":{"type":"string"},"memberCount":{"type":"integer","format":"int32"},"context":{"properties":{"asOfDate":{"type":["string","null"],"format":"date"}},"title":"ContractAnalysisPackageContext"}},"required":["anchorJobGuid","context","fingerprint","memberCount","packageId"],"title":"ProfileTestPackageResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

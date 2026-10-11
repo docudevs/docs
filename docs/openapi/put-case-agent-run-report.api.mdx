@@ -1,0 +1,71 @@
+---
+id: put-case-agent-run-report
+title: "Save the report of an agent run"
+description: "Only the agent of that run can save it. Proposals and questions accumulate over the turns of the run; the summary is replaced."
+sidebar_label: "Save the report of an agent run"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVk1vGzcQ/SsETy2gSkrjFqh6cp0cfKqr2ujB8IEmRxKbXXLDDzmCoP/eN+RqtbYcI4ei9cHgkpwPznvzRnuZ1DrKxb1Ua3JJPkykoaiD7ZL1Ti7k767ZibQhUc6FX+FDJRGyE1o5EdWWhE1TcRN856NqolDOiM+ZIjvAl9a5zY1KJPyWQnGVcsBJcUXs6deyiLltVdgJG0WgrlGazFROpO8oKPZ1bZBOl9OVinTJySyzW1LnQ8KtTgXVUqLAb9lLhw/c1rgKs4m0/JROpQ3WgT5nGwjeUsg0kVFvqFVysZdp17GVdYnWFHB15UOrUt36+UIeDpPBNdL+Vz0/VHOU7TdvdmyjPW4DEixV1zVWlyrM/o6My37k/Dlgt1zTUhahCkwMUVyIJ4bNJrHy2ZnJ8NkV3MgU2I6b2ufGCOeTMKStIS5wYCCSpViCV6xGT4spWLeWL+nzF3t8UlHQF9Va18fpc8BR62MSF/P5XOgNINQFwUMNV+h0CgGKhqB2COFy05wz9cTAVhmaiMcd6rCiQE7TKdZPc4F3gLtwAfQStSWEMsayH9XcjB7KMAJ0OdD527P5Y+gAQA0k4BPAnfJ493oez6vJsXWGYRgHHkr9euQr8Ma6XNgiqnXJgXvM0ZdU2q+4PvH1fkAU7pJNDSfxJ4jzvNGWlaEwPrxke9mIHR5cGfLjfH7OzeqlMJJ755sZfszoztkSHMEuXvN/7baqsabnvyzX3r/eIlx41B9iwzR/IXAsQdlV+4tze1YggYpyd7F1oXO9/ctXGhI3VRNImZ1YWWfjBgXgZ0CzNr4XtiJjEJKFnLFwxdm+6tdhVlKbwQn2ivAcZuGofFyt5Uk5PqLPOi7WqElPjBm1FYr5yfknJ25Bq4UobJ4URj3j+1vXjtQc6MpyuPJjxD54nT/QNorLm+szcRgOedFy9ZGfphjhjA2m4qOKaERWEAwhD11ymCFJ7HwOwvRGkU+MSgr+cRqr73fT99N5URJ0W6sKoXrpZl7X0VPpCMgxySr8DPuLNEdK/P9Pw14fEvp4hl1bSJpDw2lW8tyXqRdxdzGMvzrbJzy0ysFxePUkQs9vUCW23e8fYXQXmsOBt5E5E+gey60KVj0yqJivxkZeg7grPJLeqNh3y14mvhdfS7/fVI7VFA2c+QvLT7Q7zXAevf9h1FqhwwMubtC1mNn87Hp2VcP8wB0xsj2TME65WlxqTV168+7DSAtu7m5x97H/HdB6U35wqCdGDP9Lmr4bBlLZ28tGuXUG0jivLvnvH+paaaU=
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Save the report of an agent run"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/cases/{caseId}/agent/runs/{runId}/report"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Only the agent of that run can save it. Proposals and questions accumulate over the turns of the run; the summary is replaced.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"runId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"description":"The report a run saves: what it found, what it proposed and what it could not decide","properties":{"summary":{"type":"string","description":"What was examined and found, at most 4000 characters"},"proposals":{"type":["array","null"],"description":"Proposals made, by reference, at most 50 per call","items":{"additionalProperties":true}},"questions":{"type":["array","null"],"description":"Questions for a person, at most 10 per call","items":{"type":"string"}},"cursor":{"type":["string","null"],"description":"Continuation cursor for the next turn"}},"required":["summary"],"title":"SaveAgentRunReportRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Report saved","content":{"application/json":{"schema":{"title":"Unit"}}}},"400":{"description":"Invalid report"},"403":{"description":"The caller is not the agent of this run"},"404":{"description":"Case or run not found"},"409":{"description":"The run already finished"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: get-case-record-stats
+title: "Per-label record counts of the latest applied table version"
+description: "Per-label record counts of the latest applied table version"
+sidebar_label: "Per-label record counts of the latest applied table version"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVE1rGzEQ/StCpxYc221Dob6FJpRAoSH9uAQfJrtjrxpZUqRZp2bZ/94ZrezYcQqGnlYfb2bfPL2ZThMsk57d6QoSnkWsfKyTno+0DxiBjHfXtZ7pJdJnBtzm++8ElPRIB4iwQsIoCTrteMNQScQxI20c7wJQw+uIj62JyKkotjjSqWpwBXrWadoEiTKOcImRoQsfV0DD0cdz3fdzCU/Bu4RJIt5Pp/KpMVXRBKHI4G8PHFp5zuJIbiEEa6pcwOR3Eki399MQpTwyQ0KCe4u/uAwz4AZKd3ucXGutiPKSmzAbFDulkpFunYV7tFaEOCkgw3N2qGsj1YC9OSB/WIpZBR/pxOQR1wafTgSTJ7CnPdj+c99tKe1+t03FcpIhK7m+SpWDq/qX4UWBZ6UPVNxLMngz5TS3xS+SjvOdT8+PHSN+Vs6TWvjW1TrDPv0D1kBiqCoUVA3Ep5RLPUTfYDzL5ApWVZyckvILRQ0qC4SJVDYn1iobT62L80aam6nxpd1yf3HvzPREOipNuqGx+klhMUmlDY1b+PwwRYhLX7WXuE7q4uZavyS4u5TFiptFsYEqTMm4pQSM1RUkIySfYKPIcwGOCZLa+DaqugQluREVOP+W/ky/G38YT0XI4BOtIPdSGQr/p8tBCTsHEv6hSbDAc0ZaK2Z3DpoN40zEme3G0bN/BuHYOg3zFHDX3TPqZ7R9L8ePLcYNn/NyDdEImTzgapNkzQ+0AJvwiNdu/Og3t8XBb5X4/TW+5RDcRjQE28qOlw+4eR6i/ZyRDULNjSYMhsuLqsJAe2FHw05m5s5MX65+sFP/AiQuBZ0=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Per-label record counts of the latest applied table version"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/records/stats"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Per-label record counts of the latest applied table version
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"tableVersion":{"type":["integer","null"],"format":"int64"},"records":{"type":"integer","format":"int64"},"unlabelled":{"type":"integer","format":"int64"},"labels":{"additionalProperties":{"properties":{"import":{"type":"integer","format":"int64"},"review":{"type":"integer","format":"int64"},"total":{"type":"integer","format":"int64"}},"required":["import","review","total"],"title":"LabelStats"}}},"required":["labels","records","unlabelled"],"title":"RecordsStatsResponse"}}}},"404":{"description":"Case not found"},"409":{"description":"Case has no records dataset"}}}
+>
+  
+</StatusCodes>
+
+
+      

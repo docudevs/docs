@@ -1,0 +1,71 @@
+---
+id: commit-case-classify
+title: "Finish a classify job whose file was uploaded"
+description: "Idempotent: committing a queued job returns it unchanged."
+sidebar_label: "Finish a classify job whose file was uploaded"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v2zAM/SuCThvgJl1XDFhuRbsN3WEr9nEqelBtOlZnS6pIJQ0M//eRlpOm7VYM2LCTZeqRIh8f2WsyS9SLS10ahIOyNYi23uirQleAZbSBrHd6oc8r6IIncLRQpe86S2TdUhl1myBBpW78tYpAKTpUllRyZWPcEqqZLrQPEI3EOa84UvY+5edOt68VOphoOiCIkkuvHf8IlEHsU2grKQRDDZ8j3CYbgUNRTFBoLBvojF70mjZBvKwjWEJkaO1jZyib3hzrYSh2oTnffxr5StwxeIeA4nF0eCSfhyR+ZJIyXxyi9E7oFJQJobXlSNH8BgXa7z0eohBINgfOif9JToVgPyS7h77USJH7xmiX2lZfMQjJUMK9iBOEr1Jovam+x/b5CHAXmDY8oWdge+lVhuCALLeBG7JH+uWuKVNK7ESWWslpK5WTsoRAjB4GcT4+PP41y86Tqn1ylR5Rb5+iPnlV2xZUrhGqYjqptXWVX6tcFJt9HMVdG0ZXY8os1MaLlINHGsXL8lnoucgV531W7TDfDtO8H+tiw6j8UXS1H7maqjvzZTqDFaqTi3P9ePJ2l3LoWDGKBVECh+b5Y4eZemeQxUFqbTaKPI+nW7Fe1ManqKrJCeWGmTccn28xx341ez07FIqkks6MwpsG5L11Fhse8G0ZIwvrxiNk4tYGd+Q9Trq/V/dfbY5JkQR3NA+t4WEVVWY9Ztbz4kLGLnbborzfK4utpCbuWVKNNI39+v6aHVjcwyBmziZu2M7HlYnWXEtneBVVFuXM7a5Ni/BMoS++TFJ+qX6X+mQ0TnJbmTbJHx9/wOZ+3cmW+o+vZoYGGeQGuJlxLDvf5XHb83qyqWTx7ebh4vPXbzwhPwGuBSij
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Finish a classify job whose file was uploaded"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/classify/{jobId}/commit"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Idempotent: committing a queued job returns it unchanged.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Job queued","content":{"application/json":{"schema":{"properties":{"jobId":{"type":"integer","format":"int64"},"jobGuid":{"type":["string","null"]},"status":{"type":"string"},"uploadUrl":{"type":["string","null"]},"expiresAt":{"type":["string","null"],"format":"date-time"}},"required":["jobId","status"],"title":"ClassifyAccepted"}}}},"404":{"description":"Job not found"},"409":{"description":"No file uploaded, upload window expired, or job failed"}}}
+>
+  
+</StatusCodes>
+
+
+      

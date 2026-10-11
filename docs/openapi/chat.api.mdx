@@ -5,7 +5,7 @@ description: "chat"
 sidebar_label: "chat"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVE1v2zAM/SuGzl6SbrfcsqUoehhWdN0pyIGx1VidLWkSndYI/N9HSv6Km23AcnBkkXwkH595FghHL9Y7AUepUexTYax0gMro+1ysRVYAilQ4+auWHj+bvBHrs8iMRnanI1hbqiwELF+80Xzns0JWwCfrGA6V9PxWSe8pTzhjYyXhg3PQUAKFsvLvI5wp5cTbo1P6KNp0WsHM1sZqlZM599U7phGLGkSFDCq+UGtfY0UhKjdZXZHrXa3yEXfXA6dC12Up9uTpKaoj6M9uszqG3icVbJhzLuMx0ktlXEShq2W48NZoHxn5uFrxXy595pRl2rspJWRJeleR/u+MXszhkoAJ6Vf6nloRsPZXTV3z/55Wn30MmWYdclznsGu9bQON7xkKqFgY1rU1nt8tYEFvy6D+ZefEFD2Ogr99g8pGGY4C3vXaHOc+ED40t5+LanSeUDnhSelnE0jqmttS9FaefLJ5uBfzlgbjtsuR0CQzxtVHDlgkt+Bpqpi8QpOgSajAEw06aUztkr4wz5YcEAifrD5i3yw+LVZcEfNUQVCMhkqOTF7UMowV5RsubQlKc3DtyiCwQHK/YtKIQNwUPAO6P58P4OUPV7YtXxPxjrbMjo4ncAoOTMWOv7tCQi5dIP+nbPgTjpR/eOLs7F7WYanM9d6mfcQmy6TFv/ruJzJ5+Pb9iZwP3d6rTM4xDl55n9BzLQRvTI6O+4rvzqIEfayD4EXE5N9v1vPe3A==
+api: eJydVMlu2zAQ/RWBZ9V2F/TgW1oHRQ5FgzQ9GT6MJUZiIpEsOXIsGPr3zlCrFcMB6oNMct5sb5aTQMi8WG8FZFKj2MXCWOkAldF3qViLJAcUsXDybyU9fjNpLdYnkRiNDKcjWFuoJCgsn73R/OaTXJbAJ+vYHCrp+VZK78lPOGNtJdkH56AmBwpl6d9qOFPICdqjUzoTTTyNYCZr2miVkynn1QPj1hYliArZqPhOqf1sIwpaqUmqkqA/KpWOdre94VjoqijEjpCetDqCrsES8PIcoyiWTLoBFIsn40pieM2ir184M1tAvTfm5R3bnNYRr4FmRAzkTyi44aIzDw9tfYmHMy10lQwP3hrt25J8Wq34L5U+ccpy3bs2iUgS9VAR/2+TPJv9eQUmVb9A/FSKgJW/KOqSf79deu+jytTr4OMyh13qTRNofMtQsIq54cGyxvPdAuZ0W4bxW3YgpuhhnLjbI5S2nYNxgrb9cIx1HwgfktvNu3oET6icWOg6djVtw5mDI54xq/STCbR2dGzI30YefHRzfyfmJAzCTRdVRLVPOBKdscIiugVPfYDRK9QRmog8Hqg1otpULupT8SxJAYHsk9S3tj8uPi9WYYCI2RJCj2ko5cj9WSxDI3BGS8pWaVauXBFaMpSl34pxa4HYzLlq9H467YmqP65oGn6mUjlajFs6HsAp2DMVW57TXEJKA8/lepE1b522SB8e2TvDiyrswfmENHGvcZMk0uJV7G7SWPe/fj8SeN+t6tKkrOPglVcgfddC8JJn7XbF8ttJFKCzKoyIaG3y7x+tzRqQ
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ chat
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"messages":{"type":"array","items":{"properties":{"role":{"type":"string"},"content":{"type":"string"}},"required":["content","role"],"title":"ChatMessage"}},"documentGuid":{"type":["string","null"]},"sessionId":{"type":["string","null"]}},"required":["messages"],"title":"AgentChatRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"messages":{"type":"array","items":{"properties":{"role":{"type":"string"},"content":{"type":"string"}},"required":["content","role"],"title":"ChatMessage"}},"documentGuid":{"type":["string","null"]},"sessionId":{"type":["string","null"]},"caseId":{"type":["integer","null"],"format":"int64"},"playbook":{"type":["string","null"]},"context":{"type":["string","null"]}},"required":["messages"],"title":"AgentChatRequest"}}},"required":true}}
 >
   
 </RequestSchema>

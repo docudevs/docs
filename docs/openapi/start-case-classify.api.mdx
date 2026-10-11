@@ -1,0 +1,71 @@
+---
+id: start-case-classify
+title: "Start a classify job"
+description: "Send inline rows (at most 1,000 rows or 10 MB), rows.source upload (then upload the file to the returned uploadUrl and call commit), or record keys of the knowledge base (at most 10,000). The tree, memo and records table versions are pinned when the job starts."
+sidebar_label: "Start a classify job"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Start a classify job"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/classify"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Send inline rows (at most 1,000 rows or 10 MB), rows.source upload (then upload the file to the returned uploadUrl and call commit), or record keys of the knowledge base (at most 10,000). The tree, memo and records table versions are pinned when the job starts.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"rows":{"type":["null","object"],"allOf":[{"properties":{"source":{"type":["string","null"],"description":"inline (default) or upload"},"format":{"type":["string","null"],"description":"Upload only: ndjson or csv"},"items":{"type":"array","items":{"description":"A row to classify, keyed by the field names of the knowledge base's field mapping.","properties":{"key":{"type":["string","null"]},"text":{"additionalProperties":{"type":"string"}},"metadata":{"additionalProperties":{"type":"string"}}},"required":["metadata","text"],"title":"ClassifyInlineRow"}}},"required":["items"],"title":"ClassifyRowsInput"}]},"keys":{"type":["array","null"],"description":"Record keys of the knowledge base to classify, at most 10,000","items":{"type":"string"}},"config":{"type":["null","object"],"allOf":[{"description":"Classify job settings. Instructions are stored in a blob and are never echoed back.","properties":{"target":{"type":["string","null"],"description":"category (default) or record"},"treeVersionId":{"type":["integer","null"],"format":"int64"},"targetDepth":{"type":["array","null"],"description":"Tree levels returned per row; a category job without one uses the case default levels, else every tree level","items":{"type":"integer","format":"int32"}},"candidateStrategy":{"type":["null","object"],"allOf":[{"properties":{"similarRecords":{"type":["null","object"],"allOf":[{"properties":{"k":{"type":"integer","format":"int32"}},"required":["k"],"title":"ClassifySimilarRecords"}]},"siblingExpansion":{"type":["null","object"],"allOf":[{"properties":{"fromLevel":{"type":"integer","format":"int32"},"seeds":{"type":"integer","format":"int32"}},"required":["fromLevel","seeds"],"title":"ClassifySiblingExpansion"}]},"categoryMatches":{"type":["null","object"],"allOf":[{"properties":{"k":{"type":"integer","format":"int32"}},"required":["k"],"title":"ClassifyCategoryMatches"}]},"widenWhenSourcesDisagree":{"type":["null","object"],"allOf":[{"properties":{"extraCategoryMatches":{"type":"integer","format":"int32"},"extraSimilar":{"type":"integer","format":"int32"}},"required":["extraCategoryMatches","extraSimilar"],"title":"ClassifyWidening"}]},"maxCandidates":{"type":["integer","null"],"format":"int32","description":"Most candidates shown to the model, 10 to 200 (default 100)"},"leafOnly":{"type":["boolean","null"],"description":"Only offer leaf categories as candidates (default true for target category; ignored for target record)"},"showFilingCounts":{"type":["boolean","null"],"description":"Show each category candidate's historical filing count in the prompt (default false; ignored for target record)"}},"title":"ClassifyCandidateStrategy"}]},"instructions":{"type":["string","null"]},"memo":{"type":["null","object"],"allOf":[{"properties":{"use":{"type":["string","null"],"description":"active (default) or none"},"version":{"type":["integer","null"],"format":"int64"},"include":{"type":["array","null"],"items":{"type":"string"}}},"title":"ClassifyMemoSelection"}]},"llmLevel":{"type":["string","null"],"description":"DEFAULT, NANO, MINI (default) or HIGH"},"routing":{"type":["null","object"],"allOf":[{"properties":{"reviewWhen":{"type":["array","null"],"description":"Flags that route a row to review; defaults to declined, modelNamedDifferentBestFit and sourcesDisagree","items":{"type":"string"}}},"title":"ClassifyRouting"}]},"concurrency":{"type":["integer","null"],"format":"int32","description":"Rows classified in parallel, 1 to 32 (default 8)"},"chunkRows":{"type":["integer","null"],"format":"int32","description":"Rows per queue message (default 40)"},"maxTotalTokens":{"type":["integer","null"],"format":"int64","description":"Token budget of the job; defaults to 8,000 per row, required for uploads"},"perRowMaxPromptTokens":{"type":["integer","null"],"format":"int32"},"recordsKnowledgeBaseId":{"type":["integer","null"],"format":"int64","description":"Knowledge base to classify against; required for target record"},"inputFormat":{"type":["string","null"]},"inputMapping":{"type":["null","object"],"allOf":[{"description":"Maps the columns of the input rows onto the text field names of the knowledge base dataset mapping.","properties":{"key":{"type":["string","null"],"description":"Input column holding the row key; optional, rows without a key run but their reviews write no record"},"text":{"type":"array","items":{"properties":{"column":{"type":"string"},"name":{"type":"string"}},"required":["column","name"],"title":"TextFieldMapping"}},"metadata":{"additionalProperties":{"type":"string"}}},"required":["metadata","text"],"title":"ClassifyInputMapping"}],"description":"Maps input columns onto the dataset text field names; absent means the rows use the dataset mapping"},"chunkSeconds":{"type":["integer","null"],"format":"int32","description":"Seconds of work per queue message before the job continues in a new message, 10 to 240 (default 150)"},"maxPushbackRequeues":{"type":["integer","null"],"format":"int32","description":"Times a chunk may be requeued after provider pushback before the job fails, 0 to 50 (default 5)"},"investigate":{"type":["null","object"],"allOf":[{"description":"Start a headless agent run that investigates the flagged rows when the job completes.","properties":{"enabled":{"type":"boolean"},"playbook":{"type":["string","null"],"description":"investigate-flagged (default)"},"maxRows":{"type":["integer","null"],"format":"int32","description":"Most rows the run investigates, 1 to 500 (default 10)"},"flags":{"type":["array","null"],"description":"Flags that make a row worth investigating; defaults to declined, modelNamedDifferentBestFit and sourcesDisagree","items":{"type":"string"}},"maxTotalTokens":{"type":["integer","null"],"format":"int64","description":"Tokens the investigation run may use in total, at least 1; the configured default (agent.run.default-budget-tokens, 300000) when absent"}},"required":["enabled"],"title":"ClassifyInvestigate"}]}},"title":"ClassifyConfig"}]}},"title":"ClassifyStartRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Job accepted","content":{"application/json":{"schema":{"properties":{"jobId":{"type":"integer","format":"int64"},"jobGuid":{"type":["string","null"]},"status":{"type":"string"},"uploadUrl":{"type":["string","null"]},"expiresAt":{"type":["string","null"],"format":"date-time"}},"required":["jobId","status"],"title":"ClassifyAccepted"}}}},"400":{"description":"Invalid rows, keys or config"},"404":{"description":"Case, knowledge base or tree version not found"},"409":{"description":"No dataset, imported records or usable tree"},"413":{"description":"Too many rows or keys, or body over 10 MB"}}}
+>
+  
+</StatusCodes>
+
+
+      

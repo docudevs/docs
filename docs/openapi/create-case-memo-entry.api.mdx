@@ -1,0 +1,71 @@
+---
+id: create-case-memo-entry
+title: "Create a memo entry"
+description: "An instruction starts as proposed and becomes active only through approval. Feedback is stored active and does not change classification."
+sidebar_label: "Create a memo entry"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVsFu2zgQ/RWCp11AtdNusAffskkKGO2iRdrtJchhTI1tJhSpkpRTwdC/7wwp25Lt9RZ72hwciZwZvnkz86itjLAKcvYoFQR8U2Hl5FMhSwzK6zpqZ+VM3lihbYi+UbwgQgQfg4Agau9qF7AUYEuxQOUqpHWy2qBw1rQirr1rVmsBNZluwEzEe8RyAepF6ECBnGfn7MAxSkcBrItCrcGuUCgDIeilVsAnT2QhXY0+vcxLQqY8QsRbgv4nIb+30bdkU4OHCiN6TmwrLb2wLVmRUyE151RDXNOzx++NJhByRulhIYNaYwVytpWxrdlL24gr9GS6dL6CmJd+v5Zd95TdMcQ/XNmyj3JkbSM/Usamhz19DkzjdhCciUMfNYbDUfsjiWltV7JjNC7vjO1ftC3P2itXDgI97nYKaRtj5BNZvGB72aB0qqkoh3l5ya4bMveYAREdUUfDiLgYXxJ2Moz4I55Fa7R9CcNTUnAq8eIZVeR4YMynZarhmIBxWzxgaEwcRQLvod3DpZJHrMIpkc9uMT/PpHevo50LbTCmIofcBTjiJCP9SHn3fsr58gO2P4f9CCRHGAb/mOjsToqTm6ivQ5GjHOFKg/OQezkHHs9FWgi1syHz9u7qLf8bq0QKIvJEMgP/cRj0+YKQ6MTmHA0MbaODzlH/tVyFZI37Rtrwsx5HdGrObRhjAGAP8xy/N4qrzuGur65O6Ztb0kddCsZTiFQ04bxIVUs+16c+LHxJLpeuoQnsUnZx7VgaSZhj0kLSuZmcsvqF6TaLYDflBKZUHc+sF5KL8nDQsvsfUNXmjCYNJCmL0GEja8/hPSnN4XWoK4PaZXE4mPWakJu/Y61eugSjZ/OOwtzhJoibz3N5fE/tN+/6w/iCUkhSYVfsMBH3ECjhKF6B7iYnqEU31HmidY0XO4SBd0qIQPE3uz6Rbye/Ta4YEfNaQWqd/mK5TS0vQDCpAvtLaARtcDX8r27TvrpchWltgG5GyrDxJo1l6pz8YcA9MttfoOkroZC79qFmX3Ozke12uyCjv7zpOl6mhiIuZo/0uAGvYcE1JDUvdeBnaoUlmIAXyPrloR+9X8U/we0XwTLrxErDb/sG7EF3fLetEUoacUaQN2/zOW++tkkhd84nctUVO48bpbCOF22fBkP4+dOXr2S86L8PqjwjHl5ZNeg3AXUp76RtaW0rDZWrgRXb5pj89zfviFRD
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Create a memo entry"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/memo/entries"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+An instruction starts as proposed and becomes active only through approval. Feedback is stored active and does not change classification.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"type":{"type":"string"},"scope":{"properties":{"kind":{"type":"string"},"code":{"type":["string","null"]},"key":{"type":["string","null"]},"documentId":{"type":["string","null"]}},"required":["kind"],"title":"MemoScope"},"text":{"type":"string"},"links":{"type":["null","object"],"allOf":[{"properties":{"classificationResults":{"type":["array","null"],"items":{"properties":{"jobId":{"type":"string"},"rowId":{"type":"integer","format":"int64"}},"required":["jobId","rowId"],"title":"MemoResultLink"}},"recordKeys":{"type":["array","null"],"items":{"type":"string"}}},"title":"MemoLinks"}]}},"required":["scope","text","type"],"title":"MemoEntryRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Entry created","content":{"application/json":{"schema":{"properties":{"id":{"type":"string"},"status":{"type":"string"},"revision":{"type":"integer","format":"int64"},"memoVersion":{"type":"integer","format":"int64"}},"required":["id","memoVersion","revision","status"],"title":"MemoEntryAck"}}}},"400":{"description":"Invalid type, scope or text"},"404":{"description":"Case not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

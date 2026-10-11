@@ -1,0 +1,71 @@
+---
+id: list-case-trees
+title: "List the tree versions of a case, newest first"
+description: "List the tree versions of a case, newest first"
+sidebar_label: "List the tree versions of a case, newest first"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVE1v2zAM/SuCThvgJlkb7JBb0BZbgQEbtmyXIAfWpmOttuRKdDrD8H8faTvORwOsO1kWH8lH8lGNJtgGvVjrGAJeeYydT4LeRNqV6IGMsw+JXujcBLplxMojBh3pEjwUSOjFt9GWfxglMRgeaWP5rwTK+OzxuTIeOQr5CiMd4gwL0ItGU12Kl7GEW/QMTZ0vgPqrj3PdthtxD6WzgbOyx/VsJp8EQ+xNKewY/PWJXWPHUSyJFcoyN3HHffo7CKQ5Slp6qYxMH9AQFuGIC3gPtRSwvz+FE5f/i4se2vKGErheAqqOcwTyxm7FZF2C4Z9hbq4Fm+MO87eCh258hpBdTBx7BMJkSQfrem9mWlWeiwTGuAmDr8jwjNv2eKDrk0Qjx31hY+3RWeM4NhnKhdPqYPhRFQX4mnOcJemHcdnpCwtTPNhlPpu/FoeIVllHKnWVTTr+pwAJoChDJRTVro8alEsVKNFzpCy+IGNS4zlVpFn2mZOd2CJ1m8AqX+ipYMO06VegndKwKMamrmvyQP3OxdUd7oJafnvQ51xGoxwK7qti+cUYAs9FHCbqHoIRMi9QK3KK28+MSdWu8ioZnIJYeGTA8Yd6OPaHyc1kJrMvXaACuq0Y1va/W3DCepQX4R+aljnw8nOayufd/nTt6Z8X6cdifCP6DvFUMyYkkKZ5ZNtPn7etXD9XyGJYrPm4A2/gUfrHb01igpx5AinkTO6czfgS6HffBxG9V5LvEsv92ltZ+h3klfzx8Qnrw3vWbhiZISS8bcKgNy7jGEs6cnv17sjzNarl0/2K1fcXwLXasw==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List the tree versions of a case, newest first"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/trees"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+List the tree versions of a case, newest first
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"items":{"type":"array","items":{"properties":{"treeVersionId":{"type":"integer","format":"int64"},"status":{"type":"string"},"nodes":{"type":"integer","format":"int32"},"levels":{"type":"integer","format":"int32"},"contentHash":{"type":"string"},"createdAt":{"type":["string","null"],"format":"date-time"}},"required":["contentHash","levels","nodes","status","treeVersionId"],"title":"TreeVersionSummary"}}},"required":["items"],"title":"TreeVersionList"}}}},"404":{"description":"Case not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

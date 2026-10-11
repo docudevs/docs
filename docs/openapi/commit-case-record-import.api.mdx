@@ -1,0 +1,71 @@
+---
+id: commit-case-record-import
+title: "Finish an import whose file was uploaded"
+description: "Idempotent: committing an import that is already queued returns it unchanged."
+sidebar_label: "Finish an import whose file was uploaded"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v2zAM/SuCThvgNlkXDFh2KtZ9BBi2ImuxQ9EDYzOxWkdSJbqpYeS/j7Sc1EjRYodil0SRyBfyvUe2mmAV9fRK5xDxKGDuQhH1daYLjHkwnoyzeqpnBa69I7Q0Vblbrw2RsSsFVhm+D6SoBFImKqgCQtGouxprLFRAqoONypCqbV6CXWFxrDPtPAYQ7FnB6AnxM1cw7wqYdZgc5iHAGgmDlNhqyz8knAM5L9NGSvNAJZ8D3tUmIMNRqDHTMS9xDXraamq8ZBlLuMLAoUsX1kDp6sNEb7fZHjp186rg15IevbMRo2ScjE/k64DfxGJijVFyZ4VsCQTvK5N3ZI1uokS3g//3Qagkk7D35f9LZdwGAdVxEBwpsKzydOMW32ozALraPWba1lWlrzmo9pWD4jJUL4QdOulPMIRHzlaN+n5xcf5bXc5/KC5NJTBxFZWolqZCBVE5i2pRufxWPheflGcumRi1KbuADZjOiClZCscHz0rFU3qxpj0XBXA1ZFh8tsFA56uhFXqeOI8MVULU0KfzXl1GEIzJePKsvtYR91rbrtLJ+OPTwJ8utZ4awiLrT2pjbOE2KrXH18xYP3pL4ISiq59npXQyUd7FND9s36keycTEUZsGZzvqx3yUAPhh1+t2lEaxs//SdRT2HZ+5vD7D+6hOz2f6UNT9oxzWog/7MscYRRtOOFZfILJHWTdoFDneIfaebasaVwdV9ElRXlgQYHx+jQn73fH747HwJT2tofN/P61fjTWxHGyhTeli750Nm2dH4mG97eN8vfpm6yeJ8IFGvgLeIjIoaUSSHGnXRo6d7jfZbvFmve2614EDe1nYgaUoyxhtu+Bknr3tVq65qtDwPR/vIRhYiGi8MgsT5cyeWEIV8QUi3sx7879Vz7XRX4JtRCGoavnFx1tsHteybNP/+K97kraykUqWiJeddJ6eT/McPQ0Sn6xTWdD7uTn/9fuCJ+kv50FyHQ==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Finish an import whose file was uploaded"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/records/imports/{importId}/commit"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Idempotent: committing an import that is already queued returns it unchanged.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"importId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Import queued","content":{"application/json":{"schema":{"properties":{"importId":{"type":"integer","format":"int64"},"status":{"type":"string"},"jobGuid":{"type":["string","null"]},"uploadUrl":{"type":["string","null"],"description":"Write-only HTTPS URL for uploading the file as one block blob; present while awaiting upload"},"expiresAt":{"type":["string","null"],"format":"date-time"}},"required":["importId","status"],"title":"RecordImportResponse"}}}},"404":{"description":"Import not found"},"409":{"description":"No file uploaded, upload window expired, or import failed"}}}
+>
+  
+</StatusCodes>
+
+
+      

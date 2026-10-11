@@ -1,0 +1,71 @@
+---
+id: reject-agent-action
+title: "Reject an agent action (human only)"
+description: "Reject an agent action (human only)"
+sidebar_label: "Reject an agent action (human only)"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVk1vGyEQ/SsrTq3kxmkTVapv7oeqnBIl6cnyAS/YJmFhC2way9r/3jeAvWtn21ppDylm5s08HjPDblngK88mM8ZX0gQ2HzFbS8eDsuZKsAlz8kGWYUrGaUm7bMRq7nglg3QE3DKDH/BUAiZlsKp5WGPt5M9GOYkowTVyxHy5lhVnky0LmzoiTJAr6eC6tK7iIW19vGRtO09w6cNnKzaEKS28wRBLXtdalZHj+MGDEva64LWjEwQlPf1ykmePlHTGfHDKrJDUNFqzeduOWFBBE6Hb48PeJg4g1PbPs+Tay7jja2t8yvTh/Jz+E9KXTtVRqgm7fkSiV1KHoKdohfjcy6tTncHW58v9syY4WvNPlwe7+N6ofzgFa3WPWXbIhi+aez9o9U1VcbcZtKH01lYMmmLlDcYLPDTDqXKd9Y8R2aMTFlQO1BNc6+tlLPbDK3oNFWTrH2womxCKKoTrm142aiLAF7kfXoM+KOLZjn3mOu/64C5YuBy1wDwVfKPD3ZGYs17BpYs/LLyLD2yPff3BS7RykOLz5vTEqeKFLJX4D+A0/KXEezgBeu+CwjAEVj7XkNn3sR10GJIPeDrk6DrzGOgH6vMYpQl9eOn7zuhaLvdsv0N7pXEjjQCjXW2k+UfzEWQuzy9eTsA4TYtgH6UZFdYVYS0LHtHFQmprVh7GghsLgysajzuJoS4HQiUYXIulbYxIjp9eOt53OX5xX2D+LpWrpBgVSQ5BRJQHARylM0dFDyOlFwH0ivg+7qK+WTcV9qzRm7edpnj5rA87aSdsHDHjhPHjrRLtOL2n8KHpf9s9cd+eeVWTwt2T1ZsZyixtrIp8C19t2XyVT76Y3lyxY857Iy0qYo2hVdLYx2EBOCu+cY/OChBnQ+JDgCc0W7GxjStEBsVrQbFxxIfVp9jvzy7OzuN4w0khAZHK7/9pUh1Q3Zd5kM9hXGuOzwfEblx8MpKKuy8TTIekI1aTWMlZShTnmmSH53a7QA/8cLptaTtP2hmWT9wpviDtMMOF8rTePeQvSO3fa/bmNvfX24IaYohs3uSGOueJ64Z+YfkoN+mjKA7OteQClU3Zk+FLyvHunuAd8MX3QTvaIaZlKevwV995rxRvru/uWfdcVFYQxvFfpBz+RpK2TpJS1dHelmluVg0Uhz3FpH+/Ae6VeFg=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Reject an agent action (human only)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/agent/actions/{id}/reject"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Reject an agent action (human only)
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"reason":{"type":["string","null"]}},"title":"RejectAgentActionRequest"}}},"required":false}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"sessionId":{"type":["string","null"]},"runId":{"type":["string","null"]},"jobGuid":{"type":["string","null"]},"tool":{"type":"string"},"toolClass":{"type":"string"},"summary":{"type":"string"},"method":{"type":"string"},"path":{"type":"string"},"status":{"type":"string"},"request":{"type":["null","object"],"allOf":[{"properties":{"method":{"type":"string"},"path":{"type":"string"},"query":{"type":["null","object"],"additionalProperties":true},"body":{"type":["null","object"],"additionalProperties":true}},"required":["method","path"],"title":"StoredActionRequest"}]},"resultStatus":{"type":["integer","null"],"format":"int32"},"result":{"type":["null","object"],"additionalProperties":true},"createdBy":{"type":["integer","null"],"format":"int64"},"decidedBy":{"type":["integer","null"],"format":"int64"},"decidedAt":{"type":["string","null"],"format":"date-time"},"expiresAt":{"type":"string","format":"date-time"},"createdAt":{"type":"string","format":"date-time"}},"required":["caseId","createdAt","expiresAt","id","method","path","status","summary","tool","toolClass"],"title":"PendingActionResponse"}}}},"403":{"description":"Agent token, or the action belongs to another user"},"404":{"description":"Action not found"},"409":{"description":"The action was confirmed, expired or is being confirmed"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: list-case-records
+title: "Page through records, filtered by label, subtree, label source and attributes"
+description: "Records are ordered by key. Paging uses an opaque continuation token that resumes after the last returned key, so there is no depth limit."
+sidebar_label: "Page through records, filtered by label, subtree, label source and attributes"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVk1v00AQ/SurPYFkktJWSORW0QpVQqIqcKpy2NiTeIm96+7OBqwo/50Zr+PYSZNGcOHS2p6ZN99vspaoFl5OnmSqPLxzkFqXeTlNZAY+dbpCbY2cyMcoEMqBoAdwkIlZLZZQj8SDWmizEMEDyY2wlXoOIFJrUJugGECgXQL9zRUKBz6UrDlHcPQJRKE8f8bgDKESZCK8ZQn50l4YKzKoMBeFLjWOZCJtBa7Bvc8otEJ7/ETBtyGSvFJOlUDwnNhaGnohPU6QDBKpOaFKYU7PDp6DpmTkBF2ARPo0h1LJyVpiXbGVNggLcKQ6t65UGD99uJabTdJBF2oGxRaZkne1PIR6kh4dFYpEJhSFnPYRfJihA/gnjCaKbza49N9wFJJsFvAMFOWcqjsQUkcofa96rZfNIExu4+vQu8JvwfsNuLocNKA/bH+R+5QHwVfW0Aiz4uXFBf8brsDXJVmwIzDIUlVVhU4bl+OfnlXWPV+V4ylFHQG3e7WrzLZyXcWGBrQFL5SR/OfBLE/lkrTD+LrKA2/AiYD2W5gMBuwkfjdBJzM+dLAA09vss3awt8FPfb97YElT0X7m1HPUWEBHbo/tBDSog4E6uTaDAHr8OQT/QiTVc8B21y8N2b1ZqUJnYq4L4q8kcl5ClDvgU9mYXx+aMw8SYaKY22CyqPbxiFquGm5tQxaZQvqK7Iq+qhT1CgSUM8gyZvddNZv6EL3mltl3AdgwLs+SHDPH+vE6Uu1m7DpK1mZumzq2Vbm1abiFlRc3D/dy/9h0Qn4oad0ELUcK3nMgZDASd8rToqD4pWq6LVybFe2OqGk2RdYaeZZwVoRPUh+x34+uRhdcmMp6LFXT3JZE6I4BnR1nwyLfliVpOxHPXTM9dJ0iWSfxnY4VbwSdvkwMBnCQ1HpHHf/XMW13DOE3jqtC6Wa4gmsYJLY1/jbgjCbdDe0Nek6FZKX1ekbSH67YbPhzpF++v5n2albwgsxV4SGu4u5o0sAHjkAynx/R3Z3Hc7SHh/Aci/7JO8tDe8PO0d27TTuTKb84zTYv1+noAL15bDnnrTjWwS3pmrrvs4sp9nHDZJ2DohFsIojCmzSlEemZHVw6Dr1jgM9334kS/gCW1oO+
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Page through records, filtered by label, subtree, label source and attributes"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/records"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Records are ordered by key. Paging uses an opaque continuation token that resumes after the last returned key, so there is no depth limit.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"label","in":"query","schema":{"type":["string","null"]}},{"name":"subtree","in":"query","schema":{"type":["string","null"]}},{"name":"labelSource","in":"query","schema":{"type":["string","null"]}},{"name":"attribute","in":"query","schema":{"type":["array","null"],"items":{"type":"string"}}},{"name":"limit","in":"query","schema":{"type":["integer","null"],"format":"int32"}},{"name":"continuation","in":"query","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"records":{"type":"array","items":{"properties":{"key":{"type":"string"},"chunk":{"type":["string","null"]},"label":{"type":["string","null"]},"labelPath":{"type":"array","items":{"type":"string"}},"labelSource":{"type":["string","null"]},"attributes":{"type":"array","items":{"type":"string"}},"generationId":{"type":"integer","format":"int64"}},"required":["attributes","generationId","key","labelPath"],"title":"RecordResponse"}},"continuation":{"type":["string","null"]}},"required":["records"],"title":"RecordListResponse"}}}},"400":{"description":"Invalid filter, limit, or continuation"},"404":{"description":"Case not found"},"409":{"description":"Case has no records dataset or no active embedding generation"}}}
+>
+  
+</StatusCodes>
+
+
+      

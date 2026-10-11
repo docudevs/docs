@@ -1,0 +1,71 @@
+---
+id: get-case-classify-results
+title: "Page and filter the results of a classify job"
+description: "Review requirement is computed from the stored flags and the job routing rule, or from the routing override, so rules can change without a rerun. A running job returns the rows written so far with complete=false. Filtered scans cover at most 50,000 rows per request; follow the continuation to go on."
+sidebar_label: "Page and filter the results of a classify job"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV0tz2zYQ/isYnJIZVpITtwd5cvA4SSe91ONJTh4fIHIlIQYBFlhaVTX6790F+JAsm7HZ9tZLQgHY3W/fn3cS1SrI+a3MVYCfcqNC0MutvMtkASH3ukLtrJzLG3jQsBEe/qi1hxIsCh1E7sqqRijE0rtS4BpEQOf5tyG1QtkiHn53C+FdjdquhK8NZML5XqS9cQ/gvS7oNrj4jPQrK/K1sisQG41reigUYfC1nYhLemMtC0b1gLW3oVG4CWLjNSJY1rVUPopHuAYQPiyVCTARn7VBYLiBDLE3hEAoFKULKH6eZbPZLCmr6Jxdh4AXYumMcZtoKXeWoNeKgyTQiZUTzk5kJh1JxNMvBQVvBXhF4b1qonsDoTYY6FmlvCoJkOcU7KSlH/ScU0FymdQc+Urhmr6byJM69DVkMuRrKJWc7yRuK5bSFmEFnp4unS8VpqNfzuV+n3WqKVT/kWbOeKuYAuW38qSEYlo4D7im2mEBEQDlqcVbGdBTZunK1sbIu0NDPlbiTQv6BSbXLkBfqv60kumTCiLBelCmhicxLZwzoOyToAw8gBnG8tUDiPjuoq1GrnWKJ1lKhZszUhsvuAxxTf+0mk/x9GlJeI7T8/7dUXpY5zC+q954lqyDWOkHOooQKIzdJ4VpROIKyHVgW4MwVJ5DhRnh8B5y+lgCFAuV3/PMsM4+nZsBs0aXGodtXisaMEH/RY6fcRufceO/KWCpqE/519vxbUJ5YHNRlZyTruOs9PPjB9Xj7in83cysuIpdTZOJoL+6g9LA/UE5uLJUlGYeUdhN9FiSLA88iHkKuqahsnZ+80Tuhj5N8Zehu+MAh8rZAIEfvpvN+L9jTL/fkwTHjJqWb1VVGZ3H6E2/B36yO7D1SNZCDJZwS9GuOYLOkzjO+ImIw+JguDerrHkT1qpKW6idIN1E4ZCAolWnS+DhX3ke/6iTJ6z8oEqU94qjrRHKeK6KQjNGZa4P5LjGKGfHFfJ8AE8rOtD6DScLKuEk5yz8iTEeF0ItAg9BfkAXFJp0IaP1tDAP8PdT8NjiZ16pNCS0gS79PCdQG9Nu6rjZS4pq2qql2jbxZlsBFdaHkWpc5Cj0vXfbY8pSaDtJCgJqNCz6aNNeR3f2rOn8qbr6Zu+t29hY45lo5xQPnJabpBttaTvoQsSRwtdH2Ynaz0+1/0aRsA7J1doW0R1a+WvXEIPIAmgPz+WU936Y7tL630/bKp3u4tbeT33HG7Rduhipxt+PLq8/wkMQl9dfTjLTXfJH3HdUoDmQbnKMBCbikwpUdCg2lBAqEvKKWhnF1tVeFI1Q4JtCoSL9dBuS7rPJ+8mMPa+IMpUqlmgzZeJQZQa4jCwrMbPkAfeg6ruQ3HsMete3+f/U83XUs+kepAafVkbpWJi1NxzUVGmJ7HMdzTuq2TF/OmxJYltv1FjEDZAFd7sFSXzzZr/n47Q6mLoWOqiF4Q6NDg6l81ka+CTye9j27DKRs7mUvM1ea3IUDRzAdEJER6L7h8RwAGH7ZCSwMYxwAE1DQUeCeQkvHDB+QD5HAnjTZvqteBFfHMpLQ0nHFswwFxxMwRHfHFsX/yI1HOqvjqb2OO/4h9cM9JVj5yB9z5ltGZrdHtrsYpdG5eiiGWc1zeL9HT1cE3ejPy/Y7XR3GVviQOqED3O8OrLx66evxD7+Bk8tMzw=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Page and filter the results of a classify job"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/classify/{jobId}/results"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Review requirement is computed from the stored flags and the job routing rule, or from the routing override, so rules can change without a rerun. A running job returns the rows written so far with complete=false. Filtered scans cover at most 50,000 rows per request; follow the continuation to go on.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"flag","in":"query","description":"Rows with this flag set","schema":{"type":["string","null"]}},{"name":"reviewRequired","in":"query","description":"Rows whose computed review requirement equals this value","schema":{"type":["boolean","null"]}},{"name":"level","in":"query","description":"Tree level; with code, matches the chosen code at that level","schema":{"type":["integer","null"],"format":"int32"}},{"name":"code","in":"query","description":"Chosen code, at the given level when level is set","schema":{"type":["string","null"]}},{"name":"decision","in":"query","description":"accept, correct, feedback or none","schema":{"type":["string","null"]}},{"name":"limit","in":"query","description":"Page size, 1 to 1000 (default 100)","required":true,"schema":{"type":"integer","format":"int32","default":100}},{"name":"continuation","in":"query","description":"Token from the previous page","schema":{"type":["string","null"]}},{"name":"routing","in":"query","description":"Comma separated flags that route a row to review, overriding the job rule","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"description":"One page of classify result rows. Rows follow the stored result shape with review computed at read time.","properties":{"rows":{"type":"array","items":{"additionalProperties":true}},"continuation":{"type":["string","null"],"description":"Pass as continuation to read the next page; absent on the last page"},"complete":{"type":"boolean","description":"False while the job is still running, so more rows may follow"},"status":{"type":"string"}},"required":["complete","rows","status"],"title":"ClassifyResultsPage"}}}},"400":{"description":"Unknown flag, decision or routing flag, invalid limit or continuation"},"404":{"description":"Job not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

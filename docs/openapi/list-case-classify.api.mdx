@@ -1,0 +1,71 @@
+---
+id: list-case-classify
+title: "List the classify jobs of a case, newest first"
+description: "Items have the same shape as the single job GET. Follow the continuation to read older jobs."
+sidebar_label: "List the classify jobs of a case, newest first"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1VktzGkcQ/itTc7Kr1gLbcg7kpMiKS6mkonLkXFQ6DLsNjJmdGU/PggnFf0/37AILrMmKqlwkoF9fP6b7W8uopihHTzJXCG9yoxD1ZCWfM1kA5kH7qJ2VI3kfoUQxUwsQcQYCVUl/ZsqDUFj/ou3UgPjqxuLT3eOV+NUZ45ZJlDsbta0UuxLRiQCqEM4UEFgdr2QmnYeQ5PcFBTMa4y3hud3CyaRXgUJGCAx2LS19IUUGTRaZ1IzRqzijzwG+VToAOYqhgkxiPoNSydFaxpVnK20jTCGQ6sSFUsX6p5+u5WaT7VwbXeq49fytgsAoDmvyoKac9z+Qibec17vhULwqYKIqE8WH4evLsbx/l4IlT3L0YdgG1q7meXyPbg5WTIIrUxt8gIV2FQpPuOUplieJMVAXSWQrY+TzZvPMGaB3FgFZkTLkf4dh/pyTBaMCG1mqvDc6T/gGX5FV1q1YR7YWEhzhJmI7fGkoMmFhCRjFRAfkPvjAMxJ1DUTzOLbKqEJQXIDd74fq5JEHq8cEZNuZ6qc8t25poJjCLzyuL7GMKkwhtpSb4pMIo4oVdoookU+VLs41jVrmlvjoojJttT2WWq8TUwD4m55Y8w5fZlxC6RrjF1T6jy6rfgED5C4U+KjGBi50kbvKxo55iYfVO5tF4Sz0VYXcaAt9R2Ri1HTaX1tp01sZ59r7ntqb9hp72ifRpL6LvAe89581paTqRx0NB9ou9du69uS9Ql5IJ02gb6WPaYlh34kiCwO8W15kZkx5q4zpp35UjpOQLXfZYQ4dRfiSUucaeONUcffdk1+8iWceeAtRoSK8ibpMHnI6qxGKi2wrX1xoe1yN7UFuXlbWrN7uTXm4NHaLb7cct6PRUbi/kurn5jglHAeH8Vwex1cckUlMJ0vhu2nhe0xH6mehxkhHTrACCQhKLTgpQ32GOmD/5sYPtQGbXHed03u7UEYXIhEQ4cIBMJmsrk+tuKLCOrqXVPgiASK6NHNMp+pSJnY0kgNuEQ7Wdac2g3zPsbSduFS4BvRHl1cfYYHi5uH+hFzshPyh5KrQrOeAzAPZ4ErcKdR8wZdqxfWkNBb0uMXKVUEUjRGyhMZJkf/FdofLt1fvr4acqncYS5W62bCf34ka1qSyzRaYPijBKZ3whgPU6z1P+b8ZbbNHIg3PwBulU+uqkK5K3Yr6tfC4j/bPpkXAZ5Q8a63XYxJ/CWaz4Z9rrsckuNDIt49aPFGGUv9xrq8+N8P5WvQgrZ3Q57BqsWIa0Yp1JBPT/jj+g5GeCXzEevfxn/lL0Azg8qL8KPaWXdpVO+YOU921DXOuGU0AnQtGUAtv8hx8u1QntJih794oTRg92n8BTuib2Q==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List the classify jobs of a case, newest first"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/classify"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Items have the same shape as the single job GET. Follow the continuation to read older jobs.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"limit","in":"query","description":"Page size, 1 to 200 (default 50)","required":true,"schema":{"type":"integer","format":"int32","default":50}},{"name":"continuation","in":"query","description":"Token from the previous page","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"description":"One page of classify jobs, newest first","properties":{"items":{"type":"array","items":{"properties":{"jobId":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"knowledgeBaseCaseId":{"type":"integer","format":"int64"},"target":{"type":"string"},"status":{"type":"string"},"jobGuid":{"type":["string","null"]},"rowsTotal":{"type":["integer","null"],"format":"int64"},"treeVersionId":{"type":["integer","null"],"format":"int64"},"memoVersion":{"type":"integer","format":"int64"},"caseMemoVersion":{"type":["integer","null"],"format":"int64"},"recordsTableVersion":{"type":["integer","null"],"format":"int64"},"counts":{"properties":{"total":{"type":"integer","format":"int64"},"done":{"type":"integer","format":"int64"},"declined":{"type":"integer","format":"int64"},"flagged":{"type":"integer","format":"int64"},"failed":{"type":"integer","format":"int64"},"skipped":{"type":"integer","format":"int64"}},"required":["declined","done","failed","flagged","skipped","total"],"title":"ClassifyCounts"},"usage":{"properties":{"promptTokens":{"type":"integer","format":"int64"},"completionTokens":{"type":"integer","format":"int64"},"llmCalls":{"type":"integer","format":"int64"}},"required":["completionTokens","llmCalls","promptTokens"],"title":"ClassifyUsage"},"uploadExpiresAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["caseId","counts","jobId","knowledgeBaseCaseId","memoVersion","status","target","usage"],"title":"ClassifyStatusResponse"}},"continuation":{"type":["string","null"],"description":"Pass as continuation to read the next page; absent on the last page"}},"required":["items"],"title":"ClassifyJobPage"}}}},"400":{"description":"Invalid limit or continuation"},"404":{"description":"Case not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

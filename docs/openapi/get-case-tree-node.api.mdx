@@ -1,0 +1,71 @@
+---
+id: get-case-tree-node
+title: "Get one category with its path, children and siblings"
+description: "Get one category with its path, children and siblings"
+sidebar_label: "Get one category with its path, children and siblings"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVk1v2zAM/SuCThvgNVlb7JBb0RZFL1uxj1PQA2MzsVbZciU6nWH4v4+UHSdtswBdsZ52smyRj49PFOlWE6yCns11CgE/eEydz4K+TbSr0AMZV15neqZXSOds8N0jfnYZ6kRX4KFAQi/erS75he0EhR0SbUp+q4ByXnu8r41HxiFfY6JDmmMBetZqairxMiXhCj2bLp0vgPpPn0511yUj9JpD9XT+BXraZ/Ui4EDelCuGuRXjULkyYJD94+lUHhmG1JtKRGTrL3eMmTomU5LsQlVZk0aJJz+DmLQ7ISovB0CmB4zsngeOpzDA9VvzzV6iy9pafcs2fYZ7nB/xO4QQCKgOezFCnaYYgvOHEaKkW3/wHhqRm7DYh8seFhZob17slubGZqzJIa+30Pb1ksVMzl29S+EPtXxyHHPfFux81zvZFHckO1LjoiVDVlA31/pbXRTgmwgWzMIyo/BfyFcJuQ9NynPE2tb5iDv0n/EEDkW6QAJjJRBHOp2ePu870rcTNXRP5bzinoMr5xtVOlJLziyLST/2ukJSrsSt8YOhXBkKStglapOIgjJTO0x5JORumBibVGZ6InMhTNp+PHQTYvb8Orb0blJyLmLAjy724aWLpzWke+HS+gLXQZ3dXOunXMdNWRRcaooLUyqDOYnDkbqEwEVK6gEaRU5xF+bQpBpXe5UNTkF2MiBg/IEYY388OjmaxiJ2gQqIfWUYGX8r0d62qwl/0aSywBOIo9XexgsW5euHs7jOxvkaFZQvu2MxihjNpLa4WnImLf5tu2DHH952nXy+r5GLczbn5Rq8gYVozEM8M0HWfHxLsFw1T6mO00u/+zoU9XslZPalsGkapbSMNdha3nh5h832R0Em8BtG3Yr1xoHjgXTSjXKEjPuOyN1vnXETq2jH6dmPgfxfjPfq6vI7X9ffN7dNJg==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get one category with its path, children and siblings"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/trees/{versionId}/nodes/{code}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get one category with its path, children and siblings
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"versionId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"code","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"parent":{"type":["string","null"]},"name":{"type":"string"},"description":{"type":["string","null"]},"status":{"type":"string"},"successor":{"type":["string","null"]},"path":{"type":"array","items":{"type":"string"}},"labelPath":{"type":"array","items":{"type":"string"}},"children":{"type":"array","items":{"properties":{"code":{"type":"string"},"parent":{"type":["string","null"]},"name":{"type":"string"},"status":{"type":"string"},"successor":{"type":["string","null"]},"childCount":{"type":"integer","format":"int32"}},"required":["childCount","code","name","status"],"title":"TreeNodeSummary"}},"siblings":{"type":"array","items":{"properties":{"code":{"type":"string"},"parent":{"type":["string","null"]},"name":{"type":"string"},"status":{"type":"string"},"successor":{"type":["string","null"]},"childCount":{"type":"integer","format":"int32"}},"required":["childCount","code","name","status"],"title":"TreeNodeSummary"}}},"required":["children","code","labelPath","name","path","siblings","status"],"title":"TreeNodeDetail"}}}},"404":{"description":"Case, version or category not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

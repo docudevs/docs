@@ -1,0 +1,71 @@
+---
+id: put-case-dataset
+title: "Configure the records dataset of a case"
+description: "Valid only on a case without documents. A change to the embedded text of a dataset that already holds records is refused with 409 unless reindex=true."
+sidebar_label: "Configure the records dataset of a case"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWN9v2zYQ/lcIPm2A82NtMKAB9pAlKRBsQ4PU7UvgB1o8W2xoUiUpJ4Kh/713JGXLspMlQR82IHkILJF3vPvu7jsdVzyIueent7wQHg4cFNZJzycjLsEXTlVBWcNP+VehlWTW6Ab/McFoN7tXobR1YNIW9QJM8IfsjBWlMHNgwbJQAoPFFKQEyQI8BGZnKCpFQOGAyyIwoR0I2bDSaulZPp4p+jmrPcrRGezk+AOrjQZP75WR8PBHcDUc8hG3FThBRl5JNLOqwzkqv0hH4HIlnFhAAEc+rrjBB9xG1uP+EVfkWyVCib8dfK+VA1RDukfcFyUsBD9d8dBUJKVMgDk43DqzbiFCevX7CW/b0Vp1tq/T/b0G1/AhmufWzJRbJAj2wgQPygdl5mtI7pXWbAr4fNBt5rs23vKptRqEwTVTa50CORO1RmtnQnto20lyFXz408qGZAuLnplAP0VVaVVEQI++eTJ21TukcgR3UODpKQdyHE9eo+SDQ7t5iygp0PIf1EjPO9J30OyVIgR6C8I5QQCqAAu/q6Wwul6YvYpSQHYW2n6kbzsFeTtiE1TQtH+Mdnzse0CSWkxB9+HOWju0cQtmmyBkIppSKoJS6Ostq4cmDWwiaHqKMiY927btGvEuI8Zb2N0mo7BGpt+giAqE1p9msRK2YURwKy0CPO2av1PV5aIKTTzfP5V25FJn7WXPus8VFLwlZfAg8Ey4tphvzauMXli5P/Fwz98UqHNR9RVv6rcrjX4dv39HonYJ7iOEonyZ4CCA0bJevC63fI3uR5b4DIGK3L8uZrb666XuwUMpaiSWJTwZvISDJ6Nz7W6sw2DuPUPaeorOomzZTJ2S/3KAR0oxQRU3SN/m7rmpdLWFWgSy0MJ7NWsuEs29Ekvh5hAuoApbge/Ip3N2TUJPdoSYED2jczc6HxraToZ502fUAX9OdvVRE5nfJCofkgi1sPjCV9b45OS74+NI21ut6NMdnvTKBpDb6HM65OjF3eLFMXxrKD+roUzeWspbS3lrKf/PloJ1nur4K8KtrHmWbnSjoBCOHUCWu5LPz4TE8HlUGQsM2s7hz1ExZNJuSttuiwP3Hm+MqfURcKj4ZF/zuzLLONdmlcw6FouI+XU+kOTJriRNmczYwGa2NjJt+/DItlL4zYg8okNo5MtzcnbY42DcjY5tIv3S5ok2jrGURfyIIPFHq4RMeyTXcy616pvNVJfZYWdK2zDwsN3G7rlZTk3zdtMPe9ydBt2OGyfrJtajy+3u0RXNgJ+71wPe6l7vVmFaiUw3szG1usAjuhew9Ozs+mpn2F4vXuQYMCzUAlA3RhwFDtml8Fi0gd2Lhu4t8GsIqSqwxtZuEzhayd1z2SU3/+3w/eFx7A/WB2QfMirjk7KwdhCj3Y3x3eVHvAmhMA7N7U3j/91Ll8wnpP4Im7wyBEHt4odMStVUvR73ng7LmCq2RLho02o1xVdfnG5bep1uSyjtpPJEIzLfWjwB0k+7S9nrVCqLzaUO8kVNu2LeL4VTZOULLf7lJpPcr+yxY7tvVdP0z+zMyYhGsi8xkkiqZEFaPE/nHGS27IR3vuvpzipJnBUFdqkn9056jHT9ZYx7p/nuKH0xcSfu6QoN/0c7bXQ79rX4boUcYea1mNPepJL+fgBhBRIe
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Configure the records dataset of a case"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/cases/{caseId}/dataset"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Valid only on a case without documents. A change to the embedded text of a dataset that already holds records is refused with 409 unless reindex=true.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"reindex","in":"query","description":"Confirm that the embedded text of existing records will be re-embedded","schema":{"type":["boolean","null"],"default":false}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"datasetType":{"type":"string"},"fieldMapping":{"properties":{"key":{"type":"string"},"text":{"type":"array","items":{"properties":{"column":{"type":"string"},"name":{"type":"string"}},"required":["column","name"],"title":"TextFieldMapping"}},"label":{"type":["string","null"]},"metadata":{"additionalProperties":{"type":"string"}}},"required":["key","metadata","text"],"title":"FieldMapping"},"embeddedText":{"type":["null","object"],"allOf":[{"properties":{"template":{"type":["string","null"]},"skipEmptyFields":{"type":["boolean","null"]}},"title":"EmbeddedTextSpec"}]},"examplePolicy":{"type":["null","object"],"allOf":[{"properties":{"mode":{"type":"string"},"perLabelCap":{"type":["integer","null"],"format":"int32"},"overFetch":{"type":["integer","null"],"format":"int32"}},"required":["mode"],"title":"ExamplePolicy"}]},"indexSettings":{"type":["null","object"],"allOf":[{"properties":{"topK":{"type":["integer","null"],"format":"int32"},"exhaustive":{"type":["boolean","null"]},"oversampling":{"type":["number","null"],"format":"double"},"hybrid":{"type":["boolean","null"]},"semanticRerank":{"type":["boolean","null"]}},"title":"IndexSettings"}]},"classifyDefaults":{"type":["null","object"],"allOf":[{"properties":{"targetDepth":{"type":["array","null"],"items":{"type":"integer","format":"int32"}}},"title":"DatasetClassifyDefaults"}]}},"required":["datasetType","fieldMapping"],"title":"DatasetConfigRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"caseId":{"type":"integer","format":"int64"},"datasetType":{"type":"string"},"fieldMapping":{"type":["null","object"],"allOf":[{"properties":{"key":{"type":"string"},"text":{"type":"array","items":{"properties":{"column":{"type":"string"},"name":{"type":"string"}},"required":["column","name"],"title":"TextFieldMapping"}},"label":{"type":["string","null"]},"metadata":{"additionalProperties":{"type":"string"}}},"required":["key","metadata","text"],"title":"FieldMapping"}]},"embeddedText":{"type":["null","object"],"allOf":[{"properties":{"template":{"type":["string","null"]},"skipEmptyFields":{"type":["boolean","null"]}},"title":"EmbeddedTextSpec"}]},"examplePolicy":{"type":["null","object"],"allOf":[{"properties":{"mode":{"type":"string"},"perLabelCap":{"type":["integer","null"],"format":"int32"},"overFetch":{"type":["integer","null"],"format":"int32"}},"required":["mode"],"title":"ExamplePolicy"}]},"indexSettings":{"type":["null","object"],"allOf":[{"properties":{"topK":{"type":["integer","null"],"format":"int32"},"exhaustive":{"type":["boolean","null"]},"oversampling":{"type":["number","null"],"format":"double"},"hybrid":{"type":["boolean","null"]},"semanticRerank":{"type":["boolean","null"]}},"title":"IndexSettings"}]},"classifyDefaults":{"type":["null","object"],"allOf":[{"properties":{"targetDepth":{"type":["array","null"],"items":{"type":"integer","format":"int32"}}},"title":"DatasetClassifyDefaults"}]},"mappingVersion":{"type":"integer","format":"int32"},"activeTreeVersionId":{"type":["integer","null"],"format":"int64"},"recordsTableVersion":{"type":["integer","null"],"format":"int64"}},"required":["caseId","datasetType","mappingVersion"],"title":"DatasetConfigResponse"}}}},"400":{"description":"Invalid mapping or index settings"},"404":{"description":"Case not found"},"409":{"description":"Case has documents, or the change requires a reindex"}}}
+>
+  
+</StatusCodes>
+
+
+      

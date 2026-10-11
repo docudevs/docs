@@ -1,0 +1,71 @@
+---
+id: get-case-dataset
+title: "Get the records dataset configuration of a case"
+description: "Get the records dataset configuration of a case"
+sidebar_label: "Get the records dataset configuration of a case"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVk1vGzkM/SsDnbaAN862QQ+5FYlbBLuLBqm3lyAHWeJ41GikqcTxZmD4v5fUfGTGNlInF1sakdQj+URyK1Cuo7i8F0pG+DOA8kFH8TATvoIg0Xh3o8WlWANekcC1RPpFMROVDLIEhMDKW+FoQ2JshORnwjjaVRILWgf4WZsAZAZDDTMRVQGlFJdbgU3FWsYhrCGQaO5DKbH99PFC7HYPrB4r7yJE1nh/fs5/GqIKpmJ4JPz1kVSVJysO+VRWlTUqgZ//iCyyHV1aBXYNTWuwQ3wKmJnQrfvLJDloRAzGrfk8N2D1v3Q97weBe+Fqa8mgX/0AhRxcae3XPAVuiuYRmqOGEZ5wdCBDkA1HGaGMR3zyti7dUUNtng4OduMs3fcGOnHCiwYtyy8Jx+exk6xp5Qrs2N3O6qz1+4FEiCmSg5eyo7Xh1Eh7O0G9D2kPE4dmZKiLyQjbFBffCuUKtAa9nETvFemg8FZWIrzsXHw01aKssEkI4lh45b0F6Z6ld894FyN03ypQHeYnSXfCrScGN28CXXp9nJ0k8w+n6kpWY8PPhG8xTon/4T2r+g2Ez4CqeJ3iXgoTslHGFhNfk/vGaXj6BoiEOb4tZ776+7XuwVMh64hmAy8mr41DZNAHD5ySefQO7esVOUu6RbMKRv/mgkhFyqFRd1R83eOpVLqZRC0FUlkZo8mba8hlbfGNsZSBCv81VDhJfF9+emeHMvRiCU2EGIHuesnVPtAEv2zf8XcKt/HuJNvkhuIULgNAp3ejT2dCW+G7BriUlLSDy08xsV9J+4Y4bh0H7j0cRsW73KzvutbHgSPDF+cXh82P23LmPGa5r53OfMi6q9JHlezUjIYtTFW/kBAWkHVOD4q9Uuqgmc8zmbEfbfktfDcPpCGAiSHmfBrn29bZ3VwPU4JxuU/x673zqr6GTcw+3d6IfTjDIS9K6uUZsVEBscOtWeEsW8hIzMTsf9lk6BknvUfMGl+T151S5JOuRWz6DIq/zj6cnaci6CPSE2NQ3czy+ihMYA/M5H40p3ZBow/dU4fUEtsItTyIpHq5TwjOfUGYWGi7XdGn/4Ld7fjzzxoCtYB7Wm5kMEzJ9Ea1ibymNOTSRjjAM0xC4o+7jorvMm6Yx3D2E4XjB72RtuYdLdMk0tM3PckCpCbqM4L28JNSVBlGagdzF49vA2W+LJbEwV8535S3
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get the records dataset configuration of a case"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/dataset"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get the records dataset configuration of a case
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"caseId":{"type":"integer","format":"int64"},"datasetType":{"type":"string"},"fieldMapping":{"type":["null","object"],"allOf":[{"properties":{"key":{"type":"string"},"text":{"type":"array","items":{"properties":{"column":{"type":"string"},"name":{"type":"string"}},"required":["column","name"],"title":"TextFieldMapping"}},"label":{"type":["string","null"]},"metadata":{"additionalProperties":{"type":"string"}}},"required":["key","metadata","text"],"title":"FieldMapping"}]},"embeddedText":{"type":["null","object"],"allOf":[{"properties":{"template":{"type":["string","null"]},"skipEmptyFields":{"type":["boolean","null"]}},"title":"EmbeddedTextSpec"}]},"examplePolicy":{"type":["null","object"],"allOf":[{"properties":{"mode":{"type":"string"},"perLabelCap":{"type":["integer","null"],"format":"int32"},"overFetch":{"type":["integer","null"],"format":"int32"}},"required":["mode"],"title":"ExamplePolicy"}]},"indexSettings":{"type":["null","object"],"allOf":[{"properties":{"topK":{"type":["integer","null"],"format":"int32"},"exhaustive":{"type":["boolean","null"]},"oversampling":{"type":["number","null"],"format":"double"},"hybrid":{"type":["boolean","null"]},"semanticRerank":{"type":["boolean","null"]}},"title":"IndexSettings"}]},"classifyDefaults":{"type":["null","object"],"allOf":[{"properties":{"targetDepth":{"type":["array","null"],"items":{"type":"integer","format":"int32"}}},"title":"DatasetClassifyDefaults"}]},"mappingVersion":{"type":"integer","format":"int32"},"activeTreeVersionId":{"type":["integer","null"],"format":"int64"},"recordsTableVersion":{"type":["integer","null"],"format":"int64"}},"required":["caseId","datasetType","mappingVersion"],"title":"DatasetConfigResponse"}}}},"404":{"description":"Case not found or dataset not configured"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: get-case-record
+title: "Get one record with its label, label source and index state"
+description: "Get one record with its label, label source and index state"
+sidebar_label: "Get one record with its label, label source and index state"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v2zAM/SuCThvgNdlWDFhuxVoUPa3otlPQA2MzsRZbckU6bWD4v4+0HSdtuqLFgF0SWSSf+PEeG8uwIjub2xQIP0RMQ8zI3iY2VBiBXfBXmZ3ZFfI3cbjp7DaxFUQokTFqbGO9fIiXYlyp2Xn5qoBzOUe8q11EQeFYY2IpzbEEO2ssbyuNcp5xhVFclyGWwP3Vl1PbtskIvcbtW3GJo/MrQblVZ6qCJyS1f5pO9S9DSqOrtEbx/r4WzDRILp7VClVVuLTrwOQ3qUtz8EQVtT/sekBN7vhdgctrv95b5jtTYn1dFPZWXApYYPEKl2stev8GxAhdQxhLeq7mIexHqGOKL+MDy9WiZqS3PbBCf0CRV43zYGjzw3efgCXDuPeVywjZcaH4PQdvhoEKquKeTk+PR6qMNSGantXGBzbLUPvMdgFf/xKQA4nrEEQmA5ZbVhy5hZTdBg2WC8wyaYTZ593V9xjvUuM87hK4d5wbx2S6upL+z1A3IgM+M85n+GCIgVGqF33lYRBfJzllgJ2oyGjS9FprJ0Oek0Za1nYSWYZuGkO7zkNan+OGzNn1lX2a4GjUQynMN0LsFIm0NAk4MRdAQnI297A1HIwIZCO8N1tJ2mRDEKlF+yT4YqUe++PJ55OptroKxCV0AhrE/G99eVTCSDvGB55UBciKkDfr2Imq71m/3JRls3FD7Tad3CnXhF+5pKm+TbMQp1+xaFu9vqsxirrnctxAdLDQrsrKyxzpWeazhILwKK1xldh3NwPp3xt57tl0d6LzyvoNFLV+DTIY16puw//4qv62uh9yhEz0rEX3lrM0xYoPYo52pa7ckb6XFz9FG38AFuMuuA==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get one record with its label, label source and index state"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/records/{key}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get one record with its label, label source and index state
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"key","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"key":{"type":"string"},"chunk":{"type":["string","null"]},"label":{"type":["string","null"]},"labelPath":{"type":"array","items":{"type":"string"}},"labelSource":{"type":["string","null"]},"attributes":{"type":"array","items":{"type":"string"}},"generationId":{"type":"integer","format":"int64"}},"required":["attributes","generationId","key","labelPath"],"title":"RecordResponse"}}}},"404":{"description":"Case or record not found"},"409":{"description":"Case has no records dataset or no active embedding generation"}}}
+>
+  
+</StatusCodes>
+
+
+      

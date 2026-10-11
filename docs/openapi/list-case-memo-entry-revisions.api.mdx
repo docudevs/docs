@@ -1,0 +1,71 @@
+---
+id: list-case-memo-entry-revisions
+title: "List every revision of a memo entry"
+description: "List every revision of a memo entry"
+sidebar_label: "List every revision of a memo entry"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9Vktv2zAM/iuCThvgNd1W7JBbsRZb0A4dusel6EGxmUSNLLkSnS4I/N9HSnZqJ2nQXXayLZKfyI8vbySqeZDjO5mrAO9KKJ28z6SrwCvUzk4KOZZGB/xM4m8kvbTo17ew0oGkQWayUl6VgOAZZSMtfZAJo5FtJrWlr0rhgt49PNbaA0GiryGTIV9AqeR4I3FdsZW2CHPwpDpzvlSYjj6dyabJttDAHvw7dkCv7ZyQ7lk5VOQ9BJZ/OD3lRwEh97rioEn7ZkmYuSN/LLJUVZXReaRk9BBYZdO7ovJMGOoEqIsD15K3CGXoSZT3ai17569C8S31r2Ita1UO4ITcJcnw1qW2h+/NXdEDuuskmbS1MfKeNJawPq5QuLwuic9JcUyv6efyLjlEKUONhj3iGvwRfecgUGEdDvqLrpwGdLYf/dQ5A8qyWNW4cP7qpWiT+Lij2/r4qsLisA/wB48jGG2Xoa8SJdR/0wfIkeNWxtzMYmcNE5UbFYKetTV5C6E2OEDqyivd9WKZPbjp5IVKc08DybHmHKQsQXYAO7lLnl5T3K1d7nxxBevX+b7by80Q/DrS2cTceFAIxfmxBPQiKUj5HeoylhVRi5crZYb5f45/zzrxkO3MkEkh3EzgAoQh9IACCLOO+RK+toLMSaqDiBMtE3omlF3v0dkr1WHJZTwjehOha+ptX/S7oB0FO9mI0/y3hqfEZf/aiJ2I30thuvCa1gLbkeHZ6dn+DOWVISjGGJ6wDinimqJgg6EmIxE7QGpdNEydEryPkj05Q1tm4XgfzQHj4qHBP5YjXjVhtEkbpxmxyYhNNJ+2y6IZ+d7K0nbmYmbboC5oMF3AKojz75O9LG6FF+34EtRAOVDz2TkbnIhLFTSn90mtBTpBKaJIUKxd7UU38wJLqMgU4ZM0TXD5/uTjySlXXOUClioO9XbLvY6Sgavb9uC5M6qM0nHU1d7Eto90pT3PJIy3Kzou/Uy2nLHoecU+00ZFsCAvGWKzmZLtL2+aho8fa/KSzul1pbxWUyaVBlahA79TxmbKBNjzdrte5ZvbtvDeiq5Qd6PolqblsLmP+Eu2W6f73eC/hP94a0dTHDgLUAVNBw48Sc/zHCrs2e39Q/CvyLaov1z+pM74CxGMQ7A=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List every revision of a memo entry"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/memo/entries/{entryId}/revisions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+List every revision of a memo entry
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"entryId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"id":{"type":"string"},"items":{"type":"array","items":{"properties":{"id":{"type":"string"},"revision":{"type":"integer","format":"int64"},"type":{"type":"string"},"scope":{"properties":{"kind":{"type":"string"},"code":{"type":["string","null"]},"key":{"type":["string","null"]},"documentId":{"type":["string","null"]}},"required":["kind"],"title":"MemoScope"},"status":{"type":"string"},"tombstone":{"type":"boolean"},"authorKind":{"type":"string"},"authorId":{"type":["string","null"]},"contentHash":{"type":"string"},"text":{"type":["string","null"]},"links":{"type":["null","object"],"allOf":[{"properties":{"classificationResults":{"type":["array","null"],"items":{"properties":{"jobId":{"type":"string"},"rowId":{"type":"integer","format":"int64"}},"required":["jobId","rowId"],"title":"MemoResultLink"}},"recordKeys":{"type":["array","null"],"items":{"type":"string"}}},"title":"MemoLinks"}]},"createdAt":{"type":["string","null"],"format":"date-time"},"lastEvalId":{"type":["integer","null"],"format":"int64","description":"Id of the latest evaluation run for this entry, if any"}},"required":["authorKind","contentHash","id","revision","scope","status","tombstone","type"],"title":"MemoEntryView"}}},"required":["id","items"],"title":"MemoRevisionList"}}}},"404":{"description":"Case or entry not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

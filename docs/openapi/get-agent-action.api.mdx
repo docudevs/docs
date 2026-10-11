@@ -1,0 +1,71 @@
+---
+id: get-agent-action
+title: "Get an agent action with the request it would run"
+description: "Get an agent action with the request it would run"
+sidebar_label: "Get an agent action with the request it would run"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVU1PGzEQ/SuWT62UkhRQD7mFghAnELSniMNkPUkM3vXWng1E0f73jj8SNrAqUXqKszNv/Dzz/LyRBAsvx1MJC6xIPg6krdEBaVvdKDmWC6RJiEyK8EkOZA0OSiR0AbWRFf/hNK04pCte1UBLXjv802iHXIJcgwPpiyWWIMcbSes6IirCBTpOnVtXAqVPP85l2z4GuK9t5dEHxOloFH4U+sLpOvIYy9tnhhaWqzBtjkJdG11E4sMnH1I2nU1rF45FOhVktocQ4frg8ebQZGbrc9u2+VPpyelqwflVY4x85DTXfJryZGfXjf4kiaw1HWY5IQd+GvC+N+qbsgS37o3xXJdW9YbiWHvrEVDTv1XQAHrqHiOyZ43NnrCIagNjbudRSfsjOoYK79Y9WN9uSumgEDB3nd2CQhk+s+podNtV/HTLPnNlKGkygewDWU5Jl+k+t6eNqkDfGHp418xpR3Bp8PvCOzuVO+zxBy8cAqG6WB++cVK8wkKr/wBO6B8S7+AU0/tGmp2Gsfhac5t9F/sG7YfkAx4OeTfObAPdQl0eg2R/+0Pf3Yy3K5fvbPeGdqRxh5ViRlttJP9jKoHM+ej8owOmTFFZEnPbVCrS3k+5RhJQiejtAlL+i6aloCWKfD2FJvFiG6MEO9PbMaL1bw8zlsNYY5hq+OFGqzY6/tzGnuYzXNqiucSVF5O7G/mezC4YFmVgxFe+CKZZLQLgRFyB14HRC6wFWcHuvmKpirVtnFAZ5EOERwVcn6M+1f5+cnYyiuZgPZUQ3T8/Tcf0YI/4TjKErzSsDfA7xzs1Ltpv6s/2/eSbljrEqzGrgue7tMECp3KzmbGMfjvTtuFzNqspL1fgNMxCA9kGlfZhzQOYg/H4gcvuyZNf7rNEv4qgqT6O+SNUQXwrME34x8tnXKdHO3rPEkHxhQ27p8CkKLCmDuTD4xre6J1Qrq9+sfb+Amr60mM=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get an agent action with the request it would run"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/agent/actions/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get an agent action with the request it would run
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"sessionId":{"type":["string","null"]},"runId":{"type":["string","null"]},"jobGuid":{"type":["string","null"]},"tool":{"type":"string"},"toolClass":{"type":"string"},"summary":{"type":"string"},"method":{"type":"string"},"path":{"type":"string"},"status":{"type":"string"},"request":{"type":["null","object"],"allOf":[{"properties":{"method":{"type":"string"},"path":{"type":"string"},"query":{"type":["null","object"],"additionalProperties":true},"body":{"type":["null","object"],"additionalProperties":true}},"required":["method","path"],"title":"StoredActionRequest"}]},"resultStatus":{"type":["integer","null"],"format":"int32"},"result":{"type":["null","object"],"additionalProperties":true},"createdBy":{"type":["integer","null"],"format":"int64"},"decidedBy":{"type":["integer","null"],"format":"int64"},"decidedAt":{"type":["string","null"],"format":"date-time"},"expiresAt":{"type":"string","format":"date-time"},"createdAt":{"type":"string","format":"date-time"}},"required":["caseId","createdAt","expiresAt","id","method","path","status","summary","tool","toolClass"],"title":"PendingActionResponse"}}}},"404":{"description":"Action not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

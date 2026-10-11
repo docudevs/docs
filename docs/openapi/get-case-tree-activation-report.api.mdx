@@ -1,0 +1,71 @@
+---
+id: get-case-tree-activation-report
+title: "Read the report of a tree activation"
+description: "Returns the worker report of an activation: counts of valid, retired and missing record labels, successor rewrites, codes without a successor, and memo entries whose scope names categories that are not valid in the version. importId is the id of the activation in GET /cases/{caseId}/records/imports, matched by the jobGuid returned when it was accepted."
+sidebar_label: "Read the report of a tree activation"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVbFu20AM/ZXDTS2g2ikadNAWNEHgrTDSqchAS7R1jaRT7ig7gqB/76Ok2E6AZmozddKZR74jHx/p3grtok1/2owifwqc+ZBHe5/YnGMWXCPO1za1a5Y21NFIwebgwwMHE7jxQYzfGqoNZeL2pM6pyXxbS9SLPZUuT+ApLnAOv9xULkZX78z0kilpw2VMTGyzjGP0CnsIThi2zCMHc3BS+FYMnXySCYkrb7iW4NSr8JFNzHzDpqYKloyEd368lIIQH3DjZcrJuHosZc8hIueFcZUWs8LFVCNckL+eTpVp0O3NnVkqVXHZ62eVD8uZtOWEgcQrkqxAvZtuRPjlN7ctAMPIIeyHggEm5kAR8Bk3wvnCJhbJh/GlVQ7Kdyzf8MJdYL465rAeSYdvQwFlCvJH83qrNSNmSgnXTpvWkBQ4B35slX+bSmg5sRHJVWTT3krXaJSrQRUHuG59QPKT6eulHYbkCD1T9Y/Qn/n/i+D3Gh4bX6NZGnF5camfl7q+e9nh3EMuqhJ+clEMMNFBlQSa8CyWxMDqIPB5AAqaQjaMrqp2Bd+OReuzaFHh526OXUNZqX2tIIXHzyPFw/KUE+zP5KjU5va7eutHGpyUysO1z9pr3kdz9X1lXw/v8VIPFUbGNMHrKOkgImBhbihiUFSRkKzH5NXIRUzn2wBOpqCoNzkJAX/OFNifF18WFxaVNj5KRbUmNfd0zZSPA3C2KSYmT9W9zrW3eBsEyv+d8z47Z54j4SdZNiVh+NDLNpTaikmt019DhG96XC+jYNVyvhXONKtXZyM9yxYTCcpEIft+A6wfoRwGNT+2HDrYcdxTcLRRUWOt5S7qGQO0pTLyG2L5sJ5XxUfzp6pmI9WdKpjKVn/h+MDdaXXqTnrHV0/8vfPDx+4M9+drClrD3voNjVTSjg==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Read the report of a tree activation"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/trees/{versionId}/activations/{importId}/report"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns the worker report of an activation: counts of valid, retired and missing record labels, successor rewrites, codes without a successor, and memo entries whose scope names categories that are not valid in the version. importId is the id of the activation in GET /cases/\{caseId\}/records/imports, matched by the jobGuid returned when it was accepted.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"versionId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"importId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"404":{"description":"The activation does not exist for this tree version, or its report has not been written yet"}}}
+>
+  
+</StatusCodes>
+
+
+      

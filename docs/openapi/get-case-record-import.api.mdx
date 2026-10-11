@@ -1,0 +1,71 @@
+---
+id: get-case-record-import
+title: "Get the status of an import"
+description: "Get the status of an import"
+sidebar_label: "Get the status of an import"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9V01v4zYQ/SsETy2gtdM03YN7CjZpGnSBLJxNL0EOtDi2mFAklx9ODMP/fWcoWZFsI3CCoidLHr4h53HmzWjNo1gEPrnnpQjwyUNpvQz8oeDWgRdRWXMt+YQvIH7BBdNsv66d9ZEX3AkvaojgycOaG3zBteQJQQVXBt+ciBU+e/iRlAf0FX2CgoeyglrwyZrHlSOUMhEW4HHp3PpaxOavz2d8syk61yrv/J86fyB4cNYECIQ4PTmhHwmh9MoRAbj45gmhpUUvJpJVOKdVmekZPwZasu5t6jyRF1XjsDvzMccptuwdt7i2EnpLQ/TKLMgQoogpHDbZ5Ev4Rxl50Cz9appMzzSzVoMwZHu0s6ukerj7LbDgJmnNHzbEJsX7jW7mzXWZQ5DfxUzDv5hCypo+4DXsBnEofG+fA6YkqCUcy1gDeYQyHg9piuJcyvdC7pwU797nAjS8G3RnykqYxdGw5LQV8vLFYdmE8/jGTfXQFMynqLASKU89UGwfwqaGlw9hw8qUt6muhV/10RmEqjWjqyW00PpmnmVpWMotltk5EywY4UJlIyOvrMncEbuOrLJaBlbaZGJgwkhmnfiRgDV0sydYBWaNXo1YELXTEFqEiKy2IbLTk8FSlAM2S+UTxAmL9hq1xscCV0A9A1kw1FCBQYob9FjggiYFCsS6OIWlgmeQI9LbobAYl+KXRpT+FuGtcit2SAiVOP3jM3EQK2AST1o7TIQAkmWvfyI3eL+64aVOGJGHOXgwJaAJNYL5ZNizilX2gCQAq+gMlBmZtSyTUiraUehvg5MfIfm85fUIN8J7saKOEKE+JHnkbZGEl0fmy5BleFEhop9p2xqPqy+Zb/AvL8o40DXcF698gJE2oQJmNRcvFx/BYWOaK19/FX4BjYPD8g0vJYAMX1Wt4qEVm34nvT/kdi+wHafFHl2HokK2o4qa9r7F/Lqiu9mW9IZagxYz0JjZc2yy8b1XPQwhp+Kex9f02jnL6zF2S+Z2IBVU+5O2pFuZKFopaCqeNCMnHRZOSDpua+3Z+icUg0Zq9infjk5tFy76E09u9jvtaK9rHOgIe+1op3HuNMXBhNBNEj2e+kPgbbZO2wGKLgAjOjs52x+hmvXMIINz5Evm2IdLrpDLrCbZaVZow9R22ESRrGw7i+bZkwYMPibKwnjdMLcZt6GOGxgatgRu8sw4tzlr2kgubJkuYBnY+bdrvnuazkgPNWosQ2EoUSQx0wgwYpcioEhE9ixWKNqYBmaJusFWSB+TLSiQhbQd/S+3Uw7/bfT76IRK0mGzqEUu9HbEfZuEwRG79I/wEsdOC5XLPHmdp9BMUJNTlPGTLrl8V5stS2TtEg1vusJTEXS9niHmzuvNhv7GBkhN9x4fl8IrGtyaBqsCPePdzIUOsHfKbnDmv0zbZP+V4Z4HT7+tdEN1vhQ60Rs+YlW9flvQJ8H/uGvHTVanCoREKabIG/N5WWKj7gH3Pg9ITrr8vbr8jsn/E4V7pvk=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get the status of an import"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/records/imports/{importId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get the status of an import
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"importId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"importId":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"mode":{"type":"string"},"status":{"type":"string"},"sourceKind":{"type":"string"},"dryRun":{"type":"boolean"},"jobGuid":{"type":["string","null"]},"reportPath":{"type":["string","null"]},"appliedTableVersion":{"type":["integer","null"],"format":"int64"},"rowsReceived":{"type":"integer","format":"int64"},"rowsRejected":{"type":"integer","format":"int64"},"recordsAdded":{"type":"integer","format":"int64"},"recordsUpdated":{"type":"integer","format":"int64"},"recordsDeleted":{"type":"integer","format":"int64"},"recordsUnchanged":{"type":"integer","format":"int64"},"uploadExpiresAt":{"type":["string","null"],"format":"date-time"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"},"syncSummary":{"type":["null","object"],"allOf":[{"description":"Summary of a snapshot sync report. It holds counts and opaque record keys only. samples holds at most 20 record keys per bucket: toInsert, reembed, metadataOnly, toDelete, keptReviewed.","properties":{"inputContentHash":{"type":["string","null"],"description":"sha256 of the decompressed input; a real sync must reference a dry run with the same hash"},"counts":{"additionalProperties":{"type":"integer","format":"int64"}},"samples":{"additionalProperties":{"type":"array","items":{"type":"string"}}},"guard":{"type":["null","object"],"allOf":[{"properties":{"existingRecords":{"type":"integer","format":"int64"},"deleteFraction":{"type":"number","format":"double"},"maxDeleteFraction":{"type":"number","format":"double"},"confirmLargeDelete":{"type":"boolean"},"exceedsLimit":{"type":"boolean"}},"required":["confirmLargeDelete","deleteFraction","exceedsLimit","existingRecords","maxDeleteFraction"],"title":"SyncGuardSummary"}]},"labelConflicts":{"type":"array","items":{"type":"string"}}},"required":["counts","labelConflicts","samples"],"title":"SyncSummary"}],"description":"Snapshot sync only: bucket counts, sample keys and guard result of the worker report"}},"required":["caseId","dryRun","importId","mode","recordsAdded","recordsDeleted","recordsUnchanged","recordsUpdated","rowsReceived","rowsRejected","sourceKind","status"],"title":"RecordImportStatusResponse"}}}},"404":{"description":"Import not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

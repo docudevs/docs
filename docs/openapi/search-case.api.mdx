@@ -1,0 +1,71 @@
+---
+id: search-case
+title: "Search the records or the documents of a case"
+description: "Embeds the query with the case's active embedding provider and searches the shared index in one call. kind=records searches a records dataset with the tier-1 settings; kind=documents searches case documents."
+sidebar_label: "Search the records or the documents of a case"
+hide_title: true
+hide_table_of_contents: true
+api: eJzdV0tv4zYQ/isEL20BxfYmaYG66GG7SYFggSaId09BDrQ4triRRS1JeWMY+u+dIWmL8isP9NQcHImcF+fx8dOaOzG3fPzAc2HhzECujbT8MeMSbG5U7ZSu+JhfL6YgLXMFsO8NmBX7oVzhX0nvJ8tE7tQSGJCcVNWc1UYvlQTDRCWZBWHyAoIBWwgDkqlKwjP+Ml2RlbIcsCdc+zPG0OkItlmSwqE31zl3CszZBxR1Dn3aP4IFqfNmAZVLbFCUbLs+4BnXNRhBp7uReL4g+AmlcKsWRizAgaHErHmFLyhCJlA244oSUgtX4LOB743C0/CxMw1k3KK3heDjNXermrRU5WAOBkVn2iyEC0u/XfK2fQzqYN1fWq5IJ9coXTl6FHVdqtwHOPxmqQbrxDgmF8PH01t6o0MnLq0zmAzeZtyX6uCO0/XnbuMhCbNqypLqn4Z7cU468FyIxlKZU82p1iWIaquJgnqJqRMLPAA6S0SrBrvjoA+pm2kJ5KRYTY2SLziwmIbKqfweS1g9vSA8U2UoZRoI7mGc02+QOwoEu+925ovdz6xtps5A77wxh4kD4XBp2rigIrD9qWqivOuZ2ikB6pViCuVENyZ/wcGmb29k7xTCGLFKsqkcLA66atM+fUjjRS2nXEnS1PsTPwV/x4S1j7uavtE2bXVQ9z409K5TGg6/YGtd2ZCQ89GI/vVx5vYJ7f/XYzCHKpn11zY9zagPuSldmtZN2rfp7kfRFet0UZ9gdVrAIubBW8fH+IkAM3mPcl40/WnaD8r37CtE7gge39OrbxiL/ty9wxMiAwRwP+WmFnP4J2TvTYDZHp4Paie/ubm0vlqQ+23UB+gj18hxXN4C4VE47jriFSicmjsGvp3MDmok8W0t70S1ZzXeUAnGhPxN0qQdgafNyO6k+AheBUQiwEJrl4cw6aZailJJzy2yQH8yFm+VjGmzpR9MN84i5/HUpFQLhUF4o5f7RikEVmnHZrrBqL3Y7/tin9En8hZkMCSLZco71uV908uGHnmSUwiS3edjHQiSs19H5/vOrvfIW8akQjCzuM8QdfOneF5KXSRwM4FTJIPNi32bkygbDoDIPlPzhugf2lloCSXL8Q3xUokSqZ4JSTEgkBFRRZCHFZoYWq3xWskC7xrzIZ3VDteBlLXDEBLu0yVx37Gq62dqMeiuh27AIznqFsLIjfoDFWhdf4RG3YBE1rczEmF1SzwCRLTEHGfaD0zswyu8K65gadnHuxu+S7m3m1fxRqGq5GAtFQgVBuxaWEQLpMNixZym5GKYjq0QOzuuSzvEm9E+HSLY/jC4GIwoIsoqxk5BRZobC5b2VWyzzqSeISnPA1nuBZ1Q2P/hJ0PEOQfPbliXQvlJaoy/D0Nfhs8ogp7x9nMhtibCT0EtjDLr9RQ3v5qybWk5NuIDPi6FUYIwmKioVJaesctmOBtwItU/30cU/IUdC3NDXiq6GxHPGnrjkYZsvm1auu8KnD266zCCsPkp+Dn7QiY65T1q1mYbjY95DrU7KfuYjPbd7eQLCk/jVxDBAq4a8YPAHH99oNqf29+Nfm2NRKGaN3g5436wSX//AoEEIYs=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Search the records or the documents of a case"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/search"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Embeds the query with the case's active embedding provider and searches the shared index in one call. kind=records searches a records dataset with the tier-1 settings; kind=documents searches case documents.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"kind":{"type":"string"},"query":{"type":"string"},"topK":{"type":["integer","null"],"format":"int32"},"exhaustive":{"type":["boolean","null"]},"oversampling":{"type":["number","null"],"format":"double"},"hybrid":{"type":["boolean","null"]},"semanticRerank":{"type":["boolean","null"]},"filters":{"type":["null","object"],"allOf":[{"properties":{"subtree":{"type":["string","null"]},"attributes":{"additionalProperties":{"type":"string"}},"labelSource":{"type":["string","null"]},"documentIds":{"type":["array","null"],"items":{"type":"string"}}},"required":["attributes"],"title":"CaseSearchFilters"}]}},"required":["kind","query"],"title":"CaseSearchRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"kind":{"type":"string"},"generationId":{"type":["integer","null"],"format":"int64"},"results":{"type":"array","items":{"properties":{"documentId":{"type":["string","null"]},"key":{"type":["string","null"]},"score":{"type":["number","null"],"format":"double"},"rerankerScore":{"type":["number","null"],"format":"double"},"chunk":{"type":["string","null"]},"label":{"type":["string","null"]},"labelPath":{"type":["array","null"],"items":{"type":"string"}},"labelSource":{"type":["string","null"]},"attributes":{"type":["array","null"],"items":{"type":"string"}},"filename":{"type":["string","null"]},"pageNumber":{"type":["integer","null"],"format":"int32"}},"title":"CaseSearchResult"}},"settingsUsed":{"properties":{"topK":{"type":"integer","format":"int32"},"exhaustive":{"type":"boolean"},"oversampling":{"type":"number","format":"double"},"hybrid":{"type":"boolean"},"semanticRerank":{"type":"boolean"}},"required":["exhaustive","hybrid","oversampling","semanticRerank","topK"],"title":"SearchSettingsUsed"}},"required":["kind","results","settingsUsed"],"title":"CaseSearchResponse"}}}},"400":{"description":"Invalid kind, query, filters, or settings outside the limits"},"404":{"description":"Case not found"},"409":{"description":"Kind does not match the case, or the records case has no active embedding generation"},"502":{"description":"Embedding provider, dimension check, or search index failed"},"503":{"description":"Search is not configured or model credentials are not ready"}}}
+>
+  
+</StatusCodes>
+
+
+      

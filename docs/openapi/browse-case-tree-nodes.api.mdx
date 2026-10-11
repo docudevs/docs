@@ -1,0 +1,71 @@
+---
+id: browse-case-tree-nodes
+title: "Browse or search the nodes of a tree version"
+description: "Without parent and q the roots are returned. With parent, its children. q matches name or code case-insensitively among those children, or across the whole tree when parent is absent."
+sidebar_label: "Browse or search the nodes of a tree version"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVU1T2zAQ/SsandoZN0mB9pAbBabDpWX6MT0wOSj2JlaxJUdah6YZ//fuyrIxkFAGyqGnONJ+vN19eruVqJZeTi9lqjy8cZBal3k5S2QGPnW6Qm2NnMofGnNbo6iUA4NCmUysBOYgnLXoBZ0KB1g7A9lIsHG0TISm6zTXRUZ/R+RUKkxz8MKoEoR1IrUZiJBcGw/Ga9RrKDZCldYsKYX10Psn7KBSZ70Pya9zW4BAB/wJpkOnCdCcYuFIJtJW4BRXcZ5RHXNnrz2cULpv5PWJcnuyIT9Cg+C4E1vJ0MiWQZFTIjV3oFKY07eDVa0dUCx0NSTSUzGlktOtxE3FXtogLMGR6cI6KrY9en8kmybpQ68pVQvpJaK3behCr2pwG3k/1qX06LRZ0pWpi0LOhiFWz/Ku1BLuBnhiaYcHkrm4UHVBJ5NhFq9/v0yWd5RmxrF8ZYmTnt0PJhP+uf0qPl+RW2opJLWbblVVFToNbBv/9GyyHSCoHHMRdRtQI5R+AEw5p7iC/vy2OT+TgXVsfpN0w35gMEls2A5njwprv/uqTlPw3rqHQ4eneWLrIYT9TabxDUZ0OfRO2hIj2B4azQE1Fhy1e7Ff67JUNG0OhhZV8ajMScvKx5kGaj2hnnZ4SfcAIkNbkDsquWCzpuEoR5Oj+/xinUpEFAvWvihwxqJYUNeyAICUK7csbkvAkJukZCrHLF9+vG1VrBmzStLfXnmasYnqp83ChmIjulOb1qew9uL44lzeXQT9JX+UDIZ4ykQhXrDDSJwpT5xFca02Ai3pu6GcKDa2diKLTp5vMoWK4kdEFPvt6HA0CZOyHksVnk986x+CbnMLPCiX5kH+QwHCLoRqd0AX6Q7m7c0T/Y/3WKQiwi8cV4Ui1aNG1S6Qvx15u8N5otN+dYWp88lw47SDJz4SKGS/7XZODt9d0TR83Iopb8JMezUvmNsLVRAX5RVshgtmrYqaUUmW5T3Gq7/a7Z3Wqy/xbb0W+zrQAQrv7aXTxPd8k2bGf5zmPLv79Zyc3WIwm2HODksc8T+v9OGsNzRqWP1zUBnpIpfe3h/T0qiGzLi3ErlnvWJ9PPtGEvYHO+6Rug==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Browse or search the nodes of a tree version"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cases/{caseId}/trees/{versionId}/nodes"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Without parent and q the roots are returned. With parent, its children. q matches name or code case-insensitively among those children, or across the whole tree when parent is absent.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"versionId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"parent","in":"query","schema":{"type":["string","null"]}},{"name":"q","in":"query","schema":{"type":["string","null"]}},{"name":"page","in":"query","required":true,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":true,"schema":{"type":"integer","format":"int32","default":50}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"items":{"type":"array","items":{"properties":{"code":{"type":"string"},"parent":{"type":["string","null"]},"name":{"type":"string"},"status":{"type":"string"},"successor":{"type":["string","null"]},"childCount":{"type":"integer","format":"int32"}},"required":["childCount","code","name","status"],"title":"TreeNodeSummary"}},"total":{"type":"integer","format":"int32"},"page":{"type":"integer","format":"int32"},"size":{"type":"integer","format":"int32"}},"required":["items","page","size","total"],"title":"TreeNodePage"}}}},"404":{"description":"Case, version or parent not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

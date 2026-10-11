@@ -1,0 +1,71 @@
+---
+id: create-case-tree
+title: "Upload a category tree as a new draft version"
+description: "Each upload creates a new immutable version stored as one blob. Activation is a separate step."
+sidebar_label: "Upload a category tree as a new draft version"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1Vt+P2jgQ/lcsP91JKWzb1T3QpzSga3QUViTsqUIrZJIBcpfEOdthixD/+83YAULYouqk4wE59szn+fHNjA/ciI3mgwVPhIZ3ChKpUs1fPJ6CTlRWmUyWfMBHItmyusqlSFmiQBjQTLASXllWFLURqxzYDpRGaaaNVJAyoZksga1yueoxPzHZThAYy0hTQyUUoqAwVD3ucVmBsudhite5KwI0KVYAeEzSBRi8AW098BI/SAwFUN7jGdlYCbPFtYJ/6gwN4AOjavC4TrZQCD44cLOvSCsrDWxAoehaqkIYt/XbIz8eX5w6aPNZpnvSSSRKl4aWoqryLLFG9v/SFJZDC7xS5ILJQNOXM/B05YJro7Jyg1eWdZ7zlyMuZOpEG6uEUmJPrhgo7P51AqYYSrwbNlLteywywtTahpICC0wqpsCQ258wus2S0R2sEHtG5lDU6yQBrVE4wRMK+7XVtNsyqTH6aMPfBOGOQ1cut5SvHLmHoK1Xb2KcLb+HcGwnf+G8aew6g2OGTWZyQidqTVAmLKvaYPI76i5BHfnAEnPmONLVIb7ZDV3JUruQfnh4f5vMoRJrc64XR3ai8X8km0HDnh0YVc8lQBemuwjdMv426D/D1bcr6OMHwsthB/nPCqMf2DmKu3XQ8dVKdRnSbVfBt2A88thw/jQOAz8eLYPpEL+/hlEUTn5fPvmz0ST2WDQPglEUTWfL5qS9NRvF4Ww09FizWP4Zxl+WfhCHz4j3JRzjUTh59sfhcBnFfjyPPPZ57E/+sJdRRcbT6fKrP/m2nOBGRP5eF9hNqLtuxFus7PUayhSlXDVbBEQqsBrE5q2C69D4JOg5uQ6fn1wCbtnfpPGU+1aqflARjvMEhEiPDw+3rH8WeZa6GXAC+4ROmS05h63MzQ1u1R9v1WkakDhby7pMrZ84EbaS5kUlsRo9NwEGvE9zQfcPbjwc+1Qf5ALV0ezS3kffRVHlcGnXrXQ4wi9OLfFycuqELdmO7rXV5+1TnbV2Lj3tnDyqtqxcS5vXJspDmdRD2GnmP4U3+OdDWhRoGsWWYCmoqNBjI6Gxdgx7xTlgJBKoxMZj2F7WiqWNkqYTzI1A/KYtIfb73sfegy1TDG8hylak5u4pIM4ziVGQaea7V0Ha7nBdo1tT9f9/WDTVYeC76Ve5wJcCOlSr3LYWyxf39iGCDM4PCkcZpPqWmIUih8MKz+YqPx5pG0mk8H2wwOVOqIzMtHRJM01r5ORa5BruOP7LrKm2X9mPrDx1xJL64U7kNX3h8m/YXx4/ljJbECm2WLLAHQbunncxQVyUb6bK0Ttp+EjGytyVfWlV3NM0ilF41TyTClcmSrzSCwz/raHS+m37tt078FyUm9r2Le4w6fcvRSyWPA==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Upload a category tree as a new draft version"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/trees"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Each upload creates a new immutable version stored as one blob. Activation is a separate step.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":["string","null"]},"nodes":{"type":"array","items":{"description":"One category. Status is active or retired; a retired node may name a successor code.","properties":{"code":{"type":"string"},"parent":{"type":["string","null"]},"name":{"type":"string"},"description":{"type":["string","null"]},"status":{"type":"string"},"successor":{"type":["string","null"]}},"required":["code","name","status"],"title":"TreeNodeInput"}}},"required":["nodes"],"title":"TreeCreateRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Draft version created","content":{"application/json":{"schema":{"properties":{"treeVersionId":{"type":["integer","null"],"format":"int64"},"status":{"type":["string","null"]},"nodes":{"type":"integer","format":"int32"},"levels":{"type":"integer","format":"int32"},"problems":{"type":"array","items":{"properties":{"type":{"type":"string","description":"CYCLE, DUPLICATE_CODE, MISSING_PARENT, SUCCESSOR_MISSING, SUCCESSOR_RETIRED, RETIRED_WITH_ACTIVE_CHILD, INVALID_STATUS, BLANK_CODE or TOO_MANY_NODES"},"code":{"type":["string","null"],"description":"The offending node code"},"message":{"type":"string"}},"required":["message","type"],"title":"TreeProblem"}}},"required":["levels","nodes","problems"],"title":"TreeCreateResponse"}}}},"400":{"description":"Validation problems; nothing is stored"},"404":{"description":"Case not found"}}}
+>
+  
+</StatusCodes>
+
+
+      

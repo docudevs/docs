@@ -1,0 +1,71 @@
+---
+id: review-case-classify-result
+title: "Accept, correct or comment on one classify result"
+description: "accept confirms the chosen code and correct supplies the right one; both write the record label with labelSource review in the knowledge base and take effect directly, so the product becomes evidence for later runs. A correction also adds a correction memo entry. feedback only stores a memo entry and never changes classification. Model proposals are never written back. Rows without a key and matching jobs record the review and memo entry but no record. The label write is asynchronous: labelWrite reports its state, and a repeated identical request returns the same review. Requests carrying the agent actor marker may only leave feedback."
+sidebar_label: "Accept, correct or comment on one classify result"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWN9v2zYQ/lcIPaWAamdtMWDuU5YERYet7dJkewiCgZbONmuJ1EjKjmD4f993pH4lTpMUGIY9NEBimbzjHe/u++6UXeLl0iWz6ySTjl5mhXROLZrkJk1ycplVlVdGJ7NEZhlVXmRGL5QtnfArEtnKONJYy0lInePBWsq8cHVVFYqikFXLlRdG01sxN34ltlZ5ijsEhVwUck6F2CrshcfPprYZ724UbYXSQXatzbagfEliDj+DNS/XJGixYIu5YsNFkwpngnxlTV5jYw4bJTzBYTlpHLswFmY8WWFr7SbipPMa1xSygLrMcyfkeLmk0gjS3jYTsSDK5zJb40ZFI5w3llh6EAm+adrAQraSeontNqoqk3zcRPyGgBXsYmUcTAppqdXg4HiElC1MxIXZuhAYU3vYWFM8vJQ+Wym9FF/M3HVRjAENIQsygz9zKGvTyk3EJQTbkIdMKNh3jc5W1mhTu1nc/DPsWaqM9U4o/DqPqKXhcMkbhK+54Kh6XKzA0t81OY9PX1sdc+9k2XmF20QBhENa27D/LCKXOEDIDIHExeya+KOJ0S1IbqiP+CRJE1ORDUF8n6Mm48mnKIjTtm4vyNWFh2AlLWwjzVzbu0TjCxS4xqGZJopLupJ+hWd2HOWDA72tKU1ctqJSJrNd4puKtZT2tCQLURQPgh+XfnyT7PdpfzRy8a+efBPVEbCfTd6wDqCH0vD8KBlfsZqmXxzjczc6/C5wT7qyMAtGYVeMDZY5VsIa5OYkonsM4ofgxSngsiXrAW+2BW1OxdM3us8nF7111FCy5+1MORXv0h7mvEWZHKi2VHTUctF9KnqR9nc4CkzUjHgoCAjUWo/jI4Z6WSKyL9gNFhhcuB580HVRHNJiZ4nrdXbPDoOFK1uhiDVzJDIQuElpDeh4S8TWWwAzuhcBBCN0B5csSTeOyzc6tV3FAJSBdbYSlAKoL99G8so7hmXGSOGn7xZy6SWTLbvg6dZ/gwN3SDKGpY0xY2aEi+sh7WlbSzjMK19w/gdUcwG3/IET9vehFRZcZbSLVfnq+PgQCB/XSfp8EN0r8+DB8yp9nz4fFY/W/Wjzg3nytNevnlG+kOA8n3NjGHv4NcE/QKDqbu0N1rvcH95paCFjzSAPDp9/QXGyoiyKj4vAz3cz9ZlbTYeWu1NCOzxIH7EViACg6UkL6INzlB8ylSq5lz07LUDfu1o9ESLuibV7mrF+vzq/Oj/769P5h7P3H96JGi2zCJdTOqdbBjtmFIdWyN0YPOZT3o0wjDbuRgMdOdzmAE39JXvfHoDTr0N29gfQPZmzfZAGzPdTA7vVjiaznjlTJu8n55PHAD+q7nSA2DOIIEKdmQCHv3kI7FeaJ0YtOhPgYn4uFDMv079UGCdD+4lVRHnK6zJOs6HCcGmmw4HEQRa0NLZJgtXXh1YvQ4biHMRTTjcDPzDkhDnKrbFvDus4GnhzaOAXM2exoXUHDxem1nnU+ekrTkEyk5qF59RPmdKJrv2ENGFgWhkerDCXxiEKY8wsmfLY5Ka7OD3tp90EMd2FoWc/jalz0GAevRjGlvNbWVYFjQaF4zHhDXCJtDV871resBI70IgalV5EUmxr5Mxk9RltnDj59P4AgP0mP3Af4uk7A+a4TKEwEefSKU7bFsMnUoI+gXnciwYvIyJvlUKyuC3i/E3HjMkPk9eTY/aIo1bKQJbtUBjHqmEeCRkOfRCd8aFp7L7jo6nv+xvY9zew/8EbWNvoGI7TqpB43UHl17YIM1Pgi/ivBGaDWf++1f9fAYvdm1LHGuD5FfMNFHc7rq0rW+z3vAxvQbazazxupFVyzkDnaUE5fgadLJA8egQzRxdt53khvuZ7uyg1O7eRRc3f8IhcD2+M/KL3H1qNIdrziLEimWNE4WvHvdNo5uUlnzDoHkyz7HLUiCz0qOzNiPw/ffx8CeF5+9pZRmq2css5w9/gpwnXjrMxr+0w8+lljVpi98OZ/PMPYtRwWg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Accept, correct or comment on one classify result"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/classify/{jobId}/reviews"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+accept confirms the chosen code and correct supplies the right one; both write the record label with labelSource review in the knowledge base and take effect directly, so the product becomes evidence for later runs. A correction also adds a correction memo entry. feedback only stores a memo entry and never changes classification. Model proposals are never written back. Rows without a key and matching jobs record the review and memo entry but no record. The label write is asynchronous: labelWrite reports its state, and a repeated identical request returns the same review. Requests carrying the agent actor marker may only leave feedback.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"description":"A review of one classify result row. Accept and correct take effect directly.","properties":{"rowId":{"type":"integer","format":"int64","description":"Result row id"},"decision":{"type":"string","description":"accept (confirm the chosen code), correct (supply the right code) or feedback (a comment)"},"code":{"type":["string","null"],"description":"correct only: the right code, an active node of the pinned tree (a record key for matching jobs)"},"reason":{"type":["string","null"],"description":"correct only: why the model was wrong; stored in the memo, not in the database"},"text":{"type":["string","null"],"description":"feedback only: the comment"}},"required":["decision","rowId"],"title":"ClassifyReviewRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"reviewId":{"type":"integer","format":"int64"},"rowId":{"type":"integer","format":"int64"},"decision":{"type":"string"},"decisionNo":{"type":"integer","format":"int32"},"code":{"type":["string","null"]},"memoEntryId":{"type":["string","null"]},"memoVersion":{"type":["integer","null"],"format":"int64"},"labelWrite":{"type":["null","object"],"allOf":[{"description":"State of the record label write that an accept or correct triggered.","properties":{"importId":{"type":"integer","format":"int64"},"jobGuid":{"type":["string","null"]},"status":{"type":"string","description":"QUEUED_PENDING until the indexing message is sent, then the status of the records import"}},"required":["importId","status"],"title":"ClassifyLabelWrite"}],"description":"Absent when no record is written: feedback, rows without a key and matching jobs"}},"required":["decision","decisionNo","reviewId","rowId"],"title":"ClassifyReviewResponse"}}}},"400":{"description":"Unknown decision, a declined or failed row accepted, or a code that is not an active category"},"403":{"description":"The request carries the agent actor marker and asks to accept or correct"},"404":{"description":"Job or result row not found"},"409":{"description":"The row cannot be written as a record"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: batch-case-records
+title: "Upsert and delete up to 1,000 records or 10 MB in one call"
+description: "Upsert and delete up to 1,000 records or 10 MB in one call"
+sidebar_label: "Upsert and delete up to 1,000 records or 10 MB in one call"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVU1v4jAQ/SuWT7tSWqCt9sCe+qUVh2or2p4QhyE24G5ie22HFqH8952JTQKlZb96oI4z8zx+781kwwMsPB9OeA5enjiZGyc8n2bcWOkgKKNHgg/5DEK+vMaQcYrIuAUHpQzSUfqGa3zAQILBjIwrjU8WwhLXTv6slJMIFFwlM+7zpSyBDzc8rC1lKR3kQjoMnRtXQohbXy54XU9juvThyog15eQGo3WgJVhbqLwps/fsjaa9Dtw6ukRQ0tNTZT0++J1TwTlYU6lBlv4w4Ydcd8ET7oNTeoHhuioKPq0zHuRrrEIIRSVAcb8HkI5JiTVmFDCTxXHQJuTBVC6XxwORexAQ4G8qqHe1mHQQ6S7IdVChoJSo8xXJPkJ6muqFLFDvowz+5sAtQtaq8f6R46j4WwByT7PhrdE+VnLWP6N/QvrcKUskINRlnksbpGBoJ4aq5tL7SN8/mkeV1rhArfAHns34s5l9q5R4hxE0f4BQfeCPXa7aIzu4NvmAtVETvL028YZoF/3+ITUjvYJCCdZ0NNVzMTg/jLozTrKwBM0GWb/fZ2kwMKRz0Gd3V19Z5SUDNleFZLHSZJFdlKdGZAZasKg8qywL5gNMpjQzWrIc0OGNv5eGZo816IQszpIh79GE8b1NHDR1L6EM432QK1Ry3A2M21cobSH3BsAk9XbXVKkv32xsu7BVaLrTA21LUi8qPTeNokmUG5NXN3Ll2eX9iL9lpX1JixLNuONQSjhlt+DRd4G9wJroQs+uiMc11sNESvL0JjUvvvURe3B6ftonVYm0EhpPp8n8X2Ls3aB1Lg2Nni0AZz0eWblmtEWd4geFOn3YfhL2pUIyl6Qshm42M4x5ckVd0zaK51CeCS5X4BTMiFMUTShPa/TEHAovD6pqe5t/GqdG+sxotr1X7XaCaZpf2BIVPeEyOiPVXJO4SwkC+7yzzXU85+SRILrkg3lSZ9uM2JhHY6c7jr///vCIwbP0wSuNoBwHL0Qi/jaFmubezSBp9jZoWr2oYEGxEZP+fgGTKbJb
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Upsert and delete up to 1,000 records or 10 MB in one call"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/records:batch"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Upsert and delete up to 1,000 records or 10 MB in one call
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"upserts":{"type":"array","items":{"properties":{"key":{"type":["string","null"]},"text":{"additionalProperties":{"type":"string"}},"label":{"type":["string","null"]},"labelSource":{"type":["string","null"]},"metadata":{"additionalProperties":{"type":"string"}}},"required":["metadata","text"],"title":"RecordBatchItem"}},"deletes":{"type":"array","items":{"type":"string"}}},"required":["deletes","upserts"],"title":"RecordBatchRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Accepted for processing","content":{"application/json":{"schema":{"properties":{"importId":{"type":"integer","format":"int64"},"jobGuid":{"type":"string"},"status":{"type":"string"}},"required":["importId","jobGuid","status"],"title":"RecordImportAccepted"}}}},"400":{"description":"Invalid batch"},"413":{"description":"More than 1,000 records or 10 MB; use a file import"}}}
+>
+  
+</StatusCodes>
+
+
+      

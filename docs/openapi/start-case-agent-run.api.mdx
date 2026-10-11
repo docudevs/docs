@@ -1,0 +1,71 @@
+---
+id: start-case-agent-run
+title: "Start a headless agent run"
+description: "Runs the case agent without a person present, as the person who starts it. Every turn is bounded; the run continues in further turns until it has investigated params.maxRows rows, used the budget or finished. Write tools only create pending actions for a person to confirm; costly tools run only inside the budget. Completion fires the organisation webhook. Agent tokens cannot start runs."
+sidebar_label: "Start a headless agent run"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV01v3DYQ/SsDXdoCynrjOD3YJ8dJixQoYjgOcjB84ErcFWMuqZKU18JC/z1vSGml9dpG0PbQQ30wZH4MZ+a9eTPeZkGsfHZ6k4mVNCG7zbNS+sKpOihrstPsqjGeQiWpEF5SPEQbFSrbBBJUS+etodpJj42cRDrbL28qSz4IFzypMKMP99K1FBpnSHla2MaUsjyLF1xjqLAmKNNIHDa0bBzWXTztqcGOhg2qBO/eSx/USgRZUi2cWPvZWjxc2Y0nh185NR47bHbRlCsZyDpaKqN8JcsZfXUqSArWak/W6JYKJ2EKPptSmRWJgiP3tMStXYDBsntL5dZn+PAB15IFdjxaUcarUk5endGFXddasjU8jwzFTetWAq6IuLyRi8rauxmdx7wGeyfxciGMsSFljh/wsyzPLDyJlz6WQCXuXQCReBEY4URMhQxwGHBuM4M/cJJhw5U8U4xmLUKFbyf/auARLAXXyDzzRSXXIjvdZqGt+ZYyQa6kw1GkYS1CWvr1JOu623QdELyzZct3GDjmDj5FXWtVRD+Pvnkm0HZifJ9Zn2N8giopSi2978mVMop19pzDchx6UNKziVqLdoGUTXz1wQG37DFxYQwZ0wz+hDGvllqsVoi8y7OVFXq0czMaMo3Wh5XwtRJhR1aPAtAllRacD7QGJeh4Pp9TUQGFgkE4oyHLtGjjvcGjXQxdD5qfehEfB96Lb7KI9Si0/rSMkO77c9mboRF4skskziU67OWtL5DpQyPGQ7xTrN8cH2T0T46SK2yXhUliUXavuUzezueppIcoqZRL0WioRiUB64KFgiNnIPb8Ec6J9tns/8bHYZizLe4kh2k3tLGQiYkbwO8HXkcxBDnN+gB9B7++2QWX2I/mCTXx2NULLbxXy5ZgijUQutmzLmVPOLknYodMeYKwE9bAyaCCZr+H8r9MNOpusZfk529RKlJ8UpGM8Vq05FkcZ3Q9kD/YGngLU+6LoZHwc9DMn/wgmVEOchR1MdVH7gEs1LOnuHptg9DXUQ7/ERTJxI6vHAve5AYT+IWctDCrBsKDEi6ljiGJBt3NKe4hxYAkeHaHK3AbTemMS15LgWp4/SQa7xICEQ1YWinzx79LKpR5qJRPPfmpYjwjrXwYA+dW62jqC/s9toGbUVhvx3iiQg9BXSXRx8XucQOJC75G10wAHs+PD+UeJtBbC1mD8Yjuh5vGPjcQzDSRLzSqWMm/N6p8usynsQ8H89787SGk54PnXYz/ZD4/jPCLuTN2Y3aVmtNaATPMFNxpuBHhobxvSEKrYXrhlb5oo+k3h6bPTd8d44iwPyEkwY83Tw5v8pBAfHjJ81Z8fUID4ikBhWtHqu/4lUY+Nvz2KZeud2MbN0J+YSEJFGmSoAXXxjyjMVWWR5YaShGnFEwgp9kR2/ZH2zSedEcxuiMednCGSXA1zhgfHgQPUvvtf+zWqY2Pfw8tdZC9QQ93MjityHnHk9HSRpL0mL+3RfNe3ns6v/x4UIe7Tf5YMyQgaCETzriAMVd4kBUdR7T93Ii5N1BrG4d5IV3yvFOKIGAfuz7Zfj17M5vHqQC5WotYCP0Y9/yw9NjDyTz2//D+Hxnee/kJ8iEcgcIqlmvj4vSZCuImDupM/tPdxJ7+I4ui5FmTKq4gnNxuFzjyxemu42XUCWrt9Aaf98IpsWASc2uHo/gGyZdCe/kCTX6+6sXwF3rO2X5RGJ7QIF4N/4XPO9mO/2TEhscMhSCzB2nzIr3z6ppNjJcPVL/LhxtJbF88eztRlstPn6+5zvt/R7iTY9WJDecOv6OjNsadegivbbOh9WM/2eSf79WcSBY=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Start a headless agent run"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/cases/{caseId}/agent/runs"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Runs the case agent without a person present, as the person who starts it. Every turn is bounded; the run continues in further turns until it has investigated params.maxRows rows, used the budget or finished. Write tools only create pending actions for a person to confirm; costly tools run only inside the budget. Completion fires the organisation webhook. Agent tokens cannot start runs.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"description":"Start a headless agent run on a case","properties":{"playbook":{"type":"string","description":"general or investigate-flagged"},"goal":{"type":["string","null"],"description":"What the run should do, at most 2000 characters; required by the general playbook"},"params":{"type":["null","object"],"allOf":[{"description":"Playbook parameters of a run","properties":{"maxRows":{"type":["integer","null"],"format":"int32","description":"Most rows the run investigates, 1 to 500; the playbook default when absent"},"flags":{"type":["array","null"],"description":"Flags that make a row worth investigating; the playbook default when absent","items":{"type":"string"}},"jobId":{"type":["integer","null"],"format":"int64","description":"Classify job whose flagged rows are investigated; required by the investigate-flagged playbook"}},"title":"AgentRunParams"}]},"budget":{"type":["null","object"],"allOf":[{"description":"What a headless run may spend. The run stops, and costly tools need a person's confirmation, once the budget is used.","properties":{"maxTotalTokens":{"type":["integer","null"],"format":"int64","description":"Tokens the run may use in total, language model and authorised classify work together; at least 1"}},"title":"AgentRunBudget"}]},"originJobId":{"type":["integer","null"],"format":"int64","description":"Classify job of this case the run investigates; lists the run under originJobId"}},"required":["playbook"],"title":"StartAgentRunRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Run accepted","content":{"application/json":{"schema":{"properties":{"runId":{"type":"integer","format":"int64"},"jobGuid":{"type":"string"}},"required":["jobGuid","runId"],"title":"AgentRunAccepted"}}}},"400":{"description":"Unknown playbook, missing goal or job, or invalid params or budget"},"403":{"description":"An agent token cannot start a run"},"404":{"description":"Case not found, or originJobId names no classify job of the case"},"503":{"description":"The run could not be queued; retry"}}}
+>
+  
+</StatusCodes>
+
+
+      
