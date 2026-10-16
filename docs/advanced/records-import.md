@@ -39,11 +39,13 @@ imp = await client.wait_for_import(case_id, import_id, on_progress=print)
 
 ## File import with curl
 
+Set `API` to the API base URL and `API_KEY` to your API key.
+
 1. Create the import.
 
    ```bash
-   curl -X POST "https://api.docudevs.ai/cases/42/records/imports" \
-     -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+   curl -X POST "$API/cases/42/records/imports" \
+     -H "Authorization: Bearer $API_KEY" -H "Content-Type: application/json" \
      -d '{"mode":"upsert","format":"csv","gzip":true}'
    ```
 
@@ -52,13 +54,14 @@ imp = await client.wait_for_import(case_id, import_id, on_progress=print)
     "expiresAt": "2026-10-01T12:00:00Z"}
    ```
 
-2. Split the file into blocks of at most 32 MiB and upload them through the API. Set `API` to the API base URL and `API_KEY` to your API key. Each block is a raw `application/octet-stream` body. Block indexes start at 0 and count up by one, and the file is the blocks concatenated in index order. Re-sending an index replaces that block, so a failed block is retried on its own. The upload window is 24 hours from the import's creation (`expiresAt`).
+2. Split the file into blocks of at most 32 MiB and upload them through the API. Each block is a raw `application/octet-stream` body. Block indexes start at 0 and count up by one, and the file is the blocks concatenated in index order. Re-sending an index replaces that block, so a failed block is retried on its own. The upload window is 24 hours by default from the import's creation (`expiresAt`).
 
    ```bash
+   rm -f block-*
    split -b 32m products.csv.gz block-
    i=0; for f in block-*; do
-     curl -X PUT "$API/cases/42/records/imports/302/upload/blocks/$i" \
-       -H "Authorization: Bearer $API_KEY" -H "Content-Type: application/octet-stream" --data-binary @"$f"
+     curl --fail-with-body -X PUT "$API/cases/42/records/imports/302/upload/blocks/$i" \
+       -H "Authorization: Bearer $API_KEY" -H "Content-Type: application/octet-stream" --data-binary @"$f" || break
      i=$((i+1))
    done
    ```

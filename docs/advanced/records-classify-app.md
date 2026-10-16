@@ -31,7 +31,7 @@ The API supports `GET /cases/{caseId}/records/stats?page=0&size=50&q=4.12`. Page
 
 Record cases accept records through **Imports**, using the dataset field mapping to turn rows into searchable records. They do not accept document uploads; the API rejects those with HTTP 409. Document lists, contract playbook controls, and the document embedding-index card are therefore absent from the records workspace.
 
-Start an import from a file or from a source URL, then commit it. The app sends a file to the API in 16 MiB blocks through its own server, so the app's request size limit does not cap the file; the API accepts up to 2 GiB. Larger files go through the SDK or the CLI. A snapshot sync runs as a wizard: a dry run, a summary with counts, samples and conflicts, then a confirmation. If the delete guard trips, you must tick a large-delete box before confirming. A failed import can be retried.
+Start an import from a file or from a source URL, then commit it. The app sends a file to the API in 16 MiB blocks through its own server, so the app's request size limit does not cap the file; the API accepts up to 2 GiB. A snapshot sync runs as a wizard: a dry run, a summary with counts, samples and conflicts, then a confirmation. If the delete guard trips, you must tick a large-delete box before confirming. A failed import can be retried.
 
 ## Category trees
 

@@ -647,8 +647,13 @@ paths:
       responses:
         "404":
           description: Job not found
+        "400":
+          description: "blockCount outside 1 to 50,000"
         "409":
-          description: "No file uploaded, upload window expired, or job failed"
+          description: "No file uploaded, upload window expired, job failed, or a\
+            \ block is missing (the message names its index)"
+        "413":
+          description: The uploaded file is larger than the source size cap (2 GiB)
         "202":
           description: Job queued
           content:
@@ -1755,8 +1760,13 @@ paths:
       responses:
         "404":
           description: Import not found
+        "400":
+          description: "blockCount outside 1 to 50,000"
         "409":
-          description: "No file uploaded, upload window expired, or import failed"
+          description: "No file uploaded, upload window expired, import failed, or\
+            \ a block is missing (the message names its index)"
+        "413":
+          description: The uploaded file is larger than the source size cap (2 GiB)
         "202":
           description: Import queued
           content:
