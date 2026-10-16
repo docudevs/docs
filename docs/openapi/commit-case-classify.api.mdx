@@ -5,7 +5,7 @@ description: "Idempotent: committing a queued job returns it unchanged."
 sidebar_label: "Finish a classify job whose file was uploaded"
 hide_title: true
 hide_table_of_contents: true
-api: eJy9VE1v2zAM/SuCThvgJl1XDFhuRbsN3WEr9nEqelBtOlZnS6pIJQ0M//eRlpOm7VYM2LCTZeqRIh8f2WsyS9SLS10ahIOyNYi23uirQleAZbSBrHd6oc8r6IIncLRQpe86S2TdUhl1myBBpW78tYpAKTpUllRyZWPcEqqZLrQPEI3EOa84UvY+5edOt68VOphoOiCIkkuvHf8IlEHsU2grKQRDDZ8j3CYbgUNRTFBoLBvojF70mjZBvKwjWEJkaO1jZyib3hzrYSh2oTnffxr5StwxeIeA4nF0eCSfhyR+ZJIyXxyi9E7oFJQJobXlSNH8BgXa7z0eohBINgfOif9JToVgPyS7h77USJH7xmiX2lZfMQjJUMK9iBOEr1Jovam+x/b5CHAXmDY8oWdge+lVhuCALLeBG7JH+uWuKVNK7ESWWslpK5WTsoRAjB4GcT4+PP41y86Tqn1ylR5Rb5+iPnlV2xZUrhGqYjqptXWVX6tcFJt9HMVdG0ZXY8os1MaLlINHGsXL8lnoucgV531W7TDfDtO8H+tiw6j8UXS1H7maqjvzZTqDFaqTi3P9ePJ2l3LoWDGKBVECh+b5Y4eZemeQxUFqbTaKPI+nW7Fe1ManqKrJCeWGmTccn28xx341ez07FIqkks6MwpsG5L11Fhse8G0ZIwvrxiNk4tYGd+Q9Trq/V/dfbY5JkQR3NA+t4WEVVWY9Ztbz4kLGLnbborzfK4utpCbuWVKNNI39+v6aHVjcwyBmziZu2M7HlYnWXEtneBVVFuXM7a5Ni/BMoS++TFJ+qX6X+mQ0TnJbmTbJHx9/wOZ+3cmW+o+vZoYGGeQGuJlxLDvf5XHb83qyqWTx7ebh4vPXbzwhPwGuBSij
+api: eJy9VE1P20AQ/SurPbWSIRRQpbonBG1FDxT144Q4TOxxvGDvmt3ZhMjyf++M7QRDKGpVtac4s/P55r1pNcEi6PRKZxBwL6sgBFOs9XWicwyZNw0ZZ3Wqz3OsG0doKVWZq2tDZOxCgbqLGDFXN26uPFL0NihDKtqsBLvAfF8n2jXoQfKc55xpiD7lcqebaoluwEONhF56abXlP+LKThyTaCMtNEAlf3u8i8YjpyIfMdEhK7EGnbaa1o1EGUu4QM+uhfM10GB6e6y7Ltmm5n7/UeZ55bLbUxctbdIzRF6GfIzoRazn6JUrVB8RVGwqBznm7zeGlaGSES7NomRHY3O8V4V3tQKrEHxl2ApEvBhS4FHlJmTgOYPe7f1q0ryNVSUbng5xdMhDXAsGoXE2YJDQw4ND+Xnc92fe9LB0TpU5K5wQL2iaymT9nmc3QVzbSReNFxaQGRIP6P8OsIn4foomn44SyDP5tpOwUyCgGCYZRxd+wvuGlxpO6IUMk7o5EO6R4VXyUieUuNpSZqzFQWSokmIbIp9kGTbE3l0nwccHx8/DZx2pghmS697r3a7XhVOFqXDLiWT8Yk7Y3K3UMBSbne+lVwB7533LLKPSidAaF6iXFpM71TMRU5i1g6a62Ubqs7afiw29LnvOFq7HapzuzGXxDJdBnVye77B4+ygfNVNB8aYz5NR8HThgX32AwFsntYK1IsfHwy6ZCGrtolf5GBTkhZEHzs+vYcj9Zv9o/0Agkklq6Bk1iuyjsSaIODZj9CisShdwAG4FD4J62nT7QNu/umsj1QjvadZUwFrnXqOver73qA9nNbBvur1l2cPVSzeUGrFnSpWyNI5r2zkH/PBV14l5OCFyGlnkMJddpwVUAV8Y7d8emGeHv8X10wu4hCqKo5brsgRvpPs/nOTV11GGr9WvKo9GsOtpzU1HI/hypf9j1WG7ndynEhl43489vA2nYhK1cz4Fr62WL798+87q/gnp9aGs
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,7 +47,7 @@ Idempotent: committing a queued job returns it unchanged.
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"blockCount","in":"query","description":"Number of blocks uploaded; blocks with a higher index from an earlier attempt are discarded","schema":{"type":["integer","null"],"format":"int32"}}]}
 >
   
 </ParamsDetails>
@@ -62,7 +62,7 @@ Idempotent: committing a queued job returns it unchanged.
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"202":{"description":"Job queued","content":{"application/json":{"schema":{"properties":{"jobId":{"type":"integer","format":"int64"},"jobGuid":{"type":["string","null"]},"status":{"type":"string"},"uploadUrl":{"type":["string","null"]},"expiresAt":{"type":["string","null"],"format":"date-time"}},"required":["jobId","status"],"title":"ClassifyAccepted"}}}},"404":{"description":"Job not found"},"409":{"description":"No file uploaded, upload window expired, or job failed"}}}
+  responses={{"202":{"description":"Job queued","content":{"application/json":{"schema":{"properties":{"jobId":{"type":"integer","format":"int64"},"jobGuid":{"type":["string","null"]},"status":{"type":"string"},"expiresAt":{"type":["string","null"],"format":"date-time"}},"required":["jobId","status"],"title":"ClassifyAccepted"}}}},"404":{"description":"Job not found"},"409":{"description":"No file uploaded, upload window expired, or job failed"}}}
 >
   
 </StatusCodes>

@@ -1,11 +1,11 @@
 ---
 id: create-case-record-import
 title: "Start a file import or snapshot sync"
-description: "Without sourceUrl the response carries a write-only uploadUrl for one staging blob; upload the file as a block blob, then call commit."
+description: "Without sourceUrl the import awaits an upload: send the file in blocks to upload/blocks/{index}, then call commit."
 sidebar_label: "Start a file import or snapshot sync"
 hide_title: true
 hide_table_of_contents: true
-api: eJzNVk1z4zYM/SscndoZJ3Z3tz04p3Sz22YmnWQcZ3LI5ABLsMWEIlWSsuN6/N8LkLQlf8Sb3ppDRpYAEHx4eMAq8zBz2fApy8HhmcXc2MJlz72sQJdbWXtpdDbMHqUvTeOFM43N8cEq4UsUFl1ttEORg7USnQCxsNLjmdFqKZpaGSjYdmqsMBqFo8OknomJMpOL9D0EmkqFAtifPuWvwaDHXzSFVkrkpqqkP896manRAid1XVBauUXw+JVSH4XMr6vaWE9mNVio0KPlu60yTT/YnAzJr5dJvlMNvqRni3830iKF87bBXubyEivIhqvML2v2ktrjDC2Z0j0q8PHVb1+y9fo5uqPzv5tiyT65IWvt+RHqWsk8JNt/cQzjqhN8F9/b8OCEmRIGAQ0ZriIIOaehdqUh8Jc6Zwxqyyh4ApwDVabATrbOW4I42y9gUztM4ShKtm4v8yNPXXDy7Jm7OTvO/pF1x21ijELQ/GXLjvbzUxtWN0odMuvP8fjuXjyMbgIRFsa+ohVT9ASUuxCGyi68abliTTMrE/l8YzUWLc84hcIuR43unr/J770E7gkPwYQdigKn0Cjv+EQmwwUVgwIK2xAPS9Azorg2vuT70FkVVZgfO4eFI4ilkxfMPZ9F7L2dBg7uVu0Vl4fQU0yPb92aUF/BkgnrsQp+u1Fyo5pKHw0UKX/wYd0l/NMmQDKnfL30iu3HlMd3iar4K12SPRVM8FRtGRP0UIAPFIeikAwyqLudrPdT2suJoekESph0ctvN6zm4c7OwJJzMDd6uUJEqfLeQx+p3K1dNQpNvWLJt9sI0EzqXAlBzT6WtbsDOMEY6RbSQ11ziAotR0tWPt8UrYs09V8RjOrFuuAh3hqRl+R/iRe9HyRpjk7jwrwNGpGunNu9FeemA3xXaUdS+/RJy64QXcTqEa38afDpUvRhFRBVnXf6weu62QbxOt/wnRJtkyoNvjjGxl72YyR+N/AGPWsH5OP6P7VxsFY/nYgzGU7E7CHlatqPwQtQEJgEjFmUwWAA1FrlEZ04c32oC3136kzm1nCbAz7yknt+v/xbLLU7vFj+Wl6tPMb4MBkcKrOegZCHMZrzZdoPgrH8dfD50eohaTwDRQmBRNBrmIEl7VMyWlKE0PP1r4+Kspzk+zPo83V1/FYf8up92mX68kCNDptGoHdff3qCqFbYztMVri9P2TRx6aUNox1xnaKbBE022o2EzEVqFal2O6NHguMjEoAdq0oY6Kg4dXks9NYEZqZBXJm+ucO7E5d31wcTffuSHimlH7Zajc0w5cjgX38BR6xEdYcmzklKe83axJGBEkZzCFE0KTl9djP3L+efzAWfExasgtHXazu49UIzT689+rp2F6/+zoyZV4bHVrxXIsBs1US4iWeO6zZwcbnfSze7dyzaMpcYrmeJkvlpNyI7yXK/5NXHYUoGf6HEOVobW4B2jkI6fiWVTUA5PgPXTKPX8z+K9jDcriOZxTH3c8C96DKvLZpcO47dEKEhrOYP48Ws852zMIVrnA01f9zYel3mOtT9p+9xp/bvb+zEZT9LWnfrXwoKBpP8h0aQ6bBDerWiB0bMGZmwbY/Lfv9behuo=
+api: eJzFVk1vIzcM/SvCnFrAidPtogfvKd1k2wApYjhZ7CHIgR7RthKNNJU0/qjh/15Skj3jj3i3p+YQjGdI6ol8fOS6CDD1xeC5KMHjhcPSOumLl14h0ZdO1UFZUwyKbyrMbBOEt40r8avTIsxQqKq2LghYgApegBFNrS3IgfBoZLSYKE1mRoy1Ld+8CDab9NOL/loZictNj42NKEFrUdqqUuGy6BW2RgcM4E4ShNIhBPxMMEcR5V08nMxqcFBhQMf3WBeGfrA5GZJfr1CMv4Ywo2eHfzfKIYULrsFe4csZVlAM1kVY1eylTMApOjKdWFdBSK9++1hsNi/JHX343coV+5SWrE3gR6hrrcoItv/qOWXrTvD9XD7EBy/sREBOUMqjdcIbqP3MUqJXpuQc1I6zEBR6DlRZiR20PjhlpsVhsZraYw5HUYpNe5nveRrJ4Nmz9HN2nP6j6o7b2FqNYPjLjgnt5+c2rGm0PmbRn09Pw0fxdXQfubGw7g2dmGCgRPlPwlLZW4acog8QqxI9GIF0q1Fjusdv4b13/iOlQ1ijVwMhcQKNDpGSzIVPVAsKKFxDNJyBmaIXxoYZX4fOqqjA/Ng5LB5BJB2/Yhn4LCLvwyRScL9ob7g6zjzFDLjslgScgxXzNWAV/fajlFY3lTkZKDH+6MOmy/fnbYBsTniDCprtnwjHF4Va/pUvyZ4axniutJwTDCAhRIaDlIqTDHq4h/oQ0gEmTk0nUM5JB9s+rpfozr3CinAWGyxvUJMofHFQpup3K1eNY49vWbLrdWmbMZ1LAai3J8pV9+CmmCKdI1rENVe4QDnKEvrjXfGGWHPLyXRMJ9Y9F2FoSVlW/yFe8v6mWGJc1hb+dcSIfO3c5b2kLp3kd3V2lKTvsITcOvGFr0nSUs0/XH04Fr0URSQRZ1n+YfHcb4N0nW75z2g2qVSA0JxiYq94teM/GvUdHuGypov663A2/y1/6HIXQVF/HRbllqSLBJ9FLevbgkafXRxNgaMq7W68u827JUpF4BpRjI9XVyfKYOagFUHZziDXjvR4MvXizPK4ra1Pw5UG56Do8zilcZ2m6qafF4V+AufJkAs3aufj7RKqWmM7tNqs7bK1e5OmTB7J7VzpTKks9clkJ8ZbDW41oXU5oQBXp9s6BT3q3zbUyXbsMEmZiY38yEW5sWVzg3Mvrod3R0TYfeSHijpAEMFL9J6CscOluAVPZA9iASueTgR5zuN8RYkRMjvFuZU1k776FPuXy18vrxgRF6+C2Eh5HXoMwJva2X3jEGtnw/l/FsDcszwU+rUGFRePJq0ciZhpb2X+DXYL33aJ7RVbdlLDzJjOZL5ej8mO8G82/Jr46qiYz/Q4B6eA1Z8nuFSen4lRE9AezyTmp1Hu1Z/Fe4i3A97wsKP+a/gXPcbFYLuoxuE2Q5CkZIwgffyczrl44hCt85Fibnpbj+uyxDqctX3ptPnw4fGJjMd5pc296mDBiaT/EWhWCzaI79a0HphpA1O2TTH571/tDUbI
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -36,7 +36,7 @@ import Heading from "@theme/Heading";
 
 
 
-Without sourceUrl the response carries a write-only uploadUrl for one staging blob; upload the file as a block blob, then call commit.
+Without sourceUrl the import awaits an upload: send the file in blocks to upload/blocks/\{index\}, then call commit.
 
 <Heading
   id={"request"}
@@ -54,7 +54,7 @@ Without sourceUrl the response carries a write-only uploadUrl for one staging bl
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"description":"Options of a file import or snapshot sync.","properties":{"mode":{"type":"string","description":"upsert or sync"},"format":{"type":"string","description":"ndjson or csv"},"gzip":{"type":"boolean"},"sourceUrl":{"type":["string","null"],"description":"HTTPS URL the worker fetches; omit to upload through the returned uploadUrl"},"dryRun":{"type":["boolean","null"],"description":"Sync only: defaults to true; a dry run changes nothing"},"mapping":{"type":["null","object"],"allOf":[{"properties":{"key":{"type":"string"},"text":{"type":"array","items":{"properties":{"column":{"type":"string"},"name":{"type":"string"}},"required":["column","name"],"title":"TextFieldMapping"}},"label":{"type":["string","null"]},"metadata":{"additionalProperties":{"type":"string"}}},"required":["key","metadata","text"],"title":"FieldMapping"}]},"reportId":{"type":["string","null"]},"maxDeleteFraction":{"type":["number","null"],"format":"double"},"confirmLargeDelete":{"type":["boolean","null"]},"reviewedRecords":{"type":["string","null"],"description":"keep or delete"},"reviewedLabelPolicy":{"type":["string","null"],"description":"reviewWins or importWins"}},"required":["format","gzip","mode"],"title":"RecordImportRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"description":"Options of a file import or snapshot sync.","properties":{"mode":{"type":"string","description":"upsert or sync"},"format":{"type":"string","description":"ndjson or csv"},"gzip":{"type":"boolean"},"sourceUrl":{"type":["string","null"],"description":"HTTPS URL the worker fetches; omit to upload the file in blocks and commit"},"dryRun":{"type":["boolean","null"],"description":"Sync only: defaults to true; a dry run changes nothing"},"mapping":{"type":["null","object"],"allOf":[{"properties":{"key":{"type":"string"},"text":{"type":"array","items":{"properties":{"column":{"type":"string"},"name":{"type":"string"}},"required":["column","name"],"title":"TextFieldMapping"}},"label":{"type":["string","null"]},"metadata":{"additionalProperties":{"type":"string"}}},"required":["key","metadata","text"],"title":"FieldMapping"}]},"reportId":{"type":["string","null"]},"maxDeleteFraction":{"type":["number","null"],"format":"double"},"confirmLargeDelete":{"type":["boolean","null"]},"reviewedRecords":{"type":["string","null"],"description":"keep or delete"},"reviewedLabelPolicy":{"type":["string","null"],"description":"reviewWins or importWins"}},"required":["format","gzip","mode"],"title":"RecordImportRequest"}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ Without sourceUrl the response carries a write-only uploadUrl for one staging bl
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"202":{"description":"Import created","content":{"application/json":{"schema":{"properties":{"importId":{"type":"integer","format":"int64"},"status":{"type":"string"},"jobGuid":{"type":["string","null"]},"uploadUrl":{"type":["string","null"],"description":"Write-only HTTPS URL for uploading the file as one block blob; present while awaiting upload"},"expiresAt":{"type":["string","null"],"format":"date-time"}},"required":["importId","status"],"title":"RecordImportResponse"}}}},"400":{"description":"Invalid options or sourceUrl"},"503":{"description":"Upload URLs are unavailable"}}}
+  responses={{"202":{"description":"Import created","content":{"application/json":{"schema":{"properties":{"importId":{"type":"integer","format":"int64"},"status":{"type":"string"},"jobGuid":{"type":["string","null"]},"expiresAt":{"type":["string","null"],"format":"date-time","description":"End of the upload window of a file import"}},"required":["importId","status"],"title":"RecordImportResponse"}}}},"400":{"description":"Invalid options or sourceUrl"}}}
 >
   
 </StatusCodes>

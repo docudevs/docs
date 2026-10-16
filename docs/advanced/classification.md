@@ -17,7 +17,7 @@ You need a records knowledge base first: a [records dataset](./records-datasets.
 | Input | How |
 | --- | --- |
 | Up to 1,000 rows and 10 MB | `rows: {"source": "inline", "items": [...]}` in the request |
-| A larger file | `rows: {"source": "upload", "format": "ndjson" or "csv"}`; upload the file to the returned `uploadUrl` as a block blob, then `POST .../classify/{jobId}/commit` |
+| A larger file | `rows: {"source": "upload", "format": "ndjson" or "csv"}`; upload the file in blocks of at most 32 MiB to `PUT .../classify/{jobId}/upload/blocks/{index}`, then `POST .../classify/{jobId}/commit?blockCount=n`, where `n` is the number of blocks. See [Importing records](./records-import.md#file-import-with-curl) for the block protocol. |
 | Records already in the knowledge base | `keys: ["sku-1", "sku-2", ...]`, at most 10,000 |
 
 An inline item is `{"key": "...", "text": {"title": "...", "description": "..."}, "metadata": {"brand": "..."}}`, using the **field names** of the dataset mapping. An uploaded file uses your **source column names**, like a records import, or the columns you map with `inputMapping` (below). The job pins the tree version, the memo version and the records table version when it starts, so later edits do not change a running job.
@@ -203,7 +203,7 @@ await client.download_classify_csv(case_id, job["jobId"], path="results.csv")
 await client.review_classify(case_id, job["jobId"], 17, "correct", code="4.12.3.1", reason="Plain cotton sock")
 ```
 
-- `classify` sends inline rows in one request up to 1,000 rows and 10 MB. Above that it uploads the rows as gzip ndjson, maps the columns for you and sets a default token budget. `keys=[...]` classifies records of the knowledge base, and `path="weekly.csv"` uploads a file (`config` must then include `max_total_tokens`).
+- `classify` sends inline rows in one request up to 1,000 rows and 10 MB. Above that it uploads the rows as gzip ndjson through the API in blocks, maps the columns for you and sets a default token budget. `keys=[...]` classifies records of the knowledge base, and `path="weekly.csv"` uploads a file (`config` must then include `max_total_tokens`).
 - `config` keys may be `snake_case` or `camelCase`.
 - `wait_for_classify` raises `ClassifyJobFailed` when the job fails or is cancelled.
 - `get_classify`, `cancel_classify` and `commit_classify` map one to one onto the endpoints. `get_classify_results_page` returns a single page with its `continuation`.

@@ -352,7 +352,8 @@ paths:
         "403":
           description: An agent token cannot start a run
         "404":
-          description: Case not found
+          description: "Case not found, or originJobId names no classify job of the\
+            \ case"
         "503":
           description: The run could not be queued; retry
         "202":
@@ -523,9 +524,9 @@ paths:
       - case-classify
       summary: Start a classify job
       description: "Send inline rows (at most 1,000 rows or 10 MB), rows.source upload\
-        \ (then upload the file to the returned uploadUrl and call commit), or record\
-        \ keys of the knowledge base (at most 10,000). The tree, memo and records\
-        \ table versions are pinned when the job starts."
+        \ (then send the file in blocks to upload/blocks/{index} and call commit),\
+        \ or record keys of the knowledge base (at most 10,000). The tree, memo and\
+        \ records table versions are pinned when the job starts."
       operationId: startCaseClassify
       parameters:
       - name: caseId
@@ -634,6 +635,15 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: blockCount
+        in: query
+        description: Number of blocks uploaded; blocks with a higher index from an
+          earlier attempt are discarded
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
       responses:
         "404":
           description: Job not found
@@ -895,6 +905,51 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ClassifyReviewResponse"
+  /cases/{caseId}/classify/{jobId}/upload/blocks/{index}:
+    put:
+      tags:
+      - case-classify
+      summary: Upload one block of a classify job's file
+      description: "Send the file in blocks of at most 32 MiB with indexes 0, 1, 2,\
+        \ ... and then call commit. Re-sending an index replaces that block. Accepted\
+        \ while the job awaits its upload."
+      operationId: uploadCaseClassifyBlock
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+        required: true
+      responses:
+        "400":
+          description: Invalid index or empty block
+        "404":
+          description: Job not found
+        "409":
+          description: "Job is not waiting for an upload, or the upload window expired"
+        "413":
+          description: Block larger than 32 MiB
+        "204":
+          description: Block stored
   /cases/{caseId}/dataset:
     get:
       tags:
@@ -1614,8 +1669,8 @@ paths:
       tags:
       - case-records
       summary: Start a file import or snapshot sync
-      description: "Without sourceUrl the response carries a write-only uploadUrl\
-        \ for one staging blob; upload the file as a block blob, then call commit."
+      description: "Without sourceUrl the import awaits an upload: send the file in\
+        \ blocks to upload/blocks/{index}, then call commit."
       operationId: createCaseRecordImport
       parameters:
       - name: caseId
@@ -1633,8 +1688,6 @@ paths:
       responses:
         "400":
           description: Invalid options or sourceUrl
-        "503":
-          description: Upload URLs are unavailable
         "202":
           description: Import created
           content:
@@ -1690,6 +1743,15 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: blockCount
+        in: query
+        description: Number of blocks uploaded; blocks with a higher index from an
+          earlier attempt are discarded
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
       responses:
         "404":
           description: Import not found
@@ -1737,6 +1799,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RecordImportResponse"
+  /cases/{caseId}/records/imports/{importId}/upload/blocks/{index}:
+    put:
+      tags:
+      - case-records
+      summary: Upload one block of a file import
+      description: "Send the file in blocks of at most 32 MiB with indexes 0, 1, 2,\
+        \ ... and then call commit. Re-sending an index replaces that block. Accepted\
+        \ while the import awaits its upload."
+      operationId: uploadCaseRecordImportBlock
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+        required: true
+      responses:
+        "400":
+          description: Invalid index or empty block
+        "404":
+          description: Import not found
+        "409":
+          description: "Import is not waiting for an upload, or the upload window\
+            \ expired"
+        "413":
+          description: Block larger than 32 MiB
+        "204":
+          description: Block stored
   /cases/{caseId}/records/stats:
     get:
       tags:
@@ -3602,6 +3710,74 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/result/{guid}/layout:
+    get:
+      tags:
+      - job
+      summary: "Get the provider-neutral document layout (pages, words, paragraphs,\
+        \ tables, figures, sections) for an OCR-processed job"
+      operationId: getDocumentLayout
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: batchIndex
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      - name: pages
+        in: query
+        description: "1-based page selection, e.g. 1-3,7. Defaults to all pages."
+        schema:
+          type:
+          - string
+          - "null"
+      - name: include
+        in: query
+        description: "Comma-separated parts to include: content, words, paragraphs,\
+          \ tables, figures, sections. Defaults to all."
+        schema:
+          type:
+          - string
+          - "null"
+      responses:
+        "200":
+          description: getDocumentLayout 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocumentLayout"
+  /job/result/{guid}/ocr-quality:
+    get:
+      tags:
+      - job
+      summary: Get the OCR quality summary for an OCR-processed job
+      operationId: getOcrQuality
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: batchIndex
+        in: query
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      responses:
+        "200":
+          description: getOcrQuality 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OcrQuality"
   /job/result/{guid}/pdf-acroform:
     get:
       tags:
@@ -4552,6 +4728,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TrialAttestationResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/workflow:
+    get:
+      tags:
+      - knowledge-base-profiles
+      summary: Where the case is in contract-analysis setup
+      description: "The current setup step, the running or failed rule build, the\
+        \ rebuild waiting to be applied with its change counts, and test and publish\
+        \ readiness."
+      operationId: getContractAnalysisWorkflow
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Contract-analysis workflow state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisWorkflowResponse"
+        "404":
+          description: Profile capability is disabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
   /llm/keys:
     get:
       tags:
@@ -5225,11 +5430,19 @@ paths:
         "400":
           description: Operation request rejected
         "404":
-          description: Contract-analysis capability is disabled
+          description: Contract-analysis capability is disabled or the parent job
+            was not found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+        "409":
+          description: Contract-analysis run identity conflicts or the publication
+            must be revalidated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
   /operation/{jobGuid}:
     get:
       tags:
@@ -6511,10 +6724,6 @@ components:
           - "null"
         status:
           type: string
-        uploadUrl:
-          type:
-          - string
-          - "null"
         expiresAt:
           type:
           - string
@@ -6775,6 +6984,14 @@ components:
             \ modelNamedDifferentBestFit and sourcesDisagree"
           items:
             type: string
+        maxTotalTokens:
+          type:
+          - integer
+          - "null"
+          format: int64
+          description: "Tokens the investigation run may use in total, at least 1;\
+            \ the configured default (agent.run.default-budget-tokens, 300000) when\
+            \ absent"
       required:
       - enabled
     ClassifyJobPage:
@@ -7148,6 +7365,19 @@ components:
       - fieldValues
       - name
       - secretFieldsSet
+    ContractAnalysisBuildState:
+      properties:
+        generationJobGuid:
+          type: string
+        status:
+          type: string
+        error:
+          type:
+          - string
+          - "null"
+      required:
+      - generationJobGuid
+      - status
     ContractAnalysisPackageContext:
       properties:
         asOfDate:
@@ -7155,6 +7385,21 @@ components:
           - string
           - "null"
           format: date
+    ContractAnalysisPendingRebuild:
+      properties:
+        generationJobGuid:
+          type: string
+        reviewStatus:
+          type: string
+        counts:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/RebuildChangeCounts"
+      required:
+      - generationJobGuid
+      - reviewStatus
     ContractAnalysisReviewResponse:
       properties:
         runId:
@@ -7352,6 +7597,45 @@ components:
       - resultAvailable
       - runId
       - status
+    ContractAnalysisWorkflowResponse:
+      description: "Where a case is in the contract-analysis setup, so clients render\
+        \ one state instead of combining several."
+      properties:
+        step:
+          type: string
+        draftRevision:
+          type: integer
+          format: int64
+        publishedRevision:
+          type: integer
+          format: int64
+        ruleCount:
+          type: integer
+          format: int32
+        build:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ContractAnalysisBuildState"
+        pendingRebuild:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ContractAnalysisPendingRebuild"
+        testCaseCount:
+          type: integer
+          format: int32
+        readyToPublish:
+          type: boolean
+      required:
+      - draftRevision
+      - publishedRevision
+      - readyToPublish
+      - ruleCount
+      - step
+      - testCaseCount
     ContractPackageDocumentRequest:
       properties:
         documentId:
@@ -7737,6 +8021,59 @@ components:
       - executionId
       - resourceClass
       - status
+    DocumentLayout:
+      description: "Provider-neutral document layout. Offsets in every span refer\
+        \ to the full-document \\[content\\]."
+      properties:
+        version:
+          type: integer
+          format: int32
+        provider:
+          type: string
+        contentFormat:
+          type:
+          - string
+          - "null"
+        contentLength:
+          type: integer
+          format: int32
+        content:
+          type:
+          - string
+          - "null"
+        pages:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutPage"
+        paragraphs:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutParagraph"
+        tables:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutTable"
+        figures:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutFigure"
+        sections:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutSection"
+      required:
+      - contentLength
+      - pages
+      - provider
+      - version
     DocumentStatus:
       enum:
       - PENDING
@@ -8165,6 +8502,24 @@ components:
       required:
       - baselineEvalId
       - candidateEvalId
+    EvalGrouping:
+      description: How the held-out records are kept out of each other's evidence.
+        Mode nearDuplicate (the default) also leaves out every record whose text is
+        a near-duplicate of a sampled record; field groups by groupField; none is
+        ungrouped and its accuracy is optimistic.
+      properties:
+        mode:
+          type: string
+          description: "nearDuplicate, field (requires groupField) or none"
+        threshold:
+          type:
+          - number
+          - "null"
+          format: double
+          description: "Cosine similarity at or above which a record counts as a near-duplicate;\
+            \ above 0 and at most 1; default 0.98, only for nearDuplicate"
+      required:
+      - mode
     EvalHoldoutRequest:
       description: "Start a holdout evaluation: a grouped sample of labelled records\
         \ is classified once per variant with the held-out records left out of the\
@@ -8204,6 +8559,14 @@ components:
             $ref: "#/components/schemas/EvalVariantRequest"
             description: One variant of a holdout evaluation. Variants share the sample
               and are classified separately.
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalGrouping"
+          description: Grouping of the held-out records; omitted means nearDuplicate.
+            Cannot be combined with groupField unless its mode is field
       required:
       - variants
     EvalMemoRequest:
@@ -8230,6 +8593,12 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/ClassifyConfig"
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalGrouping"
     EvalReport:
       description: Scored result of a holdout evaluation. Variant 0 is the baseline;
         comparisons pair each other variant with it.
@@ -8257,6 +8626,12 @@ components:
             $ref: "#/components/schemas/EvalReportComparison"
         limits:
           type: string
+        warnings:
+          type:
+          - array
+          - "null"
+          items:
+            type: string
       required:
       - comparisons
       - levels
@@ -8352,6 +8727,36 @@ components:
       required:
       - accepted
       - flags
+    EvalReportGrouping:
+      properties:
+        mode:
+          type: string
+        groupField:
+          type:
+          - string
+          - "null"
+        threshold:
+          type:
+          - number
+          - "null"
+          format: double
+        neighbourLimit:
+          type:
+          - integer
+          - "null"
+          format: int32
+        groupMembersExcluded:
+          type:
+          - integer
+          - "null"
+          format: int32
+        rowsAtNeighbourCap:
+          type:
+          - integer
+          - "null"
+          format: int32
+      required:
+      - mode
     EvalReportLeaveOut:
       properties:
         leakedRows:
@@ -8396,6 +8801,12 @@ components:
           type:
           - string
           - "null"
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalReportGrouping"
         tableVersion:
           type:
           - integer
@@ -8558,6 +8969,12 @@ components:
           - "null"
           items:
             type: string
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalGrouping"
       required:
       - sampleSize
       - seed
@@ -9014,6 +9431,220 @@ components:
       - import
       - review
       - total
+    LayoutBoundingRegion:
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        polygon:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutPoint"
+      required:
+      - pageNumber
+      - polygon
+    LayoutFigure:
+      properties:
+        id:
+          type: string
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+        elements:
+          type: array
+          items:
+            type: string
+        captionRef:
+          type:
+          - string
+          - "null"
+      required:
+      - boundingRegions
+      - elements
+      - id
+    LayoutPage:
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        width:
+          type:
+          - number
+          - "null"
+          format: double
+        height:
+          type:
+          - number
+          - "null"
+          format: double
+        unit:
+          type:
+          - string
+          - "null"
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        words:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutWord"
+      required:
+      - pageNumber
+      - spans
+    LayoutParagraph:
+      properties:
+        id:
+          type: string
+        role:
+          type:
+          - string
+          - "null"
+        content:
+          type: string
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+      required:
+      - boundingRegions
+      - content
+      - id
+      - spans
+    LayoutPoint:
+      properties:
+        x:
+          type: number
+          format: double
+        "y":
+          type: number
+          format: double
+      required:
+      - x
+      - "y"
+    LayoutSection:
+      properties:
+        id:
+          type: string
+        elements:
+          type: array
+          items:
+            type: string
+      required:
+      - elements
+      - id
+    LayoutSpan:
+      properties:
+        offset:
+          type: integer
+          format: int32
+        length:
+          type: integer
+          format: int32
+      required:
+      - length
+      - offset
+    LayoutTable:
+      properties:
+        id:
+          type: string
+        rowCount:
+          type: integer
+          format: int32
+        columnCount:
+          type: integer
+          format: int32
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+        cells:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutTableCell"
+      required:
+      - boundingRegions
+      - cells
+      - columnCount
+      - id
+      - rowCount
+      - spans
+    LayoutTableCell:
+      properties:
+        rowIndex:
+          type: integer
+          format: int32
+        columnIndex:
+          type: integer
+          format: int32
+        rowSpan:
+          type:
+          - integer
+          - "null"
+          format: int32
+        columnSpan:
+          type:
+          - integer
+          - "null"
+          format: int32
+        kind:
+          type:
+          - string
+          - "null"
+        content:
+          type: string
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+        elements:
+          type: array
+          items:
+            type: string
+      required:
+      - boundingRegions
+      - columnIndex
+      - content
+      - elements
+      - rowIndex
+      - spans
+    LayoutWord:
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+        confidence:
+          type:
+          - number
+          - "null"
+          format: double
+        span:
+          $ref: "#/components/schemas/LayoutSpan"
+        polygon:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutPoint"
+      required:
+      - content
+      - id
+      - polygon
+      - span
     LlmKeyBindingDto:
       properties:
         key:
@@ -9625,6 +10256,28 @@ components:
           - "null"
       required:
       - ocr
+    OcrConfidenceDetails:
+      properties:
+        meanTrimmed:
+          type:
+          - number
+          - "null"
+          format: double
+        highConfidenceRatio:
+          type:
+          - number
+          - "null"
+          format: double
+        midConfidenceRatio:
+          type:
+          - number
+          - "null"
+          format: double
+        lowConfidenceRatio:
+          type:
+          - number
+          - "null"
+          format: double
     OcrKeyBindingDto:
       properties:
         key:
@@ -9670,6 +10323,54 @@ components:
       - modelId
       - name
       - status
+    OcrQuality:
+      properties:
+        version:
+          type: integer
+          format: int32
+        provider:
+          type: string
+        requestedOcrMode:
+          type: string
+        effectiveOcrMode:
+          type: string
+        escalatedToPremium:
+          type: boolean
+        qualityScore:
+          type:
+          - number
+          - "null"
+          format: double
+        qualityCategory:
+          type:
+          - string
+          - "null"
+        wordCount:
+          type:
+          - integer
+          - "null"
+          format: int32
+        confidenceDetails:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/OcrConfidenceDetails"
+        rationale:
+          type:
+          - string
+          - "null"
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - effectiveOcrMode
+      - escalatedToPremium
+      - provider
+      - requestedOcrMode
+      - version
+      - warnings
     OcrType:
       enum:
       - DEFAULT
@@ -11064,6 +11765,25 @@ components:
       - expectedReviewRevision
       - idempotencyKey
       - resultFingerprint
+    RebuildChangeCounts:
+      properties:
+        added:
+          type: integer
+          format: int32
+        changed:
+          type: integer
+          format: int32
+        removed:
+          type: integer
+          format: int32
+        conflicting:
+          type: integer
+          format: int32
+      required:
+      - added
+      - changed
+      - conflicting
+      - removed
     RecordBatchItem:
       properties:
         key:
@@ -11144,8 +11864,8 @@ components:
           type:
           - string
           - "null"
-          description: HTTPS URL the worker fetches; omit to upload through the returned
-            uploadUrl
+          description: HTTPS URL the worker fetches; omit to upload the file in blocks
+            and commit
         dryRun:
           type:
           - boolean
@@ -11195,17 +11915,12 @@ components:
           type:
           - string
           - "null"
-        uploadUrl:
-          type:
-          - string
-          - "null"
-          description: Write-only HTTPS URL for uploading the file as one block blob;
-            present while awaiting upload
         expiresAt:
           type:
           - string
           - "null"
           format: date-time
+          description: End of the upload window of a file import
       required:
       - importId
       - status
@@ -11804,6 +12519,13 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/AgentRunBudget"
+        originJobId:
+          type:
+          - integer
+          - "null"
+          format: int64
+          description: Classify job of this case the run investigates; lists the run
+            under originJobId
       required:
       - playbook
     StoredActionRequest:

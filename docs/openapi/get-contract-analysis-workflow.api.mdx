@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-workflow
+title: "Where the case is in contract-analysis setup"
+description: "The current setup step, the running or failed rule build, the rebuild waiting to be applied with its change counts, and test and publish readiness."
+sidebar_label: "Where the case is in contract-analysis setup"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVk1v20YQ/SuLPbWAbLmJ0YNvrhIE6aWG4yAHw4chORQ3Xu0yu0OpgsD/3pklJZGSbCsFCvQkandmdubNm4+NJphHffOon51fWSzmeJFBxIs6+NJYjPppoguMeTA1Ge/0jX6oUOVNCOhIRaSmVpGwniji89A4Z9xc+aBKYPWCTyyqrDG26CUw/VErMCSS5FWGCuraGpZeGaqUoajyCtyc3/GNozhR4ApFGCl91E1mTazYFBTGYYyXeqJ9jQHEw88F+zhHmnlHAXK6dWDX0cRvPjyX1q9YtoYACyQMEvhGO/7DOjmHzcoTbSTKGqji74A/GhOQbVJocKJjXuEC9M1G07oWLeMI5xhYtPRhAdQd/X6t2/ZJ1GPtXWQYWePd1ZX8jNHcunkBvZ9q1TvKsAIhG85ZhMEW3YRTnuKcfo9iYDNwaWz5W4WBkVUSl2K7xqUE5EcPpiROVPQq5yQw3oysKzAo77BzgnU5x1AoX7L+IjMpyRGXjLkV9JktjD+ZLlDhwwCiSIHFdctEClDSPS5NNJ3vb4LIprtsY/GTekK8mdDnTfn370Q+0XIv+6hdY60QK/uOOUkZgLV/lYkx43Dn6Hru/emzT40pTsYuQDbx5BWG4MPw6f5q0vnw1LZDIj6eeHBnnt0kQxYHzNoWwB8S4JfEqfZJgOUk8yv3+F9HHjhxuPrycvxdlf8rD6AosDgzw11POVc64MIvz7ftXcmVKS3tLI2DjHZh7F0cG9w7M0hvn7dZ0ph1CLZnUWWUj1cIczcmSCKNNOEZN5SfqSzp0+sHf9cV8kAp894iuCM0xm3iVAs4Mjqs90nXgA6dfSXS7Wy479s1eyQ+XV9dH7fVu24wclutITPW0Fqaa2EiZHabufPa9ZjJuS/wZHUseMLB/PTd7tm3QU32Bxp7wwNg+uBmu9i+OljyIBeVETjJL6p8P2zTUOWBeaOn4z0iTjfdXG2n241iejSBpqv9bDau9Cma3qMPPm8+4DKq27vP+nAV2V3Kx0IWEn4k57BkPLHCpfoI0cjesIK1rBr8NM8sUmvfBFX0SlFuCiBg+3zbzRj92+X7y6s0gHykBaTc9ZtCN1nTMN3P1hfm6qHPmz0//qebVM8jwr9pWlvgbYhBaIJNlE1JPlwWI2vd7Nan3ebYlcIIEz7b5ZppVzG0Ym6zETNfg21bOf7RYFjzOX8uIRghX2r9e7aXYCO+guwv9z3zf1UvRdQfgltL2sE28o8/n3G9XwZTz6sYHW5t4kF3eZvnWNNA7ajOZffb1cenjw9cM/8AOC//Ww==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Where the case is in contract-analysis setup"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/workflow"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+The current setup step, the running or failed rule build, the rebuild waiting to be applied with its change counts, and test and publish readiness.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Contract-analysis workflow state","content":{"application/json":{"schema":{"description":"Where a case is in the contract-analysis setup, so clients render one state instead of combining several.","properties":{"step":{"type":"string"},"draftRevision":{"type":"integer","format":"int64"},"publishedRevision":{"type":"integer","format":"int64"},"ruleCount":{"type":"integer","format":"int32"},"build":{"type":["null","object"],"allOf":[{"properties":{"generationJobGuid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["generationJobGuid","status"],"title":"ContractAnalysisBuildState"}]},"pendingRebuild":{"type":["null","object"],"allOf":[{"properties":{"generationJobGuid":{"type":"string"},"reviewStatus":{"type":"string"},"counts":{"type":["null","object"],"allOf":[{"properties":{"added":{"type":"integer","format":"int32"},"changed":{"type":"integer","format":"int32"},"removed":{"type":"integer","format":"int32"},"conflicting":{"type":"integer","format":"int32"}},"required":["added","changed","conflicting","removed"],"title":"RebuildChangeCounts"}]}},"required":["generationJobGuid","reviewStatus"],"title":"ContractAnalysisPendingRebuild"}]},"testCaseCount":{"type":"integer","format":"int32"},"readyToPublish":{"type":"boolean"}},"required":["draftRevision","publishedRevision","readyToPublish","ruleCount","step","testCaseCount"],"title":"ContractAnalysisWorkflowResponse"}}}},"404":{"description":"Profile capability is disabled","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"disabled":{"type":"boolean"}},"required":["code","disabled","message"],"title":"ProfileCapabilityUnavailableResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

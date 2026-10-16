@@ -11,7 +11,7 @@ Pick the path that fits the size of your data. All of them return a `jobGuid` yo
 | Input | Use |
 | --- | --- |
 | Up to 1,000 records or 10 MB | `POST /cases/{caseId}/records:batch` |
-| A larger file on your machine | File import: create, upload to `uploadUrl`, commit |
+| A larger file on your machine | File import: create, upload in blocks, commit |
 | A file you host | Import with `sourceUrl`; DocuDevs fetches it |
 | A full export that should become the dataset | Snapshot sync (`mode: sync`), with a dry run first |
 
@@ -26,7 +26,7 @@ result = await client.bulk_upsert_records(case_id, "products.csv", wait=True,
 ```
 
 - Up to 1,000 rows (and 10 MB) of ndjson or row dictionaries are sent as one batch.
-- CSV files and anything larger become a file import. The SDK gzip-compresses the input, uploads it to the import's `uploadUrl` as a block blob and commits it.
+- CSV files and anything larger become a file import. The SDK gzip-compresses the input, uploads it through the API in blocks and commits it.
 - `mapping=` overrides the dataset mapping for one call.
 - `wait=True` polls until the import completes and returns the final import, including counters.
 
@@ -48,24 +48,30 @@ imp = await client.wait_for_import(case_id, import_id, on_progress=print)
    ```
 
    ```json
-   {"importId": 301, "status": "AWAITING_UPLOAD",
-    "uploadUrl": "https://<account>.blob.core.windows.net/incoming/...?sv=...",
+   {"importId": 302, "status": "AWAITING_UPLOAD",
     "expiresAt": "2026-10-01T12:00:00Z"}
    ```
 
-2. Upload the file to `uploadUrl` as a block blob. The URL is write-only, valid for about one hour and does not need your API key.
+2. Split the file into blocks of at most 32 MiB and upload them through the API. Set `API` to the API base URL and `API_KEY` to your API key. Each block is a raw `application/octet-stream` body. Block indexes start at 0 and count up by one, and the file is the blocks concatenated in index order. Re-sending an index replaces that block, so a failed block is retried on its own. The upload window is 24 hours from the import's creation (`expiresAt`).
 
    ```bash
-   curl -X PUT "$UPLOAD_URL" -H "x-ms-blob-type: BlockBlob" --data-binary @products.csv.gz
+   split -b 32m products.csv.gz block-
+   i=0; for f in block-*; do
+     curl -X PUT "$API/cases/42/records/imports/302/upload/blocks/$i" \
+       -H "Authorization: Bearer $API_KEY" -H "Content-Type: application/octet-stream" --data-binary @"$f"
+     i=$((i+1))
+   done
    ```
 
-3. Commit.
+3. Commit with the number of blocks. After the loop, `$i` holds the block count.
 
    ```bash
-   curl -X POST "https://api.docudevs.ai/cases/42/records/imports/301/commit" -H "Authorization: Bearer $TOKEN"
+   curl -X POST "$API/cases/42/records/imports/302/commit?blockCount=$i" -H "Authorization: Bearer $API_KEY"
    ```
 
-`format` is `ndjson` or `csv`. `gzip` states that the uploaded file is gzip-compressed. CSV and ndjson rows are mapped with the dataset field mapping, or with a `mapping` object in the request. Committing is idempotent. An upload that is not committed before `expiresAt` cannot be committed; start a new import.
+   Always send `blockCount`. The commit then uses exactly blocks `0` to `blockCount - 1` and discards blocks left over from an earlier, abandoned upload attempt. Without it, every uncommitted block is used. The commit returns `409` when a block is missing (the message names the first missing index), when the upload window has expired or when nothing was uploaded. It returns `413` when the file is larger than 2 GiB.
+
+`format` is `ndjson` or `csv`. `gzip` states that the uploaded file is gzip-compressed. CSV and ndjson rows are mapped with the dataset field mapping, or with a `mapping` object in the request. Committing is idempotent: committing an upload that is already committed is harmless. A file that is not committed before `expiresAt` cannot be committed; start a new import.
 
 ## Import from a URL
 
@@ -83,7 +89,7 @@ The URL must be `https`, must not contain user information and must not point at
 
 | Status | Meaning |
 | --- | --- |
-| `AWAITING_UPLOAD` | Waiting for the file at `uploadUrl`. |
+| `AWAITING_UPLOAD` | Waiting for the file's blocks and the commit. |
 | `COMMITTING`, `QUEUED` | Accepted and waiting for the worker. |
 | `RUNNING` | The worker is applying it. |
 | `COMPLETED` | Applied. |

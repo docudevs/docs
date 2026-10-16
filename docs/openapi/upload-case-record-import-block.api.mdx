@@ -1,0 +1,71 @@
+---
+id: upload-case-record-import-block
+title: "Upload one block of a file import"
+description: "Send the file in blocks of at most 32 MiB with indexes 0, 1, 2, ... and then call commit. Re-sending an index replaces that block. Accepted while the import awaits its upload."
+sidebar_label: "Upload one block of a file import"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVE1v2zAM/SuEThvg2GlSDFhu/dghhwFF156KHhSLqYXakibJSYPA/32k5KZdt+y0FdihqSyST/x4fHsR5UMQiztRy4ATj7X1Koj7QigMtdcuamvEQnxDoyA2CGvdImgDq9bWjwHsGmSEzoYI8xl81eew1bEhB4VPGGBawEkBswLKsgSZIQzUsm2htl2nYwnXOAkErs0DOeRA8OhaWVN8bAg9PVXCWV2ji6hg23AOnIzunPUR5FbqGID/etdaqUpRCOvQS85+qSj/fH9BNV6nEpcp8pyRyddJLzuM6LkTe2Hog2K4IxRcCM0dcDI2dPb4vdceCTP6HgsR6gY7KRZ7EXeOo7SJ+ICeXNfWdzLmq0+nYhiKA3RO/F+Bcw//DvJ8Rsj3ORxDPLdqxzG1JW8T+Sida3WdGl3ZOmKchOhRdmx7eeSAudJG+h2BDm9zShfBWRMwcMhsesr/fqZhGhiEaDmMIk6n01+dlmYjW61GLlkP2Lm4yzTKQb9BzoQAYyOsbW9G9M9HHXVIvsw8pi4VyPTNNCv4UeZn/qSVMMpuAZ+cfs77ZH6suFZ6mgMz34wrxcMVRM/GMpNdHxNjaawLUTFHQ7XPVB2qcX+rzC8yPBNtqHIuVd5bMnBzhsSStU080LFlIlzaur/ETYCzq6V4KwMHIx86ogA4b2lRA/eAAkr4IoMmplBjdhAtbbnZILVrZ3sPagwKbFEySsIna8jYJ+W8nHJzHKlJJw0nNTL6NvfRGsxTTLIzSlEq8G2iryj6H0rXuJIRn2JFaLTH1JXet1xXHnyW60C+i4NKPWt3MapLsr4SmoxPh1x/sialoP1uqAuMut+vCO7Wt8PA17T0tKyLOzpupNdyxQwhgVQ68JnouJZtwD80/8P1uOQf4Vhh46U0O6aDbHv+ouMj7l5EmOXtHV89tO29300DGe7JsUGpSI+53dl2kZ+Z3DDCS+xRAWbdPqjG1e0NT37U784qDvVyy7yhX0qBJPkHr4O6/w==
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Upload one block of a file import"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/cases/{caseId}/records/imports/{importId}/upload/blocks/{index}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Send the file in blocks of at most 32 MiB with indexes 0, 1, 2, ... and then call commit. Re-sending an index replaces that block. Accepted while the import awaits its upload.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"importId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"index","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/octet-stream":{"schema":{"format":"binary"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"204":{"description":"Block stored"},"400":{"description":"Invalid index or empty block"},"404":{"description":"Import not found"},"409":{"description":"Import is not waiting for an upload, or the upload window expired"},"413":{"description":"Block larger than 32 MiB"}}}
+>
+  
+</StatusCodes>
+
+
+      

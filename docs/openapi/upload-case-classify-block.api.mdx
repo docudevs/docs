@@ -1,0 +1,71 @@
+---
+id: upload-case-classify-block
+title: "Upload one block of a classify job's file"
+description: "Send the file in blocks of at most 32 MiB with indexes 0, 1, 2, ... and then call commit. Re-sending an index replaces that block. Accepted while the job awaits its upload."
+sidebar_label: "Upload one block of a classify job's file"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVUtv00AQ/iujvQCSY6dJhURufXAoElJV2hPqYWJP6qX2rtldJ7Us/3dmvE4KpeUElTgk2cfMt/P45kuvAt55tfqqcvQ0yyv0Xm86dZuognzudBO0NWqlvpApIJQEG10RaAPryub3HuwGMEBtfYDlAj7rU9jpULJBQQ/kYZ7AUQKLBNI0BYwQBnKsKshtXeuQwhXNPINrc8cG0REcNRXm7B9KRh+fSuEkz6kJVMCulBgkmG92DbhDHTzIp20qi0WqEmUbciihXxQcfDw/4wzPpgRPBZLtGnRYUyAnNeiV4Q3bSy3YMVFaUm8wlLx29L3VjhgvuJYS5fOSalSrXoWuES9tAt2RY9ONdTWGePT+WA1DcoDmiP8R8li5v4O8XDDybXQnH05t0YlPbtnaBFli01Q6Hyuc2TxQmPngCGu5e3zkgLnWBl3HoMPTmMYD31jjyYvLYn4sP7+Sb+wW+GDFjT2O5/PfjS7MFitdTAyyDqhuQhfJE52eQf7EBDI2wMa2ZoL+8LyV9qOhkE2oyqkJXSOzEnlO+Bi3PAKmsDugh0bvIz5avpRWhY47IEw30whJWxWzsrRC3qYNI1G5oSuVCTV91keGDtl+YLN+JNaQxQiyOJ1ZPxZjGFmxsWPfdaik8ec2b89p6+Hk8kI9HfbDpSxqbjk0zvI4esmcHVL4iF4zM7gcHQTLs2y25AJ0tnVQTE5ebgoMyPh86yP2UbpM51KShjWjRiNBTQy+idWzhmLXRnGBfYoy7G/8qD9PA/6Jmv+bUE1zGOghZAzFw8ulaV0lScWeR2n2bLs66NJBp/lwrygRkxcxYbmKksCDXHLagtT3a4a4cdUwyDFPN0/l6isvt+g0roUaLIOF9rJm9m2w8vSHar+9mqb5HbyUzHSIRqLlEW1lx8t76h6lVnTsFV+NNXvlR2M3hls2LAkLVl2pdbw7i8/MrgXh0fdFmRV1PijE5c21tH1S6doW4upwJ38A/M0hsPD+AOHkq6Q=
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Upload one block of a classify job's file"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/cases/{caseId}/classify/{jobId}/upload/blocks/{index}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Send the file in blocks of at most 32 MiB with indexes 0, 1, 2, ... and then call commit. Re-sending an index replaces that block. Accepted while the job awaits its upload.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"jobId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"index","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/octet-stream":{"schema":{"format":"binary"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"204":{"description":"Block stored"},"400":{"description":"Invalid index or empty block"},"404":{"description":"Job not found"},"409":{"description":"Job is not waiting for an upload, or the upload window expired"},"413":{"description":"Block larger than 32 MiB"}}}
+>
+  
+</StatusCodes>
+
+
+      

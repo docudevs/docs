@@ -220,6 +220,12 @@ const sidebar: SidebarsConfig = {
           label: "Accept, correct or comment on one classify result",
           className: "api-method post",
         },
+        {
+          type: "doc",
+          id: "openapi/upload-case-classify-block",
+          label: "Upload one block of a classify job's file",
+          className: "api-method put",
+        },
       ],
     },
     {
@@ -273,6 +279,12 @@ const sidebar: SidebarsConfig = {
           id: "openapi/retry-case-record-import",
           label: "Retry a failed import",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/upload-case-record-import-block",
+          label: "Upload one block of a file import",
+          className: "api-method put",
         },
         {
           type: "doc",
@@ -1053,6 +1065,12 @@ const sidebar: SidebarsConfig = {
           id: "openapi/record-contract-analysis-source-authority-decision",
           label: "recordContractAnalysisSourceAuthorityDecision",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-contract-analysis-workflow",
+          label: "Where the case is in contract-analysis setup",
+          className: "api-method get",
         },
       ],
     },
