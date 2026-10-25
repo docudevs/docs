@@ -83,6 +83,8 @@ When the similar records and the category matches disagree about the family at t
 
 `GET /cases/{caseId}/classify/{jobId}` returns the status (`QUEUED`, `RUNNING`, `COMPLETED`, `FAILED`, `CANCELLED`), `counts` (`total`, `done`, `declined`, `flagged`, `failed`, `skipped`), token `usage`, and the pinned `treeVersionId`, `memoVersion` and `recordsTableVersion`. `POST .../cancel` stops the job at the next chunk boundary. A failed row is recorded with its reason and retried once at the end of the job; it does not fail the job.
 
+A job started right after the first records import of a case waits for the case's search index to finish building. It stays `RUNNING` with no rows done meanwhile, and fails with a clear reason if the index is not ready within 10 minutes.
+
 ## Results
 
 `GET /cases/{caseId}/classify/{jobId}/results` pages the rows (`limit` 1 to 1,000, default 100). A running job returns the rows written so far with `complete: false`. Follow `continuation` for the next page.
