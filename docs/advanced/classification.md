@@ -20,7 +20,7 @@ You need a records knowledge base first: a [records dataset](./records-datasets.
 | A larger file | `rows: {"source": "upload", "format": "ndjson" or "csv"}`; upload the file in blocks of at most 32 MiB to `PUT .../classify/{jobId}/upload/blocks/{index}`, then `POST .../classify/{jobId}/commit?blockCount=n`, where `n` is the number of blocks. See [Importing records](./records-import.md#file-import-with-curl) for the block protocol. |
 | Records already in the knowledge base | `keys: ["sku-1", "sku-2", ...]`, at most 10,000 |
 
-An inline item is `{"key": "...", "text": {"title": "...", "description": "..."}, "metadata": {"brand": "..."}}`, using the **field names** of the dataset mapping. An uploaded file uses your **source column names**, like a records import, or the columns you map with `inputMapping` (below). The job pins the tree version, the memo version and the records table version when it starts, so later edits do not change a running job.
+An inline item is `{"key": "...", "text": {"title": "...", "description": "..."}, "metadata": {"brand": "..."}}`, using the **field names** of the dataset mapping. With `keys`, each record is left out of its own evidence, so the result shows how the record would be classified without its current label. An uploaded file uses your **source column names**, like a records import, or the columns you map with `inputMapping` (below). The job pins the tree version, the memo version and the records table version when it starts, so later edits do not change a running job.
 
 ```json
 {
