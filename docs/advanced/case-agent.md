@@ -85,7 +85,7 @@ A conversation keeps the session for you, so each reply sends only your new mess
 
 ```python
 run = await case.agent_run_and_wait("investigate-flagged", job=job, max_tokens=250_000)
-print(run.report.get("questions"))
+print((run.report or {}).get("questions"))
 
 chat = run.conversation()
 reply = await chat.reply("Record that packaged roasted coffee (beans or ground) is 8.2.2 Coffees.")
