@@ -18,7 +18,7 @@ The agent orchestrates and investigates. It can start a classify job from instru
 |-------|---------|
 | `caseId` | The case the agent works on. The case must belong to your organization; otherwise `404`. |
 | `playbook` | `general` (the default) or `investigate-flagged`. Any other value is `400`. Playbooks need a `caseId`. |
-| `context` | Ids only, in the form `classify:{jobId}:{rowId}`, which points the agent at one row of a classify job. Any other format is `400`. |
+| `context` | Ids only. `classify:{jobId}:{rowId}` points the agent at one row of a classify job. `run:{runId}` replies to a [headless run](./agent-runs.md): the agent reads the run's report and questions, and a run of another case is `404`. Any other format is `400`. |
 
 ```bash
 curl -X POST https://api.docudevs.ai/agent/chat \
@@ -33,6 +33,8 @@ curl -X POST https://api.docudevs.ai/agent/chat \
     "playbook": "general"
   }'
 ```
+
+A session belongs to one organization and one case. A `sessionId` sent for another case starts a new history. Session ids are letters, digits, `-` and `_`, up to 64 characters; anything else is `400`.
 
 The chat is a job, as in the general agent. Poll `GET /agent/status/{jobGuid}` until it completes. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md).
 
@@ -77,6 +79,26 @@ for action in status.get("pendingActions") or []:
     print(action["id"], action["summary"])
 ```
 
+### Reply to the agent
+
+A conversation keeps the session for you, so each reply sends only your new message. `run.conversation()` starts one about a headless run, so you can answer the questions in its report:
+
+```python
+run = await case.agent_run_and_wait("investigate-flagged", job=job, max_tokens=250_000)
+print(run.report.get("questions"))
+
+chat = run.conversation()
+reply = await chat.reply("Record that packaged roasted coffee (beans or ground) is 8.2.2 Coffees.")
+print(reply.message)
+for action in reply.pending_actions:  # the actions this reply proposed
+    print(action.tool, "-", action.summary)
+    await action.confirm()  # you confirm; the agent never does
+
+reply = await chat.reply("Also correct row 28 of that job.")
+```
+
+`case.conversation(context="classify:55:17")` starts a conversation about one row, and `case.conversation(session_id=chat.session_id)` resumes an earlier one. `reply()` waits up to 600 seconds by default.
+
 ## Status of the flows
 
 The agent flows below were run on the MINI tier in the P3 live check (2026-10-09). The check used a real case and kept its data out of the repository.
@@ -90,11 +112,11 @@ Confirmed live:
 - An investigate turn, after the step-limit fixes, reads row evidence in about 5 to 6 tool calls and ends with a question.
 - A headless run started after a classify job completes, is listed under that job, and saves its report.
 - A memo A/B evaluation runs through the evaluation endpoint.
+- A headless run that nears its budget saves its report before it stops (demo, 2026-10-27: 68,078 of 80,000 tokens, summary and one question saved).
 
 Not yet confirmed live:
 
 - A classify job whose input rows are read from the records table (the keys source) after its fix. Inline rows on the same worker succeeded.
-- The budget stop of a headless run after its fix. Before the fix one turn used 3.6 times the budget.
 - An agent-proposed holdout evaluation started from the chat. The A/B run was started directly.
 - The `RECORDS_MATCH` extraction tool.
 - The webhook when an agent run ends.
