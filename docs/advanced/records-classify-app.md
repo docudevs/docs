@@ -10,7 +10,7 @@ The web app covers the same ground as the [records](./records-datasets.md), [cat
 
 ## Where to find it
 
-Open a case. A case with a records dataset shows links to **Records**; every case shows a link to the **Memo**. The Records area has four tabs:
+Open a case from **Cases**. A case with a configured records dataset opens directly in its **Records** workspace, with the case name, description, and links to **Memo** and **Pending actions**. The **Cases** link returns to the cases list. The Records area has four tabs:
 
 | Tab      | What it does                                                                                                                                                            |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -22,6 +22,8 @@ Open a case. A case with a records dataset shows links to **Records**; every cas
 Changing a dataset setting that needs a reindex asks you to confirm before it resends the change with the reindex flag.
 
 ## Importing records
+
+Record cases accept records through **Imports**, using the dataset field mapping to turn rows into searchable records. They do not accept document uploads; the API rejects those with HTTP 409. Document lists, contract playbook controls, and the document embedding-index card are therefore absent from the records workspace.
 
 Start an import from a file or from a source URL, then commit it. Files are streamed through the app to storage and are limited by the size the app server accepts. Larger files go through the SDK or the CLI. A snapshot sync runs as a wizard: a dry run, a summary with counts, samples and conflicts, then a confirmation. If the delete guard trips, you must tick a large-delete box before confirming. A failed import can be retried.
 
