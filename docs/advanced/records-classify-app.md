@@ -21,6 +21,12 @@ Open a case from **Cases**. A case with a configured records dataset opens direc
 
 Changing a dataset setting that needs a reindex asks you to confirm before it resends the change with the reindex flag.
 
+Choose **Browse** beside a category to filter its records and jump to the record browser. Keyboard focus moves there too.
+
+Categories load in pages of 50, ordered by total record count and then code. Use the page controls to reach later categories. Enter a category-code fragment and choose **Filter** to search across all categories; filtering starts at the first page. The record and unlabelled counts remain totals for the whole dataset.
+
+The API supports `GET /cases/{caseId}/records/stats?page=0&size=50&q=4.12`. Pages are zero-based, size is 1–200, and `q` is a case-insensitive category-code substring. The response includes only that page's `labels` and a `pagination` object with `page`, `size`, `total` (matching categories), and `totalCategories` (all labelled categories). Omitting every paging option preserves the complete stats response. Deploy the updated API before the UI; this change does not require worker, database, or infrastructure updates.
+
 ## Importing records
 
 Record cases accept records through **Imports**, using the dataset field mapping to turn rows into searchable records. They do not accept document uploads; the API rejects those with HTTP 409. Document lists, contract playbook controls, and the document embedding-index card are therefore absent from the records workspace.

@@ -5,6 +5,24 @@ description: User-focused updates for the DocuDevs Python and Java SDKs.
 
 # SDK Changelog
 
+## 2026-10-27
+
+### Highlights
+
+- Record category statistics support paging and category-code filtering, including large category trees.
+
+### Python SDK
+
+- `record_stats(case_id, page=0, size=50, q="4.12")` returns a category page and global record totals. The CLI accepts `--page`, `--size`, and `--q`.
+
+### Java SDK
+
+- Generated `getCaseRecordStats(caseId, page, size, q)` calls expose the optional paging parameters and response metadata.
+
+### Migration Notes
+
+- Deploy the updated API to use paging. Omit options in the Python helper for the complete response; generated Java calls pass `null` for all three optional parameters to request the complete response.
+
 
 <!-- sdk-changelog-fingerprint: ca7d5121ec49631b -->
 ## 2026-10-10 10:30 UTC
