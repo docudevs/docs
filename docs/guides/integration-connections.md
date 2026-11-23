@@ -85,13 +85,25 @@ To verify access, run **SharePoint List** against the intended library with the 
 
 ## Google Workspace
 
-1. In Google Cloud Console, enable **Google Drive API** for Drive workflows and **Google Sheets API** for Sheets workflows. Create a service account in the project. [Enable Workspace APIs](https://developers.google.com/workspace/guides/enable-apis)
-2. Create and download a JSON key for the service account. In Drive or Sheets, share the file or folder with the service account's email. Use Viewer for downloads, exports, and reads. For uploads, use a shared drive and give the service account permission to add files. Service accounts use shared drives for files they create. [Create a service account and share Workspace files](https://developers.google.com/workspace/guides/create-credentials) · [Shared drive access](https://developers.google.com/workspace/drive/api/guides/about-shareddrives)
-3. Create a **Google Workspace** connection and paste the full key into **Service Account JSON**. Configure the file, folder, or spreadsheet ID on the node. Use **Google Drive Export** for native Docs, Sheets, and Slides, and **Google Drive Download** for files stored in Drive. Verify using one accessible sample file. [Drive downloads and exports](https://developers.google.com/workspace/drive/api/guides/manage-downloads)
+### Enable the APIs
+
+In Google Cloud Console, select the project in the top bar and open **APIs & Services → Library**. Search for **Google Drive API**, open it, and click **Enable**. For Sheets nodes, repeat for **Google Sheets API**. [Enable Workspace APIs](https://developers.google.com/workspace/guides/enable-apis)
+
+### Create a service account and JSON key
+
+1. In the same project, open [IAM & Admin → Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). Click **Create service account**.
+2. Enter a name such as `DocuDevs Drive`. Review the generated service account ID, then click **Create and continue**. Leave the optional project roles and principals empty and finish with **Done**. You’ll grant access on the Drive folder, spreadsheet, or bucket. [Create a service account](https://docs.cloud.google.com/iam/docs/service-accounts-create)
+3. Back in **Service Accounts**, open the new account and copy its email address, for example `docudevs-drive@my-project.iam.gserviceaccount.com`. You’ll use this address when granting access.
+4. On the account’s **Keys** tab, choose **Add key → Create new key → JSON → Create**. Your browser downloads the key file. If key creation is blocked, ask your Google Cloud administrator to check whether your permissions or organization policy allow JSON keys. [Create a service account key](https://docs.cloud.google.com/iam/docs/keys-create-delete)
+
+### Share the Drive folder or spreadsheet
+
+1. In Google Drive, open the source folder’s **Share** dialog. For a single spreadsheet, you can use **Share** in Google Sheets. Add the service account email, choose **Viewer**, clear **Notify people**, and save. For uploads, use a shared drive and grant the account a role that can add files. [Share Workspace files with a service account](https://developers.google.com/workspace/guides/create-credentials#access_google_workspace_files_directly_with_a_service_account) · [Shared drive access](https://developers.google.com/workspace/drive/api/guides/about-shareddrives)
+2. In DocuDevs, create a **Google Workspace** connection and paste the entire downloaded file into **Service Account JSON**. For **Google Drive Folder Downloads**, copy the ID from the `/folders/FOLDER_ID` part of the source URL into **Folder ID** on the node. Try the flow with a small folder of sample PDFs. For **Google Sheets Read**, use the ID from `/spreadsheets/d/SPREADSHEET_ID/` and an A1 range such as `Sheet1!A1:D20`. Use **Google Drive Export** for native Docs, Sheets, or Slides. [Drive downloads and exports](https://developers.google.com/workspace/drive/api/guides/manage-downloads)
 
 ## Google Cloud Storage
 
-1. Create or select a service account in Google Cloud and download its JSON key. On the target bucket, grant **Storage Object Viewer** for list and download, or **Storage Object Creator** for creating new objects. Choose an object role that includes the required overwrite or delete permissions when your workflow uses those operations. [Cloud Storage IAM roles](https://docs.cloud.google.com/storage/docs/access-control/iam-roles)
+1. Follow [Create a service account and JSON key](#create-a-service-account-and-json-key) for the Cloud Storage connection. In Google Cloud Console, open **Cloud Storage → Buckets**, select your bucket, and choose **Permissions → Grant access**. Enter the service account email in **New principals**. Choose **Storage Object Viewer** for list and download or **Storage Object Creator** for creating new objects, then click **Save**. Choose a role that includes overwrite or delete permissions if your workflow uses those operations. [Grant access to a bucket](https://docs.cloud.google.com/storage/docs/access-control/using-iam-permissions#add-principal) · [Cloud Storage IAM roles](https://docs.cloud.google.com/storage/docs/access-control/iam-roles)
 2. Create a **Google Cloud Storage** connection. Paste **Service Account JSON** and set **Project ID** for the Google Cloud project used by the connector. Enter the bucket and object path on the workflow node, for example `gs://invoice-intake/inbound/`.
 3. Verify by downloading a sample object or uploading a test file under the intended prefix.
 
