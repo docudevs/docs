@@ -15,6 +15,40 @@ An organization admin creates a managed connection under **Integrations → Conn
 2. Under **Certificates & secrets → Client secrets**, create a client secret. Copy its **Value** while it is visible. [Create a client secret](https://learn.microsoft.com/en-us/entra/msidweb/authentication/client-secrets)
 3. Under **API permissions → Add a permission → Microsoft Graph → Application permissions**, add `Sites.Selected` and have a tenant admin grant consent. Have a SharePoint administrator grant the app access to the specific site. Use `read` for list and download, or `write` for upload. A separate admin identity makes this grant. [Selected permissions](https://learn.microsoft.com/en-us/graph/permissions-selected-overview) · [Grant an app access to a site](https://learn.microsoft.com/en-us/graph/api/site-post-permissions?view=graph-rest-1.0)
 
+### Register the app with Azure CLI
+
+As an alternative to registering the app in the portal, run the following commands in Bash. Replace the tenant ID with the ID of the tenant that owns the SharePoint site. A Global Administrator in that tenant runs the `admin-consent` command. Run each command successfully before moving to the next one. [Azure CLI app registration](https://learn.microsoft.com/en-us/cli/azure/ad/app) · [Grant admin consent with Azure CLI](https://learn.microsoft.com/en-us/cli/azure/ad/app/permission#az-ad-app-permission-admin-consent)
+
+```bash
+TENANT_ID="your-entra-tenant-id"
+az login --tenant "$TENANT_ID" --allow-no-subscriptions --output none
+
+CLIENT_ID=$(az ad app create \
+  --display-name "DocuDevs SharePoint" \
+  --sign-in-audience AzureADMyOrg \
+  --query appId --output tsv)
+
+az ad sp create --id "$CLIENT_ID" --output none
+
+# Microsoft Graph application permission Sites.Selected
+az ad app permission add --id "$CLIENT_ID" \
+  --api 00000003-0000-0000-c000-000000000000 \
+  --api-permissions 883ea226-0bf2-4a8f-9f9d-92c9162a727d=Role
+
+az ad app permission admin-consent --id "$CLIENT_ID"
+
+printf 'Tenant ID: %s\nClient ID: %s\n' "$TENANT_ID" "$CLIENT_ID"
+```
+
+Run the next command in a private terminal. It prints the new **Client Secret** value once. Paste it directly into the managed connection or store it in your organization's secret manager. The `--append` option preserves any existing credentials. [Azure CLI app credentials](https://learn.microsoft.com/en-us/cli/azure/ad/app/credential#az-ad-app-credential-reset)
+
+```bash
+az ad app credential reset --id "$CLIENT_ID" --append \
+  --display-name "DocuDevs SharePoint" --query password --output tsv
+```
+
+The app can access the site after the separate site grant below. Make that grant with an approved Microsoft Graph admin client that has `Sites.FullControl.All`. The DocuDevs app keeps `Sites.Selected`. [Grant an app access to a site](https://learn.microsoft.com/en-us/graph/api/site-post-permissions?view=graph-rest-1.0)
+
 ### Find the site, library, and folder IDs
 
 Use an authorized Graph admin client to run the first two requests with your hostname and site path. Copy the complete site `id`, including its comma-separated components. From the drives response, find the entry whose `name` or `webUrl` matches the document library and copy its `id`. For a nested upload folder, get the folder item and copy its `id`. The folder path in that lookup is relative to the library root. [Get a site by path](https://learn.microsoft.com/en-us/graph/api/site-getbypath?view=graph-rest-1.0) · [List a site's drives](https://learn.microsoft.com/en-us/graph/api/drive-list?view=graph-rest-1.0) · [Get a drive item by path](https://learn.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0)
