@@ -13,7 +13,7 @@ Get up and running with DocuDevs in just a few minutes. This guide covers everyt
 
 ## Prerequisites
 
-- **Python 3.9+** (for SDK usage)
+- **Python 3.10+** (for SDK usage)
 - **API Key** from DocuDevs platform
 - **Internet connection** for API access
 

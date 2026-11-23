@@ -24,7 +24,7 @@ By the end of this tutorial, you'll know how to:
 
 ## Prerequisites
 
-- Python 3.9+ installed on your system
+- Python 3.10+ installed on your system
 - A DocuDevs API key ([contact us](mailto:support@docudevs.ai) to get started)
 - A sample document (PDF, Word, or image file)
 

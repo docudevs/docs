@@ -5,6 +5,12 @@ description: User-focused updates for the DocuDevs Python and Java SDKs.
 
 # SDK Changelog
 
+## 2026-11-06
+
+### Python SDK
+
+- The SDK now requires Python 3.10 or later, from version 1.15.0. Python 3.9 reached end of life in October 2025, and the patched `anyio` needs 3.10. Projects still on Python 3.9 stay on 1.14.0.
+
 ## 2026-10-27
 
 ### Highlights
@@ -23,6 +29,60 @@ description: User-focused updates for the DocuDevs Python and Java SDKs.
 
 - Deploy the updated API to use paging. Omit options in the Python helper for the complete response; generated Java calls pass `null` for all three optional parameters to request the complete response.
 
+
+
+<!-- sdk-changelog-fingerprint: 2cb42a696088fd98 -->
+## 2026-10-27 16:18 UTC
+
+### Highlights
+- Added interactive agent conversations for cases and runs.
+- New AgentConversation and AgentReply types to manage chat-style agent interactions.
+- AgentReply exposes the agent message, tools used, and pending agent actions.
+- RecordsCase and AgentRun gained conversation() helpers to start or resume chats.
+
+### Python SDK
+- New AgentConversation class: create a chat, send a message, and wait for a reply with reply().
+- New AgentReply class: access message, tools_used, and pending_actions from the agent reply.
+- RecordsCase.conversation(...) starts a conversation scoped to the case and can resume sessions.
+- AgentRun.conversation() starts a conversation pre-scoped to the run (context 'run:{runId}').
+
+### Java SDK
+- No Java SDK user-facing updates in this commit.
+
+### Migration Notes
+- If you import exported names from the package root, add AgentConversation and AgentReply where needed.
+- Use RecordsCase.conversation(...) or AgentRun.conversation() to start chats instead of calling client chat methods directly.
+- Call reply(text, ...) on an AgentConversation to send one message and receive an AgentReply.
+- AgentReply.pending_actions contains AgentAction instances you can inspect and act on.
+
+## 2026-10-16 UTC
+
+### Highlights
+- SDK 1.13.0: Record imports and classify-from-file upload through the API in 32 MiB blocks instead of a storage SAS URL, so they work when storage is network-restricted. Requires an API with block uploads; older SDKs cannot upload files to it.
+
+<!-- sdk-changelog-fingerprint: d7b294a60234fac0 -->
+## 2026-10-12 10:07 UTC
+
+### Highlights
+- Added a new Contract Analysis Workflow API to report a case's contract-analysis setup state.
+- New data models expose build state, pending rebuild details, and change counts for contract-analysis workflows.
+- Client libraries now include synchronous and asynchronous helpers to fetch the workflow for a knowledge base case.
+
+### Python SDK
+- Added get_contract_analysis_workflow(...) to fetch a case's contract-analysis workflow state.
+- New API module docudevs.api.knowledge_base_profiles.get_contract_analysis_workflow provides sync and async helpers.
+- Added ContractAnalysisWorkflowResponse, ContractAnalysisBuildState, ContractAnalysisPendingRebuild, and RebuildChangeCounts models.
+- The workflow endpoint returns either a ContractAnalysisWorkflowResponse or a ProfileCapabilityUnavailableResponse when the profile is missing.
+
+### Java SDK
+- Added DocuDevsClient.getContractAnalysisWorkflow(long caseId) to retrieve contract-analysis workflow state synchronously.
+- Added DocuDevsAsyncClient.getContractAnalysisWorkflow(long caseId) to retrieve contract-analysis workflow state asynchronously.
+
+### Migration Notes
+- Call get_contract_analysis_workflow(case_id) (Python) or getContractAnalysisWorkflow(caseId) (Java) to obtain the setup step, build status, pending rebuild info, and readiness.
+- Inspect the new ContractAnalysisWorkflowResponse model to read fields such as current step, build state, pending rebuild, and readiness flags.
+- When the contract-analysis profile is not available, the API may return a ProfileCapabilityUnavailableResponse—handle this case when calling the SDK.
+- New models (ContractAnalysisBuildState, ContractAnalysisPendingRebuild, RebuildChangeCounts) are included in the Python package exports; update any type annotations or deserialization handling if you rely on previous workflow representations.
 
 <!-- sdk-changelog-fingerprint: ca7d5121ec49631b -->
 ## 2026-10-10 10:30 UTC
