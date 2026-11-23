@@ -87,6 +87,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Integrations',
       items: [
+        'guides/integration-connections',
         'integration/webhooks',
         'integration/submission-portals',
         'integration/edge-runtimes',

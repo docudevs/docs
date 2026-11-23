@@ -11,6 +11,8 @@ An integration connection is a named, organization-scoped bundle of credentials 
 
 Connections live at **Connections** in the sidebar's **Integrations** section (`/app/integrations/connections`). This page — and the underlying `POST`/`PUT`/`DELETE` calls — is restricted to the `ADMIN` role; `MEMBER` accounts can view connections but cannot create, edit, or delete them.
 
+Use the [connection setup guide](../guides/integration-connections.md) to create credentials in the provider and enter them in DocuDevs.
+
 ## Connector families
 
 The fields a connection accepts depend on its `connectorFamily`:
@@ -63,7 +65,7 @@ Remove or update the referencing flow configuration(s) before deleting the conne
 curl -X POST https://api.docudevs.ai/integration/connections \
   -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
   -d '{"name":"warehouse-pg","connectorFamily":"postgres","active":true,
-       "fieldValues":{"jdbcUrl":"jdbc:postgresql://host:5432/db","username":"svc"},
+       "fieldValues":{"url":"jdbc:postgresql://host:5432/db","username":"svc"},
        "secrets":{"password":"s3cret"}}'
 ```
 

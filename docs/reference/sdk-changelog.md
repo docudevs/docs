@@ -1,6 +1,8 @@
 ---
 title: SDK Changelog
 description: User-focused updates for the DocuDevs Python and Java SDKs.
+mdx:
+  format: md
 ---
 
 # SDK Changelog
@@ -44,7 +46,7 @@ description: User-focused updates for the DocuDevs Python and Java SDKs.
 - New AgentConversation class: create a chat, send a message, and wait for a reply with reply().
 - New AgentReply class: access message, tools_used, and pending_actions from the agent reply.
 - RecordsCase.conversation(...) starts a conversation scoped to the case and can resume sessions.
-- AgentRun.conversation() starts a conversation pre-scoped to the run (context 'run:{runId}').
+- `AgentRun.conversation()` starts a conversation scoped to the run with context `run:{runId}`.
 
 ### Java SDK
 - No Java SDK user-facing updates in this commit.
