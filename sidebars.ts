@@ -88,6 +88,7 @@ const sidebars: SidebarsConfig = {
       label: 'Integrations',
       items: [
         'guides/integration-connections',
+        'guides/drive-to-sharepoint',
         'integration/webhooks',
         'integration/submission-portals',
         'integration/edge-runtimes',

@@ -7,6 +7,8 @@ slug: /guides/integration-connections
 
 An organization admin creates a managed connection under **Integrations → Connections → New connection**. Choose the system, give the connection a name, and enter the credentials from that system. Select the saved connection on the corresponding node in **Flow Builder**. Supply any remaining targets on the node. The runtime must be able to reach the provider or database.
 
+For a complete managed workflow using shared Google Workspace and SharePoint connections, follow [Send Google Drive invoices to SharePoint as Excel](./drive-to-sharepoint.md).
+
 ## SharePoint
 
 ### Register and authorize the application
