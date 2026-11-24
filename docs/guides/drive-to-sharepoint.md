@@ -64,3 +64,18 @@ Add **SharePoint Upload** and connect the output of **DocuDevs Batch Extract** t
 ![The completed managed execution in Flow Builder](./assets/drive-to-sharepoint/managed-run.png)
 
 If a run fails or produces no workbook, check the execution status, the source folder ID and service-account access, and the SharePoint app's write permission on the destination site.
+
+## Archive processed PDFs in Google Drive
+
+1. Create sibling folders named **Inbox** and **Processed** in the same Drive or shared drive. Put new PDFs in **Inbox**. Set **Folder ID** on **Google Drive Folder Downloads** to the ID of **Inbox** and give the Google Workspace service account read access to it. The person archiving files needs permission to move them between the folders.
+2. Set **Destination Filename** on **SharePoint Upload** to `drive-batch-{{ execution.id }}.xlsx` to keep a separate workbook for each run.
+3. Run the workflow with two test invoices that have distinct invoice numbers. After it uploads the workbook, compare the `invoice_number` column with the PDFs in **Inbox**. In Google Drive, select the PDFs you can match to the workbook and choose **Move** to send them to **Processed**. Leave failed or unmatched PDFs in **Inbox** for retry.
+4. Add a new PDF and run the workflow again. Check that the new workbook includes the new invoice and any successful retries. The source reads **Inbox**, so archived PDFs stay out of later runs.
+
+The move is manual. The Batch Extract node's Excel output does not expose per-file status mapped to Drive file IDs, which an automated move would need.
+
+## Run on a schedule
+
+If your deployment has managed scheduling enabled, add a **Schedule** node to the flow. Enter a five-field **Cron Expression** and an optional **Time Zone**. For example, `0 8 * * MON-FRI` with `Europe/Zurich` runs at 08:00 on weekdays in Zurich. Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
+
+Review each workbook and move its confirmed PDFs before the next scheduled run. Any matching PDF still in **Inbox** is picked up again. An empty inbox skips extraction and upload, though the scheduled run still uses runner compute.
