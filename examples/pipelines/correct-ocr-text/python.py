@@ -1,8 +1,8 @@
 import json
 
+# docs:start
 from docudevs import P, Pipeline
 
-# docs:start
 pipeline = Pipeline().ocr(mode="AUTO", source_locations=True)
 
 ocr_corrected = pipeline.ocr_correct(

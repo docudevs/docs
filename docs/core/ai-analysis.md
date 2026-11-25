@@ -28,13 +28,13 @@ AI Document Analysis uses generative AI models to understand and analyze documen
 
 ### Document Summarization
 
-OCR the document first, then submit a generative task whose parent is the OCR job. The task result carries the generated text.
+OCR the document first, then submit a generative task whose parent is the OCR job. The task result carries the generated text. The Java variant prints the raw `result` field, a JSON string that contains `generated_text`, and does not set the OCR output format.
 
 <Example name="quick-start/analyze-document" />
 
 ### Question Answering
 
-Ask questions about a document that has already been through OCR. Each question is its own generative task on the OCR job, so replace `<job-guid>` with the GUID of the OCR job from the summarization step.
+Ask questions about a document that has already been through OCR. Each question is its own generative task on the OCR job (the Java client reads only the first task of a parent, so this example has no Java variant), so replace `<job-guid>` with the GUID of the OCR job from the summarization step.
 
 <Example name="operations/ask-document-questions" />
 
@@ -82,20 +82,14 @@ Turn one document into several audience-specific texts, one task per audience:
 
 ## Configuration Options
 
-A generative task accepts optional `model`, `temperature` and `maxTokens` fields next to the prompt. In the Python SDK they are the `model`, `temperature` and `max_tokens` arguments of `submit_and_wait_for_generative_task`; the CLI has `--model`, `--temperature` and `--max-tokens`.
+A generative task accepts an optional `model` field next to the prompt. It selects the model tier and takes one of `DEFAULT`, `NANO`, `MINI` or `HIGH`, the same values as the LLM type. In the Python SDK it is the `model` argument of `submit_and_wait_for_generative_task`; the CLI has `--model`.
 
 ```json
 {
   "prompt": "Summarize the main points",
-  "model": "DEFAULT",
-  "temperature": 0.1,
-  "maxTokens": 150
+  "model": "DEFAULT"
 }
 ```
-
-- **`model`**: the model to use; `DEFAULT` selects the platform default.
-- **`temperature`**: from `0.0` (conservative, factual) to `1.0` (creative, varied).
-- **`maxTokens`**: the maximum length of the generated text. Use a small value for brief answers and a larger one for detailed analysis.
 
 ## Best Practices
 
@@ -135,7 +129,7 @@ Every generative task is an independent job under its OCR parent, so you can OCR
 
 ### Combine with Error Analysis
 
-Run error analysis on a completed extraction job to review its quality, and use generative tasks on the same document for a free-form quality review. Replace `<job-guid>` with the GUID of the extraction job.
+Run error analysis on a completed extraction job to review its quality. Replace `<job-guid>` with the GUID of the extraction job.
 
 <Example name="operations/error-analysis" />
 

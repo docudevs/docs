@@ -1,8 +1,8 @@
 import json
 
+# docs:start
 from docudevs import P, Pipeline
 
-# docs:start
 pipeline = Pipeline().ocr(mode="AUTO", quality_artifact=True)
 
 quality = pipeline.validate_bucket(

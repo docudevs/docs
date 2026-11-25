@@ -9,7 +9,7 @@ Pipeline mode is available through the public API and SDK facade helpers. Prefer
 
 ## Python SDK
 
-Use `Pipeline`, `P`, and condition helpers such as `eq` to build the pipeline. Node methods return `NodeRef` objects, so dependencies and result paths can refer to previous nodes directly. The example below builds a one-node extraction pipeline, submits it, waits for the result, and reads the source locations and node statuses. The Java tab builds the same pipeline with `PipelineDefinition`, `PipelineNode`, `PipelinePath` and `PipelineCondition`; `PipelineNodeRef` values can be used in `dependsOn(...)` and result outputs.
+Use `Pipeline`, `P`, and condition helpers such as `eq` to build the pipeline. Node methods return `NodeRef` objects, so dependencies and result paths can refer to previous nodes directly. The example below builds a one-node extraction pipeline, submits it, waits for the result, and reads the source locations and node statuses. The Java variant builds the same pipeline with `PipelineDefinition`, `PipelineNode` and `PipelinePath`, but does not read source locations because the Java client has no helper for them; `PipelineNodeRef` values can be used in `dependsOn(...)` and result outputs.
 
 <Example name="pipelines/process-pipeline-document" />
 
@@ -19,7 +19,7 @@ The runnable Python notebook [Pipeline Extraction](https://github.com/docudevs/p
 
 ## Java SDK
 
-The Java builders are shown in the Java tab of the example above. For an already-uploaded document, use `processUploadedPipelineDocument(guid, pipeline, "application/pdf", "AUTO")`. To save a named pipeline configuration, use `savePipelineConfiguration(...)`; retrieve the serialized pipeline JSON with `getPipelineConfiguration(...)`.
+The Java builders are shown in the Java variant of the example above. For an already-uploaded document, use `processUploadedPipelineDocument(guid, pipeline, "application/pdf", "AUTO")`. To save a named pipeline configuration, use `savePipelineConfiguration(...)`; retrieve the serialized pipeline JSON with `getPipelineConfiguration(...)`.
 
 ## Classify and Route
 

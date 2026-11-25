@@ -2,7 +2,9 @@ import asyncio
 import os
 from dataclasses import dataclass
 
+# docs:start
 from docudevs import ClientPipeline, P
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 
