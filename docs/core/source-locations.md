@@ -261,3 +261,5 @@ Important caveat:
 Prefer `block` granularity for longer fields such as clauses and summaries of a row or paragraph.
 
 Prefer `auto` when you want better word-level precision but still want a successful fallback when exact word matching is not possible.
+
+To resolve `sourceRefs` into page geometry and text, see [Document layout](./document-layout.md).

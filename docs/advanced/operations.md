@@ -392,6 +392,8 @@ curl -X POST https://api.docudevs.ai/operation \
 
 Run `pdf-acroform` on a completed PDF job to generate a fillable AcroForm PDF, then inspect or edit the generated field definitions.
 
+For the full parameter list and the REST download endpoint, see [PDF AcroForm](./pdf-acroform.md).
+
 The parent job must point to a PDF. The operation also needs rendered page images, so the safest setup is to create the parent job with `ocr="PREMIUM"` or pass `force_ocr=True` when thumbnails are missing.
 
 <Tabs
