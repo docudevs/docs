@@ -4,9 +4,6 @@ description: Automatically generate JSON schemas from your documents using AI.
 sidebar_position: 5
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Schema Generation
 
 Automatically generate JSON schemas from your documents using AI.
@@ -21,95 +18,9 @@ Defining a perfect JSON schema for a complex document can be tedious. DocuDevs c
 
 ## Generating a Schema
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+The example uploads a sample invoice with instructions, waits for the schema job and prints the generated JSON Schema. Save the printed schema as `invoice-schema.json` to use it in the next step. Schema generation is available through the API, the Python and Java SDKs; the CLI has no schema generation command.
 
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
-import asyncio
-
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-
-async def generate_my_schema():
-    with open("sample-invoice.pdf", "rb") as f:
-        document_data = f.read()
-
-    # Submit schema generation job
-    job_guid = await client.generate_schema(
-        document=document_data,
-        document_mime_type="application/pdf",
-        instructions="Focus on extracting the invoice number, date, and all line items with prices."
-    )
-    
-    # Wait for the result
-    result = await client.wait_until_ready(job_guid)
-    
-    # The result is the JSON Schema string
-    print("Generated Schema:")
-    print(result.result)
-
-if __name__ == "__main__":
-    asyncio.run(generate_my_schema())
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-# Generate schema and save to file
-docudevs generate-schema sample-invoice.pdf \
-  --instructions "Focus on invoice details" \
-  --output invoice-schema.json
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-byte[] fileBytes = Files.readAllBytes(Path.of("sample-invoice.pdf"));
-UploadRequest upload = new UploadRequest("sample-invoice.pdf", "application/pdf", fileBytes);
-
-String guid = client.generateSchema(
-    upload,
-    "Focus on extracting the invoice number, date, and all line items with prices."
-);
-
-JsonNode schemaResult = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
-System.out.println(schemaResult);
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/document/generate-schema \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@sample-invoice.pdf" \
-  -F "instructions=Focus on invoice details"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="extraction/generate-schema" />
 
 ## Using the Generated Schema
 
@@ -125,34 +36,9 @@ The generated schema is a starting point. You might want to:
 
 ### 2. Use in Extraction
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="python">
+Pass the reviewed schema as the extraction schema. The example loads `invoice-schema.json` and processes a new invoice with it.
 
-```python
-# Use the schema string you got from the generation step
-my_schema = { ... } 
-
-guid = await client.submit_and_process_document(
-    document=new_document_data,
-    document_mime_type="application/pdf",
-    schema=my_schema
-)
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs process new-invoice.pdf --schema-file invoice-schema.json
-```
-
-  </TabItem>
-</Tabs>
+<Example name="extraction/process-with-generated-schema" />
 
 ## Best Practices
 

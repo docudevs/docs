@@ -7,6 +7,7 @@ extraction/extract-with-calculated-fields:java
 extraction/extract-with-pydantic:java
 extraction/include-current-date-map-reduce:java
 extraction/process-page-range-map-reduce:java
+extraction/process-with-generated-schema:java
 extraction/split-map-reduce-by-document-outline:java
 first-document/handle-timeout:java
 first-document/save-and-use-configuration:java

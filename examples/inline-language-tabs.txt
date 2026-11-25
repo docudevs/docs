@@ -5,6 +5,5 @@ docs/administration/bring-your-own-ocr.md:6
 docs/administration/model-credentials.md:10
 docs/core/knowledge-search.md:4
 docs/core/lookup-files.md:6
-docs/core/schema-generation.md:6
 docs/core/source-locations.md:2
 docs/core/workbook-normalization.md:4
