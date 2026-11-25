@@ -9,45 +9,21 @@ The `pdf-acroform` operation converts a completed PDF job into a fillable AcroFo
 
 Field names use the source document language and ASCII `snake_case`. Labels are not translated.
 
-## Python SDK
+## Convert a PDF
 
-```python
-import os
+Run the operation on a completed PDF job and wait for the generated PDF. The parent job needs rendered page images, so process it with `ocr` set to `PREMIUM` or set `forceOcr` on the operation.
 
-from docudevs.docudevs_client import DocuDevsClient
-
-client = DocuDevsClient(token=os.environ["API_KEY"])
-
-result = await client.submit_and_wait_for_pdf_acroform_operation(
-    "parent-job-guid",
-    page_range=[1],
-    min_confidence=0.6,
-    save_to="fillable.pdf",
-)
-
-print(result.operation_job_guid)
-print(result.result)
-```
+<Example name="operations/convert-pdf-to-acroform" />
 
 To submit without waiting:
 
-```python
-response = await client.submit_pdf_acroform_operation("parent-job-guid")
-```
+<Example name="operations/submit-pdf-acroform" />
 
 To download a generated PDF later:
 
-```python
-pdf_bytes = await client.get_pdf_acroform("operation-job-guid", save_to="fillable.pdf")
-```
+<Example name="operations/download-acroform-pdf" />
 
-## CLI
-
-```bash
-docudevs operations pdf-acroform parent-job-guid --output fillable.pdf
-```
-
-Useful options:
+Useful CLI options:
 
 - `--page 1 --page 2`: process selected 1-based page numbers.
 - `--min-confidence 0.65`: skip lower-confidence detections.
