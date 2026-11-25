@@ -1,3 +1,5 @@
+errors/case-not-found:java
+errors/unauthorized:java
 extraction/extract-sections-by-page-range:java
 extraction/extract-with-pydantic:java
 extraction/include-current-date-map-reduce:java
