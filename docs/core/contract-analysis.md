@@ -52,43 +52,9 @@ For a v2 profile, regeneration records the draft revision it started from and st
 
 Apply an explicit decision for every added, changed, removed, or conflicting criterion. The request pins `generationJobGuid`, `expectedDraftRevision`, and `expectedDraftFingerprint`, and maps each lineage ID to `accept_proposed`, `keep_current`, or `reject_proposal`. A stale draft or unresolved element decision returns `409`; reload the comparison and reconcile against the latest draft before retrying. Rejected proposals retain lineage tombstones so a later generation cannot silently reintroduce them. Successful application creates a new draft revision and reports the suite, trials, and attestations whose readiness identities are now stale — the suite must be run and reviewed again before publication.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/compare-generation" />
 
-```sh
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/generations/$GENERATION_JOB_GUID/comparison" \
-  -H "Authorization: $API_KEY"
-
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/generations/$GENERATION_JOB_GUID/apply" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "generationJobGuid": "'"$GENERATION_JOB_GUID"'",
-    "expectedDraftRevision": 5,
-    "expectedDraftFingerprint": "sha256:draft",
-    "decisions": {"hours": {"action": "accept_proposed"}}
-  }'
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-comparison = await client.get_contract_analysis_generation_comparison(
-    CASE_ID, generation_job_guid
-)
-
-applied = await client.apply_contract_analysis_generation(
-    CASE_ID,
-    generation_job_guid,
-    expected_draft_revision=5,
-    expected_draft_fingerprint="sha256:draft",
-    decisions={"hours": {"action": "accept_proposed"}},
-)
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/apply-generation" />
 
 ## Source authority
 
@@ -109,49 +75,9 @@ Before a v2 profile can publish, every source document needs a confirmed role or
 
 Only `policy` and `guidance` sources can establish requirements; `example` sources cannot, and `superseded` sources are historical context only.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/get-source-authority" />
 
-```sh
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority" \
-  -H "Authorization: $API_KEY"
-
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority/decisions" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "observedRevision": 0,
-    "decisionType": "source_authority",
-    "content": {
-      "documents": [
-        {"id": "policy-doc", "sourceRole": "policy", "excluded": false}
-      ]
-    },
-    "reason": "Reviewer confirmed the governing policy document"
-  }'
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-authority = await client.get_contract_analysis_source_authority(CASE_ID)
-
-decision = await client.record_contract_analysis_source_authority_decision(
-    CASE_ID,
-    observed_revision=authority.parsed["revision"],
-    decision_type="source_authority",
-    content={
-        "documents": [
-            {"id": "policy-doc", "sourceRole": "policy", "excluded": False}
-        ]
-    },
-    reason="Reviewer confirmed the governing policy document",
-)
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/record-source-authority-decision" />
 
 There is no CLI command for source authority today; use the SDK or the endpoints directly.
 
