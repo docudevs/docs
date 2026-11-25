@@ -300,8 +300,9 @@ rollback window has passed.
   appear in both generations.
 
 Usage through your own embedding provider is tracked for observability but,
-once the provider or revision is verified (`VALID`), is not debited against
-your DocuDevs token balance. LLM providers (chat models) are configured
+once the provider or revision is verified (`VALID`), is not charged against
+your DocuDevs credit balance. See
+[Billing and credits](/docs/reference/billing-credits). LLM providers (chat models) are configured
 separately under
 [Settings → LLM Providers](/docs/administration/bring-your-own-llm); chat
 and embedding bindings are independent of each other.
