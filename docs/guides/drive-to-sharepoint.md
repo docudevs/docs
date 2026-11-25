@@ -78,3 +78,18 @@ If archiving fails after the workbook uploads, check the execution logs and the 
 If your deployment has managed scheduling enabled, add a **Schedule** node to the flow. Enter a five-field **Cron Expression** and an optional **Time Zone**. For example, `0 8 * * MON-FRI` with `Europe/Zurich` runs at 08:00 on weekdays in Zurich. Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
 
 Once the schedule is active, put new PDFs in **Inbox**. Each run scans that folder and archives the successful PDFs after it publishes the workbook. An empty inbox skips extraction, upload, and archiving, though the scheduled run still uses runner compute.
+
+## Archive files from other sources
+
+The **Google Drive Archive** node works with **Google Drive Folder Downloads**. For other sources, the managed runner bundles the Kestra tasks below. Use them in the workflow YAML. Flow Builder currently wires post-upload archiving for Google Drive only.
+
+| Source | Kestra task | How it archives |
+| --- | --- | --- |
+| Amazon S3 | `io.kestra.plugin.aws.s3.Copy` | Set `delete: true` to copy the object server-side and remove the source after the copy succeeds. [S3 object moves](https://docs.aws.amazon.com/AmazonS3/latest/userguide/copy-object.html) |
+| Azure Blob Storage | `io.kestra.plugin.azure.storage.blob.Copy` | Set `delete: true` to move a blob to another path or container. [Azure Blob Copy task](https://kestra.io/plugins/plugin-azure/v2.4.0/azure-blob-storage/io.kestra.plugin.azure.storage.blob.copy) |
+| Google Cloud Storage | `io.kestra.plugin.gcp.gcs.Copy` | Set `delete: true` to copy an object to the archive path and remove the source after the copy succeeds. [GCS Copy task](https://kestra.io/plugins/plugin-gcp/google-cloud-storage-gcs/io.kestra.plugin.gcp.gcs.copy) |
+| SharePoint | `io.kestra.plugin.microsoft365.sharepoint.Move` | Move an item by ID to a different folder in the same document library. [Microsoft Graph move operation](https://learn.microsoft.com/en-us/graph/api/driveitem-move?view=graph-rest-1.0) |
+
+For scheduled batch workflows, keep **After Download** set to **None** on the **S3 Downloads** and **Azure Blob Downloads** nodes. Their **Move** and **Delete** actions run as part of the download step, before extraction and publication.
+
+In the workflow YAML, keep the original object keys or SharePoint item IDs alongside the downloaded file references. Enable `includeSuccessfulFiles: true` on **DocuDevs Batch Extract** and use its `successfulFiles` output to select the originals to archive. Run the archive tasks only after the destination confirms the upload. Use the files from that batch so failed documents and files that arrived during the run stay available for the next schedule.
