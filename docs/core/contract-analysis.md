@@ -87,102 +87,23 @@ Version-2 profiles require a scored, expert-attested example trial before public
 
 Create a revisioned test suite that includes immutable package identities, scenario tags, and stable expectation target keys. An expectation is usable for a scored trial only after it is marked approved; updating approvals creates a new suite revision, so old reports and attestations do not silently carry forward.
 
-Launch either an `exploratory` or a `scored` trial explicitly, supplying an `anchorJobGuid`, the suite revision, and an `idempotencyKey`. Exploratory runs are not correctness scores. Scored reports compare the completed run against the approved expectations deterministically; expectations stay on the evaluator side and are not included in model inputs. When multiple suite cases share the same captured anchor/package, include the exact `suiteCaseId` — legacy callers that omit it retain anchor-based selection. A reviewer can then attest a passing scored report.
+Launch either an `exploratory` or a `scored` trial explicitly, supplying an `anchorJobGuid`, the suite revision, and an `idempotencyKey`. Estimate the trial first with the same inputs: the launch request carries the `estimateFingerprint` and the `executionFingerprint` (sent as `configurationFingerprint`) that the estimate returned. Exploratory runs are not correctness scores. Scored reports compare the completed run against the approved expectations deterministically; expectations stay on the evaluator side and are not included in model inputs. When multiple suite cases share the same captured anchor/package, include the exact `suiteCaseId` — legacy callers that omit it retain anchor-based selection. A reviewer can then attest a passing scored report.
 
-Publish a v2 profile by including the returned `trialAttestationId` in the publish request, alongside the draft revision and any warning acknowledgments. The API verifies that the attestation still matches the current draft, suite, package snapshot, and execution configuration inside the publication transaction; a stale attestation is rejected without replacing the active publication. Version-1 publication requests keep their existing behavior and do not need an attestation.
+Publish a v2 profile by including the returned attestation `attestationId` as `trialAttestationId` in the publish request, alongside the draft revision and any warning acknowledgments. The API verifies that the attestation still matches the current draft, suite, package snapshot, and execution configuration inside the publication transaction; a stale attestation is rejected without replacing the active publication. Version-1 publication requests keep their existing behavior and do not need an attestation.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/get-test-suite" />
 
-```sh
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/update-test-suite" />
 
-curl -X PUT "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"revision": 0, "cases": [{"...": "suite case definition"}]}'
+<Example name="contract-analysis/propose-test-case" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite/proposals" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "runId": "run-1",
-    "resultFingerprint": "sha256:result",
-    "criterionId": "hours",
-    "targetKey": "criterion:hours",
-    "name": "Hours-clause omission",
-    "expectedAssessment": "deviates_from_requirement",
-    "reason": "Reviewer correction",
-    "expectedSuiteRevision": 3,
-    "idempotencyKey": "proposal-1"
-  }'
+<Example name="contract-analysis/create-trial" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "anchorJobGuid": "<completed-contract-job>",
-    "idempotencyKey": "trial-key",
-    "trialKind": "scored",
-    "suiteRevision": 3
-  }'
+<Example name="contract-analysis/get-trial" />
 
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials/$TRIAL_ID" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/attest-trial" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials/$TRIAL_ID/attest" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"reportId": "report-1", "reason": "Reviewed and correct"}'
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-suite = await client.get_contract_analysis_test_suite(CASE_ID)
-
-updated_suite = await client.update_contract_analysis_test_suite(
-    CASE_ID, revision=suite.parsed["revision"], cases=[{"...": "suite case definition"}]
-)
-
-proposal = await client.propose_contract_analysis_finding_test_case(
-    CASE_ID,
-    run_id="run-1",
-    result_fingerprint="sha256:result",
-    criterion_id="hours",
-    target_key="criterion:hours",
-    name="Hours-clause omission",
-    expected_assessment="deviates_from_requirement",
-    reason="Reviewer correction",
-    expected_suite_revision=updated_suite.parsed["revision"],
-    idempotency_key="proposal-1",
-)
-
-trial = await client.create_contract_analysis_trial(
-    CASE_ID,
-    anchor_job_guid="<completed-contract-job>",
-    idempotency_key="trial-key",
-    trial_kind="scored",
-    suite_revision=updated_suite.parsed["revision"],
-)
-
-trial_status = await client.get_contract_analysis_trial(CASE_ID, trial.parsed["trialId"])
-
-attested = await client.attest_contract_analysis_trial(
-    CASE_ID, trial.parsed["trialId"], report_id="report-1", reason="Reviewed and correct"
-)
-
-published_v2 = await client.publish_contract_analysis_profile(
-    CASE_ID,
-    draft_revision=updated_suite.parsed["revision"],
-    trial_attestation_id=attested.parsed["trialAttestationId"],
-)
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/publish-with-attestation" />
 
 When a draft declares scoped effects, publication also requires passing, attested examples tagged `scoped_effect_override` and `scoped_effect_unaffected_scope`. Each example expectation includes an `expectedEffectiveAttributes` object on an `item:<id>` target, and trial comparison checks those values against the returned effective variant in addition to the criterion assessment.
 
