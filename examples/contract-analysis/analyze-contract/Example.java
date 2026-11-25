@@ -1,0 +1,22 @@
+package examples.contract_analysis.analyze_contract;
+
+import ai.docudevs.client.DocuDevsClient;
+import com.fasterxml.jackson.databind.JsonNode;
+
+public class Example {
+    public static void main(String[] args) throws Exception {
+        DocuDevsClient client = DocuDevsClient.builder()
+                .apiKey(System.getenv("API_KEY"))
+                .baseUrl("https://api.docudevs.ai")
+                .build();
+
+        // docs:start
+        String jobGuid = "<completed-contract-job>"; // jobGuid of a completed contract job
+        long knowledgeBaseId = 42L; // id of the case whose profile is published
+
+        JsonNode operation = client.submitAndWaitForContractAnalysis(jobGuid, knowledgeBaseId);
+
+        System.out.println(operation.path("result").asText());
+        // docs:end
+    }
+}

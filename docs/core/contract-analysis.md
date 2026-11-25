@@ -4,9 +4,6 @@ description: Build a reviewed, cited knowledge-base profile from playbook docume
 sidebar_position: 11
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 Contract analysis turns one or more playbook documents into a reusable, human-reviewed knowledge-base profile. The published profile supplies the facts, item types, relationships, criteria, and evidence requirements that a later contract-analysis run applies against a completed contract job.
 
 This capability must be enabled for your organization or deployment before any of the endpoints below are reachable. When it is off, profile and analysis entry points return a `404` with a disabled-capability code.
@@ -14,6 +11,10 @@ This capability must be enabled for your organization or deployment before any o
 Contract-analysis results are technical, evidence-linked extraction outcomes, not legal conclusions. This feature is an information-extraction and review aid; it does not provide legal advice, legal opinions, underwriting decisions, or a substitute for qualified counsel. Your organization remains responsible for reviewing source documents and every output before relying on it.
 
 ## Result status vocabulary
+
+:::note
+This section describes the earlier criterion-based result shape and is being updated. Run results and reviews are now organised by clause, each with a verdict, as the examples on this page show. See the [get contract analysis run result](/docs/openapi/get-contract-analysis-run-result) API reference for the current response schema.
+:::
 
 Contract analysis has two profile and result generations, distinguished by the profile's declared version:
 
@@ -27,73 +28,22 @@ v2 also introduces scoped effects: a version-2 relationship can declare a bounde
 ## Build and publish a profile
 
 1. Create a case and upload each playbook to `/cases/{caseId}/documents`. Include every source that should participate in the profile; profile generation captures the eligible, completed OCR documents as one source set.
-2. Start compilation once uploads finish processing. Generation is asynchronous and always creates a draft — it never publishes automatically.
+2. Confirm the role of each source document (see [Source authority](#source-authority)), then start compilation once uploads finish processing, naming the two sides the playbook is written for with `ourParty` and `counterparty`. Generation is asynchronous and always creates a draft — it never publishes automatically.
 3. Monitor the returned job with `/job/status/{guid}`. Profile status moves through `GENERATING`, `DRAFT`, `PUBLISHED`, or `FAILED`.
 4. Read the draft to review facts, item types, relationship definitions, criteria, citations, source coverage, and conflicts.
 5. Edit the draft, passing the last observed `draftRevision`. A stale revision returns `409 Conflict`. Generated and human-edited elements need resolved playbook citations; human-authored uncited elements are warnings only.
 6. Resolve structural errors and either fix or explicitly acknowledge permitted warnings, then publish with the observed `draftRevision` and any acknowledged warning codes. Publication validates and atomically cuts over the active revision; a failed publication leaves the previous publication active.
 7. Read the active profile once published.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/generate-profile" />
 
-```sh
-API_URL="https://api.docudevs.ai"
-API_KEY="<your-api-key>"
-CASE_ID=42
+<Example name="contract-analysis/get-draft-profile" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/generate" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/update-draft" />
 
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis?view=draft" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/publish-profile" />
 
-curl -X PUT "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/draft" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"draftRevision": 1, "profile": { "...": "edited profile JSON" }}'
-
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/publish" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"draftRevision": 2, "acknowledgedWarningCodes": ["UNCITED_HUMAN_AUTHORED"]}'
-
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis?view=published" \
-  -H "Authorization: $API_KEY"
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-import os
-from docudevs.docudevs_client import DocuDevsClient
-
-client = DocuDevsClient(token=os.getenv("API_KEY"))
-CASE_ID = 42
-
-generation = await client.generate_contract_analysis_profile(CASE_ID)
-
-draft_response = await client.get_contract_analysis_profile(CASE_ID, view="draft")
-draft = draft_response.parsed
-
-updated = await client.update_contract_analysis_draft(
-    CASE_ID,
-    draft_revision=draft["draftRevision"],
-    profile=draft["profile"],
-)
-
-published = await client.publish_contract_analysis_profile(
-    CASE_ID,
-    draft_revision=updated.parsed["draftRevision"],
-    acknowledged_warning_codes=["UNCITED_HUMAN_AUTHORED"],
-)
-
-active = await client.get_contract_analysis_profile(CASE_ID, view="published")
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/get-published-profile" />
 
 The active publication pins its source document IDs and fingerprint. New case uploads are uncompiled until a later regeneration, and a source used by the active publication cannot be deleted. Re-generation creates a new draft while the current publication remains available.
 
@@ -103,43 +53,9 @@ For a v2 profile, regeneration records the draft revision it started from and st
 
 Apply an explicit decision for every added, changed, removed, or conflicting criterion. The request pins `generationJobGuid`, `expectedDraftRevision`, and `expectedDraftFingerprint`, and maps each lineage ID to `accept_proposed`, `keep_current`, or `reject_proposal`. A stale draft or unresolved element decision returns `409`; reload the comparison and reconcile against the latest draft before retrying. Rejected proposals retain lineage tombstones so a later generation cannot silently reintroduce them. Successful application creates a new draft revision and reports the suite, trials, and attestations whose readiness identities are now stale — the suite must be run and reviewed again before publication.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/compare-generation" />
 
-```sh
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/generations/$GENERATION_JOB_GUID/comparison" \
-  -H "Authorization: $API_KEY"
-
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/generations/$GENERATION_JOB_GUID/apply" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "generationJobGuid": "'"$GENERATION_JOB_GUID"'",
-    "expectedDraftRevision": 5,
-    "expectedDraftFingerprint": "sha256:draft",
-    "decisions": {"hours": {"action": "accept_proposed"}}
-  }'
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-comparison = await client.get_contract_analysis_generation_comparison(
-    CASE_ID, generation_job_guid
-)
-
-applied = await client.apply_contract_analysis_generation(
-    CASE_ID,
-    generation_job_guid,
-    expected_draft_revision=5,
-    expected_draft_fingerprint="sha256:draft",
-    decisions={"hours": {"action": "accept_proposed"}},
-)
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/apply-generation" />
 
 ## Source authority
 
@@ -160,49 +76,9 @@ Before a v2 profile can publish, every source document needs a confirmed role or
 
 Only `policy` and `guidance` sources can establish requirements; `example` sources cannot, and `superseded` sources are historical context only.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/get-source-authority" />
 
-```sh
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority" \
-  -H "Authorization: $API_KEY"
-
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority/decisions" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "observedRevision": 0,
-    "decisionType": "source_authority",
-    "content": {
-      "documents": [
-        {"id": "policy-doc", "sourceRole": "policy", "excluded": false}
-      ]
-    },
-    "reason": "Reviewer confirmed the governing policy document"
-  }'
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-authority = await client.get_contract_analysis_source_authority(CASE_ID)
-
-decision = await client.record_contract_analysis_source_authority_decision(
-    CASE_ID,
-    observed_revision=authority.parsed["revision"],
-    decision_type="source_authority",
-    content={
-        "documents": [
-            {"id": "policy-doc", "sourceRole": "policy", "excluded": False}
-        ]
-    },
-    reason="Reviewer confirmed the governing policy document",
-)
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/record-source-authority-decision" />
 
 There is no CLI command for source authority today; use the SDK or the endpoints directly.
 
@@ -212,102 +88,23 @@ Version-2 profiles require a scored, expert-attested example trial before public
 
 Create a revisioned test suite that includes immutable package identities, scenario tags, and stable expectation target keys. An expectation is usable for a scored trial only after it is marked approved; updating approvals creates a new suite revision, so old reports and attestations do not silently carry forward.
 
-Launch either an `exploratory` or a `scored` trial explicitly, supplying an `anchorJobGuid`, the suite revision, and an `idempotencyKey`. Exploratory runs are not correctness scores. Scored reports compare the completed run against the approved expectations deterministically; expectations stay on the evaluator side and are not included in model inputs. When multiple suite cases share the same captured anchor/package, include the exact `suiteCaseId` — legacy callers that omit it retain anchor-based selection. A reviewer can then attest a passing scored report.
+Launch either an `exploratory` or a `scored` trial explicitly, supplying an `anchorJobGuid`, the suite revision, and an `idempotencyKey`. Estimate the trial first with the same inputs: the launch request carries the `estimateFingerprint` and the `executionFingerprint` (sent as `configurationFingerprint`) that the estimate returned. Exploratory runs are not correctness scores. Scored reports compare the completed run against the approved expectations deterministically; expectations stay on the evaluator side and are not included in model inputs. When multiple suite cases share the same captured anchor/package, include the exact `suiteCaseId` — legacy callers that omit it retain anchor-based selection. A reviewer can then attest a passing scored report.
 
-Publish a v2 profile by including the returned `trialAttestationId` in the publish request, alongside the draft revision and any warning acknowledgments. The API verifies that the attestation still matches the current draft, suite, package snapshot, and execution configuration inside the publication transaction; a stale attestation is rejected without replacing the active publication. Version-1 publication requests keep their existing behavior and do not need an attestation.
+Publish a v2 profile by including the returned attestation `attestationId` as `trialAttestationId` in the publish request, alongside the draft revision and any warning acknowledgments. The API verifies that the attestation still matches the current draft, suite, package snapshot, and execution configuration inside the publication transaction; a stale attestation is rejected without replacing the active publication. Version-1 publication requests keep their existing behavior and do not need an attestation.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/get-test-suite" />
 
-```sh
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/update-test-suite" />
 
-curl -X PUT "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"revision": 0, "cases": [{"...": "suite case definition"}]}'
+<Example name="contract-analysis/propose-test-case" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite/proposals" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "runId": "run-1",
-    "resultFingerprint": "sha256:result",
-    "criterionId": "hours",
-    "targetKey": "criterion:hours",
-    "name": "Hours-clause omission",
-    "expectedAssessment": "deviates_from_requirement",
-    "reason": "Reviewer correction",
-    "expectedSuiteRevision": 3,
-    "idempotencyKey": "proposal-1"
-  }'
+<Example name="contract-analysis/create-trial" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "anchorJobGuid": "<completed-contract-job>",
-    "idempotencyKey": "trial-key",
-    "trialKind": "scored",
-    "suiteRevision": 3
-  }'
+<Example name="contract-analysis/get-trial" />
 
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials/$TRIAL_ID" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/attest-trial" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials/$TRIAL_ID/attest" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"reportId": "report-1", "reason": "Reviewed and correct"}'
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-suite = await client.get_contract_analysis_test_suite(CASE_ID)
-
-updated_suite = await client.update_contract_analysis_test_suite(
-    CASE_ID, revision=suite.parsed["revision"], cases=[{"...": "suite case definition"}]
-)
-
-proposal = await client.propose_contract_analysis_finding_test_case(
-    CASE_ID,
-    run_id="run-1",
-    result_fingerprint="sha256:result",
-    criterion_id="hours",
-    target_key="criterion:hours",
-    name="Hours-clause omission",
-    expected_assessment="deviates_from_requirement",
-    reason="Reviewer correction",
-    expected_suite_revision=updated_suite.parsed["revision"],
-    idempotency_key="proposal-1",
-)
-
-trial = await client.create_contract_analysis_trial(
-    CASE_ID,
-    anchor_job_guid="<completed-contract-job>",
-    idempotency_key="trial-key",
-    trial_kind="scored",
-    suite_revision=updated_suite.parsed["revision"],
-)
-
-trial_status = await client.get_contract_analysis_trial(CASE_ID, trial.parsed["trialId"])
-
-attested = await client.attest_contract_analysis_trial(
-    CASE_ID, trial.parsed["trialId"], report_id="report-1", reason="Reviewed and correct"
-)
-
-published_v2 = await client.publish_contract_analysis_profile(
-    CASE_ID,
-    draft_revision=updated_suite.parsed["revision"],
-    trial_attestation_id=attested.parsed["trialAttestationId"],
-)
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/publish-with-attestation" />
 
 When a draft declares scoped effects, publication also requires passing, attested examples tagged `scoped_effect_override` and `scoped_effect_unaffected_scope`. Each example expectation includes an `expectedEffectiveAttributes` object on an `item:<id>` target, and trial comparison checks those values against the returned effective variant in addition to the criterion assessment.
 
@@ -317,120 +114,31 @@ Proposing a test case is a draft suite edit only: it copies the captured package
 
 Submit a first-class operation for a completed OCR/document-processing job and a published profile. The operation performs outline-aware map/reduce for long contracts, structural reduction, semantic relationship synthesis, deterministic applicability, and criterion evaluation before exposing one complete result — it never exposes a partial final result.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/analyze-contract" />
 
-```sh
-curl -X POST "$API_URL/operation" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jobGuid": "<completed-contract-job>",
-    "type": "contract-analysis",
-    "parameters": {"customParameters": {"knowledgeBaseId": 42}}
-  }'
-
-curl "$API_URL/operation/<completed-contract-job>/contract-analysis" \
-  -H "Authorization: $API_KEY"
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-result = await client.submit_and_wait_for_contract_analysis(
-    job_guid="<completed-contract-job>", knowledge_base_id=42
-)
-```
-
-</TabItem>
-</Tabs>
-
-`submit_and_wait_for_contract_analysis` submits the operation and polls `/operation/{jobGuid}/contract-analysis` until `resultAvailable` is `true` or `timeout` (default 120 seconds) elapses. Call `submit_contract_analysis(...)` and poll manually when you want to control retries yourself.
+The cURL and Python examples submit the operation and poll `/operation/{jobGuid}/contract-analysis` until `resultAvailable` is `true`; the CLI example waits with `--wait`. The Java `submitAndWaitForContractAnalysis` does this for you with a default timeout of 120 seconds; call `submitContractAnalysis` and poll yourself when you want to control retries.
 
 ## Contract-analysis runs (v2)
 
-Runs are immutable, addressable records: a run captures its own package of source documents, mode, and configuration, and its result never changes on rerun. `mode` is `published` (use the active publication) or `draft_trial` (use a specific draft revision). Include the anchor document in `package_members`; captures are limited to 32 members and 32 MiB of captured sources. `expected_missing_documents` is separately limited to 32 entries and `excluded_documents` to 256 entries — neither list consumes captured-member slots. Duplicate IDs, inaccessible members, and a missing anchor are rejected, and member order does not imply precedence.
+Runs are immutable, addressable records: a run captures its own package of source documents, mode, and configuration, and its result never changes on rerun. `mode` is `published` (use the active publication) or `draft_trial` (use a specific draft revision). Include the anchor document in `packageMembers`; captures are limited to 32 members and 32 MiB of captured sources. `expectedMissingDocuments` is separately limited to 32 entries and `excludedDocuments` to 256 entries — neither list consumes captured-member slots. Duplicate IDs, inaccessible members, and a missing anchor are rejected, and member order does not imply precedence.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/create-run" />
 
-```sh
-curl -X POST "$API_URL/contract-analysis/runs" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "anchorJobGuid": "<agreement-job>",
-    "knowledgeBaseId": 42,
-    "mode": "published",
-    "idempotencyKey": "request-1",
-    "packageMembers": [
-      {"jobGuid": "<agreement-job>", "role": "agreement"},
-      {"jobGuid": "<amendment-job>", "role": "amendment"}
-    ]
-  }'
+<Example name="contract-analysis/get-run" />
 
-curl "$API_URL/contract-analysis/runs/$RUN_ID" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/get-run-result" />
 
-curl "$API_URL/contract-analysis/runs/$RUN_ID/result" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/list-run-reviews" />
 
-curl "$API_URL/contract-analysis/runs/$RUN_ID/reviews" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/review-finding" />
 
-curl -X PUT "$API_URL/contract-analysis/runs/$RUN_ID/reviews/hours/criterion:hours" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "resultFingerprint": "sha256:result",
-    "disposition": "corrected",
-    "correctedAssessment": "deviates_from_requirement",
-    "expectedReviewRevision": 0,
-    "idempotencyKey": "review-1",
-    "reason": "Confirmed the omission against the source clause"
-  }'
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-created = await client.create_contract_analysis_run(
-    "<agreement-job>",
-    knowledge_base_id=42,
-    idempotency_key="request-1",
-    mode="published",
-    package_members=[
-        {"jobGuid": "<agreement-job>", "role": "agreement"},
-        {"jobGuid": "<amendment-job>", "role": "amendment"},
-    ],
-)
-run_id = created.parsed["runId"]
-
-status = await client.get_contract_analysis_run(run_id)
-result = await client.get_contract_analysis_run_result(run_id)
-reviews = await client.get_contract_analysis_run_reviews(run_id)
-
-review = await client.put_contract_analysis_run_review(
-    run_id,
-    "hours",
-    "criterion:hours",
-    result_fingerprint="sha256:result",
-    disposition="corrected",
-    corrected_assessment="deviates_from_requirement",
-    expected_review_revision=0,
-    idempotency_key="review-1",
-    reason="Confirmed the omission against the source clause",
-)
-```
-
-</TabItem>
-</Tabs>
-
-Targets in the review path use `criterion:<criterionId>` or `item:<itemId>`. `disposition` is one of `accepted`, `corrected`, `dismissed`, or `unresolved`; corrected and dismissed decisions require a `reason`. A stale `expectedReviewRevision` returns `409`. The API derives reviewer identity from the authenticated user, so organization-only API keys cannot submit human dispositions. Accepting or correcting a finding never rewrites the captured machine result — each rerun has a new run ID and starts without a disposition. CSV exports and the run workspace keep the machine assessment, disposition, reviewer, and rationale in separate fields, and original evidence links open the captured source page and source element.
+The review path names the clause being reviewed. `disposition` is one of `accepted`, `corrected`, `dismissed`, or `unresolved`; a corrected decision requires a `correctedVerdict` (`satisfactory`, `mixed`, `flagged`, `ai_unsure`, `not_found`, or `does_not_apply`), and corrected and dismissed decisions require a `reason`. A stale `expectedReviewRevision` returns `409`. The API derives reviewer identity from the authenticated user, so organization-only API keys cannot submit human dispositions. Accepting or correcting a finding never rewrites the captured machine result — each rerun has a new run ID and starts without a disposition. CSV exports and the run workspace keep the machine assessment, disposition, reviewer, and rationale in separate fields, and original evidence links open the captured source page and source element.
 
 ## Result format: v1 vs v2
+
+:::note
+This section describes the earlier criterion-based result shape and is being updated. Run results and reviews are now organised by clause, each with a verdict, as the examples on this page show. See the [get contract analysis run result](/docs/openapi/get-contract-analysis-run-result) API reference for the current response schema.
+:::
 
 Both generations expose `contractFacts`/model data, `analysisItems`, `relationships` (v1) or `effectiveVariants`/`effectUncertainties` (v2), `criteria`, and evidence references. The profile identity — knowledge-base ID, published or draft revision, and source fingerprint — is embedded in every result so a client can confirm which profile snapshot produced it. Citations use a stable source-reference shape: an ID, document ID, source-map path, source element IDs, page numbers, and an exact quote (`evidenceStatus` is `resolved` or `unresolved`); quotes are exact source text, not generated paraphrases.
 
@@ -487,24 +195,12 @@ Finding dispositions (see [Contract-analysis runs](#contract-analysis-runs-v2)) 
 
 ## Java SDK
 
-`DocuDevsClient` (synchronous, returns `JsonNode`) and `DocuDevsAsyncClient` (same method names, returns `CompletableFuture<JsonNode>`) expose the full lifecycle:
-
-```java
-DocuDevsClient client = DocuDevsClient.builder()
-    .baseUrl("https://api.docudevs.ai")
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode generation = client.generateContractAnalysisProfile(42L);
-JsonNode draft = client.getContractAnalysisProfile(42L, "draft");
-JsonNode published = client.publishContractAnalysisProfile(42L, 1L);
-JsonNode result = client.submitAndWaitForContractAnalysis("<completed-contract-job>", 42L);
-```
+`DocuDevsClient` (synchronous, returns `JsonNode`) and `DocuDevsAsyncClient` (same method names, returns `CompletableFuture<JsonNode>`) expose the full lifecycle. Every example above has a Java tab; the methods are:
 
 | Method | Purpose |
 | --- | --- |
 | `getContractAnalysisProfile(caseId[, view])` | Read the draft (default) or published profile. |
-| `generateContractAnalysisProfile(caseId)` | Start asynchronous profile compilation. |
+| `generateContractAnalysisProfile(caseId, ourParty, counterparty)` | Start asynchronous profile compilation. |
 | `getContractAnalysisSourceAuthority(caseId)` | Read source-authority decision history. |
 | `recordContractAnalysisSourceAuthorityDecision(caseId, observedRevision, decisionType, content, reason)` | Record a source-authority decision. |
 | `recordContractAnalysisElementDecision(caseId, observedRevision, decisionType, content, reason, elementLineageId, elementAction, tombstone, generationJobGuid, draftRevision)` | Record a decision that also resolves a generation-comparison lineage element. |
@@ -515,7 +211,8 @@ JsonNode result = client.submitAndWaitForContractAnalysis("<completed-contract-j
 | `getContractAnalysisTestSuite(caseId)` | Read the current test-suite revision. |
 | `updateContractAnalysisTestSuite(caseId, revision, cases)` | Create the next suite revision. |
 | `proposeContractAnalysisFindingTestCase(caseId, proposal)` | Turn a run finding into a draft suite case. |
-| `createContractAnalysisTrial(caseId, anchorJobGuid, idempotencyKey, suiteRevision, trialKind[, suiteCaseId])` | Launch an exploratory or scored trial. |
+| `estimateContractAnalysisTrial(caseId, anchorJobGuid, suiteRevision, trialKind, suiteCaseId, packageId)` | Estimate a trial; the result carries the fingerprints a launch needs. |
+| `createContractAnalysisTrial(caseId, anchorJobGuid, idempotencyKey, suiteRevision, trialKind, suiteCaseId, estimateFingerprint, executionFingerprint)` | Launch an exploratory or scored trial from an estimate. |
 | `getContractAnalysisTrial(caseId, trialId)` | Read trial status and its immutable report. |
 | `attestContractAnalysisTrial(caseId, trialId, reportId, reason)` | Record expert attestation of a passing report. |
 | `submitContractAnalysis(jobGuid, knowledgeBaseId)` | Submit the v1 analysis operation. |
@@ -524,7 +221,7 @@ JsonNode result = client.submitAndWaitForContractAnalysis("<completed-contract-j
 | `getContractAnalysisRun(runId)` | Read run status. |
 | `getContractAnalysisRunResult(runId)` | Read the immutable run result. |
 | `getContractAnalysisRunReviews(runId)` | Read current human dispositions for a run. |
-| `putContractAnalysisRunReview(runId, criterionId, targetKey, review)` | Append an expert disposition. |
+| `putContractAnalysisRunReview(runId, clauseId, review)` | Append an expert disposition. |
 
 ## In the web app
 
@@ -534,37 +231,9 @@ JsonNode result = client.submitAndWaitForContractAnalysis("<completed-contract-j
 
 ## CLI
 
-The CLI mirrors most of the SDK lifecycle:
+Every example above has a CLI tab except the source-authority ones. The CLI mirrors most of the SDK lifecycle; run `docudevs knowledge-base contract-analysis --help` for every command.
 
-```bash
-docudevs knowledge-base contract-analysis generate 42
-docudevs knowledge-base contract-analysis get 42 --view published
-docudevs knowledge-base contract-analysis update 42 --draft-revision 1 --profile-file profile.json
-docudevs knowledge-base contract-analysis publish 42 --draft-revision 1 --acknowledge-warning UNCITED_HUMAN_AUTHORED
-docudevs knowledge-base contract-analysis generation-compare 42 <generation-job-guid>
-docudevs knowledge-base contract-analysis generation-apply 42 <generation-job-guid> --decisions decisions.json
-docudevs knowledge-base contract-analysis suite-get 42
-docudevs knowledge-base contract-analysis suite-update 42 --revision 3 --cases cases.json
-docudevs knowledge-base contract-analysis propose-test-case 42 --run-id run-1 --result-fingerprint sha256:result \
-  --criterion-id hours --target-key criterion:hours --name "Hours-clause omission" \
-  --expected-assessment deviates_from_requirement --reason "Reviewer correction" \
-  --expected-suite-revision 3 --idempotency-key proposal-1
-docudevs knowledge-base contract-analysis trial 42 --anchor-job-guid <job> --idempotency-key <key> --kind scored
-docudevs knowledge-base contract-analysis trial-get 42 <trial-id>
-docudevs knowledge-base contract-analysis trial-attest 42 <trial-id> --report-id <report-id>
-docudevs knowledge-base contract-analysis run-create 42 --anchor-job-guid <job> --idempotency-key <key>
-docudevs knowledge-base contract-analysis run-get <run-id>
-docudevs knowledge-base contract-analysis run-result <run-id>
-docudevs knowledge-base contract-analysis run-reviews <run-id>
-docudevs knowledge-base contract-analysis review <run-id> <criterion-id> <target-key> \
-  --result-fingerprint sha256:result --disposition accepted \
-  --expected-review-revision 0 --idempotency-key review-1
-docudevs operations contract-analysis <completed-contract-job> --knowledge-base-id 42
-docudevs operations status <operation-job-guid>
-docudevs operations result <operation-job-guid> --type contract-analysis
-```
-
-`run-create` accepts optional JSON files through `--package-members`, `--expected-missing`, and `--excluded-documents`; include the anchor in the member list. Use `--trial-attestation-id` on `publish` when publishing a reviewed v2 profile. There is no CLI command for source-authority decisions — use the SDK or the endpoints directly. The CLI waits for the v1 operation by default; pass `--no-wait` to receive the operation job reference instead.
+`run-create` accepts optional JSON files through `--package-members`, `--expected-missing`, and `--excluded-documents`; include the anchor in the member list. Use `--trial-attestation-id` on `publish` when publishing a reviewed v2 profile. There is no CLI command for source-authority decisions — use the SDK or the endpoints directly. Submit the v1 operation with `docudevs operations submit --type contract-analysis`; add `--wait` to wait for completion, or read the result later with `docudevs operations result`.
 
 ## Availability
 

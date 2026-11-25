@@ -1,0 +1,61 @@
+name: Examples
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: examples-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run examples:test
+      - run: npm run examples:manifest
+      - if: ${{ !cancelled() }}
+        run: npm run examples:coverage
+      - if: ${{ !cancelled() }}
+        run: npm run examples:curl
+      - if: ${{ !cancelled() }}
+        run: npm run typecheck
+
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r tools/examples/python/requirements.txt
+      - run: python -m pytest tools/examples/python/tests -q
+      - if: ${{ !cancelled() }}
+        run: python tools/examples/python/check_python.py examples
+      - if: ${{ !cancelled() }}
+        run: python tools/examples/python/check_cli.py examples
+
+  java:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew compileJava
+        working-directory: tools/examples/java

@@ -4,9 +4,6 @@ description: Organize related documents into cases for grouped management, scope
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Cases - Document Collections
 
 Cases are a powerful feature that allows you to organize related documents into collections for better management and processing. Think of a case as a folder that can contain multiple documents that belong together - like all documents for a specific customer, project, or business process.
@@ -44,321 +41,23 @@ Cases are ideal for scenarios where you need to:
 
 ### Creating Cases
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode created = client.createCase(
-    "Q4 2024 Vendor Invoices",
-    "All invoices from vendors for Q4 2024 processing"
-);
-
-System.out.println("Created case ID: " + created.path("id").asLong());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/cases \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Q4 2024 Vendor Invoices",
-    "description": "All invoices from vendors for Q4 2024 processing"
-  }'
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-from docudevs.docudevs_client import DocuDevsClient
-from docudevs.models import CasesControllerCreateCaseRequest
-import os
-
-# Initialize the client
-
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-
-# Create a new case using the request model
-
-case_request = CasesControllerCreateCaseRequest(
-    name="Q4 2024 Vendor Invoices",
-    description="All invoices from vendors for Q4 2024 processing"
-)
-
-response = await client.create_case(case_request)
-case = response.parsed
-print(f"Created case ID: {case.id}")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases create \
-  --name "Q4 2024 Vendor Invoices" \
-  --description "All invoices from vendors for Q4 2024 processing"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/create" />
 
 ### Listing Cases
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode cases = client.listCases();
-
-for (JsonNode item : cases) {
-    System.out.println("Case " + item.path("id").asLong() + ": " + item.path("name").asText());
-}
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X GET https://api.docudevs.ai/cases \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-# List all cases for your organization
-response = await client.list_cases()
-cases = response.parsed
-
-for case in cases:
-    print(f"Case {case.id}: {case.name}")
-    if case.description:
-        print(f"  Description: {case.description}")
-    print(f"  Created: {case.created_at}")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases list
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/list" />
 
 ### Getting Case Details
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode caseDetails = client.getCase(123L);
-
-System.out.println("Case: " + caseDetails.path("name").asText());
-System.out.println("Description: " + caseDetails.path("description").asText());
-System.out.println("Created: " + caseDetails.path("createdAt").asText());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X GET https://api.docudevs.ai/cases/{case_id} \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-# Get specific case details
-case_id = 123
-response = await client.get_case(case_id)
-case = response.parsed
-
-print(f"Case: {case.name}")
-print(f"Description: {case.description}")
-print(f"Created: {case.created_at}")
-print(f"Organization ID: {case.organization_id}")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases get 123
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/get" />
 
 ### Updating Cases
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode updated = client.updateCase(
-    123L,
-    "Q4 2024 Vendor Invoices - Updated",
-    "Updated description with additional context"
-);
-
-System.out.println("Updated case: " + updated.path("name").asText());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X PUT https://api.docudevs.ai/cases/{case_id} \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Q4 2024 Vendor Invoices - Updated",
-    "description": "Updated description with additional context"
-  }'
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-from docudevs.models import CasesControllerUpdateCaseRequest
-
-# Update case details
-
-case_id = 123
-update_request = CasesControllerUpdateCaseRequest(
-    name="Q4 2024 Vendor Invoices - Updated",
-    description="Updated description with additional context"
-)
-
-response = await client.update_case(case_id, update_request)
-updated_case = response.parsed
-print(f"Updated case: {updated_case.name}")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases update 123 \
-  --name "Q4 2024 Vendor Invoices - Updated" \
-  --description "Updated description with additional context"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/update" />
 
 ### Deleting Cases
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-client.deleteCase(123L);
-System.out.println("Case deleted successfully");
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X DELETE https://api.docudevs.ai/cases/{case_id} \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-# Delete a case (this will also delete all associated documents)
-case_id = 123
-response = await client.delete_case(case_id)
-
-if response.status_code == 204:
-    print("Case deleted successfully")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases delete 123
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/delete" />
 
 :::warning
 Deleting a case will also delete all documents associated with that case. This action cannot be undone.
@@ -370,278 +69,19 @@ Deleting a [records](./records-datasets.md) case also removes its records, searc
 
 ### Uploading Documents to Cases
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.UploadRequest;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-long caseId = 123L;
-byte[] fileBytes = Files.readAllBytes(Path.of("invoice_001.pdf"));
-UploadRequest upload = new UploadRequest("invoice_001.pdf", "application/pdf", fileBytes);
-
-client.uploadCaseDocument(caseId, upload);
-System.out.println("Upload status: OK");
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/cases/{case_id}/documents \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@invoice_001.pdf"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-from docudevs.models import UploadCaseDocumentBody
-from docudevs.types import File
-
-# First, create a case (required before uploading documents)
-
-from docudevs.models import CasesControllerCreateCaseRequest
-
-case_request = CasesControllerCreateCaseRequest(
-    name="My Invoice Case",
-    description="Documents for invoice processing"
-)
-case_response = await client.create_case(case_request)
-case = case_response.parsed
-case_id = case.id
-print(f"Created case ID: {case_id}")
-
-# Now upload a document to the case
-
-with open("invoice_001.pdf", "rb") as f:
-    file_data = f.read()
-
-body = UploadCaseDocumentBody(
-    document=File(payload=file_data, file_name="invoice_001.pdf")
-)
-response = await client.upload_case_document(case_id=case_id, body=body)
-
-document = response.parsed
-print(f"Uploaded document {document.document_id} to case {case_id}")
-print(f"Status: {document.processing_status}")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases upload-document 123 invoice_001.pdf
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/upload-document" />
 
 ### Listing Documents in a Case
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode documentsPage = client.listCaseDocuments(123L, 0, 20);
-
-System.out.println("Total documents: " + documentsPage.path("totalSize").asInt());
-System.out.println("Page: " + documentsPage.path("pageNumber").asInt() + "/" + documentsPage.path("totalPages").asInt());
-
-for (JsonNode document : documentsPage.path("content")) {
-    System.out.println(document.path("filename").asText() + " [" + document.path("documentId").asText() + "]");
-    System.out.println("  status=" + document.path("processingStatus").asText());
-}
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-# List documents with pagination
-curl -X GET "https://api.docudevs.ai/cases/{case_id}/documents?page=0&size=20" \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-# List all documents in a case with pagination
-case_id = 123
-page = 0
-size = 20
-
-response = await client.list_case_documents(
-    case_id=case_id,
-    page=page,
-    size=size
-)
-
-documents_page = response.parsed
-print(f"Total documents: {documents_page.total_elements}")
-print(f"Current page: {documents_page.number}/{documents_page.total_pages}")
-
-for document in documents_page.content:
-    print(f"Document: {document.filename}")
-    print(f"  ID: {document.document_id}")
-    print(f"  Status: {document.processing_status}")
-    print(f"  Size: {document.size_bytes} bytes")
-    print(f"  Uploaded: {document.created_at}")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases list-documents 123 --page 0 --size 20
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/list-documents" />
 
 ### Getting Document Details
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode document = client.getCaseDocument(123L, "doc-uuid-here");
-
-System.out.println("Document: " + document.path("filename").asText());
-System.out.println("Content Type: " + document.path("contentType").asText());
-System.out.println("Processing Status: " + document.path("processingStatus").asText());
-System.out.println("Metadata: " + document.path("metadata"));
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X GET https://api.docudevs.ai/cases/{case_id}/documents/{document_id} \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-# Get specific document details
-case_id = 123
-document_id = "doc-uuid-here"
-
-response = await client.get_case_document(case_id, document_id)
-document = response.parsed
-
-print(f"Document: {document.filename}")
-print(f"Content Type: {document.content_type}")
-print(f"Processing Status: {document.processing_status}")
-print(f"Metadata: {document.metadata}")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases get-document 123 doc-uuid-here
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/get-document" />
 
 ### Deleting Documents from Cases
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-client.deleteCaseDocument(123L, "doc-uuid-here");
-System.out.println("Document deleted successfully");
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X DELETE https://api.docudevs.ai/cases/{case_id}/documents/{document_id} \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-```python
-# Delete a document from a case
-case_id = 123
-document_id = "doc-uuid-here"
-
-response = await client.delete_case_document(case_id, document_id)
-
-if response.status_code == 204:
-    print("Document deleted successfully")
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs cases delete-document 123 doc-uuid-here
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/delete-document" />
 
 ## Document Summaries
 
@@ -651,50 +91,7 @@ When documents are uploaded to a case, DocuDevs automatically generates AI-power
 
 Retrieve the AI-generated summary for a specific document:
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="curl">
-
-```bash
-curl -X GET "https://api.docudevs.ai/cases/123/documents/doc-uuid/summary" \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-```python
-result = await client.get_document_summary(case_id=123, document_id="doc-uuid")
-summary = result.parsed
-print(summary["filename"])        # "invoice-q4.pdf"
-print(summary["summary"]["document_type"])  # "invoice"
-print(summary["summary"]["summary"])        # "Monthly invoice from Acme Corp..."
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-JsonNode summary = client.getDocumentSummary(123, "doc-uuid");
-System.out.println(summary.path("filename").asText());
-System.out.println(summary.path("summary").path("document_type").asText());
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs cases get-summary 123 doc-uuid
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/get-summary" />
 
 The response includes:
 
@@ -718,50 +115,7 @@ The `summary` object contains:
 
 Retrieve summaries for every document in a case at once — useful for getting a birds-eye view of all documents:
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="curl">
-
-```bash
-curl -X GET "https://api.docudevs.ai/cases/123/summaries" \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-```python
-result = await client.list_case_summaries(case_id=123)
-for doc in result.parsed:
-    print(f"{doc['filename']}: {doc['summary']['document_type']}")
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-JsonNode summaries = client.listCaseSummaries(123);
-for (JsonNode doc : summaries) {
-    System.out.println(doc.path("filename").asText() + ": " +
-        doc.path("summary").path("document_type").asText());
-}
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs cases list-summaries 123
-```
-
-  </TabItem>
-</Tabs>
+<Example name="cases/list-summaries" />
 
 :::tip
 Summaries are generated asynchronously after document upload. If a document was just uploaded, the `summary` field may be `null` until processing completes.
@@ -800,32 +154,7 @@ You can monitor processing progress by checking the `processing_status` field wh
 
 Documents uploaded to cases can be processed just like standalone documents:
 
-```python
-from docudevs.models import CasesControllerCreateCaseRequest, UploadCaseDocumentBody
-from docudevs.types import File
-import json
-
-# Step 1: Create a case first
-case_request = CasesControllerCreateCaseRequest(
-    name="Contract Review",
-    description="Contract documents for review"
-)
-case_response = await client.create_case(case_request)
-case = case_response.parsed
-case_id = case.id
-
-# Step 2: Upload document to case
-with open("contract.pdf", "rb") as f:
-    document_data = f.read()
-
-upload_body = UploadCaseDocumentBody(
-    document=File(payload=document_data, file_name="contract.pdf")
-)
-upload_response = await client.upload_case_document(case_id=case_id, body=upload_body)
-document = upload_response.parsed
-
-print(f"Uploaded document {document.document_id} to case {case_id}")
-```
+<Example name="cases/create-and-upload" />
 
 :::note
 Case documents are stored and organized within the case. To process them with AI extraction,
@@ -860,23 +189,7 @@ you would process them separately using the standard document processing API wit
 
 Always implement proper error handling when working with cases:
 
-```python
-try:
-    response = await client.create_case(case_data)
-    case = response.parsed
-    print(f"Created case: {case.id}")
-except Exception as e:
-    print(f"Error creating case: {e}")
-    # Handle error appropriately
-
-try:
-    response = await client.upload_case_document(case_id, document_data, filename)
-    document = response.parsed
-    print(f"Uploaded document: {document.document_id}")
-except Exception as e:
-    print(f"Error uploading document: {e}")
-    # Handle error appropriately
-```
+<Example name="cases/handle-errors" />
 
 ## What's Next?
 

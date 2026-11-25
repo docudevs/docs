@@ -39,7 +39,7 @@ const config: Config = {
         docsPluginId: 'classic',
         config: {
           docudevs: {
-            specPath: '../docudevs/docudevs.yaml',
+            specPath: 'static/files/docudevs.yaml',
             outputDir: 'docs/openapi',
             sidebarOptions: {
               groupPathsBy: 'tag',
@@ -72,6 +72,29 @@ const config: Config = {
   themes: ['docusaurus-theme-openapi-docs'],
 
   themeConfig: {
+    languageTabs: [
+      {
+        highlight: 'powershell',
+        language: 'curl',
+        logoClass: 'curl',
+        variant: 'cURL',
+        variants: ['cURL'],
+      },
+      {
+        highlight: 'python',
+        language: 'python',
+        logoClass: 'python',
+        variant: 'http.client',
+        variants: ['http.client', 'Requests'],
+      },
+      {
+        highlight: 'java',
+        language: 'java',
+        logoClass: 'java',
+        variant: 'OkHttp',
+        variants: ['OkHttp', 'Unirest'],
+      },
+    ],
     // OpenAPI-specific configuration
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',

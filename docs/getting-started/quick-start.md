@@ -71,114 +71,9 @@ export API_KEY="your-api-key-here"
 
 ## Step 3: Process Your First Document (2 minutes)
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="quick-start/process-document" />
 
-Create a simple Python script to process a document:
-
-```python
-import os
-import asyncio
-from docudevs.docudevs_client import DocuDevsClient
-
-async def process_document():
-    # Initialize client
-    client = DocuDevsClient(token=os.getenv('API_KEY'))
-    
-    # Read your document
-    with open("your-document.pdf", "rb") as f:
-        document_data = f.read()
-    
-    # Submit for AI extraction (non-OCR)
-    job_id = await client.submit_and_process_document(
-        document=document_data,
-        document_mime_type="application/pdf",
-        prompt="Extract all key information from this document"
-    )
-    print(f"Document submitted for processing. Job ID: {job_id}")
-    
-    # Wait for processing to complete; request canonical JSON output
-    data = await client.wait_until_ready(job_id, result_format="json")
-    print("Processing complete!")
-    
-    # Display results as JSON (extraction returns structured data)
-    import json
-    print("\nExtracted Data:")
-    print(json.dumps(data, indent=2))
-
-# Run the processing
-asyncio.run(process_document())
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-# Process the document with a prompt
-docudevs process your-document.pdf \
-  --prompt "Extract all key information from this document"
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Duration;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .baseUrl("https://api.docudevs.ai")
-    .build();
-
-byte[] documentBytes = Files.readAllBytes(Path.of("your-document.pdf"));
-
-String jobGuid = client.submitAndProcessDocument(
-    new UploadRequest("your-document.pdf", "application/pdf", documentBytes),
-    ProcessOptions.builder()
-        .mimeType("application/pdf")
-        .prompt("Extract all key information from this document")
-        .build()
-);
-
-JsonNode result = client.waitUntilReadyJson(
-    jobGuid,
-    WaitOptions.builder()
-        .timeout(Duration.ofSeconds(180))
-        .pollInterval(Duration.ofSeconds(2))
-        .build()
-);
-
-System.out.println("Document submitted for processing. Job ID: " + jobGuid);
-System.out.println(result.toPrettyString());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -s -S -X POST https://api.docudevs.ai/document/upload-files \
-     -H "Authorization: $API_KEY" \
-     -F "document=@your-document.pdf" \
-     -F "prompt=Extract all key information from this document"
-```
-
-  </TabItem>
-</Tabs>
+The cURL examples use [`jq`](https://jqlang.org/) to read values from responses.
 
 ## Step 4: Run and See Results (2 minutes)
 
@@ -221,40 +116,7 @@ Extracted Data:
 
 Want to go beyond structured extraction? Try using AI to understand and summarize your documents:
 
-```python
-async def analyze_document_with_ai():
-    client = DocuDevsClient(token=os.getenv('API_KEY'))
-    
-    # Read your document
-    with open("your-document.pdf", "rb") as f:
-        document_data = f.read()
-    
-    # First, process with OCR to extract text
-    ocr_job_id = await client.submit_and_ocr_document(
-        document=document_data,
-        document_mime_type="application/pdf",
-        ocr="PREMIUM",
-        ocr_format="markdown"
-    )
-    
-    # Wait for OCR to complete
-    await client.wait_until_ready(ocr_job_id)
-    
-    # Now ask AI to analyze the document
-    analysis = await client.submit_and_wait_for_generative_task(
-        parent_job_id=ocr_job_id,
-        prompt="Summarize this document and explain what type of document it is and its main purpose."
-    )
-    
-    # Display the AI response
-    import json
-    result_data = json.loads(analysis.result)
-    print("\nAI Analysis:")
-    print(result_data['generated_text'])
-
-# Run the analysis
-asyncio.run(analyze_document_with_ai())
-```
+<Example name="quick-start/analyze-document" />
 
 This approach is perfect for:
 
@@ -324,71 +186,13 @@ instruction = "Extract all form fields and their values"
 
 ### Add Custom Schema
 
-```python
-from docudevs import json_schema
-
-# Define a proper JSON Schema
-schema = {
-    "type": "object",
-    "properties": {
-        "invoice_number": {"type": "string"},
-        "date": {"type": "string", "format": "date"},
-        "vendor": {"type": "string"},
-        "total": {"type": "number"},
-        "currency": {"type": "string"}
-    },
-    "required": ["invoice_number", "total"]
-}
-
-job_id = await client.submit_and_process_document(
-    document=document_data,
-    document_mime_type="application/pdf",
-    prompt="Extract invoice data according to the schema",
-    schema=json_schema(schema)
-)
-```
+<Example name="quick-start/custom-schema" />
 
 ### Process Multiple Similar Documents (Batch)
 
 For processing many similar documents with the same extraction configuration, use **batch processing**:
 
-```python
-import json
-
-# 1. Create a batch
-batch_guid = await client.create_batch(max_concurrency=3)
-
-# 2. Upload documents to the batch
-for filename in ["invoice1.pdf", "invoice2.pdf", "invoice3.pdf"]:
-    with open(filename, "rb") as f:
-        await client.upload_batch_document(
-            batch_guid=batch_guid,
-            document=f.read(),
-            mime_type="application/pdf",
-            file_name=filename,
-        )
-
-# 3. Process all documents with the same configuration
-schema = {
-    "type": "object",
-    "properties": {
-        "invoice_number": {"type": "string"},
-        "total": {"type": "number"}
-    }
-}
-
-await client.process_batch(
-    batch_guid=batch_guid,
-    mime_type="application/pdf",
-    prompt="Extract invoice data",
-    schema=json_schema(schema),
-)
-
-# 4. Wait for all results
-results = await client.wait_until_ready(batch_guid, result_format="json")
-for i, result in enumerate(results):
-    print(f"Document {i}: {result}")
-```
+<Example name="quick-start/batch-process" />
 
 > **Tip**: Use [Cases](/docs/advanced/cases) when you need to organize documents for search and retrieval (RAG), not for batch processing.
 
