@@ -105,12 +105,23 @@ System.out.println("Template uploaded.");
 
 ```bash
 curl -X POST https://api.docudevs.ai/template/invoice \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -F "document=@invoice_template.pdf"
 ```
 
   </TabItem>
 </Tabs>
+
+### Upload and Fill Responses
+
+`POST /template/{name}` uploads or replaces a template. A PDF upload returns a `guid`, a `status` of `completed`, `processing`, or `error`, and the extracted `formFields` when available; an error response can include an `error` message. A non-PDF upload returns the job `guid` and `status` in an `UploadResponse`.
+
+`POST /template/fill/{name}` accepts a JSON `fields` object and returns the filled file as either `application/msword` or `application/pdf`. The success response is binary: keep it as a download, because it is not a JSON response.
+
+Both endpoints use shared document admission and can return:
+
+- **409 Conflict**: the template operation conflicts with a bound or inconsistent review run.
+- **503 Service Unavailable**: the API could not acquire the document's admission lock. Retry the request after a short delay.
 
 ### Listing Templates
 
@@ -163,7 +174,7 @@ for (JsonNode template : templates) {
 
 ```bash
 curl -X GET https://api.docudevs.ai/template/list \
-  -H "Authorization: Bearer $API_KEY"
+  -H "Authorization: $API_KEY"
 ```
 
   </TabItem>
@@ -227,7 +238,7 @@ for (JsonNode field : metadata) {
 
 ```bash
 curl -i -X GET https://api.docudevs.ai/template/metadata/invoice \
-  -H "Authorization: Bearer $API_KEY"
+  -H "Authorization: $API_KEY"
 ```
 
 If the response is `202 Accepted`, wait for the `Retry-After` interval and request the metadata again.
@@ -280,7 +291,7 @@ System.out.println("Deleted template invoice");
 
 ```bash
 curl -X DELETE https://api.docudevs.ai/template/invoice \
-  -H "Authorization: Bearer $API_KEY"
+  -H "Authorization: $API_KEY"
 ```
 
   </TabItem>
@@ -370,7 +381,7 @@ Files.write(Path.of("filled_invoice.pdf"), filled);
 
 ```bash
 curl -X POST https://api.docudevs.ai/template/fill/invoice \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "fields": {
@@ -465,7 +476,7 @@ Files.write(Path.of("filled_report.docx"), filled);
 
 ```bash
 curl -X POST https://api.docudevs.ai/template/fill/sales_report \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "fields": {
@@ -536,7 +547,7 @@ print(source_locations)
 
 ```bash
 curl -X POST https://api.docudevs.ai/document/acroform-metadata \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -F "document=@fillable-form.pdf"
 ```
 
@@ -544,7 +555,7 @@ For processed jobs, fetch the stored artifact after a normal async document-proc
 
 ```bash
 curl -X GET https://api.docudevs.ai/job/result/JOB_GUID/acroform-metadata \
-  -H "Authorization: Bearer $API_KEY"
+  -H "Authorization: $API_KEY"
 ```
 
   </TabItem>
