@@ -1,3 +1,4 @@
+extraction/extract-with-pydantic:java
 first-document/handle-timeout:java
 first-document/save-and-use-configuration:java
 install/verify-connection:java
