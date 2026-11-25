@@ -1,9 +1,7 @@
 # Public client methods not yet called in an example or shown in the SDK reference page; this list only shrinks
 activate_tree
 add_extraction_review_flags
-add_memo_entry
 adjudicate_extraction_review_claim
-approve_memo_entry
 batch_records
 browse_tree_nodes
 bulk_upsert_records
@@ -39,8 +37,6 @@ list_classify_jobs
 list_draft_revisions
 list_evaluations
 list_imports
-list_memo
-list_memo_revisions
 list_records
 list_records_page
 list_trees
@@ -48,7 +44,6 @@ prepare_contract_analysis_test_package
 record_stats
 records_case
 resolve_extraction_review_values
-retire_memo_entry
 retry_import
 review_classify
 search

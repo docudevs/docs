@@ -11,6 +11,8 @@ case-agent/reply-to-run:java
 case-evals/compare-evals:java
 case-evals/evaluate-memo-entry:java
 case-evals/run-holdout-eval:java
+case-memo/add-and-approve-instruction:java
+case-memo/read-and-retire-entries:java
 compare/compare-and-export-redline:java
 errors/case-not-found:java
 errors/unauthorized:java
