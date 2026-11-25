@@ -4,9 +4,6 @@ description: Connect your organization's Azure OpenAI, OpenAI, or OpenAI-compati
 sidebar_position: 6
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 DocuDevs indexes knowledge-base documents into Azure AI Search so that
 knowledge-base tools can retrieve relevant passages. By default it uses the
 DocuDevs platform embedding account (Azure OpenAI `text-embedding-3-large`,
@@ -18,8 +15,9 @@ write-only and are never returned by the public API.
 
 :::note Admin-only
 Creating, editing, deleting, or reindexing an embedding provider requires the
-organization `ADMIN` role. Any org member can view providers, the rollout
-overview, and case embedding status.
+organization `ADMIN` role. Any org member can view providers, the embedding
+overview, and case embedding status. An organization API key acts as an
+administrator.
 :::
 
 ## How embedding generations work
@@ -58,9 +56,7 @@ Managed generation documents are stored twice in Azure AI Search: the exact
 float vector and an `int8` scalar-quantized copy that backs the HNSW
 graph. Queries run on the compressed graph and are re-scored against the
 preserved original vector, so retrieval quality stays close to the
-uncompressed baseline. DocuDevs releases are gated on a retrieval-quality
-eval (recall@10 at least 95% of exhaustive search and nDCG@10 within 2%)
-for every supported model profile.
+uncompressed baseline.
 
 ## Creating a provider
 
@@ -77,82 +73,17 @@ Provider validation starts after save: DocuDevs embeds a fixed probe string
 and marks the revision `VALID` or `INVALID`. An `INVALID` revision cannot be
 bound as the default or used for reindexing.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+Create the shared credential first. This example stores an API key; the key comes from the `PROVIDER_API_KEY` environment variable.
 
-```python
-from docudevs import DocuDevsClient
+<Example name="model-credentials/create-api-key-credential" />
 
-client = DocuDevsClient(api_url="https://api.docudevs.ai", token="<your-api-key>")
+Then create the provider with the credential's `id`:
 
-credential = await client.create_model_credential(
-    name="OpenAI embeddings",
-    secret="sk-...",
-    auth_type="API_KEY",
-)
-credential_id = credential.parsed.id
+<Example name="embedding-providers/create-embedding-provider" />
 
-mutation = await client.create_embedding_provider(
-    name="Our OpenAI embeddings",
-    provider_type="openai",
-    deployment_name="text-embedding-3-small",
-    dimensions=1536,
-    similarity_metric="cosine",
-    credential_id=credential_id,
-)
-provider = mutation.parsed.provider
-revision = provider.latest_revision
-revision_id = revision.id
-```
+The create call answers `201 Created` with the provider and its first revision. The generated Python client only parses a `200`, so the Python example reads the body from `response.content`.
 
-`create_model_credential` and `create_embedding_provider` return the generated
-client's `Response[...]` wrapper, not a plain dict: read the typed result off
-`.parsed` (attribute names are snake_case), not by subscripting the response
-itself.
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-API_URL="https://api.docudevs.ai"
-API_KEY="<your-api-key>"
-
-curl -X POST "$API_URL/model-credentials" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "OpenAI embeddings",
-    "authType": "API_KEY",
-    "apiKey": "sk-..."
-  }'
-
-curl -X POST "$API_URL/embeddings/providers" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Our OpenAI embeddings",
-    "providerType": "openai",
-    "apiUrl": "",
-    "deploymentName": "text-embedding-3-small",
-    "dimensions": 1536,
-    "similarityMetric": "cosine",
-    "credentialId": 42
-  }'
-```
-
-  </TabItem>
-</Tabs>
-
-For Entra client-secret authentication, use `authType: "ENTRA_CLIENT_SECRET"`
-(Python: `auth_type="ENTRA_CLIENT_SECRET"`) with `tenantId`, `clientId`,
-`scope` (for example `https://cognitiveservices.azure.com/.default`), and
-`cloud: "PUBLIC"`. Credential metadata is safe to list, but the secret is
-never returned.
+For Entra client-secret authentication, create the credential as described in [Model credentials](/docs/administration/model-credentials#create-and-select-a-credential) and pass its `id` the same way. Credential metadata is safe to list, but the secret is never returned.
 
 A shared credential may contain an API key or Microsoft Entra client-secret
 credentials. Chat and embedding providers use the same credential object and
@@ -188,70 +119,23 @@ case stays on its active generation, the candidate is marked `FAILED` with a
 sanitized error, and you can retry or cancel it. A failed candidate never
 blocks other cases.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+The case routes below work on organization-wide cases, the ones created with an API key; see [Which cases you can use](../advanced/case-agent.md#which-cases-you-can-use). Read the status of a case's embedding generations:
 
-```python
-status = await client.get_case_embedding_status(3)
-# status.parsed.active / status.parsed.candidate (EmbeddingGenerationSummaryDto)
+<Example name="embedding-providers/get-case-embedding-status" />
 
-await client.start_case_embedding_reindex(3)
-# poll get_case_embedding_status until status.parsed.active.dimensions == 1536
-# and status.parsed.candidate is unset
+Start a reindex of the case with the organization default revision. When the reindex has finished, the active generation has the new dimensions and the candidate is gone:
 
-await client.retry_case_embedding_reindex(3)
-await client.cancel_case_embedding_reindex(3)
-```
+<Example name="embedding-providers/start-case-reindex" />
 
-  </TabItem>
-  <TabItem value="curl">
+Retry a failed candidate, or cancel a running reindex:
 
-```bash
-curl "$API_URL/cases/3/embedding" -H "Authorization: $API_KEY"
+<Example name="embedding-providers/retry-case-reindex" />
 
-curl -X POST "$API_URL/cases/3/embedding-reindex" -H "Authorization: $API_KEY"
-curl -X POST "$API_URL/cases/3/embedding-reindex/retry" -H "Authorization: $API_KEY"
-curl -X DELETE "$API_URL/cases/3/embedding-reindex" -H "Authorization: $API_KEY"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="embedding-providers/cancel-case-reindex" />
 
 ## Default binding
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
-
-```python
-await client.set_default_embedding_binding(revision_id)
-overview = await client.get_embedding_overview()
-# overview.parsed exposes counts by revision (see GET /embeddings/overview)
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-curl -X PUT "$API_URL/embeddings/default" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"revisionId": 12}'
-
-curl "$API_URL/embeddings/overview" -H "Authorization: $API_KEY"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="embedding-providers/set-default-embedding" />
 
 The default revision is used for new case generations only. The response and
 `GET /embeddings/overview` show how many cases run on the default revision,

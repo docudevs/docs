@@ -35,6 +35,12 @@ contract-analysis/confirm-findings:java
 contract-analysis/generate-profile-with-scope:java
 contract-analysis/prepare-test-package:java
 contract-analysis/upload-test-contract:java
+embedding-providers/cancel-case-reindex:java
+embedding-providers/create-embedding-provider:java
+embedding-providers/get-case-embedding-status:java
+embedding-providers/retry-case-reindex:java
+embedding-providers/set-default-embedding:java
+embedding-providers/start-case-reindex:java
 errors/case-not-found:java
 errors/unauthorized:java
 extraction-review/build-review-descriptor:java
