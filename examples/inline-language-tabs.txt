@@ -3,7 +3,6 @@ docs/administration/bring-your-own-embeddings.md:6
 docs/administration/bring-your-own-llm.md:8
 docs/administration/bring-your-own-ocr.md:6
 docs/administration/model-credentials.md:10
-docs/core/calculated-fields.md:3
 docs/core/knowledge-search.md:4
 docs/core/lookup-files.md:6
 docs/core/map-reduce-extraction.md:11
