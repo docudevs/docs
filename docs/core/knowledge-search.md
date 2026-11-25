@@ -4,9 +4,6 @@ description: Enrich document extraction with case-specific lookup against your i
 sidebar_position: 5
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 Knowledge Search lets DocuDevs cite trusted facts from an indexed case while it extracts data from an incoming document. Instead of relying solely on the uploaded file, the extraction prompt can call a retrieval tool that queries your curated knowledge base (cases synchronized to the DocuDevs search index). This is ideal whenever documents contain shorthand identifiers, catalog numbers, or sparse descriptions that must be cross-referenced.
 
 Unlike standard document extraction—which only considers the uploaded content—Knowledge Search injects results from your case index directly into the prompt chain. The worker automatically keeps the organization context, so every search remains tenant-scoped.
@@ -25,7 +22,7 @@ Stay with normal extraction when the uploaded file already contains every fact y
 
 - **Step 1 — Prepare a case:** Create a case and upload reference documents via the DocuDevs UI or CLI (`docudevs cases create`, `docudevs cases upload-document`). Promote it to a knowledge base with `docudevs knowledge-base add <case_id>`.
 - **Step 2 — Discover the case ID:** `docudevs knowledge-base list` (or the API `GET /knowledge-bases`) returns the IDs you can target. The Python SDK exposes the same CRUD surface as `list_knowledge_bases`, `get_knowledge_base`, `promote_knowledge_base`, and `delete_knowledge_base` on `DocuDevsClient`.
-- **Step 3 — Attach a tool descriptor:** Pass `{"type":"KNOWLEDGE_BASE_SEARCH","config":{"caseId":"<id>","topK":5}}` alongside your extraction request.
+- **Step 3 — Attach a tool descriptor:** Pass `{"type":"KNOWLEDGE_BASE_SEARCH","config":{"caseId":"<id>","topK":5}}` in the `tools` of your extraction request.
 - **Step 4 — Process documents:** The worker resolves the descriptor into a knowledge search tool wired to your case-specific index.
 - **Step 5 — Review search hits:** Download the job result or open the processing timeline in DocuDevs to confirm when the knowledge search tool ran and what context it injected.
 
@@ -33,195 +30,11 @@ Stay with normal extraction when the uploaded file already contains every fact y
 
 ## Example scenario: Specialty catalog enrichment
 
-You maintain a "Signature Appliances" case (`kb-kitchen-pro`) that stores the canonical marketing copy, safety class, and localization guidance for every SKU. When suppliers send intake spreadsheets, you want DocuDevs to fill in the approved names and regulatory labels before the data hits your PIM. The following snippets show how to attach the Knowledge Search tool via REST, Python (with Pydantic models), and the DocuDevs CLI.
+You maintain a "Signature Appliances" case (knowledge base `42`) that stores the canonical marketing copy, safety class, and localization guidance for every SKU. When suppliers send intake spreadsheets, you want DocuDevs to fill in the approved names and regulatory labels before the data hits your PIM. The example attaches the Knowledge Search tool to the extraction request.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="knowledge-search/extract-with-knowledge-base" />
 
-```python
-import asyncio
-from pathlib import Path
-from pydantic import BaseModel, Field
-
-from docudevs import DocuDevsClient, json_schema
-
-class CatalogRow(BaseModel):
-    sku: str = Field(pattern=r"^SKU-\d{5}$")
-    canonical_name: str = Field(max_length=80)
-    localized_display_name: str = Field(max_length=40)
-    regulatory_class: str
-    marketing_summary: str | None = None
-
-class CatalogResult(BaseModel):
-    records: list[CatalogRow]
-
-async def enrich_products():
-    client = DocuDevsClient(token="YOUR_API_KEY")
-    payload = Path("samples/products.csv").read_bytes()
-
-    # Define the knowledge search tool as a simple dict
-    tool = {
-        "type": "KNOWLEDGE_BASE_SEARCH",
-        "config": {
-            "caseId": "kb-kitchen-pro",
-            "topK": 8,
-        }
-    }
-
-    job_id = await client.submit_and_process_document(
-        document=payload,
-        document_mime_type="text/csv",
-        prompt=(
-            "Fill canonical_name, localized_display_name (<=40 chars), regulatory_class, "
-            "and marketing_summary using the Signature Appliances knowledge base."
-        ),
-        schema=json_schema(CatalogResult),
-        tools=[tool],
-    )
-
-    raw = await client.wait_until_ready(job_id, result_format="json")
-    result = CatalogResult(**raw)
-    print(result.records[0])
-
-asyncio.run(enrich_products())
-```
-
-The Pydantic models ensure downstream code only sees validated names and compliance metadata. If a record fails validation (e.g., localized name exceeds 40 characters) you can catch the exception and decide whether to re-run with different prompts.
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-DOCUDEVS_API_URL="https://api.docudevs.ai"
-API_KEY="<your-api-key>"
-CASE_ID="kb-kitchen-pro"
-
-docudevs process ./samples/products.csv \
-  --mime-type text/csv \
-  --prompt "Enrich canonical name, localized display name, regulatory class, and marketing summary using the Signature Appliances case." \
-  --schema-file schemas/appliance-catalog.json \
-  --tool '{"type":"KNOWLEDGE_BASE_SEARCH","config":{"caseId":"'"$CASE_ID"'","topK":8}}'
-```
-
-You can repeat `--tool` to stack multiple descriptors (e.g., knowledge search plus other orchestration helpers).
-
-Combine with `docudevs knowledge-base list` to fetch available case IDs at runtime.
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.ToolDescriptor;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-String schema = """
-{
-  "type": "object",
-  "properties": {
-    "records": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "sku": {"type": "string"},
-          "canonical_name": {"type": "string"},
-          "localized_display_name": {"type": "string"},
-          "regulatory_class": {"type": "string"},
-          "marketing_summary": {"type": "string"}
-        }
-      }
-    }
-  }
-}
-""";
-
-byte[] fileBytes = Files.readAllBytes(Path.of("samples/products.csv"));
-UploadRequest upload = new UploadRequest("products.csv", "text/csv", fileBytes);
-
-ProcessOptions options = ProcessOptions.builder()
-    .prompt(
-        "Fill canonical_name, localized_display_name (<=40 chars), regulatory_class, and "
-            + "marketing_summary using the Signature Appliances knowledge base."
-    )
-    .schema(schema)
-    .tools(List.of(ToolDescriptor.knowledgeBaseSearch("kb-kitchen-pro", 8)))
-    .build();
-
-String guid = client.submitAndProcessDocument(upload, options);
-JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
-System.out.println(result);
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-API_URL="https://api.docudevs.ai"
-API_KEY="<your-api-key>"
-CASE_ID="kb-kitchen-pro"
-
-curl -X POST "$API_URL/document/upload-files" \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@./samples/products.csv;type=text/csv" \
-  -F 'payload={
-    "prompt": "For each SKU, fill canonicalName, localizedDisplayName (<=40 chars), regulatoryClass, and marketingSummary based on the Signature Appliances knowledge base.",
-    "schema": {
-      "type": "object",
-      "properties": {
-        "records": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "sku": {"type": "string"},
-              "canonicalName": {"type": "string"},
-              "localizedDisplayName": {"type": "string", "maxLength": 40},
-              "regulatoryClass": {"type": "string"},
-              "marketingSummary": {"type": "string"}
-            },
-            "required": ["sku", "canonicalName", "localizedDisplayName"]
-          }
-        }
-      },
-      "required": ["records"]
-    },
-    "tools": [
-      {
-        "type": "KNOWLEDGE_BASE_SEARCH",
-        "config": {
-          "caseId": "'"$CASE_ID"'",
-          "topK": 8
-        }
-      }
-    ]
-  }'
-```
-
-The `tools` array can include multiple descriptors; Knowledge Search simply becomes one of them.
-
-Server-side validation ensures the case belongs to your organization before executing the search.
-
-  </TabItem>
-</Tabs>
+The `tools` array can include several descriptors; Knowledge Search is one of them. The CLI repeats `--tool` to stack descriptors. The server checks that the case belongs to your organization before it runs the search.
 
 ## Knowledge Base Evaluation
 
@@ -300,16 +113,7 @@ When the reference data is a [records dataset](../advanced/records-datasets.md) 
 
 Unknown keys are rejected. The request fails with `400` when the case is not a records knowledge base, `404` when it is not found. Each hit contains the record `key`, the matched text (`chunk`), the `label` and its `labelPath`, and the `score`. Search uses the knowledge base's active embedding provider and its search settings, and fails instead of falling back when the provider cannot be resolved.
 
-```python
-tool = {"type": "RECORDS_SEARCH", "config": {"caseId": "51", "topK": 5}}
-job_id = await client.submit_and_process_document(
-    document=payload,
-    document_mime_type="application/pdf",
-    prompt="For each invoice line, fill product_key with the catalogue record that matches the item.",
-    schema=json_schema(InvoiceLines),
-    tools=[tool],
-)
-```
+<Example name="knowledge-search/extract-with-records-search" />
 
 To match many values in one run, use a [classify job with the record target](../advanced/classification.md#matching-rows-to-records).
 

@@ -22,7 +22,6 @@ docs/core/date-range-lookup.md:2
 docs/core/document-compare.md:1
 docs/core/document-layout.md:2
 docs/core/extraction-review.md:3
-docs/core/knowledge-search.md:5
 docs/core/lookup-files.md:11
 docs/core/object-detection.md:1
 docs/core/source-locations.md:5

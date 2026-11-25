@@ -17,6 +17,7 @@ jobs/handle-delete-errors:java
 jobs/process-and-clean-up:java
 jobs/process-with-auto-ocr:java
 jobs/process-with-depends-on:java
+knowledge-search/extract-with-records-search:java
 ocr/choose-quality-and-format:java
 ocr/extract-text:java
 ocr/ocr-sync:java
