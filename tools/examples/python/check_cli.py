@@ -12,7 +12,7 @@ def check_source(source: str, filename: str, root_command: click.Command) -> lis
         if not line.lstrip().startswith("docudevs "):
             continue
         try:
-            tokens = shlex.split(line, comments=False, posix=True)
+            tokens = _tokenise(line)
         except ValueError as error:
             problems.append(f"{filename}:{line_number}: {error}")
             continue
@@ -40,32 +40,51 @@ def _logical_lines(source: str) -> list[tuple[int, str]]:
     return lines
 
 
+def _tokenise(line: str) -> list[str]:
+    lexer = shlex.shlex(line, posix=True, punctuation_chars=True)
+    lexer.whitespace_split = True
+    lexer.commenters = "#"
+    tokens: list[str] = []
+    for token in lexer:
+        if set(token) <= set(lexer.punctuation_chars):
+            break
+        tokens.append(token)
+    return tokens
+
+
 def _check_tokens(tokens: list[str], root_command: click.Command) -> str | None:
     command = root_command
     path = [tokens[0]]
-    for token in tokens[1:]:
-        if token.startswith("-") or not isinstance(command, click.Group):
-            break
-        child = command.commands.get(token)
-        path.append(token)
-        if child is None:
-            return f"unknown command '{' '.join(path)}'"
-        command = child
-    known = _option_names(command)
-    for token in tokens[1:]:
+    index = 1
+    while index < len(tokens):
+        token = tokens[index]
         if token.startswith("--"):
             option = token.split("=", 1)[0]
-            if option not in known:
+            params = _option_params(command)
+            if option not in params:
                 return f"'{' '.join(path)}' has no option '{option}'"
+            if isinstance(command, click.Group) and "=" not in token and _takes_value(params[option]):
+                index += 1
+        elif isinstance(command, click.Group) and not token.startswith("-"):
+            child = command.commands.get(token)
+            path.append(token)
+            if child is None:
+                return f"unknown command '{' '.join(path)}'"
+            command = child
+        index += 1
     return None
 
 
-def _option_names(command: click.Command) -> set[str]:
-    names = {"--help"}
+def _option_params(command: click.Command) -> dict[str, click.Parameter | None]:
+    params: dict[str, click.Parameter | None] = {"--help": None}
     for param in command.params:
-        names.update(getattr(param, "opts", []))
-        names.update(getattr(param, "secondary_opts", []))
-    return names
+        for name in [*getattr(param, "opts", []), *getattr(param, "secondary_opts", [])]:
+            params[name] = param
+    return params
+
+
+def _takes_value(param: click.Parameter | None) -> bool:
+    return isinstance(param, click.Option) and not param.is_flag and not param.count
 
 
 def main(argv: list[str]) -> int:
