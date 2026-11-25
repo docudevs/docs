@@ -128,7 +128,7 @@ test('--diff skips the scanner and its test, and scans added lines starting with
   writeFileSync(join(dir, 'tools', 'port', 'scan.mjs'), 'localhost\n');
   writeFileSync(join(dir, 'tools', 'examples', 'test', 'port-scan.test.mjs'), 'localhost\n');
   writeFileSync(join(dir, 'page.md'), '++ SECRET-LITERAL-ONE\n');
-  git('add', '.');
+  git('add', 'tools', 'page.md');
   git('commit', '-q', '-m', 'change');
   const result = run(['--diff', 'main'], env, dir);
   assert.equal(result.status, 1);
