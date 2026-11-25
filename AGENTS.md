@@ -50,10 +50,10 @@ Markers may hide only imports, client construction and environment setup. Everyt
 
 ### Sources of truth
 
-Checks run against published packages, never a sibling checkout. The main repository is `docudevs/docudevs`, normally checked out next to this one.
+Checks run against published packages, never a sibling checkout. The private main repository is normally checked out at `../docudevs`; only maintainers have access to it, so its `features/` and `docudevs-sdk/tests` are available to maintainers only.
 
-- Features are specified in the main repository's `features/` directory.
-- The main repository's `docudevs-sdk/tests` are the reference for Python usage.
+- Features are specified in the private main repository's `features/` directory.
+- The private main repository's `docudevs-sdk/tests` are the reference for Python usage.
 - Python and Java signatures: the published packages pinned below. If repository source and published package disagree, the published package wins.
 - cURL: `static/files/docudevs.yaml`.
 - CLI: the commands of the pinned Python package.
@@ -67,24 +67,24 @@ Checks run against published packages, never a sibling checkout. The main reposi
 
 Public docs show only what a released SDK can run. Bump a pin after the SDK is released, then update the examples. To draft ahead of a release, use local overrides and do not merge examples that depend on them:
 
-- Python: run `uv pip install --python tools/examples/python/.venv/bin/python -e <main repo>/docudevs-sdk` into `tools/examples/python/.venv` (manual; the checkers use whatever is installed).
-- Java: `./gradlew compileJava -PsdkRoot=<main repo>` from `tools/examples/java` includes the main repository's Java SDK build.
-- Spec: `DOCUDEVS_MAIN_ROOT=<main repo> npm run sync-openapi-spec` copies `docudevs.yaml` from the main repository.
+- Python: run `uv pip install --python tools/examples/python/.venv/bin/python -e ../docudevs/docudevs-sdk` into `tools/examples/python/.venv` (manual; the checkers use whatever is installed).
+- Java: `./gradlew compileJava -PsdkRoot=../docudevs` from `tools/examples/java` includes the private main repository's Java SDK build (configures; not exercised in CI).
+- Spec: `DOCUDEVS_MAIN_ROOT=../docudevs npm run sync-openapi-spec` copies `docudevs.yaml` from the private main repository.
 
 ## Spec and API reference
 
-Spec sync is always deliberate and never part of `start` or `build`, so the tracked, release-pinned `static/files/docudevs.yaml` is not overwritten by accident. When refreshing the spec for a release, run `npm run sync-openapi-spec` (set `DOCUDEVS_MAIN_ROOT` if the main repository is not at `../docudevs`), then regenerate the API reference with `npm run api-docs` (or `npm run clean-api-docs` and `npm run gen-api-docs` separately) and commit the results.
+Spec sync is always deliberate and never part of `start` or `build`, so the tracked, release-pinned `static/files/docudevs.yaml` is not overwritten by accident. When refreshing the spec for a release, run `npm run sync-openapi-spec` (set `DOCUDEVS_MAIN_ROOT` if the private main repository is not at `../docudevs`), then regenerate the API reference with `npm run api-docs` (or `npm run clean-api-docs` and `npm run gen-api-docs` separately) and commit the results.
 
 ## Checks
 
-Run these before opening a pull request; CI (`.github/workflows/examples.yml`) runs them on every pull request and push to `main`.
+Run these before opening a pull request. CI (`.github/workflows/examples.yml`) runs every check below except `npm run build` on every pull request and push to `main`; the full site build is exercised by the pull-request preview deployment, not by the Examples workflow.
 
 | Command | What it checks |
 | --- | --- |
 | `npm run examples:test` | Unit tests of the example tooling |
 | `npm run examples:manifest` | Example files are recognised, markers are balanced, Java package lines match the directory, every `<Example name>` used in `docs/` exists; writes `src/generated/examples.json` |
 | `npm run examples:coverage` | Missing cURL, Python and Java files match `examples/known-gaps.txt` |
-| `npm run examples:curl` | `curl.sh` and `cli.sh` pass `bash -n`; each cURL request matches a path and method in the spec |
+| `npm run examples:curl` | `curl.sh` and `cli.sh` pass `bash -n`; each cURL request matches a path and method in the spec; a `curl` to anything other than the API fails unless its URL is a variable reference |
 | `npm run typecheck` | TypeScript in `src/` |
 | `npm run build` | The site builds (broken links only warn) |
 
@@ -100,7 +100,7 @@ tools/examples/python/.venv/bin/python tools/examples/python/check_cli.py exampl
 
 `check_python.py` verifies that each `client.<method>(...)` call names a method of the pinned `DocuDevsClient` and uses keyword arguments it accepts. `check_cli.py` verifies each `docudevs ...` command and option against the pinned CLI.
 
-Java needs a JDK 17 or newer:
+Java needs a JDK 17 installed (the build compiles with a Java 17 toolchain and has no toolchain download; Gradle itself may run on a newer JDK):
 
 ```bash
 cd tools/examples/java && ./gradlew compileJava
@@ -108,7 +108,7 @@ cd tools/examples/java && ./gradlew compileJava
 
 This compiles every `Example.java` against the pinned Java SDK.
 
-The checks do not validate response field names, request body shapes, or that the language variants of an example do the same thing. Reviewers must read each example against the spec and SDK for those.
+The checks do not validate response field names, request body shapes, or that the language variants of an example do the same thing. The Python check validates method and keyword names only (not `await`, positional arity or required arguments), and the CLI check only inspects lines that begin with `docudevs ` (not `VAR=$(docudevs ...)` or `if docudevs ...`). Reviewers must read each example against the spec and SDK for those.
 
 ### Known gaps ratchet
 
