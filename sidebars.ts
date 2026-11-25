@@ -35,6 +35,8 @@ const sidebars: SidebarsConfig = {
         'core/date-range-lookup',
         'core/lookup-files',
         'core/contract-analysis',
+        'core/contract-analysis-playbooks',
+        'core/playbook-evaluation',
         'core/workbook-normalization',
         'core/batch-processing',            // NEW: Multi-document batch processing
       ],
@@ -102,6 +104,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'reference/sdk-methods',            // NEW: Complete SDK reference
         'reference/cli-reference',          // NEW: CLI command reference
+        'reference/playbook-format',
         'reference/sdk-changelog',
         'reference/billing-tokens',
         'reference/error-codes',            // NEW: Error reference

@@ -238,3 +238,9 @@ Every example above has a CLI tab except the source-authority ones. The CLI mirr
 ## Availability
 
 Contract-analysis generation and analysis must be enabled for your organization or deployment; when disabled, public profile and analysis entry points return a typed `404`. The reviewed version-2 workflow (source authority, trials, scored review, `/contract-analysis/runs`) is a separate, nested capability that must also be enabled for your deployment before it accepts writes — v1 profile publication is unaffected either way. Legacy knowledge-base search and inline evaluation (see [Knowledge Search](/docs/core/knowledge-search)) continue to work when contract analysis is disabled.
+
+## Related
+
+- [Contract-analysis playbooks](./contract-analysis-playbooks.md): import a clause-based playbook and review contracts against it.
+- [Playbook format](../reference/playbook-format.md): the playbook JSON format and its JSON Schema.
+- [Playbook evaluation](./playbook-evaluation.md): test a playbook against gold answers and improve it.
