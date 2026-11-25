@@ -4,9 +4,6 @@ description: Pass the current date to the LLM so date-dependent extractions and 
 sidebar_position: 6
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Include Current Date
 
 Provide the LLM with today's date so that date-relative calculations in your extractions produce correct results.
@@ -27,94 +24,11 @@ If your extraction does not involve date arithmetic, you can leave the flag off 
 
 ## Enabling Include Current Date
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="extraction/include-current-date" />
 
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
+The parameter is also available on map-reduce requests:
 
-client = DocuDevsClient(token=os.getenv("API_KEY"))
-
-job_guid = await client.submit_and_process_document(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract vehicle registration details including vehicle age in years",
-    schema=schema_json,
-    include_current_date=True,
-)
-
-result = await client.wait_until_ready(job_guid)
-```
-
-The parameter is also available on map-reduce methods:
-
-```python
-job_guid = await client.submit_and_process_document_map_reduce(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract line items with remaining warranty days",
-    schema=schema_json,
-    pages_per_chunk=2,
-    include_current_date=True,
-)
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-byte[] fileBytes = Files.readAllBytes(Path.of("registration.pdf"));
-UploadRequest upload = new UploadRequest("registration.pdf", "application/pdf", fileBytes);
-
-String guid = client.submitAndProcessDocument(
-    upload,
-    ProcessOptions.builder()
-        .mimeType("application/pdf")
-        .prompt("Extract vehicle registration details including vehicle age in years")
-        .schema(schemaJson)
-        .includeCurrentDate(true)
-        .build()
-);
-
-var result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-# Process with includeCurrentDate enabled
-curl -X POST https://api.docudevs.ai/document/process/{guid} \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Extract vehicle registration details including vehicle age in years",
-    "schema": "...",
-    "mimeType": "application/pdf",
-    "includeCurrentDate": true
-  }'
-```
-
-  </TabItem>
-</Tabs>
+<Example name="extraction/include-current-date-map-reduce" />
 
 ## How It Works
 

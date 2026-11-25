@@ -4,9 +4,6 @@ description: Reference for DocuDevs API error codes, HTTP status codes, and trou
 sidebar_position: 6
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Error Codes Reference
 
 Complete reference for HTTP status codes, error responses, and troubleshooting in the DocuDevs API.
@@ -67,8 +64,7 @@ Invalid request parameters or malformed data.
 - Unsupported file formats
 - Invalid operation types
 
-<Tabs>
-<TabItem value="json" label="Response">
+Example response:
 
 ```json
 {
@@ -76,21 +72,6 @@ Invalid request parameters or malformed data.
   "status": 400
 }
 ```
-
-</TabItem>
-<TabItem value="sdk" label="Python SDK">
-
-```python
-# Raises docudevs.exceptions.ApiException
-try:
-    client.create_case(body=CreateCaseBody(description="Missing name"))
-except ApiException as e:
-    print(f"Status: {e.status}") # 400
-    print(f"Reason: {e.reason}") # Bad Request
-```
-
-</TabItem>
-</Tabs>
 
 #### 401 Unauthorized
 
@@ -103,26 +84,7 @@ Authentication failed or missing.
 - Expired token
 - Malformed Authorization header
 
-<Tabs>
-<TabItem value="curl" label="cURL">
-
-```bash
-# Missing Authorization header
-curl -X GET https://api.docudevs.ai/cases
-# Returns: 401 Unauthorized
-```
-
-</TabItem>
-<TabItem value="cli" label="CLI">
-
-```bash
-# Invalid token
-docudevs --token=invalid list-cases
-# Error: Authentication failed (401)
-```
-
-</TabItem>
-</Tabs>
+<Example name="errors/unauthorized" />
 
 #### 403 Forbidden
 
@@ -147,19 +109,7 @@ Requested resource doesn't exist.
 - Template not found
 - Resource belongs to different organization
 
-<Tabs>
-<TabItem value="sdk" label="Python SDK">
-
-```python
-try:
-    client.get_case(case_id=99999)
-except ApiException as e:
-    if e.status == 404:
-        print("Case not found")
-```
-
-</TabItem>
-</Tabs>
+<Example name="errors/case-not-found" />
 
 #### 409 Conflict
 
@@ -259,44 +209,17 @@ Jobs can have error states in their status, separate from HTTP errors.
 
 ## SDK Error Handling
 
-The Python SDK raises exceptions for non-2xx responses.
+The Python SDK methods that wrap a single API call return the HTTP response instead of raising on an error status, so check `status_code` before you use the response:
 
-```python
-from docudevs.docudevs_client import DocuDevsClient
-from docudevs.exceptions import ApiException
+<Example name="cases/handle-errors" />
 
-client = DocuDevsClient(token="your-api-key")
+The helpers that submit a document or wait for a job raise instead: `wait_until_ready` raises `TimeoutError` when the job does not finish in time, and an `Exception` carrying the error message when the job fails.
 
-try:
-    job_id = await client.submit_and_process_document(
-        document=document_data,
-        document_mime_type="application/pdf"
-    )
-    result = await client.wait_until_ready(job_id)
-except ApiException as e:
-    print(f"API Error: {e.status} - {e.reason}")
-    print(f"Details: {e.body}")
-except TimeoutError:
-    print("Processing timed out")
-except Exception as e:
-    print(f"Unexpected error: {e}")
-```
+<Example name="first-document/handle-timeout" />
 
 ## CLI Error Handling
 
-The CLI returns appropriate exit codes:
-
-- `0`: Success
-- `1`: General error (including API errors)
-
-Error messages are written to stderr.
-
-```bash
-docudevs process document.pdf
-if [ $? -ne 0 ]; then
-    echo "Processing failed"
-fi
-```
+The CLI writes error messages to stderr. Some commands report a failed API call with an error message and still exit with status `0`, so a script that must detect failures should check stderr, or call the HTTP API and check the status code.
 
 ## Rate Limiting
 
@@ -320,7 +243,7 @@ fi
 
 ### Authentication Issues
 
-- **401 Unauthorized**: Check your API key. Ensure it is set in `DOCUDEVS_TOKEN` or passed via `--token`.
+- **401 Unauthorized**: Check your API key. Ensure the `API_KEY` environment variable is set to a valid key (the CLI also accepts `--token`).
 
 ### File Upload Issues
 

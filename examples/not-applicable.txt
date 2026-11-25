@@ -2,3 +2,4 @@
 # curl: the step runs in the client and makes no HTTP request of its own
 # python: DocuDevsClient has no method for the route
 ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
+webhooks/configure-webhook:python  # DocuDevsClient 1.15.0 has no method for GET or PUT /settings/webhook

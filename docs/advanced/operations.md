@@ -4,9 +4,6 @@ description: Post-processing operations on completed jobs including error analys
 sidebar_position: 2
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Operations
 
 Perform post-processing operations on completed document jobs for error analysis, generative tasks, image selection, and AcroForm PDF generation.
@@ -43,7 +40,7 @@ Generates custom AI responses based on processed document content:
 
 ### Image Selection
 
-Selects the most relevant extracted figures based on a prompt. The parent job must have figure artifacts, which are created by running document processing or OCR with `extract_figures=True` (or `describe_figures=True`).
+Selects the most relevant extracted figures based on a prompt. The parent job must have figure artifacts, which are created by running document processing or OCR with `extractFigures` (or `describeFigures`) enabled.
 
 ### PDF AcroForm Conversion
 
@@ -51,8 +48,8 @@ Converts a completed PDF job into a generated fillable AcroForm PDF. This is use
 
 The conversion workflow has two companion artifacts:
 
-- `get_acroform_metadata(operation_job_guid)` returns the generated PDF's embedded widget metadata in PDF page-point coordinates.
-- `get_pdf_acroform_field_definitions(operation_job_guid)` returns normalized editable field definitions with `entryBbox` values in `0..1` page-image coordinates.
+- `GET /job/result/{operationJobGuid}/acroform-metadata` returns the generated PDF's embedded widget metadata in PDF page-point coordinates.
+- `GET /job/result/{operationJobGuid}/pdf-acroform-field-definitions` returns normalized editable field definitions with `entryBbox` values in `0..1` page-image coordinates.
 
 Use the field-definition artifact for review UIs or manual edits, then send the reviewed list back through `pdf-acroform/apply` to regenerate the PDF without rerunning visual detection.
 
@@ -105,288 +102,23 @@ POST /operation/{parentJobId}/generative-task
 }
 ```
 
-## SDK & CLI Examples
+## Examples
+
+The examples below start from a completed job: replace `<job-guid>` with the GUID of a job you processed earlier. The cURL tabs poll the operation job until it completes; the Python SDK helpers and the CLI wait for you.
 
 ### Error Analysis
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
-
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
-import asyncio
-
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-
-async def analyze_errors(job_guid):
-    # Submit error analysis operation and wait for the result
-    analysis_result = await client.submit_and_wait_for_error_analysis(
-        job_guid=job_guid,
-        timeout=120
-    )
-    print(f"Analysis result: {analysis_result}")
-
-# Usage
-# asyncio.run(analyze_errors("your-job-guid"))
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-# Submit error analysis and wait for completion
-docudevs operations error-analysis JOB_GUID --timeout 180
-
-# Check status of operations on the job (optional)
-docudevs operations status JOB_GUID
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-String parentJobGuid = "JOB_GUID";
-
-client.submitOperation(parentJobGuid, "error-analysis");
-
-JsonNode result = client.waitForOperation(
-    parentJobGuid, "error-analysis", WaitOptions.builder().build()
-);
-System.out.println(result.path("result"));
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/operation \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"jobGuid": "JOB_GUID", "type": "error-analysis"}'
-
-# Poll for operation status
-curl -X GET https://api.docudevs.ai/operation/JOB_GUID \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="operations/error-analysis" />
 
 ### Generative Tasks
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
-
-```python
-async def summarize_document(job_guid):
-    summary = await client.submit_and_wait_for_generative_task(
-        parent_job_id=job_guid,
-        prompt="Summarize the main findings",
-        model="DEFAULT"
-    )
-    # The result is a JSON string inside the response object
-    import json
-    result_data = json.loads(summary.result)
-    print(result_data['generated_text'])
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-# Create a generative task that waits for completion
-docudevs operations generative-task PARENT_JOB_GUID \
-  --prompt "Summarize the main findings" \
-  --model DEFAULT --timeout 180
-
-# Retrieve the operation result if needed later
-docudevs operations result PARENT_JOB_GUID --type generative-task
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-ObjectMapper mapper = new ObjectMapper();
-String parentJobGuid = "PARENT_JOB_GUID";
-
-client.createGenerativeTask(parentJobGuid, "Summarize the main findings", "DEFAULT");
-
-JsonNode result = client.waitForGenerativeTask(
-    parentJobGuid, WaitOptions.builder().build()
-);
-JsonNode payload = mapper.readTree(result.path("result").asText());
-System.out.println(payload.path("generated_text").asText());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/operation/PARENT_JOB_GUID/generative-task \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Summarize the main findings", "model": "DEFAULT"}'
-
-# Fetch the generative task result
-curl -X GET https://api.docudevs.ai/operation/PARENT_JOB_GUID/generative-task \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="operations/generative-task" />
 
 ### Image Selection
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+The parent job must have figure artifacts, so process the document with figure extraction (`extractFigures` or `describeFigures`) first.
 
-```python
-import json
-
-job_guid = await client.submit_and_process_document(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract key information",
-    extract_figures=True
-)
-await client.wait_until_ready(job_guid)
-
-selection = await client.submit_and_wait_for_image_selection(
-    job_guid,
-    prompt="Return all diagrams from the document",
-    top_k=5,
-    match_mode="all",
-    use_vision=False
-)
-
-selection_payload = json.loads(selection.result)
-first = selection_payload["selected"][0]
-image_bytes = await client.get_figure_image(job_guid, first["id"])
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs operations submit JOB_GUID \
-  --type image-select \
-  --parameter prompt="Return all diagrams from the document" \
-  --parameter topK=5 \
-  --parameter matchMode=all \
-  --parameter useVision=false \
-  --wait
-
-docudevs operations result JOB_GUID --type image-select
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Map;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-ObjectMapper mapper = new ObjectMapper();
-String jobGuid = "JOB_GUID";
-
-client.submitOperation(jobGuid, "image-select", null,
-    Map.of(
-        "prompt", "Return all diagrams from the document",
-        "topK", 5,
-        "matchMode", "all",
-        "useVision", false
-    )
-);
-
-JsonNode result = client.waitForOperation(
-    jobGuid, "image-select", WaitOptions.builder().build()
-);
-
-JsonNode payload = mapper.readTree(result.path("result").asText());
-JsonNode first = payload.path("selected").get(0);
-if (first != null) {
-    String imageId = first.path("id").asText();
-    byte[] imageBytes = client.getFigureImage(jobGuid, imageId);
-    Files.write(Path.of("selected_figure.png"), imageBytes);
-}
-System.out.println(payload.toPrettyString());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/operation \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "jobGuid": "JOB_GUID",
-        "type": "image-select",
-        "parameters": {
-          "customParameters": {
-            "prompt": "Return all diagrams from the document",
-            "topK": 5,
-            "matchMode": "all",
-            "useVision": false
-          }
-        }
-      }'
-```
-
-  </TabItem>
-</Tabs>
+<Example name="operations/select-images" />
 
 ### PDF AcroForm Conversion
 
@@ -394,191 +126,27 @@ Run `pdf-acroform` on a completed PDF job to generate a fillable AcroForm PDF, t
 
 For the full parameter list and the REST download endpoint, see [PDF AcroForm](./pdf-acroform.md).
 
-The parent job must point to a PDF. The operation also needs rendered page images, so the safest setup is to create the parent job with `ocr="PREMIUM"` or pass `force_ocr=True` when thumbnails are missing.
+The parent job must point to a PDF. The operation also needs rendered page images, so the safest setup is to create the parent job with `ocr="PREMIUM"`, or set `forceOcr` on the operation when thumbnails are missing.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="operations/convert-pdf-to-acroform" />
 
-```python
-import json
+The CLI prints the `operationJobGuid`. To fetch `acroform-metadata` and `pdf-acroform-field-definitions`, or to submit reviewed field definitions back through `pdf-acroform/apply`, use the Python SDK or the HTTP API:
 
-parent_job_guid = await client.submit_and_process_document(
-    document=pdf_bytes,
-    document_mime_type="application/pdf",
-    ocr="PREMIUM",
-    extraction_mode="OCR",
-    acro_form_metadata=True,
-)
-await client.wait_until_ready(parent_job_guid, timeout=900, poll_interval=5)
-
-conversion = await client.submit_and_wait_for_pdf_acroform_operation(
-    parent_job_guid,
-    llm_type="DEFAULT",
-    ocr="PREMIUM",
-    min_confidence=0.35,
-    max_fields_per_page=300,
-    timeout=1200,
-    poll_interval=10,
-    save_to="medical-examination-form-fillable.pdf",
-)
-
-generated_metadata = await client.get_acroform_metadata(conversion.operation_job_guid)
-definitions_artifact = await client.get_pdf_acroform_field_definitions(
-    conversion.operation_job_guid
-)
-
-print(json.dumps(generated_metadata.get("fields", [])[:3], indent=2))
-print(json.dumps(definitions_artifact["fieldDefinitions"][:3], indent=2))
-
-reviewed_fields = [dict(field) for field in definitions_artifact["fieldDefinitions"]]
-for field in reviewed_fields:
-    field["reviewStatus"] = "accepted"
-
-applied = await client.submit_and_wait_for_pdf_acroform_apply_operation(
-    parent_job_guid,
-    field_definitions=reviewed_fields,
-    source_operation_guid=conversion.operation_job_guid,
-    save_to="medical-examination-form-reviewed.pdf",
-)
-
-print(applied.operation_job_guid)
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs operations pdf-acroform PARENT_JOB_GUID \
-  --ocr PREMIUM \
-  --min-confidence 0.35 \
-  --max-fields-per-page 300 \
-  --timeout 1200 \
-  --poll-interval 10 \
-  --output medical-examination-form-fillable.pdf
-```
-
-The CLI prints the `operationJobGuid`. Use the SDK or raw HTTP API to fetch `acroform-metadata` and `pdf-acroform-field-definitions`, or to submit reviewed field definitions back through `pdf-acroform/apply`.
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/operation \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jobGuid": "PARENT_JOB_GUID",
-    "type": "pdf-acroform",
-    "parameters": {
-      "llmType": "DEFAULT",
-      "customParameters": {
-        "ocr": "PREMIUM",
-        "fieldNameStyle": "source_snake_case",
-        "minConfidence": 0.35,
-        "maxFieldsPerPage": 300
-      }
-    }
-  }'
-
-curl -X GET https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/pdf-acroform \
-  -H "Authorization: Bearer $API_KEY" \
-  --output medical-examination-form-fillable.pdf
-
-curl -X GET https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/acroform-metadata \
-  -H "Authorization: Bearer $API_KEY"
-
-curl -X GET https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/pdf-acroform-field-definitions \
-  -H "Authorization: Bearer $API_KEY"
-
-curl -X POST https://api.docudevs.ai/job/PARENT_JOB_GUID/pdf-acroform/apply \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "sourceOperationGuid": "OPERATION_JOB_GUID",
-    "fieldDefinitions": [],
-    "minConfidence": 0.0,
-    "maxFieldsPerPage": 300
-  }'
-```
-
-  </TabItem>
-</Tabs>
+<Example name="operations/review-acroform-fields" />
 
 The generated PDF from either the initial conversion or the reviewed apply flow is always downloaded through `GET /job/result/{guid}/pdf-acroform`.
 
 ### Document Outline
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="operations/document-outline" />
 
-```python
-outline_result = await client.submit_and_wait_for_document_outline_operation(
-    job_guid,
-    pages_per_chunk=3,
-    overlap_pages=1,
-    parallel_processing=True,
-    timeout=180,
-)
+If the job already has an outline artifact (for example, a job originally processed with `splitType=DOCUMENT_OUTLINE`), fetch it directly without submitting a new operation:
 
-print(outline_result.result)
-print(outline_result.document_outline)
-```
+<Example name="operations/get-document-outline" />
 
-If the job already has an outline artifact — for example, a job originally processed with `splitType=DOCUMENT_OUTLINE` — fetch it directly without submitting a new operation:
+In Python, `wait_until_ready_with_document_outline` waits for a still-running job and returns its result and outline in one call.
 
-```python
-outline = await client.get_document_outline(job_guid)
-```
-
-Or wait for a still-running job and fetch its outline in one call:
-
-```python
-combined = await client.wait_until_ready_with_document_outline(job_guid)
-
-print(combined.result)
-print(combined.document_outline)
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/operation \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jobGuid": "JOB_GUID",
-    "type": "document-outline",
-    "parameters": {
-      "customParameters": {
-        "pagesPerChunk": 3,
-        "overlapPages": 1,
-        "parallelProcessing": true
-      }
-    }
-  }'
-
-# Poll the operation job, then fetch the outline artifact.
-curl https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/document-outline \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-</Tabs>
-
-`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command and no Java SDK method for this operation today — use the Python SDK or the raw HTTP API directly.
+`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command and no Java SDK method for this operation: use the Python SDK or the raw HTTP API directly.
 
 ## Advanced Usage
 
@@ -586,111 +154,13 @@ curl https://api.docudevs.ai/job/result/OPERATION_JOB_GUID/document-outline \
 
 You can use Generative Tasks to ask specific questions about a processed document.
 
-```python
-questions = [
-    "What is the contract duration?",
-    "Who are the parties involved?",
-    "What are the key obligations?"
-]
-
-for question in questions:
-    answer = await client.submit_and_wait_for_generative_task(
-        parent_job_id=ocr_job_id,
-        prompt=f"Based on this document, answer the following question: {question}"
-    )
-    
-    result_data = json.loads(answer.result)
-    print(f"Q: {question}")
-    print(f"A: {result_data['generated_text']}\n")
-```
+<Example name="operations/ask-document-questions" />
 
 ### Advanced Parameters
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+Set `llmType` to choose the model tier for an operation. Operation-specific settings go in `customParameters`; the parameters each operation accepts are described with that operation above.
 
-```python
-# Submit operation with custom LLM and parameters
-await client.submit_operation_with_parameters(
-    job_guid=job_guid,
-    operation_type="error-analysis",
-    llm_type="HIGH",  # Use high-quality LLM for analysis
-    custom_parameters={
-        "focus_areas": ["numerical_accuracy", "date_formats"],
-        "confidence_threshold": 0.8,
-        "detailed_suggestions": True
-    }
-)
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-# Submit error analysis with HIGH quality model
-docudevs operations error-analysis <JOB_GUID> \
-  --llm-type HIGH \
-  --timeout 180
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.util.List;
-import java.util.Map;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode response = client.submitOperation(
-    "JOB_GUID",
-    "error-analysis",
-    "HIGH",
-    Map.of(
-        "focus_areas", List.of("numerical_accuracy", "date_formats"),
-        "confidence_threshold", 0.8,
-        "detailed_suggestions", true
-    )
-);
-
-System.out.println("Operation job GUID: " + response.path("jobGuid").asText());
-System.out.println("Status: " + response.path("status").asText());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/operation \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jobGuid": "<JOB_GUID>",
-    "type": "error-analysis",
-    "parameters": {
-      "llmType": "HIGH",
-      "customParameters": {
-        "focus_areas": ["numerical_accuracy", "date_formats"],
-        "confidence_threshold": 0.8
-      }
-    }
-  }'
-```
-
-  </TabItem>
-</Tabs>
+<Example name="operations/submit-with-llm-type" />
 
 ## Output Formats
 
@@ -698,29 +168,45 @@ curl -X POST https://api.docudevs.ai/operation \
 
 ```json
 {
-  "analysis": {
-    "overall_confidence": 0.85,
-    "field_confidence": {
-      "invoice_number": 0.95,
-      "total_amount": 0.90
-    },
-    "potential_issues": [
-      {
-        "field": "line_items",
-        "issue": "Some quantities may be misread",
-        "confidence": 0.75,
-        "suggestion": "Review items with quantities > 100"
-      }
-    ]
-  },
-  "recommendations": [
+  "extraction_quality": "good",
+  "overall_confidence": 0.85,
+  "field_analysis": [
     {
-      "type": "processing_improvement",
-      "description": "Consider using higher quality OCR settings"
+      "field_name": "total_amount",
+      "extracted_value": "1250.00",
+      "text_evidence": "Total due: 1,250.00 EUR",
+      "confidence": 0.9,
+      "issues": [],
+      "suggestions": [],
+      "recommend_human_review": false
+    },
+    {
+      "field_name": "invoice_number",
+      "extracted_value": "INV-0O42",
+      "text_evidence": "Invoice no. INV-0042",
+      "confidence": 0.6,
+      "issues": ["Letter O read instead of digit 0"],
+      "suggestions": ["Normalise the invoice number format after extraction"],
+      "recommend_human_review": true
     }
+  ],
+  "ocr_issues": [
+    {
+      "type": "character_confusion",
+      "description": "The digit 0 and the letter O are confused in the invoice number",
+      "original_text_location": "Invoice no. INV-0042",
+      "confidence": 0.7
+    }
+  ],
+  "derived_data_issues": [],
+  "recommendations": [
+    "Review fields flagged with recommend_human_review",
+    "Consider using higher quality OCR settings"
   ]
 }
 ```
+
+`extraction_quality` is one of `excellent`, `good`, `fair`, `poor` or `failed`. `field_analysis` has one entry per extracted field, `ocr_issues` and `derived_data_issues` list problems found in the source text and in calculated values, and `recommendations` is a list of strings.
 
 ### Generative Task Output
 
@@ -744,4 +230,4 @@ curl -X POST https://api.docudevs.ai/operation \
 - **Summarization**: Use generative tasks to create quick summaries for document lists.
 - **Translation**: Use generative tasks to translate document content while preserving context.
 - **Chain Operations**: Process a document, then run error analysis, then summarize it—all via API.
-- **Map-Reduce Re-processing**: Use `submit_and_wait_for_map_reduce(parent_job_id=...)` to run map-reduce on a previously processed document without re-uploading or re-running OCR. See [Map-Reduce Extraction](/docs/core/map-reduce-extraction#re-running-map-reduce-on-an-existing-job) for details.
+- **Map-Reduce Re-processing**: Run map-reduce on a previously processed document without re-uploading or re-running OCR (in Python, `submit_and_wait_for_map_reduce(parent_job_id=...)`). See [Map-Reduce Extraction](/docs/core/map-reduce-extraction#re-running-map-reduce-on-an-existing-job) for details.

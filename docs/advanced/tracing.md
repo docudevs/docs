@@ -4,9 +4,6 @@ description: Enable LLM tracing to inspect prompts, token usage, and model respo
 sidebar_position: 3
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # LLM Tracing
 
 Debug and understand your document extraction by capturing detailed traces of LLM interactions.
@@ -23,110 +20,16 @@ LLM Tracing provides visibility into how your documents are processed, similar t
 
 ## Enabling Tracing
 
-Tracing is opt-in and must be enabled per request by setting `trace=true`.
+Tracing is opt-in and must be enabled per request by setting `trace` to `true`.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'cURL', value: 'curl'},
-    {label: 'Web UI', value: 'ui'},
-  ]}>
-  <TabItem value="python">
+<Example name="tracing/enable-tracing" />
 
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
-
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-
-# Enable tracing when processing a document
-job_guid = await client.submit_and_process_document(
-    document=document_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract invoice data",
-    trace=True  # Enable LLM tracing
-)
-
-# Wait for processing to complete
-result = await client.wait_until_ready(job_guid)
-
-# Retrieve the trace
-trace = await client.get_trace(job_guid)
-if trace:
-    print(f"Total tokens used: {trace['total_tokens']}")
-    print(f"LLM calls: {trace['total_llm_calls']}")
-    for event in trace['events']:
-        print(f"  {event['type']}: {event['name']}")
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-byte[] fileBytes = Files.readAllBytes(Path.of("invoice.pdf"));
-UploadRequest upload = new UploadRequest("invoice.pdf", "application/pdf", fileBytes);
-
-String guid = client.submitAndProcessDocument(
-    upload,
-    ProcessOptions.builder()
-        .mimeType("application/pdf")
-        .prompt("Extract invoice data")
-        .trace(true)
-        .build()
-);
-
-client.waitUntilReadyJson(guid, WaitOptions.builder().build());
-
-JsonNode trace = client.getTrace(guid);
-System.out.println(trace);
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-# Process with tracing enabled
-curl -X POST https://api.docudevs.ai/document/process/{guid} \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Extract invoice data",
-    "mimeType": "application/pdf",
-    "trace": true
-  }'
-
-# Retrieve the trace after job completes
-curl -X GET https://api.docudevs.ai/job/trace/{guid} \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="ui">
-
-In the Workbench:
+You can also enable tracing in the Workbench:
 
 1. Navigate to the **Processing** panel
-2. Check the **"Enable LLM Tracing (Debug)"** checkbox
+2. Check the **"Enable LLM tracing"** checkbox
 3. Process your document
-4. After completion, click **"🔍 Trace"** on the job detail page
-
-  </TabItem>
-</Tabs>
+4. After completion, click **"Trace"** on the job detail page
 
 ## Trace Data Structure
 
@@ -197,82 +100,15 @@ LLM events include detailed information:
 
 Messages may contain `image_ref` objects referencing document pages. You can retrieve these images:
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="tracing/get-page-image" />
 
-```python
-# Get a specific page thumbnail
-image_bytes = await client.get_image(job_guid, page_index=0)
-if image_bytes:
-    with open("page_0.png", "wb") as f:
-        f.write(image_bytes)
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-String jobGuid = "your-job-guid";
-String apiKey = System.getenv("API_KEY");
-
-HttpClient httpClient = HttpClient.newHttpClient();
-HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.docudevs.ai/job/image/" + jobGuid + "/0"))
-    .header("Authorization", "Bearer " + apiKey)
-    .GET()
-    .build();
-
-HttpResponse<byte[]> response = httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
-if (response.statusCode() / 100 != 2) {
-    throw new IllegalStateException("Image fetch failed: HTTP " + response.statusCode());
-}
-
-Files.write(Path.of("page_0.png"), response.body());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-# Get page 0 thumbnail
-curl -X GET https://api.docudevs.ai/job/image/{guid}/0 \
-  -H "Authorization: Bearer $API_KEY" \
-  --output page_0.png
-```
-
-  </TabItem>
-</Tabs>
+The Java SDK has no method for page images, so there is no Java example for this call.
 
 ## Map-Reduce Tracing
 
 For large documents processed with map-reduce, tracing captures all chunk processing:
 
-```python
-job_guid = await client.submit_and_process_document_map_reduce(
-    document=large_document,
-    document_mime_type="application/pdf",
-    prompt="Extract line items",
-    pages_per_chunk=5,
-    trace=True  # Traces all chunks
-)
-
-trace = await client.get_trace(job_guid)
-print(f"Processed in {len(trace['events'])} events")
-```
+<Example name="tracing/trace-map-reduce" />
 
 ## Best Practices
 
