@@ -18,6 +18,7 @@
     "typecheck": "tsc",
     "examples:manifest": "node tools/examples/build-manifest.mjs",
     "examples:coverage": "node tools/examples/check-coverage.mjs",
+    "examples:inline": "node tools/examples/check-inline-code.mjs",
     "examples:curl": "node tools/examples/check-curl.mjs",
     "examples:test": "node --test tools/examples/test/*.test.mjs",
     "api-docs": "docusaurus clean-api-docs all && docusaurus gen-api-docs all"

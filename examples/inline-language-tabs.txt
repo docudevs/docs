@@ -1,0 +1,25 @@
+# Pages that still hold inline language tabs, with the tab count; convert to <Example> and lower or remove the line. This file only shrinks.
+docs/administration/bring-your-own-embeddings.md:6
+docs/administration/bring-your-own-llm.md:8
+docs/administration/bring-your-own-ocr.md:6
+docs/administration/model-credentials.md:10
+docs/advanced/include-current-date.md:3
+docs/advanced/job-management.md:9
+docs/advanced/operations.md:21
+docs/advanced/page-range.md:3
+docs/advanced/tracing.md:6
+docs/basics/SimpleDocuments.md:16
+docs/basics/install.md:1
+docs/configuration/Configuration.md:20
+docs/core/ai-analysis.md:8
+docs/core/batch-processing.md:3
+docs/core/calculated-fields.md:3
+docs/core/knowledge-search.md:4
+docs/core/lookup-files.md:6
+docs/core/map-reduce-extraction.md:11
+docs/core/schema-generation.md:6
+docs/core/source-locations.md:2
+docs/core/workbook-normalization.md:4
+docs/getting-started/first-document.md:4
+docs/reference/error-codes.md:4
+docs/templates/Templates.md:26
