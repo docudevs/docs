@@ -47,8 +47,6 @@ resolve_extraction_review_values
 retry_import
 review_classify
 search
-search_documents
-search_records
 set_dataset
 split_test_suite
 start_evaluation

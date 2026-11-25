@@ -13,7 +13,7 @@ sidebar_position: 5
 | `records` | The records dataset of the case. Results carry the record `key`, its text (`chunk`), `label`, `labelPath`, `labelSource` and `attributes`. |
 | `documents` | The documents of a case without a records dataset. Results carry `documentId`, `chunk`, `filename` and `pageNumber`. |
 
-A `records` search on a case without a dataset, or a `documents` search on a records case, returns `409`.
+A `records` search on a case without a dataset, or a `documents` search on a records case, returns `409`. So does a `records` search on a case that has no active embedding generation.
 
 ## Request
 
@@ -68,25 +68,16 @@ Out-of-range settings or an empty query return `400`. Errors from the embedding 
 
 `settingsUsed` shows the settings that were applied after defaults. With `examplePolicy.mode = perLabelCap` the results hold at most that many records per label.
 
-## Python SDK and CLI
+## Search a records case
 
-```python
-hits = await client.search_records(case_id, "Soft sports sock", top_k=10,
-                                   filters={"subtree": "4.12", "attributes": {"brand": "Foo"}})
-docs = await client.search_documents(case_id, "termination notice period")
-# or: await client.search(case_id, "records", "query", hybrid=False)
-```
+<Example name="case-search/search-records" />
 
-```bash
-docudevs records search 42 "Soft sports sock" --kind records --top-k 10 --subtree 4.12 --attribute brand=Foo
-```
+The Python SDK takes the settings as keyword arguments (`top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank`) and `filters` as a dictionary. `client.search(case_id, "records", query)` takes the kind as an argument.
 
-```bash
-curl -X POST "https://api.docudevs.ai/cases/42/search" \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d '{"kind":"records","query":"Soft sports sock","topK":5}'
-```
+## Search the documents of a case
+
+<Example name="case-search/search-documents" />
 
 ## Billing
 
-Each search embeds the query once and records one embedding usage event for your organization, measured in characters. Searches that use a provider you bring yourself are not debited from DocuDevs token balances.
+Each search embeds the query once and records one embedding usage event for your organization, measured in characters. Query embedding is not charged against your credits.
