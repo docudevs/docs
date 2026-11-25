@@ -17,7 +17,6 @@ docs/advanced/classification.md:2
 docs/advanced/records-datasets.md:6
 docs/advanced/records-import.md:11
 docs/core/agent-chat.md:3
-docs/core/ai-analysis.md:19
 docs/core/batch-processing.md:7
 docs/core/calculated-fields.md:3
 docs/core/contract-analysis-playbooks.md:15
