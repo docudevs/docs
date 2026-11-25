@@ -59,8 +59,8 @@ These choices are **immutable** after installation:
   explicitly instead of replacing the Container Apps environment.
 - Moving between managed networking and BYO VNet — or to another VNet —
   requires a new installation and data migration.
-- The first release uses the generated Azure Container Apps domain and
-  certificate. Customer-defined internal domains and certificates are not yet
+- The deployment uses the generated Azure Container Apps domain and
+  certificate. Customer-defined internal domains and certificates are not
   supported.
 
 ## Before you install
@@ -351,9 +351,9 @@ Where your firewall supports FQDN/service-tag rules, also allow:
 - **Public Azure Monitor ingestion and query** endpoints are reached over the
   public internet even in private-only deployments (see the next section).
 
-## Understand monitoring traffic and the first-release AMPLS limitation
+## Understand monitoring traffic and the AMPLS limitation
 
-In the first release:
+Monitoring behaves as follows:
 
 - Telemetry is sent to a DocuDevs-provisioned Log Analytics workspace and
   Application Insights component over **public Azure Monitor ingestion**
@@ -361,15 +361,13 @@ In the first release:
   is outbound egress from your VNet; no monitoring data is exposed through
   public inbound routes to DocuDevs.
 - The workspace and component are **not automatically attached to your Azure
-  Monitor Private Link Scope (AMPLS)** in the first release. If your
+  Monitor Private Link Scope (AMPLS)**. If your
   organization enforces deny-all-public-monitoring policy, coordinate an
   exception for this egress before installing, or the Azure Monitor probe and
   telemetry will fail.
 - The in-environment connectivity probe treats blocked Azure Monitor egress as
-  a failure and says so explicitly: first-release telemetry requires approved
+  a failure and says so explicitly: telemetry requires approved
   public Azure Monitor egress.
-
-Plan to revisit AMPLS integration in a later release.
 
 ## Install from Azure Marketplace
 
@@ -441,13 +439,10 @@ The deployment emits two non-secret outputs:
    browser must have private DNS and reachability.
 4. Complete an authenticated UI login.
 5. Complete an authenticated API request from an internal client, without
-   printing secrets:
-
-```bash
-curl -sS -o /dev/null -w '%{http_code}\n' \
-  -H "Authorization: Bearer $DOCUDEVS_TOKEN" \
-  "https://<generated-container-apps-domain>/api/documents"
-```
+   printing secrets. Send a `GET` request for `/api/documents` on
+   `https://<generated-container-apps-domain>` with your Microsoft Entra access
+   token in an `Authorization: Bearer` header, and print only the HTTP status
+   code.
 
 An HTTP status in the 2xx/4xx range proves reachability and authentication
 behavior; connection timeouts or DNS failures indicate a networking problem.
@@ -493,9 +488,11 @@ az network private-endpoint show \
   --resource-group <managed-resource-group>
 
 nslookup <host-under-test>
-curl -sS -o /dev/null -w 'dns+tls+tcp: %{http_code} time: %{time_total}s\n' \
-  "https://<host-under-test>"
 ```
+
+To test DNS, TCP, and TLS together, request `https://<host-under-test>` with
+`curl -sS -o /dev/null -w '%{http_code} %{time_total}s'` and read the status
+code and timing.
 
 | Phase | What it tells you |
 | --- | --- |
@@ -504,7 +501,7 @@ curl -sS -o /dev/null -w 'dns+tls+tcp: %{http_code} time: %{time_total}s\n' \
 | Environment provisioning | An Azure operation was rejected; missing Container Apps platform, DNS, NSG, or UDR requirements are called out when the environment cannot become ready. |
 | Job-start authorization | A transient `AuthorizationFailed` is retried for up to five minutes while role assignments propagate. `DenyAssignmentAuthorizationFailed` is not a VNet or customer-role problem: the gate stops immediately and identifies the required Partner Center action `Microsoft.App/jobs/start/action`. Contact DocuDevs and install a corrected plan instance; do not add broader customer roles to work around it. |
 | Publisher image-pull gate | A recognized `ErrImagePull`, `ImagePullBackOff`, or registry-timeout condition produces exactly this message: **`DocuDevs image pull failed: outbound HTTPS to ddmkt7d52dee38b83.azurecr.io or its ACR layer-data endpoint is blocked. Allow the release-specific publisher ACR endpoints from the Container Apps subnet, then retry the deployment.`** The diagnostic includes the image digest and the latest non-secret ARM condition. If the pull did not reach a registry-timeout diagnosis before the gate budget elapsed, the gate instead reports that either the publisher registry (`ddmkt7d52dee38b83.azurecr.io`) or Container Apps platform egress may be blocked. |
-| In-environment connectivity | Reports the destination category and hostname, DNS result, TCP/TLS outcome, and the likely NSG, UDR, firewall, proxy, or resolver cause, without exposing credentials. If the job itself failed without a registry signal, the gate reports: `DocuDevs network readiness job <JOB_NAME> failed. Open the Container Apps job logs for <JOB_NAME> in the Container Apps environment to find which probe target failed; this gate reads only ARM execution status and cannot read job stdout.` An Azure Monitor probe failure means first-release telemetry needs approved public Azure Monitor egress. |
+| In-environment connectivity | Reports the destination category and hostname, DNS result, TCP/TLS outcome, and the likely NSG, UDR, firewall, proxy, or resolver cause, without exposing credentials. If the job itself failed without a registry signal, the gate reports: `DocuDevs network readiness job <JOB_NAME> failed. Open the Container Apps job logs for <JOB_NAME> in the Container Apps environment to find which probe target failed; this gate reads only ARM execution status and cannot read job stdout.` An Azure Monitor probe failure means telemetry needs approved public Azure Monitor egress. |
 | Post-deployment client access | Failures limited to your workstation, peered network, VPN, ExpressRoute, or DNS-forwarding path — not the deployment. Re-run the [verification steps](#verify-private-dns-ui-api-setup-uri-and-msal-callback) from a correctly connected client. |
 
 Remember: a private-networking failure never causes the deployment to enable

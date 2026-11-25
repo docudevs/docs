@@ -76,15 +76,6 @@ All endpoints below require an `ADMIN`-role principal (an org API key is always 
 | POST | `/sso/sync` | Activate SSO — pushes the saved configuration to the identity federation layer |
 | GET | `/sso/discovery?domain=` | Unauthenticated — used by the login page to resolve a domain to a provider |
 
-```bash
-curl -X PUT https://api.docudevs.ai/sso/config \
-  -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"providerType":"OIDC","oidcIssuerUrl":"https://idp.example.com","oidcClientId":"abc123",
-       "oidcScopes":"openid profile email","enforceSsoForDomains":true}'
+<Example name="sso/configure-oidc-provider" />
 
-curl -X POST https://api.docudevs.ai/sso/sync \
-  -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"oidcClientSecret":"s3cret"}'
-
-curl https://api.docudevs.ai/sso -H "Authorization: $API_KEY"
-```
+The Python SDK has no helper for the SSO routes, so the example is cURL only. Replace the `oidcClientSecret` with the secret your identity provider issued; the example reads it from the `OIDC_CLIENT_SECRET` environment variable.

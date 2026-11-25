@@ -41,7 +41,7 @@ Deleting a connection referenced by a saved flow configuration is blocked with a
 
 ```json
 {
-  "message": "Connection 'warehouse-pg' is referenced by 1 flow config(s) and cannot be deleted.",
+  "message": "Connection 'warehouse-pg' is referenced by 1 flow config(s). Remove the references before deleting.",
   "connectionName": "warehouse-pg",
   "referencedBy": [{ "id": 12, "flowId": "sync-invoices" }]
 }
@@ -61,20 +61,16 @@ Remove or update the referencing flow configuration(s) before deleting the conne
 
 ## Examples
 
-```bash
-curl -X POST https://api.docudevs.ai/integration/connections \
-  -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"name":"warehouse-pg","connectorFamily":"postgres","active":true,
-       "fieldValues":{"url":"jdbc:postgresql://host:5432/db","username":"svc"},
-       "secrets":{"password":"s3cret"}}'
-```
+Create a connection. The password goes in the write-only `secrets` map; the example reads it from the `DB_PASSWORD` environment variable.
 
-```bash
-curl -X DELETE https://api.docudevs.ai/integration/connections/7 \
-  -H "Authorization: $API_KEY"
-# 409 Conflict if referenced by a flow config
-```
+<Example name="integrations/create-connection" />
 
-```bash
-curl https://api.docudevs.ai/integration/connections -H "Authorization: $API_KEY"
-```
+List the connections of the organization. The response shows which secret fields are set, never their values.
+
+<Example name="integrations/list-connections" />
+
+Delete a connection. A connection that a flow configuration still references answers `409 Conflict`.
+
+<Example name="integrations/delete-connection" />
+
+The Python SDK has no helper for the integration connection routes, so these examples are cURL only.

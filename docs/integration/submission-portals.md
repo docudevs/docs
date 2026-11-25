@@ -21,7 +21,7 @@ Each portal has a unique `slug` that forms its public-facing URL.
 
 ## Who can submit
 
-`/submit/<slug>` is not an anonymous public form. It sits outside `/app/`, so it doesn't require the full app shell, but the page still forwards the visitor's signed-in session to the API — submitting requires a signed-in member of the organization that owns the portal.
+`/submit/<slug>` is not an anonymous public form. It sits outside `/app/`, so it doesn't require the full app shell, but the page still forwards the visitor's signed-in session to the API — submitting through the page requires a signed-in member of the organization that owns the portal. An organization API key can call every portal route as well, including submitting documents and reading receipts.
 
 DocuDevs has a dedicated role for this: `SUBMISSION_PORTAL_USER`. Accounts with this role land directly in the submission experience instead of the main document workspace, and can only read `/submission-portals*` (to see available portals) and submit to `/submission-portals/{id}/submissions` — they cannot create, edit, or delete portals, and cannot access the main workbench. `ADMIN` and `MEMBER` accounts can also submit, in addition to managing portals.
 
@@ -57,24 +57,16 @@ The receipt page at `/submit/receipt/<receiptCode>` gives submitters a bookmarka
 
 ## Examples
 
-```bash
-curl -X POST https://api.docudevs.ai/submission-portals \
-  -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"slug":"invoices","configurationName":"invoice-extractor","title":"Submit an invoice",
-       "inputMode":"SINGLE_FILE","resultMode":"DOWNLOAD","downloadFormat":"EXCEL",
-       "isDefaultForConfiguration":true,"active":true}'
-```
+Create a portal for an existing processing configuration:
 
-```bash
-curl -X POST https://api.docudevs.ai/submission-portals/42/submissions \
-  -H "Authorization: $API_KEY" \
-  -F "documents=@invoice.pdf"
-```
+<Example name="submission-portals/create-portal" />
 
-```bash
-curl https://api.docudevs.ai/submission-records/AB12CD34 \
-  -H "Authorization: $API_KEY"
+Submit a document to the portal by its numeric `id`. The response carries the `receiptCode`:
 
-curl https://api.docudevs.ai/submission-records/AB12CD34/download \
-  -H "Authorization: $API_KEY" -o result.xlsx
-```
+<Example name="submission-portals/submit-document" />
+
+Check the submission and download the result:
+
+<Example name="submission-portals/check-submission" />
+
+The Python SDK has no helpers for the submission portal routes, so these examples are cURL only.

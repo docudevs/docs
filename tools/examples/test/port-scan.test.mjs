@@ -147,3 +147,17 @@ test('directory scans skip binary files with a note on stderr', () => {
   assert.equal(result.status, 0);
   assert.match(result.stderr, /skipped binary .*img\.bin/);
 });
+
+test('placeholder hosts under example.com and example.org and the Azure example resources are allowed', () => {
+  const lines = [
+    'curl https://idp.example.com/a',
+    'curl https://llm.example.org/a',
+    'curl https://example.openai.azure.com/a',
+    'curl https://example.cognitiveservices.azure.com/a',
+  ].join('\n');
+  assert.deepEqual(scanText(`${lines}\n`, 'a.sh', []), []);
+});
+
+test('a host that only ends like a placeholder is still reported', () => {
+  assert.equal(scanText('curl https://notexample.com/a\n', 'a.sh', []).length, 1);
+});

@@ -1,10 +1,2 @@
 # Pages that still hold inline fences calling the product, with the fence count; convert to <Example> and lower or remove the line. This file only shrinks.
-docs/administration/azure-marketplace-private-network.md:2
-docs/administration/bring-your-own-embeddings.md:6
-docs/administration/bring-your-own-llm.md:9
-docs/administration/bring-your-own-ocr.md:6
-docs/administration/integration-connections.md:3
-docs/administration/model-credentials.md:10
-docs/administration/single-sign-on.md:1
-docs/integration/submission-portals.md:3
-docs/integration/webhooks.md:1
+

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# docs:start
+curl -s -S -f "https://api.docudevs.ai/model-credentials" \
+  -H "Authorization: $API_KEY"
+# docs:end
