@@ -20,4 +20,6 @@ operations/submit-pdf-acroform:java
 quick-start/analyze-document:java
 templates/acroform-job-metadata:java
 templates/acroform-metadata:java
+tracing/get-page-image:java
+tracing/trace-map-reduce:java
 webhooks/configure-webhook:java

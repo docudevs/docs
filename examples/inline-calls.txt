@@ -18,7 +18,6 @@ docs/advanced/include-current-date.md:4
 docs/advanced/page-range.md:8
 docs/advanced/records-datasets.md:6
 docs/advanced/records-import.md:11
-docs/advanced/tracing.md:6
 docs/core/agent-chat.md:3
 docs/core/ai-analysis.md:19
 docs/core/batch-processing.md:7

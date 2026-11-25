@@ -5,7 +5,6 @@ docs/administration/bring-your-own-ocr.md:6
 docs/administration/model-credentials.md:10
 docs/advanced/include-current-date.md:3
 docs/advanced/page-range.md:3
-docs/advanced/tracing.md:6
 docs/core/ai-analysis.md:8
 docs/core/batch-processing.md:3
 docs/core/calculated-fields.md:3
