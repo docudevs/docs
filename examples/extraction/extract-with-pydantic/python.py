@@ -1,6 +1,5 @@
 import asyncio
 import os
-from typing import List
 
 # docs:start
 from pydantic import BaseModel, Field
@@ -23,7 +22,7 @@ async def main():
     class Invoice(BaseModel):
         number: str = Field(description="The invoice number")
         date: str
-        items: List[LineItem]
+        items: list[LineItem]
         total: float
 
     with open("invoice.pdf", "rb") as f:

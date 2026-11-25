@@ -88,7 +88,7 @@ Some models expose a configurable reasoning effort level. Set the optional `reas
 
 <Example name="extraction/set-reasoning-effort" />
 
-There is no `--reasoning-effort` CLI flag today; use the Python SDK, the Java SDK, or the raw HTTP API.
+The CLI has no `--reasoning-effort` flag; use the Python SDK, the Java SDK, or the raw HTTP API.
 
 ## Upload Responses
 
@@ -103,14 +103,14 @@ The upload and synchronous processing endpoints accept documents for the authent
 
 ### Busy and conflict responses
 
-All four endpoints, `POST /document/analyze`, `POST /submission-portals/{id}/submissions` and the deprecated `POST /cases/{caseId}/upload` can return:
+`POST /document/analyze`, `POST /submission-portals/{id}/submissions` and the deprecated `POST /cases/{caseId}/upload` can return:
 
 - **409 Conflict**: the request conflicts with an active review run for the document. For a submission portal, the request can also conflict with a batch start.
 - **503 Service Unavailable**: the service is busy with the document. Retry the request after a short delay.
 
 `POST /cases/{caseId}/documents` returns **503** in the same way. Its **409** means the case is a records case, which does not accept documents; import records instead.
 
-Error responses carry the API's JSON error body. The Python SDK's detailed calls expose the HTTP status and raw body; the Java SDK reports non-success responses as `ApiException` with the status and response body.
+Error responses carry the API's JSON error body. The Python SDK's detailed calls expose the HTTP status and raw body; the Java SDK reports non-success responses as `DocuDevsApiException` (`getStatusCode()`, `getResponseBody()`).
 
 The batch endpoints `POST /document/batch/{guid}/upload`, `/process`, `/process/with-configuration/{configurationName}` and `/schedule` return **404 Not Found** when the batch job (or the requested configuration) does not exist, **409 Conflict** when the batch state or a review run prevents the request, and **503 Service Unavailable** when the service is busy with the job; retry a 503 after a short delay.
 

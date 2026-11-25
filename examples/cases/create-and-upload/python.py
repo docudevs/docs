@@ -17,6 +17,8 @@ async def main():
         name="Contract Review",
         description="Contract documents for review",
     )
+    if case_response.status_code != 201:
+        raise SystemExit(f"Creating the case failed: HTTP {case_response.status_code}")
     case_id = case_response.parsed.id
 
     # Step 2: Upload document to case

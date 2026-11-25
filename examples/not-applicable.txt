@@ -14,7 +14,7 @@ model-credentials/get-credential:python  # DocuDevsClient 1.15.0 has no method f
 model-credentials/update-credential:python  # DocuDevsClient 1.15.0 has no method for PATCH /model-credentials/{id}
 model-credentials/validate-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/validate
 ocr-providers/create-ocr-provider:python  # DocuDevsClient 1.15.0 create_ocr_provider sends field names that POST /ocr/providers rejects
-ocr-providers/update-ocr-provider:python  # DocuDevsClient 1.15.0 update_ocr_provider sends field names that PATCH /ocr/providers/{id} ignores
+ocr-providers/update-ocr-provider:python  # DocuDevsClient 1.15.0 update_ocr_provider sends model, not modelId, so a model change on PATCH /ocr/providers/{id} is ignored
 ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
 pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client

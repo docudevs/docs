@@ -29,7 +29,7 @@ Every code block that calls the API, SDK or CLI lives in a file under `examples/
 | `Example.java` | Java |
 | `cli.sh` | CLI |
 
-Tabs always render in that order, grouped with `groupId="lang"` and `queryString="lang"`. A language without a file gets no tab. Every example needs cURL and Python. Java is required where the published Java facade has the method; otherwise record the gap (see the ratchet). CLI is optional where a command exists. Every file is complete and valid on its own, and all languages of one example share the scenario, sample file names and variable names.
+Tabs always render in that order, grouped with `groupId="lang"` and `queryString="lang"`. A language without a file gets no tab. Every example needs cURL and Python, except those listed with a reason in `examples/not-applicable.txt`. Java is required where the published Java facade has the method; otherwise record the gap (see the ratchet). CLI is optional where a command exists. Every file is complete and valid on its own, and all languages of one example share the scenario, sample file names and variable names.
 
 ### Markers
 
@@ -42,11 +42,10 @@ Markers may hide only imports, client construction and environment setup. Everyt
 ### Language conventions
 
 - All languages: the key comes from `API_KEY`; the base URL is `https://api.docudevs.ai`. Status codes and response fields shown must match the spec.
-- cURL: quoted `https://api.docudevs.ai/...` URLs, `-H "Authorization: $API_KEY"`, one flag per line.
 - Python: `from docudevs.docudevs_client import DocuDevsClient`, async, runnable under `asyncio.run(main())`. Name the client variable `client`; the checker inspects only calls on that name. The client does not consistently raise on HTTP errors, so examples check the status instead of relying on exceptions.
 - Java: `ai.docudevs.client.DocuDevsClient` through its builder, synchronous. The file starts with `package examples.<area>.<name>;` (dashes become underscores), declares `public class Example`, and keeps the package line outside the shown region.
 - CLI: the published CLI reads `API_KEY` from the environment, so commands start with `docudevs <command>` and pass no `--token`.
-- cURL: use `-f` on every call whose output is used later, unless the example reads the HTTP status on purpose. Bound every polling loop with a deadline. Copy the shared `wait_for_job` helper from `examples/jobs/process-with-auto-ocr/curl.sh` unchanged (success on `COMPLETED`, success with a notice on `PARTIAL`, failure on `ERROR`, `FAILED` and `TIMEOUT`, 600-second deadline). Python loops are bounded too, and Python checks `status_code` before writing response content to a file and guards values that can be `None`.
+- cURL: quoted `https://api.docudevs.ai/...` URLs, `-H "Authorization: $API_KEY"`, one flag per line. Use `-f` on every call whose output is used later, unless the example reads the HTTP status on purpose. Bound every polling loop with a deadline. Copy the shared `wait_for_job` helper from `examples/jobs/process-with-auto-ocr/curl.sh` unchanged (success on `COMPLETED`, failure on `ERROR`, `FAILED` and `TIMEOUT`, 600-second deadline; its `PARTIAL` branch is only a safeguard). Python loops are bounded too, and Python checks `status_code` before writing response content to a file and guards values that can be `None`.
 - The API leaves empty collections and null fields out of responses. Every `jq` path and Python read of a list or optional field tolerates absence (`(.items // [])[]`, `.get("items", [])`).
 - All language variants of one example do the same thing. Where they cannot (for example cURL and Python poll while the Java SDK or the CLI makes one call), say so in a comment in the shown region and in one sentence on the page.
 - Sample data is neutral (invoices, vendors, contracts, `productGroup`): no real-looking identifiers, catalogue field names, secrets or brands. Keys come from the environment.
@@ -87,7 +86,7 @@ Run these before opening a pull request. CI (`.github/workflows/examples.yml`) r
 | --- | --- |
 | `npm run examples:test` | Unit tests of the example tooling |
 | `npm run examples:manifest` | Example files are recognised, markers are balanced, Java package lines match the directory, every `<Example name>` used in `docs/` exists; writes `src/generated/examples.json` |
-| `npm run examples:coverage` | Missing cURL, Python and Java files match `examples/known-gaps.txt` |
+| `npm run examples:coverage` | Missing Java files match `examples/known-gaps.txt` |
 | `npm run examples:inline` | Inline language tabs and inline product calls per page do not exceed `examples/inline-language-tabs.txt` and `examples/inline-calls.txt`, and listed counts are not stale |
 | `npm run examples:curl` | `curl.sh` and `cli.sh` pass `bash -n`; each cURL request matches a path and method in the spec; a `curl` to anything other than the API fails unless its URL is a variable reference |
 | `npm run typecheck` | TypeScript in `src/` |
@@ -119,13 +118,13 @@ The checks do not validate response field names, request body shapes, or that th
 
 ### Known gaps ratchet
 
-`examples/known-gaps.txt` lists one `<area>/<name>:<lang>` per line, sorted, for guaranteed languages (cURL, Python, Java) an example does not yet have. `examples:coverage` fails both when an unlisted gap appears and when a listed gap has been filled, so the file only ever shrinks. Remove the line when you add the missing file.
+`examples/known-gaps.txt` lists one `<area>/<name>:<lang>` per line, sorted, for examples that do not yet have a Java file. `examples:coverage` fails both when an unlisted gap appears and when a listed gap has been filled, so the file only ever shrinks. Remove the line when you add the missing file.
 
 ### Ratchets
 
 `examples/inline-language-tabs.txt` and `examples/inline-calls.txt` list no pages and stay that way: a new inline language tab or inline product call fails CI, so put the code in an example. Never use `node tools/examples/check-inline-code.mjs --write` to add entries.
 
-`examples/known-gaps.txt` (Java gaps) and `examples/sdk-uncovered.txt` (public client methods not called in an example or shown in the SDK reference page) only shrink. A check fails when something grows and also when a listed entry is no longer needed, so remove the line when you add the missing file or cover the method. `docs/reference/sdk-methods.md`, `docs/reference/cli-reference.md` and `docs/core/playbook-evaluation.md` keep inline fences and are exempt from the inline checks. `examples/not-applicable.txt` lists `<example>:curl` or `<example>:python` with a reason where a language cannot do the step. `tools/examples/client-methods.json` is generated by `check_method_coverage.py --write-methods tools/examples/client-methods.json` and committed; a pytest fails when it differs from the installed client.
+`examples/known-gaps.txt` and `examples/sdk-uncovered.txt` (public client methods not called in an example or shown in the SDK reference page) only shrink. A check fails when something grows and also when a listed entry is no longer needed, so remove the line when you add the missing file or cover the method. `docs/reference/sdk-methods.md`, `docs/reference/cli-reference.md` and `docs/core/playbook-evaluation.md` keep inline fences and are exempt from the inline checks. `examples/not-applicable.txt` lists `<example>:curl` or `<example>:python` with a reason where a language cannot do the step. `tools/examples/client-methods.json` is generated by `check_method_coverage.py --write-methods tools/examples/client-methods.json` and committed; a pytest fails when it differs from the installed client.
 
 ## User-facing SDK methods
 

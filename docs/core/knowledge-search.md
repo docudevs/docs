@@ -4,7 +4,7 @@ description: Enrich document extraction with case-specific lookup against your i
 sidebar_position: 5
 ---
 
-Knowledge Search lets DocuDevs cite trusted facts from an indexed case while it extracts data from an incoming document. Instead of relying solely on the uploaded file, the extraction prompt can call a retrieval tool that queries your curated knowledge base (cases synchronized to the DocuDevs search index). This is ideal whenever documents contain shorthand identifiers, catalog numbers, or sparse descriptions that must be cross-referenced.
+Knowledge Search lets DocuDevs cite trusted facts from an indexed case while it extracts data from an incoming document. Instead of relying solely on the uploaded file, the extraction prompt can call a retrieval tool that queries your curated knowledge base (cases synchronized to the DocuDevs search index). This is ideal whenever documents contain shorthand identifiers, catalogue numbers, or sparse descriptions that must be cross-referenced.
 
 Unlike standard document extraction—which only considers the uploaded content—Knowledge Search injects results from your case index directly into the prompt chain. The worker automatically keeps the organization context, so every search remains tenant-scoped.
 
@@ -12,7 +12,7 @@ Unlike standard document extraction—which only considers the uploaded content�
 
 Use Knowledge Search when:
 
-- Product catalogs or policy libraries evolve faster than your documents, and you need authoritative reference data during extraction.
+- Product catalogues or policy libraries evolve faster than your documents, and you need authoritative reference data during extraction.
 - You maintain a case per customer or brand and want cross-document consistency (e.g., canonical marketing names, compliance tags, localized variants).
 - You already curated a case that feeds the DocuDevs knowledge index via the indexing worker.
 
@@ -28,7 +28,7 @@ Stay with normal extraction when the uploaded file already contains every fact y
 
 > **Tip:** `topK` defaults to 5. Increase it when the knowledge base stores short entries (SKUs, abbreviations) and you want broader recall.
 
-## Example scenario: Specialty catalog enrichment
+## Example scenario: Specialty catalogue enrichment
 
 You maintain a "Product Catalogue" case (knowledge base `42`) that stores the canonical marketing copy, product group, and localization guidance for every SKU. When suppliers send intake spreadsheets, you want DocuDevs to fill in the approved names and product groups before the data reaches your product database. The example attaches the Knowledge Search tool to the extraction request.
 

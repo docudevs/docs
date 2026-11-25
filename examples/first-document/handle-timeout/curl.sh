@@ -31,8 +31,8 @@ while true; do
       -H "Authorization: $API_KEY" | jq .
     break
   fi
-  if [ "$STATUS" = "ERROR" ]; then
-    echo "Processing failed for job $JOB_ID" >&2
+  if [ "$STATUS" = "ERROR" ] || [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "TIMEOUT" ]; then
+    echo "Processing failed for job $JOB_ID with status $STATUS" >&2
     exit 1
   fi
   if [ "$SECONDS" -ge "$DEADLINE" ]; then

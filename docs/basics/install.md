@@ -23,7 +23,7 @@ Your API key is required to authenticate with the DocuDevs platform.
 
 ### Creating an API Key
 
-1. **Sign up** at [DocuDevs.ai](https://docudevs.ai) (currently in private beta)
+1. **Sign up** at [DocuDevs.ai](https://docudevs.ai)
 2. **Navigate** to Settings → API Keys after login
 3. **Create** a new API key for your project
 4. **Copy** the API key (it looks like: `1234567890abcdef1234567890abcdef`)
@@ -92,7 +92,7 @@ python -c "import docudevs; print('DocuDevs SDK installed successfully!')"
 
 ## Step 3: Configure Your Environment
 
-Set up your API key for easy access across your projects. The SDK, the CLI and the examples in this documentation read the key from the `API_KEY` environment variable.
+Set up your API key for easy access across your projects. The examples in this documentation and the CLI read the key from the `API_KEY` environment variable; the Python client takes it as its `token` argument.
 
 <Tabs
   defaultValue="env_var"
@@ -148,7 +148,7 @@ Verify everything is working by listing your saved configurations. A `200` statu
 
 <Example name="install/verify-connection" />
 
-The cURL example does not need the SDK. To process a document next, follow the [Quick Start](/docs/getting-started/quick-start).
+The cURL example does not need the SDK. The CLI example prints nothing and exits with status 0 when the key is rejected, so it cannot verify a key: use the cURL or Python variant for that. To process a document next, follow the [Quick Start](/docs/getting-started/quick-start).
 
 ## Alternative Integration Methods
 
@@ -194,7 +194,7 @@ The CLI supports multiple authentication methods:
    export API_KEY=your-api-key-here
    ```
 
-2. **Alternative Environment Variable**:
+2. **Alternative Environment Variable**: the CLI also reads `DOCUDEVS_TOKEN`, and it takes precedence over `API_KEY` when both are set.
 
    ```bash
    export DOCUDEVS_TOKEN=your-api-key-here
