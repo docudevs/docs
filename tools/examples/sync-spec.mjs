@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const SPEC_TARGET = 'static/files/docudevs.yaml';
 const SCHEMA_TARGET = 'docs/reference/pipeline.schema.json';
-const GUIDE_TARGET = 'docs/core/playbook-evaluation.md';
+const SKILL_TARGET = 'static/files/playbook-evaluation-skill.md';
 
 export function syncSpec({ mainRoot, destination }) {
   const source = join(mainRoot, 'docudevs.yaml');
@@ -15,13 +15,7 @@ export function syncSpec({ mainRoot, destination }) {
   return { copied: true, lines };
 }
 
-function splitFrontMatter(text) {
-  const match = /^---\r?\n[\s\S]*?\r?\n---[ \t]*(?:\r?\n|$)/.exec(text);
-  if (!match) return { frontMatter: '', body: text };
-  return { frontMatter: match[0], body: text.slice(match[0].length) };
-}
-
-function ownedFiles(mainRoot, docsRoot) {
+function ownedFiles(mainRoot) {
   const files = [];
   const spec = join(mainRoot, 'docudevs.yaml');
   if (existsSync(spec)) {
@@ -32,11 +26,8 @@ function ownedFiles(mainRoot, docsRoot) {
     files.push({ target: SCHEMA_TARGET, expected: readFileSync(schema, 'utf8') });
   }
   const skill = join(mainRoot, 'docudevs-sdk', 'skills', 'playbook-evaluation', 'SKILL.md');
-  const page = join(docsRoot, GUIDE_TARGET);
   if (existsSync(skill)) {
-    const { body } = splitFrontMatter(readFileSync(skill, 'utf8'));
-    const { frontMatter } = existsSync(page) ? splitFrontMatter(readFileSync(page, 'utf8')) : { frontMatter: '' };
-    files.push({ target: GUIDE_TARGET, expected: frontMatter + body });
+    files.push({ target: SKILL_TARGET, expected: readFileSync(skill, 'utf8') });
   }
   return files;
 }
@@ -48,7 +39,7 @@ function currentContent(docsRoot, target) {
 
 export function syncOwnedFiles({ mainRoot, docsRoot }) {
   const copied = [];
-  for (const { target, expected } of ownedFiles(mainRoot, docsRoot)) {
+  for (const { target, expected } of ownedFiles(mainRoot)) {
     const path = join(docsRoot, target);
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, expected);
@@ -58,7 +49,7 @@ export function syncOwnedFiles({ mainRoot, docsRoot }) {
 }
 
 export function checkOwnedFiles({ mainRoot, docsRoot }) {
-  return ownedFiles(mainRoot, docsRoot)
+  return ownedFiles(mainRoot)
     .filter(({ target, expected }) => currentContent(docsRoot, target) !== expected)
     .map(({ target }) => target);
 }

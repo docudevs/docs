@@ -65,30 +65,32 @@ function ownedWorkspace() {
 }
 
 const page = (docsRoot) => join(docsRoot, 'docs', 'core', 'playbook-evaluation.md');
+const skillFile = (docsRoot) => join(docsRoot, 'static', 'files', 'playbook-evaluation-skill.md');
+const SKILL_TARGET = 'static/files/playbook-evaluation-skill.md';
+const SKILL_TEXT = '---\nname: skill\ndescription: skill front matter\n---\n\n# Body\n\nNew text.\n';
 
-test('syncOwnedFiles copies the spec, the schema and the guide body', () => {
+test('syncOwnedFiles copies the spec, the schema and the skill file', () => {
   const { mainRoot, docsRoot } = ownedWorkspace();
 
   const { copied } = syncOwnedFiles({ mainRoot, docsRoot });
 
   assert.deepEqual(copied.sort(), [
-    'docs/core/playbook-evaluation.md',
     'docs/reference/pipeline.schema.json',
     'static/files/docudevs.yaml',
+    SKILL_TARGET,
   ]);
   assert.equal(readFileSync(join(docsRoot, 'static', 'files', 'docudevs.yaml'), 'utf8'), 'openapi: 3.1.0\n');
   assert.equal(readFileSync(join(docsRoot, 'docs', 'reference', 'pipeline.schema.json'), 'utf8'), '{"a":1}\n');
 });
 
-test('syncOwnedFiles keeps the page front matter and replaces only its body', () => {
+test('syncOwnedFiles publishes the skill byte for byte and leaves the page untouched', () => {
   const { mainRoot, docsRoot } = ownedWorkspace();
+  const pageBefore = readFileSync(page(docsRoot), 'utf8');
 
   syncOwnedFiles({ mainRoot, docsRoot });
 
-  assert.equal(
-    readFileSync(page(docsRoot), 'utf8'),
-    '---\ntitle: Page title\ndescription: Page description\n---\n\n# Body\n\nNew text.\n',
-  );
+  assert.equal(readFileSync(skillFile(docsRoot), 'utf8'), SKILL_TEXT);
+  assert.equal(readFileSync(page(docsRoot), 'utf8'), pageBefore);
 });
 
 test('syncOwnedFiles skips the schema when the main checkout root has none', () => {
@@ -97,16 +99,24 @@ test('syncOwnedFiles skips the schema when the main checkout root has none', () 
 
   const { copied } = syncOwnedFiles({ mainRoot, docsRoot });
 
-  assert.deepEqual(copied.sort(), ['docs/core/playbook-evaluation.md', 'static/files/docudevs.yaml']);
+  assert.deepEqual(copied.sort(), ['static/files/docudevs.yaml', SKILL_TARGET]);
   assert.equal(existsSync(join(docsRoot, 'docs', 'reference', 'pipeline.schema.json')), false);
 });
 
-test('checkOwnedFiles reports the guide page when it is missing from the docs', () => {
+test('checkOwnedFiles reports the skill file when it is missing from the docs', () => {
   const { mainRoot, docsRoot } = ownedWorkspace();
   syncOwnedFiles({ mainRoot, docsRoot });
-  rmSync(page(docsRoot));
+  rmSync(skillFile(docsRoot));
 
-  assert.deepEqual(checkOwnedFiles({ mainRoot, docsRoot }), ['docs/core/playbook-evaluation.md']);
+  assert.deepEqual(checkOwnedFiles({ mainRoot, docsRoot }), [SKILL_TARGET]);
+});
+
+test('checkOwnedFiles ignores the hand-edited guide page', () => {
+  const { mainRoot, docsRoot } = ownedWorkspace();
+  syncOwnedFiles({ mainRoot, docsRoot });
+  writeFileSync(page(docsRoot), '---\ntitle: Rewritten\n---\n\nCompletely different.\n');
+
+  assert.deepEqual(checkOwnedFiles({ mainRoot, docsRoot }), []);
 });
 
 test('checkOwnedFiles reports nothing once synced', () => {
@@ -116,7 +126,7 @@ test('checkOwnedFiles reports nothing once synced', () => {
   assert.deepEqual(checkOwnedFiles({ mainRoot, docsRoot }), []);
 });
 
-test('checkOwnedFiles reports a changed guide body and a changed schema', () => {
+test('checkOwnedFiles reports a changed skill and a changed schema', () => {
   const { mainRoot, docsRoot } = ownedWorkspace();
   syncOwnedFiles({ mainRoot, docsRoot });
   writeFileSync(
@@ -126,8 +136,8 @@ test('checkOwnedFiles reports a changed guide body and a changed schema', () => 
   writeFileSync(join(mainRoot, 'pipeline.schema.json'), '{"a":2}\n');
 
   assert.deepEqual(checkOwnedFiles({ mainRoot, docsRoot }).sort(), [
-    'docs/core/playbook-evaluation.md',
     'docs/reference/pipeline.schema.json',
+    SKILL_TARGET,
   ]);
 });
 
