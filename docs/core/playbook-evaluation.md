@@ -149,7 +149,7 @@ The Markdown form is for the person. The JSON form is for you. Read these fields
 - `clauses`, `redFlags`, `facts`: pass rates per clause, red flag agreement and fact matches. `clauses[].verdictPairs` counts each expected-to-actual verdict pair, such as `flagged→satisfactory`; a missing actual verdict counts as `none`.
 - `contracts[].assertions[]`: one per expectation. Each has `expectationId`, `passed` and `reasonCode`. A clause assertion has `clauseId`, `expectedVerdict`, `actualVerdict`, `redFlagResults`, `explanation` (the finding's reasoning), `redFlagReasons` (a reason for each red flag outcome, by red flag id), `acceptedVerdicts` (when the expectation has them) and `observedEvidence`: the passages the finding cited, with `quote`, `filename` and `pageNumbers`. A fact assertion has `factId`, `expectedValue` and `actualValue`, and no evidence.
 - `reasonCode` on a failed clause assertion is `verdict_mismatch`, `red_flag_mismatch`, `red_flag_not_found` or `clause_not_found`. On a fact it is `fact_mismatch` or `fact_not_found`.
-- `comparison` (when you pass `--against`): `newlyPassing`, `newlyFailing`, `unchanged`, `added`, `removed`.
+- `comparison` (when you pass `--against`): lists `newlyPassing`, `newlyFailing`, `added` and `removed` (an empty list is left out), and `unchanged`, the number of expectations with the same result.
 - `unstable`: expectations whose finished runs disagree, with `passedRuns` of `runs`. It is empty unless the evaluation ran with `--repeats` above 1. The Markdown report shows it as the Unstable section.
 
 ### 5. Diagnose

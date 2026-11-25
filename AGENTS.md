@@ -69,7 +69,7 @@ Public docs show only what a released SDK can run. Bump a pin after the SDK is r
 
 - Python: run `uv pip install --python tools/examples/python/.venv/bin/python -e ../docudevs/docudevs-sdk` into `tools/examples/python/.venv` (manual; the checkers use whatever is installed).
 - Java: `./gradlew compileJava -PsdkRoot=../docudevs` from `tools/examples/java` includes the private main repository's Java SDK build (configures; not exercised in CI).
-- Spec: `DOCUDEVS_MAIN_ROOT=../docudevs npm run sync-openapi-spec` copies `docudevs.yaml` from the private main repository.
+- Spec: `DOCUDEVS_MAIN_ROOT=../docudevs npm run sync-openapi-spec` copies `docudevs.yaml`, `pipeline.schema.json` and the playbook evaluation guide body (`docs/core/playbook-evaluation.md`, keeping the page's own front matter) from the private main repository. `node tools/examples/sync-spec.mjs --check` lists files that differ, by name only, and exits 0 when there is no main checkout.
 
 ## Spec and API reference
 
