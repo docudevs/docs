@@ -709,7 +709,7 @@ await client.fill("invoice", request)
 Manage bring-your-own LLM and OCR providers and the logical key bindings that route requests to them. See [Bring Your Own LLM](/docs/administration/bring-your-own-llm) and [Bring Your Own OCR](/docs/administration/bring-your-own-ocr) for the provider model and setup steps.
 
 :::warning
-`create_llm_provider`, `update_llm_provider`, `create_ocr_provider`, and `update_ocr_provider` are thin convenience wrappers that currently send outdated field names and do not match the current provider contract. Use the generated API functions (see [Bring Your Own LLM](/docs/administration/bring-your-own-llm)) or call the REST API directly instead of these four methods.
+`create_llm_provider`, `update_llm_provider`, `create_ocr_provider`, and `update_ocr_provider` send field names the API does not accept. The create methods are rejected with `400`; the update methods change only the name (and the endpoint for OCR), and other fields are ignored. Call the REST API for these steps: see the cURL examples in [Bring Your Own LLM](/docs/administration/bring-your-own-llm) and [Bring Your Own OCR](/docs/administration/bring-your-own-ocr).
 :::
 
 ### list_llm_providers
@@ -851,6 +851,8 @@ provider = await client.create_embedding_provider(
     credential_id=credential_id,
 )
 ```
+
+The API answers `201`, which the client does not parse: `provider.parsed` is `None`. Read the created provider from `provider.content` (JSON).
 
 ### get_embedding_provider
 
@@ -1103,6 +1105,8 @@ credential = await client.create_model_credential(
     auth_type="API_KEY",
 )
 ```
+
+The API answers `201`, which the client does not parse: `credential.parsed` is `None`. Read the credential ID from `credential.content` (JSON).
 
 ### rotate_model_credential
 
