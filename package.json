@@ -17,6 +17,8 @@
     "clean-api-docs": "docusaurus clean-api-docs all",
     "typecheck": "tsc",
     "examples:manifest": "node tools/examples/build-manifest.mjs",
+    "examples:coverage": "node tools/examples/check-coverage.mjs",
+    "examples:curl": "node tools/examples/check-curl.mjs",
     "examples:test": "node --test tools/examples/test/*.test.mjs",
     "api-docs": "npm run sync-openapi-spec && docusaurus clean-api-docs all && docusaurus gen-api-docs all"
   },
