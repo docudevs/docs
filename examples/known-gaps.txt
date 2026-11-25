@@ -1,6 +1,12 @@
 compare/compare-and-export-redline:java
 errors/case-not-found:java
 errors/unauthorized:java
+extraction-review/build-review-descriptor:java
+extraction-review/find-and-register-run:java
+extraction-review/pull-decisions:java
+extraction-review/save-profile-with-descriptor:java
+extraction-review/save-profile:java
+extraction-review/submit-claims:java
 extraction/analyze-document-with-several-prompts:java
 extraction/check-map-reduce-progress:java
 extraction/detect-objects:java
