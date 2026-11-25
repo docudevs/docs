@@ -8,7 +8,6 @@ docs/advanced/job-management.md:9
 docs/advanced/operations.md:21
 docs/advanced/page-range.md:3
 docs/advanced/tracing.md:6
-docs/configuration/Configuration.md:20
 docs/core/ai-analysis.md:8
 docs/core/batch-processing.md:3
 docs/core/calculated-fields.md:3
@@ -19,4 +18,3 @@ docs/core/schema-generation.md:6
 docs/core/source-locations.md:2
 docs/core/workbook-normalization.md:4
 docs/reference/error-codes.md:4
-docs/templates/Templates.md:26
