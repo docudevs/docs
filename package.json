@@ -16,6 +16,7 @@
     "gen-api-docs": "npm run sync-openapi-spec && docusaurus gen-api-docs all",
     "clean-api-docs": "docusaurus clean-api-docs all",
     "typecheck": "tsc",
+    "examples:test": "node --test tools/examples/test/*.test.mjs",
     "api-docs": "npm run sync-openapi-spec && docusaurus clean-api-docs all && docusaurus gen-api-docs all"
   },
   "dependencies": {
@@ -36,6 +37,7 @@
     "@docusaurus/module-type-aliases": "3.7.0",
     "@docusaurus/tsconfig": "3.7.0",
     "@docusaurus/types": "3.7.0",
+    "js-yaml": "^5.5.0",
     "typescript": "~5.6.2"
   },
   "browserslist": {
@@ -51,6 +53,6 @@
     ]
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20"
   }
 }
