@@ -1,7 +1,3 @@
-docs/core/ai-analysis.md:DocuDevsClient has no method 'get_case_documents'
-docs/core/ai-analysis.md:unknown command 'docudevs ocr contract.pdf'
-docs/core/ai-analysis.md:unknown command 'docudevs ocr report.pdf'
-docs/core/schema-generation.md:unknown command 'docudevs generate-schema'
 docs/reference/cli-reference.md:'docudevs knowledge-base contract-analysis propose-test-case' has no option '--criterion-id'
 docs/reference/cli-reference.md:unknown command 'docudevs operations contract-analysis'
 docs/reference/sdk-methods.md:DocuDevsClient has no method 'submit_and_wait_for_contract_analysis'

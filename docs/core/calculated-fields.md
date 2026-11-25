@@ -4,9 +4,6 @@ description: Define post-extraction fields in your JSON schema using Excel-style
 sidebar_position: 6
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Calculated Fields
 
 Calculated fields let you derive new values from extracted fields directly in your schema.
@@ -134,71 +131,6 @@ This example computes `laskettu_verotusarvot_yhteensa` from two extracted fields
 
 ## Using With SDK / API
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'CLI', value: 'cli'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+Send the schema as the extraction schema of a normal request. The example extracts `net_amount` and `vat_rate` from an invoice and reads the computed `gross_amount` from the result. The CLI reads the schema from a file.
 
-```python
-from docudevs import DocuDevsClient, json_schema
-
-client = DocuDevsClient(token="YOUR_API_KEY")
-
-schema = {
-    "type": "object",
-    "properties": {
-        "net_amount": {"type": "number"},
-        "vat_rate": {"type": "number"},
-        "gross_amount": {
-            "type": "number",
-            "x-docudevs": {
-                "fieldType": "calculated",
-                "dependsOn": ["net_amount", "vat_rate"],
-                "formula": {
-                    "lang": "excel",
-                    "expression": "ROUND({net_amount} * (1 + {vat_rate}), 2)"
-                }
-            }
-        }
-    }
-}
-
-job_guid = await client.submit_and_process_document(
-    document=open("invoice.pdf", "rb").read(),
-    document_mime_type="application/pdf",
-    prompt="Extract net amount and vat rate as numbers.",
-    schema=json_schema(schema),
-)
-
-result = await client.wait_until_ready(job_guid, result_format="json")
-print(result["gross_amount"])
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs process invoice.pdf \
-  --prompt "Extract net amount and vat rate as numbers." \
-  --schema-file schema-with-calculated-fields.json
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@invoice.pdf" \
-  -F 'command={
-    "prompt":"Extract net amount and vat rate as numbers.",
-    "schema":"{\"type\":\"object\",\"properties\":{\"net_amount\":{\"type\":\"number\"},\"vat_rate\":{\"type\":\"number\"},\"gross_amount\":{\"type\":\"number\",\"x-docudevs\":{\"fieldType\":\"calculated\",\"dependsOn\":[\"net_amount\",\"vat_rate\"],\"formula\":{\"lang\":\"excel\",\"expression\":\"ROUND({net_amount} * (1 + {vat_rate}), 2)\"}}}}}"
-  };type=application/json'
-```
-
-  </TabItem>
-</Tabs>
+<Example name="extraction/extract-with-calculated-fields" />

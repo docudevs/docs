@@ -1,9 +1,14 @@
 errors/case-not-found:java
 errors/unauthorized:java
+extraction/analyze-document-with-several-prompts:java
+extraction/check-map-reduce-progress:java
 extraction/extract-sections-by-page-range:java
+extraction/extract-with-calculated-fields:java
 extraction/extract-with-pydantic:java
 extraction/include-current-date-map-reduce:java
 extraction/process-page-range-map-reduce:java
+extraction/process-with-generated-schema:java
+extraction/split-map-reduce-by-document-outline:java
 first-document/handle-timeout:java
 first-document/save-and-use-configuration:java
 install/verify-connection:java
@@ -22,7 +27,11 @@ operations/download-acroform-pdf:java
 operations/get-document-outline:java
 operations/review-acroform-fields:java
 operations/submit-pdf-acroform:java
-quick-start/analyze-document:java
+pipelines/bucket-ocr-quality:java
+pipelines/client-pipeline-conditional:java
+pipelines/correct-ocr-text:java
+pipelines/route-by-document-type:java
+pipelines/run-client-pipeline:java
 templates/acroform-job-metadata:java
 templates/acroform-metadata:java
 tracing/get-page-image:java

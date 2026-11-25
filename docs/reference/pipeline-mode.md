@@ -9,42 +9,9 @@ Pipeline mode is available through the public API and SDK facade helpers. Prefer
 
 ## Python SDK
 
-Use `Pipeline`, `P`, and condition helpers such as `eq` to build the pipeline. Node methods return `NodeRef` objects, so dependencies and result paths can refer to previous nodes directly.
+Use `Pipeline`, `P`, and condition helpers such as `eq` to build the pipeline. Node methods return `NodeRef` objects, so dependencies and result paths can refer to previous nodes directly. The example below builds a one-node extraction pipeline, submits it, waits for the result, and reads the source locations and node statuses. The Java variant builds the same pipeline with `PipelineDefinition`, `PipelineNode` and `PipelinePath`, but does not read source locations because the Java client has no helper for them; `PipelineNodeRef` values can be used in `dependsOn(...)` and result outputs.
 
-```python
-from docudevs import DocuDevsClient, P, Pipeline, eq
-
-client = DocuDevsClient(token="YOUR_API_KEY")
-
-pipeline = Pipeline().ocr(mode="AUTO", source_locations=True, quality_artifact=True)
-extract_data = pipeline.extract(
-    "extract_data",
-    source=P.ocr.content,
-    prompt="Extract the requested fields.",
-    schema={
-        "type": "object",
-        "properties": {"name": {"type": "string"}},
-    },
-    source_locations=True,
-)
-pipeline.final(
-    "final_result",
-    depends_on=[extract_data],
-    output=extract_data.result,
-)
-
-guid = await client.process_pipeline_document(
-    document=open("report.pdf", "rb"),
-    document_mime_type="application/pdf",
-    ocr="AUTO",
-    pipeline=pipeline,
-    trace=True,
-)
-
-result = await client.wait_until_ready(guid)
-sources = await client.get_source_locations(guid)
-nodes = await client.get_pipeline_nodes(guid)
-```
+<Example name="pipelines/process-pipeline-document" />
 
 For an already-uploaded document, use `process_uploaded_pipeline_document(guid, pipeline=...)`. To save a named configuration, use `save_pipeline_configuration(...)`; retrieve the serialized pipeline JSON with `get_pipeline_configuration(...)`.
 
@@ -52,170 +19,17 @@ The runnable Python notebook [Pipeline Extraction](https://github.com/docudevs/p
 
 ## Java SDK
 
-Use `PipelineDefinition`, `PipelineNode`, `PipelinePath`, and `PipelineCondition` to build the pipeline. `PipelineNodeRef` values can be used in `dependsOn(...)` and result outputs.
-
-```java
-import static ai.docudevs.client.PipelinePath.ocr;
-
-import ai.docudevs.client.PipelineDefinition;
-import ai.docudevs.client.PipelineNode;
-import ai.docudevs.client.PipelineNodeRef;
-import ai.docudevs.client.PipelineOcr;
-import ai.docudevs.client.UploadRequest;
-import java.util.Map;
-
-PipelineDefinition.Builder pipelineBuilder = PipelineDefinition.builder()
-    .ocr(PipelineOcr.builder()
-        .mode("AUTO")
-        .sourceLocations(true)
-        .qualityArtifact(true)
-        .build());
-
-PipelineNodeRef extractData = pipelineBuilder.addNodeRef(PipelineNode.extract("extract_data")
-    .source(ocr().content())
-    .prompt("Extract the requested fields.")
-    .schema(Map.of(
-        "type", "object",
-        "properties", Map.of("name", Map.of("type", "string"))))
-    .sourceLocations(true)
-    .build());
-
-PipelineNodeRef finalResult = pipelineBuilder.addNodeRef(PipelineNode.finalResult("final_result")
-    .dependsOn(extractData)
-    .output(extractData.result())
-    .build());
-
-PipelineDefinition pipeline = pipelineBuilder.finalOrder(finalResult).build();
-
-String guid = client.processPipelineDocument(
-    new UploadRequest("report.pdf", "application/pdf", pdfBytes),
-    pipeline,
-    "AUTO"
-);
-
-JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
-JsonNode nodes = client.getPipelineNodes(guid);
-```
-
-For an already-uploaded document, use `processUploadedPipelineDocument(guid, pipeline, "application/pdf", "AUTO")`. To save a named pipeline configuration, use `savePipelineConfiguration(...)`; retrieve the serialized pipeline JSON with `getPipelineConfiguration(...)`.
-
-## Minimal Builder
-
-```python
-pipeline = Pipeline().ocr(mode="AUTO", source_locations=True, quality_artifact=True)
-
-extract_data = pipeline.extract(
-    "extract_data",
-    source=P.ocr.content,
-    prompt="Extract the requested fields.",
-    schema={"type": "object", "properties": {"name": {"type": "string"}}},
-    source_locations=True,
-)
-
-pipeline.final(
-    "final_result",
-    depends_on=[extract_data],
-    output=extract_data.result,
-)
-```
+The Java builders are shown in the Java variant of the example above. For an already-uploaded document, use `processUploadedPipelineDocument(guid, pipeline, "application/pdf", "AUTO")`. To save a named pipeline configuration, use `savePipelineConfiguration(...)`; retrieve the serialized pipeline JSON with `getPipelineConfiguration(...)`.
 
 ## Classify and Route
 
 The main reason to use pipeline mode is when a later extraction depends on an earlier decision. This example classifies the document first, then only runs the matching branch.
 
-```python
-pipeline = Pipeline().ocr(mode="AUTO", quality_artifact=True).max_nodes(2)
-
-classification = pipeline.extract(
-    "classify_document",
-    source=P.ocr.content,
-    prompt="Classify this document as invoice, safety_data_sheet, or other. Only classify the document.",
-    schema={
-        "type": "object",
-        "properties": {
-            "document_type": {
-                "type": "string",
-                "enum": ["invoice", "safety_data_sheet", "other"],
-            },
-            "confidence": {"type": "number"},
-            "reason": {"type": "string"},
-        },
-        "required": ["document_type", "confidence", "reason"],
-    },
-    llm_tier="nano",
-)
-
-invoice = pipeline.extract(
-    "extract_invoice",
-    depends_on=[classification],
-    when=eq(classification.result.document_type, "invoice"),
-    source=P.ocr.content,
-    prompt="Extract invoice fields from the document. Return null for missing fields.",
-    schema={
-        "type": "object",
-        "properties": {
-            "invoice_number": {"type": ["string", "null"]},
-            "vendor_name": {"type": ["string", "null"]},
-            "total_amount": {"type": ["number", "null"]},
-            "currency": {"type": ["string", "null"]},
-        },
-    },
-    llm_tier="mini",
-)
-
-sds = pipeline.extract(
-    "extract_sds",
-    depends_on=[classification],
-    when=eq(classification.result.document_type, "safety_data_sheet"),
-    source=P.ocr.content,
-    prompt="Extract product and safety information from the document.",
-    schema={
-        "type": "object",
-        "properties": {
-            "product_name": {"type": ["string", "null"]},
-            "supplier": {"type": ["string", "null"]},
-            "signal_word": {"type": ["string", "null"]},
-        },
-    },
-    llm_tier="mini",
-)
-
-invoice_final = pipeline.final_candidate(
-    "invoice_final",
-    depends_on=[classification, invoice],
-    when=eq(classification.result.document_type, "invoice"),
-    output={
-        "branch": "invoice",
-        "classification": classification.result,
-        "extracted": invoice.result,
-    },
-)
-sds_final = pipeline.final_candidate(
-    "sds_final",
-    depends_on=[classification, sds],
-    when=eq(classification.result.document_type, "safety_data_sheet"),
-    output={
-        "branch": "safety_data_sheet",
-        "classification": classification.result,
-        "extracted": sds.result,
-    },
-)
-other_final = pipeline.final_candidate(
-    "other_final",
-    depends_on=[classification],
-    when=eq(classification.result.document_type, "other"),
-    output={
-        "branch": "other",
-        "classification": classification.result,
-        "message": "No specialized extraction branch was selected.",
-    },
-)
-pipeline.final_order(invoice_final, sds_final, other_final)
-```
+<Example name="pipelines/route-by-document-type" />
 
 Branch prompts should describe the extraction task itself, not the pipeline mechanics. The branch selection already happened through `when`; the extract node receives a normal extraction task over the selected source content.
 
-Use `get_pipeline_nodes(guid)` to inspect routing after the run. Matching branches complete; non-matching branches are marked `SKIPPED`.
+Read the node statuses after the run to inspect routing (`get_pipeline_nodes(guid)` in Python, `getPipelineNodes(guid)` in Java, `pipeline.nodes` in `GET /job/status/{guid}`). Matching branches complete; non-matching branches are marked `SKIPPED`.
 
 ## Node Types
 
@@ -226,7 +40,7 @@ Use `get_pipeline_nodes(guid)` to inspect routing after the run. Matching branch
 - `operation`: submits a child operation job and consumes `operations/{childGuid}/result.json`.
 - `final`: maps a completed node result into the public `{guid}/result.json`.
 
-A job-level [`reasoningEffort`](/docs/basics/SimpleDocuments#reasoning-effort) request field applies to every node's LLM calls in the pipeline; there is no per-node reasoning-effort override — only `llm_tier` is settable per node.
+A job-level [`reasoningEffort`](/docs/basics/SimpleDocuments#reasoning-effort) request field applies to every node's LLM calls in the pipeline; there is no per-node reasoning-effort override — only the LLM tier (`llm_tier` in the Python builder) is settable per node.
 
 ## Declared Resources
 
@@ -254,7 +68,7 @@ A pipeline can declare reusable named resources in a top-level `resources` array
 
 At execution time the worker merges every field from the named resource (everything except `id` and `type`) into the tool descriptor that references it. A node whose `tools[].resource` names an id that is not declared in `resources` fails at execution with a pipeline execution error, and pipeline submission is rejected up front for the same mismatch.
 
-Declared resources are raw pipeline JSON only — the Python `Pipeline` builder has no `.resource()`/`.resources()` helper today. Build the JSON directly (or via `pipeline.raw_node(...)`) and pass it to `save_pipeline_configuration(...)` or `process_pipeline_document(...)`.
+Declared resources are raw pipeline JSON only — the Python `Pipeline` builder has no `.resource()`/`.resources()` helper. Build the JSON directly (or via `pipeline.raw_node(...)`) and pass it to `save_pipeline_configuration(...)` or `process_pipeline_document(...)`.
 
 ## Inputs and Structured Node Input
 
@@ -290,23 +104,13 @@ An optional RFC 6901 JSON `pointer` (max depth 32) can drill into the resolved v
 
 An `extract` node's `input` field is distinct from `source`: `source` supplies the primary document text the model reads, while `input` hands the model additional structured JSON delivered as delimited data alongside the source — not as the primary document text. Use it for reference data the model should treat as context, such as a validated list of values or a prior node's structured result.
 
-Like declared resources, `inputs` and node-level `input` are raw pipeline JSON — the Python `Pipeline` builder's `extract()`/`ocr_correct()` methods do not take an `input=` keyword yet. The full JSON Schema for both fields is in [`pipeline.schema.json`](./pipeline.schema.json).
+Like declared resources, `inputs` and node-level `input` are raw pipeline JSON — the Python `Pipeline` builder's `extract()`/`ocr_correct()` methods do not take an `input=` keyword. The full JSON Schema for both fields is in [`pipeline.schema.json`](./pipeline.schema.json).
 
 ## OCR Quality
 
-When OCR quality is available, the worker stores `layout/ocr-quality.json` and exposes the normalized context to pipeline nodes as `$ocr.quality`. The stable routing fields are `category`, `score`, and `escalate`; use a `validate` node such as `bucket` when you need to route on numeric ranges without adding numeric operators to `when`.
+When OCR quality is available, the worker stores `layout/ocr-quality.json` and exposes the normalized context to pipeline nodes as `$ocr.quality`. The stable routing fields are `category`, `score`, and `escalate`; use a `validate` node such as `bucket` when you need to route on numeric ranges without adding numeric operators to `when`. The example buckets the numeric score into `good` and `review`, builds the pipeline and prints its JSON.
 
-```python
-quality = pipeline.validate_bucket(
-    "ocr_quality",
-    input=P.ocr.quality.score,
-    buckets=[
-        {"name": "good", "min": 0.85},
-        {"name": "review"},
-    ],
-    default="review",
-)
-```
+<Example name="pipelines/bucket-ocr-quality" />
 
 ## OCR_CORRECT
 
@@ -316,25 +120,7 @@ quality = pipeline.validate_bucket(
 - `compress`: produces corrected content but downstream source locations are marked unresolved with a compressed-upstream reason.
 - `none`: drops source-map projection for workflows that only need corrected text.
 
-```python
-ocr_corrected = pipeline.ocr_correct(
-    "ocr_corrected",
-    source=P.ocr.content,
-    mode="correction",
-    scope="pagewise",
-    source_map="preserve",
-    llm_tier="mini",
-)
-
-extracted = pipeline.extract(
-    "extract_corrected",
-    depends_on=[ocr_corrected],
-    source=ocr_corrected.result.content,
-    prompt="Extract fields from the corrected OCR text.",
-    schema={"type": "object", "properties": {"name": {"type": "string"}}},
-    source_locations=True,
-)
-```
+<Example name="pipelines/correct-ocr-text" />
 
 ## Runtime Status
 
@@ -344,10 +130,4 @@ The main result still comes from `wait_until_ready()` / `GET /job/result/{guid}`
 
 ## Queue Mode
 
-Inline execution remains the default. Request queue-backed extract nodes per pipeline with:
-
-```python
-pipeline = Pipeline().execution_mode("queue")
-```
-
-In queue mode, extract nodes run as node-scoped AI tasks on the tiered worker pools. Node artifacts keep the same layout: `pipeline/nodes/{nodeId}/result.json` and optional `result.sources.json`.
+Request queue-backed extract nodes per pipeline with `Pipeline().execution_mode("queue")`. In queue mode, extract nodes run as node-scoped AI tasks on the tiered worker pools. Node artifacts keep the same layout: `pipeline/nodes/{nodeId}/result.json` and optional `result.sources.json`.
