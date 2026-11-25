@@ -4,16 +4,13 @@ description: Connect your organization's Azure Document Intelligence account for
 sidebar_position: 5
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 DocuDevs can extract text using your organization's own Azure Document
 Intelligence (Azure OCR) account instead of the DocuDevs platform account.
 
 :::note Who can manage OCR providers
-Creating, editing, deleting, or key-binding OCR providers is not gated to
-organization admins today: any member of the organization holding an API key
-can perform these actions. This differs from
+Creating, editing, deleting, or key-binding OCR providers is not restricted to
+organization admins: any member of the organization and any organization API
+key can perform these actions. This differs from
 [embedding providers](/docs/administration/bring-your-own-embeddings) and
 [model credentials](/docs/administration/model-credentials), which require the
 `ADMIN` role for the same operations.
@@ -24,7 +21,7 @@ its own `apiKey` directly. This is different from LLM and embedding
 providers, which can reference a reusable
 [model credential](/docs/administration/model-credentials).
 
-There is no dedicated verify/probe endpoint for OCR providers today, unlike
+There is no dedicated verify/probe endpoint for OCR providers, unlike
 `POST /llm/providers/{id}/verify` for LLM providers. Confirm a provider works
 by running a document-processing job against it.
 
@@ -42,136 +39,23 @@ DocuDevs platform OCR account.
 
 ## Create a provider
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-  ]}>
-  <TabItem value="curl">
+<Example name="ocr-providers/create-ocr-provider" />
 
-```bash
-API_URL="https://api.docudevs.ai"
-API_KEY="<your-api-key>"
-
-curl -X POST "$API_URL/ocr/providers" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Our Doc Intelligence",
-    "endpoint": "https://myacct.cognitiveservices.azure.com",
-    "apiKey": "<azure-doc-intelligence-key>",
-    "modelId": "prebuilt-document"
-  }'
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-The hand-written `DocuDevsClient.create_ocr_provider`/`update_ocr_provider`
-convenience methods send outdated field names (`model` instead of `modelId`)
-and will be rejected by the API. Until they are fixed, call the generated,
-typed functions directly:
-
-```python
-from docudevs.client import AuthenticatedClient
-from docudevs.api.azure_ocr_providers.create_ocr_provider import asyncio_detailed as create_ocr_provider
-from docudevs.models.create_ocr_provider_request import CreateOcrProviderRequest
-
-client = AuthenticatedClient(base_url="https://api.docudevs.ai", token="<your-api-key>")
-
-body = CreateOcrProviderRequest(
-    name="Our Doc Intelligence",
-    endpoint="https://myacct.cognitiveservices.azure.com",
-    api_key="<azure-doc-intelligence-key>",
-    model_id="prebuilt-document",
-)
-response = await create_ocr_provider(client=client, body=body)
-provider = response.parsed
-```
-
-  </TabItem>
-</Tabs>
+The example reads the Azure Document Intelligence key from the `DOC_INTELLIGENCE_API_KEY` environment variable. The Python SDK's `create_ocr_provider` and `update_ocr_provider` methods send `model` instead of `modelId`, which the API rejects, so the create and update examples are cURL only.
 
 ## Update or delete a provider
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-  ]}>
-  <TabItem value="curl">
+<Example name="ocr-providers/update-ocr-provider" />
 
-```bash
-curl -X PATCH "$API_URL/ocr/providers/7" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"modelId": "prebuilt-invoice"}'
-
-curl -X DELETE "$API_URL/ocr/providers/7" -H "Authorization: $API_KEY"
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-```python
-from docudevs.api.azure_ocr_providers.update_ocr_provider import asyncio_detailed as update_ocr_provider
-from docudevs.api.azure_ocr_providers.delete_ocr_provider import asyncio_detailed as delete_ocr_provider
-from docudevs.models.update_ocr_provider_request import UpdateOcrProviderRequest
-
-body = UpdateOcrProviderRequest(model_id="prebuilt-invoice")
-await update_ocr_provider(id=7, client=client, body=body)
-
-await delete_ocr_provider(id=7, client=client)
-```
-
-  </TabItem>
-</Tabs>
+<Example name="ocr-providers/delete-ocr-provider" />
 
 ## Key bindings
 
-Each logical OCR key is bound to a provider independently. Listing and
-binding keys use the correctly-mapped `list_ocr_keys`/`update_ocr_key_binding`
-convenience methods on `DocuDevsClient`.
+Each logical OCR key is bound to a provider independently. The only key is `DEFAULT`.
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-  ]}>
-  <TabItem value="curl">
+<Example name="ocr-providers/bind-ocr-key" />
 
-```bash
-curl "$API_URL/ocr/keys" -H "Authorization: $API_KEY"
-
-curl -X PUT "$API_URL/ocr/keys/DEFAULT" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"providerId": 7}'
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-```python
-from docudevs import DocuDevsClient
-
-client = DocuDevsClient(api_url="https://api.docudevs.ai", token="<your-api-key>")
-
-keys = (await client.list_ocr_keys()).json()
-
-await client.update_ocr_key_binding("DEFAULT", 7)
-# Pass provider_id=None to clear a binding
-```
-
-`list_ocr_keys`/`update_ocr_key_binding` call the API with a plain
-`httpx.AsyncClient` under the hood and return a regular `httpx.Response`
-(`.json()`, `.status_code`), unlike the generated functions used above.
-
-  </TabItem>
-</Tabs>
+The Python methods `list_ocr_keys` and `update_ocr_key_binding` return a plain `httpx.Response`, so read the body with `.json()` and check `.status_code`.
 
 ## LLM providers
 

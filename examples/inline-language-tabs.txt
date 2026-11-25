@@ -1,4 +1,2 @@
 # Pages that still hold inline language tabs, with the tab count; convert to <Example> and lower or remove the line. This file only shrinks.
 docs/administration/bring-your-own-embeddings.md:6
-docs/administration/bring-your-own-llm.md:8
-docs/administration/bring-your-own-ocr.md:6
