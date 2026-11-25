@@ -1,1 +1,1 @@
-# one Python client method name per line; methods listed here need no guide or example
+# <method>  # reason; methods listed here need no guide or example
