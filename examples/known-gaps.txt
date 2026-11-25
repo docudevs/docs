@@ -74,10 +74,16 @@ records/batch-records:java
 records/configure-dataset:java
 records/delete-record:java
 records/get-dataset:java
+records/get-import:java
 records/get-record:java
+records/import-file:java
+records/import-from-url:java
 records/list-records:java
 records/record-stats:java
+records/retry-import:java
+records/sync-snapshot:java
 records/upsert-record:java
+records/wait-for-import:java
 templates/acroform-job-metadata:java
 templates/acroform-metadata:java
 tracing/get-page-image:java

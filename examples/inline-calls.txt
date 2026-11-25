@@ -8,7 +8,6 @@ docs/administration/model-credentials.md:10
 docs/administration/single-sign-on.md:1
 docs/advanced/category-trees.md:5
 docs/advanced/classification.md:2
-docs/advanced/records-import.md:11
 docs/core/contract-analysis-playbooks.md:15
 docs/integration/submission-portals.md:3
 docs/integration/webhooks.md:1
