@@ -24,7 +24,6 @@ get_contract_analysis_trial_readiness
 get_contract_analysis_workflow
 get_dataset
 get_document_compare
-get_document_layout
 get_draft_revision
 get_evaluation
 get_evaluation_report
@@ -32,7 +31,6 @@ get_extraction_review_artifact
 get_extraction_review_profile
 get_extraction_review_run
 get_import
-get_ocr_quality
 get_record
 get_tree_activation_report
 get_tree_node

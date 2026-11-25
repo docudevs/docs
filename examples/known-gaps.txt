@@ -23,6 +23,8 @@ jobs/process-and-clean-up:java
 jobs/process-with-auto-ocr:java
 jobs/process-with-depends-on:java
 knowledge-search/extract-with-records-search:java
+layout/get-document-layout:java
+layout/resolve-source-locations:java
 lookup-files/download-excel-result:java
 lookup-files/manage-batch-lookup-file:java
 lookup-files/manage-configuration-lookup-file:java
