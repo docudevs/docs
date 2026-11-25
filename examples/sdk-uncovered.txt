@@ -10,14 +10,12 @@ bulk_upsert_records
 cancel_classify
 classify
 commit_classify
-compare_documents
 confirm_contract_analysis_findings
 confirm_sync_records
 create_case_id
 create_records_case
 delete_record
 download_classify_csv
-export_document_compare
 export_playbook
 get_classify
 get_classify_results
@@ -78,4 +76,3 @@ wait_for_classify
 wait_for_evaluation
 wait_for_import
 wait_for_records_job
-wait_until_compare_ready

@@ -1,3 +1,4 @@
+compare/compare-and-export-redline:java
 errors/case-not-found:java
 errors/unauthorized:java
 extraction/analyze-document-with-several-prompts:java

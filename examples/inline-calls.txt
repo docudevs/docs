@@ -18,7 +18,6 @@ docs/advanced/records-datasets.md:6
 docs/advanced/records-import.md:11
 docs/core/agent-chat.md:3
 docs/core/contract-analysis-playbooks.md:15
-docs/core/document-compare.md:1
 docs/core/document-layout.md:2
 docs/core/extraction-review.md:3
 docs/integration/submission-portals.md:3
