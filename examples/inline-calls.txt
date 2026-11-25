@@ -22,6 +22,5 @@ docs/core/date-range-lookup.md:2
 docs/core/document-compare.md:1
 docs/core/document-layout.md:2
 docs/core/extraction-review.md:3
-docs/core/object-detection.md:1
 docs/integration/submission-portals.md:3
 docs/integration/webhooks.md:1

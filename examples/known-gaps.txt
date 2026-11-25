@@ -2,6 +2,7 @@ errors/case-not-found:java
 errors/unauthorized:java
 extraction/analyze-document-with-several-prompts:java
 extraction/check-map-reduce-progress:java
+extraction/detect-objects:java
 extraction/extract-sections-by-page-range:java
 extraction/extract-with-calculated-fields:java
 extraction/extract-with-pydantic:java
