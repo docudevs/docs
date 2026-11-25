@@ -29,3 +29,5 @@ src/generated/
 tools/examples/python/.venv/
 __pycache__/
 .pytest_cache/
+tools/examples/java/build/
+tools/examples/java/.gradle/
