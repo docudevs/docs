@@ -111,7 +111,7 @@ const sidebars: SidebarsConfig = {
         'reference/cli-reference',          // NEW: CLI command reference
         'reference/playbook-format',
         'reference/sdk-changelog',
-        'reference/billing-tokens',
+        'reference/billing-credits',
         'reference/error-codes',            // NEW: Error reference
         'reference/limits-quotas',          // NEW: Platform limits
       ],
