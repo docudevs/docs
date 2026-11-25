@@ -3,7 +3,8 @@ set -euo pipefail
 
 # docs:start
 wait_for_job() {
-  while true; do
+  local deadline=$((SECONDS + 600))
+  while [ "$SECONDS" -lt "$deadline" ]; do
     STATUS=$(curl -s -S -f "https://api.docudevs.ai/job/status/$1" \
       -H "Authorization: $API_KEY" | jq -r '.status')
     case "$STATUS" in
@@ -13,6 +14,8 @@ wait_for_job() {
     esac
     sleep 5
   done
+  echo "Job $1 did not finish within 600 seconds" >&2
+  return 1
 }
 
 CASE_ID=42  # id of the knowledge base, from GET /knowledge-bases
@@ -28,7 +31,7 @@ SCHEMA='{
           "sku": {"type": "string"},
           "canonical_name": {"type": "string"},
           "localized_display_name": {"type": "string", "maxLength": 40},
-          "regulatory_class": {"type": "string"},
+          "product_group": {"type": "string"},
           "marketing_summary": {"type": "string"}
         },
         "required": ["sku", "canonical_name", "localized_display_name"]
@@ -47,7 +50,7 @@ jq -n \
   --arg caseId "$CASE_ID" \
   '{
     mimeType: "text/csv",
-    prompt: "Fill canonical_name, localized_display_name (at most 40 characters), regulatory_class and marketing_summary for every SKU, using the Signature Appliances knowledge base.",
+    prompt: "Fill canonical_name, localized_display_name (at most 40 characters), product_group and marketing_summary for every SKU, using the Product Catalogue knowledge base.",
     schema: $schema,
     tools: [{type: "KNOWLEDGE_BASE_SEARCH", config: {caseId: $caseId, topK: 8}}]
   }' |

@@ -1,2 +1,2 @@
-# Pages that still hold inline language tabs, with the tab count; convert to <Example> and lower or remove the line. This file only shrinks.
+# Pages that hold inline language tabs, with the tab count. This file has no entries and stays that way: put the code in an example.
 

@@ -6,10 +6,10 @@ CASE_ID=42  # id of the case that holds the playbook documents
 RUN_ID="<run-id>"  # runId returned when the run was created
 RESULT_FINGERPRINT="<result-fingerprint>"  # resultFingerprint of that run's result
 
-SUITE_REVISION=$(curl -s -S "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite" \
+SUITE_REVISION=$(curl -s -S -f "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite" \
   -H "Authorization: $API_KEY" | jq '.revision')
 
-curl -s -S -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite/proposals" \
+curl -s -S -f -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite/proposals" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

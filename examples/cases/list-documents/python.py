@@ -11,6 +11,9 @@ async def main():
     case_id = 123  # id returned by create_case
 
     response = await client.list_case_documents(case_id=case_id, page=0, size=20)
+    if response.status_code != 200:
+        raise SystemExit(f"List documents failed: {response.status_code}")
+
     documents_page = response.parsed
 
     print(f"Total documents: {documents_page.total_size}")

@@ -19,7 +19,7 @@ async def main():
     imported = await client.import_playbook(case_id, playbook, draft_revision=revision)
     if imported.status_code == 422:
         # A playbook with mistakes is refused with every problem and its JSON path
-        for issue in imported.parsed["validation"]["errors"]:
+        for issue in imported.parsed["validation"].get("errors", []):
             print(issue["path"], issue["code"], issue["message"])
     elif imported.status_code == 200:
         print(f"Draft revision: {imported.parsed['draftRevision']}")

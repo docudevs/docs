@@ -6,7 +6,7 @@ CASE_ID=42  # id of the case that holds the playbook documents
 ANCHOR_JOB_GUID="<completed-contract-job>"  # jobGuid of a completed contract job
 SUITE_REVISION=3  # revision returned by the test-suite read
 
-ESTIMATE=$(curl -s -S -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials/estimate" \
+ESTIMATE=$(curl -s -S -f -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials/estimate" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -24,7 +24,7 @@ jq '{
   configurationFingerprint: .executionFingerprint
 }' <<< "$ESTIMATE" > trial.json
 
-curl -s -S -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials" \
+curl -s -S -f -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d @trial.json | jq .

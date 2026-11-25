@@ -1,9 +1,11 @@
 package examples.contract_analysis.create_run;
 
 import ai.docudevs.client.DocuDevsClient;
+// docs:start
 import ai.docudevs.client.generated.model.ContractAnalysisRunRequest;
 import ai.docudevs.client.generated.model.ContractPackageMemberRequest;
 import com.fasterxml.jackson.databind.JsonNode;
+// docs:end
 
 public class Example {
     public static void main(String[] args) throws Exception {

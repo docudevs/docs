@@ -25,7 +25,7 @@ First, ensure you have the DocuDevs SDK installed and your API key set in the `A
 
 ### Step 2: Prepare Your Document
 
-For this walkthrough, we'll use an invoice as an example. You can use any document format. The examples read the file from the current directory: `sample_invoice.pdf` in this guide's own examples and `your-document.pdf` in the shared Quick Start examples. Rename the file in the example or put your document under that name.
+For this walkthrough, we'll use an invoice as an example. You can use any document format. The examples read the file from the current directory: `sample_invoice.pdf` in this guide's own examples, `your-document.pdf` in the shared Quick Start examples, and `contract.pdf` in the case example near the end. Rename the file in the example or put your document under that name.
 
 ### Step 3: Basic Processing (Minimal Configuration)
 
@@ -124,10 +124,12 @@ The processing results typically include:
 
 ### Processing Status Flow
 
-1. **Submitted**: Document uploaded and queued for processing
-2. **Processing**: AI is analyzing the document
-3. **Completed**: Extraction finished successfully
-4. **Failed**: Error occurred during processing
+1. `CREATED` or `PENDING`: Document uploaded and queued for processing
+2. `IN_PROGRESS`, then `OCR_COMPLETED`: The document is being read and analyzed
+3. `COMPLETED`: Extraction finished successfully
+4. `ERROR`, `FAILED` or `TIMEOUT`: Processing did not finish successfully
+
+Any other status means the job is still running; keep polling until one of the final statuses in steps 3 and 4.
 
 ## Different Document Types
 

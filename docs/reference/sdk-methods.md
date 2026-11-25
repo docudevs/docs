@@ -1445,23 +1445,15 @@ Record an authenticated expert's approval of a passing trial report.
 await client.attest_contract_analysis_trial(case_id, trial_id, report_id=report_id)
 ```
 
-### submit_contract_analysis
+### Submit contract analysis
 
-Submit contract analysis for a completed parent job against a published knowledge-base profile.
-
-```python
-submission = await client.submit_contract_analysis(job_guid, knowledge_base_id=knowledge_base_id)
-```
-
-### submit_and_wait_for_contract_analysis
-
-Submit contract analysis and poll until its result is available.
+Contract analysis for a completed parent job is a `contract-analysis` operation. Pass the published knowledge-base profile as the `knowledgeBaseId` parameter of `submit_operation_with_parameters`.
 
 ```python
-result = await client.submit_and_wait_for_contract_analysis(
+submission = await client.submit_operation_with_parameters(
     job_guid,
-    knowledge_base_id=knowledge_base_id,
-    timeout=120,
+    "contract-analysis",
+    custom_parameters={"knowledgeBaseId": knowledge_base_id},
 )
 ```
 
@@ -1889,7 +1881,7 @@ if image_bytes:
 
 ### delete_job
 
-Delete a job and its associated data. Jobs must be in a terminal state (COMPLETED, ERROR, TIMEOUT, or PARTIAL). Jobs older than 14 days are automatically purged, so this method is primarily for cleaning up recent jobs.
+Delete a job and its associated data. Jobs must be in a terminal state (`COMPLETED`, `ERROR`, `FAILED`, or `TIMEOUT`). Jobs older than 14 days are automatically purged, so this method is primarily for cleaning up recent jobs.
 
 ```python
 result = await client.delete_job(job_guid)

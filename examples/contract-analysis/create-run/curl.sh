@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # docs:start
-curl -s -S -X POST "https://api.docudevs.ai/contract-analysis/runs" \
+curl -s -S -f -X POST "https://api.docudevs.ai/contract-analysis/runs" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

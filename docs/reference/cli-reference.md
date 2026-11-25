@@ -21,11 +21,11 @@ The CLI supports multiple authentication methods:
 ### Environment Variables (Recommended)
 
 ```bash
-# Primary environment variable
-export DOCUDEVS_TOKEN=your-api-key-here
-
-# Legacy support (also works)
+# The variable the examples use
 export API_KEY=your-api-key-here
+
+# Also read by the CLI; it takes precedence over API_KEY when both are set
+export DOCUDEVS_TOKEN=your-api-key-here
 
 # Use commands without --token
 docudevs process document.pdf
@@ -676,18 +676,18 @@ Propose an unapproved suite expectation from one immutable finding.
 docudevs knowledge-base contract-analysis propose-test-case CASE_ID \
   --run-id RUN_ID \
   --result-fingerprint sha256:... \
-  --criterion-id hours \
-  --target-key item:clause-1 \
+  --clause-id hours \
   --name "Hours threshold" \
-  --expected-assessment meets_requirement \
+  --expected-verdict satisfactory \
   --reason "Correction" \
   --expected-suite-revision 3 \
   --idempotency-key proposal-1
 ```
 
-- `--run-id`, `--result-fingerprint`, `--criterion-id`, `--target-key`, `--name`, `--reason`, `--expected-suite-revision`, `--idempotency-key`: All required
-- `--expected-assessment [meets_requirement|deviates_from_requirement|not_found|needs_review|not_applicable]`: Required
-- `--scenario-tag TEXT`: Optional scenario tag (repeatable)
+- `--run-id`, `--result-fingerprint`, `--clause-id`, `--name`, `--reason`, `--expected-suite-revision`, `--idempotency-key`: All required
+- `--expected-verdict [satisfactory|mixed|flagged|ai_unsure|not_found|does_not_apply]`: Required
+- `--expected-red-flag TEXT`: Optional red flag as `id=triggered` or `id=not_triggered`
+- `--notes TEXT`: Optional notes
 
 ## Operations Management
 
@@ -708,18 +708,18 @@ docudevs operations submit JOB_GUID --type error-analysis --parameter quality=de
 - `--timeout INTEGER`: Wait timeout in seconds (default: 120)
 - `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
 
-### `operations contract-analysis`
+### Contract analysis operation
 
-Run contract analysis against a published knowledge-base profile.
+Run contract analysis against a published knowledge-base profile with `operations submit` and the `contract-analysis` type.
 
 ```bash
-docudevs operations contract-analysis JOB_GUID --knowledge-base-id KNOWLEDGE_BASE_ID
+docudevs operations submit JOB_GUID \
+  --type contract-analysis \
+  --parameter knowledgeBaseId=KNOWLEDGE_BASE_ID \
+  --wait
 ```
 
-- `--knowledge-base-id INTEGER` (alias `--knowledge-base`): Knowledge base ID (required)
-- `--wait/--no-wait`: Wait for the result (default: wait)
-- `--timeout FLOAT`: Wait timeout in seconds (default: 120)
-- `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
+Use the options of `operations submit` above. The knowledge base is passed as the `knowledgeBaseId` parameter.
 
 ### `operations error-analysis`
 
@@ -802,10 +802,6 @@ The CLI has no `billing` command group and the Python SDK client has no billing 
 
 Manage LLM providers and key bindings.
 
-:::warning
-`llm create` and `llm update` call SDK convenience wrappers that currently send outdated field names and do not match the current provider contract. Use the generated API functions (see [Bring Your Own LLM](/docs/administration/bring-your-own-llm)) or the REST API directly instead of these two commands.
-:::
-
 ### `llm providers`
 
 List LLM providers.
@@ -817,6 +813,10 @@ docudevs llm providers
 ### `llm create`
 
 Create an LLM provider.
+
+:::warning
+This command does not work with the current API. It sends `type`, `baseUrl` and `model`, and `POST /llm/providers` requires `apiUrl` and `modelType`, so the request is rejected. Create the provider with the cURL example on [Bring your own LLM](/docs/administration/bring-your-own-llm#create-a-provider).
+:::
 
 ```bash
 docudevs llm create --name "My OpenAI" --type OPENAI --api-key "sk-..."
@@ -832,7 +832,7 @@ docudevs llm get PROVIDER_ID
 
 ### `llm update`
 
-Update LLM provider.
+Update LLM provider. Only `--name` takes effect: the API ignores the other options this command sends. Use the cURL example on [Bring your own LLM](/docs/administration/bring-your-own-llm#update-or-delete-a-provider) to change other fields.
 
 ```bash
 docudevs llm update PROVIDER_ID --name "New Name"
@@ -866,10 +866,6 @@ docudevs llm bind KEY --provider-id PROVIDER_ID
 
 Manage OCR providers and key bindings.
 
-:::warning
-`ocr create` and `ocr update` call SDK convenience wrappers that currently send outdated field names and do not match the current provider contract. Use the generated API functions (see [Bring Your Own OCR](/docs/administration/bring-your-own-ocr)) or the REST API directly instead of these two commands.
-:::
-
 ### `ocr providers`
 
 List OCR providers.
@@ -881,6 +877,10 @@ docudevs ocr providers
 ### `ocr create`
 
 Create an OCR provider.
+
+:::warning
+This command does not work with the current API. It sends `model`, and `POST /ocr/providers` requires `modelId`, so the request is rejected. Create the provider with the cURL example on [Bring your own OCR](/docs/administration/bring-your-own-ocr#create-a-provider).
+:::
 
 ```bash
 docudevs ocr create --name "My Azure OCR" --endpoint "https://..." --api-key "..."
@@ -896,7 +896,7 @@ docudevs ocr get PROVIDER_ID
 
 ### `ocr update`
 
-Update OCR provider.
+Update OCR provider. Only `--name` and `--endpoint` take effect: the API ignores `--model` and `--description`. Use the cURL example on [Bring your own OCR](/docs/administration/bring-your-own-ocr#update-or-delete-a-provider) to change other fields.
 
 ```bash
 docudevs ocr update PROVIDER_ID --name "New Name"

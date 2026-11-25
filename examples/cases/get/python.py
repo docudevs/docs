@@ -10,6 +10,9 @@ async def main():
     # docs:start
     case_id = 123  # id returned by create_case
     response = await client.get_case(case_id)
+    if response.status_code != 200:
+        raise SystemExit(f"Get case failed: {response.status_code}")
+
     case = response.parsed
 
     print(f"Case: {case.name}")

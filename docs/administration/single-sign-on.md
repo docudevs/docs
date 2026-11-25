@@ -62,7 +62,7 @@ See [Members and Roles](./members-and-roles) for the full member lifecycle (invi
 
 ## REST reference
 
-All endpoints below require an `ADMIN`-role principal (an org API key is always treated as `ADMIN`; a Supabase-session admin also qualifies) unless noted otherwise.
+All endpoints below require an `ADMIN`-role principal (an org API key is always treated as `ADMIN`; a signed-in `ADMIN` also qualifies) unless noted otherwise.
 
 | Method | Path | Notes |
 | --- | --- | --- |

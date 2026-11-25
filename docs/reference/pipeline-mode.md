@@ -130,4 +130,4 @@ The main result still comes from `wait_until_ready()` / `GET /job/result/{guid}`
 
 ## Queue Mode
 
-Request queue-backed extract nodes per pipeline with `Pipeline().execution_mode("queue")`. In queue mode, extract nodes run as node-scoped AI tasks on the tiered worker pools. Node artifacts keep the same layout: `pipeline/nodes/{nodeId}/result.json` and optional `result.sources.json`.
+Request queue-backed extract nodes per pipeline with `Pipeline().execution_mode("queue")`. In queue mode, extract nodes run as separate node-scoped AI tasks. Node results and source locations are read the same way as in the default mode.

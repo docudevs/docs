@@ -17,7 +17,7 @@ Anything the [case agent](./case-agent.md) tries to change becomes a **pending a
 | Costly tools | `classify_records`, `run_holdout_eval`, `compare_eval_runs` | Run immediately below a platform threshold of estimated tokens. Above it they are pending actions. Inside a headless run's budget they run without a pause. |
 | Existing tools | `upload_document_to_case`, `save_configuration`, `promote_to_knowledge_base`, `create_case`, `process_document` | Pending only in a case-bound chat. Unbound flows keep their current behaviour. |
 
-A pending action stores what the agent asked for: the tool, its class, a summary (counts and cost where known), the HTTP method and path, and the request body. The body is kept as written and hashed. Confirming replays the stored body, not a new one the model might produce.
+A pending action stores what the agent asked for: the tool, its class, a one-line summary, the HTTP method and path, and the request body. The row count and estimated tokens that the web app shows next to an action come from that stored body, where it holds them. The body is kept as written and hashed. Confirming replays the stored body, not a new one the model might produce.
 
 ## Pending-action states
 

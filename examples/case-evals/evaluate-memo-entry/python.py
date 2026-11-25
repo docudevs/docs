@@ -18,7 +18,7 @@ async def main():
     # Raises EvalFailed when the evaluation fails, and TimeoutError after 3600 seconds
     finished = await client.wait_for_eval(case_id, started["evalId"], timeout=3600)
 
-    for pair in finished["report"]["comparisons"]:
+    for pair in finished["report"].get("comparisons", []):
         print(pair["baseline"], pair["candidate"], pair["target"])
     # docs:end
 

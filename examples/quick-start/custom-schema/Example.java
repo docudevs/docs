@@ -1,11 +1,13 @@
 package examples.quick_start.custom_schema;
 
 import ai.docudevs.client.DocuDevsClient;
+// docs:start
 import ai.docudevs.client.ProcessOptions;
 import ai.docudevs.client.Schema;
 import ai.docudevs.client.UploadRequest;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+// docs:end
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;

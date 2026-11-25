@@ -14,7 +14,7 @@ async def main():
     readiness = response.parsed
 
     print(f"Ready: {readiness['ready']}")
-    print(f"Blockers: {readiness['blockers']}")
+    print(f"Blockers: {readiness.get('blockers', [])}")
     print(f"Scenarios still missing: {readiness.get('outstandingScenarios', [])}")
     # docs:end
 

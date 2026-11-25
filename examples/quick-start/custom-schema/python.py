@@ -2,7 +2,9 @@ import asyncio
 import json
 import os
 
+# docs:start
 from docudevs import json_schema
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 

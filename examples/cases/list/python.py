@@ -9,6 +9,9 @@ async def main():
 
     # docs:start
     response = await client.list_cases()
+    if response.status_code != 200:
+        raise SystemExit(f"List cases failed: {response.status_code}")
+
     cases = response.parsed
 
     for case in cases:

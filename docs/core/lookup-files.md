@@ -23,7 +23,7 @@ The uploaded file is preprocessed into a runtime search artifact at upload time:
 | `.txt`, `.md` | Left as text, split into passages on blank lines | `{"score": ..., "passage": "..."}` |
 | `.docx` | Text extracted from the document, split into passages | `{"score": ..., "passage": "..."}` |
 
-Any other extension is rejected with a 400. There is no separate endpoint or parameter to set a search result limit: it defaults to 8 and is not currently exposed as a caller-adjustable option on the upload call.
+Any other extension is rejected with a 400. There is no separate endpoint or parameter to set a search result limit: it defaults to 8 and is not exposed as a caller-adjustable option on the upload call.
 
 ### Using the tool during extraction
 
@@ -65,7 +65,7 @@ Pass the configuration name when you fetch the Excel result of a completed job:
 
 <Example name="lookup-files/download-excel-result" />
 
-There is currently no working `DocuDevsClient` helper to download the template file you uploaded back out — the generated low-level client's response model for `GET /configuration/{name}/excel-template` does not match the raw binary response the server actually returns; call that endpoint directly if you need to retrieve it. There is no CLI command for uploading or downloading an Excel template.
+There is no working `DocuDevsClient` helper to download the template file you uploaded back out — the generated low-level client's response model for `GET /configuration/{name}/excel-template` does not match the raw binary response the server actually returns; call that endpoint directly if you need to retrieve it. There is no CLI command for uploading or downloading an Excel template.
 
 ## Schemas
 

@@ -35,7 +35,7 @@ public class Example {
                           "sku": {"type": "string"},
                           "canonical_name": {"type": "string"},
                           "localized_display_name": {"type": "string", "maxLength": 40},
-                          "regulatory_class": {"type": "string"},
+                          "product_group": {"type": "string"},
                           "marketing_summary": {"type": "string"}
                         },
                         "required": ["sku", "canonical_name", "localized_display_name"]
@@ -52,8 +52,8 @@ public class Example {
         ProcessOptions options = ProcessOptions.builder()
                 .mimeType("text/csv")
                 .prompt("Fill canonical_name, localized_display_name (at most 40 characters), "
-                        + "regulatory_class and marketing_summary for every SKU, "
-                        + "using the Signature Appliances knowledge base.")
+                        + "product_group and marketing_summary for every SKU, "
+                        + "using the Product Catalogue knowledge base.")
                 .schema(schema)
                 .tools(List.of(ToolDescriptor.knowledgeBaseSearch(caseId, 8)))
                 .build();

@@ -24,7 +24,7 @@ async def main():
     # Raises EvalFailed when the scoring fails, and TimeoutError after 3600 seconds
     scored = await client.wait_for_eval(case_id, comparison["evalId"], timeout=3600)
 
-    for pair in scored["report"]["comparisons"]:
+    for pair in scored["report"].get("comparisons", []):
         print(pair["baseline"], pair["candidate"], pair["target"])
     # docs:end
 

@@ -13,7 +13,7 @@ async def main():
     suite = response.parsed
 
     print(f"Suite revision: {suite['revision']}")
-    print(f"Cases: {len(suite['cases'])}")
+    print(f"Cases: {len(suite.get('cases', []))}")
     # docs:end
 
 

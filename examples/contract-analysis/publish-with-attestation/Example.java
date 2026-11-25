@@ -1,7 +1,9 @@
 package examples.contract_analysis.publish_with_attestation;
 
 import ai.docudevs.client.DocuDevsClient;
+// docs:start
 import com.fasterxml.jackson.databind.JsonNode;
+// docs:end
 import java.util.Set;
 
 public class Example {

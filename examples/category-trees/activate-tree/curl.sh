@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # docs:start
-wait_for_job() {
+wait_for_activation() {
   local deadline=$((SECONDS + 3600))  # same limit as the Python timeout
   while [ "$SECONDS" -lt "$deadline" ]; do
     STATUS=$(curl -s -S -f "https://api.docudevs.ai/job/status/$1" \
@@ -25,5 +25,5 @@ JOB_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/cases/$CASE_ID/trees/$
   -H "Content-Type: application/json" \
   -d '{"successorMapping": {"9.90.1": "4.12.3"}, "allowMissing": false}' | jq -r '.jobGuid')
 
-wait_for_job "$JOB_GUID"
+wait_for_activation "$JOB_GUID"
 # docs:end

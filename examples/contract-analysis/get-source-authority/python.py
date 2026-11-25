@@ -13,7 +13,7 @@ async def main():
     authority = response.parsed
 
     print(f"Revision: {authority['revision']}")
-    print(f"Decisions recorded: {len(authority['decisions'])}")
+    print(f"Decisions recorded: {len(authority.get('decisions', []))}")
     # docs:end
 
 

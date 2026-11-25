@@ -116,7 +116,7 @@ Submit a first-class operation for a completed OCR/document-processing job and a
 
 <Example name="contract-analysis/analyze-contract" />
 
-The cURL and Python examples submit the operation and poll `/operation/{jobGuid}/contract-analysis` until `resultAvailable` is `true`; the CLI example waits with `--wait`. The Java `submitAndWaitForContractAnalysis` does this for you with a default timeout of 120 seconds; call `submitContractAnalysis` and poll yourself when you want to control retries.
+The cURL and Python examples read `jobGuid` from the submission response, wait on that analysis job, and read its result from `GET /job/result/{jobGuid}`, so they return the analysis they just started even when the contract has been analysed before. The CLI example waits with `--wait`. The Java `submitAndWaitForContractAnalysis` polls the contract job's `/operation/{jobGuid}/contract-analysis` route instead, with a default timeout of 120 seconds; when you analyse the same contract more than once, it can return an older analysis, so call `submitContractAnalysis` and wait on the returned job yourself.
 
 ## Contract-analysis runs (v2)
 

@@ -3,7 +3,8 @@ set -euo pipefail
 
 # docs:start
 wait_for_job() {
-  while true; do
+  local deadline=$((SECONDS + 600))
+  while [ "$SECONDS" -lt "$deadline" ]; do
     STATUS=$(curl -s -S -f "https://api.docudevs.ai/job/status/$1" \
       -H "Authorization: $API_KEY" | jq -r '.status')
     case "$STATUS" in
@@ -11,8 +12,10 @@ wait_for_job() {
       PARTIAL) echo "Job $1 ended with status PARTIAL" >&2; return 0 ;;
       ERROR|FAILED|TIMEOUT) echo "Job $1 ended with status $STATUS" >&2; return 1 ;;
     esac
-    sleep 2
+    sleep 5
   done
+  echo "Job $1 did not finish within 600 seconds" >&2
+  return 1
 }
 
 JOB_GUID="<job-guid>"  # GUID of a completed document job

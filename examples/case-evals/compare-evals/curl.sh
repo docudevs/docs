@@ -37,5 +37,5 @@ COMPARE_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/cases/$CASE_ID/evals
 wait_for_eval "$COMPARE_ID"
 
 curl -s -S -f "https://api.docudevs.ai/cases/$CASE_ID/evals/$COMPARE_ID" \
-  -H "Authorization: $API_KEY" | jq '.report.comparisons[] | {baseline, candidate, target}'
+  -H "Authorization: $API_KEY" | jq '(.report.comparisons // [])[] | {baseline, candidate, target}'
 # docs:end

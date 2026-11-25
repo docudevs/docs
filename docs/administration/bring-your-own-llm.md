@@ -28,8 +28,8 @@ organization API key can perform these actions. This differs from
    when you enter an API key in the form; a provider that uses a shared model
    credential needs an `https` `apiUrl`, so create it through the API.
 5. For OpenAI-compatible, enter the base URL and model name.
-6. Select a shared model credential, or enter an API key to create a
-   dedicated credential, and save the provider.
+6. Select a shared model credential or enter an API key to create a dedicated
+   credential, and save the provider.
 7. Bind the provider to one or more levels: `DEFAULT`, `NANO`, `MINI`, or
    `HIGH`.
 
@@ -42,7 +42,7 @@ Create a provider that uses a shared [model credential](/docs/administration/mod
 
 <Example name="llm-providers/create-llm-provider" />
 
-The Python SDK's provider methods send field names the API rejects on create and ignores on update, so use cURL for these steps. The CLI's create and update commands call the same methods.
+The Python SDK's provider methods send field names the API rejects on create; on update only `name` applies and the other fields are ignored, so use cURL for these steps. The CLI's create and update commands call the same methods.
 
 ## Update or delete a provider
 

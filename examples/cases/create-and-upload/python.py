@@ -2,8 +2,10 @@ import asyncio
 import os
 
 from docudevs.docudevs_client import DocuDevsClient
+# docs:start
 from docudevs.models import UploadCaseDocumentBody
 from docudevs.types import File
+# docs:end
 
 
 async def main():
@@ -15,6 +17,8 @@ async def main():
         name="Contract Review",
         description="Contract documents for review",
     )
+    if case_response.status_code != 201:
+        raise SystemExit(f"Creating the case failed: HTTP {case_response.status_code}")
     case_id = case_response.parsed.id
 
     # Step 2: Upload document to case
