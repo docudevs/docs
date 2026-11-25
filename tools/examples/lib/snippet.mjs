@@ -39,7 +39,8 @@ export function extractSnippet(source, file) {
       current = [];
     } else if (kind === 'end') {
       if (!current) throw new Error(`${file}: docs:end without a preceding docs:start`);
-      regions.push(trimBlankEdges(dedent(current)).join('\n'));
+      const region = trimBlankEdges(dedent(current)).join('\n');
+      if (region !== '') regions.push(region);
       current = null;
     } else if (current) {
       current.push(line);

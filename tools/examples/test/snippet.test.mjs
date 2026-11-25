@@ -23,3 +23,7 @@ test('end without start fails naming the file', () => {
 test('CRLF input yields LF output', () => {
   assert.equal(extractSnippet('a = 1\r\nb = 2\r\n', 'python.py'), 'a = 1\nb = 2');
 });
+test('an empty marked region adds no blank separator', () => {
+  const src = '# docs:start\na = 1\n# docs:end\n# docs:start\n\n# docs:end\n# docs:start\nb = 2\n# docs:end\n';
+  assert.equal(extractSnippet(src, 'python.py'), 'a = 1\n\nb = 2');
+});

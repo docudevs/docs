@@ -5,6 +5,8 @@ import { extractSnippet } from './snippet.mjs';
 /** @typedef {'curl'|'python'|'java'|'cli'} Lang */
 /** @typedef {{ lang: Lang, file: string, source: string, snippet: string }} ExampleFile */
 /** @typedef {{ name: string, files: ExampleFile[] }} Example */
+/** @typedef {{ value: Lang, label: string, language: string, code: string }} Tab */
+/** @typedef {Record<string, { tabs: Tab[] }>} Manifest */
 
 export const LANGS = [
   { value: 'curl', label: 'cURL', file: 'curl.sh', language: 'bash' },

@@ -5,8 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "sync-openapi-spec": "echo 'OpenAPI spec already in static/files/docudevs.yaml'",
-    "start": "npm run sync-openapi-spec && docusaurus start",
-    "build": "npm run sync-openapi-spec && docusaurus build",
+    "start": "npm run sync-openapi-spec && npm run examples:manifest && docusaurus start",
+    "build": "npm run sync-openapi-spec && npm run examples:manifest && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "npm run sync-openapi-spec && docusaurus deploy",
     "clear": "docusaurus clear",
@@ -16,6 +16,7 @@
     "gen-api-docs": "npm run sync-openapi-spec && docusaurus gen-api-docs all",
     "clean-api-docs": "docusaurus clean-api-docs all",
     "typecheck": "tsc",
+    "examples:manifest": "node tools/examples/build-manifest.mjs",
     "examples:test": "node --test tools/examples/test/*.test.mjs",
     "api-docs": "npm run sync-openapi-spec && docusaurus clean-api-docs all && docusaurus gen-api-docs all"
   },
