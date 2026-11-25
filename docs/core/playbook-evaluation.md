@@ -7,7 +7,7 @@ description: Test a contract-analysis playbook against gold answers from a sprea
 
 Use this guide to run the evaluation loop from a cold start. You need:
 
-- an organization API key in `DOCUDEVS_TOKEN` (never print it),
+- an organization API key in `DOCUDEVS_TOKEN` (keep it out of logs and shared output),
 - the case id of the playbook (`CASE_ID` below),
 - the gold file and the contract files it names.
 
@@ -15,23 +15,27 @@ Install the CLI with `pip install docu-devs-api-client`. The command is `docudev
 
 Do not use `docudevs eval holdout` or `docudevs eval compare`. They belong to records classification evaluations, not to playbooks. Read a playbook evaluation with `docudevs eval status CASE_ID EVALUATION_ID` (the id starts with `evaluation-`), and list a case's evaluations with `docudevs eval list CASE_ID`.
 
-Stop and ask a person when a rule below says so. Do not guess at an answer that only a person can give.
+Where a step says to check with the playbook owner, do that instead of guessing at an answer that only a person can give.
+
+## Use it as an agent skill
+
+The same procedure is available as an agent skill: <a href="/files/playbook-evaluation-skill.md" target="_blank" rel="noopener noreferrer">playbook-evaluation-skill.md</a>. Give the file to a coding agent and ask it to evaluate your playbook, or follow the steps below by hand.
 
 ## Step 0: Check the draft
 
 Find the case id with `docudevs knowledge-base list`. Then read the draft and its ids:
 
-```
+```bash
 docudevs knowledge-base contract-analysis get CASE_ID --view draft
 docudevs playbook export CASE_ID --view draft
 ```
 
-From the first output, read `draftRevision` and `profile.processing.llmLevel`. The model level must be `mini` or `default`. If it is anything else, including `HIGH`, stop and ask a person. To change `mini` to `default` for a comparison:
+From the first output, read `draftRevision` and `profile.processing.llmLevel`. The model level must be `mini` or `default`. If it is anything else, for example `HIGH`, stop and check with the playbook owner before you go on. To change `mini` to `default` for a comparison:
 
 1. Copy the `profile` object of the first output into `profile.json`, and set `processing.llmLevel` to `default`.
 2. Save it with a reason, at the `draftRevision` you read:
 
-   ```
+   ```bash
    docudevs knowledge-base contract-analysis update CASE_ID --draft-revision DRAFT_REVISION --input profile.json --reason "Set the draft model level to default for a comparison baseline"
    ```
 
@@ -41,7 +45,7 @@ From the second output, copy the ids exactly. Use `clauses[].id`, `clauses[].red
 
 ## Mapping file reference
 
-The mapping file is YAML or JSON with the same keys. Write it with the person who owns the gold file, and have them check it before the import.
+The mapping file is YAML or JSON with the same keys. Write it with the person who owns the gold file, and ask them to check it before the import.
 
 ```yaml
 source:                          # required
@@ -86,15 +90,15 @@ skipRows:                        # optional; data row numbers to ignore
 
 ### 1. Import gold
 
-Write `mapping.yaml` with the ids from step 0, and have a person check it. Then run a dry run:
+Write `mapping.yaml` with the ids from step 0, and ask the gold file's owner to check it. Then run a dry run:
 
-```
+```bash
 docudevs eval import CASE_ID --gold gold.xlsx --mapping mapping.yaml --dry-run
 ```
 
 The dry run prints the counts, the contracts to upload, and the skipped cells with their reasons. It stops with an error, naming the row and the value, at the first value it cannot map. Fix the mapping until the dry run passes and every skipped cell is one you meant. Then import:
 
-```
+```bash
 docudevs eval import CASE_ID --gold gold.xlsx --mapping mapping.yaml
 ```
 
@@ -102,19 +106,19 @@ The import uploads each contract that is not yet in the case (matched by file na
 
 ### 2. Split once
 
-```
+```bash
 docudevs eval split CASE_ID --holdout 0.3 --seed 1
 ```
 
 Each test case becomes `tuning` or `holdout`. Every later run uses that split. A split creates a new suite revision, so earlier sign-offs go stale. Split again only after a new import, and never between the runs you compare. Cases added later have no set until the next split.
 
-A small suite can end with an empty holdout set. If `docudevs eval run CASE_ID --set holdout` fails with `EMPTY_SET`, stop the loop and report it to a person. Do not count the holdout check as passed.
+A small suite can end with an empty holdout set. If `docudevs eval run CASE_ID --set holdout` fails with `EMPTY_SET`, stop the loop and tell the playbook owner. Do not count the holdout check as passed.
 
 ### 3. Run a baseline
 
 Small set first, then the full set, then the holdout set:
 
-```
+```bash
 docudevs eval run CASE_ID --set tuning --limit 3
 docudevs eval run CASE_ID --set tuning
 docudevs eval run CASE_ID --set holdout
@@ -130,18 +134,18 @@ Do not pass `--llm-level` here. Set the model level in step 0, before the first 
 
 For a long run, add `--no-wait` and poll the report until `complete` is true:
 
-```
+```bash
 docudevs eval report CASE_ID EVALUATION_ID --format json
 ```
 
 ### 4. Report
 
-```
+```bash
 docudevs eval report CASE_ID EVALUATION_ID
 docudevs eval report CASE_ID EVALUATION_ID --format json
 ```
 
-The Markdown form is for the person. The JSON form is for you. Read these fields first:
+The Markdown form is for reading. The JSON form is for scripts and agents. Read these fields first:
 
 - `complete`: when false, some trials have not finished. Do not diagnose yet.
 - `contracts[].trialStatus`: `finished`, `failed` or `missing`. A `failed` or `missing` contract with its `failureReason` is not a playbook failure. Rerun the evaluation before you diagnose.
@@ -156,7 +160,7 @@ The Markdown form is for the person. The JSON form is for you. Read these fields
 
 For each assertion with `passed` false, read the finding. The trial id is `contracts[].trialId` in the report:
 
-```
+```bash
 docudevs knowledge-base contract-analysis trial-get CASE_ID TRIAL_ID
 docudevs knowledge-base contract-analysis run-result RUN_ID
 ```
@@ -168,23 +172,23 @@ Classify each failure as exactly one of these four classes:
 | Class | How to recognise it | What to do |
 | --- | --- | --- |
 | Playbook wording | A verdict or red-flag mismatch. The `explanation` applies a condition, identification hint or red-flag description from the playbook, and the passage supports the expected answer. The same wording mistake appears in more than one contract. | Propose a wording edit. Edit the playbook, not the gold. |
-| Gold looks wrong | The passage quote says clearly the opposite of the expected value or verdict. The finding agrees with the quote. | Report it for a person, with the case id, contract, expectation and quote. Never change the gold. |
-| Model variance | The same expectation flips between two runs with the same draft and suite revision. It appears in `newlyPassing` or `newlyFailing` when you compare two runs with no playbook edit between them. | Rerun the set with `--repeats 3`. If the expectation is in the `unstable` list, record it in your notes. Do not edit for it. |
-| Engine limit | `clause_not_found` or `fact_not_found`, where the contract text in the case document states the answer. Read the contract text for that section before you decide. Or the `explanation` says the playbook format cannot express the rule. | Report it to DocuDevs with the case id, evaluation id and clause or fact id. Do not edit the playbook for it. |
+| Gold looks wrong | The passage quote says clearly the opposite of the expected value or verdict. The finding agrees with the quote. | Report it to the gold file's owner, with the case id, contract, expectation and quote. Never change the gold. |
+| Model variance | The same expectation flips between two runs with the same draft and suite revision. It appears in `newlyPassing` or `newlyFailing` when you compare two runs with no playbook edit between them. | Rerun the set with `--repeats 3`. If the expectation is in the `unstable` list, note it down. Do not edit the playbook for it. |
+| Engine limit | `clause_not_found` or `fact_not_found`, where the contract text in the case document states the answer. Read the contract text for that section before you decide. Or the `explanation` says the playbook format cannot express the rule. | Report it to DocuDevs support with the case id, evaluation id and clause or fact id. Do not edit the playbook for it. |
 
 A finding can look like two classes at first. Use the quote to decide. If the quote supports the expected answer and the finding applied the wording wrongly, it is playbook wording. If the quote supports the finding, it is the gold.
 
 ### 6. Edit
 
-Edit the draft with `docudevs playbook export` and `docudevs playbook import`. Every save takes `--reason`: one sentence, as in the rules. Read the draft revision first with `docudevs knowledge-base contract-analysis get CASE_ID --view draft`. This example adds a reason to a red flag's `whyProblematic` field:
+Edit the draft with `docudevs playbook export` and `docudevs playbook import`. Every save takes `--reason`: one sentence, as described under Rules. Read the draft revision first with `docudevs knowledge-base contract-analysis get CASE_ID --view draft`. This example adds a reason to a red flag's `whyProblematic` field:
 
-```
+```bash
 docudevs playbook export CASE_ID --view draft > playbook.json
 ```
 
 In `playbook.json`, find the clause `liability_cap`, its red flag `uncapped_liability`, and set `whyProblematic` to the new wording. Then save it at the revision you read:
 
-```
+```bash
 docudevs playbook import CASE_ID playbook.json --draft-revision DRAFT_REVISION --reason "Clarified why an uncapped liability clause is a problem, for failures 3, 5 and 8"
 ```
 
@@ -198,7 +202,7 @@ Read the change log with `list_draft_revisions(CASE_ID)`, which returns `revisio
 
 After each edit, rerun the tuning set and then the holdout set. Compare each with the baseline of the same set, and pass the same `--repeats` that the baseline used (1 if it used none):
 
-```
+```bash
 docudevs eval run CASE_ID --set tuning --repeats N
 docudevs eval run CASE_ID --set holdout --repeats N
 docudevs eval report CASE_ID NEW_EVALUATION_ID --against BASELINE_EVALUATION_ID --format md
@@ -216,17 +220,17 @@ Publishing checks the latest run of every case that has a mandatory expectation,
 
 1. **Run the full set on the final draft.** Only trials of the current draft and suite count:
 
-   ```
+   ```bash
    docudevs eval run CASE_ID --set all
    docudevs eval report CASE_ID EVALUATION_ID --format json
    ```
 
    Wait until `complete` is true.
-2. **Check the results.** A mandatory expectation that still fails blocks publishing. Stop here, do not attest, and report it. An unstable expectation or a suspected gold error needs a person to decide how to resolve it, for example by correcting the gold and re-importing. The agent does not change the gold or the test suite to get past it.
-3. **Check scenario coverage.** Readiness lists `requiredScenarios`, `coveredScenarios` and `outstandingScenarios`. See the scenario section below. If any scenario is outstanding, stop and ask a person for more gold cases.
+2. **Check the results.** A mandatory expectation that still fails blocks publishing. Stop here, do not attest, and report it. An unstable expectation or a suspected gold error needs a person to decide how to resolve it, for example by correcting the gold and re-importing. Do not change the gold or the test suite to get past it.
+3. **Check scenario coverage.** Readiness lists `requiredScenarios`, `coveredScenarios` and `outstandingScenarios`. See the scenario section below. If any scenario is outstanding, stop and ask the gold file's owner for more gold cases.
 4. **Attest each passing trial.** Take each trial id from `contracts[].trialId` in the full-set report. Read its `reportId`, then sign off:
 
-   ```
+   ```bash
    docudevs knowledge-base contract-analysis trial-get CASE_ID TRIAL_ID
    docudevs knowledge-base contract-analysis trial-attest CASE_ID TRIAL_ID --report-id REPORT_ID --reason "Full-set evaluation EVALUATION_ID, draft revision DRAFT_REVISION"
    ```
@@ -235,28 +239,28 @@ Publishing checks the latest run of every case that has a mandatory expectation,
 
 5. **Check readiness.** Stop unless `ready` is true:
 
-   ```
+   ```bash
    docudevs knowledge-base contract-analysis readiness CASE_ID
    ```
 
    The output also gives `draftRevision` and `trialAttestationId`. Blockers such as `MANDATORY_CASES_INCOMPLETE` (a mandatory case has no current passing attested trial), `ATTESTATION_STALE` (an attestation no longer matches the draft or suite), `NO_CONFIRMED_EXAMPLES` and `SCENARIO_COVERAGE_MISSING` each need the step that fixes them. The contract-analysis playbooks guide lists the rest.
 6. **Compare with the last published draft.** On the full-set evaluation from item 1, run:
 
-   ```
+   ```bash
    docudevs eval report CASE_ID EVALUATION_ID --against published --format md
    ```
 
    Publish only when all of these hold:
 
-   - `comparison.againstSuiteRevision` equals the report's `suiteRevision`. If they differ, stop and ask a person.
+   - `comparison.againstSuiteRevision` equals the report's `suiteRevision`. If they differ, stop and check with the playbook owner.
    - `comparison.newlyFailing` is empty.
    - Every expectation in `comparison.added` passes. Find each one in `contracts[]` by `caseId`, then check its `assertions[]` by `expectationId`.
    - The missed-problem rate does not rise. The rate is `totals.missedProblems` divided by the sum of `clauses[].assertions`. Compare this report with the baseline's, which you read with `docudevs eval report CASE_ID BASELINE_EVALUATION_ID --format json`.
 
-   The baseline's id is `comparison.againstEvaluationId`. Check in `docudevs eval list CASE_ID` that its `set` is `all`. If it is not, or `NO_PUBLISHED_EVALUATION` comes back, stop and ask a person. A playbook published before this release has no recorded published draft revision, so it gets `NO_PUBLISHED_EVALUATION` until it is published again. Do not publish on an unknown baseline.
+   The baseline's id is `comparison.againstEvaluationId`. Check in `docudevs eval list CASE_ID` that its `set` is `all`. If it is not, or `NO_PUBLISHED_EVALUATION` comes back, stop and check with the playbook owner. A playbook with no recorded published draft revision returns `NO_PUBLISHED_EVALUATION` until it is published again. Do not publish on an unknown baseline.
 7. **Publish** with the values from readiness:
 
-   ```
+   ```bash
    docudevs knowledge-base contract-analysis publish CASE_ID --draft-revision DRAFT_REVISION --trial-attestation-id ATTESTATION_ID
    ```
 
@@ -270,13 +274,13 @@ Publishing needs all three scenarios covered by approved mandatory expectations 
 - `deviation`: a mandatory clause expectation with `expectedVerdict` `mixed` or `flagged`, and at least one expected red flag set to `triggered`. Gold: a contract with the deviating clause and its red flag.
 - `missing_required_clause`: a mandatory clause expectation with `expectedVerdict` `flagged` or `not_found`, no expected red flags, and a clause whose `requirementLevel` is `mandatory` or `expected`. Gold: a contract where the required clause is missing.
 
-If a scenario is outstanding, the fix is more gold from a person. Do not invent expectations, and do not edit existing ones, to cover it.
+If a scenario is outstanding, the fix is more gold from the gold file's owner. Do not invent expectations, and do not edit existing ones, to cover it.
 
 The worked example below covers all three, provided `liability_cap` has a `requirementLevel` of `mandatory` or `expected`.
 
 ## Rules
 
-- Never edit gold. Report a suspected gold error to a person. Never change the gold file or the mapping to make a number better.
+- Never edit gold. Report a suspected gold error to the gold file's owner. Never change the gold file or the mapping to make a number better.
 - Small set first: `--limit` on tuning, then the full tuning set, then holdout.
 - Run baselines on both sets before the first edit.
 - Check the holdout before you keep an edit. Tuning results alone prove nothing.
@@ -285,8 +289,8 @@ The worked example below covers all three, provided `liability_cap` has a `requi
 - Do not pass `--llm-level` to `eval run`. The run level comes from the draft's processing settings. Keep it at `mini`, or set `default` with `--reason` (step 0).
 - No contract-specific strings or domain words in the playbook. Do not copy party names, amounts, dates, places, or phrases and domain words from a test contract into a clause, red flag, hint or condition. Describe the issue in general terms that would apply to any contract of that kind.
 - Publish only when every condition in step 8.6 holds.
-- Stop and ask a person when: the draft model level is not `mini` or `default`; the holdout set is empty; the baseline for publishing is unknown; a scenario is outstanding; or a mandatory expectation still fails.
-- Do not print the API key, and do not paste contract text into a playbook.
+- Check with the playbook owner before you go on when: the draft model level is not `mini` or `default`; the holdout set is empty; the baseline for publishing is unknown; a scenario is outstanding; or a mandatory expectation still fails.
+- Keep the API key out of logs and shared output, and do not paste contract text into a playbook.
 
 ## Worked example: supplier agreements
 
@@ -353,5 +357,5 @@ If the playbook lacks `liability_cap` or its `uncapped_liability` red flag, the 
 
 1. `eval report` shows `supplier-b` with `liability_cap` expected `flagged` and actual `satisfactory`, reason `verdict_mismatch`.
 2. `trial-get` gives the run; `run-result` shows the `liability_cap` finding. Its `explanation` says the liability is capped at 12 months' fees, and the passage quote reads "liability is capped at the total fees paid in the last 12 months".
-3. The quote supports the finding and contradicts the gold, which expects an uncapped liability. This is a gold problem. Report it to a person with the contract, expectation and quote, and do not edit the gold. Leave the playbook alone for this failure.
+3. The quote supports the finding and contradicts the gold, which expects an uncapped liability. This is a gold problem. Report it to the gold file's owner with the contract, expectation and quote, and do not edit the gold. Leave the playbook alone for this failure.
 4. Another contract, `supplier-d`, shows a different failure on the same clause. The `explanation` treats a cap that covers only indirect damages as a full liability cap. The quote supports the expected `flagged` verdict. The red flag wording does not say that a partial cap does not count, so this is playbook wording. Propose a clearer `whyProblematic` for the red flag, save it with a reason that names the failures it targets, then rerun tuning and holdout.
