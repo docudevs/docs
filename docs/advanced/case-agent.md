@@ -26,6 +26,10 @@ A session belongs to one organization and one case. A `sessionId` sent for anoth
 
 The chat is a job, as in the general agent: the cURL variant polls `GET /agent/status/{jobGuid}` until it completes and the Python helper waits for you. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md); a chat started with an API key can be decided with any API key of the organization, see [who can confirm or reject](./agent-actions.md#who-can-confirm-or-reject).
 
+## Which cases you can use
+
+A call with an organization API key resolves the case without a user: it works on organization-wide cases, which are the cases created with an API key (see [Cases](./cases.md)), and on knowledge bases. A case created by a signed-in user answers `404` to an API key. The same holds for the memo, runs, evaluation and search calls on the other pages.
+
 ## What the agent sees
 
 - **Instructions.** The active global instructions of the case memo, quoted as data, up to about 4,000 tokens. Proposed and retired entries are left out. The agent cannot change them.
@@ -51,7 +55,7 @@ On a classify job's results, the **Ask agent about this row** link opens the age
 
 ## Investigate flagged rows from the API
 
-`agent_chat_and_wait` takes the same case arguments as `agent_chat` and returns the completed status. This example points the investigate playbook at one row of a classify job:
+The chat request takes the same case fields (`caseId`, `playbook`, `context`) for every playbook. The Python helper `agent_chat_and_wait` also waits for the answer and returns the completed status. This example points the investigate playbook at one row of a classify job:
 
 <Example name="case-agent/investigate-flagged-rows" />
 
@@ -60,6 +64,8 @@ On a classify job's results, the **Ask agent about this row** link opens the age
 A [headless run](./agent-runs.md) saves a report with questions for a person. Reply to it with a chat on the same case whose `context` is `run:{runId}`; the agent reads the run's report and questions. A run of another case answers `404`.
 
 <Example name="case-agent/reply-to-run" />
+
+To continue the conversation, send the next message with the same session id (`sessionId`, `session_id` in Python); a session keeps its history per case.
 
 Any action the reply proposes waits in the [pending-action inbox](./agent-actions.md); the agent never confirms it.
 

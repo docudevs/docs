@@ -52,17 +52,17 @@ The inbox answers `{items, nextBefore?}`; pass `nextBefore` back as `before` for
 
 <Example name="agent-actions/confirm-action" />
 
-The confirm call answers `200` with the action. Check its `status`: `confirmed` means the replayed write succeeded, and `failed` means it answered an error. The API replays a confirmed action with the credentials of your own request, so your permissions apply to the write exactly as they would if you sent it yourself.
+The confirm call answers `200` with the action. Check its `status`: `confirmed` means the replayed write succeeded, and `failed` means it answered an error. The cURL and Python variants exit non-zero when the action ends `failed`; the CLI only prints the action. The API replays a confirmed action with the credentials of your own request, so your permissions apply to the write exactly as they would if you sent it yourself.
 
 ### Reject an action
 
 <Example name="agent-actions/reject-action" />
 
-Rejecting is idempotent, but a confirmed, expired or currently confirming action answers `409`.
+Rejecting is idempotent, but a confirmed, failed, expired or currently confirming action answers `409`.
 
 ### Who can confirm or reject
 
-An action belongs to the person the agent acted for. A chat or run started with an organization API key has no person, so any API key of the organization can confirm or reject its actions. An action from the chat or run of a signed-in user can be confirmed or rejected only by that user; every other caller, an API key included, gets `403`.
+An action belongs to the person the agent acted for. A chat or run started with an organization API key has no person, so any API key of the organization can confirm or reject its actions. An action from the chat or run of a signed-in user can be confirmed or rejected only by that user; every other caller, an API key included, gets `403`. The reverse holds too: a signed-in user cannot decide an action made by a chat or run that was started with an API key.
 
 Errors:
 
@@ -83,7 +83,7 @@ Review accept and correct are refused for the agent as well.
 
 ## In the web app
 
-The case page shows a pending-action inbox. Each card shows the summary, the counts and cost, a preview of the request, and **Confirm** and **Reject** buttons. After a confirm, the agent chat receives a short follow-up message so the agent can continue.
+The case page shows a pending-action inbox. Each card shows the summary, the row count and estimated tokens, a preview of the request, and **Confirm** and **Reject** buttons. After a confirm, the agent chat receives a short follow-up message so the agent can continue.
 
 ## Headless runs
 

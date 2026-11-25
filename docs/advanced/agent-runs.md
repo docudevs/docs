@@ -75,7 +75,7 @@ Without a budget, the run stops at `maxRows`, at the turn limit, or when it has 
 
 ## Cancel a run
 
-`POST /cases/{caseId}/agent/runs/{runId}/cancel` stops the run after its current turn. Cancelling a cancelled run returns the same state. A run that has already finished returns `409`.
+`POST /cases/{caseId}/agent/runs/{runId}/cancel` marks the run `CANCELLED` immediately; a turn already in progress may still finish. Cancelling a cancelled run returns the same state. A run that has already finished returns `409`.
 
 <Example name="agent-runs/cancel-run" />
 

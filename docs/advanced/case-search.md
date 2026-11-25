@@ -70,9 +70,11 @@ Out-of-range settings or an empty query return `400`. Errors from the embedding 
 
 ## Search a records case
 
+As with the other case calls, an API key reaches organization-wide cases and knowledge bases; a case created by a signed-in user answers `404` (see [Case agent](./case-agent.md#which-cases-you-can-use)).
+
 <Example name="case-search/search-records" />
 
-The Python SDK takes the settings as keyword arguments (`top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank`) and `filters` as a dictionary. `client.search(case_id, "records", query)` takes the kind as an argument.
+The Python SDK takes the settings as keyword arguments (`top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank`) and `filters` as a dictionary. The SDK also has a `search` method that takes the kind as an argument.
 
 ## Search the documents of a case
 
