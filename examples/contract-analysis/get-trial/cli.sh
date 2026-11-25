@@ -2,7 +2,9 @@
 set -euo pipefail
 
 # docs:start
+CASE_ID=42  # id of the case that holds the playbook documents
+
 TRIAL_ID="<trial-id>"  # trialId returned when the trial was launched
 
-docudevs --token "$DOCUDEVS_API_KEY" knowledge-base contract-analysis trial-get 42 "$TRIAL_ID"
+docudevs --token "$DOCUDEVS_API_KEY" knowledge-base contract-analysis trial-get "$CASE_ID" "$TRIAL_ID"
 # docs:end

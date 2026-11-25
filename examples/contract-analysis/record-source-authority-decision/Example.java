@@ -15,6 +15,7 @@ public class Example {
         long caseId = 42L; // id of the case that holds the playbook documents
         JsonNode authority = client.getContractAnalysisSourceAuthority(caseId);
 
+        // "policy-doc" in the decision below must be the id of a real source document in the case
         JsonNode content = new ObjectMapper().readTree("""
                 {"documents": [{"id": "policy-doc", "sourceRole": "policy", "excluded": false}]}
                 """);

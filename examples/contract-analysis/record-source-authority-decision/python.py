@@ -12,6 +12,7 @@ async def main():
     response = await client.get_contract_analysis_source_authority(case_id)
     authority = response.parsed
 
+    # "policy-doc" in the decision below must be the id of a real source document in the case
     decision = await client.record_contract_analysis_source_authority_decision(
         case_id,
         observed_revision=authority["revision"],

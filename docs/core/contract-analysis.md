@@ -112,7 +112,7 @@ Submit a first-class operation for a completed OCR/document-processing job and a
 
 <Example name="contract-analysis/analyze-contract" />
 
-The examples submit the operation and poll `/operation/{jobGuid}/contract-analysis` until `resultAvailable` is `true`. The Java `submitAndWaitForContractAnalysis` does this for you with a default timeout of 120 seconds; call `submitContractAnalysis` and poll yourself when you want to control retries.
+The cURL and Python examples submit the operation and poll `/operation/{jobGuid}/contract-analysis` until `resultAvailable` is `true`; the CLI example waits with `--wait`. The Java `submitAndWaitForContractAnalysis` does this for you with a default timeout of 120 seconds; call `submitContractAnalysis` and poll yourself when you want to control retries.
 
 ## Contract-analysis runs (v2)
 
@@ -223,9 +223,9 @@ Finding dispositions (see [Contract-analysis runs](#contract-analysis-runs-v2)) 
 
 ## CLI
 
-Each example above has a CLI tab. The CLI mirrors most of the SDK lifecycle; run `docudevs knowledge-base contract-analysis --help` for every command.
+Every example above has a CLI tab except the source-authority ones. The CLI mirrors most of the SDK lifecycle; run `docudevs knowledge-base contract-analysis --help` for every command.
 
-`run-create` accepts optional JSON files through `--package-members`, `--expected-missing`, and `--excluded-documents`; include the anchor in the member list. Use `--trial-attestation-id` on `publish` when publishing a reviewed v2 profile. There is no CLI command for source-authority decisions — use the SDK or the endpoints directly. Submit the v1 operation with `docudevs operations submit --type contract-analysis` and read its result with `docudevs operations result`.
+`run-create` accepts optional JSON files through `--package-members`, `--expected-missing`, and `--excluded-documents`; include the anchor in the member list. Use `--trial-attestation-id` on `publish` when publishing a reviewed v2 profile. There is no CLI command for source-authority decisions — use the SDK or the endpoints directly. Submit the v1 operation with `docudevs operations submit --type contract-analysis`; add `--wait` to wait for completion, or read the result later with `docudevs operations result`.
 
 ## Availability
 
