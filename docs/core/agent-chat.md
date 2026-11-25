@@ -64,4 +64,4 @@ Pass `caseId` to work on one case. The agent then follows the case's active memo
 
 The web app exposes Agent Chat at `/app/agent`, including optional document upload for context. With `?caseId=` in the URL the page opens the case agent.
 
-To keep a conversation under a stored session ID and resume it from any process, see [Agent sessions](./agent-sessions.md).
+To keep a conversation under a stored session ID and resume it from any process, see [Agent sessions](./agent-sessions.md). Agent sessions are for apps that act as a signed-in user: they authenticate with the user's access token, not an API key.

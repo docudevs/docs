@@ -4,7 +4,7 @@ title: Agent sessions
 
 An agent session stores a conversation under an opaque `sessionId`. Save that ID against your own record and use it from any process authenticated as the same DocuDevs principal. Send each new user message once and keep its client message ID for retries.
 
-The beta agent in the DocuDevs UI uses `platform-chat` sessions by default. The optional `document-workspace` session kind is not available on all installations; contact support to enable it.
+The agent in the DocuDevs web app uses `platform-chat` sessions by default. The optional `document-workspace` session kind is enabled on request; contact support to enable it for your organization.
 
 ## Credentials
 
@@ -16,11 +16,11 @@ Send `POST /v1/agent/sessions` with the `Idempotency-Key` header and a body such
 
 Use `GET /v1/agent/sessions/{sessionId}` to resume. The snapshot includes any active turn, up to 25 recent turns, and an event cursor. Use its `links.turns` URL to page through the full turn history in chronological order, passing each `nextCursor` as `after`. List sessions with `GET /v1/agent/sessions?limit=25`, then pass the returned `nextCursor` as `after` until it is absent. Case-bound sessions appear only while the creator can access the case.
 
-`DELETE /v1/agent/sessions/{sessionId}` returns `202` and immediately closes access to the session and its turns. The workspace retention job removes the files and history after deletion. Unknown or inaccessible session and turn IDs return `404`.
+`DELETE /v1/agent/sessions/{sessionId}` returns `202` and immediately closes access to the session and its turns. Its files and history are then removed. Unknown or inaccessible session and turn IDs return `404`.
 
 ## Submit and poll
 
-With the `messages` capability, send `POST /v1/agent/sessions/{sessionId}/messages` with a body such as `{"clientMessageId":"case-42-msg-1","text":"Summarize the discussion."}`. A `202` response provides a `turnId`. The turn can finish after the submitting process exits. If the response is lost, retry with the same message ID and exact text. A different message while a turn is active or different text under a used message ID returns `409`. A session kind that is not available returns `503` on the respective create or submit request.
+Send `POST /v1/agent/sessions/{sessionId}/messages` with a body such as `{"clientMessageId":"case-42-msg-1","text":"Summarize the discussion."}`. A `202` response provides a `turnId`. The turn can finish after the submitting process exits. If the response is lost, retry with the same message ID and exact text. A different message while a turn is active or different text under a used message ID returns `409`. A session kind that is not available returns `503` on the respective create or submit request.
 
 Use `GET /v1/agent/sessions/{sessionId}/turns/{turnId}` to read the committed status. A turn progresses from `QUEUED` to `RUNNING` and finishes as `COMPLETED` or `FAILED`. Completed turns include `assistantText`. Failed turns include a `failureCode`.
 
@@ -43,7 +43,7 @@ Where the `document-workspace` kind is available, create a session of that kind 
 
 Workspace sessions are retained for 30 days from creation. Expiry hides the session immediately, and files, revisions and conversation content are then removed.
 
-Ask for a saved SIMPLE extraction by name. The worker applies the configuration's prompt and schema to the selected text. The completed turn records the file ID, configuration name and revision hash, and downloadable JSON in `extractionResults`. Batch extraction, PDF comparison and workbook normalization require their own session adapters for these private inputs. In a case-bound conversation, eligible case write proposals appear as `pendingActions` after their turn commits. The creator confirms or rejects them through the existing case action API.
+Ask for a saved SIMPLE extraction by name. The agent applies the configuration's prompt and schema to the selected text. The completed turn records the file ID, configuration name and revision hash, and downloadable JSON in `extractionResults`. Private attachments cannot be used for batch extraction, PDF comparison or workbook normalization. In a case-bound conversation, eligible case write proposals appear as `pendingActions` after their turn commits. The creator confirms or rejects them as described in [Agent actions and the pending-action inbox](../advanced/agent-actions.md).
 
 ## Replay after disconnect
 
