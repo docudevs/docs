@@ -272,19 +272,19 @@ An optional RFC 6901 JSON `pointer` (max depth 32) can drill into the resolved v
 {
   "version": "2026-05",
   "inputs": {
-    "validatedGenes": { "kind": "literal", "value": ["TP53", "EGFR"] }
+    "approvedVendors": { "kind": "literal", "value": ["Acme Supplies", "Globex"] }
   },
   "nodes": [
     {
-      "id": "extract_variants",
+      "id": "extract_line_items",
       "type": "extract",
       "source": "$ocr.content",
-      "input": "$inputs.validatedGenes",
-      "prompt": "Extract variant calls for these validated genes.",
+      "input": "$inputs.approvedVendors",
+      "prompt": "Extract the line items billed by these approved vendors.",
       "schema": { "type": "object" }
     }
   ],
-  "finals": [{ "node": "extract_variants" }]
+  "finals": [{ "node": "extract_line_items" }]
 }
 ```
 
