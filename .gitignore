@@ -22,8 +22,6 @@ vite.config.ts.timestamp-*
 .idea/
 .docusaurus
 
-static/files/docudevs.yaml
-docudevs-doc/
 src/generated/
 
 tools/examples/python/.venv/

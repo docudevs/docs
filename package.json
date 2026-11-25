@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "sync-openapi-spec": "echo 'OpenAPI spec already in static/files/docudevs.yaml'",
+    "sync-openapi-spec": "node tools/examples/sync-spec.mjs",
     "start": "npm run sync-openapi-spec && npm run examples:manifest && docusaurus start",
     "build": "npm run sync-openapi-spec && npm run examples:manifest && docusaurus build",
     "swizzle": "docusaurus swizzle",
