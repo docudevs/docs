@@ -27,6 +27,7 @@ Import and export use these endpoints. Both belong to a knowledge base
 | `profileVersion` | `"2026-11"`, the only supported value. Import sets it. A stored playbook in any other format is refused when a run starts. |
 | `name`, `description` | Display name and summary. |
 | `perspective` | `ourParty` and `counterparty`, free text such as "the customer" and "the supplier". Every judgement is made from our party's side. |
+| `scope` | Optional. Which contracts the playbook is for: `contractTypes`, `businessLines` and `jurisdictions` (lists of non-empty text) and `from` (non-empty text). Only `contractTypes` can put a contract outside the scope; see [Contract-analysis playbooks](../core/contract-analysis-playbooks.md). |
 | `facts` | Deal facts that clause conditions depend on. Each has `id`, `label`, `description`, `valueType` (`string`, `number`, `integer`, `boolean`, `date`, `choice`), `values` for `choice`, and `extractionGuidance`. Facts are read from the contract during analysis. |
 | `clauses` | The clauses, below. |
 
@@ -44,9 +45,9 @@ Import and export use these endpoints. Both belong to a knowledge base
 | `marketStandard` | Market-standard wording or description. |
 | `alternatives` | Wording we may accept instead. Each has `id`, `description`, `acceptability` (`acceptable`, `acceptableWithModifications`, `problematic`) and `rationale`. |
 | `redFlags` | What makes the clause unacceptable. Each has `id`, `flag`, `severity` (`critical`, `high`, `medium`, `low`), `triggeredBy` (`wording` or `silence`), `whereApplies`, `whyProblematic`, `whenTriggered` and `favours` (`us`, `counterparty`, `neutral`). A `silence` flag is about missing wording and is triggered only after the contract has been checked for it. |
-| `riskFactors` | Facts that change how much the clause matters. Each has `when` (a condition), `effect` (`raises` or `lowers`) and `reason`. Each matching factor moves the effective severity of the clause's red flags by one level. |
+| `riskFactors` | Facts that change how much the clause matters. Each has `id`, `when` (a condition), `effect` (`raises` or `lowers`) and `reason`. Each matching factor moves the effective severity of the clause's red flags by one level. |
 | `negotiationStance` | What to push for and what to concede. |
-| `identificationHints` | How to find the clause. Each has `phrase`, `whereInContract`, `whyMatches`, `howToApply` and `falsePositiveRisk`. |
+| `identificationHints` | How to find the clause. Each has `id`, `phrase`, `whereInContract`, `whyMatches`, `howToApply` and `falsePositiveRisk`. |
 | `relatedClauses` | Identifiers of related clauses. |
 | `notes` | Free text for reviewers. It is never sent to the analysis. |
 
@@ -159,7 +160,7 @@ A playbook with one clause, in the form you can write by hand and import:
       "identificationHints": [
         {
           "id": "cap_phrase",
-      "phrase": "total liability shall not exceed",
+          "phrase": "total liability shall not exceed",
           "whereInContract": "Liability or indemnity article",
           "whyMatches": "Caps are almost always introduced with this wording.",
           "howToApply": "Read the whole article, including exceptions listed after the cap.",
@@ -768,6 +769,50 @@ the fields that import fills in (see above); the rest must match:
       "title": "Perspective",
       "type": "object"
     },
+    "PlaybookScope": {
+      "additionalProperties": false,
+      "properties": {
+        "businessLines": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Businesslines",
+          "type": "array"
+        },
+        "contractTypes": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Contracttypes",
+          "type": "array"
+        },
+        "from": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "From"
+        },
+        "jurisdictions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Jurisdictions",
+          "type": "array"
+        }
+      },
+      "title": "PlaybookScope",
+      "type": "object"
+    },
     "RedFlag": {
       "additionalProperties": false,
       "properties": {
@@ -1179,6 +1224,17 @@ the fields that import fills in (see above); the rest must match:
       "minimum": 1,
       "title": "Revision",
       "type": "integer"
+    },
+    "scope": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PlaybookScope"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "sourceSet": {
       "$ref": "#/$defs/SourceManifestV2"

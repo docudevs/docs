@@ -27,8 +27,8 @@ Playbooks come from import: you write or edit the playbook as JSON and import
 it. The format is described in [Playbook format](../reference/playbook-format.md),
 which also carries the JSON Schema. You can also build the first set of clauses
 from uploaded guideline documents (see [Build clauses from guidelines](#build-clauses-from-guidelines)).
-Editing clauses in the app is not available with the clause format yet. You can
-test a draft against contracts with known answers and publish it through the API
+The app does not edit clauses; edit them through the API or CLI (see
+[Edit a playbook](#edit-a-playbook)). You can test a draft against contracts with known answers and publish it through the API
 (see [Test and publish a playbook](#test-and-publish-a-playbook)). Runs use the
 draft playbook (`mode` set to `draft_trial`) until a revision is published. The
 app shows the clauses read-only, imports and exports the playbook, and lists the
@@ -210,8 +210,8 @@ configuration, so later edits cannot change it. Keep the run ID with its result
 and any review record.
 
 Run creation returns HTTP 409 for a run identity or execution-configuration
-conflict and can return HTTP 503 if admission cannot acquire its lock before
-timeout. Retry with the same idempotency key to recover the recorded run
+conflict and HTTP 503 when the service is busy. Retry a 503 with the same
+idempotency key to recover the recorded run
 identity and status; replay does not schedule another attempt. To start a new
 attempt after an `ERROR`, use a new idempotency key.
 
@@ -410,8 +410,8 @@ playbook against them, see [Playbook evaluation](./playbook-evaluation.md).
 1. **Prepare a test package.** Pick a completed contract job and capture it with
    `POST /test-packages`. Send `anchorJobGuid`, an `idempotencyKey`, optional
    `packageMembers` (`jobGuid` and `role`) and an optional `context` with
-   `asOfDate`. The answer carries `packageId` and `fingerprint`. Nothing is
-   analyzed and nothing is charged yet.
+   `asOfDate`. The answer carries `packageId` and `fingerprint`. Preparing a
+   package analyzes nothing and is not charged.
 2. **Write the expectations.** Replace the test suite with `PUT /test-suite`,
    sending the `revision` you last read and the `cases`. Each case names the
    package (`anchorJobGuid`, `packageId`, `packageFingerprint`,
@@ -738,6 +738,6 @@ status and results are addressed by the immutable run ID returned by
 ## Model level
 
 Contract analysis runs on the DocuDevs model level that the playbook chooses:
-`mini`, `default` or `high`. A new playbook uses `default`. Organisations that
+`mini`, `default` or `high`. A new playbook uses `default`. Organizations that
 bring their own model (BYOM) get the model they configured for each level. Each
-run result records the model that answered. No deployment settings are needed.
+run result records the model that answered.
