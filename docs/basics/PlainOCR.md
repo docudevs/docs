@@ -90,6 +90,6 @@ The examples wait for the job to finish and print the text. To check a job yours
 
 ## One-Step Synchronous OCR
 
-For simpler usage, upload the document and receive the text in the same request. The response is a JSON string containing the OCR output:
+For simpler usage, upload the document and receive the text in the same request. The response is a JSON string containing the OCR output. This endpoint is called over HTTP; the Python SDK has no helper for it.
 
 <Example name="ocr/ocr-sync" />

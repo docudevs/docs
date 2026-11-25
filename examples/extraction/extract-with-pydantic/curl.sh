@@ -12,7 +12,7 @@ wait_for_job() {
   done
 }
 
-# The JSON Schema that json_schema(Invoice) generates from the Pydantic model
+# The JSON Schema for the Invoice model
 SCHEMA='{
   "$defs": {
     "LineItem": {

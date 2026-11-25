@@ -25,7 +25,7 @@ First, ensure you have the DocuDevs SDK installed and your API key set in the `A
 
 ### Step 2: Prepare Your Document
 
-For this walkthrough, we'll use an invoice named `sample_invoice.pdf` as an example. You can use any document format. The examples read the file from the current directory.
+For this walkthrough, we'll use an invoice as an example. You can use any document format. The examples read the file from the current directory: `sample_invoice.pdf` in this guide's own examples and `your-document.pdf` in the shared Quick Start examples. Rename the file in the example or put your document under that name.
 
 ### Step 3: Basic Processing (Minimal Configuration)
 
@@ -37,7 +37,7 @@ The cURL example uses [`jq`](https://jqlang.org/) to read values from responses.
 
 ### Step 4: Processing with Custom Instructions
 
-Now let's add specific instructions to guide the AI extraction. The prompt tells the AI which fields matter and how to report them:
+Now let's add specific instructions to guide the AI extraction. The prompt tells the AI which fields matter and how to report them. The example below passes a short prompt as `prompt` (`--prompt` in the CLI); replace it with your own, for example a more detailed one like this:
 
 ```text
 Extract all invoice information including:
@@ -50,13 +50,38 @@ Extract all invoice information including:
 - Payment terms and due date
 ```
 
-Pass the prompt with the document:
+The example passes a shorter prompt with the document:
 
 <Example name="quick-start/process-document" />
 
 ### Step 5: Processing with Custom Schema
 
-For even more control, define exactly how you want the output structured with a JSON Schema. Use nested objects for grouped data (a `vendor` with a `name` and an `address`) and arrays of objects for repeating data such as invoice line items:
+For even more control, define exactly how you want the output structured with a JSON Schema. The example below uses a flat schema. Use nested objects for grouped data and arrays of objects for repeating data such as invoice line items, for example:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "vendor": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "address": {"type": "string"}
+      }
+    },
+    "line_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {"type": "string"},
+          "amount": {"type": "number"}
+        }
+      }
+    }
+  }
+}
+```
 
 <Example name="quick-start/custom-schema" />
 
@@ -123,7 +148,7 @@ mime_type = "application/pdf"
 mime_type = "image/jpeg"  # or "image/png"
 
 # Consider using OCR-specific instructions
-instruction = "First perform OCR to extract all text, then analyze the content for key information"
+prompt = "First perform OCR to extract all text, then analyze the content for key information"
 ```
 
 ### Word Documents
@@ -133,21 +158,18 @@ instruction = "First perform OCR to extract all text, then analyze the content f
 mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 # Word docs often have structured content
-instruction = "Extract information from this structured document, preserving any tables or sections"
+prompt = "Extract information from this structured document, preserving any tables or sections"
 ```
 
 ### Scanned Documents
 
 ```python
 # Scanned documents need OCR
-instruction = "This is a scanned document. First extract all text using OCR, then analyze for key information"
+prompt = "This is a scanned document. First extract all text using OCR, then analyze for key information"
 
-# Consider using higher quality settings
-configuration = {
-    "ocr": "PREMIUM",  # More accurate for scanned docs
-    "llm": "HIGH"      # Better understanding of OCR'd text
-}
 ```
+
+For scanned documents, also consider higher quality settings: `ocr` set to `PREMIUM` is more accurate for scans, and `llm` set to `HIGH` understands the OCR text better. Set both in the process request (`ocr` and `llm` fields, `--ocr` and `--llm` in the CLI) or in a saved [configuration](/docs/configuration/).
 
 ## Error Handling Best Practices
 
