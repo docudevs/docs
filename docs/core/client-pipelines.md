@@ -5,7 +5,7 @@ description: Mix remote DocuDevs extraction nodes with local Python functions in
 
 `ClientPipeline` is a Python SDK construct that mixes remote DocuDevs nodes (`extract`, `ocr_correct`, `operation`) with live Python callables (`local_function`) that run in your own process — for example deterministic post-processing, a database lookup, or a business-rule check that should not cost an LLM call. The SDK compiles the mixed graph into one or more ordinary [pipeline mode](/docs/reference/pipeline-mode) segments, submits each segment to the API in turn, runs your local functions locally in between, and assembles the final result.
 
-Client pipelines are Python SDK only today — there is no CLI command and no direct REST usage pattern for a caller. The value is entirely in-process orchestration across several authenticated calls, so a curl equivalent would not be a realistic usage path.
+Client pipelines are available only in the Python SDK — there is no CLI command and no direct REST usage pattern for a caller. The value is entirely in-process orchestration across several authenticated calls, so a curl equivalent would not be a realistic usage path.
 
 ## How it differs from server pipeline mode
 
@@ -15,14 +15,12 @@ Because a Python callable cannot be serialized, a `ClientPipeline` can never be 
 
 ## Building the graph
 
-```python
-from docudevs import ClientPipeline, DocuDevsClient, P
-```
+Import `ClientPipeline` and `P` from `docudevs` next to `DocuDevsClient`.
 
 `ClientPipeline()` takes an optional `version` (default `"2026-05"`, the same pipeline wire-format version used by `Pipeline`). It exposes:
 
-- `extract(node_id, *, prompt=None, schema=None, source=None, input=None, tools=None, llm_tier=None, depends_on=None, when=None, on_error=None)` — a remote extraction node.
-- `ocr_correct(node_id, *, source=None, depends_on=None, when=None, mode="correction", scope="pagewise", output_format="markdown")` — a remote OCR-correction node.
+- `extract(node_id, *, prompt=None, schema=None, source=None, input=None, tools=None, llm_tier=None, depends_on=None, when=None, on_error=None, source_locations=None, source_location_granularity=None)` — a remote extraction node.
+- `ocr_correct(node_id, *, source=None, depends_on=None, when=None, mode="correction", scope="pagewise", output_format="markdown", source_map=None)` — a remote OCR-correction node.
 - `operation(node_id, *, operation, input=None, depends_on=None, when=None)` — a remote operation node.
 - `local_function(node_id, fn, *, input=None, output_type=None, depends_on=None, when=None, on_error=None)` — a local node backed by a Python callable.
 - `final(ref)` — marks the graph's published result.
@@ -30,44 +28,13 @@ from docudevs import ClientPipeline, DocuDevsClient, P
 
 These are the only three remote node types a `ClientPipeline` can build; there is no client-side `transform`, `validate`, or `final`-as-a-node builder like the server `Pipeline` has.
 
-Every builder method returns a `NodeRef`. Reference a prior node's result the same way you would in a server pipeline — with `.result` (optionally followed by a path), which becomes a `$nodes.<id>.result...` reference on the wire:
-
-```python
-cp = ClientPipeline()
-summary = cp.extract(
-    "summary",
-    prompt="List the distinct topics this document covers.",
-    schema={
-        "type": "object",
-        "properties": {"topics": {"type": "array", "items": {"type": "string"}}},
-        "required": ["topics"],
-    },
-    source=P.ocr.content,
-)
-```
+Every builder method returns a `NodeRef`. Reference a prior node's result the same way you would in a server pipeline — with `.result` (optionally followed by a path), which becomes a `$nodes.<id>.result...` reference on the wire. The complete example under [Running the pipeline](#running-the-pipeline) builds a graph with a remote `extract` node, a local function, and a second remote node that reads the local result.
 
 ### Local functions
 
 `local_function` accepts a sync or async callable. A sync function runs off the event loop via `asyncio.to_thread`, so a slow computation does not stall segment polling. Its `input` mapping is resolved against completed node results and passed to the callable as **keyword arguments** — so `input={"summary": summary.result}` calls `fn(summary=...)`.
 
-```python
-from dataclasses import dataclass
-
-@dataclass
-class TopicCount:
-    count: int
-
-def count_topics(*, summary) -> TopicCount:
-    topics = (summary or {}).get("topics") or []
-    return TopicCount(count=len(topics))
-
-counted = cp.local_function(
-    "counted",
-    count_topics,
-    input={"summary": summary.result},
-    output_type=TopicCount,
-)
-```
+The example under [Running the pipeline](#running-the-pipeline) defines `count_topics` as a local function and wires it in with `input={"summary": summary.result}`.
 
 The callable's return value is normalized to plain JSON before it can be referenced by later nodes: a pydantic v2 model is dumped with `model_dump(mode="json")`, a dataclass with `dataclasses.asdict`, anything else passed through as-is. The normalized value must be JSON-serializable, or the run fails with a clear error. When `output_type` is a pydantic model or a dataclass, the normalized value is validated against it before the node is marked complete.
 
@@ -79,58 +46,15 @@ A downstream node — remote or local — can depend on a value produced by eith
 
 Any node accepts a `when` condition, built with the same helpers used by server pipelines (`eq`, `ne`, `exists`, `and_`, `or_`, `not_`, importable from `docudevs`). A graph with any conditioned node must have exactly one `final`, and that final node must be an unconditional local node — this is enforced by `validate()`. A conditioned **remote** node also cannot set `on_error="continue"`.
 
-```python
-route = cp.local_function("route", lambda: {"positive": True})
-guarded = cp.extract(
-    "guarded",
-    prompt="Return one object with boolean field observed.",
-    schema={"type": "object", "properties": {"observed": {"type": "boolean"}}, "required": ["observed"]},
-    when={"eq": [route.result.positive, True]},
-)
-assembled = cp.local_function(
-    "assembled",
-    lambda *, route, guarded: {"positive": route["positive"], "guarded": guarded},
-    input={"route": route.result, "guarded": guarded.result},
-)
-cp.final(assembled)
-```
+<Example name="pipelines/client-pipeline-conditional" />
 
 When a conditioned segment's gate evaluates false, its remote nodes are skipped (their result becomes `None`) rather than executed, and any local node consuming that result must also tolerate `None`. A consumer's condition must imply the condition of every conditioned node it reads from — the compiler rejects a graph where that is not the case.
 
 ## Running the pipeline
 
-```python
-client = DocuDevsClient(api_url="https://api.docudevs.ai", token=os.getenv("API_KEY"))
+<Example name="pipelines/run-client-pipeline" />
 
-verdict = cp.extract(
-    "verdict",
-    prompt=(
-        "You are given a topic count computed from this document. "
-        "Answer whether it matches the number of distinct topics you see."
-    ),
-    schema={
-        "type": "object",
-        "properties": {"topic_count_matches": {"type": "boolean"}},
-        "required": ["topic_count_matches"],
-    },
-    input={"counts": counted.result},
-)
-cp.final(verdict)
-
-with open("report.pdf", "rb") as handle:
-    run = await client.run_client_pipeline(
-        handle.read(),
-        "application/pdf",
-        pipeline=cp,
-        timeout=900.0,
-        poll_interval=2.0,
-        on_event=lambda name, payload: print(name, payload),
-    )
-
-print(run.final_result)
-```
-
-`run_client_pipeline(document, document_mime_type, *, pipeline, timeout=900.0, poll_interval=2.0, on_event=None)` uploads the document, opens a client run, and executes every segment of the compiled graph in order — refreshing the run's server-side TTL on a heartbeat while a segment or local function is in flight, running each local node as soon as its dependencies are satisfied, uploading only the local results a later segment actually consumes, and polling each submitted segment's status until it completes. It returns a `ClientPipelineRun`:
+`run_client_pipeline(document, document_mime_type, *, pipeline, timeout=900.0, poll_interval=2.0, on_event=None, review=None)` (the optional `review` argument is covered in [Extraction Review](/docs/core/extraction-review)) uploads the document, opens a client run, and executes every segment of the compiled graph in order — refreshing the run's server-side TTL on a heartbeat while a segment or local function is in flight, running each local node as soon as its dependencies are satisfied, uploading only the local results a later segment actually consumes, and polling each submitted segment's status until it completes. It returns a `ClientPipelineRun` (abridged below to the fields most callers read):
 
 ```python
 @dataclass
@@ -153,7 +77,7 @@ You do not need this section to use `ClientPipeline` — it explains what happen
 
 The SDK groups every remote node reachable without crossing a local-function boundary into one server pipeline segment (a remote-on-remote dependency does not by itself force a new segment; only a dependency on a local result, or a different `when` gate, does). Values produced by a prior segment are threaded into the next one through the same `inputs` / `$inputs` mechanism used by server pipeline mode: a value produced remotely is read back as a `nodeArtifact`, and a value produced by a local function is uploaded as a `clientArtifact`.
 
-This is backed by five endpoints not otherwise part of the public SDK surface (`docudevs.yaml`, used by `ClientRunApi`):
+This is backed by client-run endpoints that are not otherwise part of the public SDK surface (see `docudevs.yaml`), among them:
 
 - `POST /job/{guid}/pipeline/client-runs` — open a run, returns a `clientRunId`.
 - `PUT /job/{guid}/pipeline/client-runs/{clientRunId}/nodes/{nodeId}/result` — upload a local node's JSON result as a client artifact.

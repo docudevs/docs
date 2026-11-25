@@ -22,6 +22,11 @@ operations/download-acroform-pdf:java
 operations/get-document-outline:java
 operations/review-acroform-fields:java
 operations/submit-pdf-acroform:java
+pipelines/bucket-ocr-quality:java
+pipelines/client-pipeline-conditional:java
+pipelines/correct-ocr-text:java
+pipelines/route-by-document-type:java
+pipelines/run-client-pipeline:java
 quick-start/analyze-document:java
 templates/acroform-job-metadata:java
 templates/acroform-metadata:java

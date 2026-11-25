@@ -20,7 +20,6 @@ docs/core/agent-chat.md:3
 docs/core/ai-analysis.md:19
 docs/core/batch-processing.md:7
 docs/core/calculated-fields.md:3
-docs/core/client-pipelines.md:2
 docs/core/contract-analysis-playbooks.md:15
 docs/core/date-range-lookup.md:2
 docs/core/document-compare.md:1
@@ -35,4 +34,3 @@ docs/core/source-locations.md:5
 docs/core/workbook-normalization.md:4
 docs/integration/submission-portals.md:3
 docs/integration/webhooks.md:1
-docs/reference/pipeline-mode.md:1
