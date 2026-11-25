@@ -1,20 +1,20 @@
 ---
 title: Send Google Drive invoices to SharePoint as Excel
-description: Build a managed workflow that downloads PDFs from Google Drive, extracts invoice numbers in one batch, and uploads an Excel workbook to SharePoint.
+description: Build a managed workflow that downloads PDFs from Google Drive, extracts invoice numbers in one batch, uploads one Excel workbook to SharePoint, and archives the processed PDFs.
 slug: /guides/drive-to-sharepoint
 ---
 
-Use Flow Builder to download invoice PDFs from a Google Drive folder, extract their invoice numbers in one DocuDevs batch, and upload the workbook to a SharePoint document library.
+Use Flow Builder to download invoice PDFs from a Google Drive folder, extract their invoice numbers in one DocuDevs batch, upload the workbook to SharePoint, and move the processed PDFs to a Drive archive folder.
 
-![Flow Builder canvas connecting Google Drive Folder Downloads to DocuDevs Batch Extract and SharePoint Upload](./assets/drive-to-sharepoint/visual-workflow.png)
+![Flow Builder canvas connecting Google Drive Folder Downloads, Batch Extract, SharePoint Upload, and Google Drive Archive](./assets/drive-to-sharepoint/visual-workflow.png)
 
 ## Set up the shared connections
 
-Start with a Drive folder containing two invoice PDFs with different invoice numbers and a SharePoint document library where you can check the result. Use a DocuDevs deployment with managed runs enabled.
+Create sibling folders named **Inbox** and **Processed** in the same Google shared drive. Put two test PDFs with different invoice numbers into **Inbox**. Choose a SharePoint document library where you can check the result. Use a DocuDevs deployment with managed runs and the **Google Drive Archive** node available.
 
 An organization admin creates the following connections under **Integrations → Connections → New connection**. See the provider setup instructions for [Google Workspace](./integration-connections.md#google-workspace) and [SharePoint](./integration-connections.md#sharepoint).
 
-1. **Google Workspace**. Enter the service-account JSON and share the source folder with the service account. Save the connection as `drive-invoices`. Copy the folder ID from the part of its Drive URL after `/folders/`.
+1. **Google Workspace**. Enter the service-account JSON and save the connection as `drive-invoices`. Grant the service account **Content manager** access on the shared drive or the common parent of the two folders. Copy each folder ID from the part of its URL after `/folders/`. [Google Drive roles and permissions](https://developers.google.com/workspace/drive/api/guides/ref-roles)
 2. **SharePoint**. Enter the Entra tenant ID, client ID, and client secret for an app with write access to the site. Save the site ID and library drive ID on the connection. Name it `sharepoint-invoices`. If the workbook goes in an existing subfolder, copy its Graph folder item ID.
 
 ## Build the workflow
@@ -23,7 +23,7 @@ Open **Integrations → Flow Builder**, name the flow `drive_to_sharepoint`, and
 
 ### Download the PDFs
 
-Drag **Google Drive Folder Downloads** onto the canvas. Select `drive-invoices` as the **Connection** and enter the **Folder ID**. Keep **File MIME Type** set to `application/pdf` and **Concurrent Downloads** set to `4`.
+Drag **Google Drive Folder Downloads** onto the canvas. Select `drive-invoices` as the **Connection** and enter the **Inbox** folder ID. Keep **File MIME Type** set to `application/pdf` and **Concurrent Downloads** set to `4`.
 
 The node lists the folder on every run and downloads matching files directly in that folder. New PDFs are picked up on the next run. An empty source folder skips extraction and upload.
 
@@ -51,31 +51,30 @@ Batch Extract shows **Automatic authentication** in managed scope. DocuDevs supp
 
 ### Upload the workbook
 
-Add **SharePoint Upload** and connect the output of **DocuDevs Batch Extract** to its input. Select `sharepoint-invoices` as the **Connection** and set **Destination Filename** to `drive-batch.xlsx`. Leave **Folder Item ID** blank to upload to the library root, or enter the subfolder item ID.
+Add **SharePoint Upload** and connect the output of **DocuDevs Batch Extract** to its input. Select `sharepoint-invoices` as the **Connection** and set **Destination Filename** to `drive-batch-{{ execution.id }}.xlsx` to keep one workbook per run. Leave **Folder Item ID** blank to upload to the library root, or enter the subfolder item ID.
 
 ![SharePoint Upload settings with the shared connection, destination filename, and folder item ID](./assets/drive-to-sharepoint/sharepoint-upload.png)
 
-## Run the flow and check the workbook
+### Archive processed PDFs in Google Drive
+
+Add **Google Drive Archive** and connect the output of **SharePoint Upload** to its input. Enter the **Processed Folder ID**. The archive step uses the Google Workspace connection from **Google Drive Folder Downloads**.
+
+![Google Drive Archive with the Processed Folder ID configured](./assets/drive-to-sharepoint/drive-archive.png)
+
+After SharePoint confirms the upload, the archive step moves the original PDFs with successful results from **Inbox** to **Processed**. It updates the folder in Google Drive. Failed documents stay in **Inbox** for the next run. If the upload fails, every source file stays in **Inbox**. [Move files between folders in Google Drive](https://developers.google.com/workspace/drive/api/guides/folder#move_files_between_folders)
+
+## Run the flow and check the result
 
 1. Click **Save and Run** and wait for the execution to show **COMPLETED**.
-2. Open `drive-batch.xlsx` in the destination SharePoint library or folder. Check that the `invoice_number` column contains the two expected invoice numbers.
-3. Add a third invoice PDF to the Drive folder and run the flow again. Check that the new workbook includes its invoice number.
+2. Open the new workbook in SharePoint and check that the `invoice_number` column contains both expected invoice numbers. Confirm the two original PDFs are in **Processed**.
+3. Add a third invoice PDF to **Inbox** and run the flow again. Check that the new workbook contains only the third invoice and that its PDF is now in **Processed**.
 
-![The completed managed execution in Flow Builder](./assets/drive-to-sharepoint/managed-run.png)
+![A completed managed execution in Flow Builder](./assets/drive-to-sharepoint/managed-run.png)
 
-If a run fails or produces no workbook, check the execution status, the source folder ID and service-account access, and the SharePoint app's write permission on the destination site.
-
-## Archive processed PDFs in Google Drive
-
-1. Create sibling folders named **Inbox** and **Processed** in the same Drive or shared drive. Put new PDFs in **Inbox**. Set **Folder ID** on **Google Drive Folder Downloads** to the ID of **Inbox** and give the Google Workspace service account read access to it. The person archiving files needs permission to move them between the folders.
-2. Set **Destination Filename** on **SharePoint Upload** to `drive-batch-{{ execution.id }}.xlsx` to keep a separate workbook for each run.
-3. Run the workflow with two test invoices that have distinct invoice numbers. After it uploads the workbook, compare the `invoice_number` column with the PDFs in **Inbox**. In Google Drive, select the PDFs you can match to the workbook and choose **Move** to send them to **Processed**. Leave failed or unmatched PDFs in **Inbox** for retry.
-4. Add a new PDF and run the workflow again. Check that the new workbook includes the new invoice and any successful retries. The source reads **Inbox**, so archived PDFs stay out of later runs.
-
-The move is manual. The Batch Extract node's Excel output does not expose per-file status mapped to Drive file IDs, which an automated move would need.
+If archiving fails after the workbook uploads, check the execution logs and the service account's move permissions. The archive step retries during the run. If the retries run out, the next run can process and publish any PDFs still in **Inbox** again.
 
 ## Run on a schedule
 
 If your deployment has managed scheduling enabled, add a **Schedule** node to the flow. Enter a five-field **Cron Expression** and an optional **Time Zone**. For example, `0 8 * * MON-FRI` with `Europe/Zurich` runs at 08:00 on weekdays in Zurich. Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
 
-Review each workbook and move its confirmed PDFs before the next scheduled run. Any matching PDF still in **Inbox** is picked up again. An empty inbox skips extraction and upload, though the scheduled run still uses runner compute.
+Once the schedule is active, put new PDFs in **Inbox**. Each run scans that folder and archives the successful PDFs after it publishes the workbook. An empty inbox skips extraction, upload, and archiving, though the scheduled run still uses runner compute.
