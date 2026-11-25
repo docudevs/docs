@@ -73,6 +73,8 @@ After SharePoint confirms the upload, the archive step moves the original PDFs w
 
 If archiving fails after the workbook uploads, check the execution logs and the service account's move permissions. The archive step retries during the run. If the retries run out, the next run can process and publish any PDFs still in **Inbox** again.
 
+To edit the saved workflow, open **Integrations → Flow Configs** and select **Edit** next to its name. Flow Builder restores the nodes, connections, and settings from the saved workflow and arranges them on the canvas. Workflows with settings the canvas cannot represent open in the YAML editor.
+
 ## Run on a schedule
 
 If your deployment has managed scheduling enabled, add a **Schedule** node to the flow. Enter a five-field **Cron Expression** and an optional **Time Zone**. For example, `0 8 * * MON-FRI` with `Europe/Zurich` runs at 08:00 on weekdays in Zurich. Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
