@@ -29,7 +29,7 @@ Jobs progress through several states:
 | `TIMEOUT` | Processing timed out |
 | `PARTIAL` | Processing partially completed |
 
-Only jobs in **terminal states** (COMPLETED, ERROR, TIMEOUT, PARTIAL) can be deleted.
+Only jobs in **terminal states** (COMPLETED, ERROR, TIMEOUT, PARTIAL) can be deleted. A `PARTIAL` job finished with some parts failed, and its result can still be read.
 
 ## Deleting Jobs
 

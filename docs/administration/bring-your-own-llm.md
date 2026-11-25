@@ -28,8 +28,9 @@ organization API key can perform these actions. This differs from
    when you enter an API key in the form; a provider that uses a shared model
    credential needs an `https` `apiUrl`, so create it through the API.
 5. For OpenAI-compatible, enter the base URL and model name.
-6. Select a shared model credential, or enter an API key to create a
-   dedicated credential, and save the provider.
+6. Select a shared model credential (not for the OpenAI type, whose form sends
+   no API URL; create that provider through the API), or enter an API key to
+   create a dedicated credential, and save the provider.
 7. Bind the provider to one or more levels: `DEFAULT`, `NANO`, `MINI`, or
    `HIGH`.
 
