@@ -53,84 +53,15 @@ Example shape:
 
 This is different from [Source Locations](./source-locations.md). Source locations are a separate evidence artifact for extracted text fields, while object-detection boxes are returned directly in your structured result.
 
-## Python SDK Example
+## Detect objects in an image
 
-The example below mirrors the public notebook `06-source-locations.ipynb`, which detects visible objects in `soccer.jpg` and returns normalized bounding boxes.
+The example detects visible objects in `soccer.jpg` and returns normalized bounding boxes. The schema asks for a scene summary and a list of objects, each with a name, a type, a description, a `bbox` and a confidence. The `minimum` and `maximum` bounds on the coordinates state the normalized range to the model; check the values in your own code before you draw.
 
-```python
-import json
-import os
-
-from docudevs import DocuDevsClient, json_schema
-from pydantic import BaseModel, Field
-
-
-class BoundingBox(BaseModel):
-    left: float = Field(ge=0, le=1)
-    top: float = Field(ge=0, le=1)
-    right: float = Field(ge=0, le=1)
-    bottom: float = Field(ge=0, le=1)
-
-
-class DetectedObject(BaseModel):
-    name: str = Field(description="Short human-readable name, such as 'ball' or 'player in red jersey'")
-    object_type: str = Field(description="Category such as player, ball, goal, field_marking, or equipment")
-    description: str = Field(description="Brief visual description that helps identify the boxed object")
-    bbox: BoundingBox = Field(description="Normalized bounding box in image coordinates")
-    confidence: float = Field(ge=0, le=1)
-
-
-class SoccerObjectDetection(BaseModel):
-    scene_summary: str
-    objects: list[DetectedObject]
-
-
-prompt = """
-Detect the main visible objects in this soccer image.
-
-Return visible objects only. Include soccer players, the ball, and any prominent
-sports equipment or field markings that are clearly visible. Do not invent
-objects that are hidden, implied, or outside the frame.
-
-For each object:
-- Use a concise source-image label in name.
-- Set object_type to a short category such as player, ball, goal, field_marking, or equipment.
-- Set bbox to the visible extent of the object only, not a group or surrounding whitespace.
-- Use normalized coordinates from 0 to 1 in image space with origin at the top-left.
-- Set confidence from 0 to 1.
-
-Return JSON only. The JSON must match the provided schema.
-""".strip()
-
-client = DocuDevsClient(
-    api_url=os.getenv("DOCUDEVS_API_URL", "https://api.docudevs.ai"),
-    token=os.getenv("API_KEY"),
-)
-
-with open("soccer.jpg", "rb") as f:
-    job_guid = await client.submit_and_process_document(
-        document=f.read(),
-        document_mime_type="image/jpeg",
-        prompt=prompt,
-        schema=json_schema(SoccerObjectDetection),
-        ocr="PREMIUM",
-        llm="DEFAULT",
-    )
-
-result = await client.wait_until_ready(
-    job_guid,
-    timeout=600,
-    poll_interval=5,
-    result_format="json",
-)
-
-print(f"Job completed: {job_guid}")
-print(json.dumps(result, indent=2, ensure_ascii=False))
-```
+<Example name="extraction/detect-objects" />
 
 ## Draw Bounding Boxes Back onto the Image
 
-After the job completes, render the normalized coordinates onto the original image so you can inspect the result visually.
+After the job completes, render the normalized coordinates onto the original image so you can inspect the result visually. This Python snippet runs locally on the `result` from the example above and makes no DocuDevs call; it needs `matplotlib` and `Pillow`.
 
 ```python
 import matplotlib.pyplot as plt
@@ -180,7 +111,7 @@ plt.show()
 - Ask for visible objects only, not implied or hidden ones.
 - Keep `object_type` short and stable so downstream code can group results reliably.
 - Tell the model to box the object itself, not surrounding whitespace or nearby context.
-- Validate the bounding-box shape in your schema so invalid coordinates are rejected early.
+- State the coordinate range in your schema (`minimum` 0, `maximum` 1) and check the boxes in your own code before you use them.
 - Render the boxes back onto the image whenever you tune the prompt or schema.
 
 ## When to Use Source Locations Instead

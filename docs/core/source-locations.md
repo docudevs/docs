@@ -4,9 +4,6 @@ description: Return page numbers and bounding boxes for extracted structured fie
 sidebar_position: 9
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Source Locations
 
 DocuDevs can return page-aware evidence for structured extraction results.
@@ -113,7 +110,7 @@ Behavior:
 
 For existing fillable PDFs, source locations remain an async-job feature. The direct `/document/acroform-metadata` endpoint returns form metadata only; it does not create OCR/layout artifacts or a job GUID.
 
-When an async PDF job requests both `sourceLocations=true` and `acroFormMetadata=true`, the manifest can include AcroForm-backed evidence entries such as:
+When an async PDF job requests both `sourceLocations=true` and `acroFormMetadata=true`, the manifest can include AcroForm-backed evidence entries such as the one below. A reference of this form is the `id` of a field in the job's AcroForm metadata, which `GET /job/result/{guid}/acroform-metadata` returns; it is an identifier inside the artifact, not a route you call. Its page anchors are in PDF points:
 
 ```json
 {
@@ -135,107 +132,17 @@ When an async PDF job requests both `sourceLocations=true` and `acroFormMetadata
 }
 ```
 
-## Python SDK
+## Requesting source locations
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+Send `sourceLocations: true` (Python `source_locations=True`) and, optionally, `sourceLocationGranularity` with the processing request. The example uploads a contract, extracts its clauses, and fetches the evidence artifact next to the extracted JSON. The Java SDK has no source-location option, and the CLI has no flag for it.
 
-```python
-from docudevs_client import DocuDevsClient
-import json
-import os
-import asyncio
+<Example name="extraction/extract-with-source-locations" />
 
-client = DocuDevsClient(
-    api_url="https://api.docudevs.ai",
-    token=os.getenv("API_KEY"),
-)
+The Python client can also wait for the job and fetch both artifacts in one call. `wait_until_ready_with_source_locations(guid)` does that for a job you already submitted, and `submit_and_wait_for_document_with_source_locations(...)` does submit, wait and fetch. It takes the same arguments as `submit_and_process_document(...)` plus `timeout` and `poll_interval`:
 
-schema = json.dumps({
-    "type": "object",
-    "properties": {
-        "clauses": {
-            "type": "array",
-            "items": {"type": "string"}
-        }
-    },
-    "required": ["clauses"]
-})
+<Example name="extraction/extract-with-source-locations-single-call" />
 
-async def run():
-    with open("contract.pdf", "rb") as f:
-        guid = await client.submit_and_process_document(
-            document=f.read(),
-            document_mime_type="application/pdf",
-            prompt="Extract the main clauses from this contract.",
-            schema=schema,
-            source_locations=True,
-            source_location_granularity="block",
-        )
-
-    result = await client.wait_until_ready(guid)
-    source_locations = await client.get_source_locations(guid)
-
-    print(result)
-    print(source_locations)
-
-asyncio.run(run())
-```
-
-You can also fetch both together:
-
-```python
-combined = await client.wait_until_ready_with_source_locations(guid)
-
-print(combined.result)
-print(combined.source_locations)
-```
-
-Or do submit, wait, and fetch in a single call with `submit_and_wait_for_document_with_source_locations(...)`, which takes the same arguments as `submit_and_process_document(...)` plus `timeout`/`poll_interval`:
-
-```python
-combined = await client.submit_and_wait_for_document_with_source_locations(
-    document=doc_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract the main clauses from this contract.",
-    schema=schema,
-    source_location_granularity="block",
-    timeout=180,
-)
-
-print(combined.result)
-print(combined.source_locations)
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-curl -X POST "https://api.docudevs.ai/document/upload" \
-  -H "Authorization: YOUR_API_KEY" \
-  -F "file=@contract.pdf" \
-  -F 'command={
-    "prompt":"Extract all clauses from this contract.",
-    "schema":"{\"type\":\"object\",\"properties\":{\"clauses\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"clauses\"]}",
-    "sourceLocations":true,
-    "sourceLocationGranularity":"block"
-  }'
-```
-
-Fetch the evidence artifact:
-
-```bash
-curl "https://api.docudevs.ai/job/result/JOB_GUID/source-locations" \
-  -H "Authorization: YOUR_API_KEY"
-```
-
-  </TabItem>
-</Tabs>
+Both return an object with `result` and `source_locations`. The single-call helpers exist only in the Python client; every other language makes the same calls one at a time, as the first example shows.
 
 ## Jobs UI
 

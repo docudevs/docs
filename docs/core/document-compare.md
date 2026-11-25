@@ -27,32 +27,13 @@ Each comparison reports these stages, per document where it applies:
 
 The overall status is `PENDING`, `PROCESSING`, `COMPLETED` or `ERROR`. When a stage fails, the overall status is `ERROR` and that stage carries an `error` message.
 
-## Python SDK
+## Compare two documents and export a redline
 
-```python
-import os
+The example submits two PDFs, waits for the comparison, and exports a PDF redline that shows only the substantive changes. The cURL variant polls `GET /compare/{compareGuid}` and the export status route, then downloads the export file.
 
-from docudevs.docudevs_client import DocuDevsClient
+<Example name="compare/compare-and-export-redline" />
 
-client = DocuDevsClient(token=os.environ["API_KEY"])
-
-compare_guid = await client.compare_documents(
-    "slip-2025.pdf",
-    "slip-2026-draft.pdf",
-    original_label="Slip 2025",
-    revised_label="Draft 2026",
-    ocr="PREMIUM",
-)
-
-artifact = await client.wait_until_compare_ready(compare_guid, timeout=1200)
-
-pdf_bytes = await client.export_document_compare(
-    compare_guid,
-    "pdf",
-    filters={"substantiveOnly": True},
-    save_to="redline.pdf",
-)
-```
+Python client helpers:
 
 - `compare_documents` accepts a path, bytes or a file-like object for each document. It returns the compare GUID.
 - `ocr` is `DEFAULT` or `PREMIUM` and applies to both documents. The default is `PREMIUM`.
@@ -62,7 +43,7 @@ pdf_bytes = await client.export_document_compare(
 
 ## REST API
 
-Upload the two documents with a multipart request:
+The routes behind the example are listed here. Upload the two documents with a multipart request:
 
 ```text
 POST /compare

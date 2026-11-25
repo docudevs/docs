@@ -34,14 +34,11 @@ Status codes:
 - `404`: the job does not exist, or it has no layout or quality artifact (for example, the job is still processing or was not processed with OCR).
 - `500`: the stored artifact exists but cannot be read.
 
-## Python SDK
+## Reading the layout
 
-```python
-layout = await client.get_document_layout(guid, pages="1", include=["words", "paragraphs"])
-quality = await client.get_ocr_quality(guid)
-```
+The example fetches the words and paragraphs of page 1 and the OCR quality summary of a completed job. In Python, `get_document_layout` and `get_ocr_quality` return `None` when the artifact does not exist; over HTTP that case is the `404` above.
 
-Both methods return `None` when the artifact does not exist.
+<Example name="layout/get-document-layout" />
 
 ## Layout model
 
@@ -90,17 +87,9 @@ Both methods return `None` when the artifact does not exist.
 
 To look up paragraph text for a reference, fetch the paragraphs from the layout and match them by `id`:
 
-```python
-sources = await client.get_source_locations(guid)
-layout = await client.get_document_layout(guid, include=["paragraphs"])
-if sources and layout:
-    paragraph_text = {p["id"]: p["content"] for p in layout.get("paragraphs", [])}
-    for pointer, location in sources.get("locations", {}).items():
-        for ref in location.get("sourceRefs", []):
-            print(pointer, ref, paragraph_text.get(ref, ""))
-```
+<Example name="layout/resolve-source-locations" />
 
-References to tables or figures are not in `paragraph_text`, so they print an empty string. Fetch `tables` or `figures` from the layout to resolve those.
+References to tables or figures are not among the paragraphs, so they print an empty string. Fetch `tables` or `figures` from the layout to resolve those.
 
 ## Migrating from Azure Document Intelligence `AnalyzeResult`
 
