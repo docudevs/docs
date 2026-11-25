@@ -77,9 +77,19 @@ To edit the saved workflow, open **Integrations → Flow Configs** and select **
 
 ## Run on a schedule
 
-If your deployment has managed scheduling enabled, add a **Schedule** node to the flow. Enter a five-field **Cron Expression** and an optional **Time Zone**. For example, `0 8 * * MON-FRI` with `Europe/Zurich` runs at 08:00 on weekdays in Zurich. Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
+If your deployment has managed scheduling enabled, add a **Schedule** node to the canvas. It applies to the whole workflow. Choose a **Frequency** such as **Every hour** or **Weekdays at 08:00**. The preset fills in the **Cron Expression**, which you can edit for a custom cadence. Set the **Time Zone** to match your schedule. For example, **Weekdays at 08:00** with `Europe/Zurich` runs at 08:00 on weekdays in Zurich.
+
+Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
 
 Once the schedule is active, put new PDFs in **Inbox**. Each run scans that folder and archives the successful PDFs after it publishes the workbook. An empty inbox skips extraction, upload, and archiving, though the scheduled run still uses runner compute.
+
+## Monitor managed runs
+
+Open **Integrations → Flow Configs → Run History** to see scheduled and manual runs, their status, and any failure message. Use **Run history** next to a managed workflow to filter the history to that workflow. With the log panel closed, the history refreshes while the page is visible.
+
+Select **View logs** on a run to see its task messages, timestamps, and log levels. Logs refresh while the selected run is active. After **Save and Run**, you can open its logs directly from the builder's execution status.
+
+![Run History showing a completed scheduled run, a failed manual run, and the selected run’s task logs](./assets/drive-to-sharepoint/managed-run-history.png)
 
 ## Archive files from other sources
 
