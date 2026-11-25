@@ -191,7 +191,7 @@ mdx:
 
 - Python and Java SDK facades expose stored profile preview/save, exact-run discovery and registration, versioned evaluator claims, human flags/resolutions/adjudications, cursor-based decision feeds, and verified artifact downloads.
 - Artifact helpers return raw bytes. Review state remains separate from immutable extraction results; readiness remains `NOT_ASSESSED`.
-- See the [extraction human review guide](/docs/core/extraction-review) for the supported workflow and current limits.
+- See the [extraction review guide](/docs/core/extraction-review) for the supported workflow and current limits.
 
 ## 2026-09-23 13:31 UTC
 

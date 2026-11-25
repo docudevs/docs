@@ -42,9 +42,9 @@ The rate card lists what each part of a job costs in credits:
 The current card is on the DocuDevs pricing page, which also has a calculator
 that estimates a job from page count and document type. The pricing page and
 your charges come from the same rate card. Your charges can differ from the
-page when your organization has custom OCR rates, or when a deployment routes a
-level to a different model than the card shows, because you are charged the
-rate of the model that actually ran.
+page when your organization has custom OCR rates, or when a level runs a
+different model than the card shows; you are charged the rate of the model that
+ran.
 Rates change when DocuDevs updates a model or its price; the card shows the
 current values.
 
@@ -87,9 +87,8 @@ Platform embeddings are not charged.
 ## Buying credits and checking your balance
 
 Buy credit packs and check your balance in the DocuDevs web app under billing
-settings. The billing endpoints behind these pages are internal to the web app
-and are not part of the public API reference; the Python SDK and CLI have no
-billing helpers.
+settings. Billing is managed in the web app; the public API, SDKs and CLI have
+no billing operations.
 
 ## Insufficient credits response
 
