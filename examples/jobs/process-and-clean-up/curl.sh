@@ -8,7 +8,8 @@ wait_for_job() {
       -H "Authorization: $API_KEY" | jq -r '.status')
     case "$STATUS" in
       COMPLETED) return 0 ;;
-      ERROR|FAILED|TIMEOUT|PARTIAL) echo "Job $1 ended with status $STATUS" >&2; return 1 ;;
+      PARTIAL) echo "Job $1 ended with status PARTIAL" >&2; return 0 ;;
+      ERROR|FAILED|TIMEOUT) echo "Job $1 ended with status $STATUS" >&2; return 1 ;;
     esac
     sleep 5
   done

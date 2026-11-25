@@ -8,7 +8,8 @@ wait_for_job() {
       -H "Authorization: $API_KEY" | jq -r '.status')
     case "$STATUS" in
       COMPLETED) return 0 ;;
-      ERROR|FAILED|TIMEOUT|PARTIAL) echo "Job $1 ended with status $STATUS" >&2; return 1 ;;
+      PARTIAL) echo "Job $1 ended with status PARTIAL" >&2; return 0 ;;
+      ERROR|FAILED|TIMEOUT) echo "Job $1 ended with status $STATUS" >&2; return 1 ;;
     esac
     sleep 2
   done
@@ -24,5 +25,5 @@ OPERATION_JOB_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/operation" \
 wait_for_job "$OPERATION_JOB_GUID"
 
 curl -s -S -f "https://api.docudevs.ai/job/result/$OPERATION_JOB_GUID" \
-  -H "Authorization: $API_KEY" | jq -r '.result'
+  -H "Authorization: $API_KEY" | jq .
 # docs:end

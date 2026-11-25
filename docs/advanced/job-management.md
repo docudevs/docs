@@ -181,7 +181,7 @@ The Python SDK has no helper for webhook settings, so use the HTTP API (or the s
 
 ### Payload
 
-When a job reaches a terminal state (`COMPLETED`, `ERROR`, `FAILED` or `TIMEOUT`), DocuDevs sends a POST request to your webhook URL:
+When a job reaches a terminal state (`COMPLETED`, `ERROR` or `FAILED`), DocuDevs sends a POST request to your webhook URL:
 
 ```json
 {
