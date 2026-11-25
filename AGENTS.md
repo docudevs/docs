@@ -61,6 +61,10 @@ Checks run against published packages, never a sibling checkout. The private mai
 - cURL: `static/files/docudevs.yaml`.
 - CLI: the commands of the pinned Python package.
 
+## Public content
+
+Pages state what the product does today and how to call it. Do not publish prices or rate figures, internal endpoints, private repository names or file paths, storage paths, infrastructure hosts, operator or installation configuration keys, internal vendor or project names, agent tokens, or rollout, roadmap and changelog wording ("yet", "no longer", "currently", "will"). Run `node tools/port/scan.mjs --diff main` with `PORT_SCAN_LITERALS_FILE` set before pushing content taken from another source.
+
 ## Pinned versions
 
 | Package | Pinned in |
