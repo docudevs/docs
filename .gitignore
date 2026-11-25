@@ -25,3 +25,7 @@ vite.config.ts.timestamp-*
 static/files/docudevs.yaml
 docudevs-doc/
 src/generated/
+
+tools/examples/python/.venv/
+__pycache__/
+.pytest_cache/

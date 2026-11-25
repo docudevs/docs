@@ -1,0 +1,2 @@
+docu-devs-api-client==1.15.0
+pytest
