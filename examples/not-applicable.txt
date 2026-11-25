@@ -6,6 +6,10 @@ extraction/extract-with-source-locations-single-call:curl  # polling helper that
 integrations/create-connection:python  # DocuDevsClient 1.15.0 has no method for POST /integration/connections
 integrations/delete-connection:python  # DocuDevsClient 1.15.0 has no method for DELETE /integration/connections/{id}
 integrations/list-connections:python  # DocuDevsClient 1.15.0 has no method for GET /integration/connections
+model-credentials/disable-and-enable-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/disable or /enable
+model-credentials/get-credential:python  # DocuDevsClient 1.15.0 has no method for GET /model-credentials/{id}
+model-credentials/update-credential:python  # DocuDevsClient 1.15.0 has no method for PATCH /model-credentials/{id}
+model-credentials/validate-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/validate
 ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
 pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client

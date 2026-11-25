@@ -76,6 +76,15 @@ lookup-files/manage-configuration-lookup-file:java
 lookup-files/process-batch-with-lookup-file:java
 lookup-files/save-excel-template-config:java
 lookup-files/upload-excel-template:java
+model-credentials/create-api-key-credential:java
+model-credentials/create-entra-credential:java
+model-credentials/delete-credential:java
+model-credentials/disable-and-enable-credential:java
+model-credentials/get-credential:java
+model-credentials/list-credentials:java
+model-credentials/rotate-credential:java
+model-credentials/update-credential:java
+model-credentials/validate-credential:java
 ocr/choose-quality-and-format:java
 ocr/extract-text:java
 ocr/ocr-sync:java

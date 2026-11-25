@@ -3,4 +3,3 @@ docs/administration/azure-marketplace-private-network.md:2
 docs/administration/bring-your-own-embeddings.md:6
 docs/administration/bring-your-own-llm.md:9
 docs/administration/bring-your-own-ocr.md:6
-docs/administration/model-credentials.md:10
