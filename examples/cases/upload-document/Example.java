@@ -1,7 +1,9 @@
 package examples.cases.upload_document;
 
 import ai.docudevs.client.DocuDevsClient;
+// docs:start
 import ai.docudevs.client.UploadRequest;
+// docs:end
 import java.nio.file.Files;
 import java.nio.file.Path;
 

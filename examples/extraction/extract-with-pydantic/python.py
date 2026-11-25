@@ -2,9 +2,11 @@ import asyncio
 import os
 from typing import List
 
+# docs:start
 from pydantic import BaseModel, Field
 
 from docudevs import json_schema
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 

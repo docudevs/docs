@@ -1,9 +1,11 @@
 package examples.cases.handle_errors;
 
+// docs:start
 import ai.docudevs.client.DocuDevsApiException;
 import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.UploadRequest;
 import com.fasterxml.jackson.databind.JsonNode;
+// docs:end
 import java.nio.file.Files;
 import java.nio.file.Path;
 

@@ -1,6 +1,9 @@
 import asyncio
 import os
+
+# docs:start
 from docudevs.models import CasesControllerUpdateCaseRequest
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 

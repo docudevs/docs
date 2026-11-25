@@ -3,7 +3,9 @@ import json
 import os
 
 from docudevs.docudevs_client import DocuDevsClient
+# docs:start
 from docudevs.models import UploadCommand
+# docs:end
 
 
 async def main():

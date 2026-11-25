@@ -1,8 +1,10 @@
 package examples.cases.create_and_upload;
 
 import ai.docudevs.client.DocuDevsClient;
+// docs:start
 import ai.docudevs.client.UploadRequest;
 import com.fasterxml.jackson.databind.JsonNode;
+// docs:end
 import java.nio.file.Files;
 import java.nio.file.Path;
 

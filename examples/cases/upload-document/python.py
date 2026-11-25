@@ -2,8 +2,10 @@ import asyncio
 import os
 
 from docudevs.docudevs_client import DocuDevsClient
+# docs:start
 from docudevs.models import UploadCaseDocumentBody
 from docudevs.types import File
+# docs:end
 
 
 async def main():
