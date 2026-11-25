@@ -118,10 +118,10 @@ curl -X POST https://api.docudevs.ai/template/invoice \
 
 `POST /template/fill/{name}` accepts a JSON `fields` object and returns the filled file as either `application/msword` or `application/pdf`. The success response is binary: keep it as a download, because it is not a JSON response.
 
-Both endpoints use shared document admission and can return:
+Both endpoints can return:
 
-- **409 Conflict**: the template operation conflicts with a bound or inconsistent review run.
-- **503 Service Unavailable**: the API could not acquire the document's admission lock. Retry the request after a short delay.
+- **409 Conflict**: the request conflicts with an active review run. Retrying the same request does not resolve it.
+- **503 Service Unavailable**: the service is busy. Retry the request after a short delay.
 
 ### Listing Templates
 

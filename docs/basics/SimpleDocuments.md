@@ -426,7 +426,7 @@ curl -X POST https://api.docudevs.ai/document/upload-files \
 
 There is no `--reasoning-effort` CLI flag today; use the Python SDK, the Java SDK, or the raw HTTP API.
 
-## Upload Responses and Admission Errors
+## Upload Responses
 
 The upload and synchronous processing endpoints accept documents for the authenticated organization. Upload endpoints return a job `guid`; use the job status and result endpoints to retrieve asynchronous output.
 
@@ -437,20 +437,18 @@ The upload and synchronous processing endpoints accept documents for the authent
 | `POST /document/ocr/sync` | JSON string containing OCR output |
 | `POST /document/generate-schema` | `UploadResponse` JSON with the job `guid` and `status` |
 
-Admission can return these errors on all four endpoints:
+### Busy and conflict responses
 
-- **409 Conflict**: the request conflicts with a bound or inconsistent review run for the document.
-- **503 Service Unavailable**: the API could not acquire the document's admission lock. Retry the request after a short delay.
+All four endpoints, `POST /document/analyze`, `POST /submission-portals/{id}/submissions` and the deprecated `POST /cases/{caseId}/upload` can return:
 
-These errors preserve the API's JSON error body. The Python SDK's detailed calls expose the HTTP status and raw body; the Java SDK reports non-success responses as `ApiException` with the status and response body. Successful synchronous endpoints keep their JSON string response format.
+- **409 Conflict**: the request conflicts with an active review run for the document. Retrying the same request does not resolve it. For a submission portal, the request can also conflict with a batch start.
+- **503 Service Unavailable**: the service is busy with the document. Retry the request after a short delay.
 
-Other admitted starts use the same conflict and lock-timeout responses:
+`POST /cases/{caseId}/documents` returns **503** in the same way. Its **409** means the case is a records case, which does not accept documents; import records instead.
 
-- `POST /document/analyze`
-- `POST /cases/{caseId}/documents` and the deprecated `POST /cases/{caseId}/upload`
-- `POST /submission-portals/{id}/submissions`
+Error responses carry the API's JSON error body. The Python SDK's detailed calls expose the HTTP status and raw body; the Java SDK reports non-success responses as `ApiException` with the status and response body.
 
-Batch upload and processing endpoints also report **404 Not Found** when the batch job (or the requested configuration) is missing, **409 Conflict** when the batch state or review binding prevents the request, and **503 Service Unavailable** when admission cannot acquire the job lock: `POST /document/batch/{guid}/upload`, `/process`, `/process/with-configuration/{configurationName}`, and `/schedule`.
+The batch endpoints `POST /document/batch/{guid}/upload`, `/process`, `/process/with-configuration/{configurationName}` and `/schedule` return **404 Not Found** when the batch job (or the requested configuration) does not exist, **409 Conflict** when the batch state or a review run prevents the request, and **503 Service Unavailable** when the service is busy with the job; retry a 503 after a short delay.
 
 ### Child Operation Submissions
 
@@ -465,9 +463,8 @@ The following endpoints create or reuse a child job under an existing job:
 | `POST /compare/{compareGuid}/exports` | `CompareExportSubmitResponse` JSON with HTTP 202 |
 | `POST /contract-analysis/runs` | `ContractAnalysisRunResponse` JSON |
 
-Child admission can return **409 Conflict** when the child is already bound to a review run or has inconsistent review linkage, or **503 Service Unavailable** when the API cannot acquire the child admission lock before its timeout. For `POST /operation`, a 409 response contains a JSON `message`; a contract-analysis publication can also return its existing identity-conflict or `revalidation_required` error. Contract-analysis run creation retains its existing 409 identity-conflict response and adds 503 for child admission timeout.
-
-For the other child operations, retry 503 after a short delay. For a contract-analysis run, retry with the same idempotency key to recover the recorded run identity and status; replay does not schedule another attempt. If the replay reports `ERROR` and a new attempt is desired, submit with a new idempotency key. Existing success status codes and response bodies are unchanged.
+- **409 Conflict**: the child job is bound to a review run. `POST /operation` returns a JSON `message` and also uses 409 for an operation identity conflict or a contract-analysis publication that must be revalidated (`revalidation_required`). For `POST /contract-analysis/runs`, 409 means the run identity conflicts with the requested execution configuration.
+- **503 Service Unavailable**: the service is busy. Retry after a short delay. For a contract-analysis run, retry with the same idempotency key to recover the recorded run identity and status; a replay does not schedule another attempt. If the replay reports `ERROR` and you want a new attempt, submit with a new idempotency key.
 
 ## Next Steps
 

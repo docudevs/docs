@@ -6,7 +6,7 @@ title: Extraction review
 
 Extraction review stores a versioned review record beside an immutable extraction result. Evaluators can submit claims against one exact archived result; human reviewers can flag issues, record value resolutions, and adjudicate claims. These actions preserve the extractor's raw result and do not promote data into a golden set.
 
-The implementation includes the authenticated API, Python and Java SDK helpers, and a native job review workspace. Readiness is always `NOT_ASSESSED`; acceptance-policy checks are not part of review. Configurations use the supported stored profile shape, and only configurations that the current capture path can archive produce reviewable runs. Treat unavailable or incomplete evidence as unavailable. Do not substitute a mutable latest result.
+Review is available through the API, the Python and Java SDKs, and the job review workspace in the web app. Readiness is always `NOT_ASSESSED`; acceptance-policy checks are not part of review. Only runs captured with an enabled review profile are reviewable. Treat unavailable or incomplete evidence as unavailable. Do not substitute a mutable latest result.
 
 ## Configure an extraction profile
 
@@ -42,7 +42,7 @@ upload the descriptor as a server pipeline or save the live Python graph as a
 configuration.
 
 The method records the complete remote node definitions and compiled segments,
-including the existing synthetic publication segment for a local final. Local
+including the synthetic publication segment for a local final. Local
 nodes record their inputs, effective dependencies, gates and error policy. Local
 callables and Python output types are excluded; supply the final JSON schema and
 a stable function/version ID for every local node. Exactly one final is required.
@@ -76,7 +76,7 @@ performs network calls. Code/data identities are caller assertions; they do not
 attest which code executed. The SDK does not compute a producer fingerprint;
 the API computes it when previewing or saving the binding.
 
-Pass the descriptor as JSON text on the existing profile request:
+Pass the descriptor as JSON text on the profile request:
 
 ```python
 import json
@@ -98,9 +98,8 @@ saved = await client.save_extraction_review_profile(
 The API stores canonical descriptor JSON and returns `producerFingerprint`
 (`sha256:` plus 64 lowercase hexadecimal characters). This separate identity
 covers the entire descriptor, including graph, compiled segments, implementation
-IDs, producer metadata and final schema. Existing configuration and overlay
-fingerprints retain their behavior. Descriptor identity uses exact integer and
-decimal parsing, and the UTF-8 JSON limit is 2 MiB.
+IDs, producer metadata and final schema. Descriptor identity uses exact integer
+and decimal parsing, and the UTF-8 JSON limit is 2 MiB.
 
 The descriptor's final schema drives overlay generation. An explicit `schemaJson`
 must match it. Omitted or null `clientPipelineJson` preserves an existing binding;
@@ -131,10 +130,9 @@ opener applies the runtime-supported graph check before capture preparation.
 `POST /job/{guid}/pipeline/client-runs/{id}/segments/{index}/skip` accepts
 `{"formatVersion":1}`. Bodyless
 `POST /job/{guid}/pipeline/client-runs/{id}/complete` returns the selected
-completion identity and manifest digest. For a bound run, the existing local
-node result PUT accepts the versioned envelope and returns its immutable record
-receipt; for an ordinary run, the same PUT continues to store any valid JSON
-value and returns HTTP 204.
+completion identity and manifest digest. For a bound run, the local node result PUT
+accepts the versioned envelope and returns its immutable record receipt; for an
+ordinary run, the same PUT stores any valid JSON value and returns HTTP 204.
 
 The captured runner uses the named configuration and expected profile revision
 as pins. Producer metadata and local function IDs remain caller provenance
@@ -155,20 +153,22 @@ remain opt-in and do not guarantee that usable anchors are present. The captured
 runner is not a resumable workflow, and callers must not treat producer IDs as
 proof of code identity.
 
-Shared admission now protects upload submission and the OCR endpoint. A bound
-review client run cannot be dispatched by the legacy
-`process_document`, `process_document_with_configuration`, or `ocr_document`
-routes; each returns HTTP 409 when admission finds a review binding, regardless
-of lease status or an incoming `clientRunId`. Process routes return HTTP 404
-when the job is absent from the caller's organization and HTTP 503 when
-admission cannot acquire the job lock. OCR creates a missing job in the caller's
-organization and maps its admission conflicts to HTTP 409.
+### Busy and conflict responses
 
-Python detailed SDK calls preserve these status codes and the raw response
-body with `parsed=None`, including when `raise_on_unexpected_status=True`;
-convenience methods keep their existing response object and expose the same
-response metadata. Successful calls retain the existing `UploadResponse`
-shape.
+A job bound to a captured review client run is driven only through the
+client-run endpoints above. `POST /document/process/{guid}`,
+`POST /document/process/{guid}/with-configuration/{configurationName}` and
+`POST /document/ocr/{guid}` (`process_document`,
+`process_document_with_configuration` and `ocr_document` in the Python SDK)
+return HTTP 409 for such a job, whatever its lease status or `clientRunId`.
+The two process routes return HTTP 404 when the job does not exist in your
+organization; the OCR route creates the job in your organization instead.
+HTTP 503 from any of the three means the service is busy with the job: retry
+the request. A successful call returns an `UploadResponse`.
+
+The Python SDK returns these error responses with their status code, the raw
+response body and `parsed=None`, including when
+`raise_on_unexpected_status=True`.
 
 ## Find and register the exact run
 
@@ -312,7 +312,7 @@ recorded location does not establish that a value is absent. A correction does
 not inherit the machine's source rectangle.
 Reviewer evidence attachments are under **Advanced decision details** and
 select archived artifact paths explicitly; precise reviewer-drawn regions are
-not supported yet.
+not supported.
 
 Assess an evaluator claim separately through **Assess suggestion separately**.
 Keeping or correcting a value does not decide whether the evaluator's reference
