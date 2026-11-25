@@ -10,12 +10,30 @@ Use Flow Builder to download invoice PDFs from a Google Drive folder, extract th
 
 ## Set up the shared connections
 
-Create sibling folders named **Inbox** and **Processed** in the same Google shared drive. Put two test PDFs with different invoice numbers into **Inbox**. Choose a SharePoint document library where you can check the result. Use a DocuDevs deployment with managed runs and the **Google Drive Archive** node available.
+Create sibling folders named **Inbox** and **Processed** in the same shared drive or under the same parent in **My Drive**. Put two test PDFs with different invoice numbers into **Inbox**. Choose a SharePoint document library where you can check the result. Use a DocuDevs deployment with managed runs and the **Google Drive Archive** node available.
 
 An organization admin creates the following connections under **Integrations → Connections → New connection**. See the provider setup instructions for [Google Workspace](./integration-connections.md#google-workspace) and [SharePoint](./integration-connections.md#sharepoint).
 
-1. **Google Workspace**. Enter the service-account JSON and save the connection as `drive-invoices`. Grant the service account **Content manager** access on the shared drive or the common parent of the two folders. Copy each folder ID from the part of its URL after `/folders/`. [Google Drive roles and permissions](https://developers.google.com/workspace/drive/api/guides/ref-roles)
+1. **Google Workspace**. Enter the service-account JSON and save the connection as `drive-invoices`. Copy the service account email from the JSON’s `client_email` field or from **IAM & Admin → Service Accounts** in Google Cloud Console. Use that exact email in the following Drive sharing steps.
 2. **SharePoint**. Enter the Entra tenant ID, client ID, and client secret for an app with write access to the site. Save the site ID and library drive ID on the connection. Name it `sharepoint-invoices`. If the workbook goes in an existing subfolder, copy its Graph folder item ID.
+
+### Grant access on a shared drive
+
+A **Manager** of the shared drive grants this access in Google Drive.
+
+1. Open **Shared drives** in the left sidebar and open the drive that contains **Inbox** and **Processed**.
+2. Click **Manage members** at the top. You can also open it from the menu next to the shared drive name.
+3. Enter the service account’s email address, select **Content manager**, and click **Send**. If the account is already a member, open the menu next to its name, select **Content manager**, and click **Done**.
+
+**Content manager** allows the account to move files between folders in that shared drive. The move permission comes from a parent folder or the shared drive, so give access to the account before testing the workflow. If Drive blocks the invitation, ask the Workspace administrator to check the drive’s external sharing settings. [Manage shared drive members](https://support.google.com/a/users/answer/9310249?hl=en) · [Google Drive roles and permissions](https://developers.google.com/workspace/drive/api/guides/ref-roles)
+
+### Grant access in My Drive
+
+1. In **My Drive**, right-click **Inbox** and choose **Share → Share**.
+2. Enter the service account’s email address, select **Editor**, and save the share.
+3. Repeat for **Processed**. The workflow needs access to remove the PDF from **Inbox** and add it to **Processed**. [Share folders in Google Drive](https://support.google.com/drive/answer/7166529?hl=en) · [Google Drive roles and permissions](https://developers.google.com/workspace/drive/api/guides/ref-roles)
+
+For either setup, open each folder and copy its ID from the part of its URL after `/folders/`. Use the **Inbox** ID for downloads and the **Processed** ID for archiving.
 
 ## Build the workflow
 
@@ -70,6 +88,8 @@ After SharePoint confirms the upload, the archive step moves the original PDFs w
 3. Add a third invoice PDF to **Inbox** and run the flow again. Check that the new workbook contains only the third invoice and that its PDF is now in **Processed**.
 
 ![A completed managed execution in Flow Builder](./assets/drive-to-sharepoint/managed-run.png)
+
+If the run reports **0 files** even though **Inbox** has PDFs, compare the **Folder ID** on **Google Drive Folder Downloads** with the Inbox URL. Open **Share** on the folder and check that the exact service account email from the connection has access. Drive lists only files visible to the service account, so a run can complete without producing a workbook when the folder is inaccessible. After correcting the share, run the workflow again and check the download logs. [Google Drive file listing](https://developers.google.com/workspace/drive/api/reference/rest/v3/files/list)
 
 If archiving fails after the workbook uploads, check the execution logs and the service account's move permissions. The archive step retries during the run. If the retries run out, the next run can process and publish any PDFs still in **Inbox** again.
 
