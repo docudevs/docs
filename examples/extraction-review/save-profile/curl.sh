@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # docs:start
-# Preview and save need a signed-in administrator: an organization API key is rejected.
+# The configuration invoice-v1 must already exist.
 SCHEMA='{"type":"object","properties":{"total":{"type":"number"}}}'
 
 PREVIEW=$(jq -n --arg schema "$SCHEMA" '{schemaJson: $schema, overlay: null}' |

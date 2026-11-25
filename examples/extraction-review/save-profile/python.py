@@ -9,7 +9,7 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
-    # Preview and save need a signed-in administrator: an organization API key is rejected.
+    # The configuration invoice-v1 must already exist.
     schema = {"type": "object", "properties": {"total": {"type": "number"}}}
 
     preview = await client.preview_extraction_review_profile(

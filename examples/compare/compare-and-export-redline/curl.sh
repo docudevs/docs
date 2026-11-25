@@ -4,7 +4,8 @@ set -euo pipefail
 # docs:start
 wait_for_status() {
   local status_url="$1"
-  while true; do
+  local deadline=$((SECONDS + 1200))  # same limit as the Python timeout
+  while [ "$SECONDS" -lt "$deadline" ]; do
     STATUS=$(curl "$status_url" -s -S -f -H "Authorization: $API_KEY" | jq -r '.status')
     case "$STATUS" in
       COMPLETED) return 0 ;;
@@ -12,6 +13,8 @@ wait_for_status() {
     esac
     sleep 5
   done
+  echo "$status_url did not complete in time" >&2
+  return 1
 }
 
 COMPARE_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/compare" \
@@ -21,6 +24,10 @@ COMPARE_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/compare" \
   -F 'metadata={"originalLabel": "Slip 2025", "revisedLabel": "Draft 2026", "ocr": "PREMIUM"}' | jq -r '.compareGuid')
 
 wait_for_status "https://api.docudevs.ai/compare/$COMPARE_GUID"
+
+CHANGES=$(curl -s -S -f "https://api.docudevs.ai/job/result/$COMPARE_GUID/document-compare" \
+  -H "Authorization: $API_KEY" | jq '.changes | length')
+echo "Changes found: $CHANGES"
 
 # Export a redline as PDF with only the substantive changes
 EXPORT_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/compare/$COMPARE_GUID/exports" \

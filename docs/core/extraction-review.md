@@ -10,11 +10,18 @@ Review is available through the API, the Python and Java SDKs, and the job revie
 
 ## Configure an extraction profile
 
-An active human ADMIN can preview and save an enabled review profile for a named configuration. The configuration must use a supported extraction shape such as `SIMPLE`. The profile stores its schema and optional review overlay with an expected profile revision. Preview uses the same validation and preparation as save, without persisting a revision.
+An organization API key or an active signed-in ADMIN can preview and save an enabled review profile for a named configuration, which must already exist. The configuration must use a supported extraction shape such as `SIMPLE`. The profile stores its schema and optional review overlay with an expected profile revision. Preview uses the same validation and preparation as save, without persisting a revision.
 
 <Example name="extraction-review/save-profile" />
 
-Profile reads allow an active human ADMIN or MEMBER and API keys. Profile preview and save require an active human ADMIN. The API key is not a substitute for human profile administration.
+Who can call what, in the organization that owns the run or configuration:
+
+| Calls | Allowed | Rejected with 403 |
+| --- | --- | --- |
+| Read profiles, list runs, register a run, read a run, read artifacts, pull decisions | Organization API key, or a signed-in ADMIN or MEMBER | Agent tokens, inactive members |
+| Preview and save profiles | Organization API key, or an active signed-in ADMIN | MEMBER, agent tokens |
+| Submit evaluator claims | Organization API key | Signed-in users |
+| Add flags, resolve values, adjudicate claims | Signed-in ADMIN or MEMBER | API keys |
 
 ## Hybrid producer descriptor and named profile
 
@@ -59,8 +66,8 @@ The descriptor's final schema drives overlay generation. An explicit `schemaJson
 must match it. Omitted or null `clientPipelineJson` preserves an existing binding;
 `removeClientPipeline: true` clears it and restores ordinary schema checks. Do not
 combine removal with a new descriptor. Preview validates without saving or
-consuming a revision; save still requires `expectedRevision` and active human
-ADMIN access. Disabling preserves the binding; a disable-only save preserves the
+consuming a revision; save still requires `expectedRevision` and the profile
+access described above. Disabling preserves the binding; a disable-only save preserves the
 stored snapshots even if the command has since changed.
 
 Binding does not by itself enable hybrid capture. The ordinary upload capture
@@ -126,17 +133,17 @@ response body and `parsed=None`, including when
 
 ## Find and register the exact run
 
-Process a document with the saved configuration using the normal extraction workflow. Then call `list_extraction_review_runs(job_guid)` and select the returned run descriptor for that job. Rerunning the same bytes creates a distinct run; use the descriptor's `runId` and full server-returned `identity` rather than deriving either from a hash or choosing the latest result. Register the selected run, then read it with `get_extraction_review_run(run_id, review_revision=...)` when you need a pinned review snapshot.
+Process a document with the saved configuration using the normal extraction workflow. Then call `GET /job/{jobGuid}/extraction-review-runs` (Python `list_extraction_review_runs`) and select the returned run descriptor for that job. Rerunning the same bytes creates a distinct run; use the descriptor's `runId` and full server-returned `identity` rather than deriving either from a hash or choosing the latest result. Register the selected run, then read it with `GET /extraction-review-runs/{runId}?reviewRevision=` (Python `get_extraction_review_run`) when you need a pinned review snapshot.
 
 <Example name="extraction-review/find-and-register-run" />
 
 Keep the full private reference set outside the extraction request, profile, and model input. Compare the extracted result against that set separately, then submit the specific disagreement as a post-extraction evaluator claim. That claim may include the relevant proposed value, comparison rationale, and reference/comparator version identifiers; do not upload the full golden corpus or place expected answers in the extraction prompt or profile. If the selected archive is incomplete or unavailable, stop that review path and retain its reported status.
 
-`identity` binds the organization, run, job, artifact, and raw-result fingerprint. Write requests use the `reference` subset (`jobGuid`, `artifactId`, `resultFingerprint`) returned by the server. The fingerprint is the lowercase SHA-256 of raw archived result bytes without a `sha256:` prefix. Download verified evidence with `get_extraction_review_artifact(run_id, path)`; it returns the raw bytes.
+`identity` binds the organization, run, job, artifact, and raw-result fingerprint. Write requests use the `reference` subset (`jobGuid`, `artifactId`, `resultFingerprint`) returned by the server. The fingerprint is the lowercase SHA-256 of raw archived result bytes without a `sha256:` prefix. Download verified evidence with `GET /extraction-review-runs/{runId}/artifacts?path=` (Python `get_extraction_review_artifact`); it returns the raw bytes.
 
 ## Submit evaluator claims
 
-An API key may submit evaluator claims. The run ID selects the immutable run, while `reference` selects its exact result. Include the current review revision and a unique idempotency key for each logical write.
+Only an organization API key can submit evaluator claims; a signed-in user gets 403. The run ID selects the immutable run, while `reference` selects its exact result. Include the current review revision and a unique idempotency key for each logical write.
 
 <Example name="extraction-review/submit-claims" />
 
@@ -165,7 +172,7 @@ review revision. Omit that parameter to open the current review state.
 
 ## Review and adjudicate
 
-An active human ADMIN or MEMBER can add flags, resolve values, and adjudicate a claim. Each mutation supplies an expected review revision and `Idempotency-Key`; adjudication also pins the expected claim, adjudication, and resolution revisions. Read the latest run state before preparing a change, and handle revision conflicts by reading again and making a new decision. Human audit input contains a reason and optional evidence metadata, never an actor or timestamp.
+Only an active signed-in ADMIN or MEMBER can add flags, resolve values, and adjudicate a claim. Each mutation supplies an expected review revision and `Idempotency-Key`; adjudication also pins the expected claim, adjudication, and resolution revisions. Read the latest run state before preparing a change, and handle revision conflicts by reading again and making a new decision. Human audit input contains a reason and optional evidence metadata, never an actor or timestamp.
 
 The raw extractor result stays immutable. Resolutions and adjudications are separate versioned review state; they do not update the extraction artifact, dataset labels, training data, or acceptance policy.
 
@@ -256,7 +263,7 @@ decisions do not establish acceptance. Reviewer leases, a global inbox and accep
 
 ## Consume the decision feed
 
-Call `pull_extraction_review_decisions(after_ordinal=cursor, limit=100, case_id=...)` and persist the returned `nextCursor` exactly as provided, even when `events` is empty. A filtered page can advance the authoritative cursor. Use the event ordinal and event identity to make downstream handling idempotent; do not calculate the cursor from the last visible event.
+Call `GET /extraction-review-decisions?afterOrdinal=&limit=&caseId=` (Python `pull_extraction_review_decisions`) and persist the returned `nextCursor` exactly as provided, even when `events` is empty. A filtered page can advance the authoritative cursor. Use the event ordinal and event identity to make downstream handling idempotent; do not calculate the cursor from the last visible event.
 
 <Example name="extraction-review/pull-decisions" />
 

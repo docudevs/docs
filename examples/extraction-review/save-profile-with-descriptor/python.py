@@ -10,7 +10,7 @@ async def main():
 
     # docs:start
     # descriptor.json is written by the previous example.
-    # Preview and save need a signed-in administrator: an organization API key is rejected.
+    # The configuration invoice-v1 must already exist.
     descriptor_json = Path("descriptor.json").read_text()
 
     preview = await client.preview_extraction_review_profile(

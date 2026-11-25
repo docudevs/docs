@@ -3,7 +3,7 @@ set -euo pipefail
 
 # docs:start
 # descriptor.json is written by the previous example.
-# Preview and save need a signed-in administrator: an organization API key is rejected.
+# The configuration invoice-v1 must already exist.
 PREVIEW=$(jq -n --rawfile descriptor descriptor.json '{clientPipelineJson: $descriptor}' |
   curl -s -S -f -X POST "https://api.docudevs.ai/configuration/invoice-v1/extraction-review-profile/preview" \
     -H "Authorization: $API_KEY" \
