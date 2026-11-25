@@ -6,7 +6,6 @@ docs/administration/bring-your-own-ocr.md:6
 docs/administration/integration-connections.md:3
 docs/administration/model-credentials.md:10
 docs/administration/single-sign-on.md:1
-docs/advanced/category-trees.md:5
 docs/advanced/classification.md:2
 docs/core/contract-analysis-playbooks.md:15
 docs/integration/submission-portals.md:3

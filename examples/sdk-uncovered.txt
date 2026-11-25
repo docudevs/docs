@@ -1,8 +1,6 @@
 # Public client methods not yet called in an example or shown in the SDK reference page; this list only shrinks
-activate_tree
 add_extraction_review_flags
 adjudicate_extraction_review_claim
-browse_tree_nodes
 cancel_classify
 commit_classify
 confirm_contract_analysis_findings
@@ -22,7 +20,6 @@ get_evaluation_report
 get_extraction_review_artifact
 get_extraction_review_profile
 get_tree_activation_report
-get_tree_node
 import_gold
 import_playbook
 list_classify_jobs
@@ -30,7 +27,6 @@ list_draft_revisions
 list_evaluations
 list_imports
 list_records_page
-list_trees
 prepare_contract_analysis_test_package
 records_case
 resolve_extraction_review_values
@@ -40,7 +36,6 @@ split_test_suite
 start_evaluation
 suggest_source_roles
 update_case_document
-upload_tree
 wait_for_classify
 wait_for_evaluation
 wait_for_records_job

@@ -16,6 +16,11 @@ case-memo/add-and-approve-instruction:java
 case-memo/read-and-retire-entries:java
 case-search/search-documents:java
 case-search/search-records:java
+category-trees/activate-tree:java
+category-trees/browse-tree-nodes:java
+category-trees/get-tree-node:java
+category-trees/list-trees:java
+category-trees/upload-tree:java
 compare/compare-and-export-redline:java
 errors/case-not-found:java
 errors/unauthorized:java
