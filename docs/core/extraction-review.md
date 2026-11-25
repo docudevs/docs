@@ -50,10 +50,10 @@ a stable function/version ID for every local node. Exactly one final is required
 ```python
 descriptor = pipeline.review_descriptor(
     producer={
-        "id": "extractor-genetics",
+        "id": "invoice-producer",
         "releaseId": producer_release_id,
         "codeSha256": producer_bundle_sha256,
-        "data": [{"id": "hgnc-catalog", "sha256": hgnc_catalog_sha256}],
+        "data": [{"id": "vendor-catalog", "sha256": vendor_catalog_sha256}],
     },
     local_function_ids=local_implementation_ids,
     final_schema=final_result_schema,
@@ -82,11 +82,11 @@ Pass the descriptor as JSON text on the existing profile request:
 import json
 
 preview = await client.preview_extraction_review_profile(
-    "genetics-v1",
+    "invoice-v1",
     {"clientPipelineJson": json.dumps(descriptor, allow_nan=False)},
 )
 saved = await client.save_extraction_review_profile(
-    "genetics-v1",
+    "invoice-v1",
     {
         "expectedRevision": preview.parsed["revision"],
         "clientPipelineJson": preview.parsed["clientPipelineJson"],
