@@ -70,7 +70,7 @@ System.out.println(result.toPrettyString());
 
 ```bash
 curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -F "document=@invoice.pdf" \
   -F "instructions=Extract the invoice number, date, total amount, and vendor name."
 ```
@@ -207,7 +207,7 @@ System.out.println(result.toPrettyString());
 ```bash
 # Save schema to schema.json first
 curl -X POST https://api.docudevs.ai/document/upload-files/sync \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -F "document=@invoice.pdf" \
   -F "schema=@schema.json"
 ```
@@ -343,7 +343,7 @@ System.out.println(result);
 ```bash
 # config.json: {"barcodes": true}
 curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -F "document=@invoice.pdf" \
   -F "metadata=@config.json" \
   -F "instructions=Extract QR codes"
@@ -415,7 +415,7 @@ String guid = client.submitAndProcessDocument(
 ```bash
 # config.json: {"reasoningEffort": "low"}
 curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "Authorization: $API_KEY" \
   -F "document=@invoice.pdf" \
   -F "metadata=@config.json" \
   -F "instructions=Extract the invoice number, date, total amount, and vendor name."
@@ -425,6 +425,49 @@ curl -X POST https://api.docudevs.ai/document/upload-files \
 </Tabs>
 
 There is no `--reasoning-effort` CLI flag today; use the Python SDK, the Java SDK, or the raw HTTP API.
+
+## Upload Responses and Admission Errors
+
+The upload and synchronous processing endpoints accept documents for the authenticated organization. Upload endpoints return a job `guid`; use the job status and result endpoints to retrieve asynchronous output.
+
+| Endpoint | Success response |
+| --- | --- |
+| `POST /document/upload-files` | `UploadResponse` JSON with the job `guid` and `status` |
+| `POST /document/upload-files/sync` | JSON string containing the extracted text |
+| `POST /document/ocr/sync` | JSON string containing OCR output |
+| `POST /document/generate-schema` | `UploadResponse` JSON with the job `guid` and `status` |
+
+Admission can return these errors on all four endpoints:
+
+- **409 Conflict**: the request conflicts with a bound or inconsistent review run for the document.
+- **503 Service Unavailable**: the API could not acquire the document's admission lock. Retry the request after a short delay.
+
+These errors preserve the API's JSON error body. The Python SDK's detailed calls expose the HTTP status and raw body; the Java SDK reports non-success responses as `ApiException` with the status and response body. Successful synchronous endpoints keep their JSON string response format.
+
+Other admitted starts use the same conflict and lock-timeout responses:
+
+- `POST /document/analyze`
+- `POST /cases/{caseId}/documents` and the deprecated `POST /cases/{caseId}/upload`
+- `POST /submission-portals/{id}/submissions`
+
+Batch upload and processing endpoints also report **404 Not Found** when the batch job (or the requested configuration) is missing, **409 Conflict** when the batch state or review binding prevents the request, and **503 Service Unavailable** when admission cannot acquire the job lock: `POST /document/batch/{guid}/upload`, `/process`, `/process/with-configuration/{configurationName}`, and `/schedule`.
+
+### Child Operation Submissions
+
+The following endpoints create or reuse a child job under an existing job:
+
+| Endpoint | Success response |
+| --- | --- |
+| `POST /operation` | `SubmitOperationResponse` JSON |
+| `POST /operation/{parentJobId}/generative-task` | `SubmitOperationResponse` JSON |
+| `POST /job/{parentGuid}/pdf-acroform/apply` | `SubmitOperationResponse` JSON |
+| `POST /compare` | `CompareSubmitResponse` JSON with HTTP 202 |
+| `POST /compare/{compareGuid}/exports` | `CompareExportSubmitResponse` JSON with HTTP 202 |
+| `POST /contract-analysis/runs` | `ContractAnalysisRunResponse` JSON |
+
+Child admission can return **409 Conflict** when the child is already bound to a review run or has inconsistent review linkage, or **503 Service Unavailable** when the API cannot acquire the child admission lock before its timeout. For `POST /operation`, a 409 response contains a JSON `message`; a contract-analysis publication can also return its existing identity-conflict or `revalidation_required` error. Contract-analysis run creation retains its existing 409 identity-conflict response and adds 503 for child admission timeout.
+
+For the other child operations, retry 503 after a short delay. For a contract-analysis run, retry with the same idempotency key to recover the recorded run identity and status; replay does not schedule another attempt. If the replay reports `ERROR` and a new attempt is desired, submit with a new idempotency key. Existing success status codes and response bodies are unchanged.
 
 ## Next Steps
 
