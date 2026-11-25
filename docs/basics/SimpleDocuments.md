@@ -4,9 +4,6 @@ description: Extract structured data from documents using prompts, JSON schemas,
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Structured Data Extraction
 
 Turn any document into clean, structured JSON data.
@@ -23,89 +20,13 @@ DocuDevs allows you to extract specific fields from documents using natural lang
 
 The simplest way to extract data is to describe what you want in plain English.
 
-**Example:** Extracting data from an invoice.
+**Example:** Extracting data from a document with a prompt.
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
+<Example name="quick-start/process-document" />
 
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Duration;
+The cURL example uses [`jq`](https://jqlang.org/) to read values from responses.
 
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .baseUrl("https://api.docudevs.ai")
-    .build();
-
-byte[] invoiceBytes = Files.readAllBytes(Path.of("invoice.pdf"));
-
-String jobGuid = client.submitAndProcessDocument(
-    new UploadRequest("invoice.pdf", "application/pdf", invoiceBytes),
-    ProcessOptions.builder()
-        .mimeType("application/pdf")
-        .prompt("Extract the invoice number, date, total amount, and vendor name.")
-        .build()
-);
-
-JsonNode result = client.waitUntilReadyJson(jobGuid, WaitOptions.builder().build());
-System.out.println(result.toPrettyString());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: $API_KEY" \
-  -F "document=@invoice.pdf" \
-  -F "instructions=Extract the invoice number, date, total amount, and vendor name."
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
-
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-
-with open("invoice.pdf", "rb") as f:
-    guid = await client.submit_and_process_document(
-        document=f.read(),
-        document_mime_type="application/pdf",
-        prompt="Extract the invoice number, date, total amount, and vendor name."
-    )
-
-result = await client.wait_until_ready(guid, result_format="json")
-print(result)
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs process invoice.pdf --prompt "Extract the invoice number, date, total amount, and vendor name."
-```
-
-  </TabItem>
-</Tabs>
-
-**Response:**
+For an invoice, the response looks like this:
 
 ```json
 {
@@ -128,168 +49,28 @@ For production use cases, you should use a **JSON Schema**. This ensures the API
 
 ### Example: Strict Invoice Schema
 
-Let's define a schema for an invoice with line items.
+Define a schema for an invoice and pass it with the document. Use arrays of objects for repeating data such as line items, for example:
 
 ```json
-{
-  "type": "object",
-  "properties": {
-    "invoice_number": {"type": "string"},
-    "date": {"type": "string", "format": "date"},
-    "total": {"type": "number"},
-    "line_items": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "description": {"type": "string"},
-          "amount": {"type": "number"}
-        }
-      }
-    }
-  },
-  "required": ["invoice_number", "total"]
-}
-```
-
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .baseUrl("https://api.docudevs.ai")
-    .build();
-
-String schema = """
-{
-  "type": "object",
-  "properties": {
-    "invoice_number": {"type": "string"},
-    "total": {"type": "number"}
-  }
-}
-""";
-
-byte[] docBytes = Files.readAllBytes(Path.of("invoice.pdf"));
-
-String guid = client.submitAndProcessDocument(
-    new UploadRequest("invoice.pdf", "application/pdf", docBytes),
-    ProcessOptions.builder()
-        .mimeType("application/pdf")
-        .schema(schema)
-        .build()
-);
-
-JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
-System.out.println(result.toPrettyString());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-# Save schema to schema.json first
-curl -X POST https://api.docudevs.ai/document/upload-files/sync \
-  -H "Authorization: $API_KEY" \
-  -F "document=@invoice.pdf" \
-  -F "schema=@schema.json"
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-```python
-from docudevs import json_schema
-
-schema = {
+"line_items": {
+  "type": "array",
+  "items": {
     "type": "object",
     "properties": {
-        "invoice_number": {"type": "string"},
-        "total": {"type": "number"}
+      "description": {"type": "string"},
+      "amount": {"type": "number"}
     }
+  }
 }
-
-guid = await client.submit_and_process_document(
-    document=doc_bytes,
-    document_mime_type="application/pdf",
-    schema=json_schema(schema)
-)
 ```
 
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs process invoice.pdf --schema-file schema.json
-```
-
-  </TabItem>
-</Tabs>
+<Example name="quick-start/custom-schema" />
 
 ## Type-Safe Extraction with Pydantic (Python)
 
-The Python SDK integrates seamlessly with **Pydantic**, allowing you to define your schema using Python classes. This gives you full type safety and IDE autocompletion.
+The Python SDK integrates seamlessly with **Pydantic**, allowing you to define your schema using Python classes. This gives you full type safety and IDE autocompletion. `json_schema` turns the model into a JSON Schema, and you validate the result back into the same model:
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-  ]}>
-  <TabItem value="python">
-
-```python
-from pydantic import BaseModel, Field
-from typing import List
-from docudevs import json_schema
-
-# 1. Define your data model
-class LineItem(BaseModel):
-    description: str
-    quantity: int
-    price: float
-
-class Invoice(BaseModel):
-    number: str = Field(description="The invoice number")
-    date: str
-    items: List[LineItem]
-    total: float
-
-# 2. Generate schema from model
-schema = json_schema(Invoice)
-
-# 3. Process document
-guid = await client.submit_and_process_document(
-    document=doc_bytes,
-    document_mime_type="application/pdf",
-    schema=schema
-)
-
-# 4. Validate result back into Pydantic model
-result_dict = await client.wait_until_ready(guid, result_format="json")
-invoice = Invoice(**result_dict)
-
-print(f"Invoice {invoice.number} total: {invoice.total}")
-```
-
-  </TabItem>
-</Tabs>
+<Example name="extraction/extract-with-pydantic" />
 
 ## Advanced Configuration
 
@@ -297,79 +78,7 @@ You can combine extraction with other features like Barcode/QR scanning or speci
 
 ### Extracting QR Codes
 
-<Tabs
-  defaultValue="curl"
-  values={[
-    {label: 'cURL', value: 'curl'},
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-byte[] fileBytes = Files.readAllBytes(Path.of("invoice.pdf"));
-UploadRequest upload = new UploadRequest("invoice.pdf", "application/pdf", fileBytes);
-
-String guid = client.submitAndProcessDocument(
-    upload,
-    ProcessOptions.builder()
-        .prompt("Extract QR codes")
-        .mimeType("application/pdf")
-        .barcodes(true)
-        .build()
-);
-
-JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
-System.out.println(result);
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-# config.json: {"barcodes": true}
-curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: $API_KEY" \
-  -F "document=@invoice.pdf" \
-  -F "metadata=@config.json" \
-  -F "instructions=Extract QR codes"
-```
-
-  </TabItem>
-  <TabItem value="python">
-
-```python
-guid = await client.submit_and_process_document(
-    document=doc_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract QR codes",
-    barcodes=True  # Enable barcode scanning
-)
-```
-
-  </TabItem>
-  <TabItem value="cli">
-
-```bash
-docudevs process invoice.pdf --barcodes --prompt "Extract QR codes"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="extraction/extract-qr-codes" />
 
 ## Reasoning Effort
 
@@ -377,52 +86,7 @@ Some models expose a configurable reasoning effort level. Set the optional `reas
 
 `reasoningEffort` is a plain string, not a closed enum: DocuDevs forwards the value verbatim to the underlying model provider (for example, OpenAI-style values such as `low`, `medium`, or `high`), so newly supported effort levels do not require a DocuDevs release. An empty or whitespace-only value is rejected.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
-
-```python
-guid = await client.submit_and_process_document(
-    document=doc_bytes,
-    document_mime_type="application/pdf",
-    prompt="Extract the invoice number, date, total amount, and vendor name.",
-    reasoning_effort="low",
-)
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-String guid = client.submitAndProcessDocument(
-    upload,
-    ProcessOptions.builder()
-        .mimeType("application/pdf")
-        .prompt("Extract the invoice number, date, total amount, and vendor name.")
-        .reasoningEffort("low")
-        .build()
-);
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-# config.json: {"reasoningEffort": "low"}
-curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: $API_KEY" \
-  -F "document=@invoice.pdf" \
-  -F "metadata=@config.json" \
-  -F "instructions=Extract the invoice number, date, total amount, and vendor name."
-```
-
-  </TabItem>
-</Tabs>
+<Example name="extraction/set-reasoning-effort" />
 
 There is no `--reasoning-effort` CLI flag today; use the Python SDK, the Java SDK, or the raw HTTP API.
 

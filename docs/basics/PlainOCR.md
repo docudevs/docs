@@ -17,23 +17,20 @@ The Plain OCR feature allows you to:
 - Process documents without complex data structuring
 - Get faster results for simple text extraction needs
 
-## Quick Start with CLI
+## Quick Start
 
-The simplest way to extract text from a document is using the DocuDevs CLI:
+Install the SDK and CLI, and set your API key as an environment variable:
 
 ```bash
-# Extract text as markdown (default)
-docudevs ocr-only document.pdf
-
-# Extract as plain text
-docudevs ocr-only document.pdf --format plain
-
-# Use premium OCR for better accuracy
-docudevs ocr-only document.pdf --ocr premium
-
-# Use auto quality selection (recommended)
-docudevs ocr-only document.pdf --ocr auto
+pip install docu-devs-api-client
+export API_KEY="your_api_key"
 ```
+
+Extract the text of a document as markdown:
+
+<Example name="ocr/extract-text" />
+
+The cURL example uses [`jq`](https://jqlang.org/) to read values from responses. The result of an OCR job is the text itself, not JSON. Image files such as `receipt.jpg` work the same way as PDFs; set the MIME type to match the file (for example `image/jpeg`). The CLI detects the MIME type from the file name.
 
 ## OCR Quality Options
 
@@ -61,7 +58,7 @@ docudevs ocr-only document.pdf --ocr auto
 
 ## Output Formats
 
-### Markdown Format (Default)
+### Markdown Format
 
 - Preserves document formatting
 - Maintains headers, lists, and text structure
@@ -75,140 +72,24 @@ docudevs ocr-only document.pdf --ocr auto
 - Smaller output size
 - Best for simple text analysis
 
-## CLI Usage
+## Choosing Quality and Format
 
-### Installation
+Set the OCR quality (`DEFAULT`, `PREMIUM` or `AUTO`) and the output format (`markdown` or `plain`) per request. If you do not set a format, the SDK produces markdown and the CLI produces plain text, so pass `--format` explicitly in scripts:
 
-First, install the DocuDevs CLI:
-
-```bash
-pip install docu-devs-api-client
-```
-
-Set your API key as an environment variable:
-
-```bash
-export API_KEY="your_api_key"
-```
-
-### Basic OCR Commands
-
-```bash
-# Extract text from a PDF (markdown format by default)
-docudevs ocr-only document.pdf
-
-# Extract as plain text
-docudevs ocr-only document.pdf --format plain
-
-# Use premium OCR for handwritten documents
-docudevs ocr-only handwritten.pdf --ocr premium
-
-# Process an image file
-docudevs ocr-only receipt.jpg
-
-# Use auto quality (recommended for mixed quality documents)
-docudevs ocr-only scanned-doc.pdf --ocr auto
-```
-
-### Advanced CLI Usage
-
-```bash
-# Process and save output to a file
-docudevs ocr-only document.pdf > extracted_text.md
-
-# Process multiple files
-for file in *.pdf; do
-    docudevs ocr-only "$file" > "${file%.pdf}.txt" --format plain
-done
-
-# Use with specific API endpoint
-docudevs --api-url https://api.docudevs.ai ocr-only document.pdf
-
-# Override API key for this command
-docudevs --token different_api_key ocr-only document.pdf
-```
+<Example name="ocr/choose-quality-and-format" />
 
 ### Checking Results
 
-```bash
-# If you need to check status manually (usually automatic)
-docudevs status {guid}
+The examples wait for the job to finish and print the text. To check a job yourself, use the job status and result endpoints, or `docudevs status <guid>` and `docudevs result <guid>` in the CLI. Add `--no-wait` to `docudevs ocr-only` to return as soon as the document is queued.
 
-# Get results manually
-docudevs result {guid}
-```
+### CLI Options
 
-## API Usage
+- `--api-url` points the CLI at a different API endpoint. Put it before the command name.
+- `--token` overrides the key from the environment for one command. Put it before the command name.
+- `--timeout` sets how long the CLI waits for the result, in seconds.
 
-### Basic OCR Processing
+## One-Step Synchronous OCR
 
-1. **Upload your document:**
+For simpler usage, upload the document and receive the text in the same request. The response is a JSON string containing the OCR output. This endpoint is called over HTTP; the Python SDK has no helper for it.
 
-```bash
-curl -X POST "https://api.docudevs.ai/document/upload" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -F "document=@document.pdf"
-```
-
-1. **Process with OCR:**
-
-```bash
-curl -X POST "https://api.docudevs.ai/document/ocr/{guid}?format=markdown" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "ocr": "DEFAULT"
-  }'
-```
-
-1. **Check status and get results:**
-
-```bash
-# Check processing status
-curl -X GET "https://api.docudevs.ai/job/status/{guid}" \
-  -H "Authorization: Bearer YOUR_API_KEY"
-
-# Get the results when ready
-curl -X GET "https://api.docudevs.ai/job/result/{guid}" \
-  -H "Authorization: Bearer YOUR_API_KEY"
-```
-
-### One-Step Synchronous OCR
-
-For simpler usage, use the synchronous endpoint:
-
-```bash
-curl -X POST "https://api.docudevs.ai/document/ocr/sync?format=markdown&ocr=auto" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -F "document=@document.pdf"
-```
-
-## Python SDK Usage
-
-### Basic OCR Processing
-
-```python
-from docudevs.docudevs_client import DocuDevsClient
-from io import BytesIO
-
-# Initialize client
-client = DocuDevsClient(token="your_api_key")
-
-# Upload and process document
-with open("document.pdf", "rb") as f:
-    document = BytesIO(f.read())
-
-# Submit for OCR processing
-guid = await client.submit_and_ocr_document(
-    document=document,
-    document_mime_type="application/pdf",
-    ocr="DEFAULT",
-    ocr_format="markdown"
-)
-
-# Wait for results
-result = await client.wait_until_ready(guid)
-
-# OCR returns text content
-print(result.result)
-```
+<Example name="ocr/ocr-sync" />

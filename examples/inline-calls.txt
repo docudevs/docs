@@ -22,9 +22,6 @@ docs/advanced/pdf-acroform.md:4
 docs/advanced/records-datasets.md:6
 docs/advanced/records-import.md:11
 docs/advanced/tracing.md:6
-docs/basics/PlainOCR.md:9
-docs/basics/SimpleDocuments.md:15
-docs/basics/install.md:11
 docs/configuration/Configuration.md:20
 docs/core/agent-chat.md:3
 docs/core/ai-analysis.md:19
@@ -43,7 +40,6 @@ docs/core/object-detection.md:1
 docs/core/schema-generation.md:6
 docs/core/source-locations.md:5
 docs/core/workbook-normalization.md:4
-docs/getting-started/first-document.md:11
 docs/integration/submission-portals.md:3
 docs/integration/webhooks.md:1
 docs/reference/error-codes.md:6

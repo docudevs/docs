@@ -1,1 +1,8 @@
+extraction/extract-with-pydantic:java
+first-document/handle-timeout:java
+first-document/save-and-use-configuration:java
+install/verify-connection:java
+ocr/choose-quality-and-format:java
+ocr/extract-text:java
+ocr/ocr-sync:java
 quick-start/analyze-document:java
