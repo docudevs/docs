@@ -10,18 +10,12 @@ balance is used up, new work is refused until you add credits.
 
 ## What a credit is
 
-One credit is $0.00001, so $10 buys 1,000,000 credits. A credit is not an LLM
-token: LLM usage is priced per 1,000 LLM tokens, and the price is expressed in
-credits. Each charge is rounded up to a whole credit.
+A credit is not an LLM token: LLM usage is priced per 1,000 LLM tokens, and the
+price is expressed in credits. Each charge is rounded up to a whole credit.
 
-Credit packs are one-time purchases:
-
-| Pack | Price | Credits |
-| --- | ---: | ---: |
-| Try It | $10 | 1,000,000 |
-| Starter | $25 | 2,750,000 |
-| Growth | $100 | 12,000,000 |
-| Scale | $500 | 65,000,000 |
+Credits are sold in packs as one-time purchases. The packs and their current
+prices are on the DocuDevs pricing page and in the web app under billing
+settings.
 
 ## The rate card
 
@@ -48,27 +42,22 @@ ran.
 Rates change when DocuDevs updates a model or its price; the card shows the
 current values.
 
-## Worked example
+## How a job is charged
 
-These numbers come from rate card version 2026-11-22.2. Check the pricing page
-for current values.
+The cost of a job is the sum of its parts, each taken from the current rate
+card:
 
-A 3-page scanned document, processed with Default OCR and Default LLM
-extraction, using 4,160 input and 130 output LLM tokens:
+| Part | Calculation |
+| --- | --- |
+| OCR | pages × the OCR rate per page |
+| Parsing without OCR | pages × the per-page platform fee |
+| LLM input | input tokens ÷ 1,000 × the input rate of the model that ran |
+| LLM output | output tokens ÷ 1,000 × the output rate of the model that ran |
+| Per-job fee | flat |
 
-| Part | Calculation | Credits |
-| --- | --- | ---: |
-| OCR | 3 pages × 1,200 | 3,600 |
-| LLM input | 4,160 tokens × 250 per 1,000 | 1,040 |
-| LLM output | 130 tokens × 1,200 per 1,000 | 156 |
-| Per-job fee | flat | 10 |
-| Total | | 4,806 |
-
-That is about $0.048.
-
-A 12-page Word document (about 36,000 characters), processed with the text
-parser and your own LLM, costs 12 pages × 10 + the per-job fee of 10 = 130
-credits, about $0.0013.
+A scanned document processed with OCR and LLM extraction pays the OCR, LLM and
+per-job parts. A Word document processed with the text parser and your own LLM
+pays only the per-page platform fee and the per-job fee.
 
 Jobs with several LLM stages are charged per stage, and
 each stage rounds up, so the total can be a few credits higher.
