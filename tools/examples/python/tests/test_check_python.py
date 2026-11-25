@@ -1,3 +1,9 @@
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
 from check_python import check_source
 
 
@@ -67,3 +73,12 @@ def test_each_bad_keyword_reported_once():
         "p.py:1: create_case() has no parameter 'a'",
         "p.py:1: create_case() has no parameter 'b'",
     ]
+
+
+@pytest.mark.parametrize("args", [[], ["/nonexistent-examples-dir"]])
+def test_entry_point_rejects_missing_or_invalid_directory(args):
+    script = Path(__file__).resolve().parent.parent / "check_python.py"
+    result = subprocess.run([sys.executable, str(script), *args], capture_output=True, text=True)
+    assert result.returncode == 2
+    assert result.stderr.strip().startswith("usage:")
+    assert len(result.stderr.strip().splitlines()) == 1

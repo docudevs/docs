@@ -88,6 +88,9 @@ def _takes_value(param: click.Parameter | None) -> bool:
 
 
 def main(argv: list[str]) -> int:
+    if len(argv) != 2 or not Path(argv[1]).is_dir():
+        print(f"usage: {Path(argv[0]).name} <examples-directory>", file=sys.stderr)
+        return 2
     from docudevs.cli import cli
 
     root = Path(argv[1])

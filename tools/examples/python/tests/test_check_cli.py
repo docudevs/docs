@@ -1,3 +1,9 @@
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
 import click
 
 from check_cli import check_source as check_cli
@@ -149,3 +155,12 @@ def test_subcommand_option_after_global_still_checked():
     assert check_cli("docudevs --api-url X go --limt 5\n", "c.sh", globals_root) == [
         "c.sh:1: 'docudevs go' has no option '--limt'"
     ]
+
+
+@pytest.mark.parametrize("args", [[], ["/nonexistent-examples-dir"]])
+def test_entry_point_rejects_missing_or_invalid_directory(args):
+    script = Path(__file__).resolve().parent.parent / "check_cli.py"
+    result = subprocess.run([sys.executable, str(script), *args], capture_output=True, text=True)
+    assert result.returncode == 2
+    assert result.stderr.strip().startswith("usage:")
+    assert len(result.stderr.strip().splitlines()) == 1
