@@ -1,6 +1,10 @@
 agent-actions/confirm-action:java
 agent-actions/list-pending-actions:java
 agent-actions/reject-action:java
+agent-runs/cancel-run:java
+agent-runs/investigate-after-classify:java
+agent-runs/list-runs:java
+agent-runs/start-run:java
 compare/compare-and-export-redline:java
 errors/case-not-found:java
 errors/unauthorized:java

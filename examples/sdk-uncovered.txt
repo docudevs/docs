@@ -8,7 +8,6 @@ batch_records
 browse_tree_nodes
 bulk_upsert_records
 cancel_classify
-classify
 commit_classify
 confirm_contract_analysis_findings
 confirm_sync_records
