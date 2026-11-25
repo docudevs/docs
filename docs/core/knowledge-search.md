@@ -30,7 +30,7 @@ Stay with normal extraction when the uploaded file already contains every fact y
 
 ## Example scenario: Specialty catalog enrichment
 
-You maintain a "Signature Appliances" case (knowledge base `42`) that stores the canonical marketing copy, safety class, and localization guidance for every SKU. When suppliers send intake spreadsheets, you want DocuDevs to fill in the approved names and regulatory labels before the data hits your PIM. The example attaches the Knowledge Search tool to the extraction request.
+You maintain a "Product Catalogue" case (knowledge base `42`) that stores the canonical marketing copy, product group, and localization guidance for every SKU. When suppliers send intake spreadsheets, you want DocuDevs to fill in the approved names and product groups before the data reaches your product database. The example attaches the Knowledge Search tool to the extraction request.
 
 <Example name="knowledge-search/extract-with-knowledge-base" />
 
