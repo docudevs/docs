@@ -10,5 +10,5 @@ CASE_ID=42  # id of a records case
 curl -s -S -f -G "https://api.docudevs.ai/cases/$CASE_ID/records" \
   -H "Authorization: $API_KEY" \
   --data-urlencode "subtree=4.12" \
-  --data-urlencode "attribute=brand=Foo" | jq -r '.records[] | "\(.key) \(.label)"'
+  --data-urlencode "attribute=brand=Foo" | jq -r '(.records // [])[] | "\(.key) \(.label // "-")"'
 # docs:end

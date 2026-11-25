@@ -11,7 +11,7 @@ async def main():
     case_id = 42  # id of a records case
 
     # Raises RecordsApiError when the request is refused
-    accepted = await client.delete_record(case_id, "6410000123456")
+    accepted = await client.delete_record(case_id, "1000000000001")
     print(f"Import {accepted['importId']}: {accepted['status']}")
     # docs:end
 

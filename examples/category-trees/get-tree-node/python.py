@@ -13,8 +13,8 @@ async def main():
 
     node = await client.get_tree_node(case_id, version_id, "4.12.3")
     print(" > ".join(node["path"]))
-    print([child["code"] for child in node["children"]])
-    print([sibling["code"] for sibling in node["siblings"]])
+    print([child["code"] for child in node.get("children", [])])
+    print([sibling["code"] for sibling in node.get("siblings", [])])
     # docs:end
 
 

@@ -17,8 +17,9 @@ public class Example {
         // playbook.json holds a playbook in the playbook format
         JsonNode playbook = new ObjectMapper().readTree(Path.of("playbook.json").toFile());
 
-        JsonNode draft = client.getContractAnalysisProfile(caseId, "draft");
-        long revision = draft.path("draftRevision").asLong(); // a new playbook is at revision 0
+        // The draftRevision you read; a new playbook is at revision 0. The other variants
+        // read the current draft revision first, this one uses the revision you supply.
+        long revision = 0L;
 
         JsonNode imported = client.importPlaybook(caseId, revision, playbook);
         System.out.println("Draft revision: " + imported.path("draftRevision").asLong());

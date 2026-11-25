@@ -13,7 +13,7 @@ async def main():
     # Raises RecordsApiError when the request is refused
     accepted = await client.upsert_record(
         case_id,
-        "6410000123456",
+        "1000000000001",
         {"title": "Soft sock 3-pack", "description": "Cotton, size 40-45"},
         label="4.12.3",
         metadata={"brand": "Foo"},

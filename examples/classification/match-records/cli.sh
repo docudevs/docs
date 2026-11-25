@@ -5,6 +5,7 @@ set -euo pipefail
 CASE_ID=42  # id of the case that holds the rows; it may differ from the catalogue
 
 echo '[{"key": "line-1", "text": {"title": "M8 hex bolt 40 mm, 100 pcs"}}]' > rows.json
+# recordsKnowledgeBaseId is the id of the catalogue's records case
 cat > config.json <<'JSON'
 {
   "target": "record",

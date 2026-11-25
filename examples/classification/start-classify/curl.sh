@@ -12,7 +12,7 @@ curl -s -S -f -X POST "https://api.docudevs.ai/cases/$CASE_ID/classify" \
       "source": "inline",
       "items": [
         {
-          "key": "6410000999999",
+          "key": "1000000000003",
           "text": {"title": "Running socks 3-pack", "description": "Cotton blend"}
         }
       ]

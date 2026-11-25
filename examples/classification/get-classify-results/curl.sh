@@ -10,5 +10,5 @@ JOB_ID=9  # jobId returned when the job was started
 # client follows the tokens for you.
 curl -s -S -f -G "https://api.docudevs.ai/cases/$CASE_ID/classify/$JOB_ID/results" \
   -H "Authorization: $API_KEY" \
-  --data-urlencode "reviewRequired=true" | jq -r '.rows[] | "\(.rowId) \(.key // "-") \(.chosen.code // "-") \(.review.reasons // [] | join(","))"'
+  --data-urlencode "reviewRequired=true" | jq -r '(.rows // [])[] | "\(.rowId) \(.key // "-") \(.chosen.code // "-") \(.review.reasons // [] | join(","))"'
 # docs:end

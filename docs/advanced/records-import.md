@@ -21,8 +21,8 @@ Rows are keyed by your source columns, as described by the dataset field mapping
 
 ```csv
 sku,title,desc,category,brand
-6410000123456,Soft sock 3-pack,"Cotton, size 40-45",4.12.3,Foo
-6410000123457,Wool sock,"Merino, size 36-40",4.12.3,Foo
+1000000000001,Soft sock 3-pack,"Cotton, size 40-45",4.12.3,Foo
+1000000000002,Wool sock,"Merino, size 36-40",4.12.3,Foo
 ```
 
 <Example name="records/import-file" />
@@ -53,7 +53,7 @@ The cURL variant shows the underlying flow, which is the same for every client:
 
 <Example name="records/import-from-url" />
 
-The URL must be `https`, must not contain user information and must not point at a private or local address. DocuDevs enforces a size cap. The import is queued when it is created; there is no commit step.
+The Python client and the CLI wait for the import; the cURL variant returns after creating it, so read the import status until it is final. The URL must be `https`, must not contain user information and must not point at a private or local address. DocuDevs enforces a size cap. The import is queued when it is created; there is no commit step.
 
 ## Import status
 

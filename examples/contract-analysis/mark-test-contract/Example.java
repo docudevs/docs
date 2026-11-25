@@ -18,6 +18,7 @@ public class Example {
         String documentId = "<document-id>"; // id of a completed document in the case
 
         JsonNode updated = client.updateCaseDocument(caseId, documentId, "test_contract", "kept");
+        // The other variants print the HTTP status; this one prints the id of the updated document
         System.out.println("Updated document: " + updated.path("documentId").asText());
         // docs:end
     }

@@ -12,7 +12,7 @@ async def main():
 
     stats = await client.record_stats(case_id)
     print(f"{stats['records']} records, {stats['unlabelled']} without a label")
-    for code, counts in stats["labels"].items():
+    for code, counts in stats.get("labels", {}).items():
         print(code, counts)
     # docs:end
 

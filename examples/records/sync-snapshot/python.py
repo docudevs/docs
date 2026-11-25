@@ -16,7 +16,7 @@ async def main():
     if summary is None:
         raise RuntimeError("The dry run produced no report")
     print(summary["counts"])
-    print(summary["guard"])
+    print(summary.get("guard"))
 
     # After reviewing the report, apply the same file for real
     applied = await client.confirm_sync_records(

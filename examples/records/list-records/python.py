@@ -12,7 +12,7 @@ async def main():
 
     # Follows the continuation tokens until every matching record was read
     async for record in client.list_records(case_id, subtree="4.12", attributes={"brand": "Foo"}):
-        print(record["key"], record["label"])
+        print(record["key"], record.get("label"))
     # docs:end
 
 

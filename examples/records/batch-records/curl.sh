@@ -10,12 +10,12 @@ curl -s -S -f -X POST "https://api.docudevs.ai/cases/$CASE_ID/records:batch" \
   -d '{
     "upserts": [
       {
-        "key": "6410000123457",
+        "key": "1000000000002",
         "text": {"title": "Wool sock", "description": "Merino, size 36-40"},
         "label": "4.12.3",
         "metadata": {"brand": "Foo"}
       }
     ],
-    "deletes": ["6410000123456"]
+    "deletes": ["1000000000001"]
   }' | jq -r '"Import \(.importId): \(.status)"'
 # docs:end

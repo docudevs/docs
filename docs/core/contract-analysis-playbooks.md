@@ -34,11 +34,11 @@ draft playbook (`mode` set to `draft_trial`) until a revision is published. The
 app shows the clauses read-only, imports and exports the playbook, and lists the
 findings of a run.
 
-A playbook that was stored in the earlier rule-based format (`profileVersion`
-`2026-09`) is no longer supported. A run started against it is refused with
-`400` and the message "unsupported contract analysis profile version", and the
-run page for an old result says "This run uses a format that is no longer
-supported." Recreate such a playbook in the clause format.
+Runs use the clause format (`profileVersion` `2026-11`). A run started against a
+playbook stored in the earlier rule-based format (`profileVersion` `2026-09`) is
+refused with `400` and the message "unsupported contract analysis profile
+version", and the run page for an old result says "This run uses a format that is
+no longer supported." To use such a playbook, create it again in the clause format.
 
 ## Import and export a playbook
 
@@ -68,15 +68,15 @@ supported." Recreate such a playbook in the clause format.
 
 <Example name="contract-analysis/import-playbook" />
 
-The Python client's `import_playbook` returns the response, so the `422` problem
-list stays readable. The CLI import without `--draft-revision` replaces the
+The Python and cURL variants read the current draft revision first and print the
+`422` problem list. The Java variant passes the revision you supply and does not
+read the problem list. The CLI import without `--draft-revision` replaces the
 current draft.
 
 <Example name="contract-analysis/export-playbook" />
 
-The Python client's `export_playbook` returns the playbook as a dict and raises
-on an error status. The Java client returns JSON trees; `DocuDevsAsyncClient`
-returns `CompletableFuture<JsonNode>` with the same method names.
+The Java client returns JSON trees; `DocuDevsAsyncClient` returns
+`CompletableFuture<JsonNode>` with the same method names.
 
 ## Edit a playbook
 
@@ -176,10 +176,17 @@ The verdict is computed from the assessment, not chosen by the model:
 | --- | --- |
 | `satisfactory` | No red flag is triggered and the wording matches the preferred wording, the market standard, an acceptable alternative, or no red flag applies. |
 | `mixed` | A `medium` or `low` red flag is triggered, or the wording matches an alternative that is acceptable with modifications. |
-| `flagged` | A `critical` or `high` red flag is triggered, the wording matches a problematic alternative, or a `mandatory` or `expected` clause is missing. |
-| `not_found` | The clause is absent, the absence was checked, and its requirement level is `preferred`, `optional` or `none`. |
-| `ai_unsure` | A red flag is unsure, applicability cannot be decided, an absence check was inconclusive, or the analysis stopped (budget) before finishing the clause. |
+| `flagged` | A `critical` or `high` red flag is triggered, the wording matches a problematic alternative, or a `mandatory` or `expected` clause is missing (reason `required_clause_missing`; such a clause is never `not_found`). |
+| `not_found` | The clause is absent, the absence was checked, and its requirement level is `preferred`, `optional` or `none` (reason `clause_absent`). |
+| `ai_unsure` | Applicability cannot be decided (`applicability_unknown`), an absence check was inconclusive (`absence_unresolved`), the assessment of a found clause failed (`assessment_unavailable`), a red flag is unsure and nothing makes the clause `flagged` (`red_flag_unsure`), or the analysis stopped for budget before finishing the clause (`budget_exhausted`). |
 | `does_not_apply` | The clause's condition is false. |
+
+When several rows apply, the first of these wins: the analysis stopped for
+budget (`ai_unsure`), the condition is false (`does_not_apply`), applicability is
+unknown (`ai_unsure`), the clause was not found (`ai_unsure`, `flagged` or
+`not_found` as above), the assessment failed (`ai_unsure`), a blocking red flag or
+problematic wording (`flagged`), an unsure red flag (`ai_unsure`), a medium or low
+red flag or wording that needs changes (`mixed`), and otherwise `satisfactory`.
 
 Risk factors that hold raise or lower a red flag's severity by one level, and
 the finding says why. A red flag the model reports as triggered but whose
@@ -212,7 +219,9 @@ configuration, so later edits cannot change it. Keep the run ID with its result
 and any review record.
 
 Run creation returns HTTP 409 for a run identity or execution-configuration
-conflict and HTTP 503 when admitting the run timed out. Retry a 503 with the same
+conflict and HTTP 503 when admitting the run timed out. A `draft_trial` run whose
+`draftRevision` is not the current draft revision returns `400` ("draft profile is
+unavailable"). Retry a 503 with the same
 idempotency key to recover the recorded run
 identity and status; replay does not schedule another attempt. To start a new
 attempt after an `ERROR`, use a new idempotency key.
@@ -227,8 +236,9 @@ and a missing anchor are rejected.
 
 The result has one entry per clause:
 
-- `clauseId`, `verdict`, a short `reason` code for unsure and not-found cases,
-  and an `explanation` in plain language from your side's point of view;
+- `clauseId`, `verdict`, a short `reason` code (for example `meets_playbook`,
+  `red_flag`, `required_clause_missing` or `clause_absent`), and an
+  `explanation` in plain language from your side's point of view;
 - `redFlags`: each with `redFlagId`, `outcome` (`triggered`, `not_triggered`
   or `unsure`), `effectiveSeverity` and source references;
 - `matchedWording`: `preferred`, `marketStandard`, an alternative id, or `none`;
@@ -236,8 +246,8 @@ The result has one entry per clause:
 - `passages`: every contract passage the finding rests on, each resolved to a
   document, page, character span and outline node (clause number and heading),
   with the filename of the document it comes from;
-- `facts`: the facts used, with their values and sources.
 
+The result also carries `facts`, the facts used with their values and sources.
 Coverage and diagnostics are reported alongside the clauses.
 
 ### Review a finding
@@ -415,12 +425,13 @@ case of the suite.
 
 <Example name="contract-analysis/create-trial" />
 
-Read it with `GET /trials/{trialId}` until its status is final. An expectation
+Read it with `GET /trials/{trialId}` and repeat until its status is final. An expectation
 passes when the finding's verdict equals the expected verdict and every named
 red flag has the expected outcome; otherwise the assertion carries one reason:
 `clause_not_found`, `verdict_mismatch`, `red_flag_not_found` or
-`red_flag_mismatch`. If the run for any one contract fails, the whole trial
-fails with a reason and cannot be attested.
+`red_flag_mismatch`. A trial compares verdicts exactly, unless the expectation
+lists `acceptedVerdicts` (the expected verdict first). If the run for any one
+contract fails, the whole trial fails with a reason and cannot be attested.
 
 <Example name="contract-analysis/get-trial" />
 
@@ -462,7 +473,9 @@ and passed in the attested trial. Otherwise readiness reports
   named red flag is expected `triggered`.
 - `missing_required_clause`: the expected verdict is `flagged` or `not_found`
   for a clause whose requirement level is `mandatory` or `expected`, with no
-  expected red flags.
+  expected red flags. The analysis returns `flagged` for such a missing clause,
+  so expect `flagged`; an expectation of `not_found` passes only when it lists
+  `acceptedVerdicts` with `flagged` as well.
 
 ### When source authority is required
 
@@ -572,7 +585,7 @@ outside the scope, and the scope warning next to one that is only flagged.
 
 <Example name="contract-analysis/generate-profile-with-scope" />
 
-The CLI `generate` command takes the two sides only; send a scope through the API or the Python client.
+The CLI `generate` command takes the two sides only; send a scope through the API or a client that takes one.
 
 ### Suggested test expectations from sample contracts
 
@@ -597,7 +610,9 @@ guideline documents (for example an imported one) as long as it has test contrac
 On the Test step, a test case whose contract lists a clause in `clausesMissing` with
 requirement level `mandatory` or `expected` shows the suggestion "This contract seems to
 lack \<clause name>". Add puts the expectation `{clauseId, expectedVerdict: "not_found",
-importance: "mandatory"}` into the suite form, unapproved; Dismiss hides it. Nothing is
+importance: "mandatory"}` into the suite form, unapproved. The analysis returns
+`flagged` for a missing mandatory or expected clause, so change the expected verdict
+to `flagged` before you approve it; Dismiss hides the suggestion. Nothing is
 written until you save the suite, which sets `recordedBy` as for any expectation, and a
 clause that already has an expectation in that test case gets no suggestion. The Sources
 step shows the facts of an example source under its suggestion as "Sample contract:

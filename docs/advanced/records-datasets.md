@@ -24,7 +24,7 @@ Writes are asynchronous: DocuDevs stages your request and a worker applies it. R
       {"column": "desc", "name": "description"}
     ],
     "label": "category",
-    "metadata": {"brand": "brand", "customsGroup": "customs_group"}
+    "metadata": {"brand": "brand", "productGroup": "product_group"}
   },
   "embeddedText": {"template": "{title}\n{description}", "skipEmptyFields": true},
   "examplePolicy": {"mode": "perLabelCap", "perLabelCap": 3, "overFetch": 4},
@@ -49,7 +49,7 @@ A label-only or metadata-only change to a record never calls the embedding model
 
 <Example name="records/configure-dataset" />
 
-The mapping in the example is the one shown above. `text` maps a source column to a field name. The Python client accepts `{column: name}` or a list of `{"column", "name"}` entries, and it takes option names in `snake_case`. A change that needs confirmation is refused with `409` until you repeat it with `reindex` (`?reindex=true`, the `reindex` keyword argument, or `--reindex` on the CLI).
+The example is a reduced form of the configuration shown above: it keeps the key, both text fields, the label, the `brand` metadata, the embedded text template and the `topK` and `hybrid` index settings, and leaves the other settings at their defaults. `text` maps a source column to a field name. The Python client accepts `{column: name}` or a list of `{"column", "name"}` entries, and it takes option names in `snake_case`. A change that needs confirmation is refused with `409` until you repeat it with `reindex` (`?reindex=true`, the `reindex` keyword argument, or `--reindex` on the CLI).
 
 Read the configuration back with `GET /cases/{caseId}/dataset`. The response adds the `mappingVersion` and, once a category tree is active, `activeTreeVersionId`.
 

@@ -26,7 +26,7 @@ Start a job with inline rows:
 
 <Example name="classification/start-classify" />
 
-Upload a file of rows when there are more than 1,000 or the file is large. The client compresses the file, uploads it in blocks and commits it; the cURL variant shows the three calls:
+Upload a file of rows when there are more than 1,000 or the file is large. The client compresses the file, uploads it in blocks and commits it; the cURL variant shows the three calls and does not wait for the job, while the Python client and the CLI wait:
 
 <Example name="classification/classify-file" />
 
@@ -35,7 +35,7 @@ The request body of the first example sets only the target, the model level and 
 ```json
 {
   "rows": {"source": "inline", "items": [
-    {"key": "6410000999999", "text": {"title": "Running socks 3-pack", "description": "Cotton blend"}}
+    {"key": "1000000000003", "text": {"title": "Running socks 3-pack", "description": "Cotton blend"}}
   ]},
   "config": {
     "target": "category",
@@ -64,7 +64,7 @@ Invalid settings return `400`. `404` means the case, knowledge base or tree vers
 | `target` | `category` (default) or `record` (matching, below). |
 | `treeVersionId` | Tree version to use; default is the active version. Category target only. |
 | `targetDepth` | Tree levels to report besides the chosen leaf, for example `[4, 5]`. Category target only. Precedence: this value, then the case default (`classifyDefaults.targetDepth` on the [records dataset](./records-datasets.md)), then every level of the tree from 1 to its maximum depth. A shallower leaf carries the `shallow` flag. |
-| `instructions` | Free text added to the prompt. It is stored in a blob and is never returned by the API. |
+| `instructions` | Free text added to the prompt. It is never returned by the API. |
 | `memo` | `use`: `active` (default) or `none`. `version` pins an older memo version. `include` lists ids of proposed memo entries to try in this run. See [Case memo](./case-memo.md). |
 | `llmLevel` | `DEFAULT`, `NANO`, `MINI` (default) or `HIGH`. Bring-your-own models are honoured. |
 | `concurrency` | Rows in parallel, 1 to 32 (default 8). |
@@ -75,17 +75,17 @@ Invalid settings return `400`. `404` means the case, knowledge base or tree vers
 | `perRowMaxPromptTokens` | Per-row prompt cap; the prompt is shrunk to fit. |
 | `recordsKnowledgeBaseId` | Knowledge base to classify against. Required for `target: record`; otherwise the case itself. |
 | `inputMapping` | Maps input columns onto dataset field names (see below). |
-| `investigate` | `{enabled, playbook, maxRows, flags, maxTotalTokens}`. When `enabled` is true, a headless [agent run](./agent-runs.md) investigates the job's flagged rows after it completes. `maxTotalTokens` bounds that run; without it the run takes the server default of 300000 tokens. |
+| `investigate` | `{enabled, playbook, maxRows, flags, maxTotalTokens}`. When `enabled` is true, a headless [agent run](./agent-runs.md) investigates the job's flagged rows after it completes. `maxTotalTokens` bounds that run; without it the run uses a default budget. |
 
 ### Candidate strategy
 
 The model only chooses among candidates, so the candidate set decides the best accuracy you can get. Candidates come from three sources:
 
-1. **Similar records.** The `similarRecords.k` most similar labelled records of the knowledge base vote for their categories; their texts are shown as examples.
-2. **Sibling expansion.** `siblingExpansion` takes the `seeds` top-voted categories and adds their siblings at `fromLevel`.
-3. **Category matches.** `categoryMatches.k` categories whose own name and description match the row.
+1. **Similar records.** Always on. The `similarRecords.k` most similar labelled records of the knowledge base vote for their categories; their texts are shown as examples. `k` defaults to 30 (20 for the record target).
+2. **Sibling expansion.** `siblingExpansion` takes the `seeds` top-voted categories and adds their siblings at `fromLevel`. Off unless you set `siblingExpansion`; `seeds` defaults to 3.
+3. **Category matches.** `categoryMatches.k` categories whose own name and description match the row. Off unless you set `categoryMatches`; `k` defaults to 10.
 
-When the similar records and the category matches disagree about the family at the target level, `widenWhenSourcesDisagree` adds `extraCategoryMatches` and `extraSimilar` more candidates for that row. Retired categories are never offered.
+When the similar records and the category matches disagree about the family at the target level, `widenWhenSourcesDisagree` adds `extraCategoryMatches` and `extraSimilar` more candidates for that row (defaults 10 and 20). Widening is off unless you set `widenWhenSourcesDisagree`. Retired categories are never offered.
 
 `maxCandidates` caps what the model sees, 10 to 200 (default 100). `leafOnly` (default `true` for the category target) offers only leaf categories, so a pick at an intermediate level is invalid. Turn it off when you classify to an intermediate level. For the record target `leafOnly` is ignored and the tree settings are rejected.
 
@@ -95,7 +95,7 @@ When the similar records and the category matches disagree about the family at t
 
 <Example name="classification/wait-for-classify" />
 
-The client waits until the job completes and calls your progress callback with the job status. It raises `ClassifyJobFailed` when the job fails or is cancelled. Cancel a job that you no longer need:
+The Python client and the CLI wait until the job completes; the Python client calls your progress callback with the job status and raises `ClassifyJobFailed` when the job fails or is cancelled. The cURL variant reads the job until it is final and fails on `FAILED` or `CANCELLED`. Cancel a job that you no longer need:
 
 <Example name="classification/cancel-classify" />
 
@@ -110,7 +110,7 @@ A job started right after the first records import of a case waits for the case'
 ```json
 {
   "rowId": 17,
-  "key": "6410000999999",
+  "key": "1000000000003",
   "chosen": {
     "code": "4.12.3.2",
     "path": ["Clothing", "Socks and tights", "Socks", "Sports socks"],
@@ -118,7 +118,7 @@ A job started right after the first records import of a case waits for the case'
   },
   "declined": false,
   "alternativeBestFit": {"code": "4.12.3.1", "reason": "The name does not state the use."},
-  "evidenceKeys": ["6410000123456", "6410000123999"],
+  "evidenceKeys": ["1000000000001", "1000000000004"],
   "memoVersion": 12,
   "treeVersionId": 7,
   "flags": {"declined": false, "modelNamedDifferentBestFit": true, "sourcesDisagree": false},
@@ -204,7 +204,7 @@ Rows normally use the dataset mapping of the knowledge base. When your file has 
 
 - `classify` (Python) and `classify start` (CLI) send inline rows in one request up to 1,000 rows and 10 MB. Above that they upload the rows as gzip ndjson through the API in blocks, map the columns for you and set a default token budget. Classify records of the knowledge base with a list of keys (`keys=[...]`, `--keys-file` with one key per line), and a file with `path="weekly.csv"` (`--file`); the config must then include the token budget (`max_total_tokens`, `--max-total-tokens`).
 - The Python `config` keys may be `snake_case` or `camelCase`; the CLI reads the config as a JSON file (`--config-file`) with the request's `camelCase` names. `--rows-file` takes a JSON list of inline rows.
-- `get_classify`, `cancel_classify` and `commit_classify` map one to one onto the endpoints. `get_classify_results_page` returns a single page with its `continuation`.
+- The Python client's `get_classify`, `cancel_classify` and `commit_classify` map one to one onto the endpoints, and `get_classify_results_page` returns a single page with its `continuation`.
 
 ## Limits
 

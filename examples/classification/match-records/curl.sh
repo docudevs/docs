@@ -4,6 +4,7 @@ set -euo pipefail
 # docs:start
 CASE_ID=42  # id of the case that holds the rows; it may differ from the catalogue
 
+# recordsKnowledgeBaseId is the id of the catalogue's records case
 curl -s -S -f -X POST "https://api.docudevs.ai/cases/$CASE_ID/classify" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \

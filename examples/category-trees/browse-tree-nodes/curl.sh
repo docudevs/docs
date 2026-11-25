@@ -14,8 +14,8 @@ HITS=$(curl -s -S -f -G "https://api.docudevs.ai/cases/$CASE_ID/trees/$VERSION_I
   -H "Authorization: $API_KEY" \
   --data-urlencode "q=sock")
 
-echo "$HITS" | jq -r '.items[] | "\(.code) \(.name) \(.status) \(.childCount)"'
+echo "$HITS" | jq -r '(.items // [])[] | "\(.code) \(.name) \(.status) \(.childCount)"'
 echo "$HITS" | jq -r '"\(.total) matches"'
-echo "$ROOTS" | jq -r '"\(.items | length) roots"'
-echo "$CHILDREN" | jq -r '"\(.items | length) children of 4.12"'
+echo "$ROOTS" | jq -r '"\(.items // [] | length) roots"'
+echo "$CHILDREN" | jq -r '"\(.items // [] | length) children of 4.12"'
 # docs:end

@@ -13,7 +13,6 @@ curl -s -S -f -X POST "https://api.docudevs.ai/contract-analysis/runs" \
     "knowledgeBaseId": 42,
     "mode": "draft_trial",
     "draftRevision": '"$DRAFT_REVISION"',
-    "idempotencyKey": "draft-run-1",
-    "packageMembers": [{"jobGuid": "'"$ANCHOR_JOB_GUID"'", "role": "agreement"}]
+    "idempotencyKey": "draft-run-1"
   }' | jq -r '"Run ID: \(.runId)"'
 # docs:end

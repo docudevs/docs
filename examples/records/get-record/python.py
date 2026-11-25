@@ -10,9 +10,9 @@ async def main():
     # docs:start
     case_id = 42  # id of a records case
 
-    record = await client.get_record(case_id, "6410000123456")
-    print(record["label"], record["labelPath"], record["labelSource"])
-    print(record["chunk"])
+    record = await client.get_record(case_id, "1000000000001")
+    print(record.get("label"), record.get("labelPath", []), record.get("labelSource"))
+    print(record.get("chunk"))
     # docs:end
 
 

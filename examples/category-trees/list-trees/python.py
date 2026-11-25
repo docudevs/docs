@@ -11,7 +11,7 @@ async def main():
     case_id = 42  # id of a records case
 
     versions = await client.list_trees(case_id)
-    for version in versions["items"]:
+    for version in versions.get("items", []):
         print(version["treeVersionId"], version["status"], version["nodes"], version["levels"])
     # docs:end
 

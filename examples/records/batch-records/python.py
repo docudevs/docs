@@ -15,13 +15,13 @@ async def main():
         case_id,
         upserts=[
             {
-                "key": "6410000123457",
+                "key": "1000000000002",
                 "text": {"title": "Wool sock", "description": "Merino, size 36-40"},
                 "label": "4.12.3",
                 "metadata": {"brand": "Foo"},
             },
         ],
-        deletes=["6410000123456"],
+        deletes=["1000000000001"],
     )
     print(f"Import {accepted['importId']}: {accepted['status']}")
     # docs:end
