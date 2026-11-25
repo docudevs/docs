@@ -24,6 +24,11 @@ async def main():
     job_metadata = await client.get_acroform_metadata(job_guid)
     source_locations = await client.get_source_locations(job_guid)
 
+    if job_metadata is None:
+        raise SystemExit("No AcroForm metadata found for this job")
+    if source_locations is None:
+        raise SystemExit("No source locations found for this job")
+
     print(f"Async metadata fields: {len(job_metadata.get('fields', []))}")
     print(json.dumps(source_locations, indent=2))
     # docs:end

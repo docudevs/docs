@@ -1,7 +1,10 @@
 package examples.templates.get_template_metadata;
 
 import ai.docudevs.client.DocuDevsClient;
+
+// docs:start
 import com.fasterxml.jackson.databind.JsonNode;
+// docs:end
 
 public class Example {
     public static void main(String[] args) throws Exception {
@@ -11,6 +14,7 @@ public class Example {
                 .build();
 
         // docs:start
+        // Returns immediately: for a freshly uploaded PDF, repeat the call until the fields appear
         JsonNode metadata = client.getTemplateMetadata("invoice");
 
         for (JsonNode field : metadata) {

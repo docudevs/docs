@@ -2,6 +2,7 @@ package examples.templates.delete_template;
 
 import ai.docudevs.client.DocuDevsClient;
 
+
 public class Example {
     public static void main(String[] args) throws Exception {
         DocuDevsClient client = DocuDevsClient.builder()

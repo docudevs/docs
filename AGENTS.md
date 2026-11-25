@@ -37,7 +37,7 @@ A comment line ending in `docs:start` or `docs:end` selects what the page shows.
 
 ### Visibility rule
 
-Markers may hide only imports, client construction and environment setup. Everything the shown code calls or reads (helpers, variables holding document bytes, ids produced earlier) must be visible. A reader who pastes the shown snippet into a file that already has the client set up must not hit an undefined name. An id from an earlier step is declared visibly at the top of the shown region with a comment saying where it comes from, in the same way in every language. The first example on a page shows imports and client construction in full; later ones may hide them.
+Markers may hide only imports, client construction and environment setup. Everything the shown code calls or reads (helpers, variables holding document bytes, ids produced earlier) must be visible. A reader who pastes the shown snippet into a file that already has the client set up must not hit an undefined name. Imports of SDK model classes and third-party types that the shown code names are shown; only the client import and standard-library imports may be hidden. An id from an earlier step is declared visibly at the top of the shown region with a comment saying where it comes from, in the same way in every language. The first example on a page shows imports and client construction in full; later ones may hide them.
 
 ### Language conventions
 

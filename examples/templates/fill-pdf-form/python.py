@@ -2,7 +2,10 @@ import asyncio
 import os
 
 from docudevs.docudevs_client import DocuDevsClient
+
+# docs:start
 from docudevs.models import TemplateFillRequest
+# docs:end
 
 
 async def main():
@@ -25,6 +28,9 @@ async def main():
         timeout=30,
         poll_interval=1,
     )
+
+    if response.status_code != 200:
+        raise SystemExit(f"Fill failed: {response.status_code}")
 
     with open("filled_invoice.pdf", "wb") as f:
         f.write(response.content)

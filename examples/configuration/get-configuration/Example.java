@@ -1,7 +1,10 @@
 package examples.configuration.get_configuration;
 
 import ai.docudevs.client.DocuDevsClient;
+
+// docs:start
 import com.fasterxml.jackson.databind.JsonNode;
+// docs:end
 
 public class Example {
     public static void main(String[] args) throws Exception {

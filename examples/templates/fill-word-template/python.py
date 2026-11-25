@@ -2,7 +2,10 @@ import asyncio
 import os
 
 from docudevs.docudevs_client import DocuDevsClient
+
+# docs:start
 from docudevs.models import TemplateFillRequest
+# docs:end
 
 
 async def main():
@@ -26,6 +29,9 @@ async def main():
     )
 
     response = await client.fill(name="sales_report", body=fill_request)
+
+    if response.status_code != 200:
+        raise SystemExit(f"Fill failed: {response.status_code}")
 
     with open("filled_report.docx", "wb") as f:
         f.write(response.content)
