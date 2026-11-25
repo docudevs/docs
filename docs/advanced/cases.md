@@ -4,9 +4,6 @@ description: Organize related documents into cases for grouped management, scope
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Cases - Document Collections
 
 Cases are a powerful feature that allows you to organize related documents into collections for better management and processing. Think of a case as a folder that can contain multiple documents that belong together - like all documents for a specific customer, project, or business process.
@@ -157,32 +154,7 @@ You can monitor processing progress by checking the `processing_status` field wh
 
 Documents uploaded to cases can be processed just like standalone documents:
 
-```python
-from docudevs.models import CasesControllerCreateCaseRequest, UploadCaseDocumentBody
-from docudevs.types import File
-import json
-
-# Step 1: Create a case first
-case_request = CasesControllerCreateCaseRequest(
-    name="Contract Review",
-    description="Contract documents for review"
-)
-case_response = await client.create_case(case_request)
-case = case_response.parsed
-case_id = case.id
-
-# Step 2: Upload document to case
-with open("contract.pdf", "rb") as f:
-    document_data = f.read()
-
-upload_body = UploadCaseDocumentBody(
-    document=File(payload=document_data, file_name="contract.pdf")
-)
-upload_response = await client.upload_case_document(case_id=case_id, body=upload_body)
-document = upload_response.parsed
-
-print(f"Uploaded document {document.document_id} to case {case_id}")
-```
+<Example name="cases/create-and-upload" />
 
 :::note
 Case documents are stored and organized within the case. To process them with AI extraction,
@@ -217,23 +189,7 @@ you would process them separately using the standard document processing API wit
 
 Always implement proper error handling when working with cases:
 
-```python
-try:
-    response = await client.create_case(case_data)
-    case = response.parsed
-    print(f"Created case: {case.id}")
-except Exception as e:
-    print(f"Error creating case: {e}")
-    # Handle error appropriately
-
-try:
-    response = await client.upload_case_document(case_id, document_data, filename)
-    document = response.parsed
-    print(f"Uploaded document: {document.document_id}")
-except Exception as e:
-    print(f"Error uploading document: {e}")
-    # Handle error appropriately
-```
+<Example name="cases/handle-errors" />
 
 ## What's Next?
 
