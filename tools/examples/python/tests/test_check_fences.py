@@ -61,7 +61,7 @@ def test_bash_docudevs_command_checked(tmp_path):
 
 
 def test_bash_other_commands_ignored(tmp_path):
-    page = write_page(tmp_path, "a.md", fenced("shell", "curl https://x\npip install docu-devs-api-client"))
+    page = write_page(tmp_path, "a.md", fenced("shell", "curl https://example.com\npip install docu-devs-api-client"))
     assert check_page(page) == []
 
 

@@ -21,29 +21,21 @@ function splitFrontMatter(text) {
   return { frontMatter: match[0], body: text.slice(match[0].length) };
 }
 
-function schemaSource(mainRoot) {
-  const candidates = [
-    join(mainRoot, 'pipeline.schema.json'),
-    join(mainRoot, 'docudevs-doc', 'docs', 'reference', 'pipeline.schema.json'),
-  ];
-  return candidates.find(existsSync);
-}
-
 function ownedFiles(mainRoot, docsRoot) {
   const files = [];
   const spec = join(mainRoot, 'docudevs.yaml');
   if (existsSync(spec)) {
     files.push({ target: SPEC_TARGET, expected: readFileSync(spec, 'utf8') });
   }
-  const schema = schemaSource(mainRoot);
-  if (schema) {
+  const schema = join(mainRoot, 'pipeline.schema.json');
+  if (existsSync(schema)) {
     files.push({ target: SCHEMA_TARGET, expected: readFileSync(schema, 'utf8') });
   }
   const skill = join(mainRoot, 'docudevs-sdk', 'skills', 'playbook-evaluation', 'SKILL.md');
   const page = join(docsRoot, GUIDE_TARGET);
-  if (existsSync(skill) && existsSync(page)) {
+  if (existsSync(skill)) {
     const { body } = splitFrontMatter(readFileSync(skill, 'utf8'));
-    const { frontMatter } = splitFrontMatter(readFileSync(page, 'utf8'));
+    const { frontMatter } = existsSync(page) ? splitFrontMatter(readFileSync(page, 'utf8')) : { frontMatter: '' };
     files.push({ target: GUIDE_TARGET, expected: frontMatter + body });
   }
   return files;

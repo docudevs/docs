@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -91,15 +91,22 @@ test('syncOwnedFiles keeps the page front matter and replaces only its body', ()
   );
 });
 
-test('syncOwnedFiles falls back to the schema under the legacy documentation tree', () => {
+test('syncOwnedFiles skips the schema when the main checkout root has none', () => {
   const { mainRoot, docsRoot } = ownedWorkspace();
   rmSync(join(mainRoot, 'pipeline.schema.json'));
-  mkdirSync(join(mainRoot, 'docudevs-doc', 'docs', 'reference'), { recursive: true });
-  writeFileSync(join(mainRoot, 'docudevs-doc', 'docs', 'reference', 'pipeline.schema.json'), '{"legacy":true}\n');
 
+  const { copied } = syncOwnedFiles({ mainRoot, docsRoot });
+
+  assert.deepEqual(copied.sort(), ['docs/core/playbook-evaluation.md', 'static/files/docudevs.yaml']);
+  assert.equal(existsSync(join(docsRoot, 'docs', 'reference', 'pipeline.schema.json')), false);
+});
+
+test('checkOwnedFiles reports the guide page when it is missing from the docs', () => {
+  const { mainRoot, docsRoot } = ownedWorkspace();
   syncOwnedFiles({ mainRoot, docsRoot });
+  rmSync(page(docsRoot));
 
-  assert.equal(readFileSync(join(docsRoot, 'docs', 'reference', 'pipeline.schema.json'), 'utf8'), '{"legacy":true}\n');
+  assert.deepEqual(checkOwnedFiles({ mainRoot, docsRoot }), ['docs/core/playbook-evaluation.md']);
 });
 
 test('checkOwnedFiles reports nothing once synced', () => {
