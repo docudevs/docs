@@ -77,7 +77,9 @@ To edit the saved workflow, open **Integrations → Flow Configs** and select **
 
 ## Run on a schedule
 
-If your deployment has managed scheduling enabled, add a **Schedule** node to the flow. Enter a five-field **Cron Expression** and an optional **Time Zone**. For example, `0 8 * * MON-FRI` with `Europe/Zurich` runs at 08:00 on weekdays in Zurich. Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
+If your deployment has managed scheduling enabled, add a **Schedule** node to the canvas. It applies to the whole workflow. Choose a **Frequency** such as **Every hour** or **Weekdays at 08:00**. The preset fills in the **Cron Expression**, which you can edit for a custom cadence. Set the **Time Zone** to match your schedule. For example, **Weekdays at 08:00** with `Europe/Zurich` runs at 08:00 on weekdays in Zurich.
+
+Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**. The builder shows the next scheduled run. Clear **Active** and save again to pause the schedule.
 
 Once the schedule is active, put new PDFs in **Inbox**. Each run scans that folder and archives the successful PDFs after it publishes the workbook. An empty inbox skips extraction, upload, and archiving, though the scheduled run still uses runner compute.
 
