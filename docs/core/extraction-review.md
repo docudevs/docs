@@ -2,11 +2,11 @@
 title: Extraction review
 ---
 
-# Extraction human review
+# Extraction review
 
 Extraction review stores a versioned review record beside an immutable extraction result. Evaluators can submit claims against one exact archived result; human reviewers can flag issues, record value resolutions, and adjudicate claims. These actions preserve the extractor's raw result and do not promote data into a golden set.
 
-The implementation includes the authenticated API, Python and Java SDK helpers, and a native job review workspace. Readiness is always `NOT_ASSESSED`; acceptance-policy checks are a later increment. Configurations use the supported stored profile shape, and only configurations that the current capture path can archive produce reviewable runs. Treat unavailable or incomplete evidence as unavailable. Do not substitute a mutable latest result.
+The implementation includes the authenticated API, Python and Java SDK helpers, and a native job review workspace. Readiness is always `NOT_ASSESSED`; acceptance-policy checks are not part of review. Configurations use the supported stored profile shape, and only configurations that the current capture path can archive produce reviewable runs. Treat unavailable or incomplete evidence as unavailable. Do not substitute a mutable latest result.
 
 ## Configure an extraction profile
 
@@ -37,8 +37,7 @@ bound to a named review profile. The Python SDK's opt-in review runner opens a
 captured run, records local execution evidence, dispatches supported remote
 segments and requests completion. The public API rejects graph operations that
 the review runtime cannot verify before it creates the capture or writes input
-archives. This workflow remains an opt-in integration surface; use it only when
-the matching worker and completion-reader protocol are deployed together. Do not
+archives. This workflow is an opt-in integration surface. Do not
 upload the descriptor as a server pipeline or save the live Python graph as a
 configuration.
 
@@ -170,14 +169,6 @@ body with `parsed=None`, including when `raise_on_unexpected_status=True`;
 convenience methods keep their existing response object and expose the same
 response metadata. Successful calls retain the existing `UploadResponse`
 shape.
-
-Hybrid activation remains gated on the complete cross-service protocol. Upload
-and OCR submissions share admission with the scheduler's locked rereads and
-bound-run skips. The public review opener, segment skip, completion endpoints
-and Python SDK client surface are available as opt-in contracts, while
-deployment compatibility, worker archive processing, final evidence checks,
-the Extractor bridge and isolated corpus acceptance remain separate rollout
-requirements.
 
 ## Find and register the exact run
 
@@ -336,8 +327,7 @@ After an uncertain transport failure, retry the same action with its original
 idempotency key and payload. After a revision conflict, read the updated state
 and explicitly resubmit the intended decision. A pinned
 `?reviewRevision=N` view is read-only. Readiness remains `NOT_ASSESSED`; saved
-decisions do not establish acceptance. Reviewer leases, a global inbox,
-configuration-profile authoring and acceptance policies are later increments.
+decisions do not establish acceptance. Reviewer leases, a global inbox and acceptance policies are not available.
 
 ## Consume the decision feed
 
