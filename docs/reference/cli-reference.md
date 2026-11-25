@@ -21,11 +21,11 @@ The CLI supports multiple authentication methods:
 ### Environment Variables (Recommended)
 
 ```bash
-# Primary environment variable
-export DOCUDEVS_TOKEN=your-api-key-here
-
-# Legacy support (also works)
+# The variable the examples use
 export API_KEY=your-api-key-here
+
+# Also read by the CLI; it takes precedence over API_KEY when both are set
+export DOCUDEVS_TOKEN=your-api-key-here
 
 # Use commands without --token
 docudevs process document.pdf
@@ -676,18 +676,18 @@ Propose an unapproved suite expectation from one immutable finding.
 docudevs knowledge-base contract-analysis propose-test-case CASE_ID \
   --run-id RUN_ID \
   --result-fingerprint sha256:... \
-  --criterion-id hours \
-  --target-key item:clause-1 \
+  --clause-id hours \
   --name "Hours threshold" \
-  --expected-assessment meets_requirement \
+  --expected-verdict satisfactory \
   --reason "Correction" \
   --expected-suite-revision 3 \
   --idempotency-key proposal-1
 ```
 
-- `--run-id`, `--result-fingerprint`, `--criterion-id`, `--target-key`, `--name`, `--reason`, `--expected-suite-revision`, `--idempotency-key`: All required
-- `--expected-assessment [meets_requirement|deviates_from_requirement|not_found|needs_review|not_applicable]`: Required
-- `--scenario-tag TEXT`: Optional scenario tag (repeatable)
+- `--run-id`, `--result-fingerprint`, `--clause-id`, `--name`, `--reason`, `--expected-suite-revision`, `--idempotency-key`: All required
+- `--expected-verdict [satisfactory|mixed|flagged|ai_unsure|not_found|does_not_apply]`: Required
+- `--expected-red-flag TEXT`: Optional red flag as `id=triggered` or `id=not_triggered`
+- `--notes TEXT`: Optional notes
 
 ## Operations Management
 
@@ -708,18 +708,18 @@ docudevs operations submit JOB_GUID --type error-analysis --parameter quality=de
 - `--timeout INTEGER`: Wait timeout in seconds (default: 120)
 - `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
 
-### `operations contract-analysis`
+### Contract analysis operation
 
-Run contract analysis against a published knowledge-base profile.
+Run contract analysis against a published knowledge-base profile with `operations submit` and the `contract-analysis` type.
 
 ```bash
-docudevs operations contract-analysis JOB_GUID --knowledge-base-id KNOWLEDGE_BASE_ID
+docudevs operations submit JOB_GUID \
+  --type contract-analysis \
+  --parameter knowledgeBaseId=KNOWLEDGE_BASE_ID \
+  --wait
 ```
 
-- `--knowledge-base-id INTEGER` (alias `--knowledge-base`): Knowledge base ID (required)
-- `--wait/--no-wait`: Wait for the result (default: wait)
-- `--timeout FLOAT`: Wait timeout in seconds (default: 120)
-- `--poll-interval FLOAT`: Polling interval in seconds (default: 2.0)
+Use the options of `operations submit` above. The knowledge base is passed as the `knowledgeBaseId` parameter.
 
 ### `operations error-analysis`
 
