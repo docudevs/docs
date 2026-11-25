@@ -18,6 +18,12 @@ jobs/process-and-clean-up:java
 jobs/process-with-auto-ocr:java
 jobs/process-with-depends-on:java
 knowledge-search/extract-with-records-search:java
+lookup-files/download-excel-result:java
+lookup-files/manage-batch-lookup-file:java
+lookup-files/manage-configuration-lookup-file:java
+lookup-files/process-batch-with-lookup-file:java
+lookup-files/save-excel-template-config:java
+lookup-files/upload-excel-template:java
 ocr/choose-quality-and-format:java
 ocr/extract-text:java
 ocr/ocr-sync:java
