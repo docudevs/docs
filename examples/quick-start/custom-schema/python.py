@@ -9,10 +9,10 @@ from docudevs.docudevs_client import DocuDevsClient
 async def main():
     client = DocuDevsClient(token=os.environ["DOCUDEVS_API_KEY"])
 
+    # docs:start
     with open("your-document.pdf", "rb") as f:
         document_data = f.read()
 
-    # docs:start
     schema = {
         "type": "object",
         "properties": {

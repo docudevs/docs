@@ -73,7 +73,7 @@ export DOCUDEVS_API_KEY="your-api-key-here"
 
 <Example name="quick-start/process-document" />
 
-The cURL examples use [`jq`](https://jqlang.org/) to read values from responses, and the later cURL examples on this page reuse the `wait_for_job` function defined above.
+The cURL examples use [`jq`](https://jqlang.org/) to read values from responses.
 
 ## Step 4: Run and See Results (2 minutes)
 

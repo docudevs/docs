@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# docs:start
 wait_for_job() {
   while true; do
     STATUS=$(curl -s -S "https://api.docudevs.ai/job/status/$1" \
@@ -11,7 +12,6 @@ wait_for_job() {
   done
 }
 
-# docs:start
 SCHEMA='{
   "type": "object",
   "properties": {

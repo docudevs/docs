@@ -4,10 +4,11 @@ set -euo pipefail
 # docs:start
 docudevs --token "$DOCUDEVS_API_KEY" ocr-only your-document.pdf \
   --ocr PREMIUM \
-  --format markdown
+  --format markdown \
+  --no-wait > ocr-submit.txt
+OCR_JOB_ID=$(sed -n 's/.*GUID: //p' ocr-submit.txt)
 
-# Use the GUID printed by the previous command
-OCR_JOB_ID="<guid-from-ocr-only>"
+docudevs --token "$DOCUDEVS_API_KEY" wait "$OCR_JOB_ID" --timeout 180 > /dev/null
 
 docudevs --token "$DOCUDEVS_API_KEY" operations generative-task "$OCR_JOB_ID" \
   --prompt "Summarize this document and explain what type of document it is and its main purpose."

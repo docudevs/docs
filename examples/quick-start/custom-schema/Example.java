@@ -19,9 +19,9 @@ public class Example {
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
+        // docs:start
         byte[] documentData = Files.readAllBytes(Path.of("your-document.pdf"));
 
-        // docs:start
         String schema = Schema.of(Map.of(
                 "type", "object",
                 "properties", Map.of(
