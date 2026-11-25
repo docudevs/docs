@@ -90,7 +90,7 @@ docudevs process submission.xlsx \
   --prompt 'Find related tables. Preserve source values, units, row grain, and source references.'
 
 # Poll and retrieve JSON using the returned job GUID:
-docudevs result JOB_GUID --format json
+docudevs result JOB_GUID
 ```
 
 The CLI has no command for the `plan`, `source-map`, or `summary` artifacts — only the Python and Java SDKs expose those getters. Use the CLI's authenticated configuration for the API URL and token.
