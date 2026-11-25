@@ -83,6 +83,14 @@ Set the **Schedule timeout**, keep **Active** checked, and click **Save Config**
 
 Once the schedule is active, put new PDFs in **Inbox**. Each run scans that folder and archives the successful PDFs after it publishes the workbook. An empty inbox skips extraction, upload, and archiving, though the scheduled run still uses runner compute.
 
+## Monitor managed runs
+
+Open **Integrations → Flow Configs → Run History** to see scheduled and manual runs, their status, and any failure message. Use **Run history** next to a managed workflow to filter the history to that workflow. With the log panel closed, the history refreshes while the page is visible.
+
+Select **View logs** on a run to see its task messages, timestamps, and log levels. Logs refresh while the selected run is active. After **Save and Run**, you can open its logs directly from the builder's execution status.
+
+![Run History showing a completed scheduled run, a failed manual run, and the selected run’s task logs](./assets/drive-to-sharepoint/managed-run-history.png)
+
 ## Archive files from other sources
 
 The **Google Drive Archive** node works with **Google Drive Folder Downloads**. For other sources, the managed runner bundles the Kestra tasks below. Use them in the workflow YAML. Flow Builder currently wires post-upload archiving for Google Drive only.
