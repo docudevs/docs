@@ -261,61 +261,23 @@ firewall, NSG, forced-tunnel design, private DNS configuration, or private
 endpoint route that blocks any required destination fails the deployment at a
 named gate.
 
-### 1. Publisher registry (release-specific)
+### 1. Publisher registry
 
-Lead the allowlist with the publisher registry endpoints for this release:
-
-:::caution Restricted private-preview qualification
-
-The current restricted BYO VNet qualification package uses the existing
-Standard publisher registry in Sweden Central. Standard ACR does not expose a
-dedicated regional data endpoint, so qualification networks must allow all of
-the following outbound paths on TCP 443:
-
-- `ddmkt7d52dee38b83.azurecr.io`
-- `*.blob.core.windows.net`
-- the `Storage.swedencentral` service tag, where the firewall supports Azure
-  service-tag rules
-
-This broader Blob Storage allowance is a temporary qualification contract,
-not the intended production allowlist. Use it only for the restricted preview
-package whose endpoint manifest has an empty `dataEndpoints` array. A later
-production release will move the publisher registry to Premium and publish
-dedicated data endpoints so customers can replace the broad Blob allowance
-with exact release-specific endpoints.
-
-:::
-
-The release endpoint source of truth is
-`infra/marketplace/release-network-endpoints.json` in the DocuDevs application
-repository. The currently checked-in manifest has `releaseVersion`
-`v0.0.0-unreleased`, and
-`infra/marketplace/release-network-endpoints.PLACEHOLDER.md` is still present.
-That combination is fixture-only, non-publishable metadata, not a production
-customer allowlist. Do not use the current table to authorize a production
-installation.
+Allow these outbound paths on TCP 443 for image pulls:
 
 | Destination | Purpose |
 | --- | --- |
-| `ddmkt7d52dee38b83.azurecr.io` | Publisher ACR login server (image pulls). |
-| `ddmkt7d52dee38b83.switzerlandnorth.data.azurecr.io` | Publisher ACR layer-data endpoint. |
+| `ddmkt7d52dee38b83.azurecr.io` | Publisher registry login server (image pulls). |
+| `*.blob.core.windows.net` | Layer downloads. The registry has no dedicated data endpoint, so layers come from Azure Blob Storage. |
+| `Storage.swedencentral` service tag | Use instead of the Blob wildcard where your firewall supports Azure service-tag rules. |
 
-Anonymous cross-tenant image pulls from these registries are supported by the
-platform, but they still traverse the data plane: both the login server and
-the region-specific layer-data endpoint must be allowed, or pulls stall in
-`ErrImagePull` / `ImagePullBackOff`. Always allow the release-specific
-endpoints published for the version you install — they can change between
-releases. Because the publisher registry belongs to a different tenant, a
-customer-side private endpoint to it is not available; controlled outbound
-HTTPS from the delegated subnet is the only supported path.
-
-For an approved release, the release workflow must first upgrade the publisher
-ACR to Premium with dedicated data endpoints, query those endpoints with
-`az acr show-endpoints`, and regenerate the manifest. The release-specific
-`releaseVersion` and endpoint values must then be copied into this guide,
-validated with `npm run typecheck` and `npm run build`, and committed before
-the documentation or Marketplace package is published. The repository
-placeholder marker is removed only as part of that approved release refresh.
+Anonymous cross-tenant image pulls from this registry are supported by the
+platform, but they still traverse the data plane: if the login server or the
+layer download path is blocked, pulls stall in `ErrImagePull` /
+`ImagePullBackOff`. Allow the endpoints published for the version you install.
+Because the publisher registry belongs to a different tenant, a customer-side
+private endpoint to it is not available; controlled outbound HTTPS from the
+delegated subnet is the only supported path.
 
 ### 2. Platform, Microsoft Container Registry, and Entra FQDNs
 

@@ -33,7 +33,7 @@ Delivery is best-effort: a failed delivery is logged on the DocuDevs side and is
   "status": "COMPLETED",
   "error": null,
   "qualityScore": 0.94,
-  "qualityCategory": "HIGH"
+  "qualityCategory": "Very Confident"
 }
 ```
 

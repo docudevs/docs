@@ -127,7 +127,6 @@ For large documents processed with map-reduce, tracing captures all chunk proces
 
 ### Performance Considerations
 
-- Traces are stored in blob storage alongside job results
 - Enabling tracing has minimal impact on processing time
 - Storage size depends on document complexity and LLM verbosity
 
