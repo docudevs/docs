@@ -8,6 +8,9 @@ agent-runs/start-run:java
 case-agent/chat-with-case-agent:java
 case-agent/investigate-flagged-rows:java
 case-agent/reply-to-run:java
+case-evals/compare-evals:java
+case-evals/evaluate-memo-entry:java
+case-evals/run-holdout-eval:java
 compare/compare-and-export-redline:java
 errors/case-not-found:java
 errors/unauthorized:java

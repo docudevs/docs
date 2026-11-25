@@ -38,7 +38,7 @@ Historical labels can contain errors, and conventions can change. A holdout scor
 
 | Field | Meaning |
 |-------|---------|
-| `variants` | At least one. `name` is unique within the evaluation, up to 64 characters. |
+| `variants` | One to four. `name` is unique within the evaluation, up to 64 characters. |
 | `variants[].memoInclude` | Memo entry ids, proposed ones included, loaded on top of the active memo for that variant. |
 | `variants[].config` | Classify settings for this variant. It replaces the shared `config` when present. |
 | `config` | Classify settings shared by the variants. |
@@ -49,19 +49,31 @@ The evaluation pins the effective target depth in its spec, so every variant rep
 
 `GET /cases/{caseId}/evals/{evalId}` returns the status, each variant's classify job and status, the sample hash, the records table version, the tree version and the memo version, and, once it completes, the `report`. The report has `sample` (size, requested size, seed, group field, grouping, sample hash, excluded records), `levels`, `variants` (score, failed rows, usage, leave-out), `comparisons` with paired differences per level, and `warnings`. A run with grouping `none` carries the warning `ungrouped`.
 
+An evaluation is asynchronous. Its `status` moves through `PREPARING`, `RUNNING` and `SCORING` to `COMPLETED` or `FAILED`; the `report` is present once it is `COMPLETED`, and `error` says why a run `FAILED`.
+
+<Example name="case-evals/run-holdout-eval" />
+
+The example starts the evaluation, waits for it and prints each variant's accuracy at the target depth. The Python SDK takes `memo_include` in a variant and `sample_size` and `group_field` as keyword arguments, where the request uses `memoInclude`, `sampleSize` and `groupField`; the CLI reads `variants.json` as a list of `{"name", "memo_include"?, "config"?}` and its first entry is the baseline. To group by a record metadata key, pass `groupField` (`group_field` in Python, `--group-field` in the CLI) instead of the grouping options. `get_holdout_eval` in Python and `docudevs eval status` read the status without waiting.
+
 ## Compare two runs
 
-`POST /cases/{caseId}/evals:compare` scores two completed evaluations against each other without classifying again.
+`POST /cases/{caseId}/evals:compare` scores two completed evaluations against each other without classifying again. It answers `202` with `{evalId, jobGuid, status}`: the comparison is a new evaluation with status `SCORING`, and you read its `report.comparisons` from `GET /cases/{caseId}/evals/{evalId}` once it is `COMPLETED`.
 
 ```json
 {"baselineEvalId": 301, "candidateEvalId": 302, "baselineVariant": "baseline", "candidateVariant": "with-rule"}
 ```
 
-The samples and the grouping must match: if the two evaluations drew different samples, or used a different grouping mode, field or threshold, the answer is `409`. Each comparison reports, per level, the rows newly right, the rows newly wrong and a McNemar exact p-value. It does not yet check that the two runs used the same target depth, so compare runs that share their `targetDepth`.
+<Example name="case-evals/compare-evals" />
+
+The samples and the grouping must match: if the two evaluations drew different samples, or used a different grouping mode, field or threshold, the answer is `409`. Each comparison reports, for the target level and for every level in `byLevel`, the rows right in both runs (`bothRight`), right only in the baseline (`aOnly`), right only in the candidate (`bOnly`) and wrong in both (`bothWrong`), with a McNemar exact p-value (`pValue`). It does not check that the two runs used the same target depth, so compare runs that share their `targetDepth`.
 
 ## Test a proposed memo entry
 
-`POST /cases/{caseId}/memo/entries/{entryId}/evaluate` is the shortcut for a memo A/B. Run A uses the active memo; run B adds the proposed entry. It takes the same optional `sampleSize`, `seed`, `groupField`, `grouping` and `config`, and it returns `{evalId, status}`.
+`POST /cases/{caseId}/memo/entries/{entryId}/evaluate` is the shortcut for a memo A/B. Run A uses the active memo; run B adds the proposed entry. It takes the same optional `sampleSize`, `seed`, `groupField`, `grouping` and `config`, and it returns `202` with `{evalId, jobGuid, status}`, like a holdout evaluation. It answers `409` when the entry is not a proposed instruction.
+
+<Example name="case-evals/evaluate-memo-entry" />
+
+The example reads the report's paired comparison between the active memo and the memo with the proposed entry. The CLI has no command for this call.
 
 Use it before approving an instruction. The entry stays `proposed` until a person approves it, and the evaluation changes nothing.
 
@@ -71,7 +83,7 @@ Holdout accuracy depends on what the classifier can see. A held-out record is le
 
 So the grouping decides which records leave the evidence together with a sampled record:
 
-- **`nearDuplicate` (default).** For each sampled record, the platform finds its nearest neighbours in the knowledge base by text similarity and leaves out every neighbour whose cosine similarity is at least `threshold` (default 0.98, above 0 and at most 1). Each record is looked up once, so the cost grows with the sample size. Use a lower threshold to group more loosely, and a higher one to group only close copies. The default was calibrated on a live labelled sample on 2026-10-09: a lower threshold such as 0.93 left out evidence for distinct products and lowered accuracy.
+- **`nearDuplicate` (default).** For each sampled record, the platform finds its nearest neighbours in the knowledge base by text similarity and leaves out every neighbour whose cosine similarity is at least `threshold` (default 0.98, above 0 and at most 1). Each record is looked up once, so the cost grows with the sample size. Use a lower threshold to group more loosely, and a higher one to group only close copies. A lower threshold such as 0.93 can leave out evidence for distinct products and lower accuracy.
 - **`field`.** `groupField` names a record metadata key that identifies one product, such as a base product id or a normalised name. Every record that shares its value is held out together. This is the explicit choice when your data has a reliable key.
 - **`none`.** Ungrouped. The report carries the `ungrouped` warning. Read such a run only for its paired difference between variants, as a sign of direction, and do not quote its absolute accuracy.
 
@@ -79,51 +91,6 @@ Both variants of one evaluation share the sample and the leave-out list, so thei
 
 The report states the grouping it used (`sample.grouping`): the mode, the field or the threshold, and `groupMembersExcluded`, the number of records the grouping added to the leave-out list.
 
-## Python SDK
-
-```python
-variants = [
-    {"name": "baseline"},
-    {"name": "with-rule", "memo_include": [entry["id"]]},
-]
-
-started = await client.start_holdout_eval(
-    case_id,
-    variants,
-    sample_size=200,
-    seed=7,
-    grouping={"mode": "nearDuplicate", "threshold": 0.98},
-    config={"llmLevel": "MINI"},
-)
-finished = await client.wait_for_eval(case_id, started["evalId"], timeout=3600)
-print(finished["report"]["variants"])
-
-comparison = await client.compare_holdout_evals(
-    case_id,
-    baseline_eval_id=started["evalId"],
-    candidate_eval_id=other_eval_id,
-    baseline_variant="baseline",
-    candidate_variant="with-rule",
-)
-
-memo_eval = await client.evaluate_memo_entry(
-    case_id, entry["id"], sample_size=200, seed=7, group_field="base_product_id"
-)
-```
-
-`wait_for_eval` raises `EvalFailed` when the evaluation fails and `TimeoutError` when it runs longer than `timeout`. `get_holdout_eval` returns the status without waiting.
-
-## CLI
-
-```bash
-docudevs eval holdout 42 --variants-file variants.json --sample-size 200 --seed 7 --grouping-mode nearDuplicate --grouping-threshold 0.98 --config-file config.json --wait
-docudevs eval holdout 42 --variants-file variants.json --sample-size 200 --seed 7 --group-field base_product_id --config-file config.json --wait
-docudevs eval status 42 301 --wait
-docudevs eval compare 42 301 302 --baseline-variant baseline --candidate-variant with-rule
-```
-
-`variants.json` is a list of `{"name", "memo_include"?, "config"?}`; the first entry is the baseline.
-
 ## Cost
 
-Each variant is a classify job, so a holdout run costs one classify run per variant. An agent that starts a costly evaluation is asked to confirm it above 400,000 estimated tokens (see [Agent actions](./agent-actions.md)).
+Each variant is a classify job, so a holdout run costs one classify run per variant. An agent that starts a costly evaluation is asked to confirm it above a platform threshold of estimated tokens (see [Agent actions](./agent-actions.md)).
