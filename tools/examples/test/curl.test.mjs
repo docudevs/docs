@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { extractCurlRequests, findOperation } from '../lib/curl.mjs';
+import { extractCurlCommands, extractCurlRequests, findOperation, hostOf, urlIsAllowed } from '../lib/curl.mjs';
 
 test('method defaults to GET, POST when -d or -F present, -X wins', () => {
   assert.deepEqual(extractCurlRequests('curl https://api.docudevs.ai/cases'), [{ method: 'GET', path: '/cases' }]);
@@ -45,4 +45,35 @@ test('curl inside a command substitution with an assignment is extracted', () =>
   assert.deepEqual(extractCurlRequests('JOB=$(curl -s -X POST "$API_URL/x" | jq -r .guid)'), [
     { method: 'POST', path: '/x' },
   ]);
+});
+test('commands report the line of the curl word and the URL', () => {
+  assert.deepEqual(extractCurlCommands('#!/usr/bin/env bash\n\ncurl "$API_URL/a"\ncurl \\\n  -X POST "https://api.docudevs.ai/b"'), [
+    { line: 3, url: '$API_URL/a', request: { method: 'GET', path: '/a' } },
+    { line: 4, url: 'https://api.docudevs.ai/b', request: { method: 'POST', path: '/b' } },
+  ]);
+});
+test('a mistyped host yields a command with no request', () => {
+  assert.deepEqual(extractCurlCommands('curl "https://api.docudevs.com/cases"'), [
+    { line: 1, url: 'https://api.docudevs.com/cases', request: null },
+  ]);
+  assert.deepEqual(extractCurlRequests('curl "https://api.docudevs.com/cases"'), []);
+});
+test('a curl with no recognisable URL yields a command with a null url', () => {
+  assert.deepEqual(extractCurlCommands('curl -s -S'), [{ line: 1, url: null, request: null }]);
+});
+test('a URL that is entirely another variable is reported as a non-API url', () => {
+  assert.deepEqual(extractCurlCommands('curl -s -o out.pdf "$DOWNLOAD_URL"'), [
+    { line: 1, url: '$DOWNLOAD_URL', request: null },
+  ]);
+  assert.deepEqual(extractCurlCommands('curl -d "$BODY" "$API_URL/x"')[0].request, { method: 'POST', path: '/x' });
+});
+test('hostOf returns the host, or null for a pure variable reference', () => {
+  assert.equal(hostOf('https://example.com/file.pdf'), 'example.com');
+  assert.equal(hostOf('${DOWNLOAD_URL}'), null);
+});
+test('urlIsAllowed accepts a variable reference or an allowlisted host', () => {
+  assert.equal(urlIsAllowed('"$DOWNLOAD_URL"'.slice(1, -1), []), true);
+  assert.equal(urlIsAllowed('https://example.com/x', ['example.com']), true);
+  assert.equal(urlIsAllowed('https://api.docudevs.com/cases', ['example.com']), false);
+  assert.equal(urlIsAllowed(null, []), false);
 });

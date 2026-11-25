@@ -18,4 +18,4 @@ npm run examples:coverage # check missing languages against known-gaps.txt
 npm run examples:curl     # check cURL examples against the spec, shell syntax of CLI examples
 ```
 
-The Python and Java example checks (Python needs `uv`, Java needs a JDK 17 or newer), the example conventions and the writing workflow are described in [AGENTS.md](AGENTS.md).
+The Python and Java example checks (Python needs `uv`, Java needs a JDK 17 installed), the example conventions and the writing workflow are described in [AGENTS.md](AGENTS.md).

@@ -15,6 +15,7 @@ concurrency:
 jobs:
   node:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,11 +25,16 @@ jobs:
       - run: npm ci
       - run: npm run examples:test
       - run: npm run examples:manifest
-      - run: npm run examples:coverage
-      - run: npm run examples:curl
+      - if: ${{ !cancelled() }}
+        run: npm run examples:coverage
+      - if: ${{ !cancelled() }}
+        run: npm run examples:curl
+      - if: ${{ !cancelled() }}
+        run: npm run typecheck
 
   python:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,11 +42,14 @@ jobs:
           python-version: "3.11"
       - run: pip install -r tools/examples/python/requirements.txt
       - run: python -m pytest tools/examples/python/tests -q
-      - run: python tools/examples/python/check_python.py examples
-      - run: python tools/examples/python/check_cli.py examples
+      - if: ${{ !cancelled() }}
+        run: python tools/examples/python/check_python.py examples
+      - if: ${{ !cancelled() }}
+        run: python tools/examples/python/check_cli.py examples
 
   java:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4

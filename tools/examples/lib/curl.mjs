@@ -5,13 +5,42 @@ const METHOD_FLAGS = new Set(['-X', '--request']);
 const END = Symbol('end');
 
 function tokenize(text) {
-  const source = text.replace(/\\\r?\n/g, ' ');
+  let source = '';
+  const lineAt = [];
+  for (let i = 0, line = 1; i < text.length; i++) {
+    const continuation = /^\\\r?\n/.exec(text.slice(i, i + 3));
+    if (continuation) {
+      source += ' ';
+      lineAt.push(line);
+      line++;
+      i += continuation[0].length - 1;
+    } else {
+      source += text[i];
+      lineAt.push(line);
+      if (text[i] === '\n') line++;
+    }
+  }
   const tokens = [];
+  const lines = [];
+  let wordLine = 1;
   let word = null;
   let quote = null;
   const flush = () => {
-    if (word !== null) tokens.push(word);
+    if (word !== null) {
+      tokens.push(word);
+      lines.push(wordLine);
+    }
     word = null;
+  };
+  const pushEnd = (line) => {
+    tokens.push(END);
+    lines.push(line);
+  };
+  const begin = (index) => {
+    if (word === null) {
+      word = '';
+      wordLine = lineAt[index];
+    }
   };
   for (let i = 0; i < source.length; i++) {
     const char = source[i];
@@ -21,26 +50,28 @@ function tokenize(text) {
       else word += char;
     } else if (char === '"' || char === "'") {
       quote = char;
-      word ??= '';
+      begin(i);
     } else if (char === '\\' && i + 1 < source.length) {
-      word = (word ?? '') + source[++i];
+      begin(i);
+      word += source[++i];
     } else if (char === '#' && word === null) {
       while (i + 1 < source.length && source[i + 1] !== '\n') i++;
     } else if (/\s/.test(char)) {
       flush();
-      if (char === '\n') tokens.push(END);
+      if (char === '\n') pushEnd(lineAt[i]);
     } else if (char === '|' || char === ';' || char === '&' || char === ')') {
       flush();
-      tokens.push(END);
+      pushEnd(lineAt[i]);
     } else if (char === '(' && word !== null && word.endsWith('$')) {
       word = null;
-      tokens.push(END);
+      pushEnd(lineAt[i]);
     } else {
-      word = (word ?? '') + char;
+      begin(i);
+      word += char;
     }
   }
   flush();
-  return tokens;
+  return { tokens, lines };
 }
 
 const isApiUrl = (arg) =>
@@ -48,7 +79,15 @@ const isApiUrl = (arg) =>
   arg.startsWith(`http://${API_HOST}`) ||
   API_VARIABLES.some((variable) => arg.startsWith(variable));
 
+const isVariableReference = (arg) => /^\$(\{\w+\}|\w+)$/.test(arg);
+
 const isUrlCandidate = (arg) => /^https?:\/\//.test(arg) || API_VARIABLES.some((variable) => arg.startsWith(variable));
+
+function findUrl(args) {
+  const url = args.find(isUrlCandidate);
+  if (url !== undefined) return url;
+  return args.find((arg, index) => isVariableReference(arg) && !(args[index - 1] ?? '').startsWith('-')) ?? null;
+}
 
 function pathOf(url) {
   const withoutHost = url
@@ -60,9 +99,8 @@ function pathOf(url) {
   return segments.join('/') || '/';
 }
 
-function requestFrom(args) {
-  const url = args.find(isUrlCandidate);
-  if (url === undefined || !isApiUrl(url)) return null;
+function requestFrom(args, url) {
+  if (url === null || !isApiUrl(url)) return null;
   let method = null;
   let hasBody = false;
   args.forEach((arg, index) => {
@@ -72,18 +110,36 @@ function requestFrom(args) {
   return { method: method ?? (hasBody ? 'POST' : 'GET'), path: pathOf(url) };
 }
 
-/** @returns {{ method: string, path: string }[]} */
-export function extractCurlRequests(source) {
-  const tokens = tokenize(source);
-  const requests = [];
+/** @returns {{ line: number, url: string | null, request: { method: string, path: string } | null }[]} */
+export function extractCurlCommands(source) {
+  const { tokens, lines } = tokenize(source);
+  const commands = [];
   for (let i = 0; i < tokens.length; i++) {
     if (tokens[i] !== 'curl') continue;
     const args = [];
     for (let j = i + 1; j < tokens.length && tokens[j] !== END; j++) args.push(tokens[j]);
-    const request = requestFrom(args);
-    if (request) requests.push(request);
+    const url = findUrl(args);
+    commands.push({ line: lines[i], url, request: requestFrom(args, url) });
   }
-  return requests;
+  return commands;
+}
+
+/** @returns {{ method: string, path: string }[]} */
+export function extractCurlRequests(source) {
+  return extractCurlCommands(source)
+    .map((command) => command.request)
+    .filter((request) => request !== null);
+}
+
+export function hostOf(url) {
+  return /^https?:\/\/([^/?#:]+)/.exec(url)?.[1] ?? null;
+}
+
+export function urlIsAllowed(url, allowedHosts) {
+  if (url === null) return false;
+  if (isVariableReference(url)) return true;
+  const host = hostOf(url);
+  return host !== null && allowedHosts.includes(host);
 }
 
 const segmentsOf = (path) => path.split('/').filter((segment) => segment !== '');
