@@ -12,7 +12,7 @@ The `pageRange` parameter allows you to target specific pages for extraction, wh
 
 - **Multi-section documents**: Extract data from specific sections (e.g., pages 1-3 for identification, pages 8-10 for physical properties)
 - **Large documents**: Focus on relevant pages without processing the entire document
-- **Multi-pass processing**: Upload once, extract different data from different page ranges
+- **Multi-pass processing**: Extract different data from different page ranges of the same document
 
 ## How It Works
 
