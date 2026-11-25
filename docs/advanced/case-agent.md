@@ -20,23 +20,11 @@ The agent orchestrates and investigates. It can start a classify job from instru
 | `playbook` | `general` (the default) or `investigate-flagged`. Any other value is `400`. Playbooks need a `caseId`. |
 | `context` | Ids only. `classify:{jobId}:{rowId}` points the agent at one row of a classify job. `run:{runId}` replies to a [headless run](./agent-runs.md): the agent reads the run's report and questions, and a run of another case is `404`. Any other format is `400`. |
 
-```bash
-curl -X POST https://api.docudevs.ai/agent/chat \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {"role": "user", "content": "Classify this week file into levels 4 and 5 using the memo rules."}
-    ],
-    "sessionId": "week-41",
-    "caseId": 42,
-    "playbook": "general"
-  }'
-```
+<Example name="case-agent/chat-with-case-agent" />
 
 A session belongs to one organization and one case. A `sessionId` sent for another case starts a new history. Session ids are letters, digits, `-` and `_`, up to 64 characters; anything else is `400`.
 
-The chat is a job, as in the general agent. Poll `GET /agent/status/{jobGuid}` until it completes. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md).
+The chat is a job, as in the general agent: the cURL variant polls `GET /agent/status/{jobGuid}` until it completes and the Python helper waits for you. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md); a chat started with an API key can be decided with any API key of the organization, see [who can confirm or reject](./agent-actions.md#who-can-confirm-or-reject).
 
 ## What the agent sees
 
@@ -61,67 +49,19 @@ The playbook never approves, accepts or confirms anything. Every proposal stays 
 
 On a classify job's results, the **Ask agent about this row** link opens the agent at `/app/agent?caseId=…&context=classify:{jobId}:{rowId}`. The link carries ids only; the agent reads the row itself.
 
-## Python SDK
+## Investigate flagged rows from the API
 
-`agent_chat_and_wait` takes the same case arguments as `agent_chat` and returns the completed status:
+`agent_chat_and_wait` takes the same case arguments as `agent_chat` and returns the completed status. This example points the investigate playbook at one row of a classify job:
 
-```python
-status = await client.agent_chat_and_wait(
-    [{"role": "user", "content": "Investigate the flagged rows of classify job 55."}],
-    session_id="week-41",
-    case_id=42,
-    playbook="investigate-flagged",
-    context="classify:55:17",
-)
+<Example name="case-agent/investigate-flagged-rows" />
 
-print(status["response"]["message"])
-for action in status.get("pendingActions") or []:
-    print(action["id"], action["summary"])
-```
+## Reply to a headless run
 
-### Reply to the agent
+A [headless run](./agent-runs.md) saves a report with questions for a person. Reply to it with a chat on the same case whose `context` is `run:{runId}`; the agent reads the run's report and questions. A run of another case answers `404`.
 
-A conversation keeps the session for you, so each reply sends only your new message. `run.conversation()` starts one about a headless run, so you can answer the questions in its report:
+<Example name="case-agent/reply-to-run" />
 
-```python
-run = await case.agent_run_and_wait("investigate-flagged", job=job, max_tokens=250_000)
-print((run.report or {}).get("questions"))
-
-chat = run.conversation()
-reply = await chat.reply("Record that packaged roasted coffee (beans or ground) is 8.2.2 Coffees.")
-print(reply.message)
-for action in reply.pending_actions:  # the actions this reply proposed
-    print(action.tool, "-", action.summary)
-    await action.confirm()  # you confirm; the agent never does
-
-reply = await chat.reply("Also correct row 28 of that job.")
-```
-
-`case.conversation(context="classify:55:17")` starts a conversation about one row, and `case.conversation(session_id=chat.session_id)` resumes an earlier one. `reply()` waits up to 600 seconds by default.
-
-## Status of the flows
-
-The agent flows below were run on the MINI tier in the P3 live check (2026-10-09). The check used a real case and kept its data out of the repository.
-
-Confirmed live:
-
-- The agent reads the case instructions and quotes the active one.
-- The agent proposes a classify job; after a person confirms it, the job runs to completion.
-- The agent proposes a review; after confirmation the record carries the new label with `labelSource=review`.
-- The agent's attempt to approve a memo entry stays pending, and a direct approve with an agent token returns `403`.
-- An investigate turn, after the step-limit fixes, reads row evidence in about 5 to 6 tool calls and ends with a question.
-- A headless run started after a classify job completes, is listed under that job, and saves its report.
-- A memo A/B evaluation runs through the evaluation endpoint.
-- A headless run that nears its budget saves its report before it stops (demo, 2026-10-27: 68,078 of 80,000 tokens, summary and one question saved).
-
-Not yet confirmed live:
-
-- A classify job whose input rows are read from the records table (the keys source) after its fix. Inline rows on the same worker succeeded.
-- An agent-proposed holdout evaluation started from the chat. The A/B run was started directly.
-- The `RECORDS_MATCH` extraction tool.
-- The webhook when an agent run ends.
-- The case inbox and agent page in the web app. The live check ran against the API.
-- A classify job with no target depth on a case without `classifyDefaults`; the tree-level default is tested but was not run live after the fix.
+Any action the reply proposes waits in the [pending-action inbox](./agent-actions.md); the agent never confirms it.
 
 ## Related
 
