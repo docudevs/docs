@@ -34,66 +34,15 @@ v2 also introduces scoped effects: a version-2 relationship can declare a bounde
 6. Resolve structural errors and either fix or explicitly acknowledge permitted warnings, then publish with the observed `draftRevision` and any acknowledged warning codes. Publication validates and atomically cuts over the active revision; a failed publication leaves the previous publication active.
 7. Read the active profile once published.
 
-<Tabs groupId="lang">
-<TabItem value="curl" label="cURL">
+<Example name="contract-analysis/generate-profile" />
 
-```sh
-API_URL="https://api.docudevs.ai"
-API_KEY="<your-api-key>"
-CASE_ID=42
+<Example name="contract-analysis/get-draft-profile" />
 
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/generate" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/update-draft" />
 
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis?view=draft" \
-  -H "Authorization: $API_KEY"
+<Example name="contract-analysis/publish-profile" />
 
-curl -X PUT "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/draft" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"draftRevision": 1, "profile": { "...": "edited profile JSON" }}'
-
-curl -X POST "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis/publish" \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"draftRevision": 2, "acknowledgedWarningCodes": ["UNCITED_HUMAN_AUTHORED"]}'
-
-curl "$API_URL/knowledge-bases/$CASE_ID/profiles/contract-analysis?view=published" \
-  -H "Authorization: $API_KEY"
-```
-
-</TabItem>
-<TabItem value="python" label="Python SDK">
-
-```python
-import os
-from docudevs.docudevs_client import DocuDevsClient
-
-client = DocuDevsClient(token=os.getenv("API_KEY"))
-CASE_ID = 42
-
-generation = await client.generate_contract_analysis_profile(CASE_ID)
-
-draft_response = await client.get_contract_analysis_profile(CASE_ID, view="draft")
-draft = draft_response.parsed
-
-updated = await client.update_contract_analysis_draft(
-    CASE_ID,
-    draft_revision=draft["draftRevision"],
-    profile=draft["profile"],
-)
-
-published = await client.publish_contract_analysis_profile(
-    CASE_ID,
-    draft_revision=updated.parsed["draftRevision"],
-    acknowledged_warning_codes=["UNCITED_HUMAN_AUTHORED"],
-)
-
-active = await client.get_contract_analysis_profile(CASE_ID, view="published")
-```
-
-</TabItem>
-</Tabs>
+<Example name="contract-analysis/get-published-profile" />
 
 The active publication pins its source document IDs and fingerprint. New case uploads are uncompiled until a later regeneration, and a source used by the active publication cannot be deleted. Re-generation creates a new draft while the current publication remains available.
 
