@@ -58,7 +58,7 @@ Out-of-range settings or an empty query return `400`. Errors from the embedding 
   "kind": "records",
   "generationId": 9,
   "results": [
-    {"key": "6410000123456", "score": 0.83, "chunk": "Soft sock 3-pack\nCotton, size 40-45",
+    {"key": "1000000000001", "score": 0.83, "chunk": "Soft sock 3-pack\nCotton, size 40-45",
      "label": "4.12.3", "labelPath": ["4", "4.12", "4.12.3"], "labelSource": "import",
      "attributes": ["brand=Foo"]}
   ],

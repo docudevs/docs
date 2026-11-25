@@ -6,7 +6,7 @@ sidebar_position: 4
 
 # Category trees and activation
 
-A category tree gives record labels a hierarchy. Trees are **versioned and immutable**: every upload creates a new draft version. Activating a version makes it the case's active tree. Records reference category codes, not versions, so old results stay readable.
+A category tree gives record labels a hierarchy. Trees are **versioned and immutable**: every upload creates a new draft version. Activating a version makes it the case's active tree. Records reference category codes, not versions, so old results stay readable. A version is `draft`, `active` or `superseded` (it was active and a later version replaced it). With an organization API key, the case must be one that the key can use; see [Which cases you can use](./case-agent.md#which-cases-you-can-use).
 
 ## Upload a tree
 
@@ -28,23 +28,21 @@ A node has a `code`, a `parent` code (null for roots), a `name`, an optional `de
 
 Invalid trees are rejected with `400` and nothing is stored. The body lists `problems`, each with a `type` (`CYCLE`, `DUPLICATE_CODE`, `MISSING_PARENT`, `SUCCESSOR_MISSING`, `SUCCESSOR_RETIRED`, `RETIRED_WITH_ACTIVE_CHILD`, `INVALID_STATUS`, `BLANK_CODE`, `TOO_MANY_NODES`), the offending `code` and a `message`.
 
-```python
-created = await client.upload_tree(case_id, "tree.json", name="Catalogue 2026-10")
-versions = await client.list_trees(case_id)
-```
+<Example name="category-trees/upload-tree" />
 
-`upload_tree` takes a node list or a path to a JSON file holding the list or `{"name", "nodes"}`. A rejected tree raises `RecordsApiError`; its `body["problems"]` lists the problems.
+The Python client's `upload_tree` takes a node list or a path to a JSON file holding the list or `{"name", "nodes"}`. A rejected tree raises `RecordsApiError`; its `body["problems"]` lists the problems. The CLI reads the same file.
+
+List the versions of a case, newest first, with `GET /cases/{caseId}/trees`. Each entry has `treeVersionId`, `status`, `nodes`, `levels` and a `contentHash`.
+
+<Example name="category-trees/list-trees" />
 
 ## Browse a tree
 
-```python
-roots = await client.browse_tree_nodes(case_id, version_id)
-children = await client.browse_tree_nodes(case_id, version_id, parent="4.12")
-hits = await client.browse_tree_nodes(case_id, version_id, q="sock")
-node = await client.get_tree_node(case_id, version_id, "4.12.3")
-```
+<Example name="category-trees/browse-tree-nodes" />
 
-`GET /cases/{caseId}/trees/{versionId}/nodes` returns the roots, the children of `parent`, or nodes whose name or code match `q` (case-insensitive) in pages (`page`, `size`). `GET .../nodes/{code}` returns the category with its `path`, `labelPath`, children and siblings.
+`GET /cases/{caseId}/trees/{versionId}/nodes` returns the roots, the children of `parent`, or nodes whose name or code match `q` (case-insensitive) in pages (`page`, `size`). The CLI has no browse command; read one category with `docudevs trees node`. `GET .../nodes/{code}` returns the category with its `path`, `labelPath`, children and siblings.
+
+<Example name="category-trees/get-tree-node" />
 
 ## Activate a version
 
@@ -59,29 +57,6 @@ The job:
 
 Activation is refused, and the report lists the codes, while missing codes remain, unless you set `allowMissing`. Records with missing codes are then excluded as evidence.
 
-```python
-job = await client.activate_tree(
-    case_id, version_id,
-    successor_mapping={"9.90.1": "4.12.3"},
-    allow_missing=False,
-    wait=True,
-)
-```
+<Example name="category-trees/activate-tree" />
 
-```bash
-curl -X POST "https://api.docudevs.ai/cases/42/trees/7/activate" \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d '{"successorMapping":{"9.90.1":"4.12.3"},"allowMissing":false}'
-# {"jobGuid":"..."}   poll GET /job/status/{guid}
-```
-
-Both body fields are optional; send `{}` to activate with the successors already in the tree. `409` means the version is already active or another activation is running. Retired categories are never used as evidence labels.
-
-## CLI
-
-```bash
-docudevs trees upload 42 tree.json --name "Catalogue 2026-10"
-docudevs trees list 42
-docudevs trees node 42 7 4.12.3
-docudevs trees activate 42 7 --successor-file successors.json --wait
-```
+Both body fields are optional; send `{}` to activate with the successors already in the tree. The response carries the `jobGuid` to poll with `GET /job/status/{guid}` and the `importId` of the activation. `409` means the version is already active or another activation is running. A refused activation ends the job with an error; read its report with `GET /cases/{caseId}/trees/{versionId}/activations/{importId}/report` (`docudevs trees activation-report`). Retired categories are never used as evidence labels.

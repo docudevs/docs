@@ -8,7 +8,7 @@ sidebar_position: 2
 
 A **records dataset** stores structured rows (for example a product catalogue) in a case and indexes them for semantic search. Each record has a unique key, one or more text fields that are embedded, an optional category label, and optional metadata. A dataset can only be configured on a case that has no documents, and a records case is meant to hold records only: do not upload documents to it.
 
-Writes are asynchronous: DocuDevs stages your request and a worker applies it. Reads and search are synchronous. All endpoints live under `/cases/{caseId}` and use the same API key as the rest of the API.
+Writes are asynchronous: DocuDevs stages your request and a worker applies it. Reads and search are synchronous. All endpoints live under `/cases/{caseId}` and use the same API key as the rest of the API. With an organization API key, the case must be one that the key can use; see [Which cases you can use](./case-agent.md#which-cases-you-can-use).
 
 ## Configure the dataset
 
@@ -24,7 +24,7 @@ Writes are asynchronous: DocuDevs stages your request and a worker applies it. R
       {"column": "desc", "name": "description"}
     ],
     "label": "category",
-    "metadata": {"brand": "brand", "customsGroup": "customs_group"}
+    "metadata": {"brand": "brand", "productGroup": "product_group"}
   },
   "embeddedText": {"template": "{title}\n{description}", "skipEmptyFields": true},
   "examplePolicy": {"mode": "perLabelCap", "perLabelCap": 3, "overFetch": 4},
@@ -47,80 +47,36 @@ Changing the text fields or the embedded text template of a dataset that already
 
 A label-only or metadata-only change to a record never calls the embedding model: DocuDevs hashes the embedded text and re-embeds only when the hash changes.
 
-## Python SDK
+<Example name="records/configure-dataset" />
 
-```python
-from docudevs import DocuDevsClient
+The example is a reduced form of the configuration shown above: it keeps the key, both text fields, the label, the `brand` metadata, the embedded text template and the `topK` and `hybrid` index settings, and leaves the other settings at their defaults. `text` maps a source column to a field name. The Python client accepts `{column: name}` or a list of `{"column", "name"}` entries, and it takes option names in `snake_case`. A change that needs confirmation is refused with `409` until you repeat it with `reindex` (`?reindex=true`, the `reindex` keyword argument, or `--reindex` on the CLI).
 
-client = DocuDevsClient(api_url="https://api.docudevs.ai", token=token)
+Read the configuration back with `GET /cases/{caseId}/dataset`. The response adds the `mappingVersion` and, once a category tree is active, `activeTreeVersionId`.
 
-await client.set_dataset(
-    case_id,
-    {
-        "key": "sku",
-        "text": {"title": "title", "desc": "description"},
-        "label": "category",
-        "metadata": {"brand": "brand"},
-    },
-    embedded_text={"template": "{title}\n{description}"},
-    index_settings={"top_k": 10, "hybrid": False},
-)
-dataset = await client.get_dataset(case_id)
-```
-
-`text` accepts `{column: name}` or a list of `{"column", "name"}` entries. Option names may use `snake_case`.
-
-## curl
-
-```bash
-curl -X PUT "https://api.docudevs.ai/cases/42/dataset" \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d '{"datasetType":"records","fieldMapping":{"key":"sku","text":[{"column":"title","name":"title"}],"label":"category"}}'
-```
+<Example name="records/get-dataset" />
 
 ## Single records and batches
 
-```python
-await client.upsert_record(
-    case_id, "6410000123456",
-    {"title": "Soft sock 3-pack", "description": "Cotton, size 40-45"},
-    label="4.12.3", metadata={"brand": "Foo"},
-)
-await client.delete_record(case_id, "6410000123456")
-await client.batch_records(case_id, upserts=[...], deletes=["k1", "k2"])
-```
+<Example name="records/upsert-record" />
 
-Each write returns `{"importId", "jobGuid", "status"}`. `label_source` is `import` (default) or `review`; records marked `review` are treated as human decisions by snapshot syncs (see [Importing records](/docs/advanced/records-import)).
+Each write returns `{"importId", "jobGuid", "status"}`. The label source is `import` (default) or `review` (`labelSource` in the request, `label_source` in the Python client); records marked `review` are treated as human decisions by snapshot syncs (see [Importing records](./records-import.md#snapshot-sync)).
 
-```bash
-curl -X PUT "https://api.docudevs.ai/cases/42/records/6410000123456" \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d '{"text":{"title":"Soft sock 3-pack"},"label":"4.12.3","labelSource":"import","metadata":{"brand":"Foo"}}'
-```
+<Example name="records/delete-record" />
 
-A batch (`POST /cases/{caseId}/records:batch`) holds up to 1,000 upserts and deletes and 10 MB. Larger inputs are refused with `413`; use a file import.
+A batch (`POST /cases/{caseId}/records:batch`) holds up to 1,000 upserts and deletes and 10 MB. Larger inputs are refused with `413`; use a [file import](./records-import.md#file-import). The command-line client has no batch command; `docudevs records bulk` imports a file instead.
+
+<Example name="records/batch-records" />
 
 ## Reading records
 
-```python
-record = await client.get_record(case_id, "6410000123456")
+<Example name="records/get-record" />
 
-async for record in client.list_records(case_id, subtree="4.12", attributes={"brand": "Foo"}):
-    ...
+`GET /cases/{caseId}/records/{key}` returns the record with its `label`, `labelPath`, `labelSource` and the embedded text (`chunk`).
 
-stats = await client.record_stats(case_id)
-```
+<Example name="records/list-records" />
 
-- `GET /cases/{caseId}/records/{key}` returns the record with its `label`, `labelPath`, `labelSource` and the embedded text (`chunk`).
-- `GET /cases/{caseId}/records` pages through records ordered by key. Filter with `label`, `subtree`, `labelSource` and repeated `attribute=name=value`. `limit` is 1-200 (default 50). Pass the returned `continuation` token to fetch the next page; there is no depth limit. `list_records` follows the tokens for you.
-- `GET /cases/{caseId}/records/stats` returns record counts per label, split by `labelSource`.
+`GET /cases/{caseId}/records` pages through records ordered by key. Filter with `label`, `subtree`, `labelSource` and repeated `attribute=name=value`. `limit` is 1-200 (default 50). Pass the returned `continuation` token to fetch the next page; there is no depth limit. The cURL variant reads one page; the Python client and the CLI (`--all`) follow the tokens for you.
 
-## CLI
+<Example name="records/record-stats" />
 
-```bash
-docudevs records dataset-set 42 dataset.json
-docudevs records dataset-get 42
-docudevs records upsert 42 6410000123456 --text title="Soft sock" --label 4.12.3
-docudevs records list 42 --subtree 4.12 --all
-docudevs records stats 42
-```
+`GET /cases/{caseId}/records/stats` returns record counts per label, split by `labelSource`: for each code, `import`, `review` and `total`.
