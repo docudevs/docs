@@ -67,7 +67,7 @@ Checks run against published packages, never a sibling checkout. The main reposi
 
 Public docs show only what a released SDK can run. Bump a pin after the SDK is released, then update the examples. To draft ahead of a release, use local overrides and do not merge examples that depend on them:
 
-- Python: from the Python environment run `pip install -e <main repo>/docudevs-sdk` (manual; the checkers use whatever is installed).
+- Python: run `uv pip install --python tools/examples/python/.venv/bin/python -e <main repo>/docudevs-sdk` into `tools/examples/python/.venv` (manual; the checkers use whatever is installed).
 - Java: `./gradlew compileJava -PsdkRoot=<main repo>` from `tools/examples/java` includes the main repository's Java SDK build.
 - Spec: `DOCUDEVS_MAIN_ROOT=<main repo> npm run sync-openapi-spec` copies `docudevs.yaml` from the main repository.
 

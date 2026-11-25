@@ -13,9 +13,9 @@ npm ci                    # install dependencies
 npm start                 # local development server
 npm run build             # production build into build/
 npm run examples:test     # example tooling tests
-npm run examples:manifest # validate examples and build the manifest
-npm run examples:coverage # check examples used by pages exist
-npm run examples:curl     # check cURL examples against the spec
+npm run examples:manifest # validate examples, check page references, build the manifest
+npm run examples:coverage # check missing languages against known-gaps.txt
+npm run examples:curl     # check cURL examples against the spec, shell syntax of CLI examples
 ```
 
-The Python and Java example checks, the example conventions and the writing workflow are described in [AGENTS.md](AGENTS.md).
+The Python and Java example checks (Python needs `uv`, Java needs a JDK 17 or newer), the example conventions and the writing workflow are described in [AGENTS.md](AGENTS.md).
