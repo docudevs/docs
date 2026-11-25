@@ -20,6 +20,5 @@ docs/core/map-reduce-extraction.md:11
 docs/core/schema-generation.md:6
 docs/core/source-locations.md:2
 docs/core/workbook-normalization.md:4
-docs/getting-started/first-document.md:4
 docs/reference/error-codes.md:4
 docs/templates/Templates.md:26

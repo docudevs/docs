@@ -43,7 +43,6 @@ docs/core/object-detection.md:1
 docs/core/schema-generation.md:6
 docs/core/source-locations.md:5
 docs/core/workbook-normalization.md:4
-docs/getting-started/first-document.md:11
 docs/integration/submission-portals.md:3
 docs/integration/webhooks.md:1
 docs/reference/error-codes.md:6

@@ -4,9 +4,6 @@ description: Step-by-step guide to processing documents with DocuDevs including 
 sidebar_position: 3
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Your First Document - Detailed Walkthrough
 
 This comprehensive guide walks you through processing your first document with DocuDevs, explaining each step and exploring the various options available for customizing the extraction process.
@@ -24,286 +21,50 @@ Document processing with DocuDevs involves four main components:
 
 ### Step 1: Environment Setup
 
-First, ensure you have the DocuDevs SDK installed and your API key configured:
-
-```python
-import os
-import asyncio
-from docudevs.docudevs_client import DocuDevsClient
-import json
-
-# Initialize the client
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-```
+First, ensure you have the DocuDevs SDK installed and your API key set in the `API_KEY` environment variable (see [Installation & Setup](/docs/basics/install)). Every example below reads the key from `API_KEY` and talks to `https://api.docudevs.ai`.
 
 ### Step 2: Prepare Your Document
 
-For this walkthrough, we'll use an invoice as an example. You can use any document format:
-
-```python
-# Read the document file
-document_path = "sample_invoice.pdf"
-with open(document_path, "rb") as f:
-    document_data = f.read()
-
-print(f"Document size: {len(document_data)} bytes")
-print(f"Document type: {document_path.split('.')[-1].upper()}")
-```
+For this walkthrough, we'll use an invoice named `sample_invoice.pdf` as an example. You can use any document format. The examples read the file from the current directory.
 
 ### Step 3: Basic Processing (Minimal Configuration)
 
 Let's start with the simplest approach - just upload the document and let DocuDevs use its AI to determine what to extract:
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'cURL', value: 'curl'},
-    {label: 'CLI', value: 'cli'},
-  ]}>
-  <TabItem value="python">
+<Example name="first-document/process-minimal" />
 
-```python
-async def basic_processing():
-    # Submit document for AI extraction (non-OCR)
-    job_id = await client.submit_and_process_document(
-        document=document_data,
-        document_mime_type="application/pdf"
-    )
-    print(f"Job submitted: {job_id}")
-    
-    # Wait for completion
-    result = await client.wait_until_ready(job_id, result_format="json")
-    
-    print("Basic Processing Result:")
-    print(json.dumps(result, indent=2))
-    
-    return result
-
-# Run basic processing
-result = await basic_processing()
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import ai.docudevs.client.ProcessOptions;
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Duration;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .baseUrl("https://api.docudevs.ai")
-    .build();
-
-byte[] documentBytes = Files.readAllBytes(Path.of("sample_invoice.pdf"));
-
-String jobGuid = client.submitAndProcessDocument(
-    new UploadRequest("sample_invoice.pdf", "application/pdf", documentBytes),
-    ProcessOptions.builder()
-        .mimeType("application/pdf")
-        .build()
-);
-
-JsonNode result = client.waitUntilReadyJson(
-    jobGuid,
-    WaitOptions.builder()
-        .timeout(Duration.ofSeconds(180))
-        .pollInterval(Duration.ofSeconds(2))
-        .build()
-);
-
-System.out.println("Job submitted: " + jobGuid);
-System.out.println(result.toPrettyString());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-```bash
-# Upload and process in one step
-curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@sample_invoice.pdf"
-
-# Check status (use GUID from upload response)
-
-curl -X GET <https://api.docudevs.ai/job/status/{GUID}> \
-  -H "Authorization: Bearer $API_KEY"
-
-# Get results once complete
-
-curl -X GET <https://api.docudevs.ai/job/result/{GUID}> \
-  -H "Authorization: Bearer $API_KEY"
-
-```
-  </TabItem>
-  <TabItem value="cli">
-```bash
-docudevs process sample_invoice.pdf
-```
-
-  </TabItem>
-</Tabs>
+The cURL example uses [`jq`](https://jqlang.org/) to read values from responses.
 
 ### Step 4: Processing with Custom Instructions
 
-Now let's add specific instructions to guide the AI extraction:
+Now let's add specific instructions to guide the AI extraction. The prompt tells the AI which fields matter and how to report them:
 
-```python
-async def processing_with_instructions():
-    instruction = """
-    Extract all invoice information including:
-    - Invoice number and date
-    - Vendor/supplier details
-    - Customer/bill-to information  
-    - All line items with descriptions, quantities, and prices
-    - Tax information
-    - Total amounts
-    - Payment terms and due date
-    """
-    
-    job_id = await client.submit_and_process_document(
-        document=document_data,
-        document_mime_type="application/pdf",
-        prompt=instruction
-    )
-    result = await client.wait_until_ready(job_id, result_format="json")
-    
-    print("Processing with Instructions Result:")
-    print(json.dumps(result, indent=2))
-    
-    return result
-
-# Run processing with instructions
-result = await processing_with_instructions()
+```text
+Extract all invoice information including:
+- Invoice number and date
+- Vendor/supplier details
+- Customer/bill-to information
+- All line items with descriptions, quantities, and prices
+- Tax information
+- Total amounts
+- Payment terms and due date
 ```
+
+Pass the prompt with the document:
+
+<Example name="quick-start/process-document" />
 
 ### Step 5: Processing with Custom Schema
 
-For even more control, define exactly how you want the output structured:
+For even more control, define exactly how you want the output structured with a JSON Schema. Use nested objects for grouped data (a `vendor` with a `name` and an `address`) and arrays of objects for repeating data such as invoice line items:
 
-```python
-from docudevs import json_schema
-
-async def processing_with_schema():
-    instruction = "Extract invoice data according to the provided schema"
-    
-    schema = {
-        "invoice_header": {
-            "invoice_number": "The invoice number",
-            "invoice_date": "Invoice date in YYYY-MM-DD format",
-            "due_date": "Payment due date in YYYY-MM-DD format"
-        },
-        "vendor": {
-            "name": "Vendor/supplier company name",
-            "address": "Complete vendor address",
-            "contact": "Phone or email contact information"
-        },
-        "customer": {
-            "name": "Customer/bill-to company name",
-            "address": "Complete customer address"
-        },
-        "line_items": [
-            {
-                "description": "Item or service description",
-                "quantity": "Quantity as number",
-                "unit_price": "Price per unit as number",
-                "total": "Line total as number"
-            }
-        ],
-        "summary": {
-            "subtotal": "Subtotal amount as number",
-            "tax_rate": "Tax percentage as number",
-            "tax_amount": "Tax amount as number",
-            "total_amount": "Final total as number",
-            "currency": "Currency code (USD, EUR, etc.)"
-        },
-        "payment_terms": "Payment terms description"
-    }
-    
-    job_id = await client.submit_and_process_document(
-        document=document_data,
-        document_mime_type="application/pdf",
-        prompt=instruction,
-        schema=json_schema(schema)
-    )
-    result = await client.wait_until_ready(job_id, result_format="json")
-    
-    print("Processing with Schema Result:")
-    print(json.dumps(result, indent=2))
-    
-    return result
-
-# Run processing with schema
-result = await processing_with_schema()
-```
+<Example name="quick-start/custom-schema" />
 
 ### Step 6: Using Named Configurations
 
-For consistent processing across multiple documents, save your settings as a named configuration:
+For consistent processing across multiple documents, save your settings as a named configuration and process documents with it by name:
 
-```python
-async def create_and_use_configuration():
-    # First, create a named configuration
-    config_name = "invoice_processing_standard"
-    
-    configuration = {
-        "prompt": "Extract comprehensive invoice data",
-        "schema": {
-            "invoice_number": "Invoice number",
-            "date": "Invoice date in YYYY-MM-DD format", 
-            "vendor": "Vendor name",
-            "total": "Total amount as number",
-            "line_items": [
-                {
-                    "description": "Item description",
-                    "amount": "Amount as number"
-                }
-            ]
-        },
-        "llm": "HIGH"
-    }
-    
-    # Save the configuration
-    from docudevs.models import UploadCommand
-    # Convert dict to UploadCommand or pass dict if client supports it (client.save_configuration expects UploadCommand)
-    # The SDK usually requires the model object, but let's assume we construct it or pass a dict that the client handles (if it does).
-    # Actually, looking at sdk-methods.md, we use UploadCommand.
-    
-    # Let's rewrite this to be correct with the SDK
-    cmd = UploadCommand(
-        prompt=configuration["prompt"],
-        schema=json.dumps(configuration["schema"]), # Schema must be string
-        llm=configuration["llm"]
-    )
-    
-    save_response = await client.save_configuration(config_name, cmd)
-    print(f"Configuration saved: {config_name}")
-    
-    # Use the saved configuration
-    # Note: process_document_with_configuration takes a GUID of an uploaded doc, 
-    # or submit_and_process_document_with_configuration takes the doc.
-    # The example in the file uses process_document_with_configuration with a job_id from previous step.
-    
-    response = await client.process_document_with_configuration(
-        guid=job_id,  # From previous upload
-        configuration_name=config_name
-    )
-    
-    result = await client.wait_until_ready(response.parsed.guid, result_format="json")
-    print("Processing with Named Configuration Result:")
-    print(json.dumps(result, indent=2))
-    
-    return result
-```
+<Example name="first-document/save-and-use-configuration" />
 
 ## Understanding the Results
 
@@ -390,156 +151,39 @@ configuration = {
 
 ## Error Handling Best Practices
 
-Always implement robust error handling:
+Always implement robust error handling. Check that the file exists, set a timeout when waiting for the result, and read the current job status when the wait runs out:
 
-```python
-async def robust_document_processing(document_path):
-    try:
-        # Read document
-        with open(document_path, "rb") as f:
-            document_data = f.read()
-        
-        # Submit for processing using convenience method
-        job_id = await client.submit_and_process_document(
-            document=document_data,
-            document_mime_type="application/pdf",
-            prompt="Extract key information from this document"
-        )
-        print(f"Processing job {job_id}...")
-        
-        # Wait for completion with timeout
-        try:
-            result = await client.wait_until_ready(job_id, timeout=300, result_format="json")  # 5 minute timeout
-            return result
-        
-        except TimeoutError:
-            print(f"Processing timed out for job {job_id}")
-            # Check status to see current state
-            status_response = await client.status(job_id)
-            print(f"Current status: {status_response.parsed}")
-            return None
-            
-    except FileNotFoundError:
-        print(f"Document file not found: {document_path}")
-        return None
-        
-    except Exception as e:
-        print(f"Error processing document: {e}")
-        return None
-
-# Usage
-result = await robust_document_processing("sample_invoice.pdf")
-if result:
-    print("Processing successful!")
-else:
-    print("Processing failed - check errors above")
-```
+<Example name="first-document/handle-timeout" />
 
 ## Advanced Processing Options
 
 ### Batch Processing Multiple Documents
 
-```python
-async def process_multiple_documents(file_paths):
-    results = []
-    
-    for file_path in file_paths:
-        try:
-            with open(file_path, "rb") as f:
-                document_data = f.read()
-            
-            job_id = await client.submit_and_process_document(
-                document=document_data,
-                document_mime_type="application/pdf",
-                prompt="Extract invoice data"
-            )
-            results.append({
-                "file": file_path,
-                "job_id": job_id,
-                "status": "submitted"
-            })
-            
-        except Exception as e:
-            results.append({
-                "file": file_path,
-                "job_id": None,
-                "status": f"error: {e}"
-            })
-    
-    # Wait for all jobs to complete
-    for item in results:
-        if item["job_id"]:
-            try:
-                result = await client.wait_until_ready(item["job_id"], result_format="json")
-                item["result"] = result
-                item["status"] = "completed"
-            except Exception as e:
-                item["status"] = f"processing_error: {e}"
-    
-    return results
+To process many documents with the same settings, create a batch, upload the documents to it and process the batch once:
 
-# Process multiple invoices
-file_list = ["invoice1.pdf", "invoice2.pdf", "invoice3.pdf"]
-batch_results = await process_multiple_documents(file_list)
+<Example name="quick-start/batch-process" />
 
-for item in batch_results:
-    print(f"{item['file']}: {item['status']}")
-```
+See [Batch Processing](/docs/core/batch-processing) for scheduling, results and error handling.
 
 ### Using Cases for Organization
 
-```python
-async def process_with_case_organization():
-    # Create a case for related documents
-    case_data = {
-        "name": "January 2024 Vendor Invoices",
-        "description": "All vendor invoices received in January 2024"
-    }
-    
-    case_response = await client.create_case(case_data)
-    case_id = case_response.parsed.id
-    print(f"Created case: {case_id}")
-    
-    # Upload documents to the case
-    invoice_files = ["vendor1_invoice.pdf", "vendor2_invoice.pdf"]
-    
-    for filename in invoice_files:
-        with open(filename, "rb") as f:
-            document_data = f.read()
-        
-        doc_response = await client.upload_case_document(
-            case_id=case_id,
-            document=document_data,
-            filename=filename
-        )
-        
-        print(f"Uploaded {filename} to case {case_id}")
-        
-        # Process the document
-        document_id = doc_response.parsed.document_id
-        process_response = await client.process_document(
-            guid=document_id,
-            instruction="Extract invoice data"
-        )
-        
-        result = await client.wait_until_ready(process_response.parsed.guid, result_format="json")
-        print(f"Processed {filename}")
-    
-    # List all documents in the case
-    docs_response = await client.list_case_documents(case_id)
-    print(f"Case contains {len(docs_response.parsed.content)} documents")
+Cases group related documents. Create a case, then upload documents to it:
 
-# Run case-based processing
-await process_with_case_organization()
-```
+<Example name="cases/create-and-upload" />
+
+List the documents in the case to see their processing status:
+
+<Example name="cases/list-documents" />
+
+See [Cases](/docs/advanced/cases) for processing, search and summaries over case documents.
 
 ## Performance Tips
 
 ### Optimizing Processing Speed
 
-1. **Use appropriate LLM models**:
-   - `gpt-3.5-turbo`: Faster, good for simple extraction
-   - `gpt-4`: Slower, better for complex documents
+1. **Use an appropriate LLM level**:
+   - `MINI`: Faster, good for simple extraction
+   - `HIGH`: Slower, better for complex documents
 
 2. **Provide clear, specific instructions**:
    - Good: "Extract invoice number, date, vendor name, and total amount"
