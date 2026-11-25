@@ -5,5 +5,5 @@ set -euo pipefail
 CASE_ID=42  # id of the case that holds the playbook documents
 
 curl -s -S "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis?view=draft" \
-  -H "Authorization: $DOCUDEVS_API_KEY" | jq .
+  -H "Authorization: $API_KEY" | jq .
 # docs:end

@@ -7,7 +7,7 @@ ANCHOR_JOB_GUID="<completed-contract-job>"  # jobGuid of a completed contract jo
 SUITE_REVISION=3  # revision returned by the test-suite read
 
 ESTIMATE=$(curl -s -S -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials/estimate" \
-  -H "Authorization: $DOCUDEVS_API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "anchorJobGuid": "'"$ANCHOR_JOB_GUID"'",
@@ -25,7 +25,7 @@ jq '{
 }' <<< "$ESTIMATE" > trial.json
 
 curl -s -S -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/trials" \
-  -H "Authorization: $DOCUDEVS_API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d @trial.json | jq .
 # docs:end

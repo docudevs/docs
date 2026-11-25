@@ -66,7 +66,7 @@ uv pip install docu-devs-api-client
 ## Step 2: Set Your API Key (10 seconds)
 
 ```bash
-export DOCUDEVS_API_KEY="your-api-key-here"
+export API_KEY="your-api-key-here"
 ```
 
 ## Step 3: Process Your First Document (2 minutes)

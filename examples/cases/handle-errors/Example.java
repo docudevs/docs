@@ -10,7 +10,7 @@ import java.nio.file.Path;
 public class Example {
     public static void main(String[] args) throws Exception {
         DocuDevsClient client = DocuDevsClient.builder()
-                .apiKey(System.getenv("DOCUDEVS_API_KEY"))
+                .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 

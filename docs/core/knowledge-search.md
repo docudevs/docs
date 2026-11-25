@@ -100,7 +100,7 @@ The Pydantic models ensure downstream code only sees validated names and complia
 
 ```bash
 DOCUDEVS_API_URL="https://api.docudevs.ai"
-DOCUDEVS_API_KEY="<your-api-key>"
+API_KEY="<your-api-key>"
 CASE_ID="kb-kitchen-pro"
 
 docudevs process ./samples/products.csv \

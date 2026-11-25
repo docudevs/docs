@@ -5,7 +5,7 @@ from docudevs.docudevs_client import DocuDevsClient
 
 
 async def main():
-    client = DocuDevsClient(token=os.environ["DOCUDEVS_API_KEY"])
+    client = DocuDevsClient(token=os.environ["API_KEY"])
 
     case_id = 42  # id of the case that holds the playbook documents
     generation = await client.generate_contract_analysis_profile(

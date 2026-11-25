@@ -10,7 +10,7 @@ SCHEMA='{
   }
 }'
 
-docudevs --token "$DOCUDEVS_API_KEY" batch process invoice1.pdf invoice2.pdf invoice3.pdf \
+docudevs batch process invoice1.pdf invoice2.pdf invoice3.pdf \
   --prompt "Extract invoice data" \
   --schema "$SCHEMA" \
   --mime-type application/pdf \

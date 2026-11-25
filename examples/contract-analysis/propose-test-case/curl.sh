@@ -7,10 +7,10 @@ RUN_ID="<run-id>"  # runId returned when the run was created
 RESULT_FINGERPRINT="<result-fingerprint>"  # resultFingerprint of that run's result
 
 SUITE_REVISION=$(curl -s -S "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite" \
-  -H "Authorization: $DOCUDEVS_API_KEY" | jq '.revision')
+  -H "Authorization: $API_KEY" | jq '.revision')
 
 curl -s -S -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/test-suite/proposals" \
-  -H "Authorization: $DOCUDEVS_API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "runId": "'"$RUN_ID"'",

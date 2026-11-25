@@ -8,6 +8,6 @@ GENERATION_JOB_GUID="<generation-job-guid>"  # jobGuid returned by the generate 
 
 echo '{"hours": {"action": "accept_proposed"}}' > decisions.json
 
-docudevs --token "$DOCUDEVS_API_KEY" knowledge-base contract-analysis generation-apply "$CASE_ID" "$GENERATION_JOB_GUID" \
+docudevs knowledge-base contract-analysis generation-apply "$CASE_ID" "$GENERATION_JOB_GUID" \
   --decisions decisions.json
 # docs:end

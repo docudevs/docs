@@ -41,11 +41,11 @@ Markers may hide only imports, client construction and environment setup. Everyt
 
 ### Language conventions
 
-- All languages: the key comes from `DOCUDEVS_API_KEY`; the base URL is `https://api.docudevs.ai`. Status codes and response fields shown must match the spec.
-- cURL: quoted `https://api.docudevs.ai/...` URLs, `-H "Authorization: $DOCUDEVS_API_KEY"`, one flag per line.
+- All languages: the key comes from `API_KEY`; the base URL is `https://api.docudevs.ai`. Status codes and response fields shown must match the spec.
+- cURL: quoted `https://api.docudevs.ai/...` URLs, `-H "Authorization: $API_KEY"`, one flag per line.
 - Python: `from docudevs.docudevs_client import DocuDevsClient`, async, runnable under `asyncio.run(main())`. Name the client variable `client`; the checker inspects only calls on that name. The client does not consistently raise on HTTP errors, so examples check the status instead of relying on exceptions.
 - Java: `ai.docudevs.client.DocuDevsClient` through its builder, synchronous. The file starts with `package examples.<area>.<name>;` (dashes become underscores), declares `public class Example`, and keeps the package line outside the shown region.
-- CLI: pass `--token "$DOCUDEVS_API_KEY"` because the published CLI does not read that variable.
+- CLI: the published CLI reads `API_KEY` from the environment, so commands start with `docudevs <command>` and pass no `--token`.
 - Comments that teach the reader are content and are allowed in example files.
 
 ### Sources of truth

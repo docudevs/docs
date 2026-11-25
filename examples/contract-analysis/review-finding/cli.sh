@@ -5,7 +5,7 @@ set -euo pipefail
 RUN_ID="<run-id>"  # runId returned when the run was created
 RESULT_FINGERPRINT="<result-fingerprint>"  # resultFingerprint of that run's result
 
-docudevs --token "$DOCUDEVS_API_KEY" knowledge-base contract-analysis review "$RUN_ID" hours \
+docudevs knowledge-base contract-analysis review "$RUN_ID" hours \
   --result-fingerprint "$RESULT_FINGERPRINT" \
   --disposition corrected \
   --corrected-verdict flagged \

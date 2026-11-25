@@ -6,7 +6,7 @@ from docudevs.docudevs_client import DocuDevsClient
 
 
 async def main():
-    client = DocuDevsClient(token=os.environ["DOCUDEVS_API_KEY"])
+    client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
     batch_guid = await client.create_batch(max_concurrency=3)

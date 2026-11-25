@@ -5,7 +5,7 @@ from docudevs.docudevs_client import DocuDevsClient
 
 
 async def main():
-    client = DocuDevsClient(token=os.environ["DOCUDEVS_API_KEY"])
+    client = DocuDevsClient(token=os.environ["API_KEY"])
 
     response = await client.create_case(
         name="Q4 2024 Vendor Invoices",

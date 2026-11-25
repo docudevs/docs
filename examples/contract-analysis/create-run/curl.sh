@@ -3,7 +3,7 @@ set -euo pipefail
 
 # docs:start
 curl -s -S -X POST "https://api.docudevs.ai/contract-analysis/runs" \
-  -H "Authorization: $DOCUDEVS_API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "anchorJobGuid": "<agreement-job>",

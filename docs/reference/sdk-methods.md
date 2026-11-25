@@ -18,7 +18,7 @@ import os
 
 client = DocuDevsClient(
     api_url="https://api.docudevs.ai",  # Optional, defaults to production
-    token=os.getenv("DOCUDEVS_API_KEY") # Required
+    token=os.getenv("API_KEY") # Required
 )
 ```
 

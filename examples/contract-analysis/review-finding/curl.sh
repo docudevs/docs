@@ -6,7 +6,7 @@ RUN_ID="<run-id>"  # runId returned when the run was created
 RESULT_FINGERPRINT="<result-fingerprint>"  # resultFingerprint of that run's result
 
 curl -s -S -X PUT "https://api.docudevs.ai/contract-analysis/runs/$RUN_ID/reviews/hours" \
-  -H "Authorization: $DOCUDEVS_API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "resultFingerprint": "'"$RESULT_FINGERPRINT"'",

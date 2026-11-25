@@ -104,7 +104,7 @@ Return JSON only. The JSON must match the provided schema.
 
 client = DocuDevsClient(
     api_url=os.getenv("DOCUDEVS_API_URL", "https://api.docudevs.ai"),
-    token=os.getenv("DOCUDEVS_API_KEY"),
+    token=os.getenv("API_KEY"),
 )
 
 with open("soccer.jpg", "rb") as f:

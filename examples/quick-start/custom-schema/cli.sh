@@ -14,7 +14,7 @@ SCHEMA='{
   "required": ["invoice_number", "total"]
 }'
 
-docudevs --token "$DOCUDEVS_API_KEY" process your-document.pdf \
+docudevs process your-document.pdf \
   --prompt "Extract invoice data according to the schema" \
   --schema "$SCHEMA"
 # docs:end

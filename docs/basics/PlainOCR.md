@@ -88,7 +88,7 @@ pip install docu-devs-api-client
 Set your API key as an environment variable:
 
 ```bash
-export DOCUDEVS_API_KEY="your_api_key"
+export API_KEY="your_api_key"
 ```
 
 ### Basic OCR Commands

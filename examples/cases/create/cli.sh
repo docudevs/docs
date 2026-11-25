@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # docs:start
-docudevs --token "$DOCUDEVS_API_KEY" cases create \
+docudevs cases create \
   --name "Q4 2024 Vendor Invoices" \
   --description "All invoices from vendors for Q4 2024 processing"
 # docs:end

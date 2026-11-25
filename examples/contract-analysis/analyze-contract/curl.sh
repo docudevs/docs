@@ -8,7 +8,7 @@ KNOWLEDGE_BASE_ID=42  # id of the case whose profile is published
 wait_for_analysis() {
   for _ in $(seq 60); do
     OPERATION=$(curl -s -S "https://api.docudevs.ai/operation/$1/contract-analysis" \
-      -H "Authorization: $DOCUDEVS_API_KEY")
+      -H "Authorization: $API_KEY")
     if [ "$(jq -r '.resultAvailable' <<< "$OPERATION")" = "true" ]; then return 0; fi
     case "$(jq -r '.status' <<< "$OPERATION")" in
       ERROR | FAILED | TIMEOUT) echo "Contract analysis for $1 failed" >&2; return 1 ;;
@@ -20,7 +20,7 @@ wait_for_analysis() {
 }
 
 curl -s -S -f -o /dev/null -X POST "https://api.docudevs.ai/operation" \
-  -H "Authorization: $DOCUDEVS_API_KEY" \
+  -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "jobGuid": "'"$JOB_GUID"'",

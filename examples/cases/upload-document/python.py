@@ -7,7 +7,7 @@ from docudevs.types import File
 
 
 async def main():
-    client = DocuDevsClient(token=os.environ["DOCUDEVS_API_KEY"])
+    client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
     case_id = 123  # id returned by create_case
