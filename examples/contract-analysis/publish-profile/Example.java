@@ -14,9 +14,10 @@ public class Example {
         // docs:start
         long caseId = 42L; // id of the case that holds the playbook documents
         long draftRevision = 2L; // draftRevision returned by the last draft update
+        Set<String> acknowledgedWarningCodes = Set.of(); // List here the warning codes from the readiness or publish response that you accept.
 
         JsonNode published = client.publishContractAnalysisProfile(
-                caseId, draftRevision, Set.of("UNCITED_HUMAN_AUTHORED"));
+                caseId, draftRevision, acknowledgedWarningCodes);
         System.out.println("Published revision: " + published.path("publishedRevision").asLong());
         // docs:end
     }

@@ -12,6 +12,10 @@ Contract-analysis results are technical, evidence-linked extraction outcomes, no
 
 ## Result status vocabulary
 
+:::note
+This section describes the earlier criterion-based result shape and is being updated. Run results and reviews are now organised by clause, each with a verdict, as the examples on this page show. See the [get contract analysis run result](/docs/openapi/get-contract-analysis-run-result) API reference for the current response schema.
+:::
+
 Contract analysis has two profile and result generations, distinguished by the profile's declared version:
 
 - **v1 profiles** (`profileVersion` `2026-08`) produce a result where each criterion carries a `status` field with one of: `compliant`, `non_compliant`, `missing`, `needs_review`, or `not_applicable`.
@@ -116,7 +120,7 @@ The cURL and Python examples submit the operation and poll `/operation/{jobGuid}
 
 ## Contract-analysis runs (v2)
 
-Runs are immutable, addressable records: a run captures its own package of source documents, mode, and configuration, and its result never changes on rerun. `mode` is `published` (use the active publication) or `draft_trial` (use a specific draft revision). Include the anchor document in `package_members`; captures are limited to 32 members and 32 MiB of captured sources. `expected_missing_documents` is separately limited to 32 entries and `excluded_documents` to 256 entries — neither list consumes captured-member slots. Duplicate IDs, inaccessible members, and a missing anchor are rejected, and member order does not imply precedence.
+Runs are immutable, addressable records: a run captures its own package of source documents, mode, and configuration, and its result never changes on rerun. `mode` is `published` (use the active publication) or `draft_trial` (use a specific draft revision). Include the anchor document in `packageMembers`; captures are limited to 32 members and 32 MiB of captured sources. `expectedMissingDocuments` is separately limited to 32 entries and `excludedDocuments` to 256 entries — neither list consumes captured-member slots. Duplicate IDs, inaccessible members, and a missing anchor are rejected, and member order does not imply precedence.
 
 <Example name="contract-analysis/create-run" />
 
@@ -131,6 +135,10 @@ Runs are immutable, addressable records: a run captures its own package of sourc
 The review path names the clause being reviewed. `disposition` is one of `accepted`, `corrected`, `dismissed`, or `unresolved`; a corrected decision requires a `correctedVerdict` (`satisfactory`, `mixed`, `flagged`, `ai_unsure`, `not_found`, or `does_not_apply`), and corrected and dismissed decisions require a `reason`. A stale `expectedReviewRevision` returns `409`. The API derives reviewer identity from the authenticated user, so organization-only API keys cannot submit human dispositions. Accepting or correcting a finding never rewrites the captured machine result — each rerun has a new run ID and starts without a disposition. CSV exports and the run workspace keep the machine assessment, disposition, reviewer, and rationale in separate fields, and original evidence links open the captured source page and source element.
 
 ## Result format: v1 vs v2
+
+:::note
+This section describes the earlier criterion-based result shape and is being updated. Run results and reviews are now organised by clause, each with a verdict, as the examples on this page show. See the [get contract analysis run result](/docs/openapi/get-contract-analysis-run-result) API reference for the current response schema.
+:::
 
 Both generations expose `contractFacts`/model data, `analysisItems`, `relationships` (v1) or `effectiveVariants`/`effectUncertainties` (v2), `criteria`, and evidence references. The profile identity — knowledge-base ID, published or draft revision, and source fingerprint — is embedded in every result so a client can confirm which profile snapshot produced it. Citations use a stable source-reference shape: an ID, document ID, source-map path, source element IDs, page numbers, and an exact quote (`evidenceStatus` is `resolved` or `unresolved`); quotes are exact source text, not generated paraphrases.
 
