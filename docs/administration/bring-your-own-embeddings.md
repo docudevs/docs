@@ -255,25 +255,15 @@ curl "$API_URL/embeddings/overview" -H "Authorization: $API_KEY"
 
 The default revision is used for new case generations only. The response and
 `GET /embeddings/overview` show how many cases run on the default revision,
-how many run on older revisions, and how many are still on the legacy
-uncompressed path.
+how many run on older revisions, and how many still use the original
+uncompressed index.
 
-## Automatic legacy upgrade
+## Cases indexed before bring-your-own embeddings
 
-Existing customers' cases were indexed with the legacy vector fields. Once
-automatic migration is enabled for your deployment, each
-legacy case is migrated automatically to the organization's default
-platform revision:
-
-- no manual action is required from you;
-- legacy search remains available throughout;
-- a failed candidate leaves legacy search active and does not block other
-  cases;
-- migration is resumable and idempotent, and the gate can be turned back off
-  during the rollback window while the legacy fields are retained.
-
-Legacy fields are only removed in a separately gated follow-up after the
-rollback window has passed.
+Cases indexed before bring-your-own embeddings are moved automatically to your
+organization's default platform revision. You don't need to do anything.
+Search keeps working during the move, and a case whose move fails stays
+searchable on its current index without affecting other cases.
 
 ## Troubleshooting
 
@@ -300,8 +290,9 @@ rollback window has passed.
   appear in both generations.
 
 Usage through your own embedding provider is tracked for observability but,
-once the provider or revision is verified (`VALID`), is not debited against
-your DocuDevs token balance. LLM providers (chat models) are configured
+once the provider or revision is verified (`VALID`), is not charged against
+your DocuDevs credit balance. See
+[Billing and credits](/docs/reference/billing-credits). LLM providers (chat models) are configured
 separately under
 [Settings → LLM Providers](/docs/administration/bring-your-own-llm); chat
 and embedding bindings are independent of each other.

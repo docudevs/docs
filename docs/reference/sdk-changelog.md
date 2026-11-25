@@ -7,11 +7,89 @@ mdx:
 
 # SDK Changelog
 
+## 2026-11-16 UTC
+
+### Highlights
+
+- Playbook evaluations explain each failed clause, count missed problems and false alarms, repeat runs to find unstable expectations, and compare with the published playbook.
+
+### Python SDK
+
+- `import_playbook` takes an optional `reason` of at most 500 characters.
+- `list_evaluations`, `get_evaluation` and `wait_for_evaluation` read contract-analysis evaluations. `start_evaluation` takes `repeats` (1 to 3).
+- Gold `verdict` may be a list of accepted verdicts. Test-suite expectations take `acceptedVerdicts`.
+- Evaluation reports add `explanation`, `redFlagReasons` and `acceptedVerdicts` to each clause assertion, `verdictPairs` to each clause, `missedProblems` and `falseAlarms` to the totals, and `unstable`.
+- CLI: `playbook import --reason`, `knowledge-base contract-analysis update --reason`, `eval run --repeats`, `eval run --llm-level` (which saves the draft with a reason), `eval report --against published`, `eval list`, and `eval status` for evaluation ids.
+
+### Java SDK
+
+- The generated models include the new fields. `importPlaybook(caseId, draftRevision, playbook, reason)` takes an optional reason, and `startEvaluation(caseId, set, limit, repeats, idempotencyKey)` takes optional `repeats` (1 to 3). Pass `null` to omit either. The existing overloads are unchanged. Sync and async.
+
+### Migration Notes
+
+- A reason is optional. A reason longer than 500 characters returns `400` with the code `REASON_TOO_LONG`.
+- Trial idempotency keys that start with `evaluation:` return `400` with the code `RESERVED_IDEMPOTENCY_KEY`.
+- `eval status` reads a holdout evaluation for a numeric id, as before, and a contract-analysis evaluation for any other id.
+- A list `verdict` in a gold mapping must not be empty.
+
+## 2026-11-16 06:46 UTC
+
+### Highlights
+- Draft saves can carry a reason, and the draft change log shows who changed the playbook and why.
+
+### Python SDK
+- `update_contract_analysis_draft` takes an optional `reason` of at most 500 characters.
+- `list_draft_revisions(case_id)` lists the change log newest first, with each save's actor and reason.
+- `get_draft_revision(case_id, revision)` returns the playbook saved at one revision.
+
+### Java SDK
+- `updateContractAnalysisDraft(caseId, draftRevision, profile, reason)` takes an optional reason; pass `null` to save without one. Sync and async.
+- `listDraftRevisions(caseId)` and `getDraftRevision(caseId, revision)` read the change log and the saved playbooks. Sync and async.
+
+### Migration Notes
+- The reason is optional. A reason longer than 500 characters returns `400` with the code `REASON_TOO_LONG`.
+- The change-log routes need an API version that includes the draft change log.
+
+<!-- sdk-changelog-fingerprint: c73090afbcbdf10c -->
+
 ## 2026-11-06
 
 ### Python SDK
 
 - The SDK now requires Python 3.10 or later, from version 1.15.0. Python 3.9 reached end of life in October 2025, and the patched `anyio` needs 3.10. Projects still on Python 3.9 stay on 1.14.0.
+
+## 2026-11-02 18:17 UTC
+
+### Highlights
+- Capture hybrid document runs for human review with stable review and result identities.
+
+### Python SDK
+- Open named review configurations, record skipped steps, and complete captured runs using the generated review methods.
+
+### Java SDK
+- Use generated methods to open and complete captured runs and record skipped steps.
+
+### Migration Notes
+- Review capture is opt-in. Existing ordinary document requests retain their current behavior.
+
+<!-- sdk-changelog-fingerprint: 14078145375d6ef4 -->
+## 2026-11-02 05:57 UTC
+
+### Highlights
+- Python SDK adds opt-in capture support for hybrid client pipeline runs.
+
+### Python SDK
+- Add ReviewCaptureOptions and LocalSourceMapping for detached local-node capture, exact remote result decoding, and completion after server publication.
+- Preserve request identities and frozen retry bytes across transport retries without rerunning local functions or source mappers.
+- Restore generation compatibility for nullable operation-status fields in generated Python models.
+
+### Java SDK
+- No Java SDK updates in this change.
+
+### Migration Notes
+- Captured hybrid execution requires matching server API routes. Existing pipeline calls remain unchanged when review capture is omitted.
+
+<!-- sdk-changelog-fingerprint: 6a53e0f9ac1911de -->
 
 ## 2026-10-27
 
@@ -63,6 +141,26 @@ mdx:
 - SDK 1.13.0: Record imports and classify-from-file upload through the API in 32 MiB blocks instead of a storage SAS URL, so they work when storage is network-restricted. Requires an API with block uploads; older SDKs cannot upload files to it.
 
 <!-- sdk-changelog-fingerprint: d7b294a60234fac0 -->
+## 2026-10-16 09:19 UTC
+
+### Highlights
+- 1.12.2: ProcessingJob.operation_status_version and Case.embedding_metadata_version are now optional so reads from older servers no longer raise errors.
+
+### Python SDK
+- Released version 1.12.2.
+- ProcessingJob.operation_status_version is now optional and will be UNSET when the server does not provide it.
+- Case.embedding_metadata_version is now optional and will be UNSET when the server does not provide it.
+- Parsing jobs or cases returned by older servers no longer raises KeyError; the missing attributes are represented as UNSET.
+
+### Java SDK
+- No Java SDK user-facing updates in this commit.
+
+### Migration Notes
+- If your code assumes integer values for operation_status_version or embedding_metadata_version, add checks for Unset before using them.
+- Treat UNSET as 'field not provided' rather than a numeric value.
+- Current servers still send both fields; only servers that predate them omit them.
+
+<!-- sdk-changelog-fingerprint: d4cc57296e1d6a61 -->
 ## 2026-10-12 10:07 UTC
 
 ### Highlights
@@ -87,21 +185,14 @@ mdx:
 - New models (ContractAnalysisBuildState, ContractAnalysisPendingRebuild, RebuildChangeCounts) are included in the Python package exports; update any type annotations or deserialization handling if you rely on previous workflow representations.
 
 <!-- sdk-changelog-fingerprint: ca7d5121ec49631b -->
-## 2026-10-10 10:30 UTC
+## 2026-10-06
 
-### Highlights
-- SDK usability improvements for common document processing flows.
+### Extraction human review
 
-### Python SDK
-- Python SDK improvements focused on easier day-to-day usage.
+- Python and Java SDK facades expose stored profile preview/save, exact-run discovery and registration, versioned evaluator claims, human flags/resolutions/adjudications, cursor-based decision feeds, and verified artifact downloads.
+- Artifact helpers return raw bytes. Review state remains separate from immutable extraction results; readiness remains `NOT_ASSESSED`.
+- See the [extraction review guide](/docs/core/extraction-review) for the supported workflow and current limits.
 
-### Java SDK
-- No Java SDK user-facing updates in this commit.
-
-### Migration Notes
-- No breaking SDK changes in this update.
-
-<!-- sdk-changelog-fingerprint: d4cc57296e1d6a61 -->
 ## 2026-09-23 13:31 UTC
 
 ### Highlights

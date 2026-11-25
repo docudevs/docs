@@ -23,10 +23,14 @@ const sidebars: SidebarsConfig = {
         'basics/PlainOCR',                  // EXISTING: OCR-only processing
         'core/ai-analysis',                 // NEW: AI document analysis and generative tasks
         'core/agent-chat',                  // NEW: Agent chat interface
+        'core/agent-sessions',
         'templates/Templates',              // EXISTING: Template management
         'core/schema-generation',           // NEW: AI schema generation
         'core/calculated-fields',           // NEW: Schema calculated fields
         'core/source-locations',            // NEW: Field-level evidence boxes
+        'core/extraction-review',
+        'core/document-compare',
+        'core/document-layout',
         'core/object-detection',            // NEW: Model-emitted bounding boxes for image tasks
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
         'reference/pipeline-mode',          // NEW: Pipeline extraction graphs
@@ -35,6 +39,8 @@ const sidebars: SidebarsConfig = {
         'core/date-range-lookup',
         'core/lookup-files',
         'core/contract-analysis',
+        'core/contract-analysis-playbooks',
+        'core/playbook-evaluation',
         'core/workbook-normalization',
         'core/batch-processing',            // NEW: Multi-document batch processing
       ],
@@ -60,6 +66,7 @@ const sidebars: SidebarsConfig = {
         'advanced/job-management',          // NEW: Job lifecycle and cleanup
         'configuration/Configuration',      // EXISTING: Named configurations
         'advanced/operations',    
+        'advanced/pdf-acroform',
         'advanced/page-range',          // NEW: Page range extraction
         'advanced/tracing',                 // EXISTING: LLM tracing
         'advanced/include-current-date',    // NEW: Pass current date to LLM
@@ -102,8 +109,9 @@ const sidebars: SidebarsConfig = {
       items: [
         'reference/sdk-methods',            // NEW: Complete SDK reference
         'reference/cli-reference',          // NEW: CLI command reference
+        'reference/playbook-format',
         'reference/sdk-changelog',
-        'reference/billing-tokens',
+        'reference/billing-credits',
         'reference/error-codes',            // NEW: Error reference
         'reference/limits-quotas',          // NEW: Platform limits
       ],

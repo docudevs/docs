@@ -4,17 +4,17 @@ description: Build a reviewed, cited knowledge-base profile from playbook docume
 sidebar_position: 11
 ---
 
+:::note
+The clause-based playbook format described in [Contract-analysis playbooks](./contract-analysis-playbooks.md) is the current format: run results and reviews are organized by clause, each with a verdict. Parts of this page, including the result status vocabulary and the v1 and v2 result formats, describe earlier profile formats. See the [get contract analysis run result](/docs/openapi/get-contract-analysis-run-result) API reference for the current response schema.
+:::
+
 Contract analysis turns one or more playbook documents into a reusable, human-reviewed knowledge-base profile. The published profile supplies the facts, item types, relationships, criteria, and evidence requirements that a later contract-analysis run applies against a completed contract job.
 
-This capability must be enabled for your organization or deployment before any of the endpoints below are reachable. When it is off, profile and analysis entry points return a `404` with a disabled-capability code.
+This capability must be enabled for your organization before any of the endpoints below are reachable. When it is off, profile and analysis entry points return a `404` with a disabled-capability code.
 
 Contract-analysis results are technical, evidence-linked extraction outcomes, not legal conclusions. This feature is an information-extraction and review aid; it does not provide legal advice, legal opinions, underwriting decisions, or a substitute for qualified counsel. Your organization remains responsible for reviewing source documents and every output before relying on it.
 
 ## Result status vocabulary
-
-:::note
-This section describes the earlier criterion-based result shape and is being updated. Run results and reviews are now organised by clause, each with a verdict, as the examples on this page show. See the [get contract analysis run result](/docs/openapi/get-contract-analysis-run-result) API reference for the current response schema.
-:::
 
 Contract analysis has two profile and result generations, distinguished by the profile's declared version:
 
@@ -132,13 +132,9 @@ Runs are immutable, addressable records: a run captures its own package of sourc
 
 <Example name="contract-analysis/review-finding" />
 
-The review path names the clause being reviewed. `disposition` is one of `accepted`, `corrected`, `dismissed`, or `unresolved`; a corrected decision requires a `correctedVerdict` (`satisfactory`, `mixed`, `flagged`, `ai_unsure`, `not_found`, or `does_not_apply`), and corrected and dismissed decisions require a `reason`. A stale `expectedReviewRevision` returns `409`. The API derives reviewer identity from the authenticated user, so organization-only API keys cannot submit human dispositions. Accepting or correcting a finding never rewrites the captured machine result — each rerun has a new run ID and starts without a disposition. CSV exports and the run workspace keep the machine assessment, disposition, reviewer, and rationale in separate fields, and original evidence links open the captured source page and source element.
+The review path names the clause being reviewed. `disposition` is one of `accepted`, `corrected`, `dismissed`, or `unresolved`; a corrected decision requires a `correctedVerdict` (`satisfactory`, `mixed`, `flagged`, `ai_unsure`, `not_found`, or `does_not_apply`), and corrected and dismissed decisions require a `reason`. A stale `expectedReviewRevision` returns `409`. The reviewer is recorded as the authenticated user id, or `api-key:<keyId>` for an organization API key. Accepting or correcting a finding never rewrites the captured machine result — each rerun has a new run ID and starts without a disposition. CSV exports and the run workspace keep the machine assessment, disposition, reviewer, and rationale in separate fields, and original evidence links open the captured source page and source element.
 
 ## Result format: v1 vs v2
-
-:::note
-This section describes the earlier criterion-based result shape and is being updated. Run results and reviews are now organised by clause, each with a verdict, as the examples on this page show. See the [get contract analysis run result](/docs/openapi/get-contract-analysis-run-result) API reference for the current response schema.
-:::
 
 Both generations expose `contractFacts`/model data, `analysisItems`, `relationships` (v1) or `effectiveVariants`/`effectUncertainties` (v2), `criteria`, and evidence references. The profile identity — knowledge-base ID, published or draft revision, and source fingerprint — is embedded in every result so a client can confirm which profile snapshot produced it. Citations use a stable source-reference shape: an ID, document ID, source-map path, source element IDs, page numbers, and an exact quote (`evidenceStatus` is `resolved` or `unresolved`); quotes are exact source text, not generated paraphrases.
 
@@ -156,8 +152,7 @@ v1 results are keyed by the criterion's `status` value described above. v2 resul
   "execution": {
     "engineVersion": "2026-09.1",
     "promptVersion": "criteria-v3",
-    "model": "gpt-5",
-    "deployment": "prod-eastus"
+    "model": "gpt-5"
   },
   "criteria": [
     {
@@ -237,4 +232,10 @@ Every example above has a CLI tab except the source-authority ones. The CLI mirr
 
 ## Availability
 
-Contract-analysis generation and analysis must be enabled for your organization or deployment; when disabled, public profile and analysis entry points return a typed `404`. The reviewed version-2 workflow (source authority, trials, scored review, `/contract-analysis/runs`) is a separate, nested capability that must also be enabled for your deployment before it accepts writes — v1 profile publication is unaffected either way. Legacy knowledge-base search and inline evaluation (see [Knowledge Search](/docs/core/knowledge-search)) continue to work when contract analysis is disabled.
+Contract-analysis generation and analysis must be enabled for your organization; when disabled, public profile and analysis entry points return a typed `404`. Knowledge-base search and inline evaluation (see [Knowledge Search](/docs/core/knowledge-search)) work when contract analysis is disabled.
+
+## Related
+
+- [Contract-analysis playbooks](./contract-analysis-playbooks.md): import a clause-based playbook and review contracts against it.
+- [Playbook format](../reference/playbook-format.md): the playbook JSON format and its JSON Schema.
+- [Playbook evaluation](./playbook-evaluation.md): test a playbook against gold answers and improve it.

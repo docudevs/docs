@@ -69,7 +69,7 @@ Public docs show only what a released SDK can run. Bump a pin after the SDK is r
 
 - Python: run `uv pip install --python tools/examples/python/.venv/bin/python -e ../docudevs/docudevs-sdk` into `tools/examples/python/.venv` (manual; the checkers use whatever is installed).
 - Java: `./gradlew compileJava -PsdkRoot=../docudevs` from `tools/examples/java` includes the private main repository's Java SDK build (configures; not exercised in CI).
-- Spec: `DOCUDEVS_MAIN_ROOT=../docudevs npm run sync-openapi-spec` copies `docudevs.yaml` from the private main repository.
+- Spec: `DOCUDEVS_MAIN_ROOT=../docudevs npm run sync-openapi-spec` copies `docudevs.yaml`, `pipeline.schema.json` and the playbook evaluation guide body (`docs/core/playbook-evaluation.md`, keeping the page's own front matter) from the private main repository. `node tools/examples/sync-spec.mjs --check` lists files that differ, by name only, and exits 0 when there is no main checkout.
 
 ## Spec and API reference
 
@@ -99,6 +99,8 @@ tools/examples/python/.venv/bin/python tools/examples/python/check_cli.py exampl
 ```
 
 `check_python.py` verifies that each `client.<method>(...)` call names a method of the pinned `DocuDevsClient` and uses keyword arguments it accepts. `check_cli.py` verifies each `docudevs ...` command and option against the pinned CLI.
+
+`check_fences.py` applies both checks to code fences inside the Markdown pages under `docs/` (`python` fences for client calls, `bash`/`shell` fences for `docudevs` lines; `docs/openapi/` is skipped). It runs as `check_fences.py docs examples/fence-known-failures.txt`. The known-failures file is a ratchet: entries are `<page>:<message>` without line numbers, and the check fails both for a new problem and for a listed entry that no longer occurs. Fix the page and delete its entry; never add an entry to hide a new problem.
 
 Java needs a JDK 17 installed (the build compiles with a Java 17 toolchain and has no toolchain download; Gradle itself may run on a newer JDK):
 

@@ -796,7 +796,7 @@ docudevs operations result JOB_GUID --type error-analysis
 
 ## Billing
 
-The CLI has no `billing` command group and the Python SDK client has no billing helper methods (there is no `list_billing_prices`, `create_billing_checkout_session`, or `get_billing_balance`). Token packs and balance are managed in the DocuDevs web app; see [Billing Tokens](/docs/reference/billing-tokens).
+The CLI has no `billing` command group and the Python SDK client has no billing helper methods (there is no `list_billing_prices`, `create_billing_checkout_session`, or `get_billing_balance`). Credit packs and balance are managed in the DocuDevs web app; see [Billing and credits](/docs/reference/billing-credits).
 
 ## LLM Provider Management
 
