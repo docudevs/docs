@@ -91,3 +91,59 @@ test('--diff scans only lines added since the base, by new line number', () => {
   assert.equal(result.status, 1);
   assert.equal(result.stdout.trim(), 'page.md:3: forbidden literal #1');
 });
+
+test('findings never echo scanned text', () => {
+  const findings = scanText(fence('curl https://private-host.corp.test/x'), 'a.md', []);
+  assert.deepEqual(findings, ['a.md:4: non-API host']);
+});
+test('public hosts are allowed, other github.com paths are not', () => {
+  const allowed = [
+    'https://docs.docudevs.ai/x',
+    'https://docudevs.ai',
+    'http://example.com/a',
+    'https://example.org',
+    'https://json-schema.org/draft',
+    'https://pypi.org/project/docudevs',
+    'https://github.com/docudevs/docudevs-sdk',
+  ];
+  for (const url of allowed) assert.deepEqual(scanText(fence(`see ${url}`), 'a.md', []), [], url);
+  assert.equal(scanText(fence('see https://github.com/someone/else'), 'a.md', []).length, 1);
+  assert.equal(scanText(fence('see https://github.com/docudevs-evil/x'), 'a.md', []).length, 1);
+});
+
+const gitRepo = () => {
+  const dir = workspace();
+  const git = (...args) => spawnSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@example.com', ...args], { cwd: dir, encoding: 'utf8' });
+  git('init', '-q', '-b', 'main');
+  writeFileSync(join(dir, 'seed.md'), 'seed\n');
+  git('add', 'seed.md');
+  git('commit', '-q', '-m', 'base');
+  git('checkout', '-q', '-b', 'topic');
+  return { dir, git, env: { PORT_SCAN_LITERALS_FILE: join(dir, 'literals.txt') } };
+};
+test('--diff skips the scanner and its test, and scans added lines starting with "++ "', () => {
+  const { dir, git, env } = gitRepo();
+  mkdirSync(join(dir, 'tools', 'port'), { recursive: true });
+  mkdirSync(join(dir, 'tools', 'examples', 'test'), { recursive: true });
+  writeFileSync(join(dir, 'tools', 'port', 'scan.mjs'), 'localhost\n');
+  writeFileSync(join(dir, 'tools', 'examples', 'test', 'port-scan.test.mjs'), 'localhost\n');
+  writeFileSync(join(dir, 'page.md'), '++ SECRET-LITERAL-ONE\n');
+  git('add', '.');
+  git('commit', '-q', '-m', 'change');
+  const result = run(['--diff', 'main'], env, dir);
+  assert.equal(result.status, 1);
+  assert.equal(result.stdout.trim(), 'page.md:1: forbidden literal #1');
+});
+test('--diff exits 2 when git diff fails', () => {
+  const { dir, env } = gitRepo();
+  assert.equal(run(['--diff', 'no-such-ref'], env, dir).status, 2);
+});
+test('directory scans skip binary files with a note on stderr', () => {
+  const dir = workspace();
+  const env = { PORT_SCAN_LITERALS_FILE: join(dir, 'literals.txt') };
+  mkdirSync(join(dir, 'd'));
+  writeFileSync(join(dir, 'd', 'img.bin'), Buffer.from('SECRET-LITERAL-ONE\0\x01'));
+  const result = run([join(dir, 'd')], env);
+  assert.equal(result.status, 0);
+  assert.match(result.stderr, /skipped binary .*img\.bin/);
+});

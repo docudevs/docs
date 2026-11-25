@@ -3,7 +3,9 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const API_HOST = 'api.docudevs.ai';
+const ALLOWED_HOSTS = ['api.docudevs.ai', 'docs.docudevs.ai', 'docudevs.ai', 'example.com', 'example.org', 'json-schema.org', 'pypi.org'];
+const PUBLIC_GITHUB_PATH = /^\/docudevs(?:[/?#]|$)/i;
+const SCANNER_PATHS = ['tools/port/', 'tools/examples/test/port-scan.test.mjs'];
 const ALLOWED_EMAIL_DOMAINS = ['docudevs.ai', 'example.com', 'example.org'];
 const MARKDOWN = new Set(['.md', '.mdx']);
 const SKIPPED_DIRECTORIES = new Set(['node_modules', '.git', '.superpowers']);
@@ -19,7 +21,7 @@ const ANYWHERE_TERMS = [
 ];
 
 const EMAIL = /[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)/g;
-const URL_HOST = /https?:\/\/([A-Za-z0-9.-]+)/g;
+const URL_HOST = /https?:\/\/([A-Za-z0-9.-]+)(\/[^\s"'`)>\]]*)?/g;
 const HEX_TOKEN = /(?<![0-9A-Fa-f])[0-9A-Fa-f]{32,}(?![0-9A-Fa-f])/;
 const BASE64_TOKEN = /[A-Za-z0-9+_-]{32,}={0,2}/g;
 
@@ -27,10 +29,15 @@ function looksLikeBase64Token(candidate) {
   return /[a-z]/.test(candidate) && /[A-Z]/.test(candidate) && /[0-9]/.test(candidate);
 }
 
+function hostIsAllowed(host, path) {
+  if (host === 'github.com') return PUBLIC_GITHUB_PATH.test(path);
+  return ALLOWED_HOSTS.includes(host);
+}
+
 function codeFindings(line) {
   const found = [];
-  for (const [, host] of line.matchAll(URL_HOST)) {
-    if (host.toLowerCase() !== API_HOST) found.push(`non-API host ${host}`);
+  for (const [, host, path = ''] of line.matchAll(URL_HOST)) {
+    if (!hostIsAllowed(host.toLowerCase(), path)) found.push('non-API host');
   }
   if (HEX_TOKEN.test(line) || [...line.matchAll(BASE64_TOKEN)].some(([token]) => looksLikeBase64Token(token))) {
     found.push('token-like string');
@@ -76,14 +83,23 @@ function scanAddedLines(base, literals) {
   });
   const findings = [];
   let file = null;
+  let inHeader = false;
   let line = 0;
   for (const row of diff.split('\n')) {
-    if (row.startsWith('+++ ')) {
-      file = row === '+++ /dev/null' ? null : row.slice(6);
-    } else if (row.startsWith('@@')) {
+    if (row.startsWith('diff --git ')) {
+      inHeader = true;
+      file = null;
+    } else if (inHeader) {
+      if (row.startsWith('+++ ')) file = row === '+++ /dev/null' ? null : row.slice(6);
+      else if (row.startsWith('@@')) inHeader = false;
+    }
+    if (inHeader) continue;
+    if (row.startsWith('@@')) {
       line = Number(/\+(\d+)/.exec(row)[1]);
-    } else if (file && row.startsWith('+')) {
+    } else if (file && row.startsWith('+') && !SCANNER_PATHS.some((path) => file.startsWith(path))) {
       for (const message of lineFindings(row.slice(1), true, literals)) findings.push(`${file}:${line}: ${message}`);
+      line++;
+    } else if (file && row.startsWith('+')) {
       line++;
     }
   }
@@ -120,14 +136,26 @@ function main(args) {
       console.error('usage: scan.mjs --diff <base>');
       return 2;
     }
-    findings = scanAddedLines(args[1], literals);
+    try {
+      findings = scanAddedLines(args[1], literals);
+    } catch {
+      console.error('git diff failed');
+      return 2;
+    }
   } else {
     const missing = args.filter((path) => !existsSync(path));
     if (args.length === 0 || missing.length > 0) {
       console.error(`path not found: ${missing.join(', ') || '(none given)'}`);
       return 2;
     }
-    findings = args.flatMap(filesUnder).flatMap((file) => scanText(readFileSync(file, 'utf8'), file, literals));
+    findings = args.flatMap(filesUnder).flatMap((file) => {
+      const content = readFileSync(file);
+      if (content.includes(0)) {
+        console.error(`skipped binary ${file}`);
+        return [];
+      }
+      return scanText(content.toString('utf8'), file, literals);
+    });
   }
   findings.forEach((finding) => console.log(finding));
   return findings.length === 0 ? 0 : 1;
