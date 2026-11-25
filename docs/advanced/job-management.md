@@ -23,13 +23,13 @@ Jobs progress through several states:
 | Status | Description |
 |--------|-------------|
 | `PENDING` | Job created, waiting to be processed |
-| `PROCESSING` | Document is being processed |
+| `IN_PROGRESS` | Document is being processed |
 | `COMPLETED` | Processing finished successfully |
 | `ERROR` | Processing failed with an error |
+| `FAILED` | Processing failed |
 | `TIMEOUT` | Processing timed out |
-| `PARTIAL` | Processing partially completed |
 
-Only jobs in **terminal states** (COMPLETED, ERROR, TIMEOUT, PARTIAL) can be deleted. A `PARTIAL` job finished with some parts failed, and its result can still be read.
+Only jobs in **terminal states** (`COMPLETED`, `ERROR`, `FAILED`, `TIMEOUT`) can be deleted. A batch whose documents partly failed ends `COMPLETED`; `GET /job/result/{guid}` for the batch reports `state: "PARTIAL"` with a status for each document, and the results of the documents that succeeded can still be read.
 
 ## Deleting Jobs
 
