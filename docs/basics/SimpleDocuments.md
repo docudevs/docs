@@ -441,7 +441,7 @@ The upload and synchronous processing endpoints accept documents for the authent
 
 All four endpoints, `POST /document/analyze`, `POST /submission-portals/{id}/submissions` and the deprecated `POST /cases/{caseId}/upload` can return:
 
-- **409 Conflict**: the request conflicts with an active review run for the document. Retrying the same request does not resolve it. For a submission portal, the request can also conflict with a batch start.
+- **409 Conflict**: the request conflicts with an active review run for the document. For a submission portal, the request can also conflict with a batch start.
 - **503 Service Unavailable**: the service is busy with the document. Retry the request after a short delay.
 
 `POST /cases/{caseId}/documents` returns **503** in the same way. Its **409** means the case is a records case, which does not accept documents; import records instead.
@@ -462,6 +462,8 @@ The following endpoints create or reuse a child job under an existing job:
 | `POST /compare` | `CompareSubmitResponse` JSON with HTTP 202 |
 | `POST /compare/{compareGuid}/exports` | `CompareExportSubmitResponse` JSON with HTTP 202 |
 | `POST /contract-analysis/runs` | `ContractAnalysisRunResponse` JSON |
+
+These endpoints can return:
 
 - **409 Conflict**: the child job is bound to a review run. `POST /operation` returns a JSON `message` and also uses 409 for an operation identity conflict or a contract-analysis publication that must be revalidated (`revalidation_required`). For `POST /contract-analysis/runs`, 409 means the run identity conflicts with the requested execution configuration.
 - **503 Service Unavailable**: the service is busy. Retry after a short delay. For a contract-analysis run, retry with the same idempotency key to recover the recorded run identity and status; a replay does not schedule another attempt. If the replay reports `ERROR` and you want a new attempt, submit with a new idempotency key.

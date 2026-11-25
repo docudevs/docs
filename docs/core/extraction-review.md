@@ -111,7 +111,7 @@ stored snapshots even if the command has since changed.
 
 Binding does not by itself enable hybrid capture. The ordinary upload capture
 path rejects an enabled descriptor-bound profile; a disabled profile proceeds
-without capture. The Python SDK adds an opt-in `ReviewCaptureOptions` argument
+without capture. The Python SDK has an opt-in `ReviewCaptureOptions` argument
 to `run_client_pipeline` for captured client runs. It binds by named profile and
 expected revision, records every local execution using exact
 `inputsJson`/`resultJson` strings, and returns review identity only after the
@@ -291,7 +291,7 @@ After saving, the workspace confirms the saved decision and offers **Next
 needing attention** when another queued target remains. The selected target is
 kept in place until the reviewer chooses that action.
 
-The initial editor supports integers up to 100 digits. Noninteger corrections
+The editor supports integers up to 100 digits. Noninteger corrections
 support up to 12 significant digits with absolute values at least `1e-100` and
 less than `1e100`, and must retain their exact decimal meaning through the API
 encoding.

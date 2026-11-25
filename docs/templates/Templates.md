@@ -120,7 +120,7 @@ curl -X POST https://api.docudevs.ai/template/invoice \
 
 Both endpoints can return:
 
-- **409 Conflict**: the request conflicts with an active review run. Retrying the same request does not resolve it.
+- **409 Conflict**: the request conflicts with an active review run.
 - **503 Service Unavailable**: the service is busy. Retry the request after a short delay.
 
 ### Listing Templates
