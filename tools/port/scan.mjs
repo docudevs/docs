@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const ALLOWED_HOSTS = ['api.docudevs.ai', 'docs.docudevs.ai', 'docudevs.ai', 'example.com', 'example.org', 'json-schema.org', 'pypi.org'];
+const ALLOWED_HOSTS = ['api.docudevs.ai', 'docs.docudevs.ai', 'docudevs.ai', 'example.com', 'example.org', 'json-schema.org', 'jqlang.org', 'pypi.org'];
 const PUBLIC_GITHUB_PATH = /^\/docudevs(?:[/?#]|$)/i;
 const SCANNER_PATHS = ['tools/port/', 'tools/examples/test/port-scan.test.mjs'];
 const ALLOWED_EMAIL_DOMAINS = ['docudevs.ai', 'example.com', 'example.org'];
