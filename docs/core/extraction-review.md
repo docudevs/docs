@@ -18,8 +18,8 @@ Who can call what, in the organization that owns the run or configuration:
 
 | Calls | Allowed | Rejected with 403 |
 | --- | --- | --- |
-| Read profiles, list runs, register a run, read a run, read artifacts, pull decisions | Organization API key, or a signed-in ADMIN or MEMBER | Agent tokens, inactive members |
-| Preview and save profiles | Organization API key, or an active signed-in ADMIN | MEMBER, agent tokens |
+| Read profiles, list runs, register a run, read a run, read artifacts, pull decisions | Organization API key, or a signed-in ADMIN or MEMBER | Inactive members |
+| Preview and save profiles | Organization API key, or an active signed-in ADMIN | MEMBER |
 | Submit evaluator claims | Organization API key | Signed-in users |
 | Add flags, resolve values, adjudicate claims | Signed-in ADMIN or MEMBER | API keys |
 
