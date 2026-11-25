@@ -134,7 +134,7 @@ Cases support two levels of scope:
 ### User-specific Cases
 
 - **Created by**: A signed-in user
-- **Visible to**: Only the creating user. Other users, organization admins included, and organization API keys do not see them (an API key gets `404`).
+- **Visible to**: Only the creating user. Other users, organization admins included, and organization API keys do not see them (an API key gets `404`). Knowledge bases are the exception; see [Which cases you can use](./case-agent.md#which-cases-you-can-use).
 - **Use case**: Personal projects, user-specific workflows
 
 A signed-in user sees their own cases plus the organization-wide ones. The scope is set by how you create the case: with an API key it is organization-wide, as a signed-in user it is yours alone. See [which cases you can use](./case-agent.md#which-cases-you-can-use).

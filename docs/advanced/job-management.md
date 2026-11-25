@@ -22,14 +22,17 @@ Jobs progress through several states:
 
 | Status | Description |
 |--------|-------------|
-| `PENDING` | Job created, waiting to be processed |
+| `CREATED` | Job exists and has not been submitted for processing |
+| `PENDING` | Submitted, waiting to be processed |
 | `IN_PROGRESS` | Document is being processed |
+| `OCR_COMPLETED` | Text extraction finished, extraction still running |
+| `RUNNING` | A batch job is processing its documents |
 | `COMPLETED` | Processing finished successfully |
 | `ERROR` | Processing failed with an error |
-| `FAILED` | Processing failed |
+| `FAILED` | Processing could not be completed |
 | `TIMEOUT` | Processing timed out |
 
-Only jobs in **terminal states** (`COMPLETED`, `ERROR`, `FAILED`, `TIMEOUT`) can be deleted. A batch whose documents partly failed ends `COMPLETED`; `GET /job/result/{guid}` for the batch reports `state: "PARTIAL"` with a status for each document, and the results of the documents that succeeded can still be read.
+Any status that is not terminal means the job is still running: keep polling until `COMPLETED`, `ERROR`, `FAILED` or `TIMEOUT`. Only jobs in these **terminal states** can be deleted. A batch whose documents partly failed ends `COMPLETED`; `GET /job/result/{guid}` for the batch reports `state: "PARTIAL"` with a status for each document, and the results of the documents that succeeded can still be read.
 
 ## Deleting Jobs
 
