@@ -100,6 +100,8 @@ tools/examples/python/.venv/bin/python tools/examples/python/check_cli.py exampl
 
 `check_python.py` verifies that each `client.<method>(...)` call names a method of the pinned `DocuDevsClient` and uses keyword arguments it accepts. `check_cli.py` verifies each `docudevs ...` command and option against the pinned CLI.
 
+`check_fences.py` applies both checks to code fences inside the Markdown pages under `docs/` (`python` fences for client calls, `bash`/`shell` fences for `docudevs` lines; `docs/openapi/` is skipped). It runs as `check_fences.py docs examples/fence-known-failures.txt`. The known-failures file is a ratchet: entries are `<page>:<message>` without line numbers, and the check fails both for a new problem and for a listed entry that no longer occurs. Fix the page and delete its entry; never add an entry to hide a new problem.
+
 Java needs a JDK 17 installed (the build compiles with a Java 17 toolchain and has no toolchain download; Gradle itself may run on a newer JDK):
 
 ```bash
