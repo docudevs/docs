@@ -59,7 +59,7 @@ Your API key is required to authenticate with the DocuDevs platform.
 pip install docu-devs-api-client
 
 # Or install a specific version
-pip install docu-devs-api-client==1.0.1
+pip install docu-devs-api-client==1.15.0
 ```
 
   </TabItem>
@@ -70,7 +70,7 @@ poetry add docu-devs-api-client
 
 # Or specify version
 
-poetry add docu-devs-api-client==1.0.1
+poetry add docu-devs-api-client==1.15.0
 
 ```
   </TabItem>
@@ -86,21 +86,18 @@ pip install docu-devs-api-client
 
 ### Verify Installation
 
-```python
-# Test your installation
-from docudevs.docudevs_client import DocuDevsClient
-print("DocuDevs SDK installed successfully!")
+```bash
+python -c "import docudevs; print('DocuDevs SDK installed successfully!')"
 ```
 
 ## Step 3: Configure Your Environment
 
-Set up your API key for easy access across your projects.
+Set up your API key for easy access across your projects. The SDK, the CLI and the examples in this documentation read the key from the `API_KEY` environment variable.
 
 <Tabs
   defaultValue="env_var"
   values={[
     {label: 'Environment Variable', value: 'env_var'},
-    {label: 'Python Code', value: 'python'},
     {label: '.env File', value: 'env_file'},
   ]}>
   <TabItem value="env_var">
@@ -124,51 +121,15 @@ $env:API_KEY="your-api-key-here"
 ```
 
   </TabItem>
-  <TabItem value="python">
-```python
-import os
-from docudevs.docudevs_client import DocuDevsClient
-
-# Option 1: Direct initialization
-
-client = DocuDevsClient(token="your-api-key-here")
-
-# Option 2: From environment variable
-
-api_key = os.getenv('API_KEY')
-client = DocuDevsClient(token=api_key)
-
-# Option 3: With error handling
-
-api_key = os.getenv('API_KEY')
-if not api_key:
-    raise ValueError("API_KEY environment variable not set")
-
-client = DocuDevsClient(token=api_key)
-
-```
-  </TabItem>
   <TabItem value="env_file">
 Create a `.env` file in your project root:
 
 ```bash
 # .env file
 API_KEY=your-api-key-here
-DOCUDEVS_API_URL=https://api.docudevs.ai
 ```
 
-Then load it in your Python code:
-
-```python
-from dotenv import load_dotenv
-import os
-from docudevs.docudevs_client import DocuDevsClient
-
-# Load environment variables from .env file
-load_dotenv()
-
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-```
+Then load it with `load_dotenv()` from `python-dotenv` before you create the client, and read the key with `os.getenv("API_KEY")`.
 
 **Install python-dotenv:**
 
@@ -179,102 +140,49 @@ pip install python-dotenv
   </TabItem>
 </Tabs>
 
+The Python client takes the key as its `token` argument. Reading it from the environment keeps the key out of your source code.
+
 ## Step 4: Test Your Connection
 
-Verify everything is working with a quick test:
+Verify everything is working by listing your saved configurations. A `200` status code means the API key is valid and the API is reachable:
 
-```python
-import asyncio
-import os
-from docudevs.docudevs_client import DocuDevsClient
+<Example name="install/verify-connection" />
 
-async def test_connection():
-    # Initialize client
-    client = DocuDevsClient(token=os.getenv('API_KEY'))
-    
-    try:
-        # Test connection by listing configurations
-        response = await client.list_configurations()
-        print("✅ Connection successful!")
-        print(f"Status code: {response.status_code}")
-        return True
-        
-    except Exception as e:
-        print("❌ Connection failed!")
-        print(f"Error: {e}")
-        return False
-
-# Run the test
-success = asyncio.run(test_connection())
-if success:
-    print("🎉 You're ready to start processing documents!")
-else:
-    print("🔧 Please check your API key and network connection.")
-```
+The cURL example does not need the SDK. To process a document next, follow the [Quick Start](/docs/getting-started/quick-start).
 
 ## Alternative Integration Methods
 
 ### Direct API Usage (cURL)
 
-If you prefer direct API calls without the SDK:
-
-```bash
-# Test your API key
-curl -X GET https://api.docudevs.ai/configuration \
-  -H "Authorization: Bearer $API_KEY"
-
-# Upload and process a document
-curl -X POST https://api.docudevs.ai/document/upload-files \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@your-document.pdf"
-```
+If you prefer direct API calls without the SDK, select the cURL tab of any example in this documentation. Requests go to `https://api.docudevs.ai` and send the key in the `Authorization` header.
 
 ### CLI Tool
 
-The CLI tool is included with the SDK installation and provides convenient command-line access to all DocuDevs functionality:
+The CLI tool is included with the SDK installation and provides convenient command-line access to DocuDevs:
 
 ```bash
 # CLI is included with SDK installation
 pip install docu-devs-api-client
 
-# Set up authentication (choose one method)
-export DOCUDEVS_TOKEN=your-api-key-here
-# OR
+# Set up authentication
 export API_KEY=your-api-key-here
-# OR pass token with each command using --token
 
-# High-level document processing (upload + process + wait for result)
-docudevs process document.pdf --prompt="Extract invoice data"
-
-# OCR-only processing
-docudevs ocr-only document.pdf --format=markdown
-
-# Upload and process with a saved configuration
-docudevs process-with-config document.pdf my-invoice-config
-
-# Case management
-docudevs create-case "Invoice Batch 2024-01"
-docudevs list-cases
-docudevs upload-case-document 123 document.pdf
-
-# Configuration management
-docudevs list-configurations
-docudevs save-configuration my-config config.json
-
-# Template management
-docudevs list-templates
-docudevs fill template-name data.json
-
-# Operations (error analysis, etc.)
-docudevs error-analysis job-guid-here
-
-# Low-level commands (for advanced usage)
-docudevs upload-document document.pdf    # Upload only
-docudevs process-document GUID config.json  # Process uploaded doc
-docudevs status GUID                     # Check job status
-docudevs result GUID                     # Get job result
-docudevs wait GUID                       # Wait for completion
+# List the available commands
+docudevs --help
 ```
+
+Every command group has its own help, for example `docudevs cases --help`. The most common commands:
+
+| Task | Command |
+| --- | --- |
+| Upload, process and wait for a result | `docudevs process` |
+| OCR-only processing | `docudevs ocr-only` |
+| Process with a saved configuration | `docudevs process <file> --configuration <name>` |
+| Manage cases | `docudevs cases create`, `docudevs cases list`, `docudevs cases upload-document` |
+| Manage configurations | `docudevs list-configurations`, `docudevs save-configuration` |
+| Manage templates | `docudevs list-templates`, `docudevs fill` |
+| Run operations such as error analysis | `docudevs operations error-analysis` |
+| Check a job | `docudevs status`, `docudevs result`, `docudevs wait` |
 
 #### CLI Authentication
 
@@ -283,27 +191,21 @@ The CLI supports multiple authentication methods:
 1. **Environment Variable (Recommended)**:
 
    ```bash
-   export DOCUDEVS_TOKEN=your-api-key-here
-   docudevs process document.pdf
-   ```
-
-2. **Legacy Environment Variable**:
-
-   ```bash
    export API_KEY=your-api-key-here
-   docudevs process document.pdf
    ```
 
-3. **Command Line Option**:
+2. **Alternative Environment Variable**:
 
    ```bash
-   docudevs --token=your-api-key-here process document.pdf
+   export DOCUDEVS_TOKEN=your-api-key-here
    ```
+
+3. **Command Line Option**: pass `--token your-api-key-here` before the command name.
 
 #### CLI Features
 
-- **High-level Commands**: `process`, `ocr`, `process-with-config` handle the full workflow
-- **Case Management**: Create and manage document cases
+- **High-level Commands**: `process` and `ocr-only` handle the full workflow
+- **Case Management**: Create and manage document cases with `docudevs cases`
 - **Configuration Management**: Save and reuse processing configurations  
 - **Template Operations**: Fill and manage document templates
 - **Operations**: Submit and monitor advanced operations like error analysis
@@ -316,26 +218,11 @@ For complete CLI documentation including all commands and options, see the **[CL
 
 ### API Endpoint Configuration
 
-```python
-# Default endpoint (production)
-client = DocuDevsClient(token=api_key)
-
-# Custom endpoint (if using different environment)
-client = DocuDevsClient(
-    api_url="https://api.staging.docudevs.ai",
-    token=api_key
-)
-```
+The client uses the production endpoint `https://api.docudevs.ai` by default. Pass `api_url` to `DocuDevsClient` to use a different endpoint, and `--api-url` before the command name in the CLI.
 
 ### Timeout Configuration
 
-```python
-# Configure custom timeouts
-client = DocuDevsClient(
-    token=api_key,
-    timeout=30  # 30 seconds timeout
-)
-```
+Waiting for a result is bounded by the `timeout` argument of `wait_until_ready`, in seconds (default 180), and by `--timeout` on CLI commands that wait.
 
 ## Troubleshooting
 
