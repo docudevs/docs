@@ -53,24 +53,40 @@ supported." Recreate such a playbook in the clause format.
    ```
 
    Import replaces the whole draft and saves it as the next draft revision.
-   A stale `draftRevision` returns `409 Conflict`.
+   A stale `draftRevision` returns `409 Conflict`. The optional `reason` is
+   recorded in the draft's change log (see [Say why you changed the
+   draft](#say-why-you-changed-the-draft)).
 3. A file with mistakes returns `422` with every problem and its JSON path, not
    only the first: a duplicate id, a `relatedClauses` entry that names no
    clause, a condition on a fact the playbook does not declare, an unknown
-   enum value. Fix the file and import again.
+   enum value. The problems are in `validation.errors`, each with a `code`, a
+   `path` and a `message`. Fix the file and import again.
 4. Export the draft or the published revision with
    `GET /knowledge-bases/{caseId}/profiles/contract-analysis/export?view=draft`
    (or `published`). The export is the canonical form and can be edited and
    imported again.
 
+<Example name="contract-analysis/import-playbook" />
+
+The Python client's `import_playbook` returns the response, so the `422` problem
+list stays readable. The CLI import without `--draft-revision` replaces the
+current draft.
+
+<Example name="contract-analysis/export-playbook" />
+
+The Python client's `export_playbook` returns the playbook as a dict and raises
+on an error status. The Java client returns JSON trees; `DocuDevsAsyncClient`
+returns `CompletableFuture<JsonNode>` with the same method names.
+
 ## Edit a playbook
 
 An organization API key can read and change every playbook in its organization,
-including playbooks that a user created. Editing is a loop of export, change,
+including playbooks that a user created. Editing is a loop of read, change,
 save:
 
-1. Export the draft with `GET .../profiles/contract-analysis/export?view=draft`
-   and note `draftRevision` from `GET .../profiles/contract-analysis?view=draft`.
+1. Read the draft with `GET .../profiles/contract-analysis?view=draft`: the
+   response carries `draftRevision` and the playbook as `profile`. The export
+   (`GET .../export?view=draft`) returns the same playbook in canonical form.
 2. Change the JSON: add, edit or remove clauses, red flags, risk factors,
    alternatives and identification hints.
 3. Save it with `PUT /knowledge-bases/{caseId}/profiles/contract-analysis/draft`,
@@ -81,8 +97,13 @@ save:
 {"draftRevision": 3, "profile": { "...": "the edited playbook" }}
 ```
 
+<Example name="contract-analysis/update-draft" />
+
+The example saves with a `reason`, which is optional (see [Say why you changed
+the draft](#say-why-you-changed-the-draft)).
+
 Two editors can save from the same `draftRevision`. The first save wins; the
-second gets `409 Conflict` and nothing is overwritten. Export again, apply your
+second gets `409 Conflict` and nothing is overwritten. Read the draft again, apply your
 change to the new draft and save with the new revision. A playbook with mistakes
 returns `422` with every problem and its JSON path.
 
@@ -97,28 +118,14 @@ Deleting a clause or red flag that test expectations name is allowed. The save
 succeeds, and the readiness check then reports `STALE_EXPECTATION` until you
 update the expectations.
 
-```python
-draft = await client.get_contract_analysis_profile(42)
-revision = draft.parsed["draftRevision"]
-playbook = await client.export_playbook(42, view="draft")
-playbook["clauses"][0]["name"] = "Renewal term"
-saved = await client.update_contract_analysis_draft(42, draft_revision=revision, profile=playbook)
-```
-
-```bash
-curl -X PUT "https://api.docudevs.ai/knowledge-bases/42/profiles/contract-analysis/draft" \
-  -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"draftRevision": 3, "profile": { ... }}'
-```
-
 ### Say why you changed the draft
 
 The draft save takes an optional `reason`: a note of why the draft changed, at
 most 500 characters (emoji count as one character each). Every successful save
 is recorded in the draft's change log with the reason and who saved it: a user's
 id, or `api-key:<id>` for an organization API key. Imports, generated builds and
-applied generation proposals are recorded too; an import has no reason, and a
-build records `Built from guidelines`.
+applied generation proposals are recorded too; an import records the reason you
+send with it, if any, and a build records `Built from guidelines`.
 
 ```json
 {"draftRevision": 3, "profile": { "...": "the edited playbook" }, "reason": "Tightened the notice period"}
@@ -133,19 +140,7 @@ playbook saved at one revision, call `GET .../profiles/contract-analysis/draft/r
 its `profile` field holds that playbook, and an unknown revision returns `404`.
 A case from another organization returns `404` on both routes.
 
-```python
-saved = await client.update_contract_analysis_draft(
-    42, draft_revision=revision, profile=playbook, reason="Tightened the notice period"
-)
-log = await client.list_draft_revisions(42)
-earlier = await client.get_draft_revision(42, 2)
-```
-
-```java
-client.updateContractAnalysisDraft(42, 3, playbook, "Tightened the notice period");
-JsonNode log = client.listDraftRevisions(42);
-JsonNode earlier = client.getDraftRevision(42, 2);
-```
+<Example name="contract-analysis/list-draft-revisions" />
 
 ## Clauses, red flags and verdicts
 
@@ -196,21 +191,28 @@ recorded in the run diagnostics.
 Create an immutable run for a completed OCR/document-processing job and the
 playbook's knowledge base:
 
-```http
-POST /contract-analysis/runs
-Content-Type: application/json
+`POST /contract-analysis/runs` takes the `anchorJobGuid`, the `knowledgeBaseId`,
+a `mode` and an `idempotencyKey`. The mode is `draft_trial`, which runs the draft
+at the `draftRevision` you send, or `published`.
 
-{"anchorJobGuid":"<completed-contract-job>","knowledgeBaseId":42,"mode":"draft_trial","draftRevision":3,"idempotencyKey":"<unique-request-key>"}
-```
+<Example name="contract-analysis/create-draft-run" />
+
+To analyze a package of several documents against the published playbook, see
+[Analyze a contract](./contract-analysis.md#contract-analysis-runs-v2).
 
 The response includes a `runId`. Use `GET /contract-analysis/runs/{runId}` for
-status and `GET /contract-analysis/runs/{runId}/result` for the result. The run
-captures the selected package, the playbook revision and the execution
+status and `GET /contract-analysis/runs/{runId}/result` for the result.
+
+<Example name="contract-analysis/get-run" />
+
+<Example name="contract-analysis/get-run-result" />
+
+The run captures the selected package, the playbook revision and the execution
 configuration, so later edits cannot change it. Keep the run ID with its result
 and any review record.
 
 Run creation returns HTTP 409 for a run identity or execution-configuration
-conflict and HTTP 503 when the service is busy. Retry a 503 with the same
+conflict and HTTP 503 when admitting the run timed out. Retry a 503 with the same
 idempotency key to recover the recorded run
 identity and status; replay does not schedule another attempt. To start a new
 attempt after an `ERROR`, use a new idempotency key.
@@ -259,27 +261,18 @@ in the run's playbook returns `400 UNKNOWN_RED_FLAG`. A red flag outcome other
 than `triggered` or `not_triggered` returns `400 INVALID_RED_FLAG_OUTCOME`. A
 stale revision returns
 `409`. The response carries `clauseId`, `correctedVerdict`,
-`correctedRedFlags` and `actor`.
+`correctedRedFlags`, `actor` and the new `reviewRevision`.
 
 The actor is the authenticated user id, or `api-key:<keyId>` for an
-organization API key. Agent tokens are refused. Reviewing never rewrites the
-captured result, and a rerun starts without a disposition.
+organization API key. Reviewing never rewrites the captured result, and a rerun
+starts without a disposition.
 
-```python
-await client.put_contract_analysis_run_review(
-    run_id, "term",
-    result_fingerprint=fingerprint, disposition="corrected",
-    corrected_verdict="flagged", corrected_red_flags={"auto-renewal": "triggered"},
-    expected_review_revision=0, idempotency_key="review-term-1",
-    reason="The contract renews without notice.",
-)
-```
+<Example name="contract-analysis/review-finding" />
 
-```bash
-curl -X PUT "https://api.docudevs.ai/contract-analysis/runs/$RUN_ID/reviews/term" \
-  -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"resultFingerprint":"<fingerprint>","disposition":"corrected","correctedVerdict":"flagged","correctedRedFlags":{"auto-renewal":"triggered"},"expectedReviewRevision":0,"idempotencyKey":"review-term-1","reason":"The contract renews without notice."}'
-```
+The example corrects the verdict of one clause. A correction can also carry
+`correctedRedFlags`, a map of red flag id to `triggered` or `not_triggered`.
+
+<Example name="contract-analysis/list-run-reviews" />
 
 ## Review findings into test cases
 
@@ -292,18 +285,7 @@ playbook.
 **Confirm** records several expectations at once as approved. Send to
 `POST /knowledge-bases/{caseId}/profiles/contract-analysis/test-suite/confirmations`:
 
-```json
-{
-  "runId": "<run-id>",
-  "resultFingerprint": "<fingerprint>",
-  "expectedSuiteRevision": 4,
-  "confirmations": [
-    {"clauseId": "term", "expectedVerdict": "flagged",
-     "expectedRedFlags": {"auto-renewal": "triggered"},
-     "importance": "mandatory", "notes": "Confirmed by review."}
-  ]
-}
-```
+<Example name="contract-analysis/confirm-findings" />
 
 `expectedRedFlags` defaults to empty and `importance` to `mandatory`. A clause
 the run does not have returns `400 UNKNOWN_CLAUSE`; the same clause twice in one
@@ -315,48 +297,25 @@ someone to approve later. Send to `.../test-suite/proposals` the `runId`,
 `expectedRedFlags` and `notes`, a `reason`, `expectedSuiteRevision` and an
 `idempotencyKey`.
 
+<Example name="contract-analysis/propose-test-case" />
+
 A stale `expectedSuiteRevision` returns `409`; read the suite again and retry. Every
 expectation stores `recordedBy`, set by the server: the user id, or
 `api-key:<keyId>` for an organization API key. It changes only when the
-expectation is added or edited. Agent tokens are refused on confirm and propose.
-
-```python
-await client.confirm_contract_analysis_findings(
-    42, run_id=run_id, result_fingerprint=fingerprint, expected_suite_revision=4,
-    confirmations=[{
-        "clause_id": "term", "expected_verdict": "flagged",
-        "expected_red_flags": {"auto-renewal": "triggered"},
-    }],
-)
-await client.propose_contract_analysis_finding_test_case(
-    42, run_id=run_id, result_fingerprint=fingerprint, clause_id="notice",
-    name="Notice period", expected_verdict="satisfactory",
-    reason="Reviewer checked the notice clause.",
-    expected_suite_revision=5, idempotency_key="propose-notice-1",
-)
-```
+expectation is added or edited.
 
 ## Test contracts
 
 A test contract is a contract you use to see what a draft's clauses do to a real
 document, without making it a guideline source. Upload it with
-`datasetType=test_contract`, or mark a document that is already in the case:
+`datasetType=test_contract` (and optionally `testContractRetention`):
 
-```http
-POST /cases/{caseId}/documents
-Content-Type: multipart/form-data
+<Example name="contract-analysis/upload-test-contract" />
 
-document=<contract file>
-datasetType=test_contract
-testContractRetention=kept
-```
+Or mark a document that is already in the case. The document must have finished
+processing:
 
-```http
-PATCH /cases/{caseId}/documents/{documentId}
-Content-Type: application/json
-
-{"datasetType":"test_contract","testContractRetention":"kept"}
-```
+<Example name="contract-analysis/mark-test-contract" />
 
 - `datasetType` accepts only `test_contract`. Marking is one-way: no request
   removes the marker. To use a test contract as a guideline source, upload it
@@ -385,17 +344,6 @@ Content-Type: application/json
   Test step picker. `GET /cases/{caseId}/documents` still returns them, and
   they count toward the case's document limit.
 
-```python
-await client.update_case_document(
-    case_id, document_id, dataset_type="test_contract", test_contract_retention="kept"
-)
-```
-
-```java
-client.updateCaseDocument(caseId, documentId, "test_contract", "kept");
-```
-
-
 ## Test and publish a playbook
 
 Publishing is gated by a test. You describe what the draft should conclude for
@@ -407,66 +355,100 @@ an organization API key alone. All paths are under
 To build these expectations from a spreadsheet of gold answers, and to tune the
 playbook against them, see [Playbook evaluation](./playbook-evaluation.md).
 
-1. **Prepare a test package.** Pick a completed contract job and capture it with
-   `POST /test-packages`. Send `anchorJobGuid`, an `idempotencyKey`, optional
-   `packageMembers` (`jobGuid` and `role`) and an optional `context` with
-   `asOfDate`. The answer carries `packageId` and `fingerprint`. Preparing a
-   package analyzes nothing and is not charged.
-2. **Write the expectations.** Replace the test suite with `PUT /test-suite`,
-   sending the `revision` you last read and the `cases`. Each case names the
-   package (`anchorJobGuid`, `packageId`, `packageFingerprint`,
-   `packageMembers`, `context`) and lists `expectations`:
+### 1. Prepare a test package
 
-   ```json
-   {
-     "id": "renewal-deviation",
-     "clauseId": "term",
-     "expectedVerdict": "flagged",
-     "expectedRedFlags": {"auto-renewal": "triggered"},
-     "importance": "mandatory",
-     "approved": false,
-     "notes": "The contract renews without notice."
-   }
-   ```
+Pick a completed contract job and capture it with `POST /test-packages`. Send
+`anchorJobGuid`, an `idempotencyKey`, optional `packageMembers` (`jobGuid` and
+`role`) and an optional `context` with `asOfDate`. The answer carries
+`packageId` and `fingerprint`. Preparing a package analyzes nothing and is not
+charged.
 
-   `expectedVerdict` is one of `satisfactory`, `mixed`, `flagged`, `not_found`,
-   `does_not_apply` or `ai_unsure`. `expectedRedFlags` maps red flag ids of that
-   clause to `triggered` or `not_triggered`; it may be empty and names only the
-   red flags you care about. `importance` is `mandatory` (the default) or
-   `advisory`. The request is refused with `UNKNOWN_CLAUSE`, `UNKNOWN_RED_FLAG`
-   or `INVALID_VERDICT` when an id or verdict does not exist.
-3. **Approve.** A person who has checked an expectation saves the suite again
-   with `approved` set to `true`. Only approved expectations count toward
-   coverage.
-4. **Estimate.** `POST /trials/estimate` with `anchorJobGuid`, `suiteRevision`,
-   `trialKind` set to `scored` and `suiteCaseId` returns an
-   `estimateFingerprint` and an `executionFingerprint`. The estimate counts
-   clauses.
-5. **Run a scored trial.** `POST /trials` with the same fields, an
-   `idempotencyKey`, the `estimateFingerprint` and the
-   `configurationFingerprint` (the `executionFingerprint` from the estimate)
-   starts the trial. Read it with `GET /trials/{trialId}` until its status is
-   final. An expectation passes when the finding's verdict equals the expected
-   verdict and every named red flag has the expected outcome; otherwise the
-   assertion carries one reason: `clause_not_found`, `verdict_mismatch`,
-   `red_flag_not_found` or `red_flag_mismatch`. If the run for any one contract
-   fails, the whole trial fails with a reason and cannot be attested.
-6. **Attest.** `POST /trials/{trialId}/attest` with the report's `reportId` and
-   an optional `reason` records that a user or an API key accepts the report. The
-   attestation stores who attested: the user id, or `api-key:<keyId>` for an
-   API key.
-7. **Check readiness.** `GET /readiness` lists everything that stops publishing
-   as blocker codes, such as `ATTESTATION_STALE`, `NO_CONFIRMED_EXAMPLES` and
-   `SCENARIO_COVERAGE_MISSING`. Publishing is possible only when the list is
-   empty. A blocker appears when the draft changed after
-   the trial, when an expectation names a clause or red flag that was removed
-   from the draft (a stale expectation), when a scenario is not covered, or when
-   source authority is required and not confirmed.
-8. **Publish.** `POST /publish` with the observed `draftRevision` and the
-   `trialAttestationId`. The published revision records who published it.
+<Example name="contract-analysis/prepare-test-package" />
 
-Agent tokens are refused on attest and publish; they are for a user or an API
-key only.
+### 2. Write the expectations
+
+Replace the test suite with `PUT /test-suite`, sending the `revision` you last
+read and the `cases`. Each case names the package (`anchorJobGuid`, `packageId`,
+`packageFingerprint`, `packageMembers`, `context`) and lists `expectations`:
+
+```json
+{
+  "id": "renewal-deviation",
+  "clauseId": "term",
+  "expectedVerdict": "flagged",
+  "expectedRedFlags": {"auto-renewal": "triggered"},
+  "importance": "mandatory",
+  "approved": false,
+  "notes": "The contract renews without notice."
+}
+```
+
+`expectedVerdict` is one of `satisfactory`, `mixed`, `flagged`, `not_found`,
+`does_not_apply` or `ai_unsure`. `expectedRedFlags` maps red flag ids of that
+clause to `triggered` or `not_triggered`; it may be empty and names only the
+red flags you care about. `importance` is `mandatory` (the default) or
+`advisory`. The request is refused with `UNKNOWN_CLAUSE`, `UNKNOWN_RED_FLAG`
+or `INVALID_VERDICT` when an id or verdict does not exist.
+
+Read the suite and its revision with `GET /test-suite`, edit the `cases`, and
+save them again:
+
+<Example name="contract-analysis/get-test-suite" />
+
+<Example name="contract-analysis/update-test-suite" />
+
+### 3. Approve
+
+A person who has checked an expectation saves the suite again with `approved`
+set to `true`. Only approved expectations count toward coverage.
+
+### 4. Estimate and run a scored trial
+
+`POST /trials/estimate` with `anchorJobGuid`, `suiteRevision` and `trialKind`
+set to `scored` returns an `estimateFingerprint` and an `executionFingerprint`.
+The estimate counts clauses. An optional `suiteCaseId` narrows the trial to one
+case of the suite.
+
+`POST /trials` with the same fields, an `idempotencyKey`, the
+`estimateFingerprint` and the `configurationFingerprint` (the
+`executionFingerprint` from the estimate) starts the trial.
+
+<Example name="contract-analysis/create-trial" />
+
+Read it with `GET /trials/{trialId}` until its status is final. An expectation
+passes when the finding's verdict equals the expected verdict and every named
+red flag has the expected outcome; otherwise the assertion carries one reason:
+`clause_not_found`, `verdict_mismatch`, `red_flag_not_found` or
+`red_flag_mismatch`. If the run for any one contract fails, the whole trial
+fails with a reason and cannot be attested.
+
+<Example name="contract-analysis/get-trial" />
+
+### 5. Attest
+
+`POST /trials/{trialId}/attest` with the report's `reportId` and an optional
+`reason` records that a user or an API key accepts the report. The attestation
+stores who attested: the user id, or `api-key:<keyId>` for an API key.
+
+<Example name="contract-analysis/attest-trial" />
+
+### 6. Check readiness
+
+`GET /readiness` lists everything that stops publishing as blocker codes, such
+as `ATTESTATION_STALE`, `NO_CONFIRMED_EXAMPLES` and `SCENARIO_COVERAGE_MISSING`.
+Publishing is possible only when the list is empty. A blocker appears when the
+draft changed after the trial, when an expectation names a clause or red flag
+that was removed from the draft (a stale expectation), when a scenario is not
+covered, or when source authority is required and not confirmed.
+
+<Example name="contract-analysis/check-readiness" />
+
+### 7. Publish
+
+`POST /publish` with the observed `draftRevision` and the `trialAttestationId`.
+The published revision records who published it.
+
+<Example name="contract-analysis/publish-with-attestation" />
 
 ### The three required scenarios
 
@@ -492,28 +474,6 @@ that no item cites need an explicit coverage disposition. Confirm authority
 before running trials, because changing it changes the draft and makes earlier
 attestations stale.
 
-```python
-package = await client.prepare_contract_analysis_test_package(
-    42, anchor_job_guid=job, idempotency_key="package-1", context={"asOfDate": "2026-09-22"}
-)
-suite = await client.update_contract_analysis_test_suite(42, revision=0, cases=cases)
-estimate = await client.estimate_contract_analysis_trial(
-    42, anchor_job_guid=job, suite_revision=suite.parsed["revision"],
-    trial_kind="scored", suite_case_id="case-1",
-)
-trial = await client.create_contract_analysis_trial(
-    42, anchor_job_guid=job, idempotency_key="trial-1",
-    suite_revision=suite.parsed["revision"], trial_kind="scored", suite_case_id="case-1",
-    estimate_fingerprint=estimate.parsed["estimateFingerprint"],
-    configuration_fingerprint=estimate.parsed["executionFingerprint"],
-)
-attestation = await client.attest_contract_analysis_trial(42, trial_id, report_id=report_id)
-readiness = await client.get_contract_analysis_trial_readiness(42)
-await client.publish_contract_analysis_profile(
-    42, draft_revision=revision, trial_attestation_id=attestation.parsed["attestationId"]
-)
-```
-
 ## Build clauses from guidelines
 
 A playbook with no clauses can be built from the guideline documents in its
@@ -523,18 +483,15 @@ so every build request names two sides:
 - `ourParty`: the side the playbook protects and is written for.
 - `counterparty`: the other side of the agreements.
 
-Both are required, must not be empty and are at most 8192 characters. Send them with
-`POST /knowledge-bases/{caseId}/profiles/contract-analysis/generate`:
+Both are required, must not be empty and are at most 8192 characters. Send them as
+the `perspective` of `POST /knowledge-bases/{caseId}/profiles/contract-analysis/generate`:
 
-```json
-{"perspective": {"ourParty": "Acme", "counterparty": "Globex"}}
-```
+<Example name="contract-analysis/generate-profile" />
 
 A build needs the role of each guideline document confirmed first: policy,
 guidance, example or superseded, or excluded, with at least one policy document that is not excluded.
 A signed-in user confirms the roles on the playbook page. An organization API
-key can confirm them too, with `POST .../source-authority/decisions` or the SDK
-method `record_contract_analysis_source_authority_decision`, and can then build;
+key can confirm them too, with `POST .../source-authority/decisions` (see [Source authority](./contract-analysis.md#source-authority)), and can then build;
 the decision is recorded as that key. A build without a confirmation fails with
 `400` and the message "Source authority is incomplete: SOURCE_AUTHORITY_UNCONFIRMED".
 Changing the documents makes the confirmation stale.
@@ -546,18 +503,6 @@ The build is available only for the first build. If the playbook already has
 clauses, the request fails with `400` and the message "Rebuilding a playbook
 that already has clauses is not available yet." Change an existing playbook by
 exporting it, editing the JSON and importing it again.
-
-```python
-await client.generate_contract_analysis_profile(42, our_party="Acme", counterparty="Globex")
-```
-
-```java
-client.generateContractAnalysisProfile(42L, "Acme", "Globex");
-```
-
-```bash
-docudevs knowledge-base contract-analysis generate 42 --our-party Acme --counterparty Globex
-```
 
 ### Suggested roles and sides
 
@@ -573,8 +518,7 @@ weight of the whole document:
 
 `POST /knowledge-bases/{caseId}/profiles/contract-analysis/source-authority/suggestions`
 starts a background read of the first pages of each guideline document and returns
-`202` with a job ID. Any organization API key can call it; agent tokens are refused.
-When the job finishes, `GET .../source-authority` lists for each unclassified source a
+`202` with a job ID. An organization API key can call it. When the job finishes, `GET .../source-authority` lists for each unclassified source a
 `suggestedRole` and a one-sentence `suggestionReason`, and one `suggestedPerspective`
 with `ourParty`, `counterparty` and a `reason` read from the policy and guidance
 documents. A document that is clearly two documents, such as rules with a sample
@@ -586,14 +530,9 @@ analysis use only the roles you record and the sides you send with the build req
 Record a suggestion by accepting it on the playbook page, or with a source-authority
 decision.
 
-```python
-await client.suggest_source_roles(42)
-authority = await client.get_contract_analysis_source_authority(42)
-```
+<Example name="contract-analysis/suggest-source-roles" />
 
-```java
-client.suggestContractAnalysisSourceRoles(42L);
-```
+<Example name="contract-analysis/get-source-authority" />
 
 ### Suggested versions and scope
 
@@ -631,11 +570,9 @@ and `warnings`; an unclear answer leaves the analysis unchanged. The Test step s
 "This contract is outside the playbook's scope: \<phrase>" next to a test contract judged
 outside the scope, and the scope warning next to one that is only flagged.
 
-```python
-await client.generate_contract_analysis_profile(
-    42, "Acme", "Globex", scope={"jurisdictions": ["Finland"], "from": "1 January 2026"}
-)
-```
+<Example name="contract-analysis/generate-profile-with-scope" />
+
+The CLI `generate` command takes the two sides only; send a scope through the API or the Python client.
 
 ### Suggested test expectations from sample contracts
 
@@ -665,75 +602,6 @@ written until you save the suite, which sets `recordedBy` as for any expectation
 clause that already has an expectation in that test case gets no suggestion. The Sources
 step shows the facts of an example source under its suggestion as "Sample contract:
 \<type>, \<parties>, governed by \<law>, \<date>".
-
-## Python SDK
-
-```python
-import os
-
-from docudevs.docudevs_client import DocuDevsClient
-
-client = DocuDevsClient(token=os.environ["API_KEY"])
-
-draft = await client.get_contract_analysis_profile(42)
-revision = draft.parsed["draftRevision"]
-
-imported = await client.import_playbook(42, playbook, draft_revision=revision)
-if imported.status_code == 422:
-    for issue in imported.parsed["issues"]:
-        print(issue)
-
-playbook_json = await client.export_playbook(42, view="draft")
-
-run = await client.create_contract_analysis_run(
-    anchor_job_guid="<completed-contract-job>",
-    knowledge_base_id=42,
-    idempotency_key="<unique-request-key>",
-    mode="draft_trial",
-    draft_revision=revision + 1,
-)
-run_id = run.parsed["runId"]
-result = await client.get_contract_analysis_run_result(run_id)
-```
-
-`import_playbook` returns the response so the `422` issue list stays readable;
-`export_playbook` returns the playbook as a dict and raises on an error status.
-Use `put_contract_analysis_run_review(run_id, clause_id, ...)` and
-`get_contract_analysis_run_reviews(run_id)` for finding reviews.
-
-## Java SDK
-
-The synchronous client returns JSON trees and `DocuDevsAsyncClient` returns
-`CompletableFuture<JsonNode>` with the same method names:
-
-```java
-DocuDevsClient client = DocuDevsClient.builder()
-    .baseUrl("https://api.docudevs.ai")
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-JsonNode imported = client.importPlaybook(42L, 0L, playbookJson);
-JsonNode exported = client.exportPlaybook(42L, "draft");
-JsonNode run = client.createContractAnalysisRun(
-    "<completed-contract-job>", 42L, "draft_trial", 1L, "<unique-request-key>");
-JsonNode result = client.getContractAnalysisRunResult(run.path("runId").asText());
-```
-
-## CLI
-
-```bash
-docudevs playbook export 42 --view draft > playbook.json
-docudevs playbook import 42 playbook.json
-docudevs playbook import 42 playbook.json --draft-revision 3
-docudevs knowledge-base contract-analysis run-create 42 --anchor-job-guid <completed-contract-job> --idempotency-key <unique-request-key> --mode draft_trial
-docudevs knowledge-base contract-analysis run-get <run-id>
-docudevs knowledge-base contract-analysis run-result <run-id>
-docudevs knowledge-base contract-analysis run-reviews <run-id>
-docudevs knowledge-base contract-analysis review <run-id> <clause-id> --result-fingerprint ... --disposition corrected --corrected-verdict flagged ...
-```
-
-Without `--draft-revision`, `playbook import` replaces the current draft. Run
-status and results are addressed by the immutable run ID returned by
-`run-create`.
 
 ## Model level
 

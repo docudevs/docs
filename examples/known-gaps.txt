@@ -30,6 +30,11 @@ classification/review-classify-row:java
 classification/start-classify:java
 classification/wait-for-classify:java
 compare/compare-and-export-redline:java
+contract-analysis/check-readiness:java
+contract-analysis/confirm-findings:java
+contract-analysis/generate-profile-with-scope:java
+contract-analysis/prepare-test-package:java
+contract-analysis/upload-test-contract:java
 errors/case-not-found:java
 errors/unauthorized:java
 extraction-review/build-review-descriptor:java
