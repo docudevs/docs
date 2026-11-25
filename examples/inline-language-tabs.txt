@@ -3,5 +3,4 @@ docs/administration/bring-your-own-embeddings.md:6
 docs/administration/bring-your-own-llm.md:8
 docs/administration/bring-your-own-ocr.md:6
 docs/administration/model-credentials.md:10
-docs/core/source-locations.md:2
 docs/core/workbook-normalization.md:4

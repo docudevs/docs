@@ -5,6 +5,8 @@ extraction/check-map-reduce-progress:java
 extraction/extract-sections-by-page-range:java
 extraction/extract-with-calculated-fields:java
 extraction/extract-with-pydantic:java
+extraction/extract-with-source-locations-single-call:java
+extraction/extract-with-source-locations:java
 extraction/include-current-date-map-reduce:java
 extraction/process-page-range-map-reduce:java
 extraction/process-with-generated-schema:java

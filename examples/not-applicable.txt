@@ -1,6 +1,7 @@
 # <example>:<lang>  # reason
 # curl: the step runs in the client and makes no HTTP request of its own
 # python: DocuDevsClient has no method for the route
+extraction/extract-with-source-locations-single-call:curl  # polling helper that wraps several calls
 ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
 pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client
