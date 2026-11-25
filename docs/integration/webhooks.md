@@ -52,13 +52,9 @@ Delivery is best-effort: a failed delivery is logged on the DocuDevs side and is
 | GET | `/settings/webhook` | Returns `{url}`, `null` if unset |
 | PUT | `/settings/webhook` | Sets or replaces `{url}` |
 
-```bash
-curl -X PUT https://api.docudevs.ai/settings/webhook \
-  -H "Authorization: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"url":"https://example.com/hooks/docudevs"}'
+<Example name="webhooks/configure-webhook" />
 
-curl https://api.docudevs.ai/settings/webhook -H "Authorization: $API_KEY"
-```
+The request body `{"url": null}` removes the URL and turns webhooks off. The Python SDK has no helper for these two routes, so the example is cURL only.
 
 ## Minimal receiver
 

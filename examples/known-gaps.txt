@@ -59,6 +59,9 @@ extraction/upload-calendar-dataset:java
 first-document/handle-timeout:java
 first-document/save-and-use-configuration:java
 install/verify-connection:java
+integrations/create-connection:java
+integrations/delete-connection:java
+integrations/list-connections:java
 jobs/check-quality:java
 jobs/handle-delete-errors:java
 jobs/process-and-clean-up:java
@@ -102,6 +105,10 @@ records/retry-import:java
 records/sync-snapshot:java
 records/upsert-record:java
 records/wait-for-import:java
+sso/configure-oidc-provider:java
+submission-portals/check-submission:java
+submission-portals/create-portal:java
+submission-portals/submit-document:java
 templates/acroform-job-metadata:java
 templates/acroform-metadata:java
 tracing/get-page-image:java

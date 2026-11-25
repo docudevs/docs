@@ -3,9 +3,16 @@
 # python: DocuDevsClient has no method for the route
 extraction-review/build-review-descriptor:curl  # runs in the client
 extraction/extract-with-source-locations-single-call:curl  # polling helper that wraps several calls
+integrations/create-connection:python  # DocuDevsClient 1.15.0 has no method for POST /integration/connections
+integrations/delete-connection:python  # DocuDevsClient 1.15.0 has no method for DELETE /integration/connections/{id}
+integrations/list-connections:python  # DocuDevsClient 1.15.0 has no method for GET /integration/connections
 ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
 pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client
 pipelines/correct-ocr-text:curl  # runs in the client
 pipelines/run-client-pipeline:curl  # runs in the client
+sso/configure-oidc-provider:python  # DocuDevsClient 1.15.0 has no method for PUT /sso/config or POST /sso/sync
+submission-portals/check-submission:python  # DocuDevsClient 1.15.0 has no method for GET /submission-records/{receiptCode}
+submission-portals/create-portal:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals
+submission-portals/submit-document:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals/{id}/submissions
 webhooks/configure-webhook:python  # DocuDevsClient 1.15.0 has no method for GET or PUT /settings/webhook
