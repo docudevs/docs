@@ -1,2 +1,0 @@
-I need: IBAN, reference-number, account-owner, 
-account-address and total amount from this invoice.
