@@ -13,7 +13,7 @@ async def main():
 
     response = await client.delete_case_document(case_id, document_id)
 
-    if response.status_code == 204:
+    if response.status_code == 200:
         print("Document deleted successfully")
     # docs:end
 
