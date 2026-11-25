@@ -16,45 +16,9 @@ Agent Chat provides an interactive assistant that helps you design extraction co
 
 ## API Usage
 
-### Start a chat
+<Example name="agent-chat/chat-with-agent" />
 
-```bash
-curl -X POST https://api.docudevs.ai/agent/chat \
-  -H "Authorization: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {"role": "user", "content": "Help me build an invoice extraction schema"}
-    ],
-    "sessionId": "session-123"
-  }'
-```
-
-### Poll for status
-
-```bash
-curl -X GET https://api.docudevs.ai/agent/status/<JOB_GUID> \
-  -H "Authorization: $API_KEY"
-```
-
-## Python SDK
-
-```python
-import asyncio
-from docudevs.docudevs_client import DocuDevsClient
-
-async def chat_with_agent():
-    client = DocuDevsClient(token="your-api-key")
-
-    response = await client.agent_chat_and_wait(
-        messages=[{"role": "user", "content": "Extract line items from invoices"}],
-        session_id="session-123",
-    )
-
-    print(response["response"]["message"])
-
-asyncio.run(chat_with_agent())
-```
+The request starts a chat job and returns its `jobGuid` and the `sessionId`. Poll `GET /agent/status/{jobGuid}` until `status` is `COMPLETED`; the answer is in `response.message`. A job that ends in `ERROR` carries the reason in `error`. The cURL variant and the Python helper both give up after 120 seconds.
 
 ## Case-bound chat
 

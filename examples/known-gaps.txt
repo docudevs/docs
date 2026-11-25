@@ -1,6 +1,7 @@
 agent-actions/confirm-action:java
 agent-actions/list-pending-actions:java
 agent-actions/reject-action:java
+agent-chat/chat-with-agent:java
 agent-runs/cancel-run:java
 agent-runs/investigate-after-classify:java
 agent-runs/list-runs:java

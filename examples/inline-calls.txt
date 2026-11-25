@@ -10,7 +10,6 @@ docs/advanced/category-trees.md:5
 docs/advanced/classification.md:2
 docs/advanced/records-datasets.md:6
 docs/advanced/records-import.md:11
-docs/core/agent-chat.md:3
 docs/core/contract-analysis-playbooks.md:15
 docs/integration/submission-portals.md:3
 docs/integration/webhooks.md:1
