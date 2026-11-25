@@ -172,7 +172,8 @@ embedding providers.
 
 Provider secrets are write-only in the public API and are not returned to the UI.
 Usage through your own provider is tracked for observability but is not charged
-against your DocuDevs token balance.
+against your DocuDevs credit balance. The per-job fee still applies; see
+[Billing and credits](/docs/reference/billing-credits).
 
 For a shared credential, **Validate credential** proves that DocuDevs can decrypt
 an API key or acquire an Entra access token. It does not call the model gateway.
