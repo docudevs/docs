@@ -4,9 +4,6 @@ description: Track processing job status, list jobs, retrieve results, and manag
 sidebar_position: 4
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Job Management
 
 Manage the lifecycle of document processing jobs, including cleanup and deletion of completed jobs.
@@ -38,56 +35,7 @@ Only jobs in **terminal states** (COMPLETED, ERROR, TIMEOUT, PARTIAL) can be del
 
 Delete a job when you no longer need its data. Jobs older than 14 days are automatically purged, so this API is primarily for cleaning up recent jobs before the scheduled cleanup.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'Java SDK', value: 'java'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
-
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
-
-client = DocuDevsClient(token=os.getenv('API_KEY'))
-
-# Delete a completed job
-result = await client.delete_job("job-guid-here")
-if result.status_code == 200:
-    print(f"Deleted {result.parsed['jobsDeleted']} job(s)")
-```
-
-  </TabItem>
-  <TabItem value="java">
-
-```java
-import ai.docudevs.client.DocuDevsClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-DocuDevsClient client = DocuDevsClient.builder()
-    .apiKey(System.getenv("API_KEY"))
-    .build();
-
-JsonNode purgeResult = client.deleteJob("job-guid-here");
-
-System.out.println("Deleted jobs: " + purgeResult.path("jobsDeleted").asInt());
-System.out.println("Errors: " + purgeResult.path("errors").asInt());
-```
-
-  </TabItem>
-
-  <TabItem value="curl">
-
-```bash
-# Delete a job
-curl -X DELETE https://api.docudevs.ai/job/{guid} \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-</Tabs>
+<Example name="jobs/delete-job" />
 
 ### What Gets Deleted
 
@@ -122,63 +70,9 @@ No action is required on your part—old jobs are automatically removed to manag
 
 DocuDevs can chain jobs together so you **parse a document once** and then run multiple operations on the same result without re-processing. This saves time and cost when you need to extract different schemas or run different prompts against the same document.
 
-Use the `dependsOn` query parameter when processing a document to reference a previous job:
+Use the `dependsOn` query parameter when processing a document to reference a previous job. In this example the second extraction runs on the job that already holds the parsed document, so the job's own GUID is the `dependsOn` value.
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
-
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
-
-client = DocuDevsClient(token=os.getenv("API_KEY"))
-
-# First extraction — parse and extract with schema A
-guid_a = await client.submit_and_process_document(
-    document=open("invoice.pdf", "rb"),
-    document_mime_type="application/pdf",
-    schema=schema_a,
-    prompt="Extract invoice header fields",
-)
-result_a = await client.wait_until_ready(guid_a, result_format="json")
-
-# Second extraction — reuse the parsed document with schema B (no re-OCR)
-process_resp = await client.process_document(
-    guid=guid_a,
-    body={"schema": schema_b, "prompt": "Extract line items"},
-    depends_on=guid_a,
-)
-result_b = await client.wait_until_ready(guid_a, result_format="json")
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-# First extraction
-GUID=$(curl -s -X POST https://api.docudevs.ai/document/upload \
-  -H "Authorization: Bearer $API_KEY" \
-  -F "document=@invoice.pdf" | jq -r '.guid')
-
-curl -X POST "https://api.docudevs.ai/document/process/$GUID" \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"schema": "...", "prompt": "Extract header fields"}'
-
-# Second extraction — reuse parsed document
-curl -X POST "https://api.docudevs.ai/document/process/$GUID?dependsOn=$GUID" \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"schema": "...", "prompt": "Extract line items"}'
-```
-
-  </TabItem>
-</Tabs>
+<Example name="jobs/process-with-depends-on" />
 
 The dependent job waits for the parent to complete, then reuses its OCR/parsed content. This is especially useful for:
 
@@ -197,41 +91,11 @@ Every completed job includes a **quality score** (0.0–1.0) and a **quality cat
 | `Likely Handwriting Problems` | 0.40–0.70 | May need review or PREMIUM OCR |
 | `Many Problems` | 0.0–0.40 | Consider re-processing with PREMIUM OCR |
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="jobs/check-quality" />
 
-```python
-# Check quality after processing
-status_resp = await client.status(guid=guid)
-job = status_resp.parsed
-print(f"Quality: {job.quality_score:.2f} ({job.quality_category})")
+To let DocuDevs pick the OCR level for you, set `ocr` to `AUTO`. The job starts with the default OCR and switches to `PREMIUM` when the quality is low. Check the job's quality score afterwards as shown above.
 
-# Auto-retry with PREMIUM OCR if quality is low
-result = await client.submit_and_process_with_quality_gate(
-    document=open("scan.pdf", "rb"),
-    document_mime_type="application/pdf",
-    schema=my_schema,
-    prompt="Extract fields",
-    min_quality=0.7,  # auto-retries with PREMIUM if below
-)
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-# Check quality after processing
-curl -s "https://api.docudevs.ai/job/status/$GUID" \
-  -H "Authorization: Bearer $API_KEY" | jq '{qualityScore, qualityCategory}'
-```
-
-  </TabItem>
-</Tabs>
+<Example name="jobs/process-with-auto-ocr" />
 
 :::info Case Documents
 Documents uploaded to [Cases](/docs/advanced/cases) are **not automatically purged**. Case documents persist until the case is deleted or documents are manually removed from the case.
@@ -241,58 +105,13 @@ Documents uploaded to [Cases](/docs/advanced/cases) are **not automatically purg
 
 A complete workflow for processing a document and cleaning up afterward:
 
-```python
-from docudevs.docudevs_client import DocuDevsClient
-import os
-
-async def process_and_cleanup(file_path: str, keep_result: bool = True):
-    client = DocuDevsClient(token=os.getenv('API_KEY'))
-    
-    # Process the document
-    with open(file_path, "rb") as f:
-        job_guid = await client.submit_and_process_document(
-            document=f.read(),
-            document_mime_type="application/pdf",
-            prompt="Extract invoice data"
-        )
-    
-    # Wait for completion and get result
-    result = await client.wait_until_ready(job_guid, result_format="json")
-    
-    # Save result locally if needed
-    if keep_result:
-        import json
-        with open(f"{job_guid}_result.json", "w") as f:
-            json.dump(result, f, indent=2)
-    
-    # Clean up the job from DocuDevs
-    delete_result = await client.delete_job(job_guid)
-    if delete_result.status_code == 200:
-        print(f"Cleaned up job: {delete_result.parsed['jobsDeleted']} deleted")
-    
-    return result
-
-# Usage
-invoice_data = await process_and_cleanup("invoice.pdf")
-```
+<Example name="jobs/process-and-clean-up" />
 
 ## Error Handling
 
 Handle common errors when deleting jobs:
 
-```python
-result = await client.delete_job(job_guid)
-
-if result.status_code == 200:
-    print(f"Deleted successfully: {result.parsed['jobsDeleted']} job(s)")
-elif result.status_code == 404:
-    print("Job not found - may already be deleted or purged")
-elif result.status_code == 400:
-    error_msg = result.parsed.get("message", "") if result.parsed else ""
-    print(f"Cannot delete: {error_msg}")  # e.g., job still processing
-else:
-    print(f"Unexpected status: {result.status_code}")
-```
+<Example name="jobs/handle-delete-errors" />
 
 ## API Reference
 
@@ -354,47 +173,11 @@ Instead of polling for job status, you can configure a **webhook URL** to receiv
 
 ### Configuration
 
-Set your webhook URL in the **Settings → Webhooks** page in the UI, or via the API/SDK:
+Set your webhook URL in the **Settings → Webhooks** page in the UI, or via the API:
 
-<Tabs
-  defaultValue="python"
-  values={[
-    {label: 'Python SDK', value: 'python'},
-    {label: 'cURL', value: 'curl'},
-  ]}>
-  <TabItem value="python">
+<Example name="webhooks/configure-webhook" />
 
-```python
-# Configure organization-level webhook
-await client.update_webhook_settings(url="https://example.com/webhooks/docudevs")
-
-# Check current webhook settings
-settings = await client.get_webhook_settings()
-print(settings)  # {"url": "https://example.com/webhooks/docudevs"}
-
-# Disable webhooks
-await client.update_webhook_settings(url=None)
-```
-
-  </TabItem>
-  <TabItem value="curl">
-
-```bash
-# Set webhook URL
-curl -X PUT "https://api.docudevs.ai/settings/webhook" \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://example.com/webhooks/docudevs"}'
-
-# Get current settings
-curl "https://api.docudevs.ai/settings/webhook" \
-  -H "Authorization: Bearer $API_KEY"
-```
-
-  </TabItem>
-</Tabs>
-
-You can also set a **per-request webhook URL** by including `webhookUrl` in your upload command, which overrides the organization default for that specific job.
+The Python SDK has no helper for webhook settings, so use the HTTP API (or the settings page) to change them.
 
 ### Payload
 

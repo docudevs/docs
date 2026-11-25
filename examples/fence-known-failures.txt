@@ -1,6 +1,3 @@
-docs/advanced/job-management.md:DocuDevsClient has no method 'get_webhook_settings'
-docs/advanced/job-management.md:DocuDevsClient has no method 'submit_and_process_with_quality_gate'
-docs/advanced/job-management.md:DocuDevsClient has no method 'update_webhook_settings'
 docs/core/ai-analysis.md:DocuDevsClient has no method 'get_case_documents'
 docs/core/ai-analysis.md:unknown command 'docudevs ocr contract.pdf'
 docs/core/ai-analysis.md:unknown command 'docudevs ocr report.pdf'
