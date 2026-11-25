@@ -16,7 +16,7 @@ async def main():
 
     with open("playbook.json", "w") as target:
         json.dump(playbook, target, indent=2)
-    print(f"Clauses: {len(playbook['clauses'])}")
+    print(f"Clauses: {len(playbook.get('clauses', []))}")
     # docs:end
 
 

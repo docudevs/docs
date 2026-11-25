@@ -12,7 +12,7 @@ async def main():
     response = await client.get_contract_analysis_test_suite(case_id)
     suite = response.parsed
 
-    cases = suite["cases"]  # add or edit suite cases here
+    cases = suite.get("cases", [])  # add or edit suite cases here
 
     updated = await client.update_contract_analysis_test_suite(
         case_id,

@@ -12,10 +12,14 @@ async def main():
     document_id = "doc-uuid-here"  # documentId from list_case_documents
 
     result = await client.get_document_summary(case_id=case_id, document_id=document_id)
+    if result.status_code != 200:
+        raise SystemExit(f"Get summary failed: {result.status_code}")
+
     summary = result.parsed
     print(summary["filename"])  # "invoice-q4.pdf"
-    print(summary["summary"]["document_type"])  # "invoice"
-    print(summary["summary"]["summary"])  # "Monthly invoice from Acme Corp..."
+    details = summary.get("summary") or {}  # absent until the document is summarised
+    print(details.get("document_type"))  # "invoice"
+    print(details.get("summary"))  # "Monthly invoice from Acme Corp..."
     # docs:end
 
 

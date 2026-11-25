@@ -12,7 +12,7 @@ async def main():
     classify_job_id = 55  # id of a classify job of this case
 
     runs = await client.list_agent_runs(case_id, origin_job_id=classify_job_id, status="COMPLETED")
-    for run in runs["items"]:
+    for run in runs.get("items", []):
         print(run["runId"], run["status"], run["tokensUsed"])
     # docs:end
 

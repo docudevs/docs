@@ -13,6 +13,9 @@ async def main():
 
     trial = (await client.get_contract_analysis_trial(case_id, trial_id)).parsed
 
+    if not trial.get("report"):
+        raise SystemExit("The trial has no report yet")
+
     attested = await client.attest_contract_analysis_trial(
         case_id,
         trial_id,

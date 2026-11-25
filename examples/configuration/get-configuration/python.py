@@ -9,6 +9,9 @@ async def main():
 
     # docs:start
     response = await client.get_configuration("invoice-config")
+    if response.status_code != 200:
+        raise SystemExit(f"Get configuration failed: {response.status_code}")
+
     config = response.parsed
 
     print(f"Prompt: {config.prompt}")

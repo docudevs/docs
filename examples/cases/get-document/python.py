@@ -12,6 +12,9 @@ async def main():
     document_id = "doc-uuid-here"  # documentId from list_case_documents
 
     response = await client.get_case_document(case_id, document_id)
+    if response.status_code != 200:
+        raise SystemExit(f"Get document failed: {response.status_code}")
+
     document = response.parsed
 
     print(f"Document: {document.filename}")

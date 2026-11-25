@@ -12,7 +12,7 @@ async def main():
     response = await client.get_contract_analysis_run_result(run_id)
     result = response.parsed
 
-    print(f"Result fingerprint: {result['resultFingerprint']}")
+    print(f"Result fingerprint: {result.get('resultFingerprint')}")
     # docs:end
 
 

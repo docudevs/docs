@@ -27,7 +27,7 @@ async def main():
     # Clean up the job from DocuDevs
     delete_result = await client.delete_job(job_guid)
     if delete_result.status_code == 200:
-        print(f"Cleaned up job: {delete_result.parsed['jobsDeleted']} deleted")
+        print(f"Cleaned up job: {(delete_result.parsed or {}).get('jobsDeleted', 0)} deleted")
     # docs:end
 
 

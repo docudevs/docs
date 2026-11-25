@@ -22,14 +22,14 @@ PARENT_JOB_GUID="<job-guid>"  # GUID of the completed PDF job that was converted
 OPERATION_JOB_GUID="<operation-job-guid>"  # operation job GUID returned by the conversion
 
 curl -s -S -f "https://api.docudevs.ai/job/result/$OPERATION_JOB_GUID/acroform-metadata" \
-  -H "Authorization: $API_KEY" | jq '.fields[:3]'
+  -H "Authorization: $API_KEY" | jq '(.fields // [])[:3]'
 
 DEFINITIONS=$(curl -s -S -f "https://api.docudevs.ai/job/result/$OPERATION_JOB_GUID/pdf-acroform-field-definitions" \
   -H "Authorization: $API_KEY")
-echo "$DEFINITIONS" | jq '.fieldDefinitions[:3]'
+echo "$DEFINITIONS" | jq '(.fieldDefinitions // [])[:3]'
 
 # Mark every generated field as reviewed and accepted
-REVIEWED=$(echo "$DEFINITIONS" | jq '.fieldDefinitions | map(. + {reviewStatus: "accepted"})')
+REVIEWED=$(echo "$DEFINITIONS" | jq '(.fieldDefinitions // []) | map(. + {reviewStatus: "accepted"})')
 
 APPLY_JOB_GUID=$(jq -n \
   --arg source "$OPERATION_JOB_GUID" \

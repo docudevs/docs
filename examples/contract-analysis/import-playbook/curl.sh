@@ -17,7 +17,7 @@ STATUS=$(curl -s -S -o import-response.json -w '%{http_code}' -X POST "https://a
 
 if [ "$STATUS" = "422" ]; then
   # A playbook with mistakes is refused with every problem and its JSON path
-  jq -r '.validation.errors[] | "\(.path) \(.code) \(.message)"' import-response.json
+  jq -r '(.validation.errors // [])[] | "\(.path) \(.code) \(.message)"' import-response.json
 elif [ "$STATUS" = "200" ]; then
   jq -r '"Draft revision: \(.draftRevision)"' import-response.json
 else

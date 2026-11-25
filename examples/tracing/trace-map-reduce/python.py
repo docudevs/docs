@@ -23,7 +23,7 @@ async def main():
 
     trace = await client.get_trace(job_guid)
     if trace:
-        print(f"Processed in {len(trace['events'])} events")
+        print(f"Processed in {len(trace.get('events', []))} events")
     # docs:end
 
 

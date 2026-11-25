@@ -16,7 +16,7 @@ async def main():
 
     print(f"Classification: {comparison['classification']}")
     print(f"Current draft revision: {comparison['currentDraftRevision']}")
-    print(f"Elements to review: {len(comparison['elements'])}")
+    print(f"Elements to review: {len(comparison.get('elements', []))}")
     # docs:end
 
 

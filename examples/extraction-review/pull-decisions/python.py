@@ -12,7 +12,7 @@ async def main():
 
     page = await client.pull_extraction_review_decisions(after_ordinal=cursor, limit=100)
 
-    for event in page.parsed["events"]:
+    for event in page.parsed.get("events", []):
         print(event["cursorOrdinal"], event["eventId"], event["kind"])
 
     # Persist nextCursor exactly as returned, even when events is empty

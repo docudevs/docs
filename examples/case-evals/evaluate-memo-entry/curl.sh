@@ -28,5 +28,5 @@ EVAL_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/cases/$CASE_ID/memo/ent
 wait_for_eval "$EVAL_ID"
 
 curl -s -S -f "https://api.docudevs.ai/cases/$CASE_ID/evals/$EVAL_ID" \
-  -H "Authorization: $API_KEY" | jq '.report.comparisons[] | {baseline, candidate, target}'
+  -H "Authorization: $API_KEY" | jq '(.report.comparisons // [])[] | {baseline, candidate, target}'
 # docs:end

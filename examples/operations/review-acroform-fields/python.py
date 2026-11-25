@@ -16,10 +16,10 @@ async def main():
     definitions_artifact = await client.get_pdf_acroform_field_definitions(operation_job_guid)
 
     print(json.dumps(generated_metadata.get("fields", [])[:3], indent=2))
-    print(json.dumps(definitions_artifact["fieldDefinitions"][:3], indent=2))
+    print(json.dumps(definitions_artifact.get("fieldDefinitions", [])[:3], indent=2))
 
     # Mark every generated field as reviewed and accepted
-    reviewed_fields = [dict(field) for field in definitions_artifact["fieldDefinitions"]]
+    reviewed_fields = [dict(field) for field in definitions_artifact.get("fieldDefinitions", [])]
     for field in reviewed_fields:
         field["reviewStatus"] = "accepted"
 
