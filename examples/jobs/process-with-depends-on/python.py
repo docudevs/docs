@@ -2,9 +2,12 @@ import asyncio
 import json
 import os
 
-from docudevs import json_schema
 from docudevs.docudevs_client import DocuDevsClient
+
+# docs:start
+from docudevs import json_schema
 from docudevs.models import UploadCommand
+# docs:end
 
 
 async def main():

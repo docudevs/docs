@@ -14,8 +14,8 @@ case "$HTTP_STATUS" in
   404)
     echo "Job not found - may already be deleted or purged"
     ;;
-  400)
-    echo "Cannot delete: $(jq -r '.message // ""' response.json)"  # e.g., job still processing
+  409)
+    echo "Cannot delete: $(jq -r '.errors | join("; ")' response.json)"  # e.g., job still processing
     ;;
   *)
     echo "Unexpected status: $HTTP_STATUS"

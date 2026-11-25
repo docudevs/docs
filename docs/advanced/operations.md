@@ -146,7 +146,7 @@ If the job already has an outline artifact (for example, a job originally proces
 
 In Python, `wait_until_ready_with_document_outline` waits for a still-running job and returns its result and outline in one call.
 
-`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command and no Java SDK method for this operation today: use the Python SDK or the raw HTTP API directly.
+`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command and no Java SDK method for this operation: use the Python SDK or the raw HTTP API directly.
 
 ## Advanced Usage
 
@@ -168,29 +168,45 @@ Set `llmType` to choose the model tier for an operation. Operation-specific sett
 
 ```json
 {
-  "analysis": {
-    "overall_confidence": 0.85,
-    "field_confidence": {
-      "invoice_number": 0.95,
-      "total_amount": 0.90
-    },
-    "potential_issues": [
-      {
-        "field": "line_items",
-        "issue": "Some quantities may be misread",
-        "confidence": 0.75,
-        "suggestion": "Review items with quantities > 100"
-      }
-    ]
-  },
-  "recommendations": [
+  "extraction_quality": "good",
+  "overall_confidence": 0.85,
+  "field_analysis": [
     {
-      "type": "processing_improvement",
-      "description": "Consider using higher quality OCR settings"
+      "field_name": "total_amount",
+      "extracted_value": "1250.00",
+      "text_evidence": "Total due: 1,250.00 EUR",
+      "confidence": 0.9,
+      "issues": [],
+      "suggestions": [],
+      "recommend_human_review": false
+    },
+    {
+      "field_name": "invoice_number",
+      "extracted_value": "INV-0O42",
+      "text_evidence": "Invoice no. INV-0042",
+      "confidence": 0.6,
+      "issues": ["Letter O read instead of digit 0"],
+      "suggestions": ["Normalise the invoice number format after extraction"],
+      "recommend_human_review": true
     }
+  ],
+  "ocr_issues": [
+    {
+      "type": "character_confusion",
+      "description": "The digit 0 and the letter O are confused in the invoice number",
+      "original_text_location": "Invoice no. INV-0042",
+      "confidence": 0.7
+    }
+  ],
+  "derived_data_issues": [],
+  "recommendations": [
+    "Review fields flagged with recommend_human_review",
+    "Consider using higher quality OCR settings"
   ]
 }
 ```
+
+`extraction_quality` is one of `excellent`, `good`, `fair`, `poor` or `failed`. `field_analysis` has one entry per extracted field, `ocr_issues` and `derived_data_issues` list problems found in the source text and in calculated values, and `recommendations` is a list of strings.
 
 ### Generative Task Output
 
@@ -214,4 +230,4 @@ Set `llmType` to choose the model tier for an operation. Operation-specific sett
 - **Summarization**: Use generative tasks to create quick summaries for document lists.
 - **Translation**: Use generative tasks to translate document content while preserving context.
 - **Chain Operations**: Process a document, then run error analysis, then summarize it—all via API.
-- **Map-Reduce Re-processing**: Use `submit_and_wait_for_map_reduce(parent_job_id=...)` to run map-reduce on a previously processed document without re-uploading or re-running OCR. See [Map-Reduce Extraction](/docs/core/map-reduce-extraction#re-running-map-reduce-on-an-existing-job) for details.
+- **Map-Reduce Re-processing**: Run map-reduce on a previously processed document without re-uploading or re-running OCR (in Python, `submit_and_wait_for_map_reduce(parent_job_id=...)`). See [Map-Reduce Extraction](/docs/core/map-reduce-extraction#re-running-map-reduce-on-an-existing-job) for details.

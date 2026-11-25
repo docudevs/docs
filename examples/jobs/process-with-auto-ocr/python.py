@@ -25,7 +25,10 @@ async def main():
         raise RuntimeError(f"HTTP {status_response.status_code}")
 
     job = status_response.parsed
-    print(f"Quality: {job.quality_score} ({job.quality_category})")
+    if isinstance(job.quality_score, float):
+        print(f"Quality: {job.quality_score:.2f} ({job.quality_category})")
+    else:
+        print("No quality score for this job")
     # docs:end
 
 

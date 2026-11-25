@@ -82,7 +82,7 @@ The dependent job waits for the parent to complete, then reuses its OCR/parsed c
 
 ## Quality Score
 
-Every completed job includes a **quality score** (0.0–1.0) and a **quality category** that indicate how confident the OCR engine was about the extracted text. Use this to build automated quality gates.
+Jobs whose OCR step computes quality include a **quality score** (0.0–1.0) and a **quality category** that indicate how confident the OCR engine was about the extracted text; both are empty when no quality was computed. Use this to build automated quality gates.
 
 | Category | Score Range | Description |
 |----------|-----------|-------------|
@@ -139,7 +139,7 @@ Delete a job and its associated storage data.
 | Status | Description |
 |--------|-------------|
 | `404` | Job not found |
-| `400` | Job is not in terminal state (still processing) |
+| `409` | Job is not in a terminal state (still processing); the body is `{"jobsDeleted": 0, "errors": ["..."]}` |
 
 ## Best Practices
 
@@ -181,7 +181,7 @@ The Python SDK has no helper for webhook settings, so use the HTTP API (or the s
 
 ### Payload
 
-When a job reaches a terminal state (`COMPLETED` or `ERROR`), DocuDevs sends a POST request to your webhook URL:
+When a job reaches a terminal state (`COMPLETED`, `ERROR`, `FAILED` or `TIMEOUT`), DocuDevs sends a POST request to your webhook URL:
 
 ```json
 {

@@ -4,10 +4,12 @@ set -euo pipefail
 # docs:start
 wait_for_job() {
   while true; do
-    STATUS=$(curl -s -S "https://api.docudevs.ai/job/status/$1" \
+    STATUS=$(curl -s -S -f "https://api.docudevs.ai/job/status/$1" \
       -H "Authorization: $API_KEY" | jq -r '.status')
-    if [ "$STATUS" = "COMPLETED" ]; then return 0; fi
-    if [ "$STATUS" = "ERROR" ]; then echo "Job $1 failed" >&2; return 1; fi
+    case "$STATUS" in
+      COMPLETED) return 0 ;;
+      ERROR|FAILED|TIMEOUT|PARTIAL) echo "Job $1 ended with status $STATUS" >&2; return 1 ;;
+    esac
     sleep 5
   done
 }
@@ -38,7 +40,7 @@ LINE_ITEMS_SCHEMA='{
 }'
 
 # First extraction: parse the document and extract the header fields
-JOB_GUID=$(curl -s -S -X POST "https://api.docudevs.ai/document/upload" \
+JOB_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \
   -H "Authorization: $API_KEY" \
   -F "document=@invoice.pdf" | jq -r '.guid')
 
@@ -50,7 +52,7 @@ jq -n --arg schema "$HEADER_SCHEMA" \
     --data-binary @-
 
 wait_for_job "$JOB_GUID"
-curl -s -S "https://api.docudevs.ai/job/result/$JOB_GUID/json" \
+curl -s -S -f "https://api.docudevs.ai/job/result/$JOB_GUID/json" \
   -H "Authorization: $API_KEY" | jq .
 
 # Second extraction: reuse the parsed document with another schema (no re-OCR)
@@ -62,6 +64,6 @@ jq -n --arg schema "$LINE_ITEMS_SCHEMA" \
     --data-binary @-
 
 wait_for_job "$JOB_GUID"
-curl -s -S "https://api.docudevs.ai/job/result/$JOB_GUID/json" \
+curl -s -S -f "https://api.docudevs.ai/job/result/$JOB_GUID/json" \
   -H "Authorization: $API_KEY" | jq .
 # docs:end

@@ -80,8 +80,7 @@ Pages that don't exist in the document are silently ignored. For a 10-page docum
 
 The parameter is available in:
 
-- `submit_and_process_document()`
-- `submit_and_process_document_map_reduce()`
-- `process_document()` (via UploadCommand)
-- `process_document_map_reduce()`
+- Single-document processing (Python: `submit_and_process_document`, option `page_range`)
+- Map-reduce processing (Python: `submit_and_process_document_map_reduce`, option `page_range`)
+- Processing an uploaded document with an upload command (Python: `process_document`)
 - Direct API calls to `/document/process/{guid}`

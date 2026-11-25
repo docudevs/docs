@@ -27,9 +27,9 @@ Tracing is opt-in and must be enabled per request by setting `trace` to `true`.
 You can also enable tracing in the Workbench:
 
 1. Navigate to the **Processing** panel
-2. Check the **"Enable LLM Tracing (Debug)"** checkbox
+2. Check the **"Enable LLM tracing"** checkbox
 3. Process your document
-4. After completion, click **"🔍 Trace"** on the job detail page
+4. After completion, click **"Trace"** on the job detail page
 
 ## Trace Data Structure
 

@@ -13,7 +13,7 @@ async def main():
         job_guid=job_guid,
         timeout=120,
     )
-    print(f"Analysis result: {result}")
+    print(result.result)
 
 
 asyncio.run(main())
