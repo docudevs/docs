@@ -21,6 +21,14 @@ category-trees/browse-tree-nodes:java
 category-trees/get-tree-node:java
 category-trees/list-trees:java
 category-trees/upload-tree:java
+classification/cancel-classify:java
+classification/classify-file:java
+classification/download-classify-csv:java
+classification/get-classify-results:java
+classification/match-records:java
+classification/review-classify-row:java
+classification/start-classify:java
+classification/wait-for-classify:java
 compare/compare-and-export-redline:java
 errors/case-not-found:java
 errors/unauthorized:java
