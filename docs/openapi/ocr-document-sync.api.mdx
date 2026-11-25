@@ -5,7 +5,7 @@ description: "ocrDocumentSync"
 sidebar_label: "ocrDocumentSync"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVD2T1DAM/Sse19kPoNvu4Ciu4mbuqJgtvI72YnBsYysLmUz+O5LzubcHBV1kSe89yc/pJKqXJA/fZOl1U4NDeSykDxAVGu8eSnmQXsf7MfnUOi0LGVRUNSBE7uyko4Dqzj7WCiltHEU/G4gtBUlXUCt56CS2AZgpYTTuhVKusVYe+76YIYjqP/pJcQSqT/jRly2Xau+QZ6HPurFoSDDuWN+mVJjBFtgQeVw0kDia1zATLnzjgAd5Mk6ROFKeiU2E8nqFlACnfcl9r0BHac8DtgrBGp13vfMaATfEBqom7Gt0jA3kgxS8S4PW9/t9RoekowmMcXtbgorE1EUzrDaz5v6euLm72fY0fD/o+ScVoZMpKs+eCT5hNgpWFO2mBdCMcZeGWuPOPhMZtMzEUPdwSeLu8UG+ppqTE6Gga9OQEonjhq34rBJdIYpfqhXoBc15oVsVrW+imOgTZ7IDCknZNGC/237Y7iVNx6Jrlfew+HFhHGe8EjbvCeE37oJV5F1CaqLN1srjr4xRjA7PKyDbVrwmKui6k0rwNdq+5+PB+/y0SpPUybIBzsomKOQPaNdP7aJsw/SSH9FfigfKpfLIQTRcShzs1QpUCTETDi2fBpdsskuX3rfeEhMPTXdaQ1iLujEYU88Wefzy9EzFp/HJ1r6cfiLjDc2fLLLv/wDqoJw/
+api: eJytVD1z2zAM/Ss8zvJHm3aotzTpkCm5Jp1yGWgKtthSpEpCcnQ6/fcClCzZcT+WboIAvAc8AOwkqn2Um2eZe12X4FC+ZNJXEBQa7+5yuZFeh9vR+dg6LTNZqaBKQAic2UlHBsXtfCgVkts4sn7WEFoy4LWyPif/TtkImYy6gFLJTSexrYCZIwbj9hTqamvlS99nEyRR/wc86igA5Uf87POWQ7V3yL3SZ1lbNNQQrrj+Ra4wgc2wVWA50EBka5JpIpz5RgE2cmucomKpk0RsAuTnEpMDnPY5570BHUt7GrBVVVmj0yxWXiPggthAlRdC9P05G4Ya0o9YeReH2t+v14kNog6mYszL6QoKEscsYjlR6rSW75GTuwv1j2IM5XxYf7okvL/5KlRemhjJFoS/I1SM4mCwEMoJpdE0QDU0Bg4i1E4S0sf11b+QTBS1U40yVm0tJPH/2ik1RztceF7xykdMe40FWavjPEjysIpDrHE7n/o0aLlRhrqFJorrhzv5lmpyHgkFbZEGKtTtOWEpvqhIG4XioFqBnmVoaMlE6+sgjvSRPWkhM0neOGC/W14t16wJF12qNIb5XGbGscezwqYxIbziqrLKJHXrYNOmp/ZP9jQbDzBJQFdUsEwU0HVbFeFbsH3Pv4fT5JcgN5HFz6fr/AHt6cvQKFszveQb/0PwQDlHvrARTBrq5plPpwCVQ0iEQ8rNsKSLdDRz7u9Om4mHpGutoTot6mK/mXpakYf7xycK3o4vSJlOL3U2Tmj65CL7/hcpQNkf
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,14 +47,14 @@ ocrDocumentSync
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"format","in":"query","schema":{"type":["string","null"]}},{"name":"ocr","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={[{"name":"format","in":"query","explode":false,"schema":{"type":["string","null"]}},{"name":"ocr","in":"query","explode":false,"schema":{"type":["string","null"]}}]}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ ocrDocumentSync
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"ocrDocumentSync 200 response","content":{"application/json":{"schema":{"type":"string"}}}}}}
+  responses={{"200":{"description":"ocrDocumentSync 200 response","content":{"application/json":{"schema":{"type":"string"}}}},"409":{"description":"OCR admission conflicts with an active review run"},"503":{"description":"OCR admission is unavailable"}}}
 >
   
 </StatusCodes>

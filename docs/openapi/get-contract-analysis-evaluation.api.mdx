@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-evaluation
+title: "getContractAnalysisEvaluation"
+description: "getContractAnalysisEvaluation"
+sidebar_label: "getContractAnalysisEvaluation"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v2zAM/SuCThvg1F077JBb0BZDb0W3nYIeWJtJtMqWKtHpDMP/faTjOHYSrOhluUSW+PUeH9lognXU86XOXEkBMppBCbaOJs5wC7YCMq6M+inRzmPovu5zPddrpJveY9E73A32OtEeAhRIGCR4o0v+YK8MIrJ7ok3JXx5ow+eAr5UJyFEpVJjomG2wAD1vNNVevExJuMbApisXCqDd1bevum2TIfSh2o8niBRMueZwT2IcPSPGKO9Xl5fyl2PMgvEdtHegK3ZR+xicW2jFkiQKeG9N1lmlv6OEakal+CAEk9klnqA5LZQxIJ29t6Ywo5fliLyyslYaOSbx+qoLVhnCR9yaaHZlvUt8ovMAK/qgT+YKb1kUI/Nn5yxCKa+MAeyNq0rqKIA8N0IA2IcJNf/MI3gkUUAgzBcTJnqSzhCRs/GMDOtInA9yWR4qPgacHAtOGnLM5BQTZyRDVopnRCtj8SCbHwRUxce9blr5JR/RHeficdu4fja7CWTxz3X6Uro3i/kaZ888fTFtdkPYpn5XRExPRj8djX7ajIG23WitXMdrD+bWZdUtbqNaPNzr46KHRzkUPAmK02YYI7dCHC7UHUTuLKk3qBU5xcVsudmqdlVQee8U5YW7BByfX3eS018uri8uRTneRSqgU2G/DZgCtSdL7dlSE7omdQ6yIvxDqbdgOklWwXaz2VG51EdUcpD5sNH2bPYzP+FzopbObSIeFsaGEUiGppHIv4JtW7l+rTDUfM/HLbCUnoVwXqe5iXLmZq/ARjwBM2wd/emxV/NnJXI8B7K/hLIWdrku+eLjC9aHlS2b9j9mnfDTPrH9BiHncRf0O5NFlqGnkfPJfpV1PgzF97ufPFZ/ASUOaeU=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getContractAnalysisEvaluation"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/evaluations/{evaluationId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getContractAnalysisEvaluation
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"evaluationId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getContractAnalysisEvaluation 200 response","content":{"application/json":{"schema":{"properties":{"evaluationId":{"type":"string"},"set":{"type":"string"},"limit":{"type":["integer","null"],"format":"int32"},"suiteRevision":{"type":"integer","format":"int64"},"draftRevision":{"type":"integer","format":"int64"},"complete":{"type":"boolean"},"trialCounts":{"additionalProperties":{"type":"integer","format":"int32"}},"createdAt":{"type":["string","null"],"format":"date-time"}},"required":["complete","draftRevision","evaluationId","set","suiteRevision","trialCounts"],"title":"ProfileEvaluationStatusResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -5,7 +5,7 @@ description: "Extract tracked changes (insertions, deletions) and comments from 
 sidebar_label: "Extract tracked changes (insertions, deletions) and comments from a Word document."
 hide_title: true
 hide_table_of_contents: true
-api: eJzVVsFu2zAM/RVBpw1wkq695bY1PfS0ou2wQ9CDYjOxVlnyJLqtEfjfR8pO4tppNmDooTdZJB/JR1L0VqLaBDlfSvQqfZykubIbCPIhkRmE1OsStbNyLq9eWAFFVINMdIrik7YBPCuFRGRgIB4/C2VJxxUFWAxi7V0hlPjpfCYyl1Z8OxV3VVk6T+Ip3b2ItTaE56ypp+IWsPI2iIC+SulIDjOFSjxrzIWqMHc+eqBLEAWgYulUJtKV4BWHcJ1R0NAGfc8xX3aZJdLD7woCfnNZLedbmTqLFA8fi8qgLpXH2dr5YsKgfB3SHIp4Kj07QE049LVLhc9Yl0AeKWBtN+SEARRJ5Epb5WvZNK1jTbkw3XvbBxKATV3GdgPQLrT7FluVpdFpzG7mUgSckDdQBWG/RifSIF6EkmrRxnp+dhbRXxX1CD+CFMXOkvLosdP3/yswwNvUHLqiR47yXtWEqRGKMLZBCmdMJSXSFvwgWh5otpUxkULuhFMaA/qjL2py1GjYWY+CWKp9J3/M8HeT9+/R6+x0gO+aHUVlNWplwn9wcNnmHPMPVVHw1I2L5FCZ62PNqanPN+D7o0tXF+ecY7RaHGmJvxpdjgtxyqYl82TZBgUYsrJDGPofJZGMuDjeT+Gu43LoKT1AZz3U3uQf6vAG9C0EenHj+0Xg9I7njp/t0gUk41JhTl+z3Ys4e72i2NXaRUo66AUpLuApiK8313K4wPbCRQcnqDNSCIFoZIOpuFKBugTFs6oFOtpe9okyEbWr/H5rBZbEvZBIkoYW+8v0YnrG9ePICxVfRqsKeJe9Ocyst8E+ypbuepgneFYapS1zV3kT5zVWvbcgk/GvSc4NQjrb7UoF+OFN0/A1rXWe+SUdn5TXasVdseTnJQeV0cjNl1v5CHV8LCJlk7haWd1UHNGxH4Am2Rl9TVMosac+2ojNQ6+Nb77f3ZPyqvvPKFzGNgzcNdD+yEE2zR8k5llb
+api: eJzVVk1v2zAM/SuCThvgJF17y21reuhpRdthh6AHxWZirbakSXRbI/B/Hyk7iWun2YChh95k8evxkRS9lag2Qc6XEr1KHydprswGgnxIZAYh9dqhtkbO5dULK6CIapCJTlF80iaAZ6WQiAwKiMfPQhnSsWUJBoNYe1sKJX5an4nMphXfTsVd5Zz1JJ7S3YtY64L8WVPUU3ELWHkTREBfpXSkgJlCJZ415kJVmFsfI9AliBJQsXQqE2kdeMUQrjMCDS3oe8Z82WWWSA+/Kwj4zWa1nG9lag0SHj6WVYHaKY+ztfXlhJ3ydUhzKOPJeQ6AmvzQ1y4VPmPtgCISYG02FIQdKJLIlTbK17Jp2sCacmG697YPJACT2oztBk47aPetb+VcodOY3cymCDihaKBKigYvrrAZKa1VEaBpXkcjEiFeBEe1abGfn53FaK+KfIQvQYpiZ0mRemz18fwK7OBtqg5d0iNLea9q8qkRyjC2QYIzppYSaRvgIFoeaDdVUURKuTNOaQzKEWNR06PGgoP1KIil23f2x4S/m8R/R6+z0wDfNTtCZTRq6uX/4OCyzTnmH6qy5CkcF8miKq6PNaemPt+A748yXV2cc47RanGkJf5qdDkuxCmblsyTZRsUYMjKzsMw/iiJZMTF8X4Kdx2Xw0jpwXXW89qb/EMd3nB9C4FeYE6CndO7nlt+xp0NSMZOYU5fs90LOXu9sjjU2kZKOtcLUlzAUxBfb67lcKHthYvOnaDOSCEEopENpuJKBeoSFM+qFmhpm5knykTUtvL7LRZYEvdEIkkaWt9fphfTM64fIy9VfBmNKuFd9ugws95G+yhbu+thnuCZK5Q2zF3lizivseq9hZmMf1VybhDS2W5XKsAPXzQNX9Oa55lf0vFJea1W3BVLfl5yUBmN3Hy5lY9Qx8ciUjaJq5bVi4oRHfshaJKd0dc0BYc99dFGbB56bXzz/e6elFfdf0cZF3Yc+q6B9kcG2TR/AIDHXwE=
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ Extract tracked changes (insertions, deletions) and comments from a Word documen
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>

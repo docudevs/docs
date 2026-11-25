@@ -1,0 +1,71 @@
+---
+id: delete-agent-session
+title: "deleteAgentSession"
+description: "deleteAgentSession"
+sidebar_label: "deleteAgentSession"
+hide_title: true
+hide_table_of_contents: true
+api: eJx1Uj2P2zAM/SsCpxZw4+R6k7cDkuGADkU/pkMGxmYSobakirJbw/B/L6m4Se+jkyiSj3x85AQJTwzVE+CJXPrAxGy9Y9gX4ANFTPJ7bKCChlpK9KBZXy9JUEDAiJ24o5aYwMlHUpciAivAOnEETGexI/3sbSSplmJPBXB9pg6hmiCNIQNTtO4kmUcfO0zi6XvbwDzvFcxBiBFr/t36Tp+GuI42KEfJXWiZzFQN7UecpOFcwP36/v8Qy8Y6rGv9HloyPho8sIwqvYsXmDeFEBHO/iZTlkZmrqAcNmWWtvwrbTld9ZmzQEefJbCpVQ22vu63NLB5+PwIL3tfg2p0UtWE6DNrd1LAyuyQrcxsfuFokje1dwPFZEbfR9MsINZIgwmlvkT5Unuz+rhaq1LBc+rQKalloZehTJ7Z3IZ+xu26xES/UxlalM1LsT62Gruo8QTDRnBZD3mvx1ZAdbsZ2fVZGGj2NB2Q6Xts51ndss04il/MAaPFgwomZ9dYVlvkP2LL9IqYiJC0YwXvviwn+N5I0zcJL050o6qDba8/MX/Q+Oy05/38z9q3u0+7bzu5lj9AIiNy
+sidebar_class_name: "delete api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"deleteAgentSession"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/v1/agent/sessions/{sessionId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+deleteAgentSession
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Session deletion requested"},"404":{"description":"Session is inaccessible or absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

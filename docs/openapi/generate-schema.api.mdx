@@ -5,7 +5,7 @@ description: "generateSchema"
 sidebar_label: "generateSchema"
 hide_title: true
 hide_table_of_contents: true
-api: eJyNVMty2zAM/BUOz/Kj7c23tO4hp2Qa59TJgZZgmw1FsiTkVuPhvxegHn7G05soYLGLBciDRLWNcvFTVq5sarAo3wrpPASF2tnHSi7kFiwf4aXcQa1kIb0KqgaEwMCDtHSgNG0jhqZkWFzBX6REben/7wZCS4fYwRcHia0HpqR8bbcUso0x8i0log5A+RG/uqrl1NJZZFH0WTcGNVHjbONCPakU5mLHsj6wbtQQ+TT2MxIe+biAoohca6tIXCrO1N/ReAObOtE6QHXuIwXAlq5iPFW8ZOhbW3XalPdGl9n0mSsRcELZoGrWdtrK/6LSuS5ihvwjeqLvHPo8n2ejIJZBe65xNWxBOWIAkQkn4zil/hUZ+/Esto2urudAeiIqbOLNEITgwt1tOfc9c4wVaVCo0XDJV2+cqn4MTaTOmntdUxla753j5fcuYl553NFpNoxiNiAmcYBou3FZb8+7pNQl7KN4eH6Ul4RjcNkXFORYCTFSiwyYiu8qknso/qhWoBPk/J4MFa1rghhURI7ki1BIisau9qfpl+mcLWTttcqT6e/ooFqMjZ7JGseAdH9n3ii6wFSnCSbPNHtwsuGFvHSBbN+xYZR1OKxVhNdgUuLf3SvAz0Wlo1obHtpGmQiFfIf29vOxV6ZhNZIfhr0KmnFUg2/WDlQFIRfs8N+61Zzkm3HE3no1UjGAHsoS/CnV1VYz9bgMz08vK0pe949T7SrGcOF+COMni0zpH9XP4Nc=
+api: eJydVEtzEzEM/isenzdNoHAgN6AceqJD21OnB2WtJAavvdjabTOZ/e9I3keTJnQYbn5Inz59euw1wSbp5YM2oWwq9KQfCx1qjEA2+Gujl3qDXq54W26xAl3oGiJUSBjFca89X9jM+kSxKcUt3eEzsaH1/P67wbjjCz7XLhi2XINLWOjUwy33mnY1CgX2t37Dpr5xTj92HVOJyP6JvgSzE9MyeBKSfKwaR5ap0HwdYjUzQBnsBbaOkgdZTHKb8psCvsQTAOAfvbIemGxXHGXzBsczvl1P2kY0x7ryB/oyGPFnxNcRhtTuem5Q186WuQjzUBLSjK0RqhMhGfUwtf9F6Y55MzPMD6lmer2C7xeLLCSmMtpaME+aQ7GNGp04yEG5Dqn8TOL791ptGmtO68R8EgE16ewXxhjim910XJccY0LkQpIlJ5D3rAuYH2MSvTIfFp9Ocx9yHiTgN8X5rjlLSurJ0laBV8AFbpE1aS0+qdh44fpxcfkvaGAqm5KcbFKNhxasg5XD3GNvlYHz4vncBpneOiTKM0tbvs3HXpmPHrM0uli/DlnAQYgrNr3CNqnPN9f6dcDp82oAVFzCEpmu34jDhfoGictJ6gl2ioJI03KF1S40UY0skvzkyS00/6Ye+93F5cVCdBLuFeRWGZbMyFpNiR7RmvqCeAHNawc2691El5ssa3AwkoV+rQL3wVYEY6v9fgUJ76PrOnnu15jsO2OTVMFMm+wX7s7vvxZcI2y0bLIWos3VWz7IKtgiGIwZsPf/2s/KLI/ui++5NdcVo9PnssT6MNTJmEnoqRluvt/esfFq2KZVXgB5hQ1FmI5Csuv+ANolJVE=
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,14 +47,14 @@ generateSchema
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"instructionsText","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={[{"name":"instructionsText","in":"query","explode":false,"schema":{"type":["string","null"]}}]}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"},"instructions":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"instructions":{"contentType":"application/octet-stream"},"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"},"instructions":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"instructions":{"contentType":"application/octet-stream","explode":false},"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ generateSchema
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"generateSchema 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+  responses={{"200":{"description":"generateSchema 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}},"409":{"description":"Schema generation conflicts with an active review run"},"503":{"description":"Schema generation admission is unavailable"}}}
 >
   
 </StatusCodes>

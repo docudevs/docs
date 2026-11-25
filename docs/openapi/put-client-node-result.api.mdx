@@ -5,7 +5,7 @@ description: "putClientNodeResult"
 sidebar_label: "putClientNodeResult"
 hide_title: true
 hide_table_of_contents: true
-api: eJy9VEtv2zAM/iuCThuQ1tl2y61re+hlKIL2FOTA2GyiTpY0PdIahv77SNlx08ceQIH6YNN8fKQ+kuplhG2Qi5V0yqFWBuV6Jq1DD1FZc9XIhXQpnmuFJv6wDS4xJB3lTDrw0GJEz9G9NPRDvtukGjIqw3EQdyR7/JWUR0KKPuFMhnqHLchFL2PnOCZEr8xW5jybYOqSb5m4gPejGar7HUDrwRlD/G6bjj1qayLVxyI4p1VdyKrugzWs+zNUfpm3KIKzJmDggK/zOX8aDLVXjlHfboAgR3GIpNP8b0U5lyL+iU+Q1NydHftf+k20LWR1bzdVz23O1WFkqqFdJz6ZUPVHvcsVU0+6oQO58gdwLmz5ROrlI7ROH1HFvbqzhUIVi+HC1ukC90GcXV/JlyeYjCy0lF44b2sMgbA44FRcQlCUTDxAJ6IVxNcefRSdTV40Y1BgSwMRCJ+sYcD+cvrtdC6JNGdDbKHwOQ4WMSMG5gRTJybunlU3jUHEx1g5DTSGBJe8ZtvA60oSrxS4GBdo2saZPCKXHZ6vRuGX1dOMjxTT0O6oXkbu+w0EvPU6Z1YT6Z6meEXiHryCDdNLG9yowDJ1/A50wFeHmEZMflqOM/xZUMI3DzcqwXTMJejEfyT+xO5wS/CCfmDOY94+OPXYm7wmzx1Cg74QPhjPhzwnNwzxFPxqi7nmIeKsrtHFv/quj9b3+vaGfDfj1dVSLaT08MCzQu9Spy3HLjdQ0fVSg9km2LLvAMnPbzc5HbM=
+api: eJy9VUtv2zAM/iuCThuQxs12y0595NBifSBrd2lzYGwmUedImh5pDcP/faTsuOlrw1CgOQSKSH4kP31kahlg6eX4RlplsVQa5WwgjUUHQRl9UsixtDEclQp1ODcFTtHHMsiBtOBgjQEdR9dS0w/yXUZVkFFpjoOworPD31E5JKTgIg6kz1e4BjmuZagsx/jglF7Kphn0MHnKN41cwPvRNNX9DqBZ64w+HJqiYo8Cfe6UZYbI8VrPTdSFcFF7AXmONgjQldhAqQpx+uPinI8Rh+Kw9cONwvsn7mGFYkNUEiAWojQ5lAIfMI+cQqDeYElv8i35bX8J5UVudKHYh/zJkc0EK+aKrvVySG2SRyAquWqwtlR5etfsznPp9dtdDyQ+wNqW6NloHOGBqw6cg8RAaojcb0YDpm/GAYmFaWpu0tW441rLhXFrCD/bNuV4RJwHCJESyKOLs8vvk6vJMVW8iDrvtZeo2NuM0uOREP1pKlzWty3uLeE06TVZlm8YvYkuxzPqn1pjuc4a/jzXQLrw1mjfNv1lf//lY78yDIIcxTbyPyjvivgnPkHSoK1MN4tp9kjCY5ndmXlW88g12XZ8s3Z09lhdWb0zR03GY0B37TQ0mduCc2HTR4FP2nd/1AJTvzBJIyokw7HJ4zFuvDi4PJHPO+iNfFhTemGdydF7wuKAoZiAV5RM3EMlgmERk/aDqOiZRNEFebYUEIDwN1vJyNHw63CftWaND2tIfHZDTsyIljnB1ImeuyfV9ToP+BAyWwKtBIKLrmRby+uNJF4pcNwts34zDuQOuezwdE0lfvm63zcdxbRAVlQvI9f1HDxeu7Jp+JpIdxULkpoEp2DO9NI2LZTnM734AkqPL5roJSY/TTsNfxaU8NXmuktaScxlN7h0/IXVdmPzsvzAnLu8fXDq7m2aGXmuEAp0ifDWeNTm2btiiMfgF1PMNbcRB2l//9V3tjO+l9dXkhdl+zeyplro0sE9a4W+U50mtZ02ULqrZQl6GWHJvi0kf/4AkvCpIg==
 sidebar_class_name: "put api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ putClientNodeResult
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"type":"string"}}},"required":true}}
+  body={{"description":"Unbound runs accept any valid JSON value. Bound review runs accept the versioned local execution envelope; the envelope is conditional on the run binding.","content":{"application/json":{"schema":{"type":"string"},"examples":{"ordinaryArray":{"value":"[1,true]"},"boundReviewEnvelope":{"value":{"formatVersion":1,"status":"COMPLETED","functionId":"local-v1","inputsJson":"{\"value\":1}","resultJson":"{\"value\":1}","sourceMappings":[]}}}}},"required":true}}
 >
   
 </RequestSchema>

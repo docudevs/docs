@@ -5,7 +5,7 @@ description: "createGenerativeTask"
 sidebar_label: "createGenerativeTask"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVUtv2zAM/iuCThvgNll7y61ri6K7tEizU5ADbTOJWtvSJDltYPi/j5SfSb0NWA6JxLc+fmQq6WHn5GIttUELXunCyU003B5TuZCJRfD4gEUQHnAF7k1G0oCFHD1aDlDJgi5kTFIs/A8dk2skVRFEfk9ni79KZZEieltiJF2yxxzkopL+aNjVeauKnazrTWOMzn/X6ZEtEl14CstHMCZTSahu9up0wbIhlLFcu1fo2ltu/ESKSOY6xWzQrDtVJIsyy+SGTDzmAYfS4tiwKPMYbW8Yya22OVAWuc00/XJw+FjpNyzc2E/RE3bTjqS6vqKHj0Fad9WToVc+4/JPe7BsMCK/+hzdIHCG2tkAcTWf80+KLrHKMHZ/6KsgS9G5Uqn/Cfyrjh9KlU4i35NrFTQTFs4T6G66begc7KbczsDrKhhczjP3eUYAv5RxrvxTZ7fsgKjrAPK/8Qv5/F7z3BhNzYka+i/krM8+q0ZDUs92fYAL30RgdJfDANx/QG4yHBN6YGvL40Fwwtr5CRfnNU/kVgf02hff6aS8w4MTN8+P8vyFvZIPOZUsqICE8KRU7HAp7sFRy714h6PwWhBdDsQCcdSlFWnr5FiTggeKT1rXxP52eX0555YyTDkEOrU7pAFWDMiKFtqT6noGePzwM5MBLRsKV9ow1g3qo8VG7ovT5XQOPPFgzy0jr6qKweFPm9U1i6kVlvbQmo4HsApiho52Xqocn6nZW8gcfiqwnx75Zdly86vgHk0V3gqhODJOkJV8o+MbHs/2as3baY+Q0jbhMhqL2ybZRUvuLsKnsa2jzuMmSdD4v9puRnx+fnpZkXHc7mRmHkktvPNyp+9QrTbNvwgZBFklMyh2ZZhZ2cTkz29BiUBA
+api: eJydVclu2zAQ/RWCpxZQYjdpD/UtTYIgvSRw3FPgw0gaW4wlUuXixDD0752hZFle2kN9sMhZHodvFm6lh6WTk1dparTgldFOzpP97jGXE5lZBI8PqKNwjTNwK5nIGixU6NEywFZq2pAxSVH7nyYl10QqHUW+oLXF30FZJERvAybSZQVWICdb6Tc1uzpvlV7Kppm3xuj8D5Nv2CIz2hMsL6GuS5XF6EZvzmiW7aFqy7F7ha7bVbU/c0QiK5Njude87lSJ1KEs5ZxMPFaRh2BxaKhDlaLtDRO5MLYCOkUuSkNfBoePmVmhdkM/RVdYnnck1fUVXXxI0usuejL0ypcc/mEOpi1H5NccsxsFrqZ0tkRcjcf8ydFlVtXM3QGa8AQnXEgr5T1y4v6T8DeTPgSVn2W8L6pZ1JyxcJ7IdufThc7B8pzbEWm7CPYuxyf35wyIfYlXf9rZTTvumFrC/zr+fsrerECRFarMhXIiNUHnwhsBwuJa4buwQQtjRQFOKE1sOuWY0J26VHrFwRH6t/H1KfptRO4DF5BXyjleeVUhaYKPVz/0+kunUpcWhju5NlQuSduQEznq4UfbQds2o2UPcOFbBM77dN+S9x9Q1SUOW2zfP11n7QUHfTQ+6I5xwzNiYWJeu1zcmSzc4dqJm+dHeXzDXsmLigmlADLKNB3FDpfiHhwVoxfvsOGEEPVrqk+xMcGKvHNyrMnBA+GT1rXYXy6vL8ecEaapgljo3VRriRWDjumoPYiur02PH35Ul0Djj+CCjYOmZX0wasl9cjguj4mnCi04ZeS13abg8Jctm4bFlApLk/GVlmuwClKmjqZwrhyvKdkLKB2eBNj3tfw07brms+AcnQu8E4LeME9QBt7RcoWbo0nf8LwsEHKabxxGa3HbHnbRtd0O4WSgNMnO4ybLsPb/tJ0P6vn56WVGxmn3SnDlkdTCOz839B+jNXX7rpFBlG1lCXoZ4jSRLSb//gCWH3PX
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -62,7 +62,7 @@ createGenerativeTask
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"createGenerativeTask 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}}}}
+  responses={{"200":{"description":"Generative task submitted","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}},"409":{"description":"The child is bound to a review run or has inconsistent review linkage"},"503":{"description":"Child operation admission timed out"}}}
 >
   
 </StatusCodes>

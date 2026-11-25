@@ -5,7 +5,7 @@ description: "ocrDocument"
 sidebar_label: "ocrDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVN9v2jAQ/lciP21SVtj2xhtrU6lSWypWtEkVD0figjfHdm2HNoryv+/OTiAUhqbxgB3fz+/uu2uYh7VjkydW6LwqufJsmTJtuAUvtLop2ITp3F71wpQZsFByzy1ZNUzhB+qsK1GgUCi8G/AbvFv+UgnL0YO3FU+Zyze8BDZpmK8N2ThvhVqztk13bp61LcH3jl4qbmt2bPnUm6ZMVVKyZdsuYzzu/Ddd1KSaa+UpY7yCMVLkAdDol9OK3vY+jSW4XnBHXwiWDq6qkgJdZdfTxe0jRnqYZ3c3izu8ZT8vs1s872f3GR7TxeMMj9vZDyqdF14SklluHynZNiWX1xHXGQQpK0XJg8lZrYK73IoVvxbrysaUe+WV1pKDGmrzN28h9/+i3A479hTqcAjnUpclqAL7FXWd0cpFp1/GYzpibobqfEibBBWS3gJD/mdvAsmO+YME8eArd1LErdX2LHUOcXdE7jwOKrAwUkMx70G0sQx/hYw+cEo2mgbIaBcnB+diwkb9pI1QfdRQwBalBH6+p3D2BqWRvKNkz5999nu27N+OuBEH7z0J6LWlEXvWoTAdQMr8im9dMn24Ye+R7YS7lmJrcu4cRiaDiyQDh23yySvUidcJtniLnUtqXdmkR+xIUoAH9I9SF31/vvh6MaZeUZ2QYpRUtw8QejKo6EFOu2Z7BDgyEnBnoJPKysCcUOzBWgtziP+T0GFs7Ia6ghpNswLHF1a2LT3HpUOrrRAOVpJo8QzSYSF/83q4o7YgK4rPaPtswQrSPm35LvEd/9mHece9jwl6PAmoewRVD2P22QQ0Lc36hkPBbYgfRZcxyqdAk73p0cTR/o0W0zznxp/VXQ54/TD7Tptx1W3cUhdkY+GVtj/+hzR1QB2GM7w1TIJaV7Am3eiTfn8Ar045tA==
+api: eJydVVFvGjEM/itRnjaJFbZuD+ONtVSqRAtiRZtU8WBygUubS65Jjhah+++zc3dwFIam8UBysWP7sz87Wx5g5Xn/kSdWFJk0gc873ObSQVDW3Ca8z61w142ww3NwkMkgHd3acoMfqLMqVIJCZXCfQ0hx7+RLoZxEC8EVssO9SGUGvL/lYZPTHR+cMitelp2dmaV1GYTG0Esh3QY/5FuubYLyJWh/wtJjY6rDTaE1n5flvPIvffhhkw2pCmsCIcAt5LlWIgLsPnlr6GxvM3cEPyjp6QvB0yJNkZGj6+HNYDZ6QE+T6fDudnaHu+Hvq+EI1/vx/RCXwexhjMto/ItSGVTQhGws3AMFW3bI5E2F8wyCDs9UJuOVs1qJ9MKphbxRq8JVITfKC2u1BNPWlm/BgQj/oly2K/gY83AI58pmGZgE61fp+twaXxn90uvRUsWWU54PacRQgTU30OV/1iaS7phPSJAAofAnRdI5685S5xB3TezaYisDM+QkJNMGRJWFr73vx8BHcgViwxLlsTNEyhDtEjEGz15VSFlIJROFc5QXoRUtrjAU67fe5bG1ibNCeo8xM0gyhTtr0GShE2ZsYCBi7NHqk10wbcUztdjfi4HosJ9TS62eW1/1OHZwn3ebmdBF9e6WUlGilMoy3TfX8A2yXMu6WRpm7/O65/H+7Ii11Yh4T086LWkYLG0sWZ16ivxarj0bTG75e2Q74Y5s+T5jeOGCDcEjgQJ7hQ0LlsqxRk6xjS0caxB7kiQQAO2j1Fe2P19cXvSoMpQnJD8FVU8uhM5aGT2IaUfDgAC7uQYVy1s4HTkdk90awHFC4H8/cg8pl1JVUGO7XYCXM6fLko6r8UhDGKkFC02ErSfks9y0p+kadEH+Oc3FNThF2qdvvgt815n8w7Tuio8MLZ4EVB+C2bR9NtFENCVNoVRCIl30X4muKi+fIk32V49mAb0U1Y2BEDIPZ3XnLV5Pxj9pZi/qtyCLrwl38ErvFP7HMG1EHcdGPNtyDWZVwIp0K5v0+wPpB3X4
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,7 +47,7 @@ ocrDocument
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"format","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"format","in":"query","explode":false,"schema":{"type":["string","null"]}}]}
 >
   
 </ParamsDetails>
@@ -62,7 +62,7 @@ ocrDocument
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"ocrDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+  responses={{"200":{"description":"ocrDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}},"409":{"description":"Legacy dispatch conflicts with the current client run"},"503":{"description":"Processing admission could not acquire the job lock"}}}
 >
   
 </StatusCodes>

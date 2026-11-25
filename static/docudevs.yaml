@@ -1,7 +1,8 @@
 openapi: 3.1.0
 info:
   title: DocuDevs API
-  description: DocuDevs Document processing API. Easiest way to convert your documents to data
+  description: DocuDevs Document processing API. Easiest way to convert your documents
+    to data
   version: 1.3.0
 paths:
   /agent/actions/{id}:
@@ -234,12 +235,14 @@ paths:
           format: int64
       - name: status
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: limit
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -247,6 +250,7 @@ paths:
           format: int32
       - name: before
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -282,7 +286,7 @@ paths:
       - name: limit
         in: query
         description: "Page size, 1 to 200 (default 50)"
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
@@ -290,6 +294,7 @@ paths:
       - name: continuation
         in: query
         description: Token from the previous page
+        explode: false
         schema:
           type:
           - string
@@ -297,6 +302,7 @@ paths:
       - name: originJobId
         in: query
         description: Only runs started from this classify job
+        explode: false
         schema:
           type:
           - integer
@@ -306,6 +312,7 @@ paths:
         in: query
         description: "Only runs in this status: QUEUED, RUNNING, COMPLETED, FAILED\
           \ or CANCELLED"
+        explode: false
         schema:
           type:
           - string
@@ -352,7 +359,8 @@ paths:
         "403":
           description: An agent token cannot start a run
         "404":
-          description: Case not found
+          description: "Case not found, or originJobId names no classify job of the\
+            \ case"
         "503":
           description: The run could not be queued; retry
         "202":
@@ -415,12 +423,8 @@ paths:
         content:
           application/json:
             schema:
-              type:
-              - array
-              - "null"
-              items:
-                type: string
-                format: byte
+              type: string
+              format: binary
         required: true
       responses:
         "403":
@@ -473,10 +477,6 @@ paths:
           description: The run already finished
         "200":
           description: Report saved
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Unit"
   /cases/{caseId}/classify:
     get:
       tags:
@@ -495,7 +495,7 @@ paths:
       - name: limit
         in: query
         description: "Page size, 1 to 200 (default 50)"
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
@@ -503,6 +503,7 @@ paths:
       - name: continuation
         in: query
         description: Token from the previous page
+        explode: false
         schema:
           type:
           - string
@@ -523,9 +524,9 @@ paths:
       - case-classify
       summary: Start a classify job
       description: "Send inline rows (at most 1,000 rows or 10 MB), rows.source upload\
-        \ (then upload the file to the returned uploadUrl and call commit), or record\
-        \ keys of the knowledge base (at most 10,000). The tree, memo and records\
-        \ table versions are pinned when the job starts."
+        \ (then send the file in blocks to upload/blocks/{index} and call commit),\
+        \ or record keys of the knowledge base (at most 10,000). The tree, memo and\
+        \ records table versions are pinned when the job starts."
       operationId: startCaseClassify
       parameters:
       - name: caseId
@@ -634,11 +635,26 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: blockCount
+        in: query
+        description: Number of blocks uploaded; blocks with a higher index from an
+          earlier attempt are discarded
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
       responses:
         "404":
           description: Job not found
+        "400":
+          description: "blockCount outside 1 to 50,000"
         "409":
-          description: "No file uploaded, upload window expired, or job failed"
+          description: "No file uploaded, upload window expired, job failed, or a\
+            \ block is missing (the message names its index)"
+        "413":
+          description: The uploaded file is larger than the source size cap (2 GiB)
         "202":
           description: Job queued
           content:
@@ -672,6 +688,7 @@ paths:
       - name: flag
         in: query
         description: Rows with this flag set
+        explode: false
         schema:
           type:
           - string
@@ -679,6 +696,7 @@ paths:
       - name: reviewRequired
         in: query
         description: Rows whose computed review requirement equals this value
+        explode: false
         schema:
           type:
           - boolean
@@ -686,6 +704,7 @@ paths:
       - name: level
         in: query
         description: "Tree level; with code, matches the chosen code at that level"
+        explode: false
         schema:
           type:
           - integer
@@ -694,6 +713,7 @@ paths:
       - name: code
         in: query
         description: "Chosen code, at the given level when level is set"
+        explode: false
         schema:
           type:
           - string
@@ -701,6 +721,7 @@ paths:
       - name: decision
         in: query
         description: "accept, correct, feedback or none"
+        explode: false
         schema:
           type:
           - string
@@ -708,7 +729,7 @@ paths:
       - name: limit
         in: query
         description: "Page size, 1 to 1000 (default 100)"
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
@@ -716,6 +737,7 @@ paths:
       - name: continuation
         in: query
         description: Token from the previous page
+        explode: false
         schema:
           type:
           - string
@@ -724,6 +746,7 @@ paths:
         in: query
         description: "Comma separated flags that route a row to review, overriding\
           \ the job rule"
+        explode: false
         schema:
           type:
           - string
@@ -764,18 +787,21 @@ paths:
           format: int64
       - name: flag
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: reviewRequired
         in: query
+        explode: false
         schema:
           type:
           - boolean
           - "null"
       - name: level
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -783,18 +809,21 @@ paths:
           format: int32
       - name: code
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: decision
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: routing
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -806,7 +835,8 @@ paths:
           description: Ok
           content:
             text/csv:
-              schema: {}
+              schema:
+                type: string
   /cases/{caseId}/classify/{jobId}/results/{rowId}:
     get:
       tags:
@@ -843,7 +873,7 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: true
+                additionalProperties: {}
   /cases/{caseId}/classify/{jobId}/reviews:
     post:
       tags:
@@ -895,6 +925,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ClassifyReviewResponse"
+  /cases/{caseId}/classify/{jobId}/upload/blocks/{index}:
+    put:
+      tags:
+      - case-classify
+      summary: Upload one block of a classify job's file
+      description: "Send the file in blocks of at most 32 MiB with indexes 0, 1, 2,\
+        \ ... and then call commit. Re-sending an index replaces that block. Accepted\
+        \ while the job awaits its upload."
+      operationId: uploadCaseClassifyBlock
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        "400":
+          description: Invalid index or empty block
+        "404":
+          description: Job not found
+        "409":
+          description: "Job is not waiting for an upload, or the upload window expired"
+        "413":
+          description: Block larger than 32 MiB
+        "204":
+          description: Block stored
   /cases/{caseId}/dataset:
     get:
       tags:
@@ -934,10 +1010,9 @@ paths:
       - name: reindex
         in: query
         description: Confirm that the embedded text of existing records will be re-embedded
+        explode: false
         schema:
-          type:
-          - boolean
-          - "null"
+          type: boolean
           default: false
       requestBody:
         content:
@@ -972,14 +1047,14 @@ paths:
           format: int64
       - name: page
         in: query
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
           default: 0
       - name: size
         in: query
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
@@ -1014,15 +1089,22 @@ paths:
                   type:
                   - string
                   - "null"
+                testContractRetention:
+                  type:
+                  - string
+                  - "null"
               required:
               - document
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "409":
           description: A records case does not accept documents; import records instead
+        "503":
+          description: Document upload admission is unavailable
         "201":
           description: Document uploaded successfully
   /cases/{caseId}/documents/{documentId}:
@@ -1068,6 +1150,43 @@ paths:
       responses:
         "200":
           description: deleteCaseDocument 200 response
+    patch:
+      tags:
+      - cases
+      operationId: updateCaseDocument
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CasesController.UpdateCaseDocumentRequest"
+        required: true
+      responses:
+        "200":
+          description: Document updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseDocument"
+        "400":
+          description: "Unsupported datasetType or testContractRetention, or retention\
+            \ for a document that is not a test contract"
+        "404":
+          description: Case or document not found
+        "409":
+          description: Document is an active guideline source of the current contract-analysis
+            draft; exclude it first
   /cases/{caseId}/documents/{documentId}/download:
     get:
       tags:
@@ -1308,24 +1427,28 @@ paths:
           format: int64
       - name: type
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: scope
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: status
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: version
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -1517,24 +1640,28 @@ paths:
           format: int64
       - name: label
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: subtree
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: labelSource
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: attribute
         in: query
+        explode: false
         schema:
           type:
           - array
@@ -1543,6 +1670,7 @@ paths:
             type: string
       - name: limit
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -1550,6 +1678,7 @@ paths:
           format: int32
       - name: continuation
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -1585,7 +1714,7 @@ paths:
       - name: limit
         in: query
         description: "Page size, 1 to 200 (default 50)"
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
@@ -1593,6 +1722,7 @@ paths:
       - name: continuation
         in: query
         description: Token from the previous page
+        explode: false
         schema:
           type:
           - string
@@ -1614,8 +1744,8 @@ paths:
       tags:
       - case-records
       summary: Start a file import or snapshot sync
-      description: "Without sourceUrl the response carries a write-only uploadUrl\
-        \ for one staging blob; upload the file as a block blob, then call commit."
+      description: "Without sourceUrl the import awaits an upload: send the file in\
+        \ blocks to upload/blocks/{index}, then call commit."
       operationId: createCaseRecordImport
       parameters:
       - name: caseId
@@ -1633,8 +1763,6 @@ paths:
       responses:
         "400":
           description: Invalid options or sourceUrl
-        "503":
-          description: Upload URLs are unavailable
         "202":
           description: Import created
           content:
@@ -1690,11 +1818,26 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: blockCount
+        in: query
+        description: Number of blocks uploaded; blocks with a higher index from an
+          earlier attempt are discarded
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
       responses:
         "404":
           description: Import not found
+        "400":
+          description: "blockCount outside 1 to 50,000"
         "409":
-          description: "No file uploaded, upload window expired, or import failed"
+          description: "No file uploaded, upload window expired, import failed, or\
+            \ a block is missing (the message names its index)"
+        "413":
+          description: The uploaded file is larger than the source size cap (2 GiB)
         "202":
           description: Import queued
           content:
@@ -1737,11 +1880,64 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RecordImportResponse"
+  /cases/{caseId}/records/imports/{importId}/upload/blocks/{index}:
+    put:
+      tags:
+      - case-records
+      summary: Upload one block of a file import
+      description: "Send the file in blocks of at most 32 MiB with indexes 0, 1, 2,\
+        \ ... and then call commit. Re-sending an index replaces that block. Accepted\
+        \ while the import awaits its upload."
+      operationId: uploadCaseRecordImportBlock
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        "400":
+          description: Invalid index or empty block
+        "404":
+          description: Import not found
+        "409":
+          description: "Import is not waiting for an upload, or the upload window\
+            \ expired"
+        "413":
+          description: Block larger than 32 MiB
+        "204":
+          description: Block stored
   /cases/{caseId}/records/stats:
     get:
       tags:
       - case-records
       summary: Per-label record counts of the latest applied table version
+      description: "With no query parameters, returns all category counts. Supplying\
+        \ page, size or q enables category paging: page is zero-based (default 0),\
+        \ size is 1..200 (default 50), and q matches a trimmed case-insensitive category-code\
+        \ substring. Categories are ordered by total descending then code ascending.\
+        \ Record totals remain global; pagination.total counts matches and pagination.totalCategories\
+        \ counts all labelled categories."
       operationId: getCaseRecordStats
       parameters:
       - name: caseId
@@ -1750,7 +1946,44 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: page
+        in: query
+        description: Zero-based category page (default 0)
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+          minimum: 0
+          types:
+          - integer
+      - name: size
+        in: query
+        description: "Categories per page, 1..200 (default 50)"
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+          maximum: 200
+          minimum: 1
+          types:
+          - integer
+      - name: q
+        in: query
+        description: Trimmed case-insensitive category-code substring
+        explode: false
+        schema:
+          type:
+          - string
+          - "null"
+          types:
+          - string
       responses:
+        "400":
+          description: Invalid category page or size
         "404":
           description: Case not found
         "409":
@@ -2074,6 +2307,12 @@ paths:
         "404":
           description: "The activation does not exist for this tree version, or its\
             \ report has not been written yet"
+        "200":
+          description: getCaseTreeActivationReport 200 response
+          content:
+            application/json:
+              schema:
+                additionalProperties: {}
   /cases/{caseId}/trees/{versionId}/nodes:
     get:
       tags:
@@ -2098,26 +2337,28 @@ paths:
           format: int64
       - name: parent
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: q
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: page
         in: query
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
           default: 0
       - name: size
         in: query
-        required: true
+        explode: false
         schema:
           type: integer
           format: int32
@@ -2189,8 +2430,13 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: Document upload conflicts with an active review run
+        "503":
+          description: Document upload admission is unavailable
         "200":
           description: uploadCaseDocumentLegacy 200 response
           content:
@@ -2198,6 +2444,189 @@ paths:
               schema:
                 $ref: "#/components/schemas/UploadResponse"
       deprecated: true
+  /compare:
+    get:
+      tags:
+      - compare
+      operationId: listCompares
+      parameters:
+      - name: limit
+        in: query
+        description: "Maximum number of comparisons, 1 to 100 (default 20)"
+        required: false
+        explode: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        "200":
+          description: listCompares 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompareListItem"
+    post:
+      tags:
+      - compare
+      operationId: submitCompare
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                original:
+                  type: string
+                  format: binary
+                revised:
+                  type: string
+                  format: binary
+                metadata:
+                  type:
+                  - "null"
+                  - object
+                  allOf:
+                  - type:
+                    - "null"
+                    - object
+                    $ref: "#/components/schemas/CompareMetadata"
+                    description: Optional labels and OCR tier. Send a JSON object
+                      as a text part or as a JSON file part.
+                  description: Optional labels and OCR tier. Send a JSON object as
+                    a text part or as a JSON file part.
+              required:
+              - original
+              - revised
+            encoding:
+              original:
+                contentType: application/octet-stream
+                explode: false
+              revised:
+                contentType: application/octet-stream
+                explode: false
+        required: true
+      responses:
+        "202":
+          description: Comparison accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompareSubmitResponse"
+        "409":
+          description: The child is bound to a review run or has inconsistent review
+            linkage
+        "503":
+          description: Child operation admission timed out
+  /compare/{compareGuid}:
+    get:
+      tags:
+      - compare
+      operationId: getCompare
+      parameters:
+      - name: compareGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getCompare 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompareStatusResponse"
+  /compare/{compareGuid}/exports:
+    post:
+      tags:
+      - compare
+      operationId: submitCompareExport
+      parameters:
+      - name: compareGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompareExportRequest"
+        required: true
+      responses:
+        "202":
+          description: Export accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompareExportSubmitResponse"
+        "409":
+          description: The child is bound to a review run or has inconsistent review
+            linkage
+        "503":
+          description: Child operation admission timed out
+  /compare/{compareGuid}/exports/{exportGuid}:
+    get:
+      tags:
+      - compare
+      operationId: getCompareExport
+      parameters:
+      - name: compareGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: exportGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getCompareExport 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompareExportStatusResponse"
+  /compare/{compareGuid}/exports/{exportGuid}/file:
+    get:
+      tags:
+      - compare
+      operationId: getCompareExportFile
+      parameters:
+      - name: compareGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: exportGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The exported file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+                types:
+                - string
+            application/vnd.openxmlformats-officedocument.wordprocessingml.document:
+              schema:
+                type: string
+                format: binary
+                types:
+                - string
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+                types:
+                - string
   /configuration:
     get:
       tags:
@@ -2266,10 +2695,6 @@ paths:
       responses:
         "200":
           description: deleteConfiguration 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Unit"
   /configuration/{name}/excel-template:
     get:
       tags:
@@ -2287,10 +2712,8 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-                  format: byte
+                type: string
+                format: binary
     post:
       tags:
       - configuration
@@ -2314,6 +2737,7 @@ paths:
             encoding:
               file:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "200":
@@ -2323,6 +2747,71 @@ paths:
               schema:
                 additionalProperties:
                   type: string
+  /configuration/{name}/extraction-review-profile:
+    get:
+      tags:
+      - extraction-review
+      operationId: getExtractionReviewProfile
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getExtractionReviewProfile 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewProfileResponse"
+    put:
+      tags:
+      - extraction-review
+      operationId: saveExtractionReviewProfile
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewProfileSaveRequest"
+        required: true
+      responses:
+        "200":
+          description: saveExtractionReviewProfile 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewProfileResponse"
+  /configuration/{name}/extraction-review-profile/preview:
+    post:
+      tags:
+      - extraction-review
+      operationId: previewExtractionReviewProfile
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewProfilePreviewRequest"
+        required: true
+      responses:
+        "200":
+          description: previewExtractionReviewProfile 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewProfileResponse"
   /configuration/{name}/lookup-file:
     get:
       tags:
@@ -2340,10 +2829,8 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-                  format: byte
+                type: string
+                format: binary
     post:
       tags:
       - configuration
@@ -2367,6 +2854,7 @@ paths:
             encoding:
               file:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "200":
@@ -2389,10 +2877,6 @@ paths:
       responses:
         "200":
           description: deleteLookupFile 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Unit"
   /contract-analysis/runs:
     post:
       tags:
@@ -2418,6 +2902,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
+        "503":
+          description: Child operation admission timed out
   /contract-analysis/runs/{runId}:
     get:
       tags:
@@ -2474,10 +2960,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ContractAnalysisReviewResponse"
-  /contract-analysis/runs/{runId}/reviews/{criterionId}/{targetKey}:
+  /contract-analysis/runs/{runId}/reviews/{clauseId}:
     put:
       tags:
       - contract-analysis-reviews
+      description: Records a review of one clause finding. clauseId is the clause
+        id from the run result.
       operationId: putContractAnalysisRunReview
       parameters:
       - name: runId
@@ -2485,12 +2973,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: criterionId
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: targetKey
+      - name: clauseId
         in: path
         required: true
         schema:
@@ -2526,6 +3009,7 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "200":
@@ -2533,7 +3017,7 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: true
+                additionalProperties: {}
   /document/analyze:
     post:
       tags:
@@ -2542,18 +3026,21 @@ paths:
       parameters:
       - name: ocr
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: describeFigures
         in: query
+        explode: false
         schema:
           type:
           - boolean
           - "null"
       - name: extractFigures
         in: query
+        explode: false
         schema:
           type:
           - boolean
@@ -2571,8 +3058,13 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: Analysis conflicts with an active review run
+        "503":
+          description: Analysis admission is unavailable
         "200":
           description: analyzeDocument 200 response
           content:
@@ -2613,10 +3105,8 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-                  format: byte
+                type: string
+                format: binary
     post:
       tags:
       - batch
@@ -2640,6 +3130,7 @@ paths:
             encoding:
               file:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "200":
@@ -2662,10 +3153,6 @@ paths:
       responses:
         "200":
           description: deleteBatchLookupFile 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Unit"
   /document/batch/{guid}/process:
     post:
       tags:
@@ -2683,6 +3170,12 @@ paths:
             schema:
               $ref: "#/components/schemas/UploadCommand"
       responses:
+        "404":
+          description: Batch processing job was not found for this organization
+        "409":
+          description: Batch processing conflicts with the current job or review state
+        "503":
+          description: Batch admission could not acquire the job lock
         "200":
           description: processBatch 200 response
           content:
@@ -2707,11 +3200,18 @@ paths:
           type: string
       - name: trace
         in: query
+        explode: false
         schema:
           type:
           - boolean
           - "null"
       responses:
+        "404":
+          description: Batch job or configuration was not found
+        "409":
+          description: Batch processing conflicts with the current job or review state
+        "503":
+          description: Batch admission could not acquire the job lock
         "200":
           description: processBatchWithConfiguration 200 response
           content:
@@ -2730,6 +3230,12 @@ paths:
         schema:
           type: string
       responses:
+        "404":
+          description: Batch processing job was not found for this organization
+        "409":
+          description: Batch scheduling conflicts with the current job or review state
+        "503":
+          description: Batch admission could not acquire the job lock
         "200":
           description: scheduleBatch 200 response
           content:
@@ -2760,8 +3266,15 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "404":
+          description: Batch processing job was not found for this organization
+        "409":
+          description: Batch upload conflicts with the current job or review state
+        "503":
+          description: Batch admission could not acquire the job lock
         "200":
           description: uploadBatchDocument 200 response
           content:
@@ -2776,6 +3289,7 @@ paths:
       parameters:
       - name: instructionsText
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -2798,10 +3312,16 @@ paths:
             encoding:
               instructions:
                 contentType: application/octet-stream
+                explode: false
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: Schema generation conflicts with an active review run
+        "503":
+          description: Schema generation admission is unavailable
         "200":
           description: generateSchema 200 response
           content:
@@ -2816,12 +3336,14 @@ paths:
       parameters:
       - name: format
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: ocr
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -2839,8 +3361,13 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: OCR admission conflicts with an active review run
+        "503":
+          description: OCR admission is unavailable
         "200":
           description: ocrDocumentSync 200 response
           content:
@@ -2860,6 +3387,7 @@ paths:
           type: string
       - name: format
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -2870,6 +3398,10 @@ paths:
             schema:
               $ref: "#/components/schemas/OcrCommand"
       responses:
+        "409":
+          description: Legacy dispatch conflicts with the current client run
+        "503":
+          description: Processing admission could not acquire the job lock
         "200":
           description: ocrDocument 200 response
           content:
@@ -2889,18 +3421,21 @@ paths:
           type: string
       - name: dependsOn
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: clientRunId
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: segmentIndex
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -2908,6 +3443,7 @@ paths:
           format: int32
       - name: final
         in: query
+        explode: false
         schema:
           type:
           - boolean
@@ -2917,6 +3453,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/UploadCommand"
+        required: false
       responses:
         "200":
           description: processDocument 200 response
@@ -2924,6 +3461,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadResponse"
+        "409":
+          description: Legacy dispatch conflicts with the current client run
+        "404":
+          description: Processing job was not found for this organization
+        "503":
+          description: Processing admission could not acquire the job lock
   /document/process/{guid}/with-configuration/{configurationName}:
     post:
       tags:
@@ -2942,6 +3485,7 @@ paths:
           type: string
       - name: dependsOn
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -2953,6 +3497,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadResponse"
+        "409":
+          description: Legacy dispatch conflicts with the current client run
+        "404":
+          description: Processing job was not found for this organization
+        "503":
+          description: Processing admission could not acquire the job lock
   /document/track-changes:
     post:
       tags:
@@ -2976,6 +3526,7 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "200":
@@ -3002,6 +3553,7 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "200":
@@ -3043,14 +3595,22 @@ paths:
             encoding:
               schema:
                 contentType: application/octet-stream
+                explode: false
               instructions:
                 contentType: application/octet-stream
+                explode: false
               metadata:
                 contentType: application/octet-stream
+                explode: false
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: The upload conflicts with an active review run
+        "503":
+          description: Document processing admission is unavailable
         "200":
           description: uploadFiles 200 response
           content:
@@ -3065,6 +3625,7 @@ paths:
       parameters:
       - name: configuration
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -3097,14 +3658,22 @@ paths:
             encoding:
               schema:
                 contentType: application/octet-stream
+                explode: false
               metadata:
                 contentType: application/octet-stream
+                explode: false
               document:
                 contentType: application/octet-stream
+                explode: false
               prompt:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: The upload conflicts with an active review run
+        "503":
+          description: Document processing admission is unavailable
         "200":
           description: uploadFilesSync 200 response
           content:
@@ -3243,6 +3812,233 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EmbeddingProviderMutationDto"
+  /extraction-review-decisions:
+    get:
+      tags:
+      - extraction-review
+      operationId: pullExtractionReviewDecisions
+      parameters:
+      - name: afterOrdinal
+        in: query
+        explode: false
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: limit
+        in: query
+        explode: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: caseId
+        in: query
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int64
+      responses:
+        "200":
+          description: pullExtractionReviewDecisions 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewDecisionPage"
+  /extraction-review-runs/{runId}:
+    get:
+      tags:
+      - extraction-review
+      operationId: getExtractionReviewRun
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: reviewRevision
+        in: query
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int64
+      responses:
+        "200":
+          description: getExtractionReviewRun 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtractionReviewRunResponse"
+  /extraction-review-runs/{runId}/artifacts:
+    get:
+      tags:
+      - extraction-review
+      operationId: getExtractionReviewArtifact
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: path
+        in: query
+        required: true
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+                types:
+                - string
+  /extraction-review-runs/{runId}/claims:
+    post:
+      tags:
+      - extraction-review
+      operationId: submitExtractionReviewClaims
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitReviewClaimsRequest"
+        required: true
+      responses:
+        "200":
+          description: submitExtractionReviewClaims 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewCommitResponse"
+  /extraction-review-runs/{runId}/claims/{claimId}/adjudication:
+    put:
+      tags:
+      - extraction-review
+      operationId: adjudicateExtractionReviewClaim
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: claimId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdjudicateReviewClaimApiRequest"
+        required: true
+      responses:
+        "200":
+          description: adjudicateExtractionReviewClaim 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewCommitResponse"
+  /extraction-review-runs/{runId}/flags:
+    post:
+      tags:
+      - extraction-review
+      operationId: addExtractionReviewFlags
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddReviewFlagsRequest"
+        required: true
+      responses:
+        "200":
+          description: addExtractionReviewFlags 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewCommitResponse"
+  /extraction-review-runs/{runId}/registration:
+    post:
+      tags:
+      - extraction-review
+      operationId: registerExtractionReviewRun
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: registerExtractionReviewRun 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtractionReviewRunResponse"
+  /extraction-review-runs/{runId}/resolutions:
+    put:
+      tags:
+      - extraction-review
+      operationId: resolveExtractionReviewValues
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResolveReviewValuesRequest"
+        required: true
+      responses:
+        "200":
+          description: resolveExtractionReviewValues 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewCommitResponse"
   /integration/connections:
     get:
       tags:
@@ -3428,6 +4224,7 @@ paths:
           type: string
       - name: batchIndex
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -3452,6 +4249,7 @@ paths:
           type: string
       - name: batchIndex
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -3494,6 +4292,7 @@ paths:
       parameters:
       - name: page
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -3501,6 +4300,7 @@ paths:
           format: int32
       - name: size
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -3508,24 +4308,28 @@ paths:
           format: int32
       - name: sort
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: status
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: createdAtFrom
         in: query
+        explode: false
         schema:
           type:
           - string
           - "null"
       - name: createdAtTo
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -3567,6 +4371,7 @@ paths:
           type: string
       - name: batchIndex
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -3575,6 +4380,23 @@ paths:
       responses:
         "200":
           description: getAcroFormMetadata 200 response
+          content:
+            application/json:
+              schema: {}
+  /job/result/{guid}/document-compare:
+    get:
+      tags:
+      - job
+      operationId: getDocumentCompare
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getDocumentCompare 200 response
           content:
             application/json:
               schema: {}
@@ -3591,6 +4413,7 @@ paths:
           type: string
       - name: batchIndex
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -3602,6 +4425,78 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/result/{guid}/layout:
+    get:
+      tags:
+      - job
+      summary: "Get the provider-neutral document layout (pages, words, paragraphs,\
+        \ tables, figures, sections) for an OCR-processed job"
+      operationId: getDocumentLayout
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: batchIndex
+        in: query
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      - name: pages
+        in: query
+        description: "1-based page selection, e.g. 1-3,7. Defaults to all pages."
+        explode: false
+        schema:
+          type:
+          - string
+          - "null"
+      - name: include
+        in: query
+        description: "Comma-separated parts to include: content, words, paragraphs,\
+          \ tables, figures, sections. Defaults to all."
+        explode: false
+        schema:
+          type:
+          - string
+          - "null"
+      responses:
+        "200":
+          description: getDocumentLayout 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocumentLayout"
+  /job/result/{guid}/ocr-quality:
+    get:
+      tags:
+      - job
+      summary: Get the OCR quality summary for an OCR-processed job
+      operationId: getOcrQuality
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: batchIndex
+        in: query
+        explode: false
+        schema:
+          type:
+          - integer
+          - "null"
+          format: int32
+      responses:
+        "200":
+          description: getOcrQuality 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OcrQuality"
   /job/result/{guid}/pdf-acroform:
     get:
       tags:
@@ -3649,6 +4544,7 @@ paths:
           type: string
       - name: batchIndex
         in: query
+        explode: false
         schema:
           type:
           - integer
@@ -3680,7 +4576,12 @@ paths:
         description: Allow-listed workbook artifact kind
         required: true
         schema:
+          type: string
           enum:
+          - plan
+          - source-map
+          - summary
+          allowableValues:
           - plan
           - source-map
           - summary
@@ -3689,7 +4590,8 @@ paths:
           description: Workbook supporting artifact
           content:
             application/json:
-              schema: {}
+              schema:
+                type: string
         "400":
           description: Invalid workbook artifact kind or reference
         "404":
@@ -3707,14 +4609,20 @@ paths:
           type: string
       responses:
         "200":
-          description: Workbook normalization results use the version-1 envelope;
-            legacy result shapes remain unchanged
+          description: Extraction results are JSON; OCR-only jobs return the raw text
+            artifact as text/markdown or text/plain
           content:
             application/json:
               schema:
                 oneOf:
                 - $ref: "#/components/schemas/WorkbookResult"
                 - {}
+            text/markdown:
+              schema:
+                type: string
+            text/plain:
+              schema:
+                type: string
         "404":
           description: Result not found
   /job/result/{uuid}/csv:
@@ -3747,6 +4655,7 @@ paths:
           type: string
       - name: configuration
         in: query
+        explode: false
         schema:
           type:
           - string
@@ -3867,6 +4776,52 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/{guid}/pipeline/client-runs/review:
+    post:
+      tags:
+      - pipeline
+      operationId: openReviewClientRun
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenReviewClientRunRequest"
+        required: true
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenReviewClientRunResponse"
+  /job/{guid}/pipeline/client-runs/{clientRunId}/complete:
+    post:
+      tags:
+      - pipeline
+      operationId: completeReviewClientRun
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientRunId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: completeReviewClientRun 200 response
+          content:
+            application/json:
+              schema: {}
   /job/{guid}/pipeline/client-runs/{clientRunId}/fail:
     post:
       tags:
@@ -3911,10 +4866,24 @@ paths:
         schema:
           type: string
       requestBody:
+        description: Unbound runs accept any valid JSON value. Bound review runs accept
+          the versioned local execution envelope; the envelope is conditional on the
+          run binding.
         content:
           application/json:
             schema:
               type: string
+            examples:
+              ordinaryArray:
+                value: "[1,true]"
+              boundReviewEnvelope:
+                value:
+                  formatVersion: 1
+                  status: COMPLETED
+                  functionId: local-v1
+                  inputsJson: "{\"value\":1}"
+                  resultJson: "{\"value\":1}"
+                  sourceMappings: []
         required: true
       responses:
         "200":
@@ -3950,6 +4919,44 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/{guid}/pipeline/client-runs/{clientRunId}/segments/{segmentIndex}/skip:
+    post:
+      tags:
+      - pipeline
+      operationId: skipReviewClientSegment
+      parameters:
+      - name: guid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientRunId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: segmentIndex
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkipReviewClientSegmentRequest"
+            examples:
+              formatVersion1:
+                value:
+                  formatVersion: 1
+        required: true
+      responses:
+        "200":
+          description: skipReviewClientSegment 200 response
+          content:
+            application/json:
+              schema: {}
   /job/{guid}/pipeline/client-runs/{clientRunId}/segments/{segmentIndex}/status:
     get:
       tags:
@@ -3982,6 +4989,26 @@ paths:
           content:
             application/json:
               schema: {}
+  /job/{jobGuid}/extraction-review-runs:
+    get:
+      tags:
+      - extraction-review
+      operationId: listExtractionReviewRuns
+      parameters:
+      - name: jobGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: listExtractionReviewRuns 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReviewRunDescriptor"
   /job/{parentGuid}/pdf-acroform/apply:
     post:
       tags:
@@ -4001,11 +5028,16 @@ paths:
         required: true
       responses:
         "200":
-          description: applyPdfAcroFormFieldDefinitions 200 response
+          description: AcroForm operation submitted
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubmitOperationResponse"
+        "409":
+          description: The child is bound to a review run or has inconsistent review
+            linkage
+        "503":
+          description: Child operation admission timed out
   /knowledge-bases:
     get:
       tags:
@@ -4080,7 +5112,7 @@ paths:
           format: int64
       - name: view
         in: query
-        required: true
+        explode: false
         schema:
           type: string
           default: draft
@@ -4125,7 +5157,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/KnowledgeBaseProfileHttpResponse"
         "400":
-          description: Invalid draft request
+          description: "Invalid draft request, or a reason longer than 500 characters\
+            \ (code REASON_TOO_LONG)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
         "404":
           description: Profile capability is disabled or profile is absent
           content:
@@ -4144,6 +5181,217 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProfileValidationErrorResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/draft/revisions:
+    get:
+      tags:
+      - knowledge-base-profiles
+      summary: List the draft change log
+      description: "Every successful draft save, import, build and generation apply,\
+        \ newest first, with the actor and the reason recorded for it."
+      operationId: listContractAnalysisDraftRevisions
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: "Draft change log, newest first"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileDraftRevisionListResponse"
+        "404":
+          description: Profile capability is disabled or case is absent
+  /knowledge-bases/{caseId}/profiles/contract-analysis/draft/revisions/{revision}:
+    get:
+      tags:
+      - knowledge-base-profiles
+      summary: Read the playbook saved at one draft revision
+      description: "Returns the playbook as it was saved at that revision, with its\
+        \ actor and reason."
+      operationId: getContractAnalysisDraftRevision
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: revision
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Playbook saved at the draft revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileDraftRevisionHttpResponse"
+        "404":
+          description: "Profile capability is disabled, case is absent, or the revision\
+            \ is unknown"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/evaluations:
+    get:
+      tags:
+      - contract-analysis-evaluations
+      operationId: listContractAnalysisEvaluations
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: listContractAnalysisEvaluations 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileEvaluationListResponse"
+    post:
+      tags:
+      - contract-analysis-evaluations
+      operationId: startContractAnalysisEvaluation
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileEvaluationRequest"
+        required: true
+      responses:
+        "200":
+          description: "Evaluation started: one scored trial launched per selected\
+            \ test case"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileEvaluationResponse"
+        "400":
+          description: "Invalid request, EMPTY_SET when the selection has no test\
+            \ cases, or INVALID_REPEATS when repeats is not 1 to 3"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
+        "404":
+          description: "Playbook not found for the caller, or the test suite does\
+            \ not exist"
+        "409":
+          description: "TRIAL_RUNNING when a selected test case has a trial in progress,\
+            \ or the idempotency key was used for a different selection"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/evaluations/{evaluationId}:
+    get:
+      tags:
+      - contract-analysis-evaluations
+      operationId: getContractAnalysisEvaluation
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: evaluationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getContractAnalysisEvaluation 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileEvaluationStatusResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/evaluations/{evaluationId}/report:
+    get:
+      tags:
+      - contract-analysis-evaluations
+      operationId: getContractAnalysisEvaluationReport
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: evaluationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: against
+        in: query
+        description: "An evaluation of this playbook to compare with, or published\
+          \ for the newest settled evaluation of the published draft revision that\
+          \ covers every case of this evaluation, preferring the same suite revision"
+        explode: false
+        schema:
+          type:
+          - string
+          - "null"
+      responses:
+        "200":
+          description: getContractAnalysisEvaluationReport 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileEvaluationReportResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/export:
+    get:
+      tags:
+      - knowledge-base-profiles
+      summary: Export the playbook as canonical JSON
+      description: "Returns the stored draft or published playbook document, which\
+        \ can be edited and sent back to the import endpoint."
+      operationId: exportContractAnalysisPlaybook
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: view
+        in: query
+        explode: false
+        schema:
+          type: string
+          default: draft
+      responses:
+        "200":
+          description: Canonical playbook document
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          description: Invalid profile view
+        "404":
+          description: Profile capability is disabled or profile is absent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
   /knowledge-bases/{caseId}/profiles/contract-analysis/generate:
     post:
       tags:
@@ -4156,6 +5404,12 @@ paths:
         schema:
           type: integer
           format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateContractAnalysisProfileRequest"
+        required: true
       responses:
         "200":
           description: Profile generation operation
@@ -4171,6 +5425,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+        "409":
+          description: Candidate job is linked to a review or is not a pristine profile
+            compilation job
+        "503":
+          description: Timed out while acquiring the candidate job admission lock
   /knowledge-bases/{caseId}/profiles/contract-analysis/generations/{generationJobGuid}/apply:
     post:
       tags:
@@ -4202,7 +5461,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProfileProposalApplyResponse"
         "401":
-          description: An authenticated reviewer is required
+          description: An authenticated user or organization API key is required
         "404":
           description: Generation proposal or case is absent
         "409":
@@ -4239,6 +5498,59 @@ paths:
                 $ref: "#/components/schemas/ProfileGenerationComparisonResponse"
         "404":
           description: Generation proposal or case is absent
+  /knowledge-bases/{caseId}/profiles/contract-analysis/import:
+    post:
+      tags:
+      - knowledge-base-profiles
+      summary: Replace the draft with an imported playbook
+      description: "Validates a hand-written clause playbook, canonicalises it and\
+        \ saves it as the next draft revision."
+      operationId: importContractAnalysisPlaybook
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImportPlaybookHttpRequest"
+        required: true
+      responses:
+        "200":
+          description: Imported contract-analysis draft
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeBaseProfileHttpResponse"
+        "400":
+          description: "Invalid import request, or a reason longer than 500 characters\
+            \ (code REASON_TOO_LONG)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
+        "404":
+          description: Profile capability is disabled or case is absent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+        "409":
+          description: Draft revision conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileRevisionConflictResponse"
+        "422":
+          description: Playbook validation failure listing every issue
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileValidationErrorResponse"
   /knowledge-bases/{caseId}/profiles/contract-analysis/publish:
     post:
       tags:
@@ -4350,13 +5662,41 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProfileSourceAuthorityResponse"
         "401":
-          description: An authenticated actor is required
+          description: An authenticated user or organization API key is required
         "404":
           description: Profile capability is disabled or case is absent
         "409":
           description: Source-authority revision conflict
         "422":
           description: Source-authority decision rejected
+  /knowledge-bases/{caseId}/profiles/contract-analysis/source-authority/suggestions:
+    post:
+      tags:
+      - knowledge-base-profiles
+      summary: Suggest roles for unclassified sources and the playbook sides
+      description: "Starts a background read of the guideline sources. When it finishes,\
+        \ the next source-authority read lists a suggested role with a reason for\
+        \ each unclassified source and a suggested perspective. Suggestions never\
+        \ count as roles until a person or API client records them."
+      operationId: suggestContractAnalysisSourceRoles
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "202":
+          description: Suggestion job scheduled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitOperationResponse"
+        "404":
+          description: Profile capability is disabled or case is absent
+        "422":
+          description: No eligible sources are available
   /knowledge-bases/{caseId}/profiles/contract-analysis/test-packages:
     post:
       tags:
@@ -4425,6 +5765,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProfileTestSuiteResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/test-suite/confirmations:
+    post:
+      tags:
+      - contract-analysis-trials
+      operationId: confirmContractAnalysisFindings
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmFindingsRequest"
+        required: true
+      responses:
+        "200":
+          description: confirmContractAnalysisFindings 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmFindingsResponse"
   /knowledge-bases/{caseId}/profiles/contract-analysis/test-suite/proposals:
     post:
       tags:
@@ -4450,6 +5815,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProposeFindingTestCaseResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/test-suite/split:
+    post:
+      tags:
+      - contract-analysis-trials
+      operationId: splitContractAnalysisTestSuite
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileTestSuiteSplitRequest"
+        required: true
+      responses:
+        "200":
+          description: splitContractAnalysisTestSuite 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileTestSuiteResponse"
   /knowledge-bases/{caseId}/profiles/contract-analysis/trials:
     post:
       tags:
@@ -4469,6 +5859,22 @@ paths:
               $ref: "#/components/schemas/ProfileTrialRequest"
         required: true
       responses:
+        "400":
+          description: "RESERVED_IDEMPOTENCY_KEY when the idempotency key starts with\
+            \ evaluation:, which is reserved for evaluation runs"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
+        "409":
+          description: "TRIAL_RUNNING when a trial of the same test case is still\
+            \ running under another idempotency key. Otherwise the idempotency key\
+            \ was used for a different request, or the estimate, draft, suite, or\
+            \ execution configuration is stale."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
         "200":
           description: createContractAnalysisTrial 200 response
           content:
@@ -4552,6 +5958,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TrialAttestationResponse"
+  /knowledge-bases/{caseId}/profiles/contract-analysis/workflow:
+    get:
+      tags:
+      - knowledge-base-profiles
+      summary: Where the case is in contract-analysis setup
+      description: "The current setup step, the running or failed rule build, the\
+        \ rebuild waiting to be applied with its change counts, and test and publish\
+        \ readiness."
+      operationId: getContractAnalysisWorkflow
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Contract-analysis workflow state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisWorkflowResponse"
+        "404":
+          description: Profile capability is disabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
   /llm/keys:
     get:
       tags:
@@ -4706,10 +6141,9 @@ paths:
       parameters:
       - name: status
         in: query
+        explode: false
         schema:
-          type:
-          - string
-          - "null"
+          type: string
       responses:
         "200":
           description: listManagedExecutions 200 response
@@ -4875,10 +6309,6 @@ paths:
       responses:
         "200":
           description: remove 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Unit"
     patch:
       tags:
       - members
@@ -5225,11 +6655,22 @@ paths:
         "400":
           description: Operation request rejected
         "404":
-          description: Contract-analysis capability is disabled
+          description: Contract-analysis capability is disabled or the parent job
+            was not found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProfileCapabilityUnavailableResponse"
+        "409":
+          description: "Operation identity conflicts, a contract-analysis publication\
+            \ must be revalidated, or the child is bound to a review run or has inconsistent\
+            \ review linkage"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContractAnalysisRunErrorResponse"
+        "503":
+          description: Child operation admission timed out
   /operation/{jobGuid}:
     get:
       tags:
@@ -5290,11 +6731,16 @@ paths:
         required: true
       responses:
         "200":
-          description: createGenerativeTask 200 response
+          description: Generative task submitted
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubmitOperationResponse"
+        "409":
+          description: The child is bound to a review run or has inconsistent review
+            linkage
+        "503":
+          description: Child operation admission timed out
   /settings/view:
     get:
       tags:
@@ -5387,6 +6833,7 @@ paths:
       - name: domain
         in: query
         required: true
+        explode: false
         schema:
           type: string
       responses:
@@ -5429,10 +6876,6 @@ paths:
       responses:
         "200":
           description: deleteDomain 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Unit"
   /sso/domains/{id}/verify:
     post:
       tags:
@@ -5605,10 +7048,6 @@ paths:
       responses:
         "200":
           description: deletePortal 200 response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Unit"
   /submission-portals/{id}/submissions:
     post:
       tags:
@@ -5636,8 +7075,13 @@ paths:
             encoding:
               documents:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: Submission conflicts with an active review run or batch start
+        "503":
+          description: Submission admission is unavailable
         "200":
           description: submit 200 response
           content:
@@ -5697,6 +7141,10 @@ paths:
               $ref: "#/components/schemas/TemplateFillRequest"
         required: true
       responses:
+        "409":
+          description: Template fill conflicts with an active review run
+        "503":
+          description: Template fill admission is unavailable
         "200":
           description: fill 200 response
           content:
@@ -5766,8 +7214,13 @@ paths:
             encoding:
               document:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
+        "409":
+          description: Template upload conflicts with an active review run
+        "503":
+          description: Template upload admission is unavailable
         "200":
           description: uploadTemplate 200 response
           content:
@@ -5818,6 +7271,7 @@ paths:
             encoding:
               images:
                 contentType: application/octet-stream
+                explode: false
         required: true
       responses:
         "200":
@@ -5837,14 +7291,538 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserInfo"
+  /v1/agent/sessions:
+    get:
+      tags:
+      - agent-sessions
+      operationId: listAgentSessions
+      parameters:
+      - name: after
+        in: query
+        explode: false
+        schema:
+          type:
+          - string
+          - "null"
+          format: uuid
+      - name: limit
+        in: query
+        explode: false
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      responses:
+        "200":
+          description: listAgentSessions 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentSessionPage"
+    post:
+      tags:
+      - agent-sessions
+      operationId: createAgentSession
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAgentSessionRequest"
+        required: true
+      responses:
+        "201":
+          description: Session created or recovered by idempotency key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentSessionView"
+        "409":
+          description: Idempotency key previously used with a different request
+        "503":
+          description: Session kind unavailable
+  /v1/agent/sessions/{sessionId}:
+    get:
+      tags:
+      - agent-sessions
+      operationId: getAgentSession
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "404":
+          description: Session is inaccessible or absent
+        "200":
+          description: getAgentSession 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentSessionView"
+    delete:
+      tags:
+      - agent-sessions
+      operationId: deleteAgentSession
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "202":
+          description: Session deletion requested
+        "404":
+          description: Session is inaccessible or absent
+  /v1/agent/sessions/{sessionId}/artifacts:
+    get:
+      tags:
+      - agent-sessions
+      operationId: listAgentWorkspaceArtifacts
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: after
+        in: query
+        explode: false
+        schema:
+          type:
+          - string
+          - "null"
+          format: uuid
+      - name: limit
+        in: query
+        explode: false
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      responses:
+        "404":
+          description: Workspace is inaccessible or absent
+        "200":
+          description: listAgentWorkspaceArtifacts 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceArtifactPage"
+  /v1/agent/sessions/{sessionId}/artifacts/{revisionId}/accept:
+    post:
+      tags:
+      - agent-sessions
+      operationId: acceptAgentWorkspaceArtifact
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: revisionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "403":
+          description: Acceptance requires a human owner
+        "404":
+          description: Artifact is inaccessible or absent
+        "200":
+          description: acceptAgentWorkspaceArtifact 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceArtifactView"
+  /v1/agent/sessions/{sessionId}/artifacts/{revisionId}/content:
+    get:
+      tags:
+      - agent-sessions
+      operationId: downloadAgentWorkspaceArtifact
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: revisionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Verified immutable workbook
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Artifact is inaccessible or absent
+  /v1/agent/sessions/{sessionId}/events:
+    get:
+      tags:
+      - agent-sessions
+      operationId: streamAgentSessionEvents
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Last-Event-ID
+        in: header
+        schema:
+          type:
+          - string
+          - "null"
+      responses:
+        "200":
+          description: Server-sent agent session events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        "400":
+          description: Invalid or out-of-scope event cursor
+        "404":
+          description: Session is inaccessible or absent
+        "410":
+          description: Replay window expired. Reload the session snapshot.
+  /v1/agent/sessions/{sessionId}/files:
+    get:
+      tags:
+      - agent-sessions
+      operationId: listAgentSessionFiles
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: listAgentSessionFiles 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentSessionFileList"
+    post:
+      tags:
+      - agent-sessions
+      operationId: uploadAgentSessionFile
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Idempotency-Key
+        in: header
+        schema:
+          type:
+          - string
+          - "null"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+            encoding:
+              file:
+                contentType: application/octet-stream
+                explode: false
+        required: true
+      responses:
+        "201":
+          description: Private attachment stored or recovered by idempotency key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentSessionFileView"
+  /v1/agent/sessions/{sessionId}/files/links:
+    post:
+      tags:
+      - agent-sessions
+      operationId: linkAgentSessionCaseDocument
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkAgentSessionFile"
+        required: true
+      responses:
+        "201":
+          description: Authorized case document attachment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentSessionFileView"
+  /v1/agent/sessions/{sessionId}/files/{fileId}:
+    delete:
+      tags:
+      - agent-sessions
+      operationId: unlinkAgentSessionFile
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "204":
+          description: Attachment unlinked
+  /v1/agent/sessions/{sessionId}/files/{fileId}/content:
+    get:
+      tags:
+      - agent-sessions
+      operationId: downloadAgentSessionFile
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Private attachment bytes
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /v1/agent/sessions/{sessionId}/messages:
+    post:
+      tags:
+      - agent-sessions
+      operationId: submitAgentSessionMessage
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitAgentMessage"
+        required: true
+      responses:
+        "202":
+          description: Turn accepted or recovered by client message ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AcceptedAgentTurn"
+        "409":
+          description: Turn already active or client message ID reused with a different
+            message
+        "503":
+          description: Session runner unavailable
+  /v1/agent/sessions/{sessionId}/turns:
+    get:
+      tags:
+      - agent-sessions
+      operationId: listAgentSessionTurns
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: after
+        in: query
+        explode: false
+        schema:
+          type:
+          - string
+          - "null"
+          format: uuid
+      - name: limit
+        in: query
+        explode: false
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      responses:
+        "404":
+          description: Session is inaccessible or absent
+        "200":
+          description: listAgentSessionTurns 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentTurnPage"
+  /v1/agent/sessions/{sessionId}/turns/{turnId}:
+    get:
+      tags:
+      - agent-sessions
+      operationId: getAgentSessionTurn
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: turnId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "404":
+          description: Turn is inaccessible or absent
+        "200":
+          description: getAgentSessionTurn 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentTurnView"
+  /v1/agent/sessions/{sessionId}/turns/{turnId}/cancel:
+    post:
+      tags:
+      - agent-sessions
+      operationId: cancelAgentWorkspaceTurn
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: turnId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "404":
+          description: Workspace turn is inaccessible or absent
+        "409":
+          description: Turn already finished
+        "200":
+          description: cancelAgentWorkspaceTurn 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AcceptedAgentTurn"
 components:
   schemas:
+    AcceptedAgentTurn:
+      properties:
+        turnId:
+          type: string
+          format: uuid
+        status:
+          type: string
+      required:
+      - status
+      - turnId
+    AddReviewFlagsRequest:
+      properties:
+        expectedReviewRevision:
+          type: integer
+          format: int64
+        reference:
+          $ref: "#/components/schemas/ReviewResultReference"
+        flags:
+          type: array
+          items:
+            $ref: "#/components/schemas/ManualReviewFlagInput"
+        audit:
+          $ref: "#/components/schemas/ReviewAuditInput"
+      required:
+      - audit
+      - expectedReviewRevision
+      - flags
+      - reference
     AddSsoDomainRequest:
       properties:
         domain:
           type: string
       required:
       - domain
+    AdjudicateReviewClaimApiRequest:
+      properties:
+        reference:
+          $ref: "#/components/schemas/ReviewResultReference"
+        expectedReviewRevision:
+          type: integer
+          format: int64
+        expectedClaimRevision:
+          type: integer
+          format: int64
+        expectedAdjudicationRevision:
+          type: integer
+          format: int64
+        expectedResolutionRevision:
+          type: integer
+          format: int64
+        disposition:
+          $ref: "#/components/schemas/ReviewAdjudicationDisposition"
+        audit:
+          $ref: "#/components/schemas/ReviewAuditInput"
+      required:
+      - audit
+      - disposition
+      - expectedAdjudicationRevision
+      - expectedClaimRevision
+      - expectedResolutionRevision
+      - expectedReviewRevision
+      - reference
     AgentAction:
       properties:
         type:
@@ -5853,8 +7831,8 @@ components:
           type: string
         data:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
       required:
       - description
@@ -5873,6 +7851,9 @@ components:
           type:
           - string
           - "null"
+          description: Session to continue. A session belongs to one organization
+            and case; another case starts a new history
+          pattern: "^[A-Za-z0-9_-]{1,64}$"
         caseId:
           type:
           - integer
@@ -5886,6 +7867,9 @@ components:
           type:
           - string
           - "null"
+          description: "What the person is looking at in the case: classify:{jobId}:{rowId}\
+            \ for a classify row, or run:{runId} to reply to a headless run's report\
+            \ and questions. Requires caseId"
       required:
       - messages
     AgentChatResponse:
@@ -5915,8 +7899,8 @@ components:
             $ref: "#/components/schemas/AgentAction"
         suggestedConfig:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         toolsUsed:
           type:
@@ -5996,7 +7980,7 @@ components:
         proposals:
           type: array
           items:
-            additionalProperties: true
+            additionalProperties: {}
         questions:
           type: array
           items:
@@ -6112,6 +8096,135 @@ components:
       - rows
       - tokens
       - turns
+    AgentSessionExtractionResult:
+      properties:
+        fileId:
+          type: string
+          format: uuid
+        configurationName:
+          type: string
+        configurationRevision:
+          type: string
+        resultJson:
+          type: string
+      required:
+      - configurationName
+      - configurationRevision
+      - fileId
+      - resultJson
+    AgentSessionFileList:
+      properties:
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentSessionFileView"
+      required:
+      - files
+    AgentSessionFileSource:
+      enum:
+      - UPLOAD
+      - CASE_DOCUMENT
+    AgentSessionFileStatus:
+      enum:
+      - UPLOADED
+      - PROCESSING
+      - READY
+      - FAILED
+    AgentSessionFileView:
+      properties:
+        fileId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        mediaType:
+          type:
+          - string
+          - "null"
+        status:
+          $ref: "#/components/schemas/AgentSessionFileStatus"
+        sourceKind:
+          $ref: "#/components/schemas/AgentSessionFileSource"
+      required:
+      - fileId
+      - name
+      - sourceKind
+      - status
+    AgentSessionLinks:
+      properties:
+        self:
+          type: string
+        messages:
+          type: string
+        events:
+          type: string
+        turns:
+          type: string
+        files:
+          type:
+          - string
+          - "null"
+        artifacts:
+          type:
+          - string
+          - "null"
+      required:
+      - events
+      - messages
+      - self
+      - turns
+    AgentSessionPage:
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentSessionView"
+        nextCursor:
+          type:
+          - string
+          - "null"
+          format: uuid
+      required:
+      - sessions
+    AgentSessionView:
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        kind:
+          type: string
+        caseId:
+          type:
+          - integer
+          - "null"
+          format: int64
+        status:
+          type: string
+        capabilities:
+          type: array
+          items:
+            type: string
+        eventCursor:
+          type: string
+        activeTurnId:
+          type:
+          - string
+          - "null"
+          format: uuid
+        recentTurns:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentTurnView"
+        links:
+          $ref: "#/components/schemas/AgentSessionLinks"
+      required:
+      - capabilities
+      - eventCursor
+      - kind
+      - links
+      - recentTurns
+      - sessionId
+      - status
     AgentStatusResponse:
       properties:
         jobGuid:
@@ -6140,6 +8253,64 @@ components:
       - jobGuid
       - sessionId
       - status
+    AgentTurnPage:
+      properties:
+        turns:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentTurnView"
+        nextCursor:
+          type:
+          - string
+          - "null"
+          format: uuid
+      required:
+      - turns
+    AgentTurnView:
+      properties:
+        turnId:
+          type: string
+          format: uuid
+        status:
+          type: string
+        userText:
+          type: string
+        assistantText:
+          type:
+          - string
+          - "null"
+        failureCode:
+          type:
+          - string
+          - "null"
+        pendingActions:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/PendingActionSummary"
+        suggestedConfig:
+          type:
+          - object
+          - "null"
+          additionalProperties: true
+        inputFileIds:
+          type:
+          - array
+          - "null"
+          items:
+            type: string
+            format: uuid
+        extractionResults:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/AgentSessionExtractionResult"
+      required:
+      - status
+      - turnId
+      - userText
     BatchCreateRequest:
       properties:
         maxConcurrency:
@@ -6226,7 +8397,6 @@ components:
           - "null"
           format: date-time
       required:
-      - embeddingMetadataVersion
       - isKnowledgeBase
       - name
       - organizationId
@@ -6265,8 +8435,8 @@ components:
           type: string
         metadata:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         processingStatus:
           $ref: "#/components/schemas/DocumentStatus"
@@ -6481,6 +8651,26 @@ components:
           - "null"
       required:
       - name
+    CasesController.UpdateCaseDocumentRequest:
+      properties:
+        datasetType:
+          type:
+          - string
+          - "null"
+          enum:
+          - test_contract
+          allowableValues:
+          - test_contract
+        testContractRetention:
+          type:
+          - string
+          - "null"
+          enum:
+          - kept
+          - temporary
+          allowableValues:
+          - kept
+          - temporary
     CasesController.UpdateCaseRequest:
       properties:
         name:
@@ -6491,6 +8681,25 @@ components:
           - "null"
       required:
       - name
+    CategoryStatsPagination:
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        totalCategories:
+          type: integer
+          format: int32
+      required:
+      - page
+      - size
+      - total
+      - totalCategories
     ChatMessage:
       properties:
         role:
@@ -6511,10 +8720,6 @@ components:
           - "null"
         status:
           type: string
-        uploadUrl:
-          type:
-          - string
-          - "null"
         expiresAt:
           type:
           - string
@@ -6775,6 +8980,14 @@ components:
             \ modelNamedDifferentBestFit and sourcesDisagree"
           items:
             type: string
+        maxTotalTokens:
+          type:
+          - integer
+          - "null"
+          format: int64
+          description: "Tokens the investigation run may use in total, at least 1;\
+            \ the configured default (agent.run.default-budget-tokens, 300000) when\
+            \ absent"
       required:
       - enabled
     ClassifyJobPage:
@@ -6834,7 +9047,7 @@ components:
         rows:
           type: array
           items:
-            additionalProperties: true
+            additionalProperties: {}
         continuation:
           type:
           - string
@@ -6947,8 +9160,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ClassifyInlineRow"
-            description: "A row to classify, keyed by the field names of the knowledge\
-              \ base's field mapping."
       required:
       - items
     ClassifySiblingExpansion:
@@ -7086,6 +9297,11 @@ components:
       required:
       - extraCategoryMatches
       - extraSimilar
+    Collection_String_:
+      properties:
+        size:
+          type: integer
+          format: int32
     Comment:
       properties:
         id:
@@ -7108,6 +9324,193 @@ components:
           - "null"
       required:
       - text
+    CompareDocument:
+      properties:
+        fileName:
+          type: string
+        label:
+          type: string
+      required:
+      - fileName
+      - label
+    CompareDocuments:
+      properties:
+        original:
+          $ref: "#/components/schemas/CompareDocument"
+        revised:
+          $ref: "#/components/schemas/CompareDocument"
+      required:
+      - original
+      - revised
+    CompareExportFilters:
+      properties:
+        insertions:
+          type: boolean
+        deletions:
+          type: boolean
+        moves:
+          type: boolean
+        tables:
+          type: boolean
+        substantiveOnly:
+          type: boolean
+        shownNoise:
+          type: array
+          items:
+            type: string
+    CompareExportRequest:
+      properties:
+        format:
+          type: string
+        filters:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/CompareExportFilters"
+      required:
+      - format
+    CompareExportStatusResponse:
+      properties:
+        status:
+          $ref: "#/components/schemas/CompareStatus"
+        error:
+          type:
+          - string
+          - "null"
+      required:
+      - status
+    CompareExportSubmitResponse:
+      properties:
+        exportGuid:
+          type: string
+      required:
+      - exportGuid
+    CompareListItem:
+      properties:
+        compareGuid:
+          type: string
+        documents:
+          $ref: "#/components/schemas/CompareDocuments"
+        status:
+          $ref: "#/components/schemas/CompareStatus"
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        summary:
+          type:
+          - object
+          - "null"
+          additionalProperties: true
+      required:
+      - compareGuid
+      - documents
+      - status
+    CompareMetadata:
+      description: Optional labels and OCR tier. Send a JSON object as a text part
+        or as a JSON file part.
+      properties:
+        originalLabel:
+          type:
+          - string
+          - "null"
+        revisedLabel:
+          type:
+          - string
+          - "null"
+        ocr:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/CompareOcr"
+    CompareOcr:
+      enum:
+      - DEFAULT
+      - PREMIUM
+    CompareStage:
+      properties:
+        stage:
+          type: string
+        side:
+          type:
+          - string
+          - "null"
+        status:
+          $ref: "#/components/schemas/CompareStatus"
+        error:
+          type:
+          - string
+          - "null"
+      required:
+      - stage
+      - status
+    CompareStatus:
+      enum:
+      - PENDING
+      - PROCESSING
+      - COMPLETED
+      - ERROR
+    CompareStatusResponse:
+      properties:
+        compareGuid:
+          type: string
+        status:
+          $ref: "#/components/schemas/CompareStatus"
+        documents:
+          $ref: "#/components/schemas/CompareDocuments"
+        stages:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompareStage"
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - compareGuid
+      - documents
+      - stages
+      - status
+    CompareSubmitResponse:
+      properties:
+        compareGuid:
+          type: string
+      required:
+      - compareGuid
+    ConfirmFindingsRequest:
+      properties:
+        runId:
+          type: string
+        resultFingerprint:
+          type: string
+        expectedSuiteRevision:
+          type: integer
+          format: int64
+        confirmations:
+          type: array
+          items:
+            $ref: "#/components/schemas/FindingConfirmation"
+      required:
+      - confirmations
+      - expectedSuiteRevision
+      - resultFingerprint
+      - runId
+    ConfirmFindingsResponse:
+      properties:
+        suiteCaseId:
+          type: string
+        sourceRunId:
+          type: string
+        suite:
+          $ref: "#/components/schemas/ProfileTestSuiteResponse"
+      required:
+      - sourceRunId
+      - suite
+      - suiteCaseId
     ConnectionResponse:
       properties:
         id:
@@ -7148,6 +9551,19 @@ components:
       - fieldValues
       - name
       - secretFieldsSet
+    ContractAnalysisBuildState:
+      properties:
+        generationJobGuid:
+          type: string
+        status:
+          type: string
+        error:
+          type:
+          - string
+          - "null"
+      required:
+      - generationJobGuid
+      - status
     ContractAnalysisPackageContext:
       properties:
         asOfDate:
@@ -7155,22 +9571,38 @@ components:
           - string
           - "null"
           format: date
+    ContractAnalysisPendingRebuild:
+      properties:
+        generationJobGuid:
+          type: string
+        reviewStatus:
+          type: string
+        counts:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/RebuildChangeCounts"
+      required:
+      - generationJobGuid
+      - reviewStatus
     ContractAnalysisReviewResponse:
       properties:
         runId:
           type: string
         resultFingerprint:
           type: string
-        criterionId:
-          type: string
-        targetKey:
+        clauseId:
           type: string
         disposition:
           type: string
-        correctedAssessment:
+        correctedVerdict:
           type:
           - string
           - "null"
+        correctedRedFlags:
+          additionalProperties:
+            type: string
         evidence:
           type: array
           items:
@@ -7188,13 +9620,12 @@ components:
           format: int64
       required:
       - actor
-      - criterionId
+      - clauseId
       - disposition
       - evidence
       - resultFingerprint
       - reviewRevision
       - runId
-      - targetKey
       - timestamp
     ContractAnalysisRunErrorResponse:
       properties:
@@ -7204,12 +9635,35 @@ components:
           type:
           - string
           - "null"
-          description: "Currently supported code: revalidation_required. A publication\
-            \ without an attested execution configuration must be revalidated."
+          description: "revalidation_required: a publication without an attested execution\
+            \ configuration must be revalidated. EMPTY_SET: an evaluation selected\
+            \ no test cases. TRIAL_RUNNING: a selected test case still has a trial\
+            \ in progress. REASON_TOO_LONG: a draft save gave a reason longer than\
+            \ 500 characters. The other codes reject a test-suite expectation that\
+            \ names a clause or red flag the playbook does not contain or uses an\
+            \ unsupported verdict, red flag outcome, or importance."
           enum:
           - revalidation_required
+          - UNKNOWN_CLAUSE
+          - UNKNOWN_RED_FLAG
+          - INVALID_VERDICT
+          - INVALID_RED_FLAG_OUTCOME
+          - INVALID_IMPORTANCE
+          - DUPLICATE_EXPECTATION
+          - EMPTY_SET
+          - TRIAL_RUNNING
+          - REASON_TOO_LONG
           allowableValues:
           - revalidation_required
+          - UNKNOWN_CLAUSE
+          - UNKNOWN_RED_FLAG
+          - INVALID_VERDICT
+          - INVALID_RED_FLAG_OUTCOME
+          - INVALID_IMPORTANCE
+          - DUPLICATE_EXPECTATION
+          - EMPTY_SET
+          - TRIAL_RUNNING
+          - REASON_TOO_LONG
       required:
       - message
     ContractAnalysisRunRequest:
@@ -7228,10 +9682,6 @@ components:
           format: int64
         idempotencyKey:
           type: string
-        model:
-          type:
-          - string
-          - "null"
         configurationFingerprint:
           type:
           - string
@@ -7244,8 +9694,8 @@ components:
           - $ref: "#/components/schemas/LlmType"
         customParameters:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         trialId:
           type:
@@ -7352,6 +9802,51 @@ components:
       - resultAvailable
       - runId
       - status
+    ContractAnalysisWorkflowResponse:
+      description: "Where a case is in the contract-analysis setup, so clients render\
+        \ one state instead of combining several."
+      properties:
+        step:
+          type: string
+        draftRevision:
+          type: integer
+          format: int64
+        publishedRevision:
+          type: integer
+          format: int64
+        ruleCount:
+          type: integer
+          format: int32
+        build:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ContractAnalysisBuildState"
+        pendingRebuild:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ContractAnalysisPendingRebuild"
+        testCaseCount:
+          type: integer
+          format: int32
+        readyToPublish:
+          type: boolean
+        publishWarnings:
+          type: array
+          description: Non-blocking publication warnings. Publication requires each
+            code in acknowledgedWarningCodes.
+          items:
+            type: string
+      required:
+      - draftRevision
+      - publishedRevision
+      - readyToPublish
+      - ruleCount
+      - step
+      - testCaseCount
     ContractPackageDocumentRequest:
       properties:
         documentId:
@@ -7380,6 +9875,17 @@ components:
       required:
       - jobGuid
       - role
+    CreateAgentSessionRequest:
+      properties:
+        kind:
+          type: string
+        caseId:
+          type:
+          - integer
+          - "null"
+          format: int64
+      required:
+      - kind
     CreateConnectionRequest:
       properties:
         name:
@@ -7420,7 +9926,7 @@ components:
         similarityMetric:
           type: string
         requestOptions:
-          additionalProperties: true
+          additionalProperties: {}
         credentialId:
           type:
           - integer
@@ -7451,8 +9957,8 @@ components:
           - "null"
         kwargs:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         credentialId:
           type:
@@ -7529,8 +10035,8 @@ components:
           type: string
         features:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         status:
           type:
@@ -7716,7 +10222,7 @@ components:
         resourceClass:
           type: string
         inputs:
-          additionalProperties: true
+          additionalProperties: {}
         timeoutSeconds:
           type: integer
           format: int32
@@ -7737,6 +10243,59 @@ components:
       - executionId
       - resourceClass
       - status
+    DocumentLayout:
+      description: "Provider-neutral document layout. Offsets in every span refer\
+        \ to the full-document \\[content\\]."
+      properties:
+        version:
+          type: integer
+          format: int32
+        provider:
+          type: string
+        contentFormat:
+          type:
+          - string
+          - "null"
+        contentLength:
+          type: integer
+          format: int32
+        content:
+          type:
+          - string
+          - "null"
+        pages:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutPage"
+        paragraphs:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutParagraph"
+        tables:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutTable"
+        figures:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutFigure"
+        sections:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutSection"
+      required:
+      - contentLength
+      - pages
+      - provider
+      - version
     DocumentStatus:
       enum:
       - PENDING
@@ -7751,8 +10310,8 @@ components:
           type: string
         summary:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
       required:
       - documentId
@@ -8090,7 +10649,7 @@ components:
         similarityMetric:
           type: string
         requestOptions:
-          additionalProperties: true
+          additionalProperties: {}
         credentialId:
           type:
           - integer
@@ -8165,6 +10724,24 @@ components:
       required:
       - baselineEvalId
       - candidateEvalId
+    EvalGrouping:
+      description: How the held-out records are kept out of each other's evidence.
+        Mode nearDuplicate (the default) also leaves out every record whose text is
+        a near-duplicate of a sampled record; field groups by groupField; none is
+        ungrouped and its accuracy is optimistic.
+      properties:
+        mode:
+          type: string
+          description: "nearDuplicate, field (requires groupField) or none"
+        threshold:
+          type:
+          - number
+          - "null"
+          format: double
+          description: "Cosine similarity at or above which a record counts as a near-duplicate;\
+            \ above 0 and at most 1; default 0.98, only for nearDuplicate"
+      required:
+      - mode
     EvalHoldoutRequest:
       description: "Start a holdout evaluation: a grouped sample of labelled records\
         \ is classified once per variant with the held-out records left out of the\
@@ -8202,8 +10779,14 @@ components:
             are compared with
           items:
             $ref: "#/components/schemas/EvalVariantRequest"
-            description: One variant of a holdout evaluation. Variants share the sample
-              and are classified separately.
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalGrouping"
+          description: Grouping of the held-out records; omitted means nearDuplicate.
+            Cannot be combined with groupField unless its mode is field
       required:
       - variants
     EvalMemoRequest:
@@ -8230,6 +10813,12 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/ClassifyConfig"
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalGrouping"
     EvalReport:
       description: Scored result of a holdout evaluation. Variant 0 is the baseline;
         comparisons pair each other variant with it.
@@ -8257,6 +10846,12 @@ components:
             $ref: "#/components/schemas/EvalReportComparison"
         limits:
           type: string
+        warnings:
+          type:
+          - array
+          - "null"
+          items:
+            type: string
       required:
       - comparisons
       - levels
@@ -8352,6 +10947,36 @@ components:
       required:
       - accepted
       - flags
+    EvalReportGrouping:
+      properties:
+        mode:
+          type: string
+        groupField:
+          type:
+          - string
+          - "null"
+        threshold:
+          type:
+          - number
+          - "null"
+          format: double
+        neighbourLimit:
+          type:
+          - integer
+          - "null"
+          format: int32
+        groupMembersExcluded:
+          type:
+          - integer
+          - "null"
+          format: int32
+        rowsAtNeighbourCap:
+          type:
+          - integer
+          - "null"
+          format: int32
+      required:
+      - mode
     EvalReportLeaveOut:
       properties:
         leakedRows:
@@ -8396,6 +11021,12 @@ components:
           type:
           - string
           - "null"
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalReportGrouping"
         tableVersion:
           type:
           - integer
@@ -8558,6 +11189,12 @@ components:
           - "null"
           items:
             type: string
+        grouping:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/EvalGrouping"
       required:
       - sampleSize
       - seed
@@ -8681,6 +11318,36 @@ components:
           - "null"
       required:
       - name
+    EvaluatorReviewClaimInput:
+      properties:
+        claimId:
+          type: string
+        claimRevision:
+          type: integer
+          format: int64
+        identity:
+          $ref: "#/components/schemas/ReviewClaimIdentity"
+        address:
+          $ref: "#/components/schemas/ReviewAddress"
+        observed:
+          $ref: "#/components/schemas/ReviewObservedValue"
+        proposedValueJson:
+          type:
+          - string
+          - "null"
+        rationaleJson:
+          type:
+          - string
+          - "null"
+        priority:
+          type: string
+      required:
+      - address
+      - claimId
+      - claimRevision
+      - identity
+      - observed
+      - priority
     ExamplePolicy:
       properties:
         mode:
@@ -8759,6 +11426,69 @@ components:
       - GENERATIVE
       - PIPELINE
       - WORKBOOK
+    ExtractionReviewRunResponse:
+      properties:
+        identity:
+          $ref: "#/components/schemas/ReviewResultIdentity"
+        reviewRevision:
+          type: integer
+          format: int64
+        state:
+          $ref: "#/components/schemas/ReviewState"
+        projectionStatus:
+          $ref: "#/components/schemas/ReviewProjectionStatus"
+        diagnostics:
+          type: array
+          items:
+            type: string
+        readiness:
+          type: string
+        commandJson:
+          type: string
+        schemaJson:
+          type: string
+        overlayJson:
+          type: string
+        baseJson:
+          type: string
+        projectionJson:
+          type: string
+        configurationId:
+          type: integer
+          format: int64
+        configurationName:
+          type: string
+        requestId:
+          type: string
+        profileRevision:
+          type: integer
+          format: int64
+        artifacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewArchivedArtifact"
+        adjudications:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewAdjudicationStatusView"
+      required:
+      - adjudications
+      - artifacts
+      - baseJson
+      - commandJson
+      - configurationId
+      - configurationName
+      - diagnostics
+      - identity
+      - overlayJson
+      - profileRevision
+      - projectionJson
+      - projectionStatus
+      - readiness
+      - requestId
+      - reviewRevision
+      - schemaJson
+      - state
     FieldMapping:
       properties:
         key:
@@ -8778,6 +11508,36 @@ components:
       - key
       - metadata
       - text
+    FindingConfirmation:
+      properties:
+        clauseId:
+          type: string
+        expectedVerdict:
+          type: string
+        expectedRedFlags:
+          additionalProperties:
+            type: string
+        importance:
+          type: string
+        notes:
+          type:
+          - string
+          - "null"
+      required:
+      - clauseId
+      - expectedVerdict
+    GenerateContractAnalysisProfileRequest:
+      properties:
+        perspective:
+          $ref: "#/components/schemas/PlaybookPerspective"
+        scope:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/PlaybookScope"
+      required:
+      - perspective
     GenerativeTaskRequest:
       properties:
         prompt:
@@ -8798,6 +11558,22 @@ components:
           format: int32
       required:
       - prompt
+    ImportPlaybookHttpRequest:
+      properties:
+        draftRevision:
+          type: integer
+          format: int64
+        playbook:
+          additionalProperties: {}
+        reason:
+          type:
+          - string
+          - "null"
+          description: "Why the draft changed, recorded in the draft change log. At\
+            \ most 500 characters."
+      required:
+      - draftRevision
+      - playbook
     IndexSettings:
       properties:
         topK:
@@ -8997,6 +11773,14 @@ components:
         caseId:
           type: integer
           format: int64
+        profileType:
+          type:
+          - string
+          - "null"
+          description: Optional profile type. Use contract-analysis to create a playbook
+            that starts with an empty contract-analysis profile. Omit it for a plain
+            knowledge base.
+          maxLength: 64
       required:
       - caseId
     LabelStats:
@@ -9014,6 +11798,233 @@ components:
       - import
       - review
       - total
+    LayoutBoundingRegion:
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        polygon:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutPoint"
+      required:
+      - pageNumber
+      - polygon
+    LayoutFigure:
+      properties:
+        id:
+          type: string
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+        elements:
+          type: array
+          items:
+            type: string
+        captionRef:
+          type:
+          - string
+          - "null"
+      required:
+      - boundingRegions
+      - elements
+      - id
+    LayoutPage:
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        width:
+          type:
+          - number
+          - "null"
+          format: double
+        height:
+          type:
+          - number
+          - "null"
+          format: double
+        unit:
+          type:
+          - string
+          - "null"
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        words:
+          type:
+          - array
+          - "null"
+          items:
+            $ref: "#/components/schemas/LayoutWord"
+      required:
+      - pageNumber
+      - spans
+    LayoutParagraph:
+      properties:
+        id:
+          type: string
+        role:
+          type:
+          - string
+          - "null"
+        content:
+          type: string
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+      required:
+      - boundingRegions
+      - content
+      - id
+      - spans
+    LayoutPoint:
+      properties:
+        x:
+          type: number
+          format: double
+        "y":
+          type: number
+          format: double
+      required:
+      - x
+      - "y"
+    LayoutSection:
+      properties:
+        id:
+          type: string
+        elements:
+          type: array
+          items:
+            type: string
+      required:
+      - elements
+      - id
+    LayoutSpan:
+      properties:
+        offset:
+          type: integer
+          format: int32
+        length:
+          type: integer
+          format: int32
+      required:
+      - length
+      - offset
+    LayoutTable:
+      properties:
+        id:
+          type: string
+        rowCount:
+          type: integer
+          format: int32
+        columnCount:
+          type: integer
+          format: int32
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+        cells:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutTableCell"
+      required:
+      - boundingRegions
+      - cells
+      - columnCount
+      - id
+      - rowCount
+      - spans
+    LayoutTableCell:
+      properties:
+        rowIndex:
+          type: integer
+          format: int32
+        columnIndex:
+          type: integer
+          format: int32
+        rowSpan:
+          type:
+          - integer
+          - "null"
+          format: int32
+        columnSpan:
+          type:
+          - integer
+          - "null"
+          format: int32
+        kind:
+          type:
+          - string
+          - "null"
+        content:
+          type: string
+        spans:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutSpan"
+        boundingRegions:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutBoundingRegion"
+        elements:
+          type: array
+          items:
+            type: string
+      required:
+      - boundingRegions
+      - columnIndex
+      - content
+      - elements
+      - rowIndex
+      - spans
+    LayoutWord:
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+        confidence:
+          type:
+          - number
+          - "null"
+          format: double
+        span:
+          $ref: "#/components/schemas/LayoutSpan"
+        polygon:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutPoint"
+      required:
+      - content
+      - id
+      - polygon
+      - span
+    LinkAgentSessionFile:
+      properties:
+        documentGuid:
+          type: string
+      required:
+      - documentGuid
+    List_String_:
+      allOf:
+      - $ref: "#/components/schemas/Collection_String_"
+      - properties:
+          size:
+            type: integer
+            format: int32
     LlmKeyBindingDto:
       properties:
         key:
@@ -9045,7 +12056,7 @@ components:
           - string
           - "null"
         kwargs:
-          additionalProperties: true
+          additionalProperties: {}
         status:
           type: string
         createdAt:
@@ -9154,6 +12165,33 @@ components:
       - resourceClass
       - status
       - triggerType
+    ManualReviewFlagInput:
+      properties:
+        claimId:
+          type: string
+        claimRevision:
+          type: integer
+          format: int64
+        address:
+          $ref: "#/components/schemas/ReviewAddress"
+        observed:
+          $ref: "#/components/schemas/ReviewObservedValue"
+        proposedValueJson:
+          type:
+          - string
+          - "null"
+        rationaleJson:
+          type:
+          - string
+          - "null"
+        priority:
+          type: string
+      required:
+      - address
+      - claimId
+      - claimRevision
+      - observed
+      - priority
     MapReduceCommand:
       properties:
         enabled:
@@ -9625,6 +12663,28 @@ components:
           - "null"
       required:
       - ocr
+    OcrConfidenceDetails:
+      properties:
+        meanTrimmed:
+          type:
+          - number
+          - "null"
+          format: double
+        highConfidenceRatio:
+          type:
+          - number
+          - "null"
+          format: double
+        midConfidenceRatio:
+          type:
+          - number
+          - "null"
+          format: double
+        lowConfidenceRatio:
+          type:
+          - number
+          - "null"
+          format: double
     OcrKeyBindingDto:
       properties:
         key:
@@ -9652,7 +12712,7 @@ components:
         modelId:
           type: string
         features:
-          additionalProperties: true
+          additionalProperties: {}
         status:
           type: string
         createdAt:
@@ -9670,6 +12730,54 @@ components:
       - modelId
       - name
       - status
+    OcrQuality:
+      properties:
+        version:
+          type: integer
+          format: int32
+        provider:
+          type: string
+        requestedOcrMode:
+          type: string
+        effectiveOcrMode:
+          type: string
+        escalatedToPremium:
+          type: boolean
+        qualityScore:
+          type:
+          - number
+          - "null"
+          format: double
+        qualityCategory:
+          type:
+          - string
+          - "null"
+        wordCount:
+          type:
+          - integer
+          - "null"
+          format: int32
+        confidenceDetails:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/OcrConfidenceDetails"
+        rationale:
+          type:
+          - string
+          - "null"
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - effectiveOcrMode
+      - escalatedToPremium
+      - provider
+      - requestedOcrMode
+      - version
+      - warnings
     OcrType:
       enum:
       - DEFAULT
@@ -9685,6 +12793,47 @@ components:
           format: int64
       required:
       - ttlSeconds
+    OpenReviewClientRunRequest:
+      properties:
+        requestId:
+          type: string
+        configurationName:
+          type: string
+        expectedProfileRevision:
+          type: integer
+          format: int64
+        clientRunId:
+          type: string
+        descriptor:
+          additionalProperties: {}
+        ttlSeconds:
+          type: integer
+          format: int64
+      required:
+      - clientRunId
+      - configurationName
+      - descriptor
+      - expectedProfileRevision
+      - requestId
+      - ttlSeconds
+    OpenReviewClientRunResponse:
+      properties:
+        clientRunId:
+          type: string
+        deadline:
+          type: string
+        reviewRunId:
+          type: string
+        inputManifestSha256:
+          type: string
+        producerFingerprint:
+          type: string
+      required:
+      - clientRunId
+      - deadline
+      - inputManifestSha256
+      - producerFingerprint
+      - reviewRunId
     OperationInfo:
       properties:
         jobGuid:
@@ -9723,8 +12872,8 @@ components:
           - $ref: "#/components/schemas/LlmType"
         customParameters:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
     OperationResultResponse:
       properties:
@@ -9922,7 +13071,7 @@ components:
         fieldDefinitions:
           type: array
           items:
-            additionalProperties: true
+            additionalProperties: {}
         sourceOperationGuid:
           type:
           - string
@@ -9999,8 +13148,8 @@ components:
           format: int32
         result:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         createdBy:
           type:
@@ -10121,6 +13270,45 @@ components:
       required:
       - nodes
       - warnings
+    PlaybookPerspective:
+      properties:
+        ourParty:
+          type: string
+          maxLength: 8192
+          minLength: 1
+        counterparty:
+          type: string
+          maxLength: 8192
+          minLength: 1
+      required:
+      - counterparty
+      - ourParty
+    PlaybookScope:
+      properties:
+        contractTypes:
+          type: array
+          items:
+            type: string
+            maxLength: 8192
+        businessLines:
+          type: array
+          items:
+            type: string
+            maxLength: 8192
+        jurisdictions:
+          type: array
+          items:
+            type: string
+            maxLength: 8192
+        from:
+          type:
+          - string
+          - "null"
+          maxLength: 8192
+      required:
+      - businessLines
+      - contractTypes
+      - jurisdictions
     ProcessingJob:
       properties:
         status:
@@ -10275,7 +13463,6 @@ components:
       - jobType
       - maxConcurrency
       - nextDocIndex
-      - operationStatusVersion
       - organizationId
       - status
       - totalDocs
@@ -10291,6 +13478,461 @@ components:
       - code
       - disabled
       - message
+    ProfileDraftRevisionHttpResponse:
+      properties:
+        draftRevision:
+          type: integer
+          format: int64
+        actorId:
+          type:
+          - string
+          - "null"
+        reason:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        profile:
+          type:
+          - "null"
+          - object
+      required:
+      - draftRevision
+    ProfileDraftRevisionListResponse:
+      properties:
+        revisions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileDraftRevisionSummary"
+      required:
+      - revisions
+    ProfileDraftRevisionSummary:
+      properties:
+        draftRevision:
+          type: integer
+          format: int64
+        actorId:
+          type:
+          - string
+          - "null"
+        reason:
+          type:
+          - string
+          - "null"
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - draftRevision
+    ProfileEvaluationAssertionResponse:
+      properties:
+        kind:
+          type: string
+        expectationId:
+          type: string
+        clauseId:
+          type: string
+        expectedVerdict:
+          type: string
+        actualVerdict:
+          type:
+          - string
+          - "null"
+        importance:
+          type: string
+        passed:
+          type: boolean
+        reasonCode:
+          type: string
+        redFlagResults:
+          additionalProperties:
+            type: string
+        observedEvidence:
+          type: array
+          items:
+            additionalProperties: {}
+        explanation:
+          type:
+          - string
+          - "null"
+        redFlagReasons:
+          type:
+          - "null"
+          - object
+          additionalProperties:
+            type: string
+        packageFingerprints:
+          type: array
+          items:
+            type: string
+        executionConfigurationId:
+          type:
+          - string
+          - "null"
+        executionFingerprint:
+          type:
+          - string
+          - "null"
+        factId:
+          type:
+          - string
+          - "null"
+        expectedValue:
+          description: "The expected or observed fact value: a string, a number or\
+            \ a boolean."
+        actualValue:
+          description: "The observed fact value: a string, a number or a boolean."
+        acceptedVerdicts:
+          type:
+          - array
+          - "null"
+          items:
+            type: string
+      required:
+      - clauseId
+      - expectationId
+      - expectedVerdict
+      - importance
+      - kind
+      - observedEvidence
+      - packageFingerprints
+      - passed
+      - reasonCode
+      - redFlagResults
+    ProfileEvaluationClauseReport:
+      properties:
+        clauseId:
+          type: string
+        assertions:
+          type: integer
+          format: int32
+        passed:
+          type: integer
+          format: int32
+        expectedByVerdict:
+          additionalProperties:
+            type: integer
+            format: int32
+        actualByVerdict:
+          additionalProperties:
+            type: integer
+            format: int32
+        verdictPairs:
+          type:
+          - "null"
+          - object
+          additionalProperties:
+            type: integer
+            format: int32
+      required:
+      - actualByVerdict
+      - assertions
+      - clauseId
+      - expectedByVerdict
+      - passed
+    ProfileEvaluationComparison:
+      properties:
+        againstEvaluationId:
+          type: string
+        againstDraftRevision:
+          type: integer
+          format: int64
+        againstSuiteRevision:
+          type: integer
+          format: int64
+        newlyPassing:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationExpectationRef"
+        newlyFailing:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationExpectationRef"
+        unchanged:
+          type: integer
+          format: int32
+        added:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationExpectationRef"
+        removed:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationExpectationRef"
+        complete:
+          type: boolean
+      required:
+      - added
+      - againstDraftRevision
+      - againstEvaluationId
+      - againstSuiteRevision
+      - complete
+      - newlyFailing
+      - newlyPassing
+      - removed
+      - unchanged
+    ProfileEvaluationContractReport:
+      properties:
+        caseId:
+          type: string
+        name:
+          type: string
+        trialId:
+          type: string
+        trialStatus:
+          type: string
+        failureReason:
+          type:
+          - string
+          - "null"
+        assertions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationAssertionResponse"
+        run:
+          type: integer
+          format: int32
+      required:
+      - assertions
+      - caseId
+      - name
+      - run
+      - trialId
+      - trialStatus
+    ProfileEvaluationExpectationRef:
+      properties:
+        caseId:
+          type: string
+        expectationId:
+          type: string
+      required:
+      - caseId
+      - expectationId
+    ProfileEvaluationFactReport:
+      properties:
+        factId:
+          type: string
+        assertions:
+          type: integer
+          format: int32
+        matched:
+          type: integer
+          format: int32
+      required:
+      - assertions
+      - factId
+      - matched
+    ProfileEvaluationListResponse:
+      properties:
+        evaluations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationStatusResponse"
+      required:
+      - evaluations
+    ProfileEvaluationRedFlagReport:
+      properties:
+        clauseId:
+          type: string
+        redFlagId:
+          type: string
+        assertions:
+          type: integer
+          format: int32
+        agreed:
+          type: integer
+          format: int32
+      required:
+      - agreed
+      - assertions
+      - clauseId
+      - redFlagId
+    ProfileEvaluationReportResponse:
+      properties:
+        evaluationId:
+          type: string
+        draftRevision:
+          type: integer
+          format: int64
+        suiteRevision:
+          type: integer
+          format: int64
+        repeats:
+          type: integer
+          format: int32
+        complete:
+          type: boolean
+        totals:
+          $ref: "#/components/schemas/ProfileEvaluationTotals"
+        clauses:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationClauseReport"
+        unstable:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationUnstableExpectation"
+        redFlags:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationRedFlagReport"
+        facts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationFactReport"
+        contracts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileEvaluationContractReport"
+        comparison:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ProfileEvaluationComparison"
+      required:
+      - clauses
+      - complete
+      - contracts
+      - draftRevision
+      - evaluationId
+      - facts
+      - redFlags
+      - repeats
+      - suiteRevision
+      - totals
+      - unstable
+    ProfileEvaluationRequest:
+      properties:
+        set:
+          type: string
+        limit:
+          type:
+          - integer
+          - "null"
+          format: int32
+        idempotencyKey:
+          type: string
+        repeats:
+          type: integer
+          format: int32
+      required:
+      - idempotencyKey
+      - repeats
+      - set
+    ProfileEvaluationResponse:
+      properties:
+        evaluationId:
+          type: string
+        suiteRevision:
+          type: integer
+          format: int64
+        draftRevision:
+          type: integer
+          format: int64
+        trialIds:
+          type: array
+          items:
+            type: string
+        caseIds:
+          type: array
+          items:
+            type: string
+      required:
+      - caseIds
+      - draftRevision
+      - evaluationId
+      - suiteRevision
+      - trialIds
+    ProfileEvaluationStatusResponse:
+      properties:
+        evaluationId:
+          type: string
+        set:
+          type: string
+        limit:
+          type:
+          - integer
+          - "null"
+          format: int32
+        suiteRevision:
+          type: integer
+          format: int64
+        draftRevision:
+          type: integer
+          format: int64
+        complete:
+          type: boolean
+        trialCounts:
+          additionalProperties:
+            type: integer
+            format: int32
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+      required:
+      - complete
+      - draftRevision
+      - evaluationId
+      - set
+      - suiteRevision
+      - trialCounts
+    ProfileEvaluationTotals:
+      properties:
+        assertions:
+          type: integer
+          format: int32
+        passed:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        unsure:
+          type: integer
+          format: int32
+        failedContracts:
+          type: integer
+          format: int32
+        missedProblems:
+          type: integer
+          format: int32
+        falseAlarms:
+          type: integer
+          format: int32
+      required:
+      - assertions
+      - failed
+      - failedContracts
+      - falseAlarms
+      - missedProblems
+      - passed
+      - unsure
+    ProfileEvaluationUnstableExpectation:
+      properties:
+        caseId:
+          type: string
+        expectationId:
+          type: string
+        passedRuns:
+          type: integer
+          format: int32
+        runs:
+          type: integer
+          format: int32
+      required:
+      - caseId
+      - expectationId
+      - passedRuns
+      - runs
     ProfileExpertDecision:
       properties:
         id:
@@ -10314,7 +13956,7 @@ components:
         decisionType:
           type: string
         content:
-          additionalProperties: true
+          additionalProperties: {}
         reason:
           type: string
         contentHash:
@@ -10380,7 +14022,13 @@ components:
         elements:
           type: array
           items:
-            additionalProperties: true
+            additionalProperties: {}
+        contractModelChanges:
+          type:
+          - array
+          - "null"
+          items:
+            additionalProperties: {}
       required:
       - baseDraftRevision
       - classification
@@ -10512,7 +14160,7 @@ components:
         decisionType:
           type: string
         content:
-          additionalProperties: true
+          additionalProperties: {}
         reason:
           type: string
         elementLineageId:
@@ -10561,15 +14209,31 @@ components:
             type: string
         authority:
           type:
+          - object
+          - "null"
+          additionalProperties: true
+        suggestedPerspective:
+          type:
           - "null"
           - object
-          additionalProperties: true
+          allOf:
+          - $ref: "#/components/schemas/SuggestedPerspective"
+        suggestedPrecedence:
+          type: array
+          items:
+            $ref: "#/components/schemas/SuggestedPrecedence"
+        suggestedContractFacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/SuggestedContractFacts"
       required:
       - confirmed
       - decisions
       - excludedDocumentIds
       - revision
       - sources
+      - suggestedContractFacts
+      - suggestedPrecedence
     ProfileSourceAuthoritySource:
       properties:
         documentId:
@@ -10602,10 +14266,22 @@ components:
           - "null"
         excluded:
           type: boolean
+        suggestedRole:
+          type:
+          - string
+          - "null"
+        suggestionReason:
+          type:
+          - string
+          - "null"
+        suggestedFacts:
+          type: object
+          additionalProperties: true
       required:
       - documentId
       - excluded
       - filename
+      - suggestedFacts
       - supersedesDocumentIds
     ProfileStatus:
       enum:
@@ -10672,16 +14348,33 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TestSuiteCase"
-        scenarioTags:
-          type: array
-          items:
-            type: string
       required:
       - cases
       - fingerprint
       - revision
-      - scenarioTags
       - suiteId
+    ProfileTestSuiteSplitRequest:
+      description: "Assigns every test case to the tuning or holdout set and saves\
+        \ the result as a new suite revision. Within each scenario group of two or\
+        \ more cases, at least one case goes to tuning and at least one to holdout,\
+        \ whatever the holdout share."
+      properties:
+        holdout:
+          type: number
+          format: double
+          description: "Share of each scenario group held back for evaluation, from\
+            \ 0 to 1. Default 0.3. The number held back is round(group size x holdout),\
+            \ clamped so that a group of two or more keeps one case in each set."
+        seed:
+          type: integer
+          format: int32
+          description: Seed for the deterministic shuffle that picks the held-back
+            cases. Default 1.
+        expectedSuiteRevision:
+          type: integer
+          format: int64
+      required:
+      - expectedSuiteRevision
     ProfileTrialEstimateRequest:
       properties:
         anchorJobGuid:
@@ -10693,18 +14386,14 @@ components:
           format: int64
         trialKind:
           type: string
-        model:
-          type:
-          - string
-          - "null"
         configurationFingerprint:
           type:
           - string
           - "null"
         customParameters:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         suiteCaseId:
           type:
@@ -10736,9 +14425,9 @@ components:
         maxRetries:
           type: integer
           format: int32
-        maxCostMicroUsd:
+        maxVerificationTokens:
           type: integer
-          format: int64
+          format: int32
         executionConfigurationId:
           type: string
         executionFingerprint:
@@ -10764,10 +14453,10 @@ components:
       - executionConfigurationId
       - executionFingerprint
       - maxChunks
-      - maxCostMicroUsd
       - maxInputTokens
       - maxOutputTokens
       - maxRetries
+      - maxVerificationTokens
       - packageFingerprint
       - suiteCaseId
       - suiteRevision
@@ -10807,6 +14496,18 @@ components:
           type: array
           items:
             type: string
+        warnings:
+          type: array
+          description: Reserved for non-blocking readiness codes; currently always
+            empty. Readiness problems are reported in blockers.
+          items:
+            type: string
+        staleExpectations:
+          type: array
+          description: Suite expectations naming a clause or red flag that is no longer
+            in the draft playbook.
+          items:
+            $ref: "#/components/schemas/TrialStaleExpectation"
       required:
       - attestationCurrent
       - blockers
@@ -10830,18 +14531,14 @@ components:
           type: string
         idempotencyKey:
           type: string
-        model:
-          type:
-          - string
-          - "null"
         configurationFingerprint:
           type:
           - string
           - "null"
         customParameters:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         suiteCaseId:
           type:
@@ -10944,13 +14641,11 @@ components:
           type: string
         resultFingerprint:
           type: string
-        criterionId:
-          type: string
-        targetKey:
+        clauseId:
           type: string
         name:
           type: string
-        expectedAssessment:
+        expectedVerdict:
           type: string
         reason:
           type: string
@@ -10959,20 +14654,22 @@ components:
           format: int64
         idempotencyKey:
           type: string
-        scenarioTags:
-          type: array
-          items:
+        expectedRedFlags:
+          additionalProperties:
             type: string
+        notes:
+          type:
+          - string
+          - "null"
       required:
-      - criterionId
-      - expectedAssessment
+      - clauseId
       - expectedSuiteRevision
+      - expectedVerdict
       - idempotencyKey
       - name
       - reason
       - resultFingerprint
       - runId
-      - targetKey
     ProposeFindingTestCaseResponse:
       properties:
         proposedCaseId:
@@ -11014,6 +14711,9 @@ components:
           format: int64
         acknowledgedWarningCodes:
           type: array
+          description: Validation warning codes the reviewer accepts. Publication
+            fails when a returned warning code is missing. Readiness problems are
+            blockers and cannot be acknowledged.
           items:
             type: string
         trialAttestationId:
@@ -11042,10 +14742,29 @@ components:
           type: string
         disposition:
           type: string
-        correctedAssessment:
+        correctedVerdict:
           type:
           - string
           - "null"
+          enum:
+          - satisfactory
+          - mixed
+          - flagged
+          - ai_unsure
+          - not_found
+          - does_not_apply
+          allowableValues:
+          - satisfactory
+          - mixed
+          - flagged
+          - ai_unsure
+          - not_found
+          - does_not_apply
+        correctedRedFlags:
+          additionalProperties:
+            type: string
+          description: "Corrected outcome per red flag id of the clause: triggered\
+            \ or not_triggered."
         evidence:
           type: array
           items:
@@ -11064,6 +14783,25 @@ components:
       - expectedReviewRevision
       - idempotencyKey
       - resultFingerprint
+    RebuildChangeCounts:
+      properties:
+        added:
+          type: integer
+          format: int32
+        changed:
+          type: integer
+          format: int32
+        removed:
+          type: integer
+          format: int32
+        conflicting:
+          type: integer
+          format: int32
+      required:
+      - added
+      - changed
+      - conflicting
+      - removed
     RecordBatchItem:
       properties:
         key:
@@ -11144,8 +14882,8 @@ components:
           type:
           - string
           - "null"
-          description: HTTPS URL the worker fetches; omit to upload through the returned
-            uploadUrl
+          description: HTTPS URL the worker fetches; omit to upload the file in blocks
+            and commit
         dryRun:
           type:
           - boolean
@@ -11195,17 +14933,12 @@ components:
           type:
           - string
           - "null"
-        uploadUrl:
-          type:
-          - string
-          - "null"
-          description: Write-only HTTPS URL for uploading the file as one block blob;
-            present while awaiting upload
         expiresAt:
           type:
           - string
           - "null"
           format: date-time
+          description: End of the upload window of a file import
       required:
       - importId
       - status
@@ -11371,6 +15104,10 @@ components:
         labels:
           additionalProperties:
             $ref: "#/components/schemas/LabelStats"
+        pagination:
+          allOf:
+          - $ref: "#/components/schemas/CategoryStatsPagination"
+          - {}
       required:
       - labels
       - records
@@ -11381,6 +15118,329 @@ components:
           type:
           - string
           - "null"
+    ResolveReviewValuesRequest:
+      properties:
+        reference:
+          $ref: "#/components/schemas/ReviewResultReference"
+        expectedReviewRevision:
+          type: integer
+          format: int64
+        changes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewResolutionChange"
+        audit:
+          $ref: "#/components/schemas/ReviewAuditInput"
+      required:
+      - audit
+      - changes
+      - expectedReviewRevision
+      - reference
+    ReviewActorType:
+      enum:
+      - HUMAN
+      - EVALUATOR
+      - SYSTEM
+    ReviewAddress:
+      properties:
+        scope:
+          $ref: "#/components/schemas/ReviewAddressScope"
+        pointer:
+          type: string
+        memberId:
+          type:
+          - string
+          - "null"
+      required:
+      - pointer
+      - scope
+    ReviewAddressScope:
+      enum:
+      - BASE
+      - INSERTED
+    ReviewAdjudication:
+      properties:
+        claimId:
+          type: string
+        claimRevision:
+          type: integer
+          format: int64
+        revision:
+          type: integer
+          format: int64
+        address:
+          $ref: "#/components/schemas/ReviewAddress"
+        resolutionRevisionConsidered:
+          type: integer
+          format: int64
+        adjudicatedAtReviewRevision:
+          type: integer
+          format: int64
+        disposition:
+          $ref: "#/components/schemas/ReviewAdjudicationDisposition"
+        audit:
+          $ref: "#/components/schemas/ReviewAuditMetadata"
+      required:
+      - address
+      - adjudicatedAtReviewRevision
+      - audit
+      - claimId
+      - claimRevision
+      - disposition
+      - resolutionRevisionConsidered
+      - revision
+    ReviewAdjudicationDisposition:
+      enum:
+      - SEMANTIC_EQUIVALENT
+      - REFERENCE_ERROR
+      - EXTRACTION_ERROR
+      - UNRESOLVED
+    ReviewAdjudicationStatusView:
+      properties:
+        claimId:
+          type: string
+        claimRevision:
+          type: integer
+          format: int64
+        status:
+          $ref: "#/components/schemas/ReviewClaimAdjudicationStatus"
+      required:
+      - claimId
+      - claimRevision
+      - status
+    ReviewArchivedArtifact:
+      properties:
+        path:
+          type: string
+        name:
+          type: string
+        stage:
+          type: string
+        sha256:
+          type: string
+        sizeBytes:
+          type: integer
+          format: int64
+      required:
+      - name
+      - path
+      - sha256
+      - sizeBytes
+      - stage
+    ReviewAuditInput:
+      properties:
+        reason:
+          type:
+          - string
+          - "null"
+        diagnosis:
+          type:
+          - string
+          - "null"
+        evidenceArtifactPaths:
+          type: array
+          items:
+            type: string
+        producingNode:
+          type:
+          - string
+          - "null"
+        traceReference:
+          type:
+          - string
+          - "null"
+        exampleEligibility:
+          type: boolean
+      required:
+      - evidenceArtifactPaths
+      - exampleEligibility
+    ReviewAuditMetadata:
+      properties:
+        actorType:
+          $ref: "#/components/schemas/ReviewActorType"
+        actorId:
+          type:
+          - string
+          - "null"
+        occurredAt:
+          type: string
+        reason:
+          type:
+          - string
+          - "null"
+        diagnosis:
+          type:
+          - string
+          - "null"
+        evidenceArtifactPaths:
+          type: array
+          items:
+            type: string
+        producingNode:
+          type:
+          - string
+          - "null"
+        traceReference:
+          type:
+          - string
+          - "null"
+        exampleEligibility:
+          type: boolean
+      required:
+      - actorType
+      - evidenceArtifactPaths
+      - exampleEligibility
+      - occurredAt
+    ReviewClaim:
+      properties:
+        claimId:
+          type: string
+        claimRevision:
+          type: integer
+          format: int64
+        identity:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ReviewClaimIdentity"
+        address:
+          $ref: "#/components/schemas/ReviewAddress"
+        observed:
+          $ref: "#/components/schemas/ReviewObservedValue"
+        proposedValueJson:
+          type:
+          - string
+          - "null"
+        rationaleJson:
+          type:
+          - string
+          - "null"
+        priority:
+          type: string
+        source:
+          $ref: "#/components/schemas/ReviewActorType"
+        contentsFingerprint:
+          type: string
+        audit:
+          $ref: "#/components/schemas/ReviewAuditMetadata"
+      required:
+      - address
+      - audit
+      - claimId
+      - claimRevision
+      - contentsFingerprint
+      - observed
+      - priority
+      - source
+    ReviewClaimAdjudicationStatus:
+      enum:
+      - CURRENT
+      - STALE
+    ReviewClaimIdentity:
+      properties:
+        reporterId:
+          type: string
+        externalIssueId:
+          type: string
+        referenceVersion:
+          type: string
+        comparatorVersion:
+          type: string
+      required:
+      - comparatorVersion
+      - externalIssueId
+      - referenceVersion
+      - reporterId
+    ReviewCommitResponse:
+      properties:
+        event:
+          $ref: "#/components/schemas/ReviewEventResponse"
+        state:
+          $ref: "#/components/schemas/ReviewState"
+      required:
+      - event
+      - state
+    ReviewDecisionPage:
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewEventResponse"
+        nextCursor:
+          type: integer
+          format: int64
+      required:
+      - events
+      - nextCursor
+    ReviewEdit:
+      properties:
+        kind:
+          $ref: "#/components/schemas/ReviewEditKind"
+        operationId:
+          type: string
+        address:
+          $ref: "#/components/schemas/ReviewAddress"
+        valueJson:
+          type:
+          - string
+          - "null"
+        property:
+          type:
+          - string
+          - "null"
+        memberId:
+          type:
+          - string
+          - "null"
+        beforeBaseIndex:
+          type:
+          - integer
+          - "null"
+          format: int32
+        order:
+          type:
+          - integer
+          - "null"
+          format: int32
+      required:
+      - address
+      - kind
+      - operationId
+    ReviewEditKind:
+      enum:
+      - REPLACE
+      - REMOVE
+      - ADD_PROPERTY
+      - INSERT_MEMBER
+    ReviewEventResponse:
+      properties:
+        eventId:
+          type: string
+        cursorOrdinal:
+          type: integer
+          format: int64
+        kind:
+          type: string
+        runId:
+          type: string
+        reviewRevision:
+          type: integer
+          format: int64
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        state:
+          $ref: "#/components/schemas/ReviewState"
+      required:
+      - cursorOrdinal
+      - eventId
+      - kind
+      - reviewRevision
+      - runId
+      - state
     ReviewEvidenceReference:
       properties:
         id:
@@ -11407,6 +15467,369 @@ components:
       - pageNumbers
       - quote
       - sourceElementIds
+    ReviewField:
+      properties:
+        path:
+          type: array
+          items:
+            type: string
+        label:
+          type: string
+        description:
+          type:
+          - string
+          - "null"
+        kind:
+          $ref: "#/components/schemas/ReviewFieldKind"
+        groupPath:
+          type:
+          - array
+          - "null"
+          items:
+            type: string
+        identityFields:
+          type: array
+          items:
+            type: string
+      required:
+      - identityFields
+      - kind
+      - label
+      - path
+    ReviewFieldKind:
+      enum:
+      - VALUE
+      - OBJECT
+      - ARRAY
+    ReviewInsertedOrigin:
+      properties:
+        memberId:
+          type: string
+        parentAddress:
+          $ref: "#/components/schemas/ReviewAddress"
+        insertionAnchorPointer:
+          type: string
+        order:
+          type:
+          - integer
+          - "null"
+          format: int32
+        originalValueJson:
+          type: string
+        originResolutionId:
+          type: string
+      required:
+      - insertionAnchorPointer
+      - memberId
+      - originResolutionId
+      - originalValueJson
+      - parentAddress
+    ReviewObservedValue:
+      properties:
+        present:
+          type: boolean
+        valueJson:
+          type:
+          - string
+          - "null"
+      required:
+      - present
+      - valueJson
+    ReviewOverlay:
+      properties:
+        schemaFingerprint:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewField"
+        warnings:
+          type: array
+          items:
+            type: string
+        version:
+          type: integer
+          format: int32
+      required:
+      - fields
+      - schemaFingerprint
+      - version
+      - warnings
+    ReviewProfilePreviewRequest:
+      properties:
+        schemaJson:
+          type:
+          - string
+          - "null"
+        overlay:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ReviewOverlay"
+        clientPipelineJson:
+          type:
+          - string
+          - "null"
+        removeClientPipeline:
+          type: boolean
+          default: false
+          defaultValue: "false"
+    ReviewProfileResponse:
+      properties:
+        configurationId:
+          type: integer
+          format: int64
+        configurationName:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        enabled:
+          type: boolean
+        configurationFingerprint:
+          type: string
+        schemaJson:
+          type: string
+        overlayJson:
+          type: string
+        stale:
+          type: boolean
+        clientPipelineJson:
+          type:
+          - string
+          - "null"
+        producerFingerprint:
+          type:
+          - string
+          - "null"
+      required:
+      - clientPipelineJson
+      - configurationFingerprint
+      - configurationId
+      - configurationName
+      - enabled
+      - overlayJson
+      - producerFingerprint
+      - revision
+      - schemaJson
+      - stale
+    ReviewProfileSaveRequest:
+      properties:
+        expectedRevision:
+          type: integer
+          format: int64
+        enabled:
+          type: boolean
+        schemaJson:
+          type:
+          - string
+          - "null"
+        overlay:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ReviewOverlay"
+        clientPipelineJson:
+          type:
+          - string
+          - "null"
+        removeClientPipeline:
+          type: boolean
+          default: false
+          defaultValue: "false"
+      required:
+      - enabled
+      - expectedRevision
+    ReviewProjectionStatus:
+      enum:
+      - VALID
+      - INVALID_BASE
+    ReviewResolution:
+      properties:
+        resolutionId:
+          type: string
+        address:
+          $ref: "#/components/schemas/ReviewAddress"
+        revision:
+          type: integer
+          format: int64
+        disposition:
+          $ref: "#/components/schemas/ReviewResolutionDisposition"
+        edits:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewEdit"
+        changedAtReviewRevision:
+          type: integer
+          format: int64
+        audit:
+          $ref: "#/components/schemas/ReviewAuditMetadata"
+      required:
+      - address
+      - audit
+      - changedAtReviewRevision
+      - disposition
+      - edits
+      - resolutionId
+      - revision
+    ReviewResolutionChange:
+      properties:
+        address:
+          $ref: "#/components/schemas/ReviewAddress"
+        expectedResolutionRevision:
+          type: integer
+          format: int64
+        disposition:
+          $ref: "#/components/schemas/ReviewResolutionDisposition"
+        edits:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewEdit"
+        supersedes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewResolutionRevisionRef"
+      required:
+      - address
+      - disposition
+      - edits
+      - expectedResolutionRevision
+      - supersedes
+    ReviewResolutionDisposition:
+      enum:
+      - KEEP_BASE
+      - CORRECT
+      - UNRESOLVED
+    ReviewResolutionRevisionRef:
+      properties:
+        resolutionId:
+          type: string
+        expectedRevision:
+          type: integer
+          format: int64
+      required:
+      - expectedRevision
+      - resolutionId
+    ReviewResultIdentity:
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        runId:
+          type: string
+        jobGuid:
+          type: string
+        artifactId:
+          type: string
+        resultFingerprint:
+          type: string
+      required:
+      - artifactId
+      - jobGuid
+      - organizationId
+      - resultFingerprint
+      - runId
+    ReviewResultReference:
+      properties:
+        jobGuid:
+          type: string
+        artifactId:
+          type: string
+          description: Verified path of the winning raw result artifact in the immutable
+            run archive.
+        resultFingerprint:
+          type: string
+          description: "Lowercase SHA-256 of the raw archived result bytes, as recorded\
+            \ by the completion manifest."
+          example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+      required:
+      - artifactId
+      - jobGuid
+      - resultFingerprint
+    ReviewRunAvailability:
+      enum:
+      - COMPLETED
+      - INCOMPLETE
+      - UNAVAILABLE
+    ReviewRunDescriptor:
+      properties:
+        runId:
+          type: string
+        jobGuid:
+          type: string
+        requestId:
+          type: string
+        configurationId:
+          type: integer
+          format: int64
+        configurationName:
+          type: string
+        profileRevision:
+          type: integer
+          format: int64
+        configurationFingerprint:
+          type: string
+        overlayFingerprint:
+          type: string
+        createdAt:
+          type:
+          - string
+          - "null"
+          format: date-time
+        availability:
+          $ref: "#/components/schemas/ReviewRunAvailability"
+        identity:
+          type:
+          - "null"
+          - object
+          allOf:
+          - $ref: "#/components/schemas/ReviewResultIdentity"
+      required:
+      - availability
+      - configurationFingerprint
+      - configurationId
+      - configurationName
+      - jobGuid
+      - overlayFingerprint
+      - profileRevision
+      - requestId
+      - runId
+    ReviewState:
+      properties:
+        formatVersion:
+          type: integer
+          format: int32
+        identity:
+          $ref: "#/components/schemas/ReviewResultIdentity"
+        reviewRevision:
+          type: integer
+          format: int64
+        resolutions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewResolution"
+        claims:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewClaim"
+        adjudications:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewAdjudication"
+        insertedOrigins:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewInsertedOrigin"
+      required:
+      - adjudications
+      - claims
+      - formatVersion
+      - identity
+      - insertedOrigins
+      - resolutions
+      - reviewRevision
     RotateModelCredentialRequest:
       properties:
         secret:
@@ -11426,7 +15849,7 @@ components:
           - "null"
           description: "Proposals made, by reference, at most 50 per call"
           items:
-            additionalProperties: true
+            additionalProperties: {}
         questions:
           type:
           - array
@@ -11506,6 +15929,13 @@ components:
       - sheetName
       - startCol
       - startRow
+    SkipReviewClientSegmentRequest:
+      properties:
+        formatVersion:
+          type: integer
+          format: int32
+      required:
+      - formatVersion
     Slice_CaseDocument_:
       properties:
         content:
@@ -11576,6 +16006,8 @@ components:
       - orderBy
     Sort.Order:
       properties:
+        nullOrdering:
+          $ref: "#/components/schemas/Sort.Order.NullOrdering"
         ignoreCase:
           type: boolean
         direction:
@@ -11588,11 +16020,17 @@ components:
       - ascending
       - direction
       - ignoreCase
+      - nullOrdering
       - property
     Sort.Order.Direction:
       enum:
       - ASC
       - DESC
+    Sort.Order.NullOrdering:
+      enum:
+      - NONE
+      - FIRST
+      - LAST
     SourceLocationGranularity:
       enum:
       - AUTO
@@ -11804,6 +16242,13 @@ components:
           - object
           allOf:
           - $ref: "#/components/schemas/AgentRunBudget"
+        originJobId:
+          type:
+          - integer
+          - "null"
+          format: int64
+          description: Classify job of this case the run investigates; lists the run
+            under originJobId
       required:
       - playbook
     StoredActionRequest:
@@ -11814,13 +16259,13 @@ components:
           type: string
         query:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         body:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
       required:
       - method
@@ -11973,6 +16418,30 @@ components:
       - receiptCode
       - resultMode
       - status
+    SubmitAgentMessage:
+      properties:
+        clientMessageId:
+          type: string
+        text:
+          type: string
+        playbook:
+          type:
+          - string
+          - "null"
+        context:
+          type:
+          - string
+          - "null"
+        inputFileIds:
+          type:
+          - array
+          - "null"
+          items:
+            type: string
+            format: uuid
+      required:
+      - clientMessageId
+      - text
     SubmitOperationRequest:
       properties:
         jobGuid:
@@ -12003,6 +16472,64 @@ components:
       - message
       - operationType
       - status
+    SubmitReviewClaimsRequest:
+      properties:
+        expectedReviewRevision:
+          type: integer
+          format: int64
+        reference:
+          $ref: "#/components/schemas/ReviewResultReference"
+        claims:
+          type: array
+          items:
+            $ref: "#/components/schemas/EvaluatorReviewClaimInput"
+        audit:
+          $ref: "#/components/schemas/ReviewAuditInput"
+      required:
+      - audit
+      - claims
+      - expectedReviewRevision
+      - reference
+    SuggestedContractFacts:
+      properties:
+        documentId:
+          type: string
+        filename:
+          type: string
+        suggestedFacts:
+          type: object
+          additionalProperties: true
+      required:
+      - documentId
+      - filename
+      - suggestedFacts
+    SuggestedPerspective:
+      properties:
+        ourParty:
+          type: string
+        counterparty:
+          type: string
+        reason:
+          type: string
+      required:
+      - counterparty
+      - ourParty
+      - reason
+    SuggestedPrecedence:
+      properties:
+        winnerDocumentId:
+          type: string
+        loserDocumentId:
+          type: string
+        scope:
+          type: string
+        summary:
+          type: string
+      required:
+      - loserDocumentId
+      - scope
+      - summary
+      - winnerDocumentId
     SyncGuardSummary:
       properties:
         existingRecords:
@@ -12061,7 +16588,7 @@ components:
     TemplateFillRequest:
       properties:
         fields:
-          additionalProperties: true
+          additionalProperties: {}
       required:
       - fields
     TestSuiteCase:
@@ -12086,10 +16613,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ContractPackageDocumentRequest"
-        scenarioTags:
-          type: array
-          items:
-            type: string
         expectations:
           type: array
           items:
@@ -12108,11 +16631,11 @@ components:
           type:
           - string
           - "null"
-        proposalSourceTargetKey:
+        proposalRationale:
           type:
           - string
           - "null"
-        proposalRationale:
+        set:
           type:
           - string
           - "null"
@@ -12126,46 +16649,57 @@ components:
       - name
       - packageFingerprint
       - packageMembers
-      - scenarioTags
     TestSuiteExpectation:
       properties:
         id:
           type: string
-        criterionId:
+        clauseId:
           type: string
-        targetKey:
+          description: The clause this expectation checks. Required for clause expectations;
+            empty for fact expectations.
+        expectedVerdict:
           type: string
-        expectedAssessment:
-          type: string
+          description: The verdict a clause expectation expects. Unused by fact expectations.
+        expectedRedFlags:
+          additionalProperties:
+            type: string
         importance:
           type: string
-        scenarioTags:
-          type: array
-          items:
-            type: string
         approved:
           type: boolean
-        expectedReasonCode:
+        notes:
           type:
           - string
           - "null"
-        expectedApplicabilityReasonCode:
+        recordedBy:
           type:
           - string
           - "null"
-        expectedEffectiveAttributes:
+          readOnly: true
+        kind:
+          type: string
+          description: clause (the default) checks a clause verdict; fact checks a
+            playbook fact value.
+        factId:
           type:
+          - string
           - "null"
-          - object
-          additionalProperties: true
+        expectedValue:
+          description: "The expected or observed fact value: a string, a number or\
+            \ a boolean."
+        acceptedVerdicts:
+          type:
+          - array
+          - "null"
+          description: "The verdicts a clause expectation accepts, the expected verdict\
+            \ first. Absent accepts only the expected verdict."
+          items:
+            type: string
       required:
       - approved
-      - criterionId
-      - expectedAssessment
+      - expectedRedFlags
       - id
       - importance
-      - scenarioTags
-      - targetKey
     TextFieldMapping:
       properties:
         column:
@@ -12181,8 +16715,8 @@ components:
           $ref: "#/components/schemas/ToolType"
         config:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
       required:
       - type
@@ -12288,8 +16822,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TreeNodeInput"
-            description: One category. Status is active or retired; a retired node
-              may name a successor code.
       required:
       - nodes
     TreeCreateResponse:
@@ -12486,13 +17018,11 @@ components:
       properties:
         expectationId:
           type: string
-        criterionId:
+        clauseId:
           type: string
-        targetKey:
+        expectedVerdict:
           type: string
-        expectedAssessment:
-          type: string
-        actualAssessment:
+        actualVerdict:
           type:
           - string
           - "null"
@@ -12502,18 +17032,13 @@ components:
           type: boolean
         reasonCode:
           type: string
-        scenarioTags:
-          type: array
-          items:
+        redFlagResults:
+          additionalProperties:
             type: string
-        actualReasonCode:
-          type:
-          - string
-          - "null"
         observedEvidence:
           type: array
           items:
-            additionalProperties: true
+            additionalProperties: {}
         packageFingerprints:
           type: array
           items:
@@ -12526,17 +17051,34 @@ components:
           type:
           - string
           - "null"
+        kind:
+          type: string
+        factId:
+          type:
+          - string
+          - "null"
+        expectedValue:
+          description: "The expected or observed fact value: a string, a number or\
+            \ a boolean."
+        actualValue:
+          description: "The observed fact value: a string, a number or a boolean."
+        acceptedVerdicts:
+          type:
+          - array
+          - "null"
+          items:
+            type: string
       required:
-      - criterionId
+      - clauseId
       - expectationId
-      - expectedAssessment
+      - expectedVerdict
       - importance
+      - kind
       - observedEvidence
       - packageFingerprints
       - passed
       - reasonCode
-      - scenarioTags
-      - targetKey
+      - redFlagResults
     TrialAttestationRequest:
       properties:
         reportId:
@@ -12597,12 +17139,39 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TrialAssertionResponse"
+        failureReason:
+          type:
+          - string
+          - "null"
       required:
       - assertions
       - reportFingerprint
       - reportId
       - runId
       - status
+    TrialStaleExpectation:
+      properties:
+        suiteCaseId:
+          type: string
+        expectationId:
+          type: string
+        clauseId:
+          type: string
+        redFlagId:
+          type:
+          - string
+          - "null"
+          description: Set when the clause remains but this red flag is gone.
+        factId:
+          type:
+          - string
+          - "null"
+          description: Set when the fact this expectation names is no longer in the
+            playbook.
+      required:
+      - clauseId
+      - expectationId
+      - suiteCaseId
     TrialWorkEstimate:
       properties:
         estimatedDocuments:
@@ -12618,7 +17187,6 @@ components:
       - estimatedCriteria
       - estimatedDocuments
       - estimatedUnits
-    Unit: {}
     UpdateConnectionRequest:
       properties:
         fieldValues:
@@ -12667,8 +17235,8 @@ components:
           - "null"
         requestOptions:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         credentialId:
           type:
@@ -12713,8 +17281,8 @@ components:
           - "null"
         kwargs:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         credentialId:
           type:
@@ -12809,8 +17377,8 @@ components:
           - "null"
         features:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
         status:
           type:
@@ -12824,7 +17392,13 @@ components:
           type: integer
           format: int64
         profile:
-          additionalProperties: true
+          additionalProperties: {}
+        reason:
+          type:
+          - string
+          - "null"
+          description: "Why the draft changed, recorded in the draft change log. At\
+            \ most 500 characters."
       required:
       - draftRevision
       - profile
@@ -13032,8 +17606,8 @@ components:
           - $ref: "#/components/schemas/SourceLocationGranularity"
         pipeline:
           type:
-          - "null"
           - object
+          - "null"
           additionalProperties: true
     UploadResponse:
       properties:
@@ -13147,8 +17721,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/WorkbookResultArtifact"
-            description: "Opaque, job-relative references published with a workbook\
-              \ result."
       required:
       - artifacts
       - context
@@ -13193,7 +17765,7 @@ components:
           items:
             type: array
             items:
-              type: string
+              $ref: "#/components/schemas/List_String_"
         unit:
           type:
           - string
@@ -13229,7 +17801,7 @@ components:
     WorkbookResultContext:
       properties:
         values:
-          additionalProperties: true
+          additionalProperties: {}
         evidenceRefs:
           type: array
           items:
@@ -13325,7 +17897,7 @@ components:
         kind:
           $ref: "#/components/schemas/WorkbookRowKind"
         values:
-          additionalProperties: true
+          additionalProperties: {}
         sourceRef:
           type: string
         cellStates:
@@ -13413,3 +17985,51 @@ components:
       - detail
       - subtotal
       - total
+    WorkspaceArtifactPage:
+      properties:
+        revisions:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkspaceArtifactView"
+        nextCursor:
+          type:
+          - string
+          - "null"
+          format: uuid
+      required:
+      - revisions
+    WorkspaceArtifactView:
+      properties:
+        revisionId:
+          type: string
+          format: uuid
+        turnId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        mediaType:
+          type: string
+        sizeBytes:
+          type: integer
+          format: int32
+        sha256:
+          type: string
+        passedChecks:
+          type: array
+          items:
+            type: string
+        accepted:
+          type: boolean
+        download:
+          type: string
+      required:
+      - accepted
+      - download
+      - mediaType
+      - name
+      - passedChecks
+      - revisionId
+      - sha256
+      - sizeBytes
+      - turnId

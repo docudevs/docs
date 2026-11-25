@@ -1,0 +1,71 @@
+---
+id: submit-compare-export
+title: "submitCompareExport"
+description: "submitCompareExport"
+sidebar_label: "submitCompareExport"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1zGjEM/Ssen9oZGmjSHsotTdJOLk2GpieGg9gVrBOv7dpeCMPsf69kL18BcigHsC35WXrSE2sZYR7kcCwLWzvwKCc9aR16iMqa+1IOZWimtYo32Xz36qyPsidpAzVG9Hx5LQ1tyLcD+dmoknyUoSMHsaK1x7+N8kiA0TfYk6GosAY5XMu4cnw1RK/MXLbtJDtjiN9tuWKPwpqIJvISnNOqSMH1n4M1fLaDcp5DjwoD72bW1xBPPNGTM6Vz6BvbWJpGa4rTTp+xiMwCaP0wS8kdwioTeGPN3nU5tVYjGMYuUeM75tou8IwpwlSfs1EVQgQT1QIfjF6dcars0vyyKuCeHbyHFVcjYh1OEc4vq6j57KDKPzqS2gm77Ao43jA7OXNxlMuXoQ8Lnw6CI3ZyopeDS/4pMRReOaaNwDKKgKJAF5E76T87ABNQ6sYTeR/mtOd7Lq/fSQmjLn5OjzC+DL4dZ/BUoSgqpUuhgpjaxpQiWgHC40LhUvjGCOtFBUEoQ7kFFTi9jVkr8wJz5Ip+HVwdo98k5K1KBZS1CoFXUdVIliam9A5vndYxabiyLHNnQ9Y1yXUo+52S++s9Sbf9TFIgP6Z+tJPp3SvUTuO+7DZE76kti6zlyTCzqSQdzbe2aG5xEcT14718G/jWyIuaeaIqF0gZmzlfuBB3EKjiUSxhxTwTowtqArGyjRdldymwpYQIhE/WkLE/X1xdDDgiTr+G1E3dLMt8iY4wsWXsILhtV0V8jX2nQSUhNl6nbkxk7mZrTw4PJ+SGT+q4ivkn3/V6CgH/eN22fEwMe1L7mJYL8IonRJpJpQq8psrNQAc8CmurGPlh1HX5R0Evngx3MykMz4kF6IZ3tHzB1ZuhTrOAQkUo0acwssdNfuzTE+PsEI6k2vY2N66Ttt/1new15+PD7ydynnZ/CLUt+Y6HJf+z0HeK1rrt2E1na6nBzBtW0lBmTP78A1nubZY=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"submitCompareExport"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/compare/{compareGuid}/exports"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+submitCompareExport
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"compareGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"format":{"type":"string"},"filters":{"type":["null","object"],"allOf":[{"properties":{"insertions":{"type":"boolean"},"deletions":{"type":"boolean"},"moves":{"type":"boolean"},"tables":{"type":"boolean"},"substantiveOnly":{"type":"boolean"},"shownNoise":{"type":"array","items":{"type":"string"}}},"title":"CompareExportFilters"}]}},"required":["format"],"title":"CompareExportRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Export accepted","content":{"application/json":{"schema":{"properties":{"exportGuid":{"type":"string"}},"required":["exportGuid"],"title":"CompareExportSubmitResponse"}}}},"409":{"description":"The child is bound to a review run or has inconsistent review linkage"},"503":{"description":"Child operation admission timed out"}}}
+>
+  
+</StatusCodes>
+
+
+      

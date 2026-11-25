@@ -1,0 +1,71 @@
+---
+id: link-agent-session-case-document
+title: "linkAgentSessionCaseDocument"
+description: "linkAgentSessionCaseDocument"
+sidebar_label: "linkAgentSessionCaseDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVE1v2zAM/SuCThvg1s12y81L3CJY1wRJO2AIgoG1lVirLXmSnDYz/N9Hys5XXXTAcoglinx6fCJZcwcby4dLDhuh3IUV1kqtLF8FXJfCgMPdJOVDnkv1FJHPonUZgRVjnVQFmnjASzBQCCcMgdVc4QaDOjgECLhUaCjBZbg24ncljUBcZyoRcJtkogA+rLnblT7QGak26LnWpgCHlqqSKW+aVRssrPui0x1FJFo54oBLKMtcJp5z+MtqRbYjdGkoIyeFpV3acb8h3N7FTXNKcnnujRycdDm5375S5VqiuTmPphS9wZaobHv7p6uBJyFsYmRJhBEsqlymjfwjUpagumx/KQPnIMk6pf8z3zUym7yRaU/ioHu8niQBL0Qq4d5b96fLI46q8pyv0M06cJW/VKiqIJ+H2e00Gsdj9JrNp6N4sZjc3eBmHkfjH/i9jia3eHoi7GtRFy0moevKJOKrVGn/BoQaRYv453g6evgW392/i+hxei/d6dSpcHbdIbN3UL9L8UwFQLDnr/uPBsLmyTQ1Wqlt21DYKUMebgehb81w35phfeiqJiS2NiRoizFUA/Njd8QvUJS56Ff7yZNKtdb+Nbt8iNFYbC2LZhP+OoXD4Z43wxpLiI3aUMAli8FivTn2DDvmNMNa3WIJsh2KeChnSycpOEB8PLUt9uDy8+UVMaL8C/C13E0RSo956VinHSPx2Il6ZzwPlevEiwvLHHD0IHBlct8WXtgl3w4wzktLD7ufewEfng4try9+W4Xx3TN6HYyu60ek8GDypiEzam5wGi1xuQUj4ZHExDmYSktr1HwNuRU9oodm5h/mXRF+ZHjfmwl0RlA7Ug7yina4fBK7s1nbUBNmAlJhPIn2fNRedeH79xjfmyFNsI+IkkSU7l3f1UnhzqaLe3R+7OZyoVOKMfBMAx//PVftU/fDwdtqnoPaVPgOeN5i0u8vtK5E3Q==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"linkAgentSessionCaseDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1/agent/sessions/{sessionId}/files/links"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+linkAgentSessionCaseDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"documentGuid":{"type":"string"}},"required":["documentGuid"],"title":"LinkAgentSessionFile"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Authorized case document attachment","content":{"application/json":{"schema":{"properties":{"fileId":{"type":"string","format":"uuid"},"name":{"type":"string"},"mediaType":{"type":["string","null"]},"status":{"enum":["UPLOADED","PROCESSING","READY","FAILED"],"title":"AgentSessionFileStatus"},"sourceKind":{"enum":["UPLOAD","CASE_DOCUMENT"],"title":"AgentSessionFileSource"}},"required":["fileId","name","sourceKind","status"],"title":"AgentSessionFileView"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

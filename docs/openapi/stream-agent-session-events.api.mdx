@@ -1,0 +1,71 @@
+---
+id: stream-agent-session-events
+title: "streamAgentSessionEvents"
+description: "streamAgentSessionEvents"
+sidebar_label: "streamAgentSessionEvents"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVEuP2jAQ/iuWT62U8Gj3xA0JVCH1ULHtCXEYkoFYDXbW44RFUf57ZxxId4Gt1FwyHs/zm2/c6gAH0rONhgPakBISGWdJbxPtKvQQ+LTK9UxT8AjHuVg990bLhmXSia7AwxEDegnUassHceit2DnRxrKiglCw7PGlNh45ZvA1JpqyAo+gZ60O5wr7TMYe2HLv/BECa+ra5LrrkiH2d6CQxvzpanGNXyDk6PV9xM3fkLYuS73tuq3UQRV3iiSGXyYT+eVImTeVNM0Bn9E36BkTG1SER116UnhtPXM2sBhz4WsYx4u0x0qUHzXX8Zfop0dZV7aB0uTKeeXqkLp9ShmPos+pstqT8zo6Pz0quS/QkDIWskyOuxIlGOykkeg5fZB2jVUJZ3UyNncnha+VzGik1lg6yFUocGieLFRUuDCSkdxE+QdLmCGFEyYdMETSMBtmetxMxxHb8ZV643ZgTjcegDZ27yKMJpSC48Jl9QIbUvMfK31bxXApwlFgq7yLWNiDOIzUEsggBXXiloNTPEaedFBnV3uVX5xIbnIIwPH5lvrY09HX0URQrByFI1gp6sr42LyK3avrJIb+35U48CGyhpFnBnPM2pdy12Oz0c2U/SI6wurraiZ69na3LhAxowuuSNzadgeEv3zZdaJ+qdGfWc9iA97ATgDkPc0Nicwj2UNJeFfhwG39aX3Z2c+KEz6s/KIEexa0oKzlxOJvPL97C7otG1829f+K+Chzn+H2RRhKkFejN5nzOlThzd39xsq7MPD02/InM/wPrOHDdw==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"streamAgentSessionEvents"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/agent/sessions/{sessionId}/events"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+streamAgentSessionEvents
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"Last-Event-ID","in":"header","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Server-sent agent session events","content":{"text/event-stream":{"schema":{"type":"string"}}}},"400":{"description":"Invalid or out-of-scope event cursor"},"404":{"description":"Session is inaccessible or absent"},"410":{"description":"Replay window expired. Reload the session snapshot."}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -5,7 +5,7 @@ description: "fill"
 sidebar_label: "fill"
 hide_title: true
 hide_table_of_contents: true
-api: eJyVVE2T0zAM/SsenWAmtAVuuS3sMrMnOqWcOj2osdManNjYTruZTP47kpP0Y8se6KFR7Cfp6UlKBxH3AfINRFU5g1HBNgPrlMeobf0sIYdSGwMZOPRYqag8wzuo6YUu0yMDXZPtMB7I9upPo70i1+gblUEoDqpCyDuIrWOfEL2u99D32wGsQvxiZcuIwtZR1ZFNdM7oItGY/wq25rNLKOeZZNQq8FuplZHJQik1u6BZXiGYSN9fU9tMPsQh6miY13qU4BsVvBp4Ecn+dUXpIDhbhyH5p8WCH1KFwmvHyUfRBN2ICUrCvFFcFU7Wy9vybpXKoLS+QvKEna7Rt8CsrmM4Wf5vgFTZPWnCUpcPljvvLCmQDX3NYT6NyJxx845b39M1N2d1aePTCxKMknc9z0VpE51R4kdbNI/qGMTD8hlepz9fslGRUoK6XKgQqAR2mIknDNTPKE7YimgFCXqkFovWNl7I0SnwjcSIFJ9uwxD74+zzbAHEiGuqME3TOMJj1TdczgJG9RLnVDUNODk33qThS4Jc7Uw2BclTTJqpA0tHkK7bYVA/vel7PiaVSPx8Q+YRvcYdq0LbJHVgm0Qv0QR1x+Y8OvBuNQ7je0H5/slyPMS6ZQnQNPxG5m/VThvbbwl3UCiVT/mHq69Dlg9rDnBxvdvEPps8HopCufgGdhxsXvPzSC2//1gTfDfue2Ule3k88YeD/hNRm+pOy5XOOjBY7xvcM3ZgwL+/NCGhtQ==
+api: eJyVVE1z0zAQ/SsanWDGNIHCgdwKLTM9kSnl1OlhY60TgSwJSU7q8fi/syvb+WjaYcghXmk/9PbprTqZYB3l4kEmrL2BhPKxkM5jgKSdvVVyISttjCykhwA1Jgwc3klLC3LmTyG1JdtD2pAd8E+jA1JqCg0WMpYbrEEuOplazzkxBW3Xsu8fh2CM6YtTLUeUzia0iU3w3ugyw5j9is7y3qGUDwwyaYy8qjQalS1QSnMKmOVxRN/3x8AepgxCkHQyjOp+JOAbtXs3oJLP0rifvBG9s3E4+sN8zh+FsQza89EjZYI8YgolWl5prY47F9Rpc6c8FbJyoQbKlCttIbSSUR3X8Kr63wJc4uP88zn0iQaReyDQFR2TotjptBFgBZRJb5Ea22rcidBYSZU+zS//VQlUrWMkj9BRNBa2oA2siHlGcs4egSaxbRwL0Du6imKQ10LOJqXOOG7WsQJ7crNG7g5qunkCCkO+e5Zn5TIv411fu7K5xm0UV8tb+fz4vZONmq5MkNhKJPB2zQkX4gYiySqJHbQiOSZpS0oTrWuCUGNSZI+CBFSfvHGo/f7i8mLOjHFPNWRRj5M0dn2CZX+TCZ/SjLrWme4mmDwDmZCj0S2mIotck8S9YeoopOtWEPFnMH3P28QSqWDxQOYWgs73wEOtdGSbSK/ARDxDs9ewfHM3TsVbQee9iHLcBNsyBWAaXpH5G9vp4egfKW6DoDDk8wfX1+GUd/dc4JB69iD0xZRxVZbo0yux44Txa7OX1PL7j3sKX43PTu0UZwXY8ftF/xmoy33nKc97nTRg1w2sOXZAwL+/i8fRMg==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ fill
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"fields":{"additionalProperties":true}},"required":["fields"],"title":"TemplateFillRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"fields":{"additionalProperties":{}}},"required":["fields"],"title":"TemplateFillRequest"}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ fill
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"fill 200 response","content":{"application/msword":{"schema":{"type":"string","format":"binary"}},"application/pdf":{"schema":{"type":"string","format":"binary"}}}}}}
+  responses={{"200":{"description":"fill 200 response","content":{"application/msword":{"schema":{"type":"string","format":"binary"}},"application/pdf":{"schema":{"type":"string","format":"binary"}}}},"409":{"description":"Template fill conflicts with an active review run"},"503":{"description":"Template fill admission is unavailable"}}}
 >
   
 </StatusCodes>

@@ -1,0 +1,71 @@
+---
+id: unlink-agent-session-file
+title: "unlinkAgentSessionFile"
+description: "unlinkAgentSessionFile"
+sidebar_label: "unlinkAgentSessionFile"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9k02PnDAMhv9K5FMr0WGn7YnbSDOVVuqh6sdpNQcveIZoIWETQ4sQ/712oGh3296qnnAc+4392EzAeI1Q3AFeyfGbSDFa7yKcM/AdBWQ53VZQQO8a6x4OGvVlCfpgG4IMOgzYElNQmQmcHCR8FZLUDKwTR4dcix3osbeBRJFDTxnEsqYWoZiAxy4lcrDuKpEXH1pkfbm3Fcxztmlf5OF/KHzW5NhJ1xQ1/u3Ne/1UFMtgOwUgsQdmLOtWujcLCUo1vYj6KyQBVHvFWFEjrBI2KbuAfNjnCX3+C30+bezmXFsVz9LxnFq++NSU5Ua7OvqyP9IQzeHTLbwsZ7tUI9XeBV+qurtqws6cMFqKbL7jaNib0ruBApvR98FUa1LUmwoZRV9u46K9373b3YAQ6HzkFp0Wtc5noWASBrNyMCuIZwVus2H6wXnXoAxUFPvQ6N1C6A6GveQlRvLdFjSD4umOJVDqXJdDhlpLYZo/TfcY6Vto5lndjz2FUfxiDhgs3itHWdzKRrVlSBdsIv1WqrBhraGAV5/XXXtt5MU/trA60Y0KDZteT2I+0Pjs59Ct/o8Pr3Dm8/xkJY+nj6evJ9nmnzuTYPo=
+sidebar_class_name: "delete api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"unlinkAgentSessionFile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/v1/agent/sessions/{sessionId}/files/{fileId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+unlinkAgentSessionFile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"fileId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"204":{"description":"Attachment unlinked"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -5,7 +5,7 @@ description: "createOcrProvider"
 sidebar_label: "createOcrProvider"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVE1z2jAQ/SsanV1IP6YHbhRyyPQAQ9OTh4OwFlAqS6okk1CP/3t3bWObj0nacMDyrvS8771dlTyKXeCTlE//FB7YYrZiS28PSoIPfJ1w68CLqKx5kHzCMw8iwiLzpz084R5+FxDiNyuPfFLyzJoIJtJSOKdVVp8ePwVrKBayPeSCVs4TdlQQ6M2IHOgZjw6fPESvzI5XCQcjnVUN4FVSOPUdjjdTuZWgqegbuS2yQLahT6bcFFojG7t5giwScyGlotKFXg4qjb4ARAgREc7Ot+hJA7SuqkYZ5UFSuq10wKcvMWnY4zejippKnV3qvGpE5tU5blsNUnHWhIbQp7s7ekgImVeOGNwyjuE2djqHFbzTNjUUGFnBru6JrfW5iE3o6xeS/H3+/quJ/+XVAKORRU7ja04mvHDy7W0Xhg987ipNSK8r37sKBw0wcGoeLdlO+G94StAQ95Ym1dlAn3Yi7vFtbDM/dt1cJ5x8XfWDe/8icqehH8SeXe9PHzuNXR/pjOpDvT+n2ToZMTBAma2tRW15z21WzOEQ2HT5wC8Jd0la5NitDCllEAKC0YERuxcBnY/sWRxZtAyb+oDNwI628Ey2hwJl0E+B+JgNDfbH0efRHVVEwuXCDKRodGYoNBsofVZa11oRXuLYaaEMYRVe1yNTm5ByNIEsGV6ve7IJU2W5EQF+el1VFEZjPOqb4vIgvBIbEielVtyDoO9P0pL/qi2YNYP74ZEKoO26oEKuhrhKTiemWQYuvrp3Peik5eLHI27etPc7OY1RL57p7sf/CadrsxaiHrI6VnItzK4QO9rbYNLvLwcFORI=
+api: eJydVU1z2jAQ/SsanV0gbacHbhRyyPQAQ5MTk8MiL6DEllRJhlCP/3t3bcDmY5JOOGB5V/u0+96uXMoI6yCHCzn6W3gU0/FczLzd6hR9kM+JtA49RG3NQyqHUnmEiFPlj3tkIj3+KTDEnzbdy2EplTURTeQlOJdpVUf3X4I1bAtqgznwynnGjhoDvxnIkZ9x7+gpQ/TarGWVSDSps7oBvHKC079wf9OV2xQzTvqGb0VVULWhdS6kXb6gilSPKbKMK4c01Zw6ZLNOptEXSAghEsJZ/AH9GF9VDTPaY8ruQ6adetoUk6Z6OjPqmHGq40ue5w3JsjrHPWRDpThrQlPQ18GAHykG5bXjCm4JJ2ibOMZRBp+UTXcJpqpwXffEyvocYmP68Z0p/5y+/yviba3K6oZSHYSGlHQU39MxkYVLP952IXdH5VOeCbN1pfopw478HZ0m0bLojP+BogyNcWN5Tp0NfLSDuKG3vlW+705TnUhWdd6O7f0b5C7Ddgzb6lp1Wttx6FrLSabW1Kojn8yrsTsjHom6oWjmLKlpa9XpqKLNytZMH8iYWFVMcBvEaPYgL1k4OXmRUwMLqlNhCATGAT1xD4GaIYod7EW0gvp8S/0h9rbwIj0EBfaQyED45A0N9l3vW2/AGTGbOZgOPw35gtgXHfrPUjv1W8S32HcZaMNYhc/qKaqVoVtHcaDr3rgb1o5cZbmEgE8+qyo2k1qeSF/Qcgtew5LJWXB/bhD4/OGilK+1LuNmlr8w4VwRZAUncjXXVXKMGCmFLr6797nTXrPp70favDxc+Sw/WT3s+HNA/0Mp+cvB0fXk1bZSZmDWBax5b4PJv39PQj/5
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ createOcrProvider
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"endpoint":{"type":"string"},"apiKey":{"type":"string"},"modelId":{"type":"string"},"features":{"type":["null","object"],"additionalProperties":true},"status":{"type":["string","null"]}},"required":["apiKey","endpoint","modelId","name"],"title":"CreateOcrProviderRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string"},"endpoint":{"type":"string"},"apiKey":{"type":"string"},"modelId":{"type":"string"},"features":{"type":["object","null"],"additionalProperties":true},"status":{"type":["string","null"]}},"required":["apiKey","endpoint","modelId","name"],"title":"CreateOcrProviderRequest"}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ createOcrProvider
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"createOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":true},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
+  responses={{"200":{"description":"createOcrProvider 200 response","content":{"application/json":{"schema":{"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"endpoint":{"type":"string"},"modelId":{"type":"string"},"features":{"additionalProperties":{}},"status":{"type":"string"},"createdAt":{"type":["string","null"]},"updatedAt":{"type":["string","null"]}},"required":["endpoint","features","id","modelId","name","status"],"title":"OcrProviderDto"}}}}}}
 >
   
 </StatusCodes>

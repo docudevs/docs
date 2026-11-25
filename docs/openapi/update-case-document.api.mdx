@@ -1,0 +1,71 @@
+---
+id: update-case-document
+title: "updateCaseDocument"
+description: "updateCaseDocument"
+sidebar_label: "updateCaseDocument"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VktvGzcQ/isETy2wttzWKFD1pMhqqyJNBNnuxRCK0e5IYkIttyTXtiLsf+8MqX1IKydxDtVB4JLz4jffzHAvPaydHD7IFBw6uUikKdCCVyafZnIoyyIDj2M6vDFpucXcy0QWYGGLHi1r7mVOHyTKFkgnkSqnrwL8htYW/y2VRTLlbYmJdOkGtyCHe+l3BWup3OMaLYmujN2Cj1s/X8uqShrT2cH36807b1W+JmOLKIzOvzHZjiVSQ67pPrSEotAqDbcefHAm573WVGEZE68IH/oiPOii/i7Yr/081I4SmZdaM46Yl1s+8OTyH/ZlIfV8AFqbJ1hq/Bt0ie6MTJWEnfFhY44cp4phfdHfRyw4Rx63hbFgdy+47ItV7FZ5zbBxwl3wb7RGe3nfo8E8gknIVqdpCBuuMLmLiP14dRWAQ5daVcSLyNqOiAzjxH5jQlTWxaXlUw3MKa+SmqlfQ0KqB7uGXH1qSuKrlEqHdvrquDo07zOYFJTGWBBnDg/gfYGWJOjUJ3yz8xG710S31GY547I7557aAXBldI2a5QdMfccmZJliGEHPOhk8UIaSmqJzZO/Wgy9DeDWnZ5N3N9N3v5Op2fz9eHJ7Gz/G7/+avZ3cTW5o/dto+pYWi5bDNcMO5o5c/GmWr09PapGZOvKfrcNGj2l94RXliwkRWf4Nukfl9dBmIWkb7lF7bFjSo+4ZjBfHJd/0+CqU9fW5wr3PXVlQz6DbiE4vFMaKs00r4RNbfwm6ogBRRyz8BrxQTuTG0zYbEE0fDBFc9yPgSNloY4SVV6bMs6jyy2e6DbmCXJB19YhiXaoMtcpROFPalIyuKCAUaWktC9eRXABRdudIN7Ow8r8KfE51maFQ5FfZ0AWTE49nBydVycZkcXylmzBJuZ7kIEzfwT5mtBrUN6OtNrcVyXMvnLdjbPIM20JjbyydDJQXx0mcAhXP1JUJzOzUzg0+OjGaTeXp1ZrDBtWWV6xwKSbgFKfyCXbCG8bxkapd7AjlJmuOT0LLSCSdumj7h8ufLq9CrRrntxAa/+EREBEVIfsdTI9iazqTx2c/KDTQY4Grz+owNwLa9VsnkcNeBYXdTjlRfWwoEFba75ckfW91VfE25YCG5vCBlo9gFQ/X8BjKlOM1JXkF2mEvvmbIye/mh7L+XnCGzsV92IR8xyDx7KYvWn7EXfvg4nfS/+i1g07F82SDkFHj5LtHgXH0dRGo2BrojXSOO2qM0jS+Rl6WXXSKZza6G/9B0svDQ25rMlay8MQvQvoP0Zpw+TBGwt5easjXJaxZNhrl339zCcsz
+sidebar_class_name: "patch api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"updateCaseDocument"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/cases/{caseId}/documents/{documentId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+updateCaseDocument
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"documentId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"datasetType":{"type":["string","null"],"enum":["test_contract"],"allowableValues":["test_contract"]},"testContractRetention":{"type":["string","null"],"enum":["kept","temporary"],"allowableValues":["kept","temporary"]}},"title":"CasesController.UpdateCaseDocumentRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Document updated","content":{"application/json":{"schema":{"properties":{"id":{"type":["integer","null"],"format":"int64"},"caseId":{"type":"integer","format":"int64"},"organizationId":{"type":"integer","format":"int64"},"userId":{"type":["integer","null"],"format":"int64"},"documentId":{"type":"string"},"filename":{"type":"string"},"contentType":{"type":["string","null"]},"sizeBytes":{"type":["integer","null"],"format":"int64"},"blobPath":{"type":"string"},"metadata":{"type":["object","null"],"additionalProperties":true},"processingStatus":{"enum":["PENDING","PROCESSING","COMPLETED","FAILED"],"title":"DocumentStatus"},"processingJobId":{"type":["integer","null"],"format":"int64"},"createdAt":{"type":["string","null"],"format":"date-time"},"updatedAt":{"type":["string","null"],"format":"date-time"}},"required":["blobPath","caseId","documentId","filename","organizationId","processingStatus"],"title":"CaseDocument"}}}},"400":{"description":"Unsupported datasetType or testContractRetention, or retention for a document that is not a test contract"},"404":{"description":"Case or document not found"},"409":{"description":"Document is an active guideline source of the current contract-analysis draft; exclude it first"}}}
+>
+  
+</StatusCodes>
+
+
+      

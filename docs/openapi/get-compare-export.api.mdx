@@ -1,0 +1,71 @@
+---
+id: get-compare-export
+title: "getCompareExport"
+description: "getCompareExport"
+sidebar_label: "getCompareExport"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v2zAM/SuCThtgxNl2y61IjCDA1gROdwpyUG021mZbqkRnNQz/95G247hNgR4GLJdQovjxHh/dSFQnLxcHmZjCKgfyGEhjwSnUptykciFPgMveF71Y41AGkg6qAATHkY0s6UAPhwzrSqf0Rpd0ZRVmZDt4rrQDyoaugkD6JINCyUUjsbYc6tHp8iTbNhizQVfsn5Id+bG3pvTg2f91Pue/FHzitGWA78AT9EpcwqhcYkqEEjlQWZvrpGMm/OU5uplUt455Q93X8qiw6iwoq4IJ3kX3q839mlLu4u0y2u/7w3L7Y/c9eohWZEdxvI15AqgxZyhDZ/s+WRtIcM64K9bDBWwgyyrP5ZEYnBB0uLRxm7IH2yeOL2hb/gUfEES1aPaZGbTRyYEGs5DhIICwmSihDftB+rC5TrTtRvpkOiBDXyuTVCs4e3G328i3PYxONgoahyC2E/CesHPATETKE/Mo/qhaoBE0tTMNQ9SmciIdgjx7UoWK8pPX97m/zL7N5sytNR4L1U110CDBEwN2MYJ/1dkoOoQXDG2uSKmUqnJ5J4mOmOtuBXLxekkGbtgx0TtNK6NeOLJpHpWHny5vW75+rsDVdE/mWTmtHpk62sBUe7ZpJE8q93DT5Chi+Ske1PFZUNV3mx8uVVkzTyqv+ETmb6jfbDmv638sPaGoPdLrDFQKriOgf3CXJGBxEnqzsfxNGNW7jh5I8n8B36C3Kg==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getCompareExport"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/compare/{compareGuid}/exports/{exportGuid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getCompareExport
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"compareGuid","in":"path","required":true,"schema":{"type":"string"}},{"name":"exportGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getCompareExport 200 response","content":{"application/json":{"schema":{"properties":{"status":{"enum":["PENDING","PROCESSING","COMPLETED","ERROR"],"title":"CompareStatus"},"error":{"type":["string","null"]}},"required":["status"],"title":"CompareExportStatusResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

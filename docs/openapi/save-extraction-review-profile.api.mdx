@@ -1,0 +1,71 @@
+---
+id: save-extraction-review-profile
+title: "saveExtractionReviewProfile"
+description: "saveExtractionReviewProfile"
+sidebar_label: "saveExtractionReviewProfile"
+hide_title: true
+hide_table_of_contents: true
+api: eJytVktv2zgQ/isCT11AibPtYg++uakD9IGN4TYBFkYOtDS22aVILkk5MQz9985Qb0tx0qI5xBQ5j48z38zwyDzfOjZdMXjylideaHVhYS/gkT3ETBuwnPY+pmzKHN/DvBFbBqmF1RshgcXMcMsz8GDJ3JEp/ECd8BMzoXBtuN/h2sL/ubCAFr3NIWYu2UHG2fTI/MGQjvNWqC0riodSGJx/r9MDSSRaeVCeltwYKZKAbvLdaUV7rSljCbsX4OgLngwkHlLC7EQpWzkTaHALFnFttM24L7f+/osVMQPF15KANtJrrSVwRYelr0+ua21VY4+ZyqVkDyin92AlP3SFwhmerL8jKoozl/J2E8LWx136uEGLYA0a9iNRQuACZOo6R9xadIhR95C5YTRCHs5In6YhZpKvQY76TsElVhgvXgrDf0KFQILKM5K4n325m6PA7ftP8+tvuJgtl7N/KRheeElOSoLd0OU+kzIa2Vqdm0UP/qrBX7o6ew+RInmEP9y8GLFT3aLL29Wpoep6daDiMsTjdwlAHrlVaPinIMQMmfQq9r57y04Bb2qgQ0q1dju4BthvKxoXlMxECrz/QhiQQsHLNWAhwzK47mmNVBXRacNzidfYcOmg+b7nMifBsDu4W12m8bDOB9eo+tVXbGXLsrWcJpeaUthwRitXVszbqyv66ZH9XDuMUCGqLSCuX2xbqLYR27xtwa/qWj2tf0IbHilc+xtbYc/jS91qrG92jqt2+ey581yOcecXWInBTvME7CjiocIJ60a8nYlEPEjmWKLiDpe7gRjH2kliL6x1kJ4j/7ImZlEE7r+a1mgZJ/xO02PA5L7uc1M26V1lcqSpX0wGT4oL09gh6i/b2T5/4pkp8zqc1Vcd+nWfDGWG2zw1k7YesGOEaMXHm1JoMTQq1EYHNlQR/KCT/APsXTRbfGSnMWsOaZGhvQhvmoBz6IkULqM5d1jUPnrkh8jrCOOFYH100LmN0krJ0UnKPe+05Cn78/Ld5RXR22jnMx44XT2uKFVRm6uoTFbUZmt0OjOPiZkYyUWomtzK9lGw6pMSTUyrF9zzyUSa7RAaKR+Pa+7gzsqioG1Mr8V0rHC551ZQCsMjJxWuSmfT5ns4m3bJ3iyrivsjQgyj+OvxqWh47qtBQRMZDvX7M8ysHfAUmxv5L4+uSy8X38hAqzpo0EVca8ySBIw/K/vQKZHFHb1r1tXTNdMpqVj+SNzD/wGlDpcO3T7sHfEJobY535JsaZL+fgD8UBMh
+sidebar_class_name: "put api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"saveExtractionReviewProfile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/configuration/{name}/extraction-review-profile"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+saveExtractionReviewProfile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"expectedRevision":{"type":"integer","format":"int64"},"enabled":{"type":"boolean"},"schemaJson":{"type":["string","null"]},"overlay":{"type":["null","object"],"allOf":[{"properties":{"schemaFingerprint":{"type":"string"},"fields":{"type":"array","items":{"properties":{"path":{"type":"array","items":{"type":"string"}},"label":{"type":"string"},"description":{"type":["string","null"]},"kind":{"enum":["VALUE","OBJECT","ARRAY"],"title":"ReviewFieldKind"},"groupPath":{"type":["array","null"],"items":{"type":"string"}},"identityFields":{"type":"array","items":{"type":"string"}}},"required":["identityFields","kind","label","path"],"title":"ReviewField"}},"warnings":{"type":"array","items":{"type":"string"}},"version":{"type":"integer","format":"int32"}},"required":["fields","schemaFingerprint","version","warnings"],"title":"ReviewOverlay"}]},"clientPipelineJson":{"type":["string","null"]},"removeClientPipeline":{"type":"boolean","default":false,"defaultValue":"false"}},"required":["enabled","expectedRevision"],"title":"ReviewProfileSaveRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"saveExtractionReviewProfile 200 response","content":{"application/json":{"schema":{"properties":{"configurationId":{"type":"integer","format":"int64"},"configurationName":{"type":"string"},"revision":{"type":"integer","format":"int64"},"enabled":{"type":"boolean"},"configurationFingerprint":{"type":"string"},"schemaJson":{"type":"string"},"overlayJson":{"type":"string"},"stale":{"type":"boolean"},"clientPipelineJson":{"type":["string","null"]},"producerFingerprint":{"type":["string","null"]}},"required":["clientPipelineJson","configurationFingerprint","configurationId","configurationName","enabled","overlayJson","producerFingerprint","revision","schemaJson","stale"],"title":"ReviewProfileResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

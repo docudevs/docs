@@ -5,7 +5,7 @@ description: "uploadTemplate"
 sidebar_label: "uploadTemplate"
 hide_title: true
 hide_table_of_contents: true
-api: eJx9U01z00AM/Ss7OsGM8wHccisNh57oQDhlelBspVmwvcuuHPB4/N+R1o7jNh1OllfSk/T01AHjc4TNHgqXNxXVDE8ZOE8B2br6oYANNL50WOyo8iUyQQYeA1bEFDSxg1p+JCx9MrC12B75JHag340NJCAcGsog5ieqEDYdcOs1J3Kw9TP0/dMQTJE/u6LViNzVrO2IWTUlWynKq6ML1aJAThhXNB+0Y7YU9W+a5KZOBgqA4oGDrTG0Unne5ZwFcVCdu0LzXoGOre0GbPS+tHmia+VyJl5INcJKsF+iKwfpIXpXx6HXj+t1QqeYB+sV44ZwIzHmkiQjzIiZl/4ZNXfGSj/U/x+0oMkeT0637F3ktFvZ3AZWPIasOt1rnxZ7dIlSy6XOvRVGtnSO5u7xAV7XmZzbkTcjO8opRqFTE5bmC0bZF5s/2Bp2RqY6ywpN65pgLmRH9aR1ZyDeOGB/WH5arkFG05YrTFOPGhzGM7P5XrQ16YHpL68kRMQqOE0ok4rS6Hvga/Ym4Yo4T8qO+LrugJF+hLLv9VkUKyLa7MU8Y7B4UGbkJAob1RZej1hGumlj2iG8+zbq472Rem+2Nz5i3SoNWDb6J+Yvai9n16tcT4QFhVR/cN0PVRZJqNfUt86pzy5Jd3lOnmfhNyLTY51k8/j1+06CD+PVVq7QHAUe9zaZwpII8h/xuooH
+api: eJyFVE1z0zAQ/SsanWDGaQKFA74VwqEnOhBOmR429iYR2JKQ1kk9Gf93dmXHcZsOnLzWfrzV27c6aYJd1Plal65oarSkHzPtPAYg4+x9qXPd+MpBucLaV0CoM+0hQI2EQRJP2vIPh6VPpo1l2wPt2Q74pzEBuQiFBjMdiz3WoPOTptZLTqRg7E533WMfjJE+u7KViMJZknbYrJuKDIPSfOtCPSuBUo1LNR+kYzIY5W+8yRVOpqUAsEdvjIXQMvK0yykL7EBbuFLyXhQdWlv1tcH7yhSJrrkrCGnGaAg1o+ETU1dy0BaqiF33HE04SQfROxv73t8vFgkNYxGMl5pXA1Aco85JDDIhatrKryi5E5Z6+A+LT9cAY+keSXHJLReiqI6G9gqsgoLMARn2YPCoQmM11/q4uP1/LShrEyP7lImqsXAAU8GmwkT9v+7JV2OR7Z1I0LtISXgsq1zPaQiZn0R0XVLd1qV5G6pkKEse1xIPUd093OuXOKNzOQxVsYAK5C7tThJu1FeILCZSR2gVOeHjwPpSrWuCOishiidpMdPsjX3tdze3NwshR1quIY1gWJCBkMn9nrU1ipXwieYcYhLJTaiSxNPV15ou2Xmqy5uzF3bYdzptIOLPUHWdHPM6scLzNZsHCCaRLvtamih2Ocjyqo1RUPrN90GsbxXjvdrecAi2FRqgauSPzd/Ynt+ETnZpj1BiSPi960uPMktbdEl9bde77Jx0VxToaRJ+pXh5SUbZPHz7seLgzfCk1GkX0xswzG00mSVej789JsGu
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ uploadTemplate
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ uploadTemplate
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"uploadTemplate 200 response","content":{"application/json":{"schema":{}}}}}}
+  responses={{"200":{"description":"uploadTemplate 200 response","content":{"application/json":{"schema":{}}}},"409":{"description":"Template upload conflicts with an active review run"},"503":{"description":"Template upload admission is unavailable"}}}
 >
   
 </StatusCodes>

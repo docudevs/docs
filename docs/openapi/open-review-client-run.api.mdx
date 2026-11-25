@@ -1,0 +1,71 @@
+---
+id: open-review-client-run
+title: "openReviewClientRun"
+description: "openReviewClientRun"
+sidebar_label: "openReviewClientRun"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVUtv2zAM/iuGThuQ1lm39ZBbXwN62Bqk3SnIQbEZR60saZKcNjD830dKdp5OOywHRw8+PvIjqZp5Xjg2mjIjDEihgM0GTBuw3Aut7nM2op2awErA640UoPykUmzADLe8BA+WtGumcIOyRSVyvBQK14b7Ja4t/KmEBbTkbQUD5rIllJyNaubXhnSct0IVrGlmURicv9b5miQyrTx6pCU3RoosoEqfnVZ0tjVlLGH2AhztWiuE/sjLgIwuRFHFCH8F3D1S8GYg85CPrV4ICZQAJ6LbVlYgtgIshrjQtuQ+Hl1+Cz66TJ3AkIPLrDBe2xBbngsCw+V4N44GBb2Xj4CIc/dPnpvdfE/3YPQFvgfkdMyDnYzuQULGvPCSMD0cV8kkKiGq5rAMwoEzWrnI2MVwSH8dmpBo9vASQf9PCXxMAM9Dufdd2hDHaWWhTOV/ciUWGN7jkl98v+yVQ0h5lYH9gXuwBo99X92/x9kGZ7/Xfh/7EXxEUqSBWGp2KjNS0N/72PdLTaPBaOfDLMBOH7H0Wc/TmkZAk3bjJI3hnNlKuTSiQgVib7Jt9bs3XhoJB63bJai3Y7eXJxt1eNCGW5XdphoGPhc6ENOm6VZn1S2sXHI1vmeHKdlc0qJE8wlSkIFzaJsUzpM77rAKffLK14nXCTpaYWEma13ZJG+VHN3k3HO0j7cRMfty/vV8GCoHE1vyUOHtZCUmkkhFErlIIhl76DbF5eHNp0ZynMRorrIytEjgacqQJ1QctcN6M/m7fAWyNkVE9bMknlGxrufcwW8rm4aOkSqLc3qKyxW3gs8pe/gY5MLRGnO+4NLBEcZNT7NPk7byPyfESx/29pCrNaWKy4p2uHyBdffgNDOUW2Kn4Ewk//HqJno5eyIDW9WjKdIMOo2rLAPj35Wd7VT/+OHxCYXn7WNV6px0LKcKp2+AqUPU8Vmis5pJroqKFyQbbdLvLwbLou8=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"openReviewClientRun"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/job/{guid}/pipeline/client-runs/review"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+openReviewClientRun
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"requestId":{"type":"string"},"configurationName":{"type":"string"},"expectedProfileRevision":{"type":"integer","format":"int64"},"clientRunId":{"type":"string"},"descriptor":{"additionalProperties":{}},"ttlSeconds":{"type":"integer","format":"int64"}},"required":["clientRunId","configurationName","descriptor","expectedProfileRevision","requestId","ttlSeconds"],"title":"OpenReviewClientRunRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Ok","content":{"application/json":{"schema":{"properties":{"clientRunId":{"type":"string"},"deadline":{"type":"string"},"reviewRunId":{"type":"string"},"inputManifestSha256":{"type":"string"},"producerFingerprint":{"type":"string"}},"required":["clientRunId","deadline","inputManifestSha256","producerFingerprint","reviewRunId"],"title":"OpenReviewClientRunResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

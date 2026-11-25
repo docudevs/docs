@@ -1,0 +1,71 @@
+---
+id: submit-compare
+title: "submitCompare"
+description: "submitCompare"
+sidebar_label: "submitCompare"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VU1v2zAM/SuCzmmStdthufVrQ4d2KZr2FPRA20ysVpY8SU4bBP7vI2XH+dxQ7LCTaemJIh8fqZUMMPdyNJWpLUpwKJ970pboIChrbjI5kr5KChUu2+2edPirQh8ubLaUoxWdMwFNYLOodFCECoOZdcVJBgF42ac5FtEqHbsOCj3/WafmyoBmOyxL5LuCU2ZOl7ADIKcyIYRbyprvXSiP2QfRBQZYB9DAp9JUWhPaJi+YBk4UtB7PaOcvkAx96lTJbJD/cTRACw0Jai/AZGJ8+SAoJdcXE6RfED8m45+i8SCAMCLgexDMi7CuWYmQmdIYl/t043Fqbvma7RS6lGOgzxtaPoC0qfsgG2iqgiFX19/On24fCXX/cH1383THsKCCZvZbRYzJa/1c1wcbd+sK1P+Nxrpu5Kkc62S6UdhGPUwEmtRmTM6eCFspPzbqgrLUKo19MLBpwHBClCIU5AzfS20zAs1Ae9zV5r86qXeDD65qHPvSGt+o4nR4yp9dLhu2lbdGQJpiGeh0b7srt0N48Xzmzy3ZDoHvlTrSZ/vsboMPdTGJY+OhjV82+X0efj3M4DFHkeZKZ0J5kdiKqh8sVZdJxTfhKsMFz6niigpnvPKc2npbK/MKc+Se/zI8O8JP9NyNNAFZobxnK6gCaacKMbPdU/tDj8ZJbnkaltYHblcIOf0N0g6hzMxGzloarmxaXeHCi/P7G7nvvttko+BsqA4pUlxmzgf64ho81SSIN1gyG5T3gsoklrZyImsPed6JLdaTtOsb35/6Z/0h08GhFhDrbaDALiuxSWsnqq7e3GiDUoMy7KZysTmajHfeiZy5oKXVKgGPT07XNS/T80AzeDQlc0HKhIT5mHLj5QgZujhiXnEZtRJlehK7heG64gCOPSR1b33oPMp8C36gcJ44XcXuxxOeYEn7XhWx5+KT0VLXmRxkXf8Gk51ynQ==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"submitCompare"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/compare"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+submitCompare
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"original":{"type":"string","format":"binary"},"revised":{"type":"string","format":"binary"},"metadata":{"type":["null","object"],"allOf":[{"type":["null","object"],"description":"Optional labels and OCR tier. Send a JSON object as a text part or as a JSON file part.","properties":{"originalLabel":{"type":["string","null"]},"revisedLabel":{"type":["string","null"]},"ocr":{"type":["null","object"],"allOf":[{"enum":["DEFAULT","PREMIUM"],"title":"CompareOcr"}]}},"title":"CompareMetadata"}],"description":"Optional labels and OCR tier. Send a JSON object as a text part or as a JSON file part."}},"required":["original","revised"]},"encoding":{"original":{"contentType":"application/octet-stream","explode":false},"revised":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Comparison accepted","content":{"application/json":{"schema":{"properties":{"compareGuid":{"type":"string"}},"required":["compareGuid"],"title":"CompareSubmitResponse"}}}},"409":{"description":"The child is bound to a review run or has inconsistent review linkage"},"503":{"description":"Child operation admission timed out"}}}
+>
+  
+</StatusCodes>
+
+
+      

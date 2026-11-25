@@ -5,7 +5,7 @@ description: "analyzeDocument"
 sidebar_label: "analyzeDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJylVEuT0zAM/isZn9MHcOttYZeZPbEDuyemByVWW4MTG1sphE7+O5LzaLvtLsxwiyN9n6RPj4Mi2Ea1+qq0K5sKa1LrXDmPAci4+l6rlYIabPsbb0eHXHkIUCFhEORB1fxgP1cGtpmaP380GFp+xHKHFajVQVHrUcJECqbesqlurFXrrssnvMZYBlPgR7NtAsa/cxXOWYT6Khn+ogAl/QcX6xCQAZHeO92Kb+lqEgH4s2osGZaBFhsXqpkGSmxHXh9ERDIcm1+TuFPEoxBCAGxRhamBs+MqUmATUJ83hg1Yl04L7hnpkNpjzw3eW1OmDi5cSUgzjoZQMfc5O4UG04/oXR37XN8ul4k9dcMLx+UMZOyUjSiu4USZ09jfooBflmXbGH0pCScUCaiJV00YgguvT9SZfCnGxMhNJUNWKJ+8daA/j0V0vTavls08PPY7J1vhXexXgXb8WozNWAyQNHEblxIdAgrLLe5jdvNwr55HmoyTxCxViTFybQKYZ3cQWTbKfkKbkctY8j0rmbWuCdkYPYolDWOu2Bp77jfzd/OlaCc5V5BaMqzJkG12UuFZXlMDiBdq4S3wGjFRE2zqZir+ZETzkVCE3olCbD0cCoj4FGzXye9+B+VuaBOhsNKmDdiIufqO7XRH9mAbCaxkqV/wvLwY/4K6OA1H0FoewQiKM5SF2yFoDCndHv2hH/VZWrUj9tpBkBx60E1ZoqcT94stkdDTbD18+vLIzsVwdyqnBSPEQ2+nT0my6/4AOpv/TQ==
+api: eJytVE1v2zAM/SuCzmmTrdthuXXrBvS0YmtPRQ+MxSTaZMmT6LRe4P8+UnacpE6LDdjNMsnHx8ePrSZYJT2/1yYUdYme9MNEhwojkA3+2ui5Bg+u+Y1XO4eJriBCiYRRIrfa84P9QhHZZj1//qoxNvzAp8oFw8YluIQTnYo1lqDnW01NhZI2UbR+xa6+dk4/tO1kwDOYimgX+MWu6ojp37EXITgEfxIcnyhCQf8Rm3WLyACJPgbTiG8RPIlg/FnWjizLRtNliOWZAcpoe9wqiuhkmQu/hmYMGfdCCQCwRS+sB2bLVeXENqI5biQb0BfBSNwz0J7abYcNVeVskTs+DQUhnXE2hHKkRNseZ6NYY/6RquBTx/3tbJaz5e5VgjmeIcVOahfFWQ6UOuTyI0nwyzKtamvGEjGhREB1OmnCGEN8fQKP5Mw5BkRuMllyAnnHwoD5tiuik+bd7MO4+EspPtmkuMwlF0dJPVpaK/CKR9BukKXYWHxUsfZC8f3s4hUQMKVNiX8qftQeNmAdLBzmQXhVdS6Dt3YdZKmrkLpNpjW/prvZmPYheSGWIevU1ysoV7hJ6vLmWj/PNBiHDnOnCmSefiUB5+ozJO4aqUdoFAWRYsONVE2oo9plT2LJuzHRbE0d9pvzi/OZ6CKcS8gT0W9xz1YdVHjEa+g/8b5PKwc2C1xHl4cpF3+wMZMdoPR5LQqxdbtdQMK76NpWfncnQs6esUl0N8OV+InNcAY34GpJrOXmvOA5PnB/EzW6XPugB3lEm6dhfi/7v0YwGDPdLvpTt2lnefP3safuk3Dogi6LAis6cB8tqaQeZuvm6/dbdl70Z7DM9yPfrb63w6eQbNs/t5pCuw==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,14 +47,14 @@ analyzeDocument
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"ocr","in":"query","schema":{"type":["string","null"]}},{"name":"describeFigures","in":"query","schema":{"type":["boolean","null"]}},{"name":"extractFigures","in":"query","schema":{"type":["boolean","null"]}}]}
+  parameters={[{"name":"ocr","in":"query","explode":false,"schema":{"type":["string","null"]}},{"name":"describeFigures","in":"query","explode":false,"schema":{"type":["boolean","null"]}},{"name":"extractFigures","in":"query","explode":false,"schema":{"type":["boolean","null"]}}]}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ analyzeDocument
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"analyzeDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+  responses={{"200":{"description":"analyzeDocument 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}},"409":{"description":"Analysis conflicts with an active review run"},"503":{"description":"Analysis admission is unavailable"}}}
 >
   
 </StatusCodes>

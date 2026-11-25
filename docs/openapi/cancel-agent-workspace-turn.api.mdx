@@ -1,0 +1,71 @@
+---
+id: cancel-agent-workspace-turn
+title: "cancelAgentWorkspaceTurn"
+description: "cancelAgentWorkspaceTurn"
+sidebar_label: "cancelAgentWorkspaceTurn"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VMGO0zAQ/RXLJ5BC08Je6K3SctgTK1jEoephmkwbs6nttSeFKMq/M+OkoUsQcECc4oxnnue9eXanCY5Rr7cajmjpVcQYjbNR7zLtPAYg/rsr9VoXYAusN5L12YXH6KHAhyZYnWkPAU5IGASo05Z/uGCE4uJMG8sBD1TxOuBTYwIyJoUGMx2LCk+g152m1qdCCsYeOfPgwgmII01jSt332YRNfPA/BN5JcfTMG6Pkv14u5VNiLILxIsFvBFCcrS7lDF44S5wjAOB9bYqkYf4lCkp31ZUPojCZ4cyR0p+7ZWIE1MR5Kit0JcL2kpddsJkmGaqlYlMU6AnLRCeNse+l/GZ5M2c+0VUCpExUxgID8Hz3NSoXFOyjUE4Ab+cASSaoA0LZqoOxJlaYBvqXEjMF9lflxIfeRUqe45mvdX5e5cm5+cW5eTcZr8+lX44M/Pt8wE+2Obik3yjHrSuaWzxHtbm/0z93NW3K4sRnKZ5cYm+PUrBQ7yDyFEl9hVaRU+yAMw9Wta4JqhyLouyUQMD4vBsH7NXizWIpugmtEySHjB4fmlVJDfVjBKMez1qcjED4jXJfA18LxmxCnXyWpNrq84rrklj8nS56ptfXNzUpJsHpio2isXkqkZ6Bum4PET+Fuu8l/NRgaDnOyzMEA3uRlN+B0kRZ89AOUEec9TxdFP3iw+jal0pa+BWXMQi2Ff2gbuSPl4/YPntr5JH4jwePKvU7zqzY3hgS9WFzuGRXZbP3QF6eydn37z8+8KX4DkGG6lw=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"cancelAgentWorkspaceTurn"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1/agent/sessions/{sessionId}/turns/{turnId}/cancel"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+cancelAgentWorkspaceTurn
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"turnId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"cancelAgentWorkspaceTurn 200 response","content":{"application/json":{"schema":{"properties":{"turnId":{"type":"string","format":"uuid"},"status":{"type":"string"}},"required":["status","turnId"],"title":"AcceptedAgentTurn"}}}},"404":{"description":"Workspace turn is inaccessible or absent"},"409":{"description":"Turn already finished"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: list-contract-analysis-draft-revisions
+title: "List the draft change log"
+description: "Every successful draft save, import, build and generation apply, newest first, with the actor and the reason recorded for it."
+sidebar_label: "List the draft change log"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVD1v20AM/SuHm1pAttw26ODNaIIiQIcgbacgAy3R0jWnjxwpu4Kg/15Slm3ZadNunSTd8VF85HvsLENGdvlgn8pq5zHNcLYGwlkdqo3zSPYxsilSElzNrirt0t5sMbSGmiRBok3jTRpgw4Zgi5FxRV0Fjsy6cT41UKYmwxIDKNZAXfs2MiXukNhsXCCJ3DnODedoIOEqDBD9CggkkIBJFVJMzUbuHM9tZKt6zHebSjXeEX+qSg4CX5XgW3J0rQXd49aRRJFAaghQIGNQpp0t5UOgifCUHJF1SqsGzuU94HPjAkpqDg1GlpIcC7DLznJbK8qVjBkGCZWSCuD90ccr2/ePCqda/il9E8T7xUIf5+0bijNJDmWGxlfZeT8kbSJssGRFasNcMpCNf5DCu0lBMiJpBbv9z8KR76lWCAFaJchY0EtIOu3TP1GM7DAl7fwh+sESB1dmEl023tvHXrsANM34u5hEghjTFb8SNikgleAZOxlc30+n9HDBQjDs2CuNu72Ez9TwtSkKCK0kuchyat9fMnwRwd2PU9Y0kudqcfVyziPWJFDD2nnHrXFkUkewFpsZkbPqT89gTTpvzSQizSuVdYY86FY0ubTxuTcp7vbS7eODS+NktMAMRg/EQ1viMHGBKzfV0OyR3XWVNNe4JbO6u7WXLj9e6ksh9Rn5lzpe5qOAubkBcqrbHbSGKyMVyGJg01ZNMOkIIr2R0YHkl9u9zuy7+Yf5QsVUV8QFDEIZPandHfyfXtjkssDu5JP/vpFG2zD+5Lj2IOtEuDXBD44bRni5XnUcy+P+Oe7avfnP5qi8lc2wmiYSzaV1mrfrNN/34Ptej58baYWcy+sWglOtDSvvoDu73IAnfKWZb+5HV7w1f6J22C6l7pYt+Ea/5PUJ29Na7dXkOUIqi0Qr2F+uZEY1T2AvVpxu0aMNPt98E1/8Aid1UyI=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List the draft change log"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/draft/revisions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Every successful draft save, import, build and generation apply, newest first, with the actor and the reason recorded for it.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Draft change log, newest first","content":{"application/json":{"schema":{"properties":{"revisions":{"type":"array","items":{"properties":{"draftRevision":{"type":"integer","format":"int64"},"actorId":{"type":["string","null"]},"reason":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"}},"required":["draftRevision"],"title":"ProfileDraftRevisionSummary"}}},"required":["revisions"],"title":"ProfileDraftRevisionListResponse"}}}},"404":{"description":"Profile capability is disabled or case is absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: download-agent-session-file
+title: "downloadAgentSessionFile"
+description: "downloadAgentSessionFile"
+sidebar_label: "downloadAgentSessionFile"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9k0tvm0AQgP/Kak6tRI3d3rhZSlrlFvVxsnwYw9isCuxmdyBFiP/eGcAoSdOqh6pc2J33fjMzAOMlQnYAvFDD7yLFaF0T4ZiA8xSQ5XZXQAaFe2wqh8Ve7b7MZh9tRZCAx4A1MQUNNEAjF3FYQolzArYRgUcu5RzoobWBJCaHlhKIeUk1QjYA935y5GCbi1ieXaiRRdK2toBxTNbYZ0n8DwMf1Tl6eTdFtX+/3eqvoJgH6xWB2N4H2yGTQWbMy1oomFPP4pBA7hqWu/qg95XNJ2ypy5kEKQfCWnV/UdDJNhh6KUm+5EUBf+iA0C+ddulCPDVEgGSQdrt0amt6bWs6rF0ZU4UokpnlmF4foVDPbqrScqVl3ri8vaEumv39HbysalXqYaLig8s1S3NRh425xWgpsnnE3rAzkqejwKZ3bTDF4hRVUyCjxBdtnGPvNh82WxAQ3kWusdGilgm4wjATDbPgMAuPZyWuuJl+cOorlKGRmG2oVDezOkC3E7+JlvzXNUggezrHEzIVrgN4pSYjVEqRGmkYThjpW6jGUcUPLUlHs4McOwwWT8pU1qSwUc/StTNWkX4peh0qePN5mey3RjK++phFiE2vALFq9SbH79Q/W0Xdof+YeME0HsWyJCwoTE+flfs8J89P3H67O7qg64h/uv0q+/ETvJaeMg==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"downloadAgentSessionFile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/agent/sessions/{sessionId}/files/{fileId}/content"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+downloadAgentSessionFile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"fileId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Private attachment bytes","content":{"application/octet-stream":{"schema":{"type":"string","format":"binary"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

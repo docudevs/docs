@@ -5,7 +5,7 @@ description: "promoteKnowledgeBase"
 sidebar_label: "promoteKnowledgeBase"
 hide_title: true
 hide_table_of_contents: true
-api: eJx1Uz1z2zAM/Ss8zI7ttL0O2pqPIdehvjSdfB5gEZHYUCRLUnZ0Ov33ApJq12nqwaZB4OHh4bGHjFWCYgsvzh8t6Yqu9pgowW4BPlDEbLx70FBAiL7xmb7+ybvhNFhApF8tpXzjdQdFD6V3mVyWI4ZgTTkCrH4m7ySWypoalBPDMXw23ErKGEy69JC7QNzNMExFkRs8+9hgnkKfP8EwTD1NJC2850qmm022UnrBMN0yoeitpbjcvDPB40SfYS9wc2xpDKTgXZo4flhfy4+mVEYTZCxudssYapZGq+zVSUclOo50Lyv+o2NDufajzp7pLCBgrvnf6u1eFiBaPp5Vv3/FJsjgZxXX3NS4Zz/qOaty58v2jg5Jfdk8wFtOp0s5NLw/GamklIyrpGCp7jHxqrI6YidT8poPvD3V+TYqPRcludGYkfH5Nk3Y18uPyzUwIxmswdEGDhs6S6FOWqhZjAt2J09kes2rYNE4gWujHX006vSuf2tRkq/6XkI/oh0GCbNykb265eMBo8G96LPdMWRNqNlzxbaHF+pku5Obr56EgKTbVoj84+xh99cCN9++P3Hyfn4RjddSE/Eor4W/CwB5W1I9+mqM9WDRVS1Wkjthyuc301VD3A==
+api: eJx1VE1v2zAM/SuCzqnTbkUPua0fh2IDEnTtKeiBsVlbiyx5Ep3UMPzfR8pu2rRZECQCRT6Sj4/qNUEZ9WKtt87vLRYlnm0gYtTPM+0bDEDGu/tCL3QTfO0Jf775XbObnumAf1uMdO2LTi96nXtH6EiO0DTW5Alg/id6J7aYV1iDnBiO4clwKgljMMnSa+oa5GyGYUoMnODFhxpoNF1d6mEmoS/G4mPyfItY60jBuJIjXGut1F9gzINppAAOX6YDWDWFK4nL1FNEJUUHyOkM+L6LJiryKg8IhApUY6HbeL9VVAGpSBAoqr2hSoFTWDfUnQCYkmRqWRtS/OU2Rizj1IFrJVxnXHINr7/QlVTpxdXlMIy0moCFNDaRwx2RISvsHA0h3kh2by2GbHViSA/jhPRwjEuhxWSIjXdxHMO38wv5OybuhjHUNP1CmDkuXwvsccR/pFIjVT5JyXM5PEeQfvX8s/RmWuTy8C6su1eoG4sfhXL+SQZv0+dajHvxSRcTWbc+b29xF9WP1b3+XOrhUg41K1c6zTFGBpOATN1BZJGS2kOXZOHdjnWrOt8GVUxBSTAFEDA+38YR+yL7np0nwXK/NaQFcFDjO0PqQJGaODqq7rANhK80T9oRuDbYtEGJvpObWwnBfNX3YnoKdhjEzIQG3tI1H3cQDGyEn/UzQ1YIBW/bYt3rLXYy9HGPzxK74m5bKeTLTg/PH+a6Wv5+ZOfN9BbUvpCYAHt5J/h3obW8KhKd5JZsvbbgyhZK8R0x5fMP8xmdZg==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ promoteKnowledgeBase
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"caseId":{"type":"integer","format":"int64"}},"required":["caseId"],"title":"KnowledgeBasesController.PromoteKnowledgeBaseRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"caseId":{"type":"integer","format":"int64"},"profileType":{"type":["string","null"],"description":"Optional profile type. Use contract-analysis to create a playbook that starts with an empty contract-analysis profile. Omit it for a plain knowledge base.","maxLength":64}},"required":["caseId"],"title":"KnowledgeBasesController.PromoteKnowledgeBaseRequest"}}},"required":true}}
 >
   
 </RequestSchema>

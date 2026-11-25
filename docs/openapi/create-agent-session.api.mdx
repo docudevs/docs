@@ -1,0 +1,71 @@
+---
+id: create-agent-session
+title: "createAgentSession"
+description: "createAgentSession"
+sidebar_label: "createAgentSession"
+hide_title: true
+hide_table_of_contents: true
+api: eJytV99v4zYM/lcEPW2A26S724D1Lct1QLZhK9JuL0EfFJtOdJUtTz/cBkH+9yNlO1YcJzsc1ofWEinq40eKZPfciY3l9ysuNlC6GwvWSl1a/pJwXYERDleLjN/z1IBwMCOtp0aJJ7wSRhTgwJCJPS9xgaqLDIpKOyjT3c3vsEM9WeL2FkQGBlcG/vXSAFp1xkPCbbqFQvD7PXe7igxYZ2S54YfDS6MM1v2isx1ppLpEw44+RVUpmQaEk88W8eBeb6oyhN9JsLR6lWU2ckHCU2FhEYlWiNXBJuAsvVJERK5NIfBKEv30EWHFLqwa26jmpFNkfH7G1LLxAU8eht6HDVsh5Q3QH6Z39CcDmxpZkW9osTXDmhhkTBtmINU1oBm23jHZE85eA+HfSFMb/sUIVxEN3suMuPtfScU0cMJ5e8FgJdZSyQ5nqyCMESG9HBRjB/Ek1EjD3BurzahlkTpZw7M35Sngo9dneDvvMQJomk5ehXRKsBtcdIXdK3R4C+YZ3t24RxhCPIvQTjTOXELVXEjlDcx1BtcVKygz3JqlLhSHSLfzt6Ppgt8y9rlPhvMkGKbOVWWntRrlgARzhUyMSq0vCmF2ozJ4r/Bx2tkItxGCDJ/hjZNY7YbFoMUfG0rI+/7WFnYMMioejzHTT+2RQwC92WANgWyuy1xu4hjo9WdIXRQEkWWSzgv1GEWhLTeyrLz7VSqE+XWR/I9MDaQ5IwLiJViv3LdkSB4QfdXLSAMDvmlOf4aeM1YzYq0l1DL0rDFNE0D/ZkfFw/ie3X3ppqRz6eSCKNRxh3gYMDhsFauuHCRdCYmqwNAm1aR/JLwF8EqWryN0W1D5KBkFAsJZYPzlhGo6LnKDQthLiAZ7vb4IxJWj/1fVBoS0WCLESeNVh+UC1X8EQs7fbdRhTttG2+g6Kk8rfxL1zGPNvnBzGxO6+uP05/M2vzht46wymEvaW7VjGOuMvUm3ZYJlMs+x85eOmW6uSPiP0w+X5wbCz3wpaqz3Yq2aqnWqOjre4Wi31TT8Vdq6MO65La4m9d0kjIuT47iYcBotlv2s9vAuikpBP3v14exK/DQUo1yHmLd0fdKp/wS1ZbPHBR9iPArpoyACMKdTglBu6MAtexAW4+fYm9gxpxk+TJyRHNtpb1jWHrIkwQIu0D5Km6rA724/3E6JSHK1EKEStONsQw0L3LCenBNsx7R3+CAnlRI48VKjNqE/NbyteH2H5wJzfd6EbNkSv6iw36+RnL+NOhxoG9mkNrXCz1oYGUKHKzTcztI0dGfSkgAJzYWycAbsOAry75Ztwn/P6JGMAabpcWyAr4XypI06+1Zp3ti9eSY7vcbZuNmfmKUpVO6q7kuUdI9/PT2j8rqd/IswpXAj3ugJ4m9EQ/+kHEeSsLfnSpQbjySjvLFJP18Ak+R5Tg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"createAgentSession"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1/agent/sessions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+createAgentSession
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"Idempotency-Key","in":"header","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"kind":{"type":"string"},"caseId":{"type":["integer","null"],"format":"int64"}},"required":["kind"],"title":"CreateAgentSessionRequest"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Session created or recovered by idempotency key","content":{"application/json":{"schema":{"properties":{"sessionId":{"type":"string","format":"uuid"},"kind":{"type":"string"},"caseId":{"type":["integer","null"],"format":"int64"},"status":{"type":"string"},"capabilities":{"type":"array","items":{"type":"string"}},"eventCursor":{"type":"string"},"activeTurnId":{"type":["string","null"],"format":"uuid"},"recentTurns":{"type":"array","items":{"properties":{"turnId":{"type":"string","format":"uuid"},"status":{"type":"string"},"userText":{"type":"string"},"assistantText":{"type":["string","null"]},"failureCode":{"type":["string","null"]},"pendingActions":{"type":["array","null"],"items":{"properties":{"id":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"tool":{"type":"string"},"toolClass":{"type":"string"},"summary":{"type":"string"},"expiresAt":{"type":"string","format":"date-time"}},"required":["caseId","expiresAt","id","summary","tool","toolClass"],"title":"PendingActionSummary"}},"suggestedConfig":{"type":["object","null"],"additionalProperties":true},"inputFileIds":{"type":["array","null"],"items":{"type":"string","format":"uuid"}},"extractionResults":{"type":["array","null"],"items":{"properties":{"fileId":{"type":"string","format":"uuid"},"configurationName":{"type":"string"},"configurationRevision":{"type":"string"},"resultJson":{"type":"string"}},"required":["configurationName","configurationRevision","fileId","resultJson"],"title":"AgentSessionExtractionResult"}}},"required":["status","turnId","userText"],"title":"AgentTurnView"}},"links":{"properties":{"self":{"type":"string"},"messages":{"type":"string"},"events":{"type":"string"},"turns":{"type":"string"},"files":{"type":["string","null"]},"artifacts":{"type":["string","null"]}},"required":["events","messages","self","turns"],"title":"AgentSessionLinks"}},"required":["capabilities","eventCursor","kind","links","recentTurns","sessionId","status"],"title":"AgentSessionView"}}}},"409":{"description":"Idempotency key previously used with a different request"},"503":{"description":"Session kind unavailable"}}}
+>
+  
+</StatusCodes>
+
+
+      

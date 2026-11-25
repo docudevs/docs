@@ -1,0 +1,71 @@
+---
+id: list-agent-session-files
+title: "listAgentSessionFiles"
+description: "listAgentSessionFiles"
+sidebar_label: "listAgentSessionFiles"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVNtu2zAM/RVBTxuQ1en2ljejcYtgXVs0zYAiCAbWZhJtvlWi0wVG/n2kYru5LduTZZHn8HaoWhMsnB5MNSwwp08OnTNF7vSsp4sSLRD/jRI90KlxFIrPeOtybVJ0uqdLsJAhoRWWWuf8w94NDyN72uR8UQIt+WzxtTIWmZBshT3t4iVmoAe1pnXpgWRNvmDPeWEzIL6pKpPozWYmYFdybhyW/T/3+/JJ0MXWlJLm35JU7KpaLDPHRU7sImgoy9TEvsjgpxOKeiel0koLyGwDzn3B75mCtbCW8ggzd9pdGvfPynpNzw4d2ZBhYuDJ37bW6TtPXqWpnrGbI6DKB8W8ysRn8nB7Hw6jIXs9PN5fRePx6O6Gfx6jcPjM3+twdMtW7ikZSiXoYdfGW05hLyob41eTJ8cRmOoqHEc/hvdXk2/R3dNZRs/Dk9xVwbTtU9OFvXBdZWdYvxt8Y84TpGdhtywUgQnwPySkZRa0LGQRFkhe9qzngQ5Wl4HfnKDdnKDutL8J5g3Y5PPCz7BJZ1jE1RBXToUPI32YQWeUQ8bcipUVC2m+EMCFisCxyki9wVpRoVjQKxaeWnPrVNKAnFgSIGB+trot9+XFl4u+TLUsHGXgBd+srBSufOWqKV21te/l1+mU8DcFZQq830xY2dQvge/LVK8uGec7I2NsX5WeHuy+DN2YlpyNoOr6BRxObLrZyPVrhXbN93xcgTXwIs3jRyYxTs48jTmkDo8S7DZcf3hsVPFRcbyTibfrnMsyryCt5I+Pv3C995BtZNWWCAlan8TWHsYxlrSDPHpS5OXqxHMTPbHs/gDNRdyL
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listAgentSessionFiles"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/agent/sessions/{sessionId}/files"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listAgentSessionFiles
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listAgentSessionFiles 200 response","content":{"application/json":{"schema":{"properties":{"files":{"type":"array","items":{"properties":{"fileId":{"type":"string","format":"uuid"},"name":{"type":"string"},"mediaType":{"type":["string","null"]},"status":{"enum":["UPLOADED","PROCESSING","READY","FAILED"],"title":"AgentSessionFileStatus"},"sourceKind":{"enum":["UPLOAD","CASE_DOCUMENT"],"title":"AgentSessionFileSource"}},"required":["fileId","name","sourceKind","status"],"title":"AgentSessionFileView"}}},"required":["files"],"title":"AgentSessionFileList"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

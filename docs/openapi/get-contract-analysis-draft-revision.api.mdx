@@ -1,0 +1,71 @@
+---
+id: get-contract-analysis-draft-revision
+title: "Read the playbook saved at one draft revision"
+description: "Returns the playbook as it was saved at that revision, with its actor and reason."
+sidebar_label: "Read the playbook saved at one draft revision"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v00AQ/SurPYHkxAEqDrlFtAJuVQSnqoeJPUm2dXbdnXGKZfm/M+OP1Cml4gBckvXufL/3prEMO7LLG3vvw2OB+Q5nGyCclTFsXYFkbxObI2XRleyCt0u7Rq6iJ8N7NGUB9SaEewNkHJtH+SM4Ym6A5V1+Ih4diV9iHh3vxYYMZByiAZ/LI1Dwc5vYUGIEjf81lww75E/BcxTLlYeiJkeXEba8HoKJQwkRDsgYtfbGevkQx0wqlwiJdVpoCbyXc8SHykWUwBwrTCxlezyAXTaW61K9nGfcYRTTbYgH4P7q44Vt2+QUOj7l/lvBb9WdyuBJxiwe7xcL/Tuf9vU44clc0eQ6DjOpKZN5oWf1h7IsXNZNM70jDdJMyhJcZdbs+pT52Vj/pOrEdvgpTqP1jSWOzu/E2ldFYW9bbQxoGvElm0yMGPMVv2I2KSAX4xk7QUN8B3pOPTsHodLmDjOWBO0UnZtnrUpgdqwB7HUf6oxhX5jL9YCNIKWxLhYXL6DT+5oMSti4wnFtHJncEWxES4lRQuoNbEjQSYwQX+EbgdOnyqvyvJLNCqP3YVBAR3Lh2NKm59KktOl53qajSNNskMsMBr2kXbvpmEh8xmPbMXgbutENI7gMWXWJRzKr66/2ud5Pj3o4SBtG0mZIJDipw9xcAQmfVP614WCkmKNQzNShiiYfnEhfBEKQ+PLa882+m3+YLzo8A/EBOsIMglsj5Oc75qSA4F9QwFnRzZMg/sm+GmTC+INTiSkbQXqoYtEprEPt+UIl8Vqe9tNpu/bKPYNOe9Hmuu0ywKfOccLdvYxLczSNxv4ei7bV64cKYy33cjxCdErCbj2OhLTLLRSErwzrzXqQzFvzuzaHS/C1QglFpV9yvMf6aQXr5vyPWU+zaXWx7IU6sry08/55lWVY8sTxlx2py/ikvs9X30SOPwFsEHcF
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Read the playbook saved at one draft revision"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/draft/revisions/{revision}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns the playbook as it was saved at that revision, with its actor and reason.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"revision","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Playbook saved at the draft revision","content":{"application/json":{"schema":{"properties":{"draftRevision":{"type":"integer","format":"int64"},"actorId":{"type":["string","null"]},"reason":{"type":["string","null"]},"createdAt":{"type":["string","null"],"format":"date-time"},"profile":{"type":["null","object"]}},"required":["draftRevision"],"title":"ProfileDraftRevisionHttpResponse"}}}},"404":{"description":"Profile capability is disabled, case is absent, or the revision is unknown"}}}
+>
+  
+</StatusCodes>
+
+
+      

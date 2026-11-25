@@ -1,0 +1,71 @@
+---
+id: download-agent-workspace-artifact
+title: "downloadAgentWorkspaceArtifact"
+description: "downloadAgentWorkspaceArtifact"
+sidebar_label: "downloadAgentWorkspaceArtifact"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9U02P00AM/SujOYEUNi3sKbdKu0J7Q4iPQ9WDm7jtqElm1uOkRFH+O3aahpYFwQFxmhnb7439bPeWYR9ttrawx5rfRIzR+TraTWJ9QAKW11NhM1v4U116KFYa99XTMQbIcUXsdpCzTWwAggoZSel6W8tDYBOhUCTW1WIIwAe5Ez43jlCYmRpMbMwPWIHNestdGIFMrt5L5M5TBSyWpnGFHYZk5iZs3T8m3yg4BlEAo8a/XSz0KDDm5IKKIbFfkNzOYWFcVTUM2xLNSQTZen8UytzXLBIpDEIoXT5qmPqcUfRlQqjU9xc5bV0N1ElWUrS9X9y/zOQiv3HRSHCeq9qajycD26hpKPYW9MdOShcPXnu+x3NjRdTMpu0yHYckvQxJ2s/dHVKY8GL90ZchvaihDdr5sVzHpdb74PPmAdtoVh+e7M85zk69VEJgAvmxunqvgDvzCNFhZHOCzrA38k+LxKbzDZliAkX1FMAg/OKNZ+7l3bu7hRVZgo9cQa1JTRN1kcaM2phZHHOlzk2ic/cYv3EaSpAxFOaGSvWdlVvbdim4UTs55xVLbHa9HbOA6rgZ7YuGMpwHSVkZ+34LET9TOQxqfm5QBiVby7UFcjqS4xIWLupdermDMuKL5OdZta8+Tjvz2siPvyxqMkLdqZxQNvqS6xG7m0XXDf2PH19JNWwk+oBQII3lnwNWshaBr6C/XUtd/3n43z9+kuX5DuBxxdM=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"downloadAgentWorkspaceArtifact"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/agent/sessions/{sessionId}/artifacts/{revisionId}/content"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+downloadAgentWorkspaceArtifact
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"revisionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Verified immutable workbook","content":{"application/octet-stream":{"schema":{"type":"string","format":"binary"}}}},"404":{"description":"Artifact is inaccessible or absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

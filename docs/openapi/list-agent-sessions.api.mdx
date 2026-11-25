@@ -1,0 +1,71 @@
+---
+id: list-agent-sessions
+title: "listAgentSessions"
+description: "listAgentSessions"
+sidebar_label: "listAgentSessions"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVktT2zAQ/isenV0C9HHglgHaodPpMEB7YTgIe+2oyA+kVSCT8X/vrvyI4jiB9pRY+/r229Vq1wJlbsXZvZA5lPjBgrWqKq14iEVVg5FIX1epOBNaWZyzzm2vEotaGlkAgmEPa1HSB2nKjE5Iqkr6eHZgVvQBr7WuUhJnUluIhU0WUEhxtha4qoEBWDSqzEm1dFpz/KwyhUTy4ZxKRdPEQwStCoX/GoG0EXKPbPBMRx9P6SCFTDpNJ6efm4ZCG7A1pQiWzU+Pj/knBZsYVTMhU3REpBb1duQyqShciWwp61qrxFM5+2PZfB2gqw0TjaoNNhRgg1saIzlBhVDYvRZcpMFk4HLEYSyeVDmhSIJEWgh93Ad87VSERF8+sZVFic7ucVjLR6VVj3NfNiNDsoQlEXfujK3MpGeZoFrCnTPlNuC3OojrmpBrtvwHgnEU6AC7B+hwFswdvOJ0RlRCsiVoWxo7KZFqJpV2Bs59qx9SrKFM6Wie4HY/3Q/59jTtyVulb16etgnGrXNQGatKT3LAgnNNTExKrSsKSfd8SkY3X9HNm09wGyBIJcIHVDRAGt8Jz46MUuajwx86ijn7TdQOdgiSeEOFmmNdh0zfdiaNB53nYBHS86rMVB7WoHr8AwkGRZBpqthe6uugCmgcNDzoaodflSaY76vkG53qSUMjPeIbsDT7/qdDMo/oXTcj8Qy49kH56cf41MwItW5gqaxqx+WOpvGgv9tJ8bi+O7H3RYr7lLYCBKUOR/7liEGKOwrcjYO4HyHBFBj75Jn0W8GLB69V+TQ56XU2SUZBgOj9nr45fppOi3A0CDcSpsEeni+ScGWU/0G1ESEdlgBx3GbVY9lD9Q9PyO69DV6Y7Weje+h6Krcnfxy8mcPM3hN5qElJVRu/Se9ZWrYbIlivpqJdEyfcRmz3xr7hScRFxbtZDui3MVzQx2x5MvPL3MxuVFWZVR53F/SiStwFLG00v74S41iDkP8U5CmiPkzYWZmzwVF0KS1xjtGLXEVYRXSZltSm0apyJko7I8sSGrqS/JO0vcni5Ojj0TF3WF1ZLKS/vcNWRx59jlGQ5Ba0oVORqjGrtaQNkN9W45+UloB7sTwhO0/BptSe8gXFZIX1+pFG/i+jm4aP2w2SN9hUWfmouVbdEvkEq2CjXUrtOLrgXXSPbr+bbnQf+MMoVqYgfHUWIFNyyBFbo3mSQB1a7ayM7GWo97fLO+qSv2QKDIE=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listAgentSessions"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/agent/sessions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listAgentSessions
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"after","in":"query","explode":false,"schema":{"type":["string","null"],"format":"uuid"}},{"name":"limit","in":"query","explode":false,"schema":{"type":"integer","format":"int32","default":25}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listAgentSessions 200 response","content":{"application/json":{"schema":{"properties":{"sessions":{"type":"array","items":{"properties":{"sessionId":{"type":"string","format":"uuid"},"kind":{"type":"string"},"caseId":{"type":["integer","null"],"format":"int64"},"status":{"type":"string"},"capabilities":{"type":"array","items":{"type":"string"}},"eventCursor":{"type":"string"},"activeTurnId":{"type":["string","null"],"format":"uuid"},"recentTurns":{"type":"array","items":{"properties":{"turnId":{"type":"string","format":"uuid"},"status":{"type":"string"},"userText":{"type":"string"},"assistantText":{"type":["string","null"]},"failureCode":{"type":["string","null"]},"pendingActions":{"type":["array","null"],"items":{"properties":{"id":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"tool":{"type":"string"},"toolClass":{"type":"string"},"summary":{"type":"string"},"expiresAt":{"type":"string","format":"date-time"}},"required":["caseId","expiresAt","id","summary","tool","toolClass"],"title":"PendingActionSummary"}},"suggestedConfig":{"type":["object","null"],"additionalProperties":true},"inputFileIds":{"type":["array","null"],"items":{"type":"string","format":"uuid"}},"extractionResults":{"type":["array","null"],"items":{"properties":{"fileId":{"type":"string","format":"uuid"},"configurationName":{"type":"string"},"configurationRevision":{"type":"string"},"resultJson":{"type":"string"}},"required":["configurationName","configurationRevision","fileId","resultJson"],"title":"AgentSessionExtractionResult"}}},"required":["status","turnId","userText"],"title":"AgentTurnView"}},"links":{"properties":{"self":{"type":"string"},"messages":{"type":"string"},"events":{"type":"string"},"turns":{"type":"string"},"files":{"type":["string","null"]},"artifacts":{"type":["string","null"]}},"required":["events","messages","self","turns"],"title":"AgentSessionLinks"}},"required":["capabilities","eventCursor","kind","links","recentTurns","sessionId","status"],"title":"AgentSessionView"}},"nextCursor":{"type":["string","null"],"format":"uuid"}},"required":["sessions"],"title":"AgentSessionPage"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

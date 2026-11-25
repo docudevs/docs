@@ -1,0 +1,71 @@
+---
+id: get-compare-export-file
+title: "getCompareExportFile"
+description: "getCompareExportFile"
+sidebar_label: "getCompareExportFile"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVE1v2zAM/SuCThvg2dl2861YsqK3YehORQ6KRcdCbUkV5TSB4f8+0lbzVfTUYT1ZJinq8fGRg4xqi7J8kJXrvAog15l0HoKKxtk7LUu5hfhj9q323oX407QgM0kG1UGEwLcHaemHglOW295oijGWTF7Fhs4BnnoTgDLG0EMmsWqgU7IcZDx4vooxGLuV45gds8H04LuSrTkYvbMIyP5viwV/NGAVjOciKfq+ATG/BVrUc32VsxFs5GDlfWuqiZHC65pNbz2YydqFTtE1uTFWhQNZOGKiOMWsqcSLnDurc+Lc7rt2vo1fXF2bCrSr+o5A5M8uaB9cBYiUoWvzF88HYEEfQGlsACIBmb7/AMXIQC678obwSHSNS8KcdEiKKGWRlFcMZxIci7mrWAwnKY1F6rCxtZvwmtgy4CVVuIQdiptfd/IazNG5TDyIUz/4Qi5WCg1gFM/qIKITpJ8dhCgOrg/ihTxkj1ZRUX7y4pz7a/49X0iq3zuMnbIMKk0A1SgSCWJmQSQaLuAdSY+wj4VvFQ0L5etDy76ZotOIZ7K8nNPEEjsuRm4iiiaoIVycYBg2CuFPaMeRzU89UDvLBzruVDBqwzTSLtAG+Uw9qlWL8ArrcbTkp99pkD+LJItXNSSjsiycnWp7/qPjIxyu9g0vjv/49BlT45qiG5oKCBMBc8BNVYGPZ1ev9wgvp6Oab1f3tK7+AslM70o=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getCompareExportFile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/compare/{compareGuid}/exports/{exportGuid}/file"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getCompareExportFile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"compareGuid","in":"path","required":true,"schema":{"type":"string"}},{"name":"exportGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"The exported file","content":{"application/pdf":{"schema":{"type":"string","format":"binary","types":["string"]}},"application/vnd.openxmlformats-officedocument.wordprocessingml.document":{"schema":{"type":"string","format":"binary","types":["string"]}},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":{"schema":{"type":"string","format":"binary","types":["string"]}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

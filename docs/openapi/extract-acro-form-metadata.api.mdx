@@ -5,7 +5,7 @@ description: "extractAcroFormMetadata"
 sidebar_label: "extractAcroFormMetadata"
 hide_title: true
 hide_table_of_contents: true
-api: eJyNU8GOEzEM/ZUo57ZT4NZboSDtAVGJ5VTtwU28O4GZJCSewmg0/46dabvTXZC4JbH93vOzM2iCp6w3B22D6Vr0pB8WOkRMQC74O6s3Gn9TAkNbk8KnkNrPSGCBQC90wp8dZnofbK83gzbBkyDwse0achESVY9csiz5/JxNjW05xSQk5DDL7UrOZ+ojMmum5PwTkwgAcEQfnYfU63GciF1CeyucA+hNsFL3AvQs7X7ChhgbZ0qHVTCEtGQ2hJaxb9EpdVgecgw+T1rfrtcFHbNJLgrGvz1SnKwu1dzLzKG5hu9ZQOb2gLVOQtDsZ0YVOZPG/6JnxhapDjLFGDLxPQLVfKsu5lTANWVG7XOR84+hjMJRI37tOHmHp6y2+zv9kvsa3J0hFc/WYM48BilYqY+QWT6pX9ArCopNOHFHqg9dUhcdWSJneo7mCfvN6t1qrbldUd9CMclDi88tK+lZSdNq1vWNwutKEddUsQHnBbJLTVnEYshsjRb6tSX8J2rxj/OG4QgZv6VmHOWZPwDv5ObAxxMkB0cx7CCrWCNYTHwZ9A/kFP1hGv6yLKGkN52o+ttXGReXoq0xGGmW/mpvxofZlPdfvt5z8vH8I9tgpUaAz85cjyJyHP8AwflovQ==
+api: eJyNU01v2zAM/SuCzkmcbbfcsmUDehgWYN0p6IGRmVqbbWkSndUw9N9Hyk7qtB2wGyV+vMdHctAEj1FvDrp0pmuwJf2w0M5jALKuvSv1RuMTBTC0NcF9caH5igQlEOiFDvi7w0gfXdnrzaCNa0kqsNl0NVkPgYoTpyxzPH9HU2GTLR8EhCxGeV3B2abeI6NGCrZ9ZBApAOzRR9tC6HVKI7ANWN4SZwe2xpWS96LoRO1+rA3e19bkDgtnCGnJaAgNo+GTr13JQSeoI6Z0i0ahw/wRvWvjyP39ep3RMJpgvdT8t2aKg9Ulm9Fmis05/YxSZC4XlKUVF9T7uXApjQz/C5zxGqTKyUy9i8RvD1Txq7hIVQDn5Ik1z0m2Pbk8GEu1qLfj4B2eo9ru7/RL7KtzN5VUPGmDMfJQJGGlPkNk8qT+QK/IKZbgzP2o3nVBXXhE8Uzw7I1j7XerD6u15naFfQNZohYafG5ZSc9Kmlazrm8YXheMOKfwNdhWSnahzmuZBZkt1UK/loQvpBL9OG4YjhDxR6hTkm8+B97QzYHNMwQLRxHsIItZIZQY+DHoX8gh+tM4+mVeSQmvO2H11uGkxSVpawx6moW/2pr0MJvy/tv3ew4+TvfZ5MXOBzUpczWFZEp/AZYGbZs=
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ extractAcroFormMetadata
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ extractAcroFormMetadata
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"extractAcroFormMetadata 200 response","content":{"application/json":{"schema":{"additionalProperties":true}}}}}}
+  responses={{"200":{"description":"extractAcroFormMetadata 200 response","content":{"application/json":{"schema":{"additionalProperties":{}}}}}}}
 >
   
 </StatusCodes>

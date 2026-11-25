@@ -5,7 +5,7 @@ description: "uploadBatchDocument"
 sidebar_label: "uploadBatchDocument"
 hide_title: true
 hide_table_of_contents: true
-api: eJyNVE1v2zAM/SuGThvg1Fl7860fw9DTiq49BTkwNhOrsy1NorMagf/7SPkjbpJhu1Ei+Ug9PuqgCHZepSu1AcoKtY6VseiAtKkfc5WqxpYG8jtxPpisqbAmFSsLDiokdJJ6UDUfOHbX6JydumbbAhVsO/zVaIeMRK7BWPmswApUelDUWsnx5HS9U1237oPR053JW4nITE1Sjs2qKUlzUUq2xlWLHChgHNGsk7ZJo5dTPnZ6VidWAgDsURtdg2u58rzL1TF3zQ6sM5NL3gno0NpLjw3WljoLnCUmI6QFV0OoGPsjunAQLrw1te97vV4uAzr6zGkrGJdZjzgwGjP5HTN25vXfvAD8nZo3s/kmYzqfgAwux/eZR3OFHbo5aXx1cy2xZAjKsTf/X0knRPfV4qmjM0xWBGkqBTQw8RpIeR4p6Hp2/0kcA7NUCyNqtsb38mVxpioZR5oE8ScHEXCX9BhByFsTXjZ0IYgPuPfR7dOjOq08OaeBMfEZes/kSsJV9BU8D4Gi39BGZCIe4J7nErWmcdHYiRdPkHes2Ot77C9XN1dLYV36ryAMeNi5vtkovDiaPflDc9NwCN8psSXwijJa48ogkMDGTPnx8BnEKh1WeqCEJ1IIgxx8OGzA46sru06ueXF5l9IVm3twGjZCGP8MufZiM/dbKD2e9TWpWH16HrTxORIpXOp3uIS6FXagbOTE5k9sx9+nk60tEHJWoNTvXfd9lUXY12PqpV+li8ek2yxDS7PwszWTP2uS1tP3Hy/C3PB5VSaXHAEexjmZzBIr9w+KGuWL
+api: eJyNVE1T3DAM/Ssen9qZQLZAD90blE6HUxkKJ4aDNtZuDEmc2spCupP/Xsn5ILAw9JJxLOlJftLTThNsgl7e6hVQluu7RLsaPZB11YXRS93UhQNzJsZzlzUlVqQTXYOHEgm9hO50xT/su2msYaOt+FwD5Xz2+KexHhmJfIOJDlmOJejlTlNbS0wgb6uN7rq73hkDnTnTikfmKpJ0fCybgiwnpXTtfHlggCLGM1rtpWyyGOTPjJXu5Um0AABb9MpW4FvOPK/y9jn2jg1YZc5I3CvQobTrHhvqurBZ5Cx1GSEdcDaEkrPhE/Nn2GkNRcCue5lNOIkXoXZV6Gs/WixiNgyZt7Vgvt0FxY5qjORMM7bm9dwHAXifqnu3+ilt2++INNLg08xiOcMG/ZxEvjo+El9yBMVYW/ivoFfE99mSqaI9TJ4QslQIaGTiJpJyNVLQk3uyONmnL7orfniGIfDjFOdQjxBU5UitXVMZ/npFuQ3K+Q1U9m9kT0fAb+8B9l1RzPya+aagHi3ljIIqa7yXHkkeBva4tfioAgGhYH5dHL+HCaa0XKOrGLYpTKwQsshSRBbEwmUPkb4Ph4RJZJnmTpRcu9BLl4W51Ok4zmkUfroT8XZpjxFFvHaxiwPjgniO26BOLy/068yTcRrOGdcccKh+QOCBIya9VeSEsi3PoGpd49VYSRBLlHai2Rp67C+Hx4cLIU3qLyEO87BvBv574mZPflHcNIiET5TWBdjY1sYXUQyRjZnqk2ERJno5rLOBEp6+XBhk591uBQFvfNF1cs1Li/fI8paPW/AWVkIYb0Vjg5zNIP69uibF6k9Xgw4+Kxn7t+odLqFqhR0oGvnj4wO24+btZGPlCIbVJvl70/c+y0HcVc+hb23ULhmDTrMMa5q5760U2dfTaF3++n0tzA2Lu4wbL+p9aOd0ZJZYpv8APew+Zg==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ uploadBatchDocument
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ uploadBatchDocument
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"uploadBatchDocument 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"index":{"type":"integer","format":"int32"},"totalDocuments":{"type":"integer","format":"int32"}},"required":["index","jobGuid","totalDocuments"],"title":"BatchUploadResponse"}}}}}}
+  responses={{"200":{"description":"uploadBatchDocument 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"index":{"type":"integer","format":"int32"},"totalDocuments":{"type":"integer","format":"int32"}},"required":["index","jobGuid","totalDocuments"],"title":"BatchUploadResponse"}}}},"404":{"description":"Batch processing job was not found for this organization"},"409":{"description":"Batch upload conflicts with the current job or review state"},"503":{"description":"Batch admission could not acquire the job lock"}}}
 >
   
 </StatusCodes>

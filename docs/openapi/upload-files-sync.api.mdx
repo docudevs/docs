@@ -5,7 +5,7 @@ description: "uploadFilesSync"
 sidebar_label: "uploadFilesSync"
 hide_title: true
 hide_table_of_contents: true
-api: eJyVVMuS0zAQ/BWVzk4c4JbbwkLVntiqXU7UHhR7kghkSUjjgMvlf2dGshNnEyCc/NB096jn0UtUuyjXX2XtqrYBi/KlkM5DUKidfajlWrbeOFV/0gbiU2crWUivgmoAITCyl5Y+KK5ydqt3bUZSlLb080cLoaOPWO2hUXLdS+w8sGDEoO2OjmxrjHwZBhIOQPER37u641BiRE6JXpvWoCZdLLcuNItaYSI70frAWaOGmMIB1RTzB8FCMpMidrnRVlGWQ3Fy4Yg7wa6Ek2jj8X9F/unFFdSQzdEB6vNq0QHYytWMPzNkNO8530J5b3SVSlO6CgEXpAmq4XzmZt2Omlt1O+rk2K2Y4fzuGFpIP6J3NuZqv12t+FFDrIL2qf0u2lZQkJhQ5PSst+ba3yKD+4saTSUacj5/lZLJ0r3j4fEuYpoY3NNXOZlWZshiy5gyZpC2W5cUNRqWvKfgezhEcff4IF9rHg/vR0pB1lYQI2XJgKX4qCJNA4qfqhPoBF34QAMiOtcGMeUR+STVvpB0GjP3m+W75SpVi7JvVDJkHPKct0h3FeNlzxI7GobwC0tvFK0BYmqDSVOafJj1byHnTvCiYE6agD0bR5F9v1ERvgQzDPw77xPeOrWOamO4JbbKRCjkd+iubKGDMi2nI3m/HFTQDCICHpw9qBpCYsvgD7kpFqkpT9hry2coJtBdVYHHWfhFP7H0sSMePz89U/Bm3HGNqxnDxGMdjq+c5DD8Biz++AE=
+api: eJydVE1z0zAQ/SsanZ0PKBzIrVCY6YnOtJw6PWysTS2QJSGtnXoy/u+sZCdxSIChJ1vSvt23bz92kuA5ytWjVK5sarQknwrpPAYg7eytkivZeONAfdEG431nS1lIDwFqJAwJuZOWD2xXOrvRz82AZCtt+fJng6HjA76wF8VmGzARCxnLCmuQq52kzmMiEClo+8ymtjFGPvU9EwnI+EgfneqSKUegRJF/68aQZh602LhQzxRQdnZ060PKgjTGbI4Ee5s/BCxk8gTsXa61BWbdF0dVDrgj7II5B609/W+Qf2pxAdUP4uiA6rR6/IC2dCrhTwQZxXsYsgDvjS5zqRauJKQZx0Soz0rF/qbivd7LVMrXezkq/Fof/al2FBrMF9E7G4duebtcpo/CWAbtczufjYFgI7FHcZRJb065fI8JvDur8b7EA513yw/nAR8qFENQkUaLXVIUW02VACugJN0iE2g1bkVobGqk98urczc3o+6CpSsxRo4qQNWa/5wVOorGQgvawNpg7qu/pi1zO1QuLQbvIuVtQBWfFvsCLwbIbJMwiziAtN24nL0mgyOrG2yjuL67lb/HPDxe4s6AufgMkSebxBY6QS7p0/Kwi841Qex5xPSS+7aQ/BoH32/mV/NlnlVmX0MuzrjARrFzrmJM9oTYoXiEL7TwBnSWvQkmb5ysw2QWCzlVgo9ZC57mKgnHlrvdGiJ+C6bv0/WwK9NGVTqmcqjDuvyB3YUN24JpEh2ZdmULQecarh7TEqgQFIbsbQB/Ghp0lgfmiL20SPtiD7ouS/Q0MT/r7RT60BF3X+8f2Hg97us6j11eXmMdDr+JZN//AutCRe8=
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,14 +47,14 @@ uploadFilesSync
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"configuration","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={[{"name":"configuration","in":"query","explode":false,"schema":{"type":["string","null"]}}]}
 >
   
 </ParamsDetails>
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"metadata":{"type":["string","null"],"format":"binary"},"document":{"type":"string","format":"binary"},"prompt":{"type":["string","null"],"format":"binary"},"schema":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"schema":{"contentType":"application/octet-stream"},"metadata":{"contentType":"application/octet-stream"},"document":{"contentType":"application/octet-stream"},"prompt":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"metadata":{"type":["string","null"],"format":"binary"},"document":{"type":"string","format":"binary"},"prompt":{"type":["string","null"],"format":"binary"},"schema":{"type":["string","null"],"format":"binary"}},"required":["document"]},"encoding":{"schema":{"contentType":"application/octet-stream","explode":false},"metadata":{"contentType":"application/octet-stream","explode":false},"document":{"contentType":"application/octet-stream","explode":false},"prompt":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -62,7 +62,7 @@ uploadFilesSync
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"uploadFilesSync 200 response","content":{"application/json":{"schema":{"type":"string"}}}}}}
+  responses={{"200":{"description":"uploadFilesSync 200 response","content":{"application/json":{"schema":{"type":"string"}}}},"409":{"description":"The upload conflicts with an active review run"},"503":{"description":"Document processing admission is unavailable"}}}
 >
   
 </StatusCodes>

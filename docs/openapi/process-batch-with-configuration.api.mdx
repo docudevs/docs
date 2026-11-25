@@ -5,7 +5,7 @@ description: "processBatchWithConfiguration"
 sidebar_label: "processBatchWithConfiguration"
 hide_title: true
 hide_table_of_contents: true
-api: eJy9VMFu2zAM/RVBpw3w6qy95dY1w9DLVnQbdghyYGQmVudYrkSnNQz/+0jZMdy4QDEMWC6xJfI98pHPrSbYB71c6y2QyfUm0a5CD2RdeZvppa68MxjCJ7n9ZSm/ceXO7us+Qie6Ag8HJPQC0uqSXzhrX9uML20pCEA5P3t8rK1HxiRfY6KDyfEAetlqairJCeRtudddl4wwZkr2Vc7+HZM8mBHnsUbf6Hkiy+FcgSAdlnVR6E3XbYQvVK4MGCTycrGQvwyD8baKcrwhl+IUdcJgZG6PsCRBgaoqrIlR6UMQqHZSFKPyUMj2xA9u+0X0nbeZ6AM8M6WpvcfSNJMQy1R79My6c/4A1B9dXYo2Ex3XI/oMi/snS4WAxfZuPALh/amdTn7J38ghFEi5i2vmAsVt4rkudZo5Ux9YmjRuZdrKPnXpgJY+MdKHF7uRtrNV6eKMdy5qMNS9YtgVHoO6vrvV57WOl6uBXA18LK0kXKjPEHgEpJ6gUeQUUx55KqpxtVenioPcZEDA+HwbeuyPF1cXC5mP9HmAON5hHwcSFTVSIpI6V+lFneNECZ8prQrgRWbg2hdxU6KAa30qh7N7Yyd6OZhyIOSnuY4SNjcdTz6X+TBu224h4E9fdJ0c9/4R42c2wLaQFdpBEdiLv7GZuO0IRS1Fa7HREbyV4NcTz7odTaLf3Q9r+l4x4qsqDIdQNlPOUzFRAPkU/EfOuZrdhpNyhIzdKAL0cdfGYEUThNkXQZQb/XL37fsPttwfmg39ng==
+api: eJy9lE1v2zAMhv+KoNMGZHXWdofl1rXD0MtWdBt2KHJgZCZWa1uuRKc1DP/3kbJjuHWLYRiwUxyJeki+/Gg1wS7o1Y3eAJlMrxfaVeiBrCsvU73SlXcGQ/gkt78sZeeu3Npd3Vvoha7AQ4GEXiCtLvkPv9rVNuVLWwoBKONvj/e19chM8jUudDAZFqBXraamkjeBvC13uusWI8ZMnX2Vs39nkgczcu5r9A3/wccqdylfbyEPL4BYHudyBMm4rPNcr7tuLf5D5cqAQSyPl0v5STEYb6sozx/kU/xEHRhM5nQJSxIKVFVuTbRKboOg2klQTOUike0d37rNF9F7nvZCF/DILk3tPZammZhYdrVDz163zhdA/dHJsWg10fVmpM9YnD9ZygUW0zv3CITXh3S6Tkiny9O5KNFcMVg5r57UWD1AUKUjtXV1meoI+PgaYNCWM40Q1ouCemCRFWWo+jjp4Mbj3uKDCsQxCvfD8uQ1LqSFZSxHY1ydpzEeMFGRSBZi7sxdlOovyi0SImUujpULFKeH+3ilk9SZuuBokziFSSvz0yUDLZGc3j3RKWlno9HFnt66WOOhLheMvcB9UGdXl/p5rOPlxeB8Kig/OFKfIXCLERelUeRE5D13nWpc7dUh4iA3KRAwn29Dz35/dHK0FJklzwJi+w7zNzhRvdYiknqu0pM4x44lfKSkyoEHl8G1z+MkRAFv9CEcft0vsoVeDUtocMhfcx3FbL5kuLMzqQ9z23YDAX/6vOvkuN8XsuhSG2CTy4gMK+MOm8l22UNeS9Ba1sQevBXjlx8+y3ZcAvrN9TCGbxUTX1RhOISymfo8BBMFkNX3H33O1ezW/ChDSHnbiAC93ZkxWNGEMNt4otw4L1ffvv/gefsNsh9R+Q==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,7 +47,7 @@ processBatchWithConfiguration
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"configurationName","in":"path","required":true,"schema":{"type":"string"}},{"name":"trace","in":"query","schema":{"type":["boolean","null"]}}]}
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"configurationName","in":"path","required":true,"schema":{"type":"string"}},{"name":"trace","in":"query","explode":false,"schema":{"type":["boolean","null"]}}]}
 >
   
 </ParamsDetails>
@@ -62,7 +62,7 @@ processBatchWithConfiguration
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"processBatchWithConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"maxConcurrency":{"type":"integer","format":"int32"}},"required":["jobGuid","maxConcurrency"],"title":"BatchCreateResponse"}}}}}}
+  responses={{"200":{"description":"processBatchWithConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"maxConcurrency":{"type":"integer","format":"int32"}},"required":["jobGuid","maxConcurrency"],"title":"BatchCreateResponse"}}}},"404":{"description":"Batch job or configuration was not found"},"409":{"description":"Batch processing conflicts with the current job or review state"},"503":{"description":"Batch admission could not acquire the job lock"}}}
 >
   
 </StatusCodes>

@@ -138,6 +138,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "openapi/update-case-document",
+          label: "updateCaseDocument",
+          className: "api-method patch",
+        },
+        {
+          type: "doc",
           id: "openapi/download-case-document",
           label: "downloadCaseDocument",
           className: "api-method get",
@@ -464,6 +470,48 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "compare",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/list-compares",
+          label: "listCompares",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/submit-compare",
+          label: "submitCompare",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-compare",
+          label: "getCompare",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/submit-compare-export",
+          label: "submitCompareExport",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-compare-export",
+          label: "getCompareExport",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-compare-export-file",
+          label: "getCompareExportFile",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "configuration",
       items: [
         {
@@ -519,6 +567,84 @@ const sidebar: SidebarsConfig = {
           id: "openapi/delete-lookup-file",
           label: "deleteLookupFile",
           className: "api-method delete",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "extraction-review",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/get-extraction-review-profile",
+          label: "getExtractionReviewProfile",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/save-extraction-review-profile",
+          label: "saveExtractionReviewProfile",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "openapi/preview-extraction-review-profile",
+          label: "previewExtractionReviewProfile",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/pull-extraction-review-decisions",
+          label: "pullExtractionReviewDecisions",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-extraction-review-run",
+          label: "getExtractionReviewRun",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-extraction-review-artifact",
+          label: "getExtractionReviewArtifact",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/submit-extraction-review-claims",
+          label: "submitExtractionReviewClaims",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/adjudicate-extraction-review-claim",
+          label: "adjudicateExtractionReviewClaim",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "openapi/add-extraction-review-flags",
+          label: "addExtractionReviewFlags",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/register-extraction-review-run",
+          label: "registerExtractionReviewRun",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/resolve-extraction-review-values",
+          label: "resolveExtractionReviewValues",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "openapi/list-extraction-review-runs",
+          label: "listExtractionReviewRuns",
+          className: "api-method get",
         },
       ],
     },
@@ -852,6 +978,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "openapi/get-document-compare",
+          label: "getDocumentCompare",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "openapi/get-document-outline",
           label: "getDocumentOutline",
           className: "api-method get",
@@ -960,6 +1092,18 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "openapi/open-review-client-run",
+          label: "openReviewClientRun",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/complete-review-client-run",
+          label: "completeReviewClientRun",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "openapi/fail-client-run",
           label: "failClientRun",
           className: "api-method post",
@@ -974,6 +1118,12 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "openapi/refresh-client-run",
           label: "refreshClientRun",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/skip-review-client-segment",
+          label: "skipReviewClientSegment",
           className: "api-method post",
         },
         {
@@ -1032,6 +1182,24 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "openapi/list-contract-analysis-draft-revisions",
+          label: "List the draft change log",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-contract-analysis-draft-revision",
+          label: "Read the playbook saved at one draft revision",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/export-contract-analysis-playbook",
+          label: "Export the playbook as canonical JSON",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "openapi/generate-contract-analysis-profile",
           label: "generateContractAnalysisProfile",
           className: "api-method post",
@@ -1047,6 +1215,12 @@ const sidebar: SidebarsConfig = {
           id: "openapi/get-contract-analysis-generation-comparison",
           label: "getContractAnalysisGenerationComparison",
           className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/import-contract-analysis-playbook",
+          label: "Replace the draft with an imported playbook",
+          className: "api-method post",
         },
         {
           type: "doc",
@@ -1068,8 +1242,44 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "openapi/suggest-contract-analysis-source-roles",
+          label: "Suggest roles for unclassified sources and the playbook sides",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "openapi/get-contract-analysis-workflow",
           label: "Where the case is in contract-analysis setup",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "contract-analysis-evaluations",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/list-contract-analysis-evaluations",
+          label: "listContractAnalysisEvaluations",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/start-contract-analysis-evaluation",
+          label: "startContractAnalysisEvaluation",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-contract-analysis-evaluation",
+          label: "getContractAnalysisEvaluation",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-contract-analysis-evaluation-report",
+          label: "getContractAnalysisEvaluationReport",
           className: "api-method get",
         },
       ],
@@ -1104,8 +1314,20 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "openapi/confirm-contract-analysis-findings",
+          label: "confirmContractAnalysisFindings",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "openapi/propose-contract-analysis-finding-test-case",
           label: "proposeContractAnalysisFindingTestCase",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/split-contract-analysis-test-suite",
+          label: "splitContractAnalysisTestSuite",
           className: "api-method post",
         },
         {
@@ -1598,6 +1820,114 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "openapi/upload-template-images",
           label: "uploadTemplateImages",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "agent-sessions",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/list-agent-sessions",
+          label: "listAgentSessions",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/create-agent-session",
+          label: "createAgentSession",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-agent-session",
+          label: "getAgentSession",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/delete-agent-session",
+          label: "deleteAgentSession",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "openapi/list-agent-workspace-artifacts",
+          label: "listAgentWorkspaceArtifacts",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/accept-agent-workspace-artifact",
+          label: "acceptAgentWorkspaceArtifact",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/download-agent-workspace-artifact",
+          label: "downloadAgentWorkspaceArtifact",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/stream-agent-session-events",
+          label: "streamAgentSessionEvents",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/list-agent-session-files",
+          label: "listAgentSessionFiles",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/upload-agent-session-file",
+          label: "uploadAgentSessionFile",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/link-agent-session-case-document",
+          label: "linkAgentSessionCaseDocument",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/unlink-agent-session-file",
+          label: "unlinkAgentSessionFile",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "openapi/download-agent-session-file",
+          label: "downloadAgentSessionFile",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/submit-agent-session-message",
+          label: "submitAgentSessionMessage",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/list-agent-session-turns",
+          label: "listAgentSessionTurns",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-agent-session-turn",
+          label: "getAgentSessionTurn",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/cancel-agent-workspace-turn",
+          label: "cancelAgentWorkspaceTurn",
           className: "api-method post",
         },
       ],

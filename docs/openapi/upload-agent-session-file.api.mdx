@@ -1,0 +1,71 @@
+---
+id: upload-agent-session-file
+title: "uploadAgentSessionFile"
+description: "uploadAgentSessionFile"
+sidebar_label: "uploadAgentSessionFile"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVN9v2jAQ/lcsP21SaMr2xhsDOqF2BZV20oTQZJIDvCVxZl9oI5T/fXdOCFBapj3Fdu6++/Xdt5Oo1k725lKtIcOOA+e0yZxcBNLkYBXSbRzLnizyxKi4z1az2uhGJyADmSurUkCwDLOTGV3IvAEi10DqjB5yhRs6W/hTaAuEiLaAQLpoA6mSvZ3EMveOaHW2JsuVsalCjlzoWFZV0GKPY0hzg5BFZecWyn2EDagYrDzHnB9AsyJJ5KKqFnUm4PCLiUs2jUxGiMjHtEhQU1kYcg6dWKEHO8DmlnuDGhzfVtyHSwUsdaZsySUclT+v/Rb0SIWYmH2OwJp0HmtMleeJjvwwQhMh0KDQgkopCrzQYGIyWqnEQVWdRuEm+weX01TrfD9dd/kTg4uszhmTIkyt3ioEoRBVtEkptHBoCEMYKyxEZgt8WZZCH7ovfvvuH7XuONFfjpEv942p9c/RB83gXxvSjxRireomvT9tYgQqLHxQyIqUbZ6md5P+cDQkq+nDZDCazcb3X+nyMOoPf9D3pj++o7/EE9TII5GvqT+rMRndFDaCW53F5xEIatCfjX4OJ4Onb6P7x4uIHudNnvg98l04CddWdgH1u4ZnWdXEOJ35uytN67wxvPS5cehXnHa3J8NtN/QyEe5lIty1e16FnKfzy7gyfhxNQkMTFUPYOtGfjuXrHNqffPC0I5JEDJqt2eFKjJQjwqB4VqVAI4hsREUUJXVBxI2T4z9+TwNJf12N3b36fHXNA+IyUuXJ2EhIXbrwtYumeNFUf5JgyzmEFwzzRJHUEGJhE09o35i53HbJz7eGR7LX0ED2jmWw7g9NasNdJa/dbqkcPNmkqviZ5IhUojen41ZZrZbcPVLUWDs+x82KnyXYrp/88NDQ5qOgeG8m3jyqjBd3q5KCb3TkTT5W7YrXplHU/0vivch1hHPtbpNgha+NBjVYxy/2weItXT449aMIcjwyP9MiVv2W2tPJ7JGMl438p15DvfI0PGqPNBFanr88AHTj
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"uploadAgentSessionFile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1/agent/sessions/{sessionId}/files"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+uploadAgentSessionFile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"Idempotency-Key","in":"header","schema":{"type":["string","null"]}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"file":{"type":"string","format":"binary"}},"required":["file"]},"encoding":{"file":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Private attachment stored or recovered by idempotency key","content":{"application/json":{"schema":{"properties":{"fileId":{"type":"string","format":"uuid"},"name":{"type":"string"},"mediaType":{"type":["string","null"]},"status":{"enum":["UPLOADED","PROCESSING","READY","FAILED"],"title":"AgentSessionFileStatus"},"sourceKind":{"enum":["UPLOAD","CASE_DOCUMENT"],"title":"AgentSessionFileSource"}},"required":["fileId","name","sourceKind","status"],"title":"AgentSessionFileView"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: list-agent-session-turns
+title: "listAgentSessionTurns"
+description: "listAgentSessionTurns"
+sidebar_label: "listAgentSessionTurns"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVktv2zAM/iuGThvgNX1th9yCthu6w1C03S5FD6ytONpky5OotEHg/z5SfkRJnLXbKbH4kfz4EKm1QCicmD4IKGSFH5x0TpnKicdUmFpaQPq6zsVUaOVwxpi7FnLvLcFSUYOFUqK0bGUtKvogdGeHNFOhKjqoARf038rfXllJBtF6mQqXLWQJYroWuKqDIlpVFYScG1sC0on3KhdNkw62YU7eeru/vbQr+pAvtTY5ieeg3Yjhh43lymvN8R32oFWp8F89EBplEZgNluno7JQOcjkHr+nk9GPTPHIaXE1Zlo7VT4+P+SeXLrOq5oQfSndC0KTXJbOZIZcVsjbUtVZZKNfkp2MT64hhbbmYqFqHGEq3IQ7WAkeoUJZuHM4t8GqNKCcI6N0+lETeSXsvX3BUCBQj6Va4jdgrGkHnoLS38iKU4m/AWlY5Hc0yDA0dYft4+0Y4ELfKXy3up3Nmn4GT128FozF6NAcsuNCUiVGp82UJ1IdjMupMulNuNpLbiEEOKD+goganVo8u4kPPPzaUcvQbrx3tmCTlDRVq9nUTZ/quU2kC6aKQDmV+Yaq5KuIamKefMsOoCJDnivVB30RV4CnR8EWsPX5Wmmi+rZKvThOKFS0ExrfS0d38nw6ZB0ZvuhlZyIBvB+q3MGZGKrmFupVL5VR7lfeQNpD+6kbFu/Xd833IU9qHtOUgKnU8kq52Mkh+dxx34yDtR0g0BXZt8nz7oeRzIF8R4sJbZ+y/DfAt5+2UG/NzQ7uOyZLC+fH5/uzt4kuUS1QFWcafT1omxibw5Hjgsuob5jVxpdW4MLw/C4lhW9IanIrJ8mQSFu6kX7iT9bAymwl2yqqam5CBLoJLk/lLuXTJ7OZa7DIYhPynJNsJNWvgXhWscJRcgaPGxeQZVgmahFpgSb2crIy3Sd4pOZbQqACyT9K2/8TJ0dnRMbddbRyWEHpu2JVkMUSe9HnrY9/iNzQpUnEntQZarrwWbJiGbV4exPKE9EJmePr0j5FUTOMHxVDZBbFhrfX6iUbYd6ubho/bjc2vkVw5oMrlw9L+JVfRC2IJ2jMlwbv/ALZ/C2ywj/xhFYPHnezEPWxp8e6268/3CYcxlo9+JVer2GdPZpOFhlfcQkJOgTCJVj6jZq1jtnvPAmY/9OSXq3tq5T/b0nQV
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listAgentSessionTurns"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/agent/sessions/{sessionId}/turns"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listAgentSessionTurns
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"after","in":"query","explode":false,"schema":{"type":["string","null"],"format":"uuid"}},{"name":"limit","in":"query","explode":false,"schema":{"type":"integer","format":"int32","default":25}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listAgentSessionTurns 200 response","content":{"application/json":{"schema":{"properties":{"turns":{"type":"array","items":{"properties":{"turnId":{"type":"string","format":"uuid"},"status":{"type":"string"},"userText":{"type":"string"},"assistantText":{"type":["string","null"]},"failureCode":{"type":["string","null"]},"pendingActions":{"type":["array","null"],"items":{"properties":{"id":{"type":"integer","format":"int64"},"caseId":{"type":"integer","format":"int64"},"tool":{"type":"string"},"toolClass":{"type":"string"},"summary":{"type":"string"},"expiresAt":{"type":"string","format":"date-time"}},"required":["caseId","expiresAt","id","summary","tool","toolClass"],"title":"PendingActionSummary"}},"suggestedConfig":{"type":["object","null"],"additionalProperties":true},"inputFileIds":{"type":["array","null"],"items":{"type":"string","format":"uuid"}},"extractionResults":{"type":["array","null"],"items":{"properties":{"fileId":{"type":"string","format":"uuid"},"configurationName":{"type":"string"},"configurationRevision":{"type":"string"},"resultJson":{"type":"string"}},"required":["configurationName","configurationRevision","fileId","resultJson"],"title":"AgentSessionExtractionResult"}}},"required":["status","turnId","userText"],"title":"AgentTurnView"}},"nextCursor":{"type":["string","null"],"format":"uuid"}},"required":["turns"],"title":"AgentTurnPage"}}}},"404":{"description":"Session is inaccessible or absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: suggest-contract-analysis-source-roles
+title: "Suggest roles for unclassified sources and the playbook sides"
+description: "Starts a background read of the guideline sources. When it finishes, the next source-authority read lists a suggested role with a reason for each unclassified source and a suggested perspective. Suggestions never count as roles until a person or API client records them."
+sidebar_label: "Suggest roles for unclassified sources and the playbook sides"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVcFuGzcQ/RWCpxaQJdc1etDNaIoil8awU/QQ+DDijnYZU8sNZ1auIOjf+2Z3LSuKmi/ISRQ584bz+N7s3ivV4pef/HObXxJXNV+tSPiqK3kdE4t/mvmKJZTYacytX/pHpaLiyK0oPNcl923lClPl8tppw67uY8Uptuwk9yWwzN0/DbcuqlvHNkrDMhsCW/5Xp5gr6rXJJepuhEpRhhLS1zWLMirkxO4laoNdhEhu3ToXxxQa17chkUhcRwSOgI5wq9P8jot0HDRuee4ex230I7jFlosLaEMdyVBHgKgxId+yUAmF7u7fu5AiI6pwyKUS62Ez9zOfEUUG9r4CPVPJ33OrhYLetZR2EuVxuNaDoSOlo0IbVqCD+r1v8QepAcQDY+aj8dyRNlgX/tLHwoDW0vPMS0BZ8su9111nWbFVrrkgFIRsSMet32794fBk6dKhTVRFxs31jf2cveeRDPc5r5zhVz2UAMCAJtCx5VDXpRiGNhefxRL3J1eBWkCCxrEMYP6ECE7uKFpiW/vDCVkfh5MLEaKkvVw82rAI1ZfSDqdEfTre4C3lvPKxDjjSqIkHJlabqB9e4x4m6oBu+LfXt9+Sdz/axAXqaBWTCTiKq6LQChSacOxRbY9WYlQa0M2FV/grO5imjkh79Y2jAh1vKSYDG3qEZppsKuuy6KAjaGTpF1+bVxb7UUqHxauNF2HS4xVNglycO28hb64YNLjOA9ETOe9y6N/xVswJ/nwmHA9tsTGToDBaEDyOJczdHyRQh7oX2jnN8FsL26nb4RKumpLETipSAj5OZcT+Zf7r/Np4s543NChvMswk3cm0Ng8ujAIZZoENnC7RbpXzsxNMKDlvYv8m9x8z7nzGTXZTtLMAjRhQeJC+pMH8gwjPvyDG7/I40Y6fk3GofKVE8+IZQ7Z1okZ4tDHBo8h+b+B/l3Q42PaXnssO+1huqcTBKDZRXx3ol2tKwt956p8eprnxs/u/PqdNau1eW0q9/cPymXdvU/vwhMgGD4tRbDcYD+9C4E5P0r6Zozakj7a+//D4EUb/D94BsN4=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Suggest roles for unclassified sources and the playbook sides"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/source-authority/suggestions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Starts a background read of the guideline sources. When it finishes, the next source-authority read lists a suggested role with a reason for each unclassified source and a suggested perspective. Suggestions never count as roles until a person or API client records them.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Suggestion job scheduled","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"operationType":{"type":"string"},"status":{"type":"string"},"message":{"type":"string"}},"required":["jobGuid","message","operationType","status"],"title":"SubmitOperationResponse"}}}},"404":{"description":"Profile capability is disabled or case is absent"},"422":{"description":"No eligible sources are available"}}}
+>
+  
+</StatusCodes>
+
+
+      

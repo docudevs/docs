@@ -5,7 +5,7 @@ description: "chat"
 sidebar_label: "chat"
 hide_title: true
 hide_table_of_contents: true
-api: eJydVMlu2zAQ/RWBZ9V2F/TgW1oHRQ5FgzQ9GT6MJUZiIpEsOXIsGPr3zlCrFcMB6oNMct5sb5aTQMi8WG8FZFKj2MXCWOkAldF3qViLJAcUsXDybyU9fjNpLdYnkRiNDKcjWFuoJCgsn73R/OaTXJbAJ+vYHCrp+VZK78lPOGNtJdkH56AmBwpl6d9qOFPICdqjUzoTTTyNYCZr2miVkynn1QPj1hYliArZqPhOqf1sIwpaqUmqkqA/KpWOdre94VjoqijEjpCetDqCrsES8PIcoyiWTLoBFIsn40pieM2ir184M1tAvTfm5R3bnNYRr4FmRAzkTyi44aIzDw9tfYmHMy10lQwP3hrt25J8Wq34L5U+ccpy3bs2iUgS9VAR/2+TPJv9eQUmVb9A/FSKgJW/KOqSf79deu+jytTr4OMyh13qTRNofMtQsIq54cGyxvPdAuZ0W4bxW3YgpuhhnLjbI5S2nYNxgrb9cIx1HwgfktvNu3oET6icWOg6djVtw5mDI54xq/STCbR2dGzI30YefHRzfyfmJAzCTRdVRLVPOBKdscIiugVPfYDRK9QRmog8Hqg1otpULupT8SxJAYHsk9S3tj8uPi9WYYCI2RJCj2ko5cj9WSxDI3BGS8pWaVauXBFaMpSl34pxa4HYzLlq9H467YmqP65oGn6mUjlajFs6HsAp2DMVW57TXEJKA8/lepE1b522SB8e2TvDiyrswfmENHGvcZMk0uJV7G7SWPe/fj8SeN+t6tKkrOPglVcgfddC8JJn7XbF8ttJFKCzKoyIaG3y7x+tzRqQ
+api: eJydVW1v0zAQ/isnC4kv6ctgmkT4VNiE9gExbUNIVAVdE6/1ltjBdtZlUf47d07Spt0Ygn1YHd/7c8+da+Fx5UQ8F7iS2otFJEwhLXpl9HkqYpGs0YtIWPmrlM5/MGkl4lokRntWpyMWRaaSYDC5dUbznUvWMkc+FZbdeSUdf+XSOYoTzr4qJPlHa7GiAMrL3D21sCaTA23nrdIr0UTDDA5kTZutsjLlunrFqPVFBXrl2an4SKV9bjMKVqlJypxUP5Uq3fmd944jocssEwvSdGTVAfRHNfInXWJVwchQtKvWBrwBTknpUo5hBp0rWMrM6JVjsdESjF2hVo8BVkCdQoJOvqeT8Wtpwxc4j9Y7QNByA2vlvLGMZIHeS8shf8xno+84epyO3v0cLeqj6OS4eRXAI/P95BWBtJJ2kP2NsTm1PmbRyTFbFRlWS2PuXsYm4P3g/wGZb9QHoLKA+k4EAuUgozBkAiRQOsg45RiSDAmumyqub83yPG3i2poN/QJlS0D0YqDbiDAEW2pSKTWrELJWFlnFB4S1xDQj7FnltWOJsT4gHYhOmbkxXLY8ctABdsitLZ8HrJrxHDG1LtuRIaM9K29LGS5cQTFalr+ZTvlnHxaePCAJ9Koi+t+5I7D2ST0YpGe4PJR69KV7VtQV//cJ7KPvTIZRtzGex7ArvWkCjE8RCl792vCuKozz7QCs6WsSNtqkU2KILndL7OwB86JdLbulNO/3zY6xW8C3xS0OF8VOeQDlwEM3a9PhAB0EePB7yCp9YwKsHRynFO9U3juYXZyLQxC2wtMuK6DeJ5wJzQ8ZjOEMHfHAwwarbvvcEzWgMqWFvpSweFL0SP5J6lrfR+O342kYfUI2x8AxjbncYb+Xy5YIXNGEqlWajUubBUqGtvQPTdR6IDTX3DW6r+slQfXVZk3D19QqWmfxnI73aBUuGYo5bxgeXVpV3K47WfEib5s0uuborJ6V4Wk5nJAm6i1mSSIL/6LuYkCsiy9X16S87F6/3KRsY3HDrwr9j4XgdzNsjfBq8V0tMtSrMoyIaH3y32+GcJMw
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ chat
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/json":{"schema":{"properties":{"messages":{"type":"array","items":{"properties":{"role":{"type":"string"},"content":{"type":"string"}},"required":["content","role"],"title":"ChatMessage"}},"documentGuid":{"type":["string","null"]},"sessionId":{"type":["string","null"]},"caseId":{"type":["integer","null"],"format":"int64"},"playbook":{"type":["string","null"]},"context":{"type":["string","null"]}},"required":["messages"],"title":"AgentChatRequest"}}},"required":true}}
+  body={{"content":{"application/json":{"schema":{"properties":{"messages":{"type":"array","items":{"properties":{"role":{"type":"string"},"content":{"type":"string"}},"required":["content","role"],"title":"ChatMessage"}},"documentGuid":{"type":["string","null"]},"sessionId":{"type":["string","null"],"description":"Session to continue. A session belongs to one organization and case; another case starts a new history","pattern":"^[A-Za-z0-9_-]{1,64}$"},"caseId":{"type":["integer","null"],"format":"int64"},"playbook":{"type":["string","null"]},"context":{"type":["string","null"],"description":"What the person is looking at in the case: classify:{jobId}:{rowId} for a classify row, or run:{runId} to reply to a headless run's report and questions. Requires caseId"}},"required":["messages"],"title":"AgentChatRequest"}}},"required":true}}
 >
   
 </RequestSchema>

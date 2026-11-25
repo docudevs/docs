@@ -5,7 +5,7 @@ description: "scheduleBatch"
 sidebar_label: "scheduleBatch"
 hide_title: true
 hide_table_of_contents: true
-api: eJx9U8Fu2zAM/RVBpw0w4rS9+dYhw9BTi3Y7BTnQNmOrsy1VorMZhv99pGIbaVMsl8giHx/5HjVqgirobK9zoKLWh0Rbhx7I2O6h1JkORY1l3+C3GE60Aw8tEnoBjbrjD86qelNy0HR8dkCS6PGtNx65Bvkek1ioBZ2NmgYnmEDedJWepoMkB2e7gEHit9ut/JUYCm+cdPKxD8UpasEwV2E7wo4EBc41poj9p69BoOMFtfMyHZkz0avNf0jj1z0lK99l1DBLhZ4Jj9a3QOeru9uYT0B9+Gy8Syn2K+clw4pmJchQI/A458uc8ryMOskv+Z80XIztqa1452ygaBkbkum0tEXfskxptDodxbQpXdDRvqONE8w97Biww1NQ908P+iPrGtzNZRWLW2AIPLUANuo7BBaa1B8YFFnFJp1YezXY3qullyCREgi4PkfDufbN5m6zFVVlghaiifOmLe2qZdp3Xa3qE/6l1DXAG8llet9E96MQe72QMzqfq2TVe1PEilrk4/RxzCHgL99Mk1y/9egHvufjCbyBXLTip1CaIGcW/ghNwKvO1iXVX57nhfiqmPLTjudL6AYRBppevvj4G4fluU0HzqsRSt5I4T+H7osCHV2Arh6EvLd1RZ4eX37yVv0DD25g5w==
+api: eJx9VMFu2zAM/RVBpw0IkqzpDsutRYahpxXtdgpyYGzGVmtbrkQl8wz/+0jFNtym3SWRJfK9x+cnt5og83q91XugJNe7mbY1OiBjq7tUr7VPckxDgbfxeKZrcFAioZOmVlf8wFVZMCkfmorXNZAUOnwJxiFjkAs4i0Al6HWrqamlx5MzVaa7bifFvraVRy/nV8ul/KXoE2dqUfJWh+ISNfQwV2IrwoqkC+q6MEnUv3jy0tpOqGsn05E5Ez3Z/Q8RfqlpNvJNTw2zZOiY8GBdCXTeWl3FegIK/r3xplZsR84pw9jNTpChQtrjnI99ycMwatcJ3vXy+tKgszE8YILeM7NiJnUCrypL6mBDlfKvU5Qbr6zLoDJ/o0s6An77CLBXKYDs8oG9Ja9OhnJGQpUE59j4yMXgDo8GT0qmQcH9ulx9hAtpaVinrRg2FGlUCUn0KSILYmGT52jgf6LA5nEccytZra2nGFEO4FovUpuEktUtYrQXrYS0WwzdMa4HG99Y7/mGGzZ49Orm/k6/ZR0PNz3s1GtumKvv4DlYxKY3iqzYdeSsqcYGpwYtXk5SIGB8PvVn7C/z1XwphskEJcTQ9jdrkKuGaV+pGtNG+IcWdQEmvs/gipj2aMRWD+Tcve9R1tnrEEr0crGPy9t2Dx5/u6LrZPsloGt4n5dHcAb24hVf/dR4WbPxByg8XigbL6X+9NBfgM+KKd9V3G9C1YgxUAR54uUzNsPnpdtxXY6Q8g0U/vPRTZJgTZOmiw+AfF/GiNz/fPzFkfoHEpu1rg==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -62,7 +62,7 @@ scheduleBatch
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"scheduleBatch 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"scheduled":{"type":"integer","format":"int32"},"status":{"type":"string"}},"required":["jobGuid","scheduled","status"],"title":"BatchScheduleResponse"}}}}}}
+  responses={{"200":{"description":"scheduleBatch 200 response","content":{"application/json":{"schema":{"properties":{"jobGuid":{"type":"string"},"scheduled":{"type":"integer","format":"int32"},"status":{"type":"string"}},"required":["jobGuid","scheduled","status"],"title":"BatchScheduleResponse"}}}},"404":{"description":"Batch processing job was not found for this organization"},"409":{"description":"Batch scheduling conflicts with the current job or review state"},"503":{"description":"Batch admission could not acquire the job lock"}}}
 >
   
 </StatusCodes>

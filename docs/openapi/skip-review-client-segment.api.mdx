@@ -1,0 +1,71 @@
+---
+id: skip-review-client-segment
+title: "skipReviewClientSegment"
+description: "skipReviewClientSegment"
+sidebar_label: "skipReviewClientSegment"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v2zAM/SuCThuQ1ml7y61re+hpRdLtEuTA2Kyj1pY0SU4aGP7vIyXns+nWYUB9sGWKfKSeHtnKAKWXo6m0ymKlNMrZQBqLDoIy+r6QI+lflB3jUuHqplKowwTLmj5yIC04qDGgY4RWavoh/7JRBW0qTWsLYUFrh78a5ZDQgmtwIH2+wBrkqJVhbTnGB6d0KbtusIXJY7Jxw0X8P5pPRd/rAl//FU7pgCU6cn0yroaQTFeXlGCWwtGHb6ZYc0xuyJvYoSVYW6k8Epk9e6PZtgO3jmkOCj3/JeSfRKVKjn/PvV/59AiA6goqVIwwOX1941S2JBh8hdpWJ+q4YMsSqgZPlHjR8XNMXzR4a7RPeJfDIX8K9LlTNsTI9xQlyFlsounEH6WyL+RDOQiWFLswLGxrfFIxyWAks2czz1oWb5dtmiFLIjxzjfZZu6fILusFReZ9aZGd8hIoFzneKeMuUXyCxmHHanwy8c77K7s1eXOLSy+uH+7l8cG2m7yItJGScvSeJM8B5+IOPKkqiBWsRTCCaFyS0MTaNE4UfZDnnQICEP5yU4u8OL86H7IkmJoaIs2bBqJziUSoSIyKHaUHFW61G/A1ZLYCajaCbFwVZR/ZnkpimwJH/bDYTp+B3KOcHQ7HwIZ13jlq6Ug86X7Bt0oJ2nYOHn+4quvYTFfhqEGntFyCUzBnpmloFcrzmvTwBJXHN2fZilB+GfdK/yoo3ckz9kbQa6Y1NY6k5QuuN4ORZ9In5tyn75NTH9xPNyP/BUJBs4xpTy43KdvZIwPtIN50O1eeIq7zHG34o+9sr8Ufvk8eyXneD+faFBzjYMVzn96xXBNPH8dVtLWyAl02ULJvwuTnN4w/e18=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"skipReviewClientSegment"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/job/{guid}/pipeline/client-runs/{clientRunId}/segments/{segmentIndex}/skip"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+skipReviewClientSegment
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"clientRunId","in":"path","required":true,"schema":{"type":"string"}},{"name":"segmentIndex","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"formatVersion":{"type":"integer","format":"int32"}},"required":["formatVersion"],"title":"SkipReviewClientSegmentRequest"},"examples":{"formatVersion1":{"value":{"formatVersion":1}}}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"skipReviewClientSegment 200 response","content":{"application/json":{"schema":{}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: get-extraction-review-profile
+title: "getExtractionReviewProfile"
+description: "getExtractionReviewProfile"
+sidebar_label: "getExtractionReviewProfile"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVE1v2zAM/SuCThvgNtkHdsitQLuhOwxBsZ2CHlibSbQpkirR6QzD/32k7TjxnBTNJbIkPj4+PbLWBJukFyuNfylCTsa7q4h7gy/6MdM+YATZuy/0Qm+Q7oZbD+2lZfRrY1FnOkCEHRJGQau14w8Oaf8ybRyvA9CW1xGfSxORASmWmOmUb3EHelFrqoLEJIrGbXTTPMrlFLxLmOT843wufwWmPJogJF4lpfi+OgBw4tw7QkcCASFYk7eVzX4nwalPeIQodZPpsnLY2mzKow4DUcN4G4wMvfZxB9Rtffmsm2wc9aMVY1KglLc3yXT53wCKDp4snlJ48t4iuEnGr5wAY+A8dDZxV+z3NEp9PPZ7jBaqi+eJwOIFGtawyEsT0BqHY4TVASLTrrRWP/J9Frsoc4xnGU8DmlMDrc5le0WJbPKY5x7qqPNYiPNcTx5xJOtBJDYxGRK19MidDwdjNvLL3uxqBuY22/q+IdvO475a6NmoklktrdfMJm19FQYc49a+1brnd+vz8hb3Sd0s7/X/jIZDWexYdMVAOabEWkjAtbqDxC1D6gUqRV4xHRaPVOXLqIo+KMlJAQSMz6ed9/WH60/XczFP8Il20DqmHyBcojoqoTop1FGLEcnBj8Rlz4IF01qyjLZt61an1fjFGWLRD6nLUvEbbpmZBNf1EyT8FW3TyPZzibHifV7uIRqxTTv+CpP6Vl2DTTjhOcwi/e6ht/N7xRzO8u83wVWiGthSvnj5B6vDiG2klbYIBU8Oyd8d3eQ5BjoJmsw9mbGDnb7d/WQ3/gMrJCLw
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getExtractionReviewProfile"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/configuration/{name}/extraction-review-profile"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getExtractionReviewProfile
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"name","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getExtractionReviewProfile 200 response","content":{"application/json":{"schema":{"properties":{"configurationId":{"type":"integer","format":"int64"},"configurationName":{"type":"string"},"revision":{"type":"integer","format":"int64"},"enabled":{"type":"boolean"},"configurationFingerprint":{"type":"string"},"schemaJson":{"type":"string"},"overlayJson":{"type":"string"},"stale":{"type":"boolean"},"clientPipelineJson":{"type":["string","null"]},"producerFingerprint":{"type":["string","null"]}},"required":["clientPipelineJson","configurationFingerprint","configurationId","configurationName","enabled","overlayJson","producerFingerprint","revision","schemaJson","stale"],"title":"ReviewProfileResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

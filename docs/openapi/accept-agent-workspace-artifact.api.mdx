@@ -1,0 +1,71 @@
+---
+id: accept-agent-workspace-artifact
+title: "acceptAgentWorkspaceArtifact"
+description: "acceptAgentWorkspaceArtifact"
+sidebar_label: "acceptAgentWorkspaceArtifact"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1z0zAQ/SsanWDG1OkHHHILlENPdKDAodPDxt7EorakSrKL8eS/syt/1Gky0x4YTpal3afdp/e2kwG2Xi5vJWxRh3cevVdGe3mXSGPRQaC/q1wuJWQZ2rDiqJ/G3XsLGa5cUBvIgkykBQcVBnQM1klNP5Q0wBFAIpWmDQuhoLXDh1o5JNzgakykzwqsQC47GVobE4NTekuRG+MqCLRT1yqXu10yYTts1D8Gv+Nkb6l/9Bx/tljwJ0efOWWZiheIEJQhRgi6IDM6UByDgLWlyiKf6S/PSN2sMuuY7aD6e2etvVx1IkPtXhvac/c8kA4qzBXcxN0jp179wY9t6KsbThW1tkU3v4W2zs9ifAFn7z8chbLgPeafCszu52jgHLT8kAErfySRMnvicd7o2pgSQTNubh51aeAIDZz7pInbJ5xZ0pyAgaVnpSb7ghs6nFMzPQTJKKhQcgkHCvmh8JEq4pouFueH6lrF4kBnKIaavQBR1BVoQcUS3zHz4kjmqEHlhdLcJHlvXaIwTsDaswz51teLOZISCsPut8b3LieHLWXanKZxXqTjvEi7yeq7FAYA2n3ijLbjXdGsGxOfaSDp0mT1JTZerK6v5PMKp0NeVHSnIK/E3vSWE07EZ/DkmyAeoRXBCPJcQ1YSramdyIckzyc5BCB8OvU99unJ+ckiipLaI4a5qGG69MWKyIyYqBEzbvbKnDQX8HdIbQkqirJ2ZXR3pO1WNqeUF4lj4YyjNpHL+Zyc2OODPc0NBJK8Cn4OAuy6NXj87srdjrcfanQt7dOyAadgzfTSNM6V5zU95AZKjwe1T2NKvvk6GOWtYD0f62k0rGa7NlDW/EfLe2z3Jj6P6v948Yyp3R1FFwg5uYXb7wNWo/zG1IOJzPN/Uvz1l283ZJi/KYFzIg==
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"acceptAgentWorkspaceArtifact"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1/agent/sessions/{sessionId}/artifacts/{revisionId}/accept"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+acceptAgentWorkspaceArtifact
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"revisionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"acceptAgentWorkspaceArtifact 200 response","content":{"application/json":{"schema":{"properties":{"revisionId":{"type":"string","format":"uuid"},"turnId":{"type":"string","format":"uuid"},"name":{"type":"string"},"mediaType":{"type":"string"},"sizeBytes":{"type":"integer","format":"int32"},"sha256":{"type":"string"},"passedChecks":{"type":"array","items":{"type":"string"}},"accepted":{"type":"boolean"},"download":{"type":"string"}},"required":["accepted","download","mediaType","name","passedChecks","revisionId","sha256","sizeBytes","turnId"],"title":"WorkspaceArtifactView"}}}},"403":{"description":"Acceptance requires a human owner"},"404":{"description":"Artifact is inaccessible or absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

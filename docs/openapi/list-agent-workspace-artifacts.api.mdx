@@ -1,0 +1,71 @@
+---
+id: list-agent-workspace-artifacts
+title: "listAgentWorkspaceArtifacts"
+description: "listAgentWorkspaceArtifacts"
+sidebar_label: "listAgentWorkspaceArtifacts"
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVcFS2zAQ/RWNTu2MS0KAHnJLgelwYzq0PWRy2NibREW2jLQOuBn/e3eVxDYhUDiBpX1Pu293XzaaYBn0eKphiQV9CRiCcUXQs0S7Ej0Qf91keqytCTSRmN/O34cSUpx4MgtIKehEl+AhR0IvXBtd8AdjdmyMT7Qp+KAEWvH/Hh8q45FpyVeY6JCuMAc93miqywgkb4olRy6cz4H4pKpMppsmablhwa/teR8q9DV/4FNpXcbXC7DhCPG0Yy4qa6XK11+wJjf00Rc4mnAZM2uZ+ehsxAcZLqCyfDK6aJqZyBBK1hqDwEfDofzJMKTelCL726IrBqg9A5Onjh8uSDigLK1JY+sGf4IQbXp5ll4aS2b7rMe12Xa8KwG8B6nVEObhdYiMxX87lmiq/HtDt8IfBvJFjpmBu3h65DaYv/itJgzvaYPEr2B08fUoVQkhYHa5wvT+TUUOgIyENMWSsF/o3DmLUAhv5h4L6+CIDILt9mHa8fRAfQF2Kh2kmvS70lbYl6ZtBA8eGbKSwoup+mXwMWZU4BNdVj44/7HleVZKN1tvvXnLzsNQAZ8Pz1/uQAtQJihTiD7sKnOLynkF8yBDL+B3b06Uk1ZOXG2JFKVkWxrrwfp0EG1wsLfBwaa1sGYAPQJTLFxUZlfVlUurK1wHNbm90Ye5tJfyT878ihcqVlEsBXCiriHwcpF6hFqRU7zLa943VbvKq2wHCnKTAQHz823Ycp+enJ0M4+S6QDnEXW/9ixmjBqrTsK/CsyzbuSRu/aC0YOLgVt5GB4gKTfX6lHFRIxmu/Y9Fosd9q++E4r6vOC9BbjZzCPjT26aR462fym9FZgJwN7PWUu+x7vn7GmwlaWlx5ldi907dxc7kwxsJPv7IQe2te+pPP3YT/FnJzhzTZG8KRd1/c59Mp0Qz4+AVQsaFSBLb+0lc8B7yhV1L9u2Efr++4/H+B3U2n8E=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listAgentWorkspaceArtifacts"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/agent/sessions/{sessionId}/artifacts"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listAgentWorkspaceArtifacts
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}},{"name":"after","in":"query","explode":false,"schema":{"type":["string","null"],"format":"uuid"}},{"name":"limit","in":"query","explode":false,"schema":{"type":"integer","format":"int32","default":25}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listAgentWorkspaceArtifacts 200 response","content":{"application/json":{"schema":{"properties":{"revisions":{"type":"array","items":{"properties":{"revisionId":{"type":"string","format":"uuid"},"turnId":{"type":"string","format":"uuid"},"name":{"type":"string"},"mediaType":{"type":"string"},"sizeBytes":{"type":"integer","format":"int32"},"sha256":{"type":"string"},"passedChecks":{"type":"array","items":{"type":"string"}},"accepted":{"type":"boolean"},"download":{"type":"string"}},"required":["accepted","download","mediaType","name","passedChecks","revisionId","sha256","sizeBytes","turnId"],"title":"WorkspaceArtifactView"}},"nextCursor":{"type":["string","null"],"format":"uuid"}},"required":["revisions"],"title":"WorkspaceArtifactPage"}}}},"404":{"description":"Workspace is inaccessible or absent"}}}
+>
+  
+</StatusCodes>
+
+
+      

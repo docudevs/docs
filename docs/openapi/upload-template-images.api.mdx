@@ -5,7 +5,7 @@ description: "uploadTemplateImages"
 sidebar_label: "uploadTemplateImages"
 hide_title: true
 hide_table_of_contents: true
-api: eJyFVE2z0zAM/Csen2AmfSlw6+3B49ATHSinTg9qrLaGJDa2Ushk8t+R8tW0fQynKLGkXa1XaTTBKerVThMWPgdCvU+08xiArCvXRq905XMHZjucrws4YdSJ9hCgQMIg5Y0u+YWTu0eibcmxBzpzHPBXZQNyKwoVJjpmZyxArxpNtZeaSMGWJ922+z4ZI310ppaMzJWEJUlYVDlZBqX06EKxMEBdj2s3H4Q3WWbHb7bneUWBEKAWajxpfERPtLQFhtIHW0KomU87J78bW+75M5aZM1J2gzSw3Q6A3uc263RMXUZIC4ZCKKRxey9L9yF6V8a+1fvlUh4GYxaslx7/uAnFmWos5Slmis0J/IjSYS4XGGPlCPLNjXD3l9Kz/T8RxmY7nJ1YxrtInUXYACudjt5KG7FHm9qxwJZH12FaygX0xWXVC16iet6s9T3odChBwTMqvvEMY2SeUvCkPkPkIUj9hlqRUyzFhedStauCMkNRlJPOPInm09j3fvf04WmpeU5hXkAn1eDoflY1DqumaW/YTboR/qGUM3kDuF0V8s6anRCzJUv0atyUwVSJPotonNQ0B4j4PeRtK595H9iMqx2HFwgWDqIUL5yxUWKW+wh5xAc+kxH0m6+D1d4qBnyV57gjpWzIBfJK3jj8ifW41K34/oxgMHT4/dGnHmXRef5a+tqytslY9Jxl6GmW/uBU+RVMbtp8+bbl5MPwTyickRppPNzjFLJK7Na/GIqtig==
+api: eJyFVMuy0zAM/RWPVzCTPoBdd5d7WXRFB8qq04Uaq60hiY2tlJvp5N+RnEdfl2EVxZZ0jk6OctYEh6gXG01Y+gII9TbTzmMAsq5aGr3QtS8cmHV/vyzhgFFn2kOAEgmDlJ91xS+cnB6ZthXHHujIccDftQ3IrSjUmOmYH7EEvThrarzURAq2Oui23XbJGOmzM41k5K4irEjCsi7IMijN9i6UEwOUely6+SC8yTI7frMdzwsKhACNUONJ4yN6pqUtMJTe2QpCw3zaa/KboeWWj7HKnZGyG6Se7boH9L6wedJx5nJCmjAUQslQ+MqaGk7aQxGxvUMSmdJB9K6KXeuP87k8DMY8WC89//FlFGeqoZShrhS8JvQzSodr+cAYK1dQrG6EvP9IHdv/E2FstsfRiYW8i5Qsw4ZY6NngtdlZ7NLO7FBgq71LmJYKAX1xef2Cp6ieVkt9DzpeSlDyjIodkGOMzFMKpuoLRB6C1B9oFDnFUpx4LtW4OijTF0W5SWbKNN/GrveH6afpXPOcwryEJFXv8G5WNQyrxmlv2I26Eb7SjDN5I7hdHYpk1STE1dJlejFsTm+yTB9FNE46n3cQ8Uco2laOeT/YnIsNhycIFnaiFC+gsVFi05vqgc9oBP3uW2+194oB3+Q57EwlG3OCopY3Dn9hMyx5K3twRDAYEn539dyhTNIOXErfWt42G4qe8hw9XaU/OFV+DaObVl+/rzl51/8jyrRJaX377ziGrBK79S+JvLMw
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ uploadTemplateImages
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"images":{"type":"array","items":{"type":"string","format":"binary"}}},"required":["images"]},"encoding":{"images":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"images":{"type":"array","items":{"type":"string","format":"binary"}}},"required":["images"]},"encoding":{"images":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>

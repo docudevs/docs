@@ -1,0 +1,71 @@
+---
+id: list-compares
+title: "listCompares"
+description: "listCompares"
+sidebar_label: "listCompares"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVE1v4jAQ/SuWT7sS2wZ641aVCCH1A9HuqephSAZw14lTe8wWIf77ziQQUmAve1ouwR6/N2/G47fVBMugh686c0UFHvVbT7sKPZBx5STXQ21NoLsmGHRP8xcKJPSC2uqSF/WhwhBHTcmLj4h+w4scQ+ZNJUy8+wCfpoiFKmMxR6/cQjUpTXBl6Km+Iqf6SaK+5biAaEkNku9M4vEjGo+sZAE2YE/jZ2Vdju06ZCssQA+3mjaVaDEl4RI9YxfOF0DN1s2gVlRT6+Eg2e3ehDxUnJ0LY/ggSeTzVXW3elaUqAOE2TLHmUoSEFSVNVndtOv3IMjtuTDwHqQvhrCoM1ZeWk2myb+/gXE0eQcUyJtyqXcs3mWx4HwXoM6bpSnBnkcWxuJjfUcXGC3M0V6I7Lptfz1yHBDcOTJkBbLvzWivTdfQtQmY/wdaTrBtl44a/44OIioQUKy1I4+tcEzTx9HkccwU09nTXfr83Czunh6m9+lLOuL/6Wz2NLvA/NyQMW3mEQjzWzrW+3oouKfLaOuy2unN+fAPMly0SIpFAfy8Okg3f8eMOkjIcyOjCHbauQDyEU9b0p257oS1pZ+Xcc8vYsITzO2V3+kzP7ELtoqVExtZItXuQSteXB/cRhxj4epi9lmk/yNcB3U7nZx5SBs83JLiCcswBO6cAK5UCoGLJfUbNmIo/ETXXL/auOhVW55EuKnA/BwNDXf/6uYqkQ5XLlAB9RNu3Y0ZO0V9EdVOLOEnXVcW2AOZJfrmNdYFf7HXFfPL1nY7h4A/vd3tZLtxTfHU3ASY247lneRrfedfPfWi4F+46Rj5GmyUM1pscs2MoojVvfHJFULO/ipSG9BtlmHVRZ3ZobC0ozBOX3h4/gAHlDbo
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listCompares"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/compare"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listCompares
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"limit","in":"query","description":"Maximum number of comparisons, 1 to 100 (default 20)","required":false,"explode":false,"schema":{"type":"integer","format":"int32","default":20}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listCompares 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"compareGuid":{"type":"string"},"documents":{"properties":{"original":{"properties":{"fileName":{"type":"string"},"label":{"type":"string"}},"required":["fileName","label"],"title":"CompareDocument"},"revised":{"properties":{"fileName":{"type":"string"},"label":{"type":"string"}},"required":["fileName","label"],"title":"CompareDocument"}},"required":["original","revised"],"title":"CompareDocuments"},"status":{"enum":["PENDING","PROCESSING","COMPLETED","ERROR"],"title":"CompareStatus"},"createdAt":{"type":["string","null"],"format":"date-time"},"summary":{"type":["object","null"],"additionalProperties":true}},"required":["compareGuid","documents","status"],"title":"CompareListItem"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

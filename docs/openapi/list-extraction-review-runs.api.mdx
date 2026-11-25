@@ -1,0 +1,71 @@
+---
+id: list-extraction-review-runs
+title: "listExtractionReviewRuns"
+description: "listExtractionReviewRuns"
+sidebar_label: "listExtractionReviewRuns"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1v2zAM/SuGThvgNt0HdsgtW7IiQNcWRbtLkANj04k6WfIkOl1m5L+PdBzXrZNuXS6RTPHpkXykKkWwDGo4U/iLPCSknT3xuNb4oOaxcgV6kG/TVA2V0YEm7bGb+tRNaYOKVQEeciT0glUpyxt2uHeL81KnbNeWtwXQitcef5baIyOSLzFWIVlhDmpYKdoU4hbIa7tU2+1cDofC2YBB7O/PzuQvxZB4XQiJF1hFfDrau/O1ibOElgQAisLopA5scB8EpeqzAO9hI9QJ8/r2wks6SO+4+LJOSo903EZ9yCaxY6Ajnkwx08vyMeXtGc3cl+iZTuZ8DrT79Oljz+uyzvwBbGafaYOSn6B3Ib8W+ytDoS8YkQ5e4dboDWz+dizxCITpqGOd7c2xsqUxIr2WS8qHT0hzWOwLa9AGFtpo2og72jIX9y9X364vJreTMSNML/c73txdjr6PphejzxcTQSVNRti0Mhl1AfkCnbJGGvA9t5oSh7e4x4QEBYy5ymqhP9WE80uw+vfryvd/QgK+NGPJH3Fl3ZeGXq7EttuKsy5i3OncZzEdgt7H0M9vfXS6T+l23ruzm/0X1NZvjUOyf0K7r8V+D3T78XgQpR03A8d5zpr84n+cQYzKU3HlZHousaYgM3CoBsx0UDV0t4Pe8D3xO29tM1eXrqE0dkk5xnWIRtdT9ZxFa5RFzkmPOOAEQ+AkiMNpNIHAUqXoATYRuYhTyGmiaONKH6WNUxALNx0wPlt3w0K9O/1welbPERcoh3p+NFNego8eo4924UdN/E8othokjnhQGOB3gTFLb+oBW+dmJlVkx+FjMY+kh0u1YjbiUlULCHjnzXYrn7monlt4xss1eA0LSR63a6qDrLkcGZiAPXbtG6He3DQyfRsxgYOs9++EFemuwZSy4+UP3HTePhY900RIuf2Fws46ShIsqOPXe5Lk8Wu1cz65ZeX9AcsFrOI=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"listExtractionReviewRuns"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/job/{jobGuid}/extraction-review-runs"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+listExtractionReviewRuns
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"jobGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"listExtractionReviewRuns 200 response","content":{"application/json":{"schema":{"type":"array","items":{"properties":{"runId":{"type":"string"},"jobGuid":{"type":"string"},"requestId":{"type":"string"},"configurationId":{"type":"integer","format":"int64"},"configurationName":{"type":"string"},"profileRevision":{"type":"integer","format":"int64"},"configurationFingerprint":{"type":"string"},"overlayFingerprint":{"type":"string"},"createdAt":{"type":["string","null"],"format":"date-time"},"availability":{"enum":["COMPLETED","INCOMPLETE","UNAVAILABLE"],"title":"ReviewRunAvailability"},"identity":{"type":["null","object"],"allOf":[{"properties":{"organizationId":{"type":"integer","format":"int64"},"runId":{"type":"string"},"jobGuid":{"type":"string"},"artifactId":{"type":"string"},"resultFingerprint":{"type":"string"}},"required":["artifactId","jobGuid","organizationId","resultFingerprint","runId"],"title":"ReviewResultIdentity"}]}},"required":["availability","configurationFingerprint","configurationId","configurationName","jobGuid","overlayFingerprint","profileRevision","requestId","runId"],"title":"ReviewRunDescriptor"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

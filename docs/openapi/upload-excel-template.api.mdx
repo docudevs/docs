@@ -5,7 +5,7 @@ description: "uploadExcelTemplate"
 sidebar_label: "uploadExcelTemplate"
 hide_title: true
 hide_table_of_contents: true
-api: eJyFVMuO2zAM/BVBpxZw4rS9+bbd3cOeGrTpKciBsZlErW2pEp2uYfjfS8pO4jyAnkw9OByOhu40wT7obK1zW+/MvvFAxtZ6k2jrcFi8FTrTjSstFK/vOZYrrFwJhDrRDjxUSOgFotM1L/hu/CTa1Bw7oAPHHv80xiMjkW8w0SE/YAU66zS1TnICeVPvdd9vhssY6KstWrnBzAhrkrBqSjJclNKd9dWsAIoYFzTnhTYZDLLamRLvayRakoEB9dbU4FuuOmW4HvI2vIl1bgvJmYCNdFYDJjhXmjzqlNqckGZcBaFizGtU6TtuBGfrMPD7vFjIp8CQe+Oi8A+VVnxRnTKZ/0SRaf1fQQCmckBRGDmCcnklzK3oA9n/8uDS/NoHK4ZwNlB0AL9vptMr+6SdWKBPUZJndMk29c7G+oZETP1i8+YFj0E9Ld/0LYHzoQQV96v4dXMMgTlLwly9QuCGSP2FVpFVzOHIParWNl4VY1KQk2iURPNpGLA/zb/MF5p7ljYqiLKN7h36VrFxNen8itxZQsJ3SvkKm53RGl9GF0ZRbmcq0dk4GTe6sOUPoiZndN0WAv70Zd/LNs8B2zNbc3gEb2ArqvGgFSZIzO+wgzLgHbmzQfSH76MDPyou/JD0uAl1KxJB2ciKw9/Ynoa5l2E4IBToY/3h6HmoMoujcEl9NKR9ckp6ynN0NLl+52D5BZxttvz2Y8WXt+O/oLKF5Ajw+KbnkFViF/8DN86tqQ==
+api: eJyFVE2T2jAM/Ssen9qZsKHtjdt2dw97KtPSE8NBxALcJrFrK5QMk/9eyQkQPmZ6imzr4+npKUdNsI16ttSFqzd22wQg62q9yrTz2B/ejZ7pxpcOzNuhwHKBlS+BUGfaQ4AKCYOkOOqaD+ybPpm2NdseaMd2wD+NDciZKDSY6VjssAI9O2pqvcRECrbe6q5b9c4Y6aszrXgwMsKaxKyakiwXpXzjQjUxQCnHJZsPApssRjltbIn3NTItwcAJ9drWEFquOka47ONWfIl14YzEjJINcBZ9TvC+tEXiKXcFIU24CkLFVfDAnBl22kAZseuuqwgP6SJ6V8ce7+fpVD4GYxGsT4N4yLxiR3WK5EojhsZ4fkVJMKYHjLHyBOX8iqjbIfRg/4uDS/P0d04E4l2kpAie90znV3LKjyKJLkcJntAl2tYbl+pbEnL1qyuaV9xH9Tx/17cAzo9iVNyv4mkXGCNjloAn9QaRGyL1F1pFTjGGPfeoWtcEZYagKC9JOJnm19jn/vT05WmquWdpo4JE26Dmvm+VGlejzq/AnSkkPFDOLix+ztaEMqkykXK7Y5meDZtywwuvwE7Y5IjjcQ0Rf4ay6+Sa94LlOluyuYdgYS2s8eIZG8U2g9buwJ0Foj98HxT4UXHhh6CHS6hboQjKRk5s/sb2tNydLMcOwWBI9funl77KJK3GJfTR0nbZKei5KNDTyP1OwfJLOMts/u3Hgp3Xw7+hSguWFnqY6dlklljF/wCXyrNP
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ uploadExcelTemplate
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"file":{"type":"string","format":"binary"}},"required":["file"]},"encoding":{"file":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"file":{"type":"string","format":"binary"}},"required":["file"]},"encoding":{"file":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>

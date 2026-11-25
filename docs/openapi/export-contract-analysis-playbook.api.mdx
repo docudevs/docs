@@ -1,0 +1,71 @@
+---
+id: export-contract-analysis-playbook
+title: "Export the playbook as canonical JSON"
+description: "Returns the stored draft or published playbook document, which can be edited and sent back to the import endpoint."
+sidebar_label: "Export the playbook as canonical JSON"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVMFu2zAM/RVBpw1Ik24rdsitaIuhO2xBt56GHmiZidXIkirJSQ3D/z7Sdpw0SQ87LZfYEh/9+PjIRiZYRTn/I9fWbQ3mK7zIIOKFD26pDUb5NJE5RhW0T9pZOZcPmKpgo0gFiphcwFzkAZZJuCB8lRkdCzryBurMubXInapKtGkitoVWhVBgRYYCc50oDGwuIt2KDNRaJNdl1aV3IQm0uXfapqmcSOcxABO4z4kCvnLAjbMpgErXFkwddVwMn6RwDwFKTBi4tEZaeiGYosIIP5Ga6/CQCnoO+FJpKkLOU6hwIqMqsAQ5b2SqPaOIAa4wUOjShRJSf/T1SrbtZEy90bjdJX6pMNT0QiyNy+l2CSaeyxxT0HYlWeAlVIYzd0pS5icmFr2zkVpAiM+Xl/z3thM3YJ3VCsyp2pRUkTz8RDDw3lAcw2bPkbHNKRuXPaNiIOTUGwoFswise9LMgdVp6TeRV+e43NsNGE19730jOkG64KvT4MUQpMBDpo1OtdBR5DpCRhbsjDRE0DFk8R8L8ge0G4JxD45FJ2olxgir83c7LgeXpK9BsNz2A9P86fMfIPaJqYlJJ4P7im/Ggh8tbEAbhjwMjZZtry8Zt3Bs8xWmzsvk07mcvR3QOGt6O7ez3ajO1DAQFzBMxKwflM6YS9fVMvC5JZ/c4iaK68W9PJ7w8fJ2cBO3Q1FRJA4DpuIOIqmbxBZqHlr68IYEF7WrwmjByDc5JKD8dBv73J+mX6aXrLB3MZXQdW6YobuObLcBRj9D5IUxuPz7r58/jsk2e1v8n800uCPha5pRatoAVFwVTGfErnXHuzUSaj7uonHR9gZ/079+iXAHyUoFCcbJmoaTPAbTtnzcbxvecnvPDgtnjfV+NdF4VkxU8m7ZQNAcex73rsAfHgbffxTvVT4cgq0Pv7njMlTdPlFkgZDTWmUG/eW1UujTAexkypn6OB3f7n7TxPwFTNVbTQ==
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Export the playbook as canonical JSON"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/knowledge-bases/{caseId}/profiles/contract-analysis/export"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns the stored draft or published playbook document, which can be edited and sent back to the import endpoint.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"caseId","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"view","in":"query","explode":false,"schema":{"type":"string","default":"draft"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Canonical playbook document","content":{"application/json":{"schema":{"type":"object","additionalProperties":true}}}},"400":{"description":"Invalid profile view"},"404":{"description":"Profile capability is disabled or profile is absent","content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"message":{"type":"string"},"disabled":{"type":"boolean"}},"required":["code","disabled","message"],"title":"ProfileCapabilityUnavailableResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

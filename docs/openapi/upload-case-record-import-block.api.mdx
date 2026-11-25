@@ -5,7 +5,7 @@ description: "Send the file in blocks of at most 32 MiB with indexes 0, 1, 2, ..
 sidebar_label: "Upload one block of a file import"
 hide_title: true
 hide_table_of_contents: true
-api: eJzVVE1v2zAM/SuEThvg2GlSDFhu/dghhwFF156KHhSLqYXakibJSYPA/32k5KZdt+y0FdihqSyST/x4fHsR5UMQiztRy4ATj7X1Koj7QigMtdcuamvEQnxDoyA2CGvdImgDq9bWjwHsGmSEzoYI8xl81eew1bEhB4VPGGBawEkBswLKsgSZIQzUsm2htl2nYwnXOAkErs0DOeRA8OhaWVN8bAg9PVXCWV2ji6hg23AOnIzunPUR5FbqGID/etdaqUpRCOvQS85+qSj/fH9BNV6nEpcp8pyRyddJLzuM6LkTe2Hog2K4IxRcCM0dcDI2dPb4vdceCTP6HgsR6gY7KRZ7EXeOo7SJ+ICeXNfWdzLmq0+nYhiKA3RO/F+Bcw//DvJ8Rsj3ORxDPLdqxzG1JW8T+Sida3WdGl3ZOmKchOhRdmx7eeSAudJG+h2BDm9zShfBWRMwcMhsesr/fqZhGhiEaDmMIk6n01+dlmYjW61GLlkP2Lm4yzTKQb9BzoQAYyOsbW9G9M9HHXVIvsw8pi4VyPTNNCv4UeZn/qSVMMpuAZ+cfs77ZH6suFZ6mgMz34wrxcMVRM/GMpNdHxNjaawLUTFHQ7XPVB2qcX+rzC8yPBNtqHIuVd5bMnBzhsSStU080LFlIlzaur/ETYCzq6V4KwMHIx86ogA4b2lRA/eAAkr4IoMmplBjdhAtbbnZILVrZ3sPagwKbFEySsIna8jYJ+W8nHJzHKlJJw0nNTL6NvfRGsxTTLIzSlEq8G2iryj6H0rXuJIRn2JFaLTH1JXet1xXHnyW60C+i4NKPWt3MapLsr4SmoxPh1x/sialoP1uqAuMut+vCO7Wt8PA17T0tKyLOzpupNdyxQwhgVQ68JnouJZtwD80/8P1uOQf4Vhh46U0O6aDbHv+ouMj7l5EmOXtHV89tO29300DGe7JsUGpSI+53dl2kZ+Z3DDCS+xRAWbdPqjG1e0NT37U784qDvVyy7yhX0qBJPkHr4O6/w==
+api: eJzVVE1v2zAM/SuEThvg2GlSDFhu/dghhwFF156GHhSLqYXakibJSYPA/32k5KZdu+y0FdihqSySjxT5+PYiyvsgFt9FLQNOPNbWqyDuCqEw1F67qK0RC/ENjYLYIKx1i6ANrFpbPwSwa5AROhsizGfwVZ/DVseGHBQ+YoBpAScFzAooyxJkhjBQy7aF2nadjiVc4yQQuDb35JADwaNrZU3xsSH0lKqEs7pGF1HBtuEauBjdOesjyK3UMQD/9a61UpWiENahl1z9UlH9+f6C3nidnrhMkeeMTL5OetlhRM+d2AtDHxTDHaHgQmjugJOxobPHH732SJjR91iIUDfYSbHYi7hzHKVNxHv05Lq2vpMxX306FcNQHKBz4f8KnHv4d5DnM0K+y+EY4rlVO46pLXmbyEfpXKvr1OjK1hHjJESPsmPbmyRkojm/zLHSRvodJRle15gugrMmYGCI2fSU//1KyzRACNFyGEWcTqdvnZZmI1utRm5ZD9i5uMu0ykG/Qc4EAWMjrG1vRvTPRx11SL7MRKYyPZDpnGlXcFLma/6kFTHKbgEfnX6q+2R+7HGt9DQX3gQzrhgPWxBdG8vMdn1MDKYxL0TFnA3VPlN3qMZ9rjLfyPBEvKHKtVR5j8nAzRkSa9Y2jUzHlmd2aev+EjcBzq6W4rUsHIx86IgS4LylxQ3cAwoo4YsMmphDjdlBtLT1ZoPUrp3tPagxKLBFySgJn6whY5+U83LKzXGkLp00XNTI8NvcR2swTzHJ0ChN6YGvC31B2f9QysbtifgYK0Kjvaau9L7ld+XBZ/kO5Ls4qNaTlhej2iTrC+HJ+HTI70/WpBy07w11gVH3+xXB3fp2GPiaRICWdfGdjhvptVwxQ0gwlQ58JjquZRvwD83/cD0u+Uc49rDxUpod00G2PX/R8QF3z6LMcveOWQ9te++8aSDDHTk2KBXpM7c72y5ymskNIzzHHhVk1vGDalzd3vDkRz3vrOJQL7fMG/qlEkiSfwLBJcBG
 sidebar_class_name: "put api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -54,7 +54,7 @@ Send the file in blocks of at most 32 MiB with indexes 0, 1, 2, ... and then cal
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"application/octet-stream":{"schema":{"format":"binary"}}},"required":true}}
+  body={{"content":{"application/octet-stream":{"schema":{"type":"string","format":"binary"}}},"required":true}}
 >
   
 </RequestSchema>

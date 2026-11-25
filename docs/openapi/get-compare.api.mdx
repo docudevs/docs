@@ -1,0 +1,71 @@
+---
+id: get-compare
+title: "getCompare"
+description: "getCompare"
+sidebar_label: "getCompare"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVU1vm0AQ/StoT61E7bS9+WbZKIrUJhZJT1YOYxjb2wJLdge3CPHfOwMYE0Nyq1RfvDDzZt587KNSBAenFlsVmTQHi+rZVyZHC6RNdherhTogrTqbr/gPUiS0gqlUxg/s0mFvCx2zj874VQ505LPFl0Jb5DhkC/SVi46YglpUispcoI6szg6qrp/F2eUmc+jE/uXmRv5idJHVubB5xcVju3cGcKLIZIQZCQTyPNFRU8D8pxNcNcibWymPdJtlyHxMivkSUNF4Ylak0qdNcL++u7/llJvwYRU8PrYPq4fvm2/BU7DmcxCGD6E0kjQlEq/j/NgG47CxiYqU6boxI2P1QWeQjC17neB90/AJognsMJnq63AG20uMM2LMct1xUw30pB3G/wGXK2zfpQvHt9Gum+Sh5d6xAmuhlHUlTCfm0PhP74SOB4bt2eKrrEi4iH+3NWitse9lvmpSW0JPZzI0OwgssgiE8ZLeCe+rvbEpsIuK2fkT6RRHg3ktBZc97wfwPh02hOdLXcvPf1MBOBIr0dF0GtWIE2vOQs07DvNqQKZuhGlvmvq6tLIfazw5b7m5U9eJeuN5izzejwid45YIYOYF4HhXyPsNpUfGYwU68fp4pSms1xcuFu4WcHy2ujb259nX2Y1MNDeOUmgUqpNSrsS7FPiKUr+KhH9onifAQssxCttqRVP8Rcd9tRjOgrt95GTiUVU7cPjDJnUtr18KtCW/5+MJrIad9Ia1PdZOztzePSQOR2R6xVUfwm4BPnqcdpLk+c5lcuNOkBTyxMdfWF59P2q5QEeEGG1Do/VYRhHmNMCORF4+IP0+3AZPvD5/AQECVkw=
+sidebar_class_name: "get api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getCompare"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/compare/{compareGuid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+getCompare
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"compareGuid","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"getCompare 200 response","content":{"application/json":{"schema":{"properties":{"compareGuid":{"type":"string"},"status":{"enum":["PENDING","PROCESSING","COMPLETED","ERROR"],"title":"CompareStatus"},"documents":{"properties":{"original":{"properties":{"fileName":{"type":"string"},"label":{"type":"string"}},"required":["fileName","label"],"title":"CompareDocument"},"revised":{"properties":{"fileName":{"type":"string"},"label":{"type":"string"}},"required":["fileName","label"],"title":"CompareDocument"}},"required":["original","revised"],"title":"CompareDocuments"},"stages":{"type":"array","items":{"properties":{"stage":{"type":"string"},"side":{"type":["string","null"]},"status":{"enum":["PENDING","PROCESSING","COMPLETED","ERROR"],"title":"CompareStatus"},"error":{"type":["string","null"]}},"required":["stage","status"],"title":"CompareStage"}},"createdAt":{"type":["string","null"],"format":"date-time"}},"required":["compareGuid","documents","stages","status"],"title":"CompareStatusResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

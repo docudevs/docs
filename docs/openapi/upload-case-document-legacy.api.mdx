@@ -5,7 +5,7 @@ description: "uploadCaseDocumentLegacy"
 sidebar_label: "uploadCaseDocumentLegacy"
 hide_title: true
 hide_table_of_contents: true
-api: eJyNVEtv2zAM/iuGThvgxNkDO/jWxw4FBqzo2lPQA2MziTbb0iQ6m2H4v4+Un02zYTdJ5PeR/EiqVQQHr9KtysCjV8+xMhYdkDbVXa5SVdvCQH7DxluT1SVW9AUPkDUqVhYclEjoBN+qii8MEB5GxkpXfLNARz47/Flrh0xIrsZY+eyIJai0VdRYQemK8ICOXffGlUD906ePquueezh6ujZ5I5jMsHdFcizrgjQnQongVjlQYJ35rZN6SHNtfMuHGhaRPTldHZaBd7oC13DkZd7bGfvMBqwykwvujHRI7bHnBmsLnQUxE5MR0oqjIZTM/ZJdVAkP3prK97m+32wCO/rMaSsc/2hHxN7RCOdiFhItk/juheXv+hxqnb/WhjPzBFT7iyZ0zrjZsp0VreqiYLXOdAwxJkbuLmkqhPIp1PYwFtH1IuVoHXL68/D8nyIcgofzaGSIrfEUBpaHMVVJGPWk7Se1S3qGMLF7EwoZEhLCWzz56Or+Tp3HnYxj2IilzNB7rl0A6+gzeJaVol/QRGQibsmJlY4aU7tonBkvljC1sWKr77nfrT+sN6KtJF5CaNmwXn2ykdQ7R54qfpHi1CvC35TYAngjmbN2RWh8EGPc+1il0+IOenBnjqIb+7Ttjo1Prug6eeZl5P1It3w8gdOwE7X4B8i1lzMrvofCn3dqsbfqzcMwEG8jDngxzeERKqnrBEUtNz7+wGb+ZTrZxSNCzl+HZNAbb/o4q7CFM/jSX9HFI+gqy9DSwv3V3shPNI3U/ddvj+y8G76k0uSCEeKhm9ORdeJB/gOWHt+k
+api: eJyNVE1v2zAM/SuCThvgNtnaDVhuXbtDgQEruvYU9MDYTKLNljSJdmsE/u8jZcdOm+7jJoniI9/jx04TbKJeLHUOEaN+yLTzGICMs9eFXujalw6KSzZeubyu0NJX3EDe6kx7CFAhYRD/nbZ8YQfBYc9MG8s3D7Tlc8BftQnIgBRqzHTMt1iBXuw0tV68jCXcYOCvaxcqoP7p47nuuofeHSN9dkUrPrnj35bkWNUlGU6EZuJ3UgAl1AnfB+FDhrnxrRg4HESOFIzdHAZeGQuh5ciHeS8n3wc2oM1dIX4vQIfU7nps8L40eRJz5nJCOuFoCBVHwycWtuBPaygjdt3zaKJSeoje2djn/n4+T9Ew5sF4wfxLeRT/Vnt3Dncg2WFSP6Kg/FmvTW2KY604s0hAdXzVhCG4MFmWk8K2LktW74WuKcaIyNUmQ6VA3idut3sSvUbn80/HKuy5q14OxWzXzJGiejS0VWAV5GQaZEUag48q1FYy/TA/+zcWFJWJkW3KRFVbaMCUsCox9UeBPiBrOXX2/5WH+fLkbJ1MmHeR0jTxpCz0LM3hbNePUTfrEdI4rV1SdVBHAK+wieri5lq/jDsaRzZc1xyZh92Iw6n6ApFrTOoRWkVOFGu47Kp1dVD7ho5iSSOVabbGHvvd6dnpXOSTxCtI/TPM/iCZ8J0ij4yfpTg2DuETzXwJJpWkDmXqwiTGfillejFulUEPbpOt6MZ/drsVG+9D2XXyzJuCh3ex5GMDwaRSyXoqTJRzMUzcUTrjhOg3t0N3vlUc8NU0h0ewwquBspYbH39iO63AThbFFqHgvSYZ9MbLPs5JWhGT82uLrMv2Thd5jp4Ovh8NsazJsaVuvn2/48+rYV9WadGkBTdUczyyTjxWvwHH+xdg
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -58,7 +58,7 @@ uploadCaseDocumentLegacy
 
 <RequestSchema
   title={"Body"}
-  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream"}}}},"required":true}}
+  body={{"content":{"multipart/form-data":{"schema":{"properties":{"document":{"type":"string","format":"binary"}},"required":["document"]},"encoding":{"document":{"contentType":"application/octet-stream","explode":false}}}},"required":true}}
 >
   
 </RequestSchema>
@@ -66,7 +66,7 @@ uploadCaseDocumentLegacy
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"uploadCaseDocumentLegacy 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+  responses={{"200":{"description":"uploadCaseDocumentLegacy 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}},"409":{"description":"Document upload conflicts with an active review run"},"503":{"description":"Document upload admission is unavailable"}}}
 >
   
 </StatusCodes>

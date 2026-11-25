@@ -5,7 +5,7 @@ description: "Retrieve the plan, source-map, or bounded summary artifact for a w
 sidebar_label: "Retrieve a plan, source-map, or bounded summary artifact published for this workbook result."
 hide_title: true
 hide_table_of_contents: true
-api: eJy1VE1v2zAM/SuCThvgxtnWU24BWgzZaSg27FDkQNtMrMaWVH0k8wz/95G246TNWmwFlktkSXwi3+NjKwNsvVzcyweTyXUiC/S5UzYoo+VC3mFwCvcoQonCVqAT4U10OV7VYBNhnMhM1AUWwse6BtcIcEFtIA9iQ4cgDsbtMmN2QhtXQ6V+ASMLhz5WQSbSWHT91qqg57YYfowByxGH7lhwUGNAx3m2UtMH342qoEPFaVoIJa0dPkblkJCCi5hIn5dYg1y0MjSWYzxVo7ey65IJBk7vnEM9pWFZVeZwVSkfqNKppKnUndLFq8+jjjVzzAzSxROF/DEQJ9ddt2YMb4326Dns43zOf09zORJEjFtrKAW9FWdF5EYH1IHjwNpK5T276YPn4PaUU0e/RF7/6YWV3pNSLxXKojvcoEOdo+wxri8xvpgsETZmxFl5ztkgfN85E6o23C3URiyMJKVLMzZDLz7psZAptWc6BKctS9+lR8y0PSJ1vYgb0yuuQsX63pg83uDei+XX1YWu0yEvaqJNWGdy9J5JpYCZuAWv0AdxgEYEI4jdPbogGlJQFGOQ55MCAhA+nfoB+8Ps02zO/FjjQw09+2PPTa6Cf/TUiVB2VyiVf87s7HmN7akj/r+bR5sF/BlSwidDUf3RVZzGIOQwZ/o+H0IWo4+P0Lw1tTMZoiT2OKxtM/D43VVdx9uPEckzi3ta7sEpyFhsGg6F8rym/tlA5fEVMt7djXZ9L17KfNwE3bCyUEX+ouUOm+MA4knypjf/bqS8Ia2JvG5Nd0uEAl1PzXC8zHO04SzwYkrwGJpM+Pn2G7nyN/USJVo=
+api: eJy1VE1v2zAM/SuCThvgxt3WU24BWgzdaSj2cSh6oG0mViNLqj7SZYb/+0jbcdKm7dYCO1kWxUfy8ZGtjLAKcn4tb20hbzJZYSi9clFZI+fyCqNXuEERaxROg8lEsMmXeNKAy4T1orDJVFiJkJoG/FaAj2oJZRRLMoK4t35dWLsWxvoGtPoNjCw8hqSjzKR16Pury4rCrTD+HB0WIw69ceChwYie82yloR9+m1RFRsVpOog1nT3eJeWRkKJPmMlQ1tiAnLcybh37BKrGrGTXZRMM7OMcQj2kYaG1vT/RKkSqdCppKnWtTPWK8JlEkxrmnBml3z2l/DMQyb0ADguFxh+gE4a/enTdDWcRnDWBn7fy4+kpfx5Ws6OYeuacpSLMShzQUFoT0UT2A+e0Kvv+5LeBndsXSCVa5dlTAS/Nhlr/HHOsIo9L9GhKlD3G2THGF1tkwqWCmlAfNmFQUi/FCdVYlh/pkjstSTq1HdXVq4kaPJc56T0fnPOWtdTlO8y83SF1vSqWtq9WRc3lntsyneMmiMXXyyOhTEY+NMSicN6WGAJzTA4zcQFBYYjiHrYiWkFkb9BHsaWGimp0CmypIALhkzUM2B9mn2anzI+zITbQN2MU8TSm8Moh3RPK4xprFR4zO3tcY7sXyP9fD6PEIv6KOeHThFL9yWtOY2jksLh62Q8u83Ex7KD5alI3zUdN7LFb2xYQ8LvXXcfXdwlphObXdNyAVzx1/bapVOAz6WcJOuALZLy7Guf/vXgu8/ESzJY7y0NNf3Rc43a30Xg1vSnmv+2oN6Q1kdfd0NsaoULfUzOYF2WJLh44Hi0N3krTEH6++EZT+QcvQkEa
 sidebar_class_name: "get api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,7 +47,7 @@ Retrieve the plan, source-map, or bounded summary artifact for a workbook normal
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"artifact","in":"path","description":"Allow-listed workbook artifact kind","required":true,"schema":{"enum":["plan","source-map","summary"]}}]}
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"artifact","in":"path","description":"Allow-listed workbook artifact kind","required":true,"schema":{"type":"string","enum":["plan","source-map","summary"],"allowableValues":["plan","source-map","summary"]}}]}
 >
   
 </ParamsDetails>
@@ -62,7 +62,7 @@ Retrieve the plan, source-map, or bounded summary artifact for a workbook normal
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"Workbook supporting artifact","content":{"application/json":{"schema":{}}}},"400":{"description":"Invalid workbook artifact kind or reference"},"404":{"description":"Job, published workbook result, or artifact not found"}}}
+  responses={{"200":{"description":"Workbook supporting artifact","content":{"application/json":{"schema":{"type":"string"}}}},"400":{"description":"Invalid workbook artifact kind or reference"},"404":{"description":"Job, published workbook result, or artifact not found"}}}
 >
   
 </StatusCodes>

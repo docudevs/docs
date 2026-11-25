@@ -5,7 +5,7 @@ description: "processDocumentWithConfiguration"
 sidebar_label: "processDocumentWithConfiguration"
 hide_title: true
 hide_table_of_contents: true
-api: eJy9lE1v2zAMhv+KoNMGeHG23XIr1h16WYtuxQ5BDqzNxNoUSdVHOsPwfx+p2JkbBxuGAcsltig+JF+S7mSEXZCrtaxtlfZootwU0jr0EJU1N7VcSedthSFcDxe+qth8sGardul4SRbSgYc9RvSM6qShF3LcJVWTURmGQGzo2eNTUh4JG33CQoaqwT3IVSdj69gnRK/MTvZ9ccJU02Cf+OzfmTU6NHW4NSPrKaFv5dx5PXoX0iSt5abvNxwyOGsCBr74brnkvxpD5ZXLivxZNEFeYsQQnIqMrD6BwDmtqnyr/BaY1k3SIjB1J6pj7CzxvFKqI0JM4aIJvbf+txVONV2PbRyIVH1UUTPywWkL9f1YRM+/4i91IDANTmPzoNkQ8zBRW1eyHCeyHBhlx5n05TMx3rwYirKbzUifG7u1uc4hX07iGg9BXN3dyPNET8YxVTGEJWnYYSE+QiDVo3iGVkQrKOSBGiFam7wYcw1sqSEC8ckajuy3i/eLJUvPFe4hd3QYxCHIr6iskDiX6EWqp5ZG/EHiaKABJnbyOs9HVm+yz8UYg55WQy/nErJxvmjU7IabQryue4SAD173PR8f94WXvVYBHjWPyhZ0oP37ju3Zhh1AJ05Y8u4cwCt2uOx8VulpLeSr+2EkXwsiXlRgOATTTmOOCeXS+RPwH2POFe035NQg1OizAMd7V1WFLk4Is28AK3dalLvbz19o3X4CxOT+kA==
+api: eJy9VE1v2zAM/SuCThuQJdnaHZZbse5QYFiDbsUOQQ6MpMRqFcnVR1rP8H8fKdtpGgcdhgG7JLYlPpKP77HmETaBzxZcOpG2yka+HHFXKg9RO3sl+YyX3gkVwmV34aeOxWdn13qT2kt8xEvwsFVReYKqucUXDNwkLfFQWwKBWOCzVw9Je4Ww0Sc14kEUagt8VvNYlRQTotd2w5tmtIcRh8m+0bd/x5SqVFaGa9tjPSTlK3xRT6VxEq+swYQTYIsebcRtMoYvm2ZJJYTS2aACXfwwndKfVEF4XWaG/kwiwyjWwyA4Nh1pGggEZWm0yLcmd4HQ6oOyEBinFXWbO1M+7Bz7iBBTOHmkvHf+1Q4POV70Y+0QsfuooyHIW6QO5E3fRNNQ5Pn0fMjGvGUDs7A7t2KPEJh1ka1dshJ/PYuFDsz5DVj9qxVZhvo0hPqqNiAqJnVAOYiCkVqQrhjYI3KMQIqJ5D1yyYTR9OdTRvs4PXu1MJBbjU84GuGSkblAEJmGjEqFGyfuSVd/OWxkD91SuOwuF2J2EGp5xie9DScdxqQmupsJNfPuhRMm9cAYTVbz2uVhdkOhIi7VLrCL+RU/LnR/2JfKymcCMGDMvkBAaUUcUcWiI3Z3qDZWueRZX2ugEwkREB9PQ4v9fnw2nhLR1OEWsmw793VJnrMSQ+yYohel7nUb1ROSY0DnISZvsgkyewdLbNTnwKdZJ9ghhXQ43C6o6IKGgnh1vYKgbr1pGvrcLgnacCg3WBnyQ7cn7lV1tFZ2YBIVzGlB7MBrCjgdfNTp3vv8zU3nu7cMEU8y0H0EWx3m7AvKrdPe+485h4w2SwwqFEjlMwHtvQshVBkPEAaLjpjbG2V+/f0Heu03y/FVhw==
 sidebar_class_name: "post api-method"
 info_path: docs/openapi/docudevs-api
 custom_edit_url: null
@@ -47,7 +47,7 @@ processDocumentWithConfiguration
 </Heading>
 
 <ParamsDetails
-  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"configurationName","in":"path","required":true,"schema":{"type":"string"}},{"name":"dependsOn","in":"query","schema":{"type":["string","null"]}}]}
+  parameters={[{"name":"guid","in":"path","required":true,"schema":{"type":"string"}},{"name":"configurationName","in":"path","required":true,"schema":{"type":"string"}},{"name":"dependsOn","in":"query","explode":false,"schema":{"type":["string","null"]}}]}
 >
   
 </ParamsDetails>
@@ -62,7 +62,7 @@ processDocumentWithConfiguration
 <StatusCodes
   id={undefined}
   label={undefined}
-  responses={{"200":{"description":"processDocumentWithConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}}}}
+  responses={{"200":{"description":"processDocumentWithConfiguration 200 response","content":{"application/json":{"schema":{"properties":{"guid":{"type":"string"},"status":{"type":"string"},"error":{"type":["string","null"]}},"required":["guid","status"],"title":"UploadResponse"}}}},"404":{"description":"Processing job was not found for this organization"},"409":{"description":"Legacy dispatch conflicts with the current client run"},"503":{"description":"Processing admission could not acquire the job lock"}}}
 >
   
 </StatusCodes>

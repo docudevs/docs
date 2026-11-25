@@ -1,0 +1,71 @@
+---
+id: submit-agent-session-message
+title: "submitAgentSessionMessage"
+description: "submitAgentSessionMessage"
+sidebar_label: "submitAgentSessionMessage"
+hide_title: true
+hide_table_of_contents: true
+api: eJydVU1v2zAM/SuCThvgNmm7HZZbtnZAD8OKfpyCHBhbSbTakidRTo3A/32k7Nj5WjEsh1iWSIp8j4/eSoSVl5OZhJUyeOGV99oaL+eJtKVygPR2n8mJ9GFRaJyy1VNr9IMe5CUTWYKDQqFyHGkrDb2wR2tG3onUhjZKwDWtnfodtFMUFF1QifTpWhUgJ1uJdRkd0WmzIsuldQUg7YSgM9k089ZZefxqs5o9UmuQMuIllGWu05jw6Je3hveG0KXjclArH91yTV5dAVze8d1NIlG94dmDMod6Ye3rcDgbUjYhz+WcrGJm+xHOGWlTBvyuc8rB71uCc1D3hmSHqvD/glCzD+/spM6uKoqIGnOO9DTQuuPzKAqTFDd8SY3R4nc9vuZHpnzqdMmQU6jn4IyANFUlqkxYJ5xKbaUoiFjUok1FFO0l4v5WJv/LHtJF50g7gYN6CwHDGeSOgerskl3sPYSmXUURI66RASL3T+Mvf8MgdwqymrBAXSlG4qR4wiZ4AmajcS1AZHq5JKAGE8798/jm9IJOe8IFY5QTwUAFOodFrmJNh8bvaZb0urYs7NJ6jBomcU7kqLoaxVEw2o2C0bYXcjPq0mOkmKXHQY13b1CUDNgZdQ0EtZIY3gctDXu9coatQ53IF/Nq7MaIZ+J0IqJYkiiVKKmljXx39N3aNNyqyovpw708Bqg/5EXB+FOnpVyuWbHDpbgDT12HYgO1QCsoN+poFLUNTmSdk+eTDBAoPp36NvbV5c3lOM4LAriA2NG7yRh5EZEYsWN0oOYgx75zGZMR4UWjlIIGl0dhRNZmsroiv8gbPfshnsjJ/hDuyaPuXjPr5LjdLsCrF5c3DW8TnY4G64yWFTgd+4pHeqY9r4nLJeReneTYK1l+eOxk9VEw3+dy7zbB8IirIA/8RstXVR98NhoekWuSknIxifb8W3vVBZO/538yQJpk59Eq+F3b+Z4gHn4+PZPxovvEFDZjHwcb/nbRf8zVxtLjZIl7W5mDWQUmcCLbmPz7A7V4j3M=
+sidebar_class_name: "post api-method"
+info_path: docs/openapi/docudevs-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"submitAgentSessionMessage"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1/agent/sessions/{sessionId}/messages"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+submitAgentSessionMessage
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"properties":{"clientMessageId":{"type":"string"},"text":{"type":"string"},"playbook":{"type":["string","null"]},"context":{"type":["string","null"]},"inputFileIds":{"type":["array","null"],"items":{"type":"string","format":"uuid"}}},"required":["clientMessageId","text"],"title":"SubmitAgentMessage"}}},"required":true}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"202":{"description":"Turn accepted or recovered by client message ID","content":{"application/json":{"schema":{"properties":{"turnId":{"type":"string","format":"uuid"},"status":{"type":"string"}},"required":["status","turnId"],"title":"AcceptedAgentTurn"}}}},"409":{"description":"Turn already active or client message ID reused with a different message"},"503":{"description":"Session runner unavailable"}}}
+>
+  
+</StatusCodes>
+
+
+      
