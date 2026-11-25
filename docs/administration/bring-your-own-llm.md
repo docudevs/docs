@@ -24,8 +24,9 @@ organization API key can perform these actions. This differs from
 2. Select the provider type: `azure-openai`, `openai`, or `openai-compatible`.
 3. For Azure OpenAI, enter the Azure endpoint and deployment name.
 4. For OpenAI, enter the model name (for example `gpt-4o`) as the deployment
-   name. DocuDevs uses OpenAI's default API URL, so the API URL field can be
-   left blank.
+   name. The form has no API URL field for this type and sends none. That works
+   when you enter an API key in the form; a provider that uses a shared model
+   credential needs an `https` `apiUrl`, so create it through the API.
 5. For OpenAI-compatible, enter the base URL and model name.
 6. Select a shared model credential, or enter an API key to create a
    dedicated credential, and save the provider.
@@ -41,7 +42,7 @@ Create a provider that uses a shared [model credential](/docs/administration/mod
 
 <Example name="llm-providers/create-llm-provider" />
 
-The Python SDK's `create_llm_provider` and `update_llm_provider` methods send field names the API no longer accepts, so the create and update examples are cURL only.
+The Python SDK's provider methods send field names the API rejects on create and ignores on update, so use cURL for these steps. The CLI's create and update commands call the same methods.
 
 ## Update or delete a provider
 

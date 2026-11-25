@@ -7,14 +7,14 @@ integrations/create-connection:python  # DocuDevsClient 1.15.0 has no method for
 integrations/delete-connection:python  # DocuDevsClient 1.15.0 has no method for DELETE /integration/connections/{id}
 integrations/list-connections:python  # DocuDevsClient 1.15.0 has no method for GET /integration/connections
 llm-providers/create-llm-provider:python  # DocuDevsClient 1.15.0 create_llm_provider sends field names that POST /llm/providers rejects
-llm-providers/update-llm-provider:python  # DocuDevsClient 1.15.0 update_llm_provider sends field names that PATCH /llm/providers/{id} rejects
+llm-providers/update-llm-provider:python  # DocuDevsClient 1.15.0 update_llm_provider sends field names that PATCH /llm/providers/{id} ignores
 llm-providers/verify-llm-provider:python  # DocuDevsClient 1.15.0 has no method for POST /llm/providers/{id}/verify
 model-credentials/disable-and-enable-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/disable or /enable
 model-credentials/get-credential:python  # DocuDevsClient 1.15.0 has no method for GET /model-credentials/{id}
 model-credentials/update-credential:python  # DocuDevsClient 1.15.0 has no method for PATCH /model-credentials/{id}
 model-credentials/validate-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/validate
 ocr-providers/create-ocr-provider:python  # DocuDevsClient 1.15.0 create_ocr_provider sends field names that POST /ocr/providers rejects
-ocr-providers/update-ocr-provider:python  # DocuDevsClient 1.15.0 update_ocr_provider sends field names that PATCH /ocr/providers/{id} rejects
+ocr-providers/update-ocr-provider:python  # DocuDevsClient 1.15.0 update_ocr_provider sends field names that PATCH /ocr/providers/{id} ignores
 ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
 pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client

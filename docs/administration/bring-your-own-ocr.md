@@ -41,7 +41,7 @@ DocuDevs platform OCR account.
 
 <Example name="ocr-providers/create-ocr-provider" />
 
-The example reads the Azure Document Intelligence key from the `DOC_INTELLIGENCE_API_KEY` environment variable. The Python SDK's `create_ocr_provider` and `update_ocr_provider` methods send `model` instead of `modelId`, which the API rejects, so the create and update examples are cURL only.
+The example reads the Azure Document Intelligence key from the `DOC_INTELLIGENCE_API_KEY` environment variable. The Python SDK's provider methods send field names (not `modelId`) that the API rejects on create and ignores on update, so use cURL for these steps. The CLI's create and update commands call the same methods.
 
 ## Update or delete a provider
 
