@@ -7,7 +7,7 @@ if [ ! -f sample_invoice.pdf ]; then
   exit 1
 fi
 
-JOB_ID=$(curl -s -S -X POST "https://api.docudevs.ai/document/upload" \
+JOB_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \
   -H "Authorization: $API_KEY" \
   -F "document=@sample_invoice.pdf" | jq -r '.guid')
 
@@ -23,11 +23,11 @@ echo "Processing job $JOB_ID..."
 # Wait up to 5 minutes for the result
 DEADLINE=$((SECONDS + 300))
 while true; do
-  STATUS=$(curl -s -S "https://api.docudevs.ai/job/status/$JOB_ID" \
+  STATUS=$(curl -s -S -f "https://api.docudevs.ai/job/status/$JOB_ID" \
     -H "Authorization: $API_KEY" | jq -r '.status')
   if [ "$STATUS" = "COMPLETED" ]; then
     echo "Processing successful!"
-    curl -s -S "https://api.docudevs.ai/job/result/$JOB_ID/json" \
+    curl -s -S -f "https://api.docudevs.ai/job/result/$JOB_ID/json" \
       -H "Authorization: $API_KEY" | jq .
     break
   fi

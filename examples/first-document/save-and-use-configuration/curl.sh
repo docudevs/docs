@@ -43,7 +43,7 @@ jq -n \
 echo "Configuration saved: invoice_processing_standard"
 
 # Upload a document and process it with the saved configuration
-JOB_ID=$(curl -s -S -X POST "https://api.docudevs.ai/document/upload" \
+JOB_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \
   -H "Authorization: $API_KEY" \
   -F "document=@sample_invoice.pdf" | jq -r '.guid')
 
@@ -53,6 +53,6 @@ curl -s -S -f -o /dev/null -X POST "https://api.docudevs.ai/document/process/$JO
 wait_for_job "$JOB_ID"
 
 echo "Processing with Named Configuration Result:"
-curl -s -S "https://api.docudevs.ai/job/result/$JOB_ID/json" \
+curl -s -S -f "https://api.docudevs.ai/job/result/$JOB_ID/json" \
   -H "Authorization: $API_KEY" | jq .
 # docs:end

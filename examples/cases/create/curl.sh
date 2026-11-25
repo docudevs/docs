@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # docs:start
-CASE_ID=$(curl -s -S -X POST "https://api.docudevs.ai/cases" \
+CASE_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/cases" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

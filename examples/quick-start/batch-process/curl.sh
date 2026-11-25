@@ -18,7 +18,7 @@ wait_for_job() {
   return 1
 }
 
-BATCH_GUID=$(curl -s -S -X POST "https://api.docudevs.ai/document/batch" \
+BATCH_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/batch" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"maxConcurrency": 3}' | jq -r '.jobGuid')
@@ -51,6 +51,6 @@ jq -n \
 
 wait_for_job "$BATCH_GUID"
 
-curl -s -S "https://api.docudevs.ai/job/result/$BATCH_GUID/json" \
+curl -s -S -f "https://api.docudevs.ai/job/result/$BATCH_GUID/json" \
   -H "Authorization: $API_KEY" | jq .
 # docs:end

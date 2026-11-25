@@ -18,7 +18,7 @@ wait_for_job() {
   return 1
 }
 
-OCR_JOB_ID=$(curl -s -S -X POST "https://api.docudevs.ai/document/upload" \
+OCR_JOB_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \
   -H "Authorization: $API_KEY" \
   -F "document=@your-document.pdf" | jq -r '.guid')
 
@@ -32,7 +32,7 @@ curl -s -S -f -o /dev/null -X POST "https://api.docudevs.ai/document/ocr/$OCR_JO
   }'
 wait_for_job "$OCR_JOB_ID"
 
-ANALYSIS_JOB_ID=$(curl -s -S -X POST "https://api.docudevs.ai/operation/$OCR_JOB_ID/generative-task" \
+ANALYSIS_JOB_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/operation/$OCR_JOB_ID/generative-task" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -41,6 +41,6 @@ ANALYSIS_JOB_ID=$(curl -s -S -X POST "https://api.docudevs.ai/operation/$OCR_JOB
 wait_for_job "$ANALYSIS_JOB_ID"
 
 echo "AI Analysis:"
-curl -s -S "https://api.docudevs.ai/job/result/$ANALYSIS_JOB_ID" \
+curl -s -S -f "https://api.docudevs.ai/job/result/$ANALYSIS_JOB_ID" \
   -H "Authorization: $API_KEY" | jq -r '.generated_text'
 # docs:end

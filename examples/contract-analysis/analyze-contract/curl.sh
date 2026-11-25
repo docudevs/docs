@@ -7,7 +7,7 @@ KNOWLEDGE_BASE_ID=42  # id of the case whose profile is published
 
 wait_for_analysis() {
   for _ in $(seq 60); do
-    OPERATION=$(curl -s -S "https://api.docudevs.ai/operation/$1/contract-analysis" \
+    OPERATION=$(curl -s -S -f "https://api.docudevs.ai/operation/$1/contract-analysis" \
       -H "Authorization: $API_KEY")
     if [ "$(jq -r '.resultAvailable' <<< "$OPERATION")" = "true" ]; then return 0; fi
     case "$(jq -r '.status' <<< "$OPERATION")" in

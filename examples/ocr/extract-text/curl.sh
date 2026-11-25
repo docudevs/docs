@@ -18,7 +18,7 @@ wait_for_job() {
   return 1
 }
 
-JOB_ID=$(curl -s -S -X POST "https://api.docudevs.ai/document/upload" \
+JOB_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \
   -H "Authorization: $API_KEY" \
   -F "document=@document.pdf" | jq -r '.guid')
 
@@ -32,6 +32,6 @@ curl -s -S -f -o /dev/null -X POST "https://api.docudevs.ai/document/ocr/$JOB_ID
 
 wait_for_job "$JOB_ID"
 
-curl -s -S "https://api.docudevs.ai/job/result/$JOB_ID" \
+curl -s -S -f "https://api.docudevs.ai/job/result/$JOB_ID" \
   -H "Authorization: $API_KEY"
 # docs:end

@@ -43,7 +43,7 @@ SCHEMA='{
   "type": "object"
 }'
 
-JOB_ID=$(curl -s -S -X POST "https://api.docudevs.ai/document/upload" \
+JOB_ID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \
   -H "Authorization: $API_KEY" \
   -F "document=@invoice.pdf" | jq -r '.guid')
 
@@ -57,6 +57,6 @@ jq -n \
 
 wait_for_job "$JOB_ID"
 
-curl -s -S "https://api.docudevs.ai/job/result/$JOB_ID/json" \
+curl -s -S -f "https://api.docudevs.ai/job/result/$JOB_ID/json" \
   -H "Authorization: $API_KEY" | jq .
 # docs:end

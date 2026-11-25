@@ -4,11 +4,11 @@ set -euo pipefail
 # docs:start
 CASE_ID=42  # id of the case that holds the playbook documents
 
-OBSERVED_REVISION=$(curl -s -S "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority" \
+OBSERVED_REVISION=$(curl -s -S -f "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority" \
   -H "Authorization: $API_KEY" | jq '.revision')
 
 # "policy-doc" in the decision below must be the id of a real source document in the case
-curl -s -S -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority/decisions" \
+curl -s -S -f -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/source-authority/decisions" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
