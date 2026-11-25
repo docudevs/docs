@@ -18,12 +18,12 @@ const RATCHETS = [
   {
     file: 'inline-language-tabs.txt',
     key: 'tabs',
-    header: '# Pages that still hold inline language tabs, with the tab count; convert to <Example> and lower or remove the line. This file only shrinks.',
+    header: '# Pages that hold inline language tabs, with the tab count. This file has no entries and stays that way: put the code in an example.',
   },
   {
     file: 'inline-calls.txt',
     key: 'calls',
-    header: '# Pages that still hold inline fences calling the product, with the fence count; convert to <Example> and lower or remove the line. This file only shrinks.',
+    header: '# Pages that hold inline fences calling the product, with the fence count. This file has no entries and stays that way: put the code in an example.',
   },
 ];
 

@@ -1,2 +1,2 @@
-# Pages that still hold inline fences calling the product, with the fence count; convert to <Example> and lower or remove the line. This file only shrinks.
+# Pages that hold inline fences calling the product, with the fence count. This file has no entries and stays that way: put the code in an example.
 
