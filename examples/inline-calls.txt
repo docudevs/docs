@@ -16,7 +16,6 @@ docs/advanced/category-trees.md:5
 docs/advanced/classification.md:2
 docs/advanced/include-current-date.md:4
 docs/advanced/job-management.md:11
-docs/advanced/operations.md:24
 docs/advanced/page-range.md:8
 docs/advanced/pdf-acroform.md:4
 docs/advanced/records-datasets.md:6

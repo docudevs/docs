@@ -5,6 +5,13 @@ install/verify-connection:java
 ocr/choose-quality-and-format:java
 ocr/extract-text:java
 ocr/ocr-sync:java
+operations/ask-document-questions:java
+operations/convert-pdf-to-acroform:java
+operations/document-outline:java
+operations/download-acroform-pdf:java
+operations/get-document-outline:java
+operations/review-acroform-fields:java
+operations/submit-pdf-acroform:java
 quick-start/analyze-document:java
 templates/acroform-job-metadata:java
 templates/acroform-metadata:java
