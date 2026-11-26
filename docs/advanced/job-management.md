@@ -49,7 +49,7 @@ Any status that is not terminal means the job is still running: keep polling unt
 | `createdAtFrom` | Only jobs created on or after this date, written `YYYY-MM-DD`. |
 | `createdAtTo` | Only jobs created on or before this date, written `YYYY-MM-DD`. |
 
-The order is ascending unless `sort` contains `desc`, so without `sort` the oldest jobs come first. Use `sort=createdAt,desc` for the newest first. A date that is not in the `YYYY-MM-DD` form is ignored instead of rejected.
+The order is ascending unless `sort` contains lower-case `desc` (`Desc` or `DESC` sorts ascending), so without `sort` the oldest jobs come first. Use `sort=createdAt,desc` for the newest first. A date that is not in the `YYYY-MM-DD` form is ignored instead of rejected.
 
 The response has `content`, the jobs of the page, and `totalSize` and `totalPages`, the counts over all jobs that match the filters. Each job is the same object that `GET /job/status/{guid}` returns, with fields such as `guid`, `status`, `jobType`, `createdAt`, `updatedAt` and `error`. Timestamps are UTC.
 

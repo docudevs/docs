@@ -28,7 +28,7 @@ Choose batches when:
 
 ## Step-by-Step Guide
 
-The example creates a batch with a concurrency limit of three, uploads three invoices, starts processing with a prompt and a schema, waits for the batch to finish and prints the result for each document. The results list follows the upload order; a document that failed appears in the list as an error entry instead of data (see [Best Practices](#best-practices)).
+The example creates a batch with a concurrency limit of three, uploads three invoices, starts processing with a prompt and a schema, waits for the batch to finish and prints the result for each document. The results list follows the upload order; a document that failed or has no stored result is `null` in the list (see [Best Practices](#best-practices) and [Result Formats](/docs/core/result-formats#batch-results)).
 
 <Example name="quick-start/batch-process" />
 
@@ -46,5 +46,5 @@ The example creates a batch with a concurrency limit of three, uploads three inv
 
 - **Concurrency**: Set `maxConcurrency` between 3 and 8 for optimal throughput. Lower it for very large files.
 - **Validation**: Ensure all documents in a batch are of the same type (e.g., all invoices) so they share the same schema.
-- **Error Handling**: Batch jobs continue even if individual documents fail. Always check the results list for error strings.
+- **Error Handling**: Batch jobs continue even if individual documents fail. A failed or missing document is `null` in the results list, and an empty row in CSV or Excel. Check each entry for `null`; the `status` and `error` of each document are in `documents` of `GET /job/result/{guid}`. See [Result Formats](/docs/core/result-formats#batch-results).
 

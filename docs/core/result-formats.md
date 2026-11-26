@@ -68,9 +68,9 @@ A batch is a single job that holds one result per document. Its two result route
 - `GET /job/result/{guid}` returns an overview as soon as the batch exists, also while it is still processing: `jobGuid`, `isBatch`, `total`, `completed`, `failed`, `state` and a `documents` list. Each entry of `documents` has the `index` in upload order, a `status` and the `result` or the `error` of that document.
 - `GET /job/result/{guid}/json` returns only the results, as a list in upload order. A document without a result is `null`.
 
-The `status` of a document is `COMPLETED`, `FAILED`, `PENDING` while it is still waiting, or `MISSING` when the batch has finished and no result was stored for it. `state` is `COMPLETED` when every document completed, `FAILED` when every document failed, and `PARTIAL` when some did and some did not. Until every document has finished it is `RUNNING` or the current job status. A batch with partly failed documents still ends with the job status `COMPLETED`; `PARTIAL` appears only in `state`.
+The `status` of a document is `COMPLETED`, `FAILED`, `PENDING` while it is still waiting, or `MISSING` when the batch has finished and no result was stored for it. `state` is `COMPLETED` when every document completed, `FAILED` when every document failed, and `PARTIAL` when some did and some did not. Until every document has finished it is `RUNNING` or the current job status. Once every document has finished, the job status is `COMPLETED` whatever `state` says, even when every document failed; `PARTIAL` and `FAILED` appear only in `state`.
 
-The CSV and Excel routes of a batch work on the list of results: a document without a result becomes an empty row.
+The CSV and Excel routes of a batch work on the list of results: a document without a result becomes an empty row. In the CLI, `docudevs batch process --format json|csv|excel` waits for the batch and saves the result in that format to the `--output` file, or to a file named after the batch when you give none.
 
 <Example name="results/get-batch-result" />
 

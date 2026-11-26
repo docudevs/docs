@@ -52,7 +52,11 @@ public class Example {
                         .pollInterval(Duration.ofSeconds(5))
                         .build());
         for (int i = 0; i < results.size(); i++) {
-            System.out.println("Document " + i + ": " + results.get(i));
+            if (results.get(i).isNull()) {
+                System.out.println("Document " + i + ": no result (it failed or has no stored result)");
+            } else {
+                System.out.println("Document " + i + ": " + results.get(i));
+            }
         }
         // docs:end
     }

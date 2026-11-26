@@ -130,7 +130,7 @@ The list looks like this:
 
 `id` names the image, in the order of the figures. `figureId` is the identifier of the figure in the OCR output. `pageIndex` is the page that holds the figure, counted from 0 like the page image route. `caption`, `pageIndex` and `boundingPolygon` can be empty when the OCR did not return them, so read them as optional.
 
-A job that was processed with figure extraction on answers the list with `200`, and an empty `images` list when the document has no figures. `404` means that the job does not exist or was processed without figure extraction. A missing image also answers `404`.
+A job that was processed with figure extraction on answers the list with `200`, and an empty `images` list when no figures were extracted, for example because the document has none. `404` means that the job does not exist or was processed without figure extraction. A missing image also answers `404`.
 
 Page images are rendered for PDFs processed with `PREMIUM` OCR, including `AUTO` when it moves up to `PREMIUM`. Without page images the route answers `404`. [LLM Tracing](/docs/advanced/tracing#retrieving-page-images) shows the page image call on its own.
 

@@ -39,7 +39,10 @@ async def main():
 
     results = await client.wait_until_ready(batch_guid, timeout=600, result_format="json")
     for i, result in enumerate(results):
-        print(f"Document {i}: {result}")
+        if result is None:
+            print(f"Document {i}: no result (it failed or has no stored result)")
+        else:
+            print(f"Document {i}: {result}")
     # docs:end
 
 
