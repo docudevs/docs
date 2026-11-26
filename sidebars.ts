@@ -31,6 +31,7 @@ const sidebars: SidebarsConfig = {
         'core/extraction-review',
         'core/document-compare',
         'core/document-layout',
+        'core/result-formats',
         'core/object-detection',            // NEW: Model-emitted bounding boxes for image tasks
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
         'reference/pipeline-mode',          // NEW: Pipeline extraction graphs

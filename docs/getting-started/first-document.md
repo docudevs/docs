@@ -122,6 +122,8 @@ The processing results typically include:
 }
 ```
 
+To download the result as CSV or Excel, or to read the schema a job was processed with, see [Result Formats](/docs/core/result-formats).
+
 ### Processing Status Flow
 
 1. `CREATED` or `PENDING`: Document uploaded and queued for processing

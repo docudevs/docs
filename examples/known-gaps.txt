@@ -138,6 +138,11 @@ records/retry-import:java
 records/sync-snapshot:java
 records/upsert-record:java
 records/wait-for-import:java
+results/check-non-json-result:java
+results/download-excel-with-template:java
+results/download-result-formats:java
+results/get-batch-result:java
+results/get-result-schema:java
 sso/configure-oidc-provider:java
 submission-portals/check-submission:java
 submission-portals/create-portal:java
