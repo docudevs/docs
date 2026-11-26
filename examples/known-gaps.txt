@@ -121,6 +121,7 @@ playbook-evaluation/run-and-wait:java
 playbook-evaluation/split-suite:java
 records/batch-records:java
 records/configure-dataset:java
+records/create-records-case:java
 records/delete-record:java
 records/get-dataset:java
 records/get-import:java

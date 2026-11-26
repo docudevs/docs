@@ -55,6 +55,28 @@ Read the configuration back with `GET /cases/{caseId}/dataset`. The response add
 
 <Example name="records/get-dataset" />
 
+## Create a records case in one call
+
+The Python client can create the case and configure its dataset in one call. `create_records_case` takes the case name, the source column of the key (`key`), the text columns (`text`, a list of names or a `{column: name}` map) and optionally `label`, `metadata`, `embedded_text`, `target_depth`, `index_settings` and `description`. Without `embedded_text` the embedded text is the text fields, one per line, with empty fields skipped; a string is used as the template. `target_depth` becomes `classifyDefaults.targetDepth`. The other languages make the two requests the example shows.
+
+<Example name="records/create-records-case" />
+
+The call returns a `RecordsCase` handle. `client.records_case(case_id)` returns the same kind of handle for an existing case and makes no request. The handle binds the case id to the methods you use most:
+
+| Method | What it does |
+| --- | --- |
+| `import_records(rows)`, `import_records_and_wait(rows)` | Upsert records from a file path or from rows keyed by the dataset's source columns. The first returns the import, the second waits for it to finish. |
+| `search(query, **settings)` | Search the records of the case. |
+| `get_record(key)` | Read one record with its label, label source and indexed text. |
+| `upload_tree(nodes, name=None)`, `activate_tree(version_or_nodes, ...)`, `set_tree_and_wait(nodes, ...)` | Upload a category tree, activate a version (or upload a node list and activate it), or do both and wait. See [Category trees](./category-trees.md). |
+| `classify(rows, keys, ...)`, `classify_and_wait(rows, keys, ...)` | Start a [classify job](./classification.md), with or without waiting. |
+| `holdout_eval(variants, ...)`, `holdout_eval_and_wait(variants, ...)` | Start a holdout evaluation, with or without waiting. See [Case evaluations](./case-evals.md). |
+| `agent_run(playbook, ...)`, `agent_run_and_wait(playbook, ...)`, `conversation(...)`, `pending_actions()` | Work with the [case agent](./case-agent.md). |
+| `memo` | The case's [classification memo](./case-memo.md). |
+| `delete()` | Delete the case. It raises an error when the server does not delete it, for example while an import or activation is running. |
+
+Methods that start a job return a handle to it; the `_and_wait` variants block until the job finishes and raise an error when it fails.
+
 ## Single records and batches
 
 <Example name="records/upsert-record" />
