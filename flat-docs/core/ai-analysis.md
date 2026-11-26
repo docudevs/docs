@@ -145,7 +145,7 @@ docudevs operations generative-task "$OCR_JOB_ID" \
 
 ### Question Answering
 
-Ask questions about a document that has already been through OCR. Each question is its own generative task on the OCR job (the Java client reads only the first task of a parent, so this example has no Java variant), so replace `<job-guid>` with the GUID of the OCR job from the summarization step.
+Ask questions about a document that has already been through OCR. Each question is its own generative task on the OCR job (the Java variant submits each question with `submitAndWaitForGenerativeTask`, which waits for that task's own result), so replace `<job-guid>` with the GUID of the OCR job from the summarization step.
 
 **cURL**
 
@@ -213,6 +213,36 @@ for question in questions:
     result_data = json.loads(answer.result)
     print(f"Q: {question}")
     print(f"A: {result_data['generated_text']}\n")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
+import java.util.List;
+
+String parentJobGuid = "<job-guid>"; // GUID of a completed document job
+
+List<String> questions = List.of(
+        "What is the contract duration?",
+        "Who are the parties involved?",
+        "What are the key obligations?");
+
+for (String question : questions) {
+    // One call submits the task and waits for it; it returns the task's result document
+    JsonNode answer = client.submitAndWaitForGenerativeTask(
+            parentJobGuid,
+            "Based on this document, answer the following question: " + question,
+            WaitOptions.builder()
+                    .timeout(Duration.ofSeconds(120))
+                    .pollInterval(Duration.ofSeconds(2))
+                    .build());
+
+    System.out.println("Q: " + question);
+    System.out.println("A: " + answer.path("generated_text").asText() + "\n");
+}
 ```
 
 ## Advanced Use Cases

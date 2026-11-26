@@ -542,6 +542,123 @@ nodes = await client.get_pipeline_nodes(guid)
 print(json.dumps(nodes, indent=2))
 ```
 
+**Java**
+
+```java
+import static ai.docudevs.client.PipelinePath.ocr;
+
+import ai.docudevs.client.PipelineCondition;
+import ai.docudevs.client.PipelineDefinition;
+import ai.docudevs.client.PipelineNode;
+import ai.docudevs.client.PipelineNodeRef;
+import ai.docudevs.client.PipelineOcr;
+import ai.docudevs.client.PipelinePath;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+
+PipelineDefinition.Builder pipelineBuilder = PipelineDefinition.builder()
+        .ocr(PipelineOcr.builder()
+                .mode("AUTO")
+                .qualityArtifact(true)
+                .build())
+        .maxNodes(2);
+
+PipelineNodeRef classification = pipelineBuilder.addNodeRef(PipelineNode.extract("classify_document")
+        .source(ocr().content())
+        .prompt("Classify this document as invoice, safety_data_sheet, or other. Only classify the document.")
+        .schema(Map.of(
+                "type", "object",
+                "properties", Map.of(
+                        "document_type", Map.of(
+                                "type", "string",
+                                "enum", List.of("invoice", "safety_data_sheet", "other")),
+                        "confidence", Map.of("type", "number"),
+                        "reason", Map.of("type", "string")),
+                "required", List.of("document_type", "confidence", "reason")))
+        .llmTier("nano")
+        .build());
+
+PipelinePath documentType = classification.result().field("document_type");
+
+PipelineNodeRef invoice = pipelineBuilder.addNodeRef(PipelineNode.extract("extract_invoice")
+        .dependsOn(classification)
+        .when(PipelineCondition.eq(documentType, "invoice"))
+        .source(ocr().content())
+        .prompt("Extract invoice fields from the document. Return null for missing fields.")
+        .schema(Map.of(
+                "type", "object",
+                "properties", Map.of(
+                        "invoice_number", Map.of("type", List.of("string", "null")),
+                        "vendor_name", Map.of("type", List.of("string", "null")),
+                        "total_amount", Map.of("type", List.of("number", "null")),
+                        "currency", Map.of("type", List.of("string", "null")))))
+        .llmTier("mini")
+        .build());
+
+PipelineNodeRef sds = pipelineBuilder.addNodeRef(PipelineNode.extract("extract_sds")
+        .dependsOn(classification)
+        .when(PipelineCondition.eq(documentType, "safety_data_sheet"))
+        .source(ocr().content())
+        .prompt("Extract product and safety information from the document.")
+        .schema(Map.of(
+                "type", "object",
+                "properties", Map.of(
+                        "product_name", Map.of("type", List.of("string", "null")),
+                        "supplier", Map.of("type", List.of("string", "null")),
+                        "signal_word", Map.of("type", List.of("string", "null")))))
+        .llmTier("mini")
+        .build());
+
+PipelineNodeRef invoiceFinal = pipelineBuilder.addNodeRef(PipelineNode.finalResult("invoice_final")
+        .dependsOn(classification, invoice)
+        .when(PipelineCondition.eq(documentType, "invoice"))
+        .output(Map.of(
+                "branch", "invoice",
+                "classification", classification.result(),
+                "extracted", invoice.result()))
+        .build());
+
+PipelineNodeRef sdsFinal = pipelineBuilder.addNodeRef(PipelineNode.finalResult("sds_final")
+        .dependsOn(classification, sds)
+        .when(PipelineCondition.eq(documentType, "safety_data_sheet"))
+        .output(Map.of(
+                "branch", "safety_data_sheet",
+                "classification", classification.result(),
+                "extracted", sds.result()))
+        .build());
+
+PipelineNodeRef otherFinal = pipelineBuilder.addNodeRef(PipelineNode.finalResult("other_final")
+        .dependsOn(classification)
+        .when(PipelineCondition.eq(documentType, "other"))
+        .output(Map.of(
+                "branch", "other",
+                "classification", classification.result(),
+                "message", "No specialized extraction branch was selected."))
+        .build());
+
+PipelineDefinition pipeline = pipelineBuilder.finalOrder(invoiceFinal, sdsFinal, otherFinal).build();
+
+byte[] documentData = Files.readAllBytes(Path.of("report.pdf"));
+
+String guid = client.processPipelineDocument(
+        new UploadRequest("report.pdf", "application/pdf", documentData),
+        pipeline,
+        "AUTO");
+
+JsonNode result = client.waitUntilReadyJson(guid,
+        WaitOptions.builder().timeout(Duration.ofSeconds(180)).pollInterval(Duration.ofSeconds(5)).build());
+System.out.println(result.toPrettyString());
+
+JsonNode nodes = client.getPipelineNodes(guid);
+System.out.println(nodes.toPrettyString());
+```
+
 Branch prompts should describe the extraction task itself, not the pipeline mechanics. The branch selection already happened through `when`; the extract node receives a normal extraction task over the selected source content.
 
 Read the node statuses after the run to inspect routing (`get_pipeline_nodes(guid)` in Python, `getPipelineNodes(guid)` in Java, `pipeline.nodes` in `GET /job/status/{guid}`). Matching branches complete; non-matching branches are marked `SKIPPED`.
@@ -665,6 +782,52 @@ pipeline.final(
 print(json.dumps(pipeline.to_dict(), indent=2))
 ```
 
+**Java**
+
+```java
+import static ai.docudevs.client.PipelinePath.ocr;
+
+import ai.docudevs.client.PipelineBucket;
+import ai.docudevs.client.PipelineDefinition;
+import ai.docudevs.client.PipelineNode;
+import ai.docudevs.client.PipelineNodeRef;
+import ai.docudevs.client.PipelineOcr;
+import java.util.List;
+import java.util.Map;
+
+PipelineDefinition.Builder pipelineBuilder = PipelineDefinition.builder()
+        .ocr(PipelineOcr.builder()
+                .mode("AUTO")
+                .qualityArtifact(true)
+                .build());
+
+PipelineNodeRef quality = pipelineBuilder.validateBucket(
+        "ocr_quality",
+        ocr().quality().score(),
+        List.of(PipelineBucket.withMin("good", 0.85), PipelineBucket.named("review")),
+        "review");
+
+PipelineNodeRef extracted = pipelineBuilder.addNodeRef(PipelineNode.extract("extract_data")
+        .source(ocr().content())
+        .prompt("Extract the requested fields.")
+        .schema(Map.of(
+                "type", "object",
+                "properties", Map.of(
+                        "name", Map.of("anyOf", List.of(
+                                Map.of("type", "string"),
+                                Map.of("type", "null"))))))
+        .build());
+
+PipelineNodeRef finalResult = pipelineBuilder.addNodeRef(PipelineNode.finalResult("final_result")
+        .dependsOn(quality, extracted)
+        .output(Map.of("quality", quality.result(), "extracted", extracted.result()))
+        .build());
+
+PipelineDefinition pipeline = pipelineBuilder.finalOrder(finalResult).build();
+
+System.out.println(pipeline.buildJsonNode().toPrettyString());
+```
+
 ## OCR_CORRECT
 
 `OCR_CORRECT` nodes run the same pagewise OCR correction primitive as the standalone `ocr-correct` operation. Set `source` or `input` to the upstream content expression and choose `sourceMap` based on source-location needs:
@@ -707,6 +870,55 @@ extracted = pipeline.extract(
 pipeline.final("final_result", depends_on=[extracted], output=extracted.result)
 
 print(json.dumps(pipeline.to_dict(), indent=2))
+```
+
+**Java**
+
+```java
+import static ai.docudevs.client.PipelinePath.ocr;
+
+import ai.docudevs.client.PipelineDefinition;
+import ai.docudevs.client.PipelineNode;
+import ai.docudevs.client.PipelineNodeRef;
+import ai.docudevs.client.PipelineOcr;
+import java.util.List;
+import java.util.Map;
+
+PipelineDefinition.Builder pipelineBuilder = PipelineDefinition.builder()
+        .ocr(PipelineOcr.builder()
+                .mode("AUTO")
+                .sourceLocations(true)
+                .build());
+
+PipelineNodeRef ocrCorrected = pipelineBuilder.addNodeRef(PipelineNode.ocrCorrect("ocr_corrected")
+        .source(ocr().content())
+        .mode("correction")
+        .scope("pagewise")
+        .sourceMap("preserve")
+        .llmTier("mini")
+        .build());
+
+PipelineNodeRef extracted = pipelineBuilder.addNodeRef(PipelineNode.extract("extract_corrected")
+        .dependsOn(ocrCorrected)
+        .source(ocrCorrected.result().content())
+        .prompt("Extract fields from the corrected OCR text.")
+        .schema(Map.of(
+                "type", "object",
+                "properties", Map.of(
+                        "name", Map.of("anyOf", List.of(
+                                Map.of("type", "string"),
+                                Map.of("type", "null"))))))
+        .sourceLocations(true)
+        .build());
+
+PipelineNodeRef finalResult = pipelineBuilder.addNodeRef(PipelineNode.finalResult("final_result")
+        .dependsOn(extracted)
+        .output(extracted.result())
+        .build());
+
+PipelineDefinition pipeline = pipelineBuilder.finalOrder(finalResult).build();
+
+System.out.println(pipeline.buildJsonNode().toPrettyString());
 ```
 
 ## Runtime Status

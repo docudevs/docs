@@ -494,6 +494,39 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.PdfAcroformOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.List;
+
+String parentJobGuid = "<job-guid>"; // GUID of a completed PDF job whose page images exist (processed with ocr PREMIUM)
+
+JsonNode result = client.submitAndWaitForPdfAcroformOperation(
+        parentJobGuid,
+        PdfAcroformOptions.builder()
+                .ocr("PREMIUM")
+                .pageRange(List.of(1))
+                .minConfidence(0.6)
+                .maxFieldsPerPage(300)
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+// The wait returns the operation job GUID and its JSON result; the PDF is a separate download
+String operationJobGuid = result.path("operationJobGuid").asText();
+Files.write(Path.of("fillable.pdf"), client.downloadPdfAcroform(operationJobGuid));
+
+System.out.println("Operation job GUID: " + operationJobGuid);
+```
+
 **CLI**
 
 ```bash
@@ -587,6 +620,70 @@ applied = await client.submit_and_wait_for_pdf_acroform_apply_operation(
 print(f"Operation job GUID: {applied.operation_job_guid}")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+String parentJobGuid = "<job-guid>"; // GUID of the completed PDF job that was converted
+String operationJobGuid = "<operation-job-guid>"; // operation job GUID returned by the conversion
+
+ObjectMapper mapper = new ObjectMapper();
+
+JsonNode generatedMetadata = client.getAcroformMetadata(operationJobGuid);
+JsonNode definitionsArtifact = client.getPdfAcroformFieldDefinitions(operationJobGuid);
+
+ArrayNode firstMetadataFields = mapper.createArrayNode();
+ArrayNode firstDefinitions = mapper.createArrayNode();
+generatedMetadata.path("fields").forEach(field -> {
+    if (firstMetadataFields.size() < 3) {
+        firstMetadataFields.add(field);
+    }
+});
+definitionsArtifact.path("fieldDefinitions").forEach(definition -> {
+    if (firstDefinitions.size() < 3) {
+        firstDefinitions.add(definition);
+    }
+});
+System.out.println(firstMetadataFields.toPrettyString());
+System.out.println(firstDefinitions.toPrettyString());
+
+// Mark every generated field as reviewed and accepted
+List<Map<String, Object>> reviewedFields = new ArrayList<>();
+for (JsonNode definition : definitionsArtifact.path("fieldDefinitions")) {
+    Map<String, Object> field = mapper.convertValue(definition, new TypeReference<Map<String, Object>>() { });
+    field.put("reviewStatus", "accepted");
+    reviewedFields.add(field);
+}
+
+JsonNode applied = client.submitAndWaitForPdfAcroformApplyOperation(
+        parentJobGuid,
+        reviewedFields,
+        operationJobGuid,
+        0.0,
+        300,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+// The wait returns the operation job GUID and its JSON result; the PDF is a separate download
+String appliedJobGuid = applied.path("operationJobGuid").asText();
+Files.write(Path.of("reviewed.pdf"), client.downloadPdfAcroform(appliedJobGuid));
+
+System.out.println("Operation job GUID: " + appliedJobGuid);
+```
+
 The generated PDF from either the initial conversion or the reviewed apply flow is always downloaded through `GET /job/result/{guid}/pdf-acroform`.
 
 ### Document Outline
@@ -654,6 +751,32 @@ print(outline_result.result)
 print(outline_result.document_outline)
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.DocumentOutlineOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
+
+String jobGuid = "<job-guid>"; // GUID of a completed document job
+
+JsonNode outlineResult = client.submitAndWaitForDocumentOutlineOperation(
+        jobGuid,
+        DocumentOutlineOptions.builder()
+                .pagesPerChunk(3)
+                .overlapPages(1)
+                .parallelProcessing(true)
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+System.out.println(outlineResult.path("result"));
+System.out.println(outlineResult.path("documentOutline"));
+```
+
 If the job already has an outline artifact (for example, a job originally processed with `splitType=DOCUMENT_OUTLINE`), fetch it directly without submitting a new operation:
 
 **cURL**
@@ -674,9 +797,20 @@ outline = await client.get_document_outline(job_guid)
 print(json.dumps(outline, indent=2))
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String jobGuid = "<job-guid>"; // GUID of a job that already has an outline artifact
+
+JsonNode outline = client.getDocumentOutline(jobGuid);
+System.out.println(outline.toPrettyString());
+```
+
 In Python, `wait_until_ready_with_document_outline` waits for a still-running job and returns its result and outline in one call.
 
-`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command and no Java SDK method for this operation: use the Python SDK or the raw HTTP API directly.
+`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command for this operation: use the Java client, the Python SDK or the raw HTTP API directly.
 
 ## Advanced Usage
 
@@ -750,6 +884,36 @@ for question in questions:
     result_data = json.loads(answer.result)
     print(f"Q: {question}")
     print(f"A: {result_data['generated_text']}\n")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
+import java.util.List;
+
+String parentJobGuid = "<job-guid>"; // GUID of a completed document job
+
+List<String> questions = List.of(
+        "What is the contract duration?",
+        "Who are the parties involved?",
+        "What are the key obligations?");
+
+for (String question : questions) {
+    // One call submits the task and waits for it; it returns the task's result document
+    JsonNode answer = client.submitAndWaitForGenerativeTask(
+            parentJobGuid,
+            "Based on this document, answer the following question: " + question,
+            WaitOptions.builder()
+                    .timeout(Duration.ofSeconds(120))
+                    .pollInterval(Duration.ofSeconds(2))
+                    .build());
+
+    System.out.println("Q: " + question);
+    System.out.println("A: " + answer.path("generated_text").asText() + "\n");
+}
 ```
 
 ### Advanced Parameters

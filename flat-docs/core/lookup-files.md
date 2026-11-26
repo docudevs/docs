@@ -344,6 +344,25 @@ response = await client.upload_excel_template("invoice-config", "template.xlsx")
 print(f"Upload status: {response.status_code}")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+byte[] templateData = Files.readAllBytes(Path.of("template.xlsx"));
+
+// The Java client returns no status code: the call throws DocuDevsApiException unless the API answers 2xx
+client.uploadExcelTemplate(
+        "invoice-config",
+        new UploadRequest(
+                "template.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                templateData));
+System.out.println("Uploaded template.xlsx");
+```
+
 If the configuration has no `excelTemplate` config saved (step 1), the Excel result silently falls back to a plain generated spreadsheet even if a template file was uploaded — both steps are required for the template to take effect.
 
 ### Fetching the result
@@ -368,6 +387,16 @@ xlsx_bytes = await client.result_excel(
     job_guid, save_to="invoices.xlsx", configuration="invoice-config"
 )
 print(f"Saved {len(xlsx_bytes)} bytes to invoices.xlsx")
+```
+
+**Java**
+
+```java
+String jobGuid = "<job-guid>"; // GUID of a completed extraction job
+
+byte[] xlsxBytes = client.fetchResultExcelBytes(jobGuid, "invoice-config");
+Files.write(Path.of("invoices.xlsx"), xlsxBytes);
+System.out.println("Saved " + xlsxBytes.length + " bytes to invoices.xlsx");
 ```
 
 There is no working `DocuDevsClient` helper to download the template file you uploaded back out — the generated low-level client's response model for `GET /configuration/{name}/excel-template` does not match the raw binary response the server actually returns; call that endpoint directly if you need to retrieve it. There is no CLI command for uploading or downloading an Excel template.

@@ -92,6 +92,39 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.PdfAcroformOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.List;
+
+String parentJobGuid = "<job-guid>"; // GUID of a completed PDF job whose page images exist (processed with ocr PREMIUM)
+
+JsonNode result = client.submitAndWaitForPdfAcroformOperation(
+        parentJobGuid,
+        PdfAcroformOptions.builder()
+                .ocr("PREMIUM")
+                .pageRange(List.of(1))
+                .minConfidence(0.6)
+                .maxFieldsPerPage(300)
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+// The wait returns the operation job GUID and its JSON result; the PDF is a separate download
+String operationJobGuid = result.path("operationJobGuid").asText();
+Files.write(Path.of("fillable.pdf"), client.downloadPdfAcroform(operationJobGuid));
+
+System.out.println("Operation job GUID: " + operationJobGuid);
+```
+
 **CLI**
 
 ```bash
@@ -140,6 +173,19 @@ print(f"Operation job GUID: {response.job_guid}")
 print(f"Status: {response.status}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String parentJobGuid = "<job-guid>"; // GUID of a completed PDF job whose page images exist (processed with ocr PREMIUM)
+
+JsonNode response = client.submitPdfAcroformOperation(parentJobGuid, null);
+
+System.out.println("Operation job GUID: " + response.path("jobGuid").asText());
+System.out.println("Status: " + response.path("status").asText());
+```
+
 **CLI**
 
 ```bash
@@ -167,6 +213,16 @@ operation_job_guid = "<operation-job-guid>"  # operation job GUID returned when 
 
 pdf_bytes = await client.get_pdf_acroform(operation_job_guid, save_to="fillable.pdf")
 print(f"Saved fillable.pdf ({len(pdf_bytes)} bytes)")
+```
+
+**Java**
+
+```java
+String operationJobGuid = "<operation-job-guid>"; // operation job GUID returned when the conversion was submitted
+
+byte[] pdfBytes = client.downloadPdfAcroform(operationJobGuid);
+Files.write(Path.of("fillable.pdf"), pdfBytes);
+System.out.println("Saved fillable.pdf (" + pdfBytes.length + " bytes)");
 ```
 
 Useful CLI options:

@@ -54,7 +54,7 @@ Without `sort` the oldest jobs come first. Use `sort=createdAt,desc` for the new
 
 The response has `content`, the jobs of the page, and `totalSize` and `totalPages`, the counts over all jobs that match the filters. Each job is the same object that `GET /job/status/{guid}` returns, with fields such as `guid`, `status`, `jobType`, `createdAt`, `updatedAt` and `error`. Timestamps are UTC.
 
-The example walks through all pages of the completed jobs created since a date, newest first. The Python SDK has no method for this route, so it is called over HTTP.
+The example walks through all pages of the completed jobs created since a date, newest first. The Python SDK and the Java client have no method for this route, so it is called over HTTP.
 
 **cURL**
 
@@ -101,7 +101,7 @@ done
 - `dependencyStatus` is `PENDING` while the job waits for its parent, `READY` once the job is released to run, and `BLOCKED` when the parent failed, timed out or cannot be found. A blocked job carries the reason in its `error`.
 - An unknown GUID answers `404`.
 
-The example reads the parameters and the dependency of one job. The Python SDK has no method for either route.
+The example reads the parameters and the dependency of one job. The Python SDK and the Java client have no method for either route.
 
 **cURL**
 
@@ -334,6 +334,70 @@ line_items_result = await client.wait_until_ready(job_guid, result_format="json"
 print(json.dumps(line_items_result, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+
+String headerSchema = Schema.of(Map.of(
+        "type", "object",
+        "properties", Map.of(
+                "invoice_number", Map.of("type", "string"),
+                "vendor", Map.of("type", "string"),
+                "total", Map.of("type", "number")),
+        "required", List.of("total")));
+
+String lineItemsSchema = Schema.of(Map.of(
+        "type", "object",
+        "properties", Map.of(
+                "line_items", Map.of(
+                        "type", "array",
+                        "items", Map.of(
+                                "type", "object",
+                                "properties", Map.of(
+                                        "description", Map.of("type", "string"),
+                                        "amount", Map.of("type", "number")))))));
+
+WaitOptions waitOptions = WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build();
+
+byte[] documentData = Files.readAllBytes(Path.of("invoice.pdf"));
+
+// First extraction: parse the document and extract the header fields
+String jobGuid = client.submitAndProcessDocument(
+        new UploadRequest("invoice.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract invoice header fields")
+                .schema(headerSchema)
+                .build());
+JsonNode headerResult = client.waitUntilReadyJson(jobGuid, waitOptions);
+System.out.println(headerResult.toPrettyString());
+
+// Second extraction: reuse the parsed document with another schema (no re-OCR)
+client.processDocument(
+        jobGuid,
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract line items")
+                .schema(lineItemsSchema)
+                .dependsOn(jobGuid)
+                .build());
+JsonNode lineItemsResult = client.waitUntilReadyJson(jobGuid, waitOptions);
+System.out.println(lineItemsResult.toPrettyString());
+```
+
 The dependent job waits for the parent to complete, then reuses its OCR/parsed content. This is especially useful for:
 
 - Extracting **multiple schemas** from the same document
@@ -374,6 +438,23 @@ if isinstance(job.quality_score, float):
     print(f"Quality: {job.quality_score:.2f} ({job.quality_category})")
 else:
     print("No quality score for this job")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String jobGuid = "<job-guid>"; // GUID of a completed job
+
+JsonNode job = client.getJobStatus(jobGuid);
+if (job.path("qualityScore").isNumber()) {
+    System.out.printf("Quality: %.2f (%s)%n",
+            job.path("qualityScore").asDouble(),
+            job.path("qualityCategory").asText());
+} else {
+    System.out.println("No quality score for this job");
+}
 ```
 
 **CLI**
@@ -452,6 +533,45 @@ else:
     print("No quality score for this job")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+byte[] documentData = Files.readAllBytes(Path.of("scan.pdf"));
+
+// AUTO starts with the default OCR and switches to PREMIUM when the quality is low
+String jobGuid = client.submitAndProcessDocument(
+        new UploadRequest("scan.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract the key fields")
+                .ocr("AUTO")
+                .build());
+
+client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+JsonNode job = client.getJobStatus(jobGuid);
+if (job.path("qualityScore").isNumber()) {
+    System.out.printf("Quality: %.2f (%s)%n",
+            job.path("qualityScore").asDouble(),
+            job.path("qualityCategory").asText());
+} else {
+    System.out.println("No quality score for this job");
+}
+```
+
 :::info Case Documents
 Documents uploaded to [Cases](https://docs.docudevs.ai/docs/advanced/cases) are **not automatically purged**. Case documents persist until the case is deleted or documents are manually removed from the case.
 :::
@@ -526,6 +646,41 @@ if delete_result.status_code == 200:
     print(f"Cleaned up job: {(delete_result.parsed or {}).get('jobsDeleted', 0)} deleted")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+byte[] documentData = Files.readAllBytes(Path.of("invoice.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+        new UploadRequest("invoice.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract invoice data")
+                .build());
+
+JsonNode result = client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+// Save the result locally before deleting the job
+Files.writeString(Path.of(jobGuid + "_result.json"), result.toPrettyString());
+
+// Clean up the job from DocuDevs
+JsonNode deleteResult = client.deleteJob(jobGuid);
+System.out.println("Cleaned up job: " + deleteResult.path("jobsDeleted").asInt(0) + " deleted");
+```
+
 ## Error Handling
 
 Handle common errors when deleting jobs:
@@ -570,6 +725,35 @@ elif result.status_code == 409:
     print(f"Cannot delete: {'; '.join(errors)}")  # e.g., job still processing
 else:
     print(f"Unexpected status: {result.status_code}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.DocuDevsApiException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+
+String jobGuid = "<job-guid>"; // GUID of the job to delete
+
+try {
+    JsonNode result = client.deleteJob(jobGuid);
+    System.out.println("Deleted successfully: " + result.path("jobsDeleted").asInt() + " job(s)");
+} catch (DocuDevsApiException error) {
+    if (error.getStatusCode() == 404) {
+        System.out.println("Job not found - may already be deleted or purged");
+    } else if (error.getStatusCode() == 409) {
+        List<String> errors = new ArrayList<>();
+        new ObjectMapper().readTree(error.getResponseBody())
+                .path("errors")
+                .forEach(message -> errors.add(message.asText()));
+        System.out.println("Cannot delete: " + String.join("; ", errors)); // e.g., job still processing
+    } else {
+        System.out.println("Unexpected status: " + error.getStatusCode());
+    }
+}
 ```
 
 ## API Reference
