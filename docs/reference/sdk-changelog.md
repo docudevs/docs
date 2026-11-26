@@ -13,6 +13,7 @@ mdx:
 
 - The Java SDK now covers the operations of the Python client: records and datasets, classify, category trees, memos, knowledge bases and search, agent chat and runs, providers and credentials, map-reduce, compare, document layout and figures, and the rest of contract analysis.
 - Every blocking method of the Java client has an async version on `DocuDevsAsyncClient`.
+- These changes are in Java SDK 0.4.0 and Python SDK 1.16.0.
 
 ### Python SDK
 

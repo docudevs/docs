@@ -13,7 +13,7 @@ java {
 }
 
 dependencies {
-    implementation("ai.docudevs:docudevs-java-sdk:0.3.0")
+    implementation("ai.docudevs:docudevs-java-sdk:0.4.0")
 }
 
 sourceSets {
