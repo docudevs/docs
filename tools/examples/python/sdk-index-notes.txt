@@ -9,3 +9,7 @@ resolve_extraction_review_values  # Needs a signed-in user; an organization API 
 adjudicate_extraction_review_claim  # Needs a signed-in user; an organization API key is refused.
 create_generative_task  # temperature and max_tokens are accepted but have no effect.
 submit_and_wait_for_generative_task  # temperature and max_tokens are accepted but have no effect.
+generate_contract_analysis_profile  # Refused with 400 (status REJECTED) when the playbook already has clauses; the first build writes the clauses into the draft.
+get_contract_analysis_generation_comparison  # For a playbook in the clause format the comparison is empty: 200, classification unchanged, no elements.
+apply_contract_analysis_generation  # For a playbook in the clause format nothing can be applied: 409 generation_apply_conflict with any decision, 422 UNKNOWN_FIELD with none.
+get_contract_analysis_workflow  # ruleCount counts clauses; pendingRebuild can appear after a build with all counts 0.

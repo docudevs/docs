@@ -509,7 +509,7 @@ docudevs knowledge-base contract-analysis get CASE_ID --view draft
 
 ### `knowledge-base contract-analysis generate`
 
-Start profile compilation from the eligible knowledge-base documents.
+Start the first build of clauses from the guideline documents of a playbook. A playbook that already has clauses is refused with status `400` (`REJECTED`); change such a playbook by exporting, editing and importing it.
 
 ```bash
 docudevs knowledge-base contract-analysis generate CASE_ID --our-party "Example Supplier" --counterparty "Example Customer"
@@ -520,7 +520,7 @@ docudevs knowledge-base contract-analysis generate CASE_ID --our-party "Example 
 
 ### `knowledge-base contract-analysis generation-compare`
 
-Show the previous, current, and proposed values for a regeneration.
+Show the comparison for a build job. For a playbook in the clause format it is empty: the call answers `200` with `classification` `unchanged` and no `elements`. An unknown job ID returns `404`.
 
 ```bash
 docudevs knowledge-base contract-analysis generation-compare CASE_ID GENERATION_JOB_GUID
@@ -528,7 +528,7 @@ docudevs knowledge-base contract-analysis generation-compare CASE_ID GENERATION_
 
 ### `knowledge-base contract-analysis generation-apply`
 
-Apply explicit per-element decisions against the latest comparison fingerprint.
+Apply per-element decisions from a comparison. For a playbook in the clause format there is nothing to apply and the draft is not changed: any decision returns `409` (code `generation_apply_conflict`), and an empty decisions object returns `422` with the problem `UNKNOWN_FIELD` at `criteria`.
 
 ```bash
 docudevs knowledge-base contract-analysis generation-apply CASE_ID GENERATION_JOB_GUID --decisions decisions.json

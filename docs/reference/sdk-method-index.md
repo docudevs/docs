@@ -16,7 +16,7 @@ This table is generated from the released Python client (`docu-devs-api-client` 
 | `agent_status` | `job_guid: str` | `dict` | Get the status and response for an agent chat job. |  |
 | `analyze_document` | `document: bytes \| BytesIO`<br />`document_mime_type: str`<br />`ocr: str \| None = None`<br />`describe_figures: bool \| None = None`<br />`extract_figures: bool \| None = None` | `str` |  |  |
 | `analyze_document_and_wait` | `document: bytes \| BytesIO`<br />`document_mime_type: str`<br />`ocr: str \| None = None`<br />`describe_figures: bool \| None = None`<br />`extract_figures: bool \| None = None`<br />`timeout: int = 180`<br />`poll_interval: float = 5.0` | `Any` |  |  |
-| `apply_contract_analysis_generation` | `case_id: Union[int, str]`<br />`generation_job_guid: str`<br />`expected_draft_revision: int`<br />`expected_draft_fingerprint: str`<br />`decisions: Mapping[str, Mapping[str, Any]]` | `SimpleNamespace` | Apply an explicitly reviewed generation against the exact draft snapshot. |  |
+| `apply_contract_analysis_generation` | `case_id: Union[int, str]`<br />`generation_job_guid: str`<br />`expected_draft_revision: int`<br />`expected_draft_fingerprint: str`<br />`decisions: Mapping[str, Mapping[str, Any]]` | `SimpleNamespace` | Apply an explicitly reviewed generation against the exact draft snapshot. | For a playbook in the clause format nothing can be applied: 409 generation_apply_conflict with any decision, 422 UNKNOWN_FIELD with none. |
 | `approve_memo_entry` | `case_id: Union[int, str]`<br />`entry_id: str` | `dict` | Approve a proposed instruction so classify jobs use it. |  |
 | `attest_contract_analysis_trial` | `case_id: Union[int, str]`<br />`trial_id: str`<br />`report_id: str`<br />`reason: str \| None = None` | `SimpleNamespace` | Record approval of a passing scored-trial report. |  |
 | `batch_records` | `case_id: Union[int, str]`<br />`upserts: Optional[Sequence[Mapping[str, Any]]] = None`<br />`deletes: Optional[Sequence[str]] = None` | `dict` | Upsert and delete up to 1,000 records (10 MB) in one call. |  |
@@ -66,7 +66,7 @@ This table is generated from the released Python client (`docu-devs-api-client` 
 | `extract_acroform_metadata` | `document: bytes \| BytesIO \| str`<br />`file_name: str \| None = None`<br />`mime_type: str \| None = None` | `dict` | Extract AcroForm metadata directly from a PDF upload. |  |
 | `fill` | `name: str`<br />`body: TemplateFillRequest` | — | Fill a template. |  |
 | `fill_with_retry` | `name: str`<br />`body: TemplateFillRequest`<br />`timeout: float = 30.0`<br />`poll_interval: float = 1.0`<br />`retry_on_statuses: tuple[int, ...] = (404, 500)`<br />`initial_delay: float = 0.5` | — | Fill a template, retrying transient readiness errors. |  |
-| `generate_contract_analysis_profile` | `case_id: Union[int, str]`<br />`our_party: str`<br />`counterparty: str`<br />`scope: Optional[dict[str, Any]] = None` | `SimpleNamespace` | Start the first build of clauses from the eligible knowledge-base documents. |  |
+| `generate_contract_analysis_profile` | `case_id: Union[int, str]`<br />`our_party: str`<br />`counterparty: str`<br />`scope: Optional[dict[str, Any]] = None` | `SimpleNamespace` | Start the first build of clauses from the eligible knowledge-base documents. | Refused with 400 (status REJECTED) when the playbook already has clauses; the first build writes the clauses into the draft. |
 | `generate_schema` | `document`<br />`document_mime_type: str`<br />`instructions: Optional[str] = None` | `str` | Generate a JSON schema from a document using AI. |  |
 | `get_acroform_metadata` | `guid: str`<br />`batch_index: int \| None = None` | `dict \| None` | Get AcroForm metadata for a PDF job. |  |
 | `get_agent_run` | `case_id: Union[int, str]`<br />`run_id: Union[int, str]` | `dict` | Get the status, usage, pending action ids and report of an agent run. |  |
@@ -79,7 +79,7 @@ This table is generated from the released Python client (`docu-devs-api-client` 
 | `get_classify_results_page` | `case_id: Union[int, str]`<br />`job_id: Union[int, str]`<br />`flag: Optional[str] = None`<br />`review_required: Optional[bool] = None`<br />`level: Optional[int] = None`<br />`code: Optional[str] = None`<br />`decision: Optional[str] = None`<br />`routing: Optional[Sequence[str]] = None`<br />`limit: Optional[int] = None`<br />`continuation: Optional[str] = None` | `dict` | Get one page of results: &#123;rows, continuation?, complete, status&#125;. |  |
 | `get_configuration` | `name: str` | — | Get a named configuration. |  |
 | `get_configuration_lookup_file` | `configuration_name: str` | — |  |  |
-| `get_contract_analysis_generation_comparison` | `case_id: Union[int, str]`<br />`generation_job_guid: str` | `SimpleNamespace` | Get the immutable three-way comparison for a generated proposal. |  |
+| `get_contract_analysis_generation_comparison` | `case_id: Union[int, str]`<br />`generation_job_guid: str` | `SimpleNamespace` | Get the immutable three-way comparison for a generated proposal. | For a playbook in the clause format the comparison is empty: 200, classification unchanged, no elements. |
 | `get_contract_analysis_profile` | `case_id: Union[int, str]`<br />`view: str = 'draft'` | `SimpleNamespace` | Get a contract-analysis profile draft or active publication. |  |
 | `get_contract_analysis_run` | `run_id: str` | `SimpleNamespace` | Get status for exactly one immutable run. |  |
 | `get_contract_analysis_run_result` | `run_id: str` | `SimpleNamespace` | Get the result for exactly one immutable run. |  |
@@ -88,7 +88,7 @@ This table is generated from the released Python client (`docu-devs-api-client` 
 | `get_contract_analysis_test_suite` | `case_id: Union[int, str]` | `SimpleNamespace` | Get the current immutable test-suite revision for a knowledge base. |  |
 | `get_contract_analysis_trial` | `case_id: Union[int, str]`<br />`trial_id: str` | `SimpleNamespace` | Read status and immutable report for a trial. |  |
 | `get_contract_analysis_trial_readiness` | `case_id: Union[int, str]` | `SimpleNamespace` | Read current publication readiness and blockers for the current draft/suite. |  |
-| `get_contract_analysis_workflow` | `case_id: Union[int, str]` | `SimpleNamespace` | Where a case is in contract-analysis setup: step, clause build, pending rebuild, readiness. |  |
+| `get_contract_analysis_workflow` | `case_id: Union[int, str]` | `SimpleNamespace` | Where a case is in contract-analysis setup: step, clause build, pending rebuild, readiness. | ruleCount counts clauses; pendingRebuild can appear after a build with all counts 0. |
 | `get_dataset` | `case_id: Union[int, str]` | `dict` | Get the records dataset configuration of a case. |  |
 | `get_default_embedding_binding` | — | — | Get the organization default embedding binding and rollout counters. |  |
 | `get_document_compare` | `compare_guid: str` | `dict` | Return the document-compare artifact of a completed redline comparison. |  |

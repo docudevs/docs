@@ -1425,7 +1425,7 @@ profile = await client.get_contract_analysis_profile(case_id, view="draft")
 
 ### get_contract_analysis_workflow
 
-Read where a case is in contract-analysis setup. `.parsed` has the `step` (`upload`, `build`, `review`, `test` or `publish`), `draftRevision`, `publishedRevision`, `ruleCount`, `testCaseCount`, `readyToPublish` and `publishWarnings`. While a rule build runs or after it failed, `build` holds the `generationJobGuid`, its `status` and, on failure, an `error`. A finished rebuild that is waiting to be applied appears as `pendingRebuild` with the number of added, changed, removed and conflicting rules. A case without a profile reports the step `upload`. The method does not raise on an error status; check `status_code`.
+Read where a case is in contract-analysis setup. `.parsed` has the `step` (`upload`, `build`, `review`, `test` or `publish`), `draftRevision`, `publishedRevision`, `ruleCount` (the number of clauses), `testCaseCount`, `readyToPublish` and `publishWarnings`. While a clause build runs or after it failed, `build` holds the `generationJobGuid`, its `status` and, on failure, an `error`. After a build has finished, `pendingRebuild` can appear with the counts of added, changed, removed and conflicting rules; for a playbook in the clause format all four are 0 and there is nothing to apply. A case without a profile reports the step `upload`. The method does not raise on an error status; check `status_code`.
 
 ```python
 workflow = await client.get_contract_analysis_workflow(case_id)
@@ -1434,7 +1434,7 @@ print(workflow.parsed["step"])
 
 ### generate_contract_analysis_profile
 
-Start profile compilation from the eligible knowledge-base documents. Returns a generation job whose proposal can be compared and applied.
+Start the first build of clauses from the guideline documents of a playbook. The response carries the job ID; when the job finishes the draft holds the generated clauses. A playbook that already has clauses is refused with status `400` (the body has `status` `REJECTED` and a `message`); change such a playbook by exporting it, editing it and importing it again.
 
 ```python
 generation = await client.generate_contract_analysis_profile(case_id)
@@ -1442,7 +1442,7 @@ generation = await client.generate_contract_analysis_profile(case_id)
 
 ### get_contract_analysis_generation_comparison
 
-Get the immutable three-way comparison (previous / current / proposed) for a generated proposal.
+Get the comparison for a build job. For a playbook in the clause format the comparison is empty: the call answers `200` with `classification` `unchanged` and no `elements`, because only the earlier rule-based format has elements to compare. An unknown job ID returns `404`. Use the draft revisions to see what a build changed.
 
 ```python
 comparison = await client.get_contract_analysis_generation_comparison(case_id, generation_job_guid)
@@ -1450,7 +1450,7 @@ comparison = await client.get_contract_analysis_generation_comparison(case_id, g
 
 ### apply_contract_analysis_generation
 
-Apply an explicitly reviewed generation against the exact draft snapshot it was compared to.
+Apply reviewed decisions from a comparison. For a playbook in the clause format there is nothing to apply and the draft is not changed: sending any decision returns `409` (code `generation_apply_conflict`), and sending none returns `422` with the problem `UNKNOWN_FIELD` at `criteria` in `validation.errors`. A stale `expected_draft_revision` returns `409`, and an unknown job ID `404`.
 
 ```python
 async def apply_contract_analysis_generation(self, case_id, generation_job_guid, *, expected_draft_revision: int, expected_draft_fingerprint: str, decisions: Mapping[str, Mapping[str, Any]])

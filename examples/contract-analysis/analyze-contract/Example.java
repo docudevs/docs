@@ -16,8 +16,8 @@ public class Example {
         String jobGuid = "<completed-contract-job>"; // jobGuid of a completed contract job
         long knowledgeBaseId = 42L; // id of the case whose profile is published
 
-        // This call polls the contract job's analysis route, so with several analyses of one
-        // contract it can return an older one; cURL and Python wait on the analysis job instead
+        // This call polls the operation route of the contract job, which can answer with any
+        // one of its analyses; cURL and Python wait on the analysis job they just started
         JsonNode operation = client.submitAndWaitForContractAnalysis(jobGuid, knowledgeBaseId);
 
         System.out.println(operation.path("result").asText());
