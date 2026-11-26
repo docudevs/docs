@@ -6,6 +6,8 @@ extraction/extract-with-source-locations-single-call:curl  # polling helper that
 integrations/create-connection:python  # DocuDevsClient 1.15.0 has no method for POST /integration/connections
 integrations/delete-connection:python  # DocuDevsClient 1.15.0 has no method for DELETE /integration/connections/{id}
 integrations/list-connections:python  # DocuDevsClient 1.15.0 has no method for GET /integration/connections
+jobs/inspect-job:python  # DocuDevsClient 1.15.0 has no method for GET /job/params/{guid} or GET /job/dependencies/{guid}
+jobs/list-jobs:python  # DocuDevsClient 1.15.0 has no method for GET /job/list
 llm-providers/create-llm-provider:python  # DocuDevsClient 1.15.0 create_llm_provider sends field names that POST /llm/providers rejects
 llm-providers/update-llm-provider:python  # DocuDevsClient 1.15.0 update_llm_provider changes only the name; its other field names are ignored by PATCH /llm/providers/{id}
 llm-providers/verify-llm-provider:python  # DocuDevsClient 1.15.0 has no method for POST /llm/providers/{id}/verify

@@ -74,6 +74,8 @@ integrations/delete-connection:java
 integrations/list-connections:java
 jobs/check-quality:java
 jobs/handle-delete-errors:java
+jobs/inspect-job:java
+jobs/list-jobs:java
 jobs/process-and-clean-up:java
 jobs/process-with-auto-ocr:java
 jobs/process-with-depends-on:java
