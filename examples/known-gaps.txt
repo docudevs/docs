@@ -94,6 +94,11 @@ lookup-files/manage-configuration-lookup-file:java
 lookup-files/process-batch-with-lookup-file:java
 lookup-files/save-excel-template-config:java
 lookup-files/upload-excel-template:java
+managed-workflows/cancel-run:java
+managed-workflows/get-logs:java
+managed-workflows/get-run:java
+managed-workflows/list-runs:java
+managed-workflows/start-run:java
 members/list-members:java
 members/remove-member:java
 members/set-join-policy:java

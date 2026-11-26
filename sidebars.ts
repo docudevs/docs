@@ -101,6 +101,7 @@ const sidebars: SidebarsConfig = {
         'guides/drive-to-sharepoint',
         'integration/webhooks',
         'integration/submission-portals',
+        'integration/managed-workflows',
         'integration/edge-runtimes',
       ],
     },

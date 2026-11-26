@@ -4,7 +4,7 @@ description: Build a managed workflow that downloads PDFs from Google Drive, ext
 slug: /guides/drive-to-sharepoint
 ---
 
-Use Flow Builder to download invoice PDFs from a Google Drive folder, extract their invoice numbers in one DocuDevs batch, upload the workbook to SharePoint, and move the processed PDFs to a Drive archive folder. For the builder itself, see [Build workflows in Flow Builder](./flow-builder.md).
+Use Flow Builder to download invoice PDFs from a Google Drive folder, extract their invoice numbers in one DocuDevs batch, upload the workbook to SharePoint, and move the processed PDFs to a Drive archive folder. For the builder itself, see [Build workflows in Flow Builder](./flow-builder.md). To start and monitor the run from your own code, see [Managed workflows API](../integration/managed-workflows.md).
 
 ![Flow Builder canvas connecting Google Drive Folder Downloads, Batch Extract, SharePoint Upload, and Google Drive Archive](./assets/drive-to-sharepoint/visual-workflow.png)
 
