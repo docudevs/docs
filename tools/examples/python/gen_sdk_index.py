@@ -9,6 +9,8 @@ from check_method_coverage import load_client, public_methods
 NOTES_FILE = Path(__file__).resolve().parent / "sdk-index-notes.txt"
 PACKAGE = "docu-devs-api-client"
 EMPTY = "—"
+MAX_DEFAULT = 40
+ABBREVIATIONS = ("e.g.", "i.e.")
 
 
 def _cell(text: str) -> str:
@@ -29,7 +31,7 @@ def _prose(text: str) -> str:
 
 def _repr(value: object) -> str:
     text = repr(value)
-    return "…" if re.search(r" at 0x[0-9a-fA-F]+", text) else text
+    return "…" if len(text) > MAX_DEFAULT or re.search(r" at 0x[0-9a-fA-F]+", text) else text
 
 
 def _annotation(annotation: object) -> str:
@@ -50,7 +52,10 @@ def _first_sentence(doc: str | None) -> str:
     if not doc:
         return ""
     paragraph = " ".join(doc.strip().split("\n\n")[0].split())
-    match = re.search(r"(?<=[.!?])\s", paragraph)
+    masked = paragraph
+    for abbreviation in ABBREVIATIONS:
+        masked = masked.replace(abbreviation, abbreviation.replace(".", "\0"))
+    match = re.search(r"(?<=[.!?])\s", masked)
     return paragraph[: match.start()] if match else paragraph
 
 
@@ -58,7 +63,7 @@ def _row(client_cls: type, name: str, notes: dict[str, str]) -> str:
     method = getattr(client_cls, name)
     signature = inspect.signature(method)
     parameters = [p for index, p in enumerate(signature.parameters.values()) if not (index == 0 and p.name == "self")]
-    params = _code(", ".join(_parameter(p) for p in parameters)) if parameters else EMPTY
+    params = "<br />".join(_code(_parameter(p)) for p in parameters) if parameters else EMPTY
     returns = (
         EMPTY
         if signature.return_annotation is inspect.Signature.empty

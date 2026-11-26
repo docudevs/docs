@@ -24,6 +24,15 @@ class Fake:
     async def addr(self, thing=object()):
         pass
 
+    async def three(self, a: int, b: str = "x", c=None):
+        pass
+
+    async def long_default(self, v="x" * 60):
+        pass
+
+    async def tick(self, v="a`b"):
+        """Sends data, e.g. files. Second sentence."""
+
     def _private(self):
         pass
 
@@ -37,7 +46,7 @@ def test_row_content():
     row = next(line for line in rows(page) if line.startswith("| `a`"))
     assert "x: int" in row
     assert "y: str = 'k'" in row
-    assert "`dict`" in row or "dict" in row
+    assert "`dict`" in row
     assert "Does a." in row
     assert "More text" not in row
     assert "self" not in row
@@ -47,7 +56,7 @@ def test_private_absent_and_sorted():
     page = render_index(Fake)
     assert "_private" not in page
     names = [line.split("`")[1] for line in rows(page)]
-    assert names == sorted(names) == ["a", "addr", "b_plain", "pipe"]
+    assert names == sorted(names) == ["a", "addr", "b_plain", "long_default", "pipe", "three", "tick"]
 
 
 def test_missing_docstring_and_annotation():
@@ -60,7 +69,7 @@ def test_pipes_escaped_in_cells():
     row = next(line for line in rows(render_index(Fake)) if line.startswith("| `pipe`"))
     assert "a\\|b" in row
     assert "str \\| None" in row
-    assert len(row.replace("\\|", "").split("|")) == len(rows(render_index(Fake))[0].replace("\\|", "").split("|"))
+    assert len(re.split(r"(?<!\\)\|", row)) == 7
 
 
 def test_mdx_unsafe_characters_cannot_break_the_page():
@@ -132,3 +141,28 @@ def test_check_flag_may_follow_the_path(tmp_path):
     out = tmp_path / "page.md"
     run_cli(str(out))
     assert run_cli(str(out), "--check").returncode == 0
+
+
+def row_of(name):
+    return next(line for line in rows(render_index(Fake)) if line.startswith(f"| `{name}`"))
+
+
+def test_each_parameter_is_its_own_code_span():
+    cell = re.split(r"(?<!\\)\|", row_of("three"))[2].strip()
+    assert cell == "`a: int`<br />`b: str = 'x'`<br />`c = None`"
+
+
+def test_long_default_is_elided():
+    row = row_of("long_default")
+    assert "v = …" in row
+    assert "xxxx" not in row
+
+
+def test_backtick_value_renders_in_a_wider_code_span():
+    assert "`` v = 'a`b' ``" in row_of("tick")
+
+
+def test_abbreviations_do_not_end_the_summary():
+    row = row_of("tick")
+    assert "Sends data, e.g. files. |" in row
+    assert "Second" not in row
