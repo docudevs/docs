@@ -30,7 +30,7 @@ public class Example {
         // Throws DocuDevsApiException (409) when an import fails, and DocuDevsTimeoutException after 1800 seconds.
         JsonNode dry = client.syncRecordsAndWait(caseId, snapshot, syncOptions, waitOptions);
         JsonNode summary = dry.path("syncSummary");
-        if (summary.isMissingNode()) {
+        if (summary.isMissingNode() || summary.isNull()) {
             throw new IllegalStateException("The dry run produced no report");
         }
         System.out.println(summary.path("counts"));
