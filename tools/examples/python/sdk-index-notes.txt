@@ -1,0 +1,11 @@
+create_llm_provider  # Rejected with 400; use the REST API (see the warning on the SDK Methods page).
+update_llm_provider  # Changes only the name; other fields are ignored. Use the REST API.
+create_ocr_provider  # Rejected with 400; use the REST API (see the warning on the SDK Methods page).
+update_ocr_provider  # Changes only the name and endpoint; the model change is ignored. Use the REST API.
+create_model_credential  # The API answers 201, which the client does not parse: read .content, not .parsed.
+create_embedding_provider  # The API answers 201, which the client does not parse: read .content, not .parsed.
+add_extraction_review_flags  # Needs a signed-in user; an organization API key is refused.
+resolve_extraction_review_values  # Needs a signed-in user; an organization API key is refused.
+adjudicate_extraction_review_claim  # Needs a signed-in user; an organization API key is refused.
+create_generative_task  # temperature and max_tokens are accepted but have no effect.
+submit_and_wait_for_generative_task  # temperature and max_tokens are accepted but have no effect.

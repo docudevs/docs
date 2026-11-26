@@ -108,6 +108,7 @@ const sidebars: SidebarsConfig = {
       label: 'Reference',
       items: [
         'reference/sdk-methods',            // NEW: Complete SDK reference
+        'reference/sdk-method-index',
         'reference/cli-reference',          // NEW: CLI command reference
         'reference/playbook-format',
         'reference/sdk-changelog',
