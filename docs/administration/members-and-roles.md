@@ -76,7 +76,7 @@ This guardrail keeps every organization from locking itself out of admin access.
 
 ## Manage members from the API
 
-Listing members, changing roles, removing members and the join policy are available over HTTP. These routes need the `ADMIN` role, so an organization API key can call them (an API key acts as an admin and is not itself a member). A signed-in user can call them only as an `ADMIN`; any other role receives `403`. The Python SDK has no helper for these routes, so the examples are cURL only.
+Listing members, changing roles, removing members and the join policy are available over HTTP. These routes need the `ADMIN` role, so an organization API key can call them (an API key acts as an admin and is not itself a member). A signed-in user can call them only as an `ADMIN`; any other role receives `403`. The Python and Java SDKs have no helper for these routes, so the examples are cURL only.
 
 | Method | Path | Purpose |
 | --- | --- | --- |

@@ -73,7 +73,7 @@ curl -s -S -f -X PUT "https://api.docudevs.ai/settings/webhook" \
   -d '{"url": null}'
 ```
 
-The request body `{"url": null}` removes the URL and turns webhooks off. The Python SDK has no helper for these two routes, so the example is cURL only.
+The request body `{"url": null}` removes the URL and turns webhooks off. The Python and Java SDKs have no helper for these two routes, so the example is cURL only.
 
 ## Minimal receiver
 

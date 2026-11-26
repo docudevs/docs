@@ -55,7 +55,7 @@ curl -s -S -f -X POST "https://api.docudevs.ai/sso/domains/$DOMAIN_ID/verify" \
   | jq '{id, domain, verifiedAt}'
 ```
 
-Verification answers `400` while the TXT record cannot be found. `DELETE /sso/domains/{id}` removes a domain and answers `204`. The Python SDK has no helper for these routes.
+Verification answers `400` while the TXT record cannot be found. `DELETE /sso/domains/{id}` removes a domain and answers `204`. The Python and Java SDKs have no helper for these routes.
 
 ## Step 3 — Identity provider
 
@@ -133,4 +133,4 @@ curl -s -S -f "https://api.docudevs.ai/sso" \
   -H "Authorization: $API_KEY"
 ```
 
-The Python SDK has no helper for the SSO routes, so the example is cURL only. Replace the `oidcClientSecret` with the secret your identity provider issued; the example reads it from the `OIDC_CLIENT_SECRET` environment variable.
+The Python and Java SDKs have no helper for the SSO routes, so the example is cURL only. Replace the `oidcClientSecret` with the secret your identity provider issued; the example reads it from the `OIDC_CLIENT_SECRET` environment variable.

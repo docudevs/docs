@@ -35,7 +35,7 @@ The route answers `200` with the domain's `id` and `verificationToken`. A consum
 
 <Example name="sso/verify-domain" />
 
-Verification answers `400` while the TXT record cannot be found. `DELETE /sso/domains/{id}` removes a domain and answers `204`. The Python SDK has no helper for these routes.
+Verification answers `400` while the TXT record cannot be found. `DELETE /sso/domains/{id}` removes a domain and answers `204`. The Python and Java SDKs have no helper for these routes.
 
 ## Step 3 — Identity provider
 
@@ -88,4 +88,4 @@ All endpoints below require an `ADMIN`-role principal (an org API key is always 
 
 <Example name="sso/configure-oidc-provider" />
 
-The Python SDK has no helper for the SSO routes, so the example is cURL only. Replace the `oidcClientSecret` with the secret your identity provider issued; the example reads it from the `OIDC_CLIENT_SECRET` environment variable.
+The Python and Java SDKs have no helper for the SSO routes, so the example is cURL only. Replace the `oidcClientSecret` with the secret your identity provider issued; the example reads it from the `OIDC_CLIENT_SECRET` environment variable.
