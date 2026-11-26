@@ -101,7 +101,7 @@ The plain OCR request has no `barcodes` option: `POST /document/ocr/{guid}`, `PO
 
 Each value is written into the text at the place where the barcode appears, as `<kind>=<value>`, where `<kind>` is the barcode type that the scanner reports. If you use a prompt and a schema instead of `extractionMode` `OCR`, the extraction reads the same text and can return the values as fields; see [Extracting QR Codes](/docs/basics/SimpleDocuments#extracting-qr-codes).
 
-The scan is part of the document OCR, so it has no effect when `ocr` is `NONE`, `LOW` or `EXCEL`. Workbook normalization rejects requests that set `barcodes`. The CLI waits 60 seconds by default, so the example raises `--timeout`; cURL and Python stop waiting after 600 seconds.
+The scan is part of the document OCR, so it has no effect when `ocr` is `NONE`, `LOW` or `EXCEL`. Workbook normalization rejects requests that set `barcodes`. The CLI waits 60 seconds by default, so the example raises `--timeout`; cURL, Python and Java stop waiting after 600 seconds.
 
 ## One-Step Synchronous OCR
 

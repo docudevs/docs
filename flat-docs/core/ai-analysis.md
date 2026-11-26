@@ -29,7 +29,7 @@ AI Document Analysis uses generative AI models to understand and analyze documen
 
 ### Document Summarization
 
-OCR the document first, then submit a generative task whose parent is the OCR job. The task result carries the generated text. The Java variant prints the raw `result` field, a JSON string that contains `generated_text`, and does not set the OCR output format.
+OCR the document first, then submit a generative task whose parent is the OCR job. The task result carries the generated text. The Java variant submits the task with `submitAndWaitForGenerativeTask`, which waits for the task's own result, and reads `generated_text` from it.
 
 **cURL**
 
@@ -104,28 +104,40 @@ print(result_data["generated_text"])
 **Java**
 
 ```java
+import ai.docudevs.client.ProcessOptions;
 import ai.docudevs.client.UploadRequest;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 byte[] documentData = Files.readAllBytes(Path.of("your-document.pdf"));
-UploadRequest upload = new UploadRequest("your-document.pdf", "application/pdf", documentData);
 
-// Step 1: OCR the document (the Java client sets the OCR type only, not the output format)
-String ocrGuid = client.ocrDocument(upload, "PREMIUM");
-client.waitUntilReadyJson(ocrGuid, WaitOptions.defaults());
+String ocrJobId = client.uploadDocument(
+        new UploadRequest("your-document.pdf", "application/pdf", documentData));
+client.ocrDocument(
+        ocrJobId,
+        ProcessOptions.builder().ocr("PREMIUM").mimeType("application/pdf").build(),
+        "markdown");
+client.waitUntilReadyText(
+        ocrJobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
 
-// Step 2: Generate the analysis
-client.createGenerativeTask(
-        ocrGuid,
-        "Summarize this document and explain what type of document it is and its main purpose.");
+// One call submits the generative task and waits for it; it returns the task's result document
+JsonNode analysis = client.submitAndWaitForGenerativeTask(
+        ocrJobId,
+        "Summarize this document and explain what type of document it is and its main purpose.",
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
 
-// The result field holds the task output as a JSON string with a generated_text field
-JsonNode result = client.waitForGenerativeTask(ocrGuid, WaitOptions.defaults());
-System.out.println("AI Analysis:");
-System.out.println(result.path("result"));
+System.out.println("\nAI Analysis:");
+System.out.println(analysis.path("generated_text").asText());
 ```
 
 **CLI**
@@ -340,6 +352,59 @@ for name, prompt in prompts.items():
     results[name] = json.loads(task.result)["generated_text"]
 
 print(json.dumps(results, indent=2))
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+byte[] documentData = Files.readAllBytes(Path.of("report.pdf"));
+
+String ocrJobId = client.uploadDocument(
+        new UploadRequest("report.pdf", "application/pdf", documentData));
+client.ocrDocument(
+        ocrJobId,
+        ProcessOptions.builder().ocr("PREMIUM").mimeType("application/pdf").build(),
+        "markdown");
+client.waitUntilReadyText(
+        ocrJobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+Map<String, String> prompts = new LinkedHashMap<>();
+prompts.put("document_type", "What type of document is this? (invoice, contract, report, form, etc.)");
+prompts.put("key_information", "Extract the most important information: dates, names, amounts, addresses, and key terms.");
+prompts.put("summary", "Provide a concise summary of this document's main content and purpose.");
+prompts.put("tone", "Analyze the tone of this document. Is it formal, informal, positive, negative, urgent?");
+
+ObjectMapper mapper = new ObjectMapper();
+ObjectNode results = mapper.createObjectNode();
+for (Map.Entry<String, String> prompt : prompts.entrySet()) {
+    // One call submits the generative task and waits for it; it returns the task's result document
+    JsonNode task = client.submitAndWaitForGenerativeTask(
+            ocrJobId,
+            prompt.getValue(),
+            WaitOptions.builder()
+                    .timeout(Duration.ofSeconds(600))
+                    .pollInterval(Duration.ofSeconds(5))
+                    .build());
+    results.put(prompt.getKey(), task.path("generated_text").asText());
+}
+
+System.out.println(results.toPrettyString());
 ```
 
 Change the entries in the prompt list for other analyses; the recipes below show typical prompts.

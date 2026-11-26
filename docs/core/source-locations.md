@@ -134,7 +134,7 @@ When an async PDF job requests both `sourceLocations=true` and `acroFormMetadata
 
 ## Requesting source locations
 
-Send `sourceLocations: true` (Python `source_locations=True`) and, optionally, `sourceLocationGranularity` with the processing request. The example uploads a contract, extracts its clauses, and fetches the evidence artifact next to the extracted JSON. The Java SDK has no source-location option, and the CLI has no flag for it.
+Send `sourceLocations: true` (Python `source_locations=True`) and, optionally, `sourceLocationGranularity` with the processing request. The example uploads a contract, extracts its clauses, and fetches the evidence artifact next to the extracted JSON. The Java variant uses the `sourceLocations` and `sourceLocationGranularity` options of `ProcessOptions`; the CLI has no flag for it.
 
 <Example name="extraction/extract-with-source-locations" />
 

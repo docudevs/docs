@@ -563,6 +563,41 @@ print(f"Async metadata fields: {len(job_metadata.get('fields', []))}")
 print(json.dumps(source_locations, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+byte[] pdfBytes = Files.readAllBytes(Path.of("fillable-form.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+        new UploadRequest("fillable-form.pdf", "application/pdf", pdfBytes),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .acroFormMetadata(true)
+                .sourceLocations(true)
+                .sourceLocationGranularity("block")
+                .build());
+client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+JsonNode jobMetadata = client.getAcroformMetadata(jobGuid);
+JsonNode sourceLocations = client.getSourceLocations(jobGuid);
+
+System.out.println("Async metadata fields: " + jobMetadata.path("fields").size());
+System.out.println(sourceLocations.toPrettyString());
+```
+
 For OCR-backed evidence overlays on the same job, combine the `acroFormMetadata` and `sourceLocations` request options (`acro_form_metadata=True` and `source_locations=True` in Python) and then read [Source Locations](https://docs.docudevs.ai/docs/core/source-locations).
 
 ## Best Practices
