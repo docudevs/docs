@@ -44,8 +44,6 @@ jobs/process-with-depends-on:java
 layout/download-figures:java
 layout/get-document-layout:java
 layout/resolve-source-locations:java
-llm-providers/verify-llm-provider:java
-llm-providers/verify-llm-provider:java
 lookup-files/download-excel-result:java
 lookup-files/manage-batch-lookup-file:java
 lookup-files/manage-configuration-lookup-file:java
@@ -61,14 +59,6 @@ members/list-members:java
 members/remove-member:java
 members/set-join-policy:java
 members/update-member-role:java
-model-credentials/disable-and-enable-credential:java
-model-credentials/disable-and-enable-credential:java
-model-credentials/get-credential:java
-model-credentials/get-credential:java
-model-credentials/update-credential:java
-model-credentials/update-credential:java
-model-credentials/validate-credential:java
-model-credentials/validate-credential:java
 ocr/choose-quality-and-format:java
 ocr/extract-text:java
 ocr/ocr-sync:java

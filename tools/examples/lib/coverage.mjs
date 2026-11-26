@@ -11,7 +11,7 @@ export function computeGaps(examples, notApplicable = []) {
     .sort();
 }
 
-const NOT_APPLICABLE_LANGS = ['curl', 'python'];
+const NOT_APPLICABLE_LANGS = ['curl', 'python', 'java'];
 
 export function parseNotApplicable(text) {
   return text
@@ -23,7 +23,7 @@ export function parseNotApplicable(text) {
       const entry = pair.trim();
       const lang = entry.slice(entry.lastIndexOf(':') + 1);
       if (!NOT_APPLICABLE_LANGS.includes(lang)) {
-        throw new Error(`examples/not-applicable.txt: ${entry}: only curl and python may be listed, not ${lang}`);
+        throw new Error(`examples/not-applicable.txt: ${entry}: only curl, python and java may be listed, not ${lang}`);
       }
       if (comment.join('#').trim() === '') {
         throw new Error(`examples/not-applicable.txt: ${entry}: add a reason after '#'`);

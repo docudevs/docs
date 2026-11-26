@@ -30,8 +30,8 @@ test('the same example without the line still reports the gap', () => {
 test('parseNotApplicable strips reasons and comments', () => {
   assert.deepEqual(parseNotApplicable('# header\n\na/b:curl  # runs in the client\n'), ['a/b:curl']);
 });
-test('parseNotApplicable rejects java and cli', () => {
-  assert.throws(() => parseNotApplicable('a/b:java  # no'), /java/);
+test('parseNotApplicable accepts java and rejects cli', () => {
+  assert.deepEqual(parseNotApplicable('a/b:java  # the Java client has no method'), ['a/b:java']);
   assert.throws(() => parseNotApplicable('a/b:cli  # no'), /cli/);
 });
 test('parseNotApplicable requires a reason', () => {
