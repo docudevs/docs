@@ -10,6 +10,10 @@ This guide explains how to install DocuDevs from Azure Marketplace into an
 existing virtual network (BYO VNet, private-only mode), and how to operate,
 verify, upgrade, and troubleshoot that installation.
 
+:::note
+Private networking for the Azure Marketplace offer is in private preview. The endpoints and steps on this page apply to the preview and can change; contact DocuDevs before you plan an installation.
+:::
+
 ## What private-only means
 
 When you select **Existing VNet - private only** in the Marketplace wizard:
@@ -267,7 +271,7 @@ Allow these outbound paths on TCP 443 for image pulls:
 
 | Destination | Purpose |
 | --- | --- |
-| `ddmkt7d52dee38b83.azurecr.io` | Publisher registry login server (image pulls). |
+| `acrfleetportdev.azurecr.io` | Publisher registry login server (image pulls). |
 | `*.blob.core.windows.net` | Layer downloads. The registry has no dedicated data endpoint, so layers come from Azure Blob Storage. |
 | `Storage.swedencentral` service tag | Use instead of the Blob wildcard where your firewall supports Azure service-tag rules. |
 
@@ -462,7 +466,7 @@ code and timing.
 | Control-plane preflight | Problems with delegation, subnet occupancy, DNS zone selection, identity access, deployment-script policy, ACI availability, or the temporary storage account. Register `Microsoft.ContainerInstance` and `Microsoft.Storage` and confirm policy allows public-network deployment scripts. |
 | Environment provisioning | An Azure operation was rejected; missing Container Apps platform, DNS, NSG, or UDR requirements are called out when the environment cannot become ready. |
 | Job-start authorization | A transient `AuthorizationFailed` is retried for up to five minutes while role assignments propagate. `DenyAssignmentAuthorizationFailed` is not a VNet or customer-role problem: the gate stops immediately and identifies the required Partner Center action `Microsoft.App/jobs/start/action`. Contact DocuDevs and install a corrected plan instance; do not add broader customer roles to work around it. |
-| Publisher image-pull gate | A recognized `ErrImagePull`, `ImagePullBackOff`, or registry-timeout condition produces exactly this message: **`DocuDevs image pull failed: outbound HTTPS to ddmkt7d52dee38b83.azurecr.io or its ACR layer-data endpoint is blocked. Allow the release-specific publisher ACR endpoints from the Container Apps subnet, then retry the deployment.`** The diagnostic includes the image digest and the latest non-secret ARM condition. If the pull did not reach a registry-timeout diagnosis before the gate budget elapsed, the gate instead reports that either the publisher registry (`ddmkt7d52dee38b83.azurecr.io`) or Container Apps platform egress may be blocked. |
+| Publisher image-pull gate | A recognized `ErrImagePull`, `ImagePullBackOff`, or registry-timeout condition produces exactly this message: **`DocuDevs image pull failed: outbound HTTPS to <publisher registry host> or its ACR layer-data endpoint is blocked. Allow the release-specific publisher ACR endpoints from the Container Apps subnet, then retry the deployment.`** The diagnostic includes the image digest and the latest non-secret ARM condition. If the pull did not reach a registry-timeout diagnosis before the gate budget elapsed, the gate instead reports that either the publisher registry (`acrfleetportdev.azurecr.io`) or Container Apps platform egress may be blocked. |
 | In-environment connectivity | Reports the destination category and hostname, DNS result, TCP/TLS outcome, and the likely NSG, UDR, firewall, proxy, or resolver cause, without exposing credentials. If the job itself failed without a registry signal, the gate reports: `DocuDevs network readiness job <JOB_NAME> failed. Open the Container Apps job logs for <JOB_NAME> in the Container Apps environment to find which probe target failed; this gate reads only ARM execution status and cannot read job stdout.` An Azure Monitor probe failure means telemetry needs approved public Azure Monitor egress. |
 | Post-deployment client access | Failures limited to your workstation, peered network, VPN, ExpressRoute, or DNS-forwarding path — not the deployment. Re-run the [verification steps](#verify-private-dns-ui-api-setup-uri-and-msal-callback) from a correctly connected client. |
 
