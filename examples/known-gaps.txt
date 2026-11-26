@@ -151,4 +151,5 @@ templates/acroform-job-metadata:java
 templates/acroform-metadata:java
 tracing/get-page-image:java
 tracing/trace-map-reduce:java
+track-changes/extract-track-changes:java
 webhooks/configure-webhook:java

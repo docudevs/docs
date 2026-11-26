@@ -30,6 +30,7 @@ const sidebars: SidebarsConfig = {
         'core/source-locations',            // NEW: Field-level evidence boxes
         'core/extraction-review',
         'core/document-compare',
+        'core/track-changes',
         'core/document-layout',
         'core/result-formats',
         'core/object-detection',            // NEW: Model-emitted bounding boxes for image tasks

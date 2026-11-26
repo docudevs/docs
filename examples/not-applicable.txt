@@ -27,4 +27,5 @@ sso/configure-oidc-provider:python  # DocuDevsClient 1.15.0 has no method for PU
 submission-portals/check-submission:python  # DocuDevsClient 1.15.0 has no method for GET /submission-records/{receiptCode}
 submission-portals/create-portal:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals
 submission-portals/submit-document:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals/{id}/submissions
+track-changes/extract-track-changes:python  # DocuDevsClient 1.15.0 has no method for POST /document/track-changes
 webhooks/configure-webhook:python  # DocuDevsClient 1.15.0 has no method for GET or PUT /settings/webhook
