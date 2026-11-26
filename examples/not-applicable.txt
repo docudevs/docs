@@ -42,3 +42,8 @@ submission-portals/create-portal:python  # DocuDevsClient 1.15.0 has no method f
 submission-portals/submit-document:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals/{id}/submissions
 track-changes/extract-track-changes:python  # DocuDevsClient 1.15.0 has no method for POST /document/track-changes
 webhooks/configure-webhook:python  # DocuDevsClient 1.15.0 has no method for GET or PUT /settings/webhook
+llm-providers/verify-llm-provider:java  # the Java client 0.4.0 has no method for POST /llm/providers/{id}/verify
+model-credentials/disable-and-enable-credential:java  # the Java client 0.4.0 has no method for POST /model-credentials/{id}/disable or /enable
+model-credentials/get-credential:java  # the Java client 0.4.0 has no method for GET /model-credentials/{id}
+model-credentials/update-credential:java  # the Java client 0.4.0 has no method for PATCH /model-credentials/{id}
+model-credentials/validate-credential:java  # the Java client 0.4.0 has no method for POST /model-credentials/{id}/validate

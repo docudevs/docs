@@ -55,7 +55,21 @@ curl -s -S -f -X POST "https://api.docudevs.ai/ocr/providers" \
   }')"
 ```
 
-The example reads the Azure Document Intelligence key from the `DOC_INTELLIGENCE_API_KEY` environment variable. The Python SDK's provider methods send field names (not `modelId`) that the API rejects on create. On update the client sends `model`, not `modelId`, so a model change is ignored (`name` and `endpoint` do apply). Use cURL for these steps. The CLI's create and update commands call the same methods.
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// DOC_INTELLIGENCE_API_KEY holds the key of your Azure Document Intelligence resource.
+JsonNode provider = client.createOcrProvider(
+        "Our Doc Intelligence",
+        "https://example.cognitiveservices.azure.com",
+        System.getenv("DOC_INTELLIGENCE_API_KEY"),
+        "prebuilt-document");
+System.out.println(provider.toPrettyString());
+```
+
+The example reads the Azure Document Intelligence key from the `DOC_INTELLIGENCE_API_KEY` environment variable. The Python SDK's provider methods send field names (not `modelId`) that the API rejects on create. On update the client sends `model`, not `modelId`, so a model change is ignored (`name` and `endpoint` do apply). Use cURL or the Java SDK for these steps. The CLI's create and update commands call the same Python methods.
 
 ## Update or delete a provider
 
@@ -69,6 +83,21 @@ curl -s -S -f -X PATCH "https://api.docudevs.ai/ocr/providers/$PROVIDER_ID" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"modelId": "prebuilt-invoice"}'
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.OcrProviderUpdate;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// providerId is the "id" returned when the provider was created or listed.
+long providerId = 7L;
+
+JsonNode provider = client.updateOcrProvider(
+        providerId,
+        OcrProviderUpdate.builder().modelId("prebuilt-invoice").build());
+System.out.println(provider.toPrettyString());
 ```
 
 **cURL**
@@ -93,6 +122,17 @@ if response.status_code != 204:
     raise SystemExit(f"Delete failed: {response.status_code}")
 
 print(f"HTTP {response.status_code}")
+```
+
+**Java**
+
+```java
+// providerId is the "id" returned when the provider was created or listed.
+long providerId = 7L;
+
+// Returns normally on 204; throws DocuDevsApiException on any other status
+client.deleteOcrProvider(providerId);
+System.out.println("Deleted provider " + providerId);
 ```
 
 **CLI**
@@ -139,6 +179,22 @@ print(keys.json())
 response = await client.update_ocr_key_binding("DEFAULT", provider_id)
 if response.status_code != 200:
     raise SystemExit(f"Bind failed: {response.status_code}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// providerId is the "id" returned when the provider was created or listed.
+long providerId = 7L;
+
+// List the current OCR key bindings
+JsonNode keys = client.listOcrKeys();
+System.out.println(keys.toPrettyString());
+
+// Bind the DEFAULT key to the provider; pass null to clear the binding
+client.updateOcrKeyBinding("DEFAULT", providerId);
 ```
 
 **CLI**

@@ -59,7 +59,25 @@ curl -s -S -f -X POST "https://api.docudevs.ai/llm/providers" \
   }')"
 ```
 
-The Python SDK's provider methods send field names the API rejects on create; on update only `name` applies and the other fields are ignored, so use cURL for these steps. The CLI's create and update commands call the same methods.
+**Java**
+
+```java
+import ai.docudevs.client.LlmProviderOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// credentialId is the "id" of a model credential (see Model credentials).
+long credentialId = 42L;
+
+JsonNode provider = client.createLlmProvider(
+        "Our Azure OpenAI",
+        "https://example.openai.azure.com",
+        "azure-openai",
+        "gpt-4o",
+        LlmProviderOptions.builder().credentialId(credentialId).build());
+System.out.println(provider.toPrettyString());
+```
+
+The Python SDK's provider methods send field names the API rejects on create; on update only `name` applies and the other fields are ignored, so use cURL or the Java SDK for these steps. The CLI's create and update commands call the same Python methods.
 
 ## Update or delete a provider
 
@@ -73,6 +91,21 @@ curl -s -S -f -X PATCH "https://api.docudevs.ai/llm/providers/$PROVIDER_ID" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"deploymentName": "gpt-4o-mini"}'
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.LlmProviderUpdate;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// providerId is the "id" returned when the provider was created or listed.
+long providerId = 7L;
+
+JsonNode provider = client.updateLlmProvider(
+        providerId,
+        LlmProviderUpdate.builder().deploymentName("gpt-4o-mini").build());
+System.out.println(provider.toPrettyString());
 ```
 
 **cURL**
@@ -97,6 +130,17 @@ if response.status_code != 204:
     raise SystemExit(f"Delete failed: {response.status_code}")
 
 print(f"HTTP {response.status_code}")
+```
+
+**Java**
+
+```java
+// providerId is the "id" returned when the provider was created or listed.
+long providerId = 7L;
+
+// Returns normally on 204; throws DocuDevsApiException on any other status
+client.deleteLlmProvider(providerId);
+System.out.println("Deleted provider " + providerId);
 ```
 
 **CLI**
@@ -129,7 +173,7 @@ curl -s -S -f -X POST "https://api.docudevs.ai/llm/providers/$PROVIDER_ID/verify
   -w "HTTP %{http_code}\n"
 ```
 
-The Python SDK has no method for verifying a provider, so this example is cURL only.
+Neither the Python SDK nor the Java SDK has a method for verifying a provider, so this example is cURL only.
 
 Shared credentials can use either an API key or a Microsoft Entra client
 ID/client secret. See [Model credentials](https://docs.docudevs.ai/docs/administration/model-credentials)
@@ -185,6 +229,22 @@ print(keys.json())
 response = await client.update_llm_key_binding("HIGH", provider_id)
 if response.status_code != 200:
     raise SystemExit(f"Bind failed: {response.status_code}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// providerId is the "id" returned when the provider was created or listed.
+long providerId = 7L;
+
+// List the current bindings of DEFAULT, NANO, MINI and HIGH
+JsonNode keys = client.listLlmKeys();
+System.out.println(keys.toPrettyString());
+
+// Bind the HIGH level to the provider; pass null to clear a binding
+client.updateLlmKeyBinding("HIGH", providerId);
 ```
 
 **CLI**

@@ -106,6 +106,17 @@ credential = json.loads(response.content)
 print(f"Credential {credential['id']}: {credential['status']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// PROVIDER_API_KEY holds the API key issued by your model provider.
+// Java: the call returns the JSON body of the 201 response and throws DocuDevsApiException on an error status.
+JsonNode credential = client.createModelCredential("Provider embeddings", System.getenv("PROVIDER_API_KEY"));
+System.out.println("Credential " + credential.path("id").asLong() + ": " + credential.path("status").asText());
+```
+
 Then create the provider with the credential's `id`:
 
 **cURL**
@@ -150,6 +161,32 @@ if response.status_code not in (200, 201):
 mutation = json.loads(response.content)
 revision = mutation["provider"]["latestRevision"]
 print(f"Revision {revision['id']}, reindex required: {mutation['reindexRequired']}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.EmbeddingProviderOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// credentialId is the "id" of a shared model credential (see Model credentials).
+long credentialId = 42L;
+
+JsonNode mutation = client.createEmbeddingProvider(
+        "Our OpenAI embeddings",
+        "openai",
+        "text-embedding-3-small",
+        1536,
+        EmbeddingProviderOptions.builder()
+                .apiUrl("")
+                .similarityMetric("cosine")
+                .requestOptions(Map.of())
+                .credentialId(credentialId)
+                .setAsDefault(false)
+                .build());
+JsonNode revision = mutation.path("provider").path("latestRevision");
+System.out.println("Revision " + revision.path("id").asLong()
+        + ", reindex required: " + mutation.path("reindexRequired").asBoolean());
 ```
 
 The create call answers `201 Created` with the provider and its first revision. The generated Python client only parses a `200`, so the Python example reads the body from `response.content`.
@@ -219,6 +256,21 @@ print(f"Active dimensions: {active['dimensions'] if active else None}")
 print(f"Candidate status: {candidate['status'] if candidate else None}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// caseId is the id of an organization-wide case.
+long caseId = 3L;
+
+JsonNode status = client.getCaseEmbeddingStatus(caseId);
+JsonNode active = status.path("active");
+JsonNode candidate = status.path("candidate");
+System.out.println("Active dimensions: " + (active.isObject() ? active.path("dimensions").asText() : null));
+System.out.println("Candidate status: " + (candidate.isObject() ? candidate.path("status").asText() : null));
+```
+
 Start a reindex of the case with the organization default revision. When the reindex has finished, the active generation has the new dimensions and the candidate is gone:
 
 **cURL**
@@ -243,6 +295,18 @@ if response.status_code != 200:
 
 candidate = json.loads(response.content)
 print(f"Candidate generation {candidate['id']}: {candidate['status']}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// caseId is the id of an organization-wide case.
+long caseId = 3L;
+
+JsonNode candidate = client.startCaseEmbeddingReindex(caseId);
+System.out.println("Candidate generation " + candidate.path("id").asText() + ": " + candidate.path("status").asText());
 ```
 
 Retry a failed candidate, or cancel a running reindex:
@@ -271,6 +335,18 @@ candidate = json.loads(response.content)
 print(f"Candidate generation {candidate['id']}: {candidate['status']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// caseId is the id of an organization-wide case.
+long caseId = 3L;
+
+JsonNode candidate = client.retryCaseEmbeddingReindex(caseId);
+System.out.println("Candidate generation " + candidate.path("id").asText() + ": " + candidate.path("status").asText());
+```
+
 **cURL**
 
 ```bash
@@ -293,6 +369,18 @@ if response.status_code != 200:
 
 candidate = json.loads(response.content)
 print(f"Candidate generation {candidate['id']}: {candidate['status']}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// caseId is the id of an organization-wide case.
+long caseId = 3L;
+
+JsonNode candidate = client.cancelCaseEmbeddingReindex(caseId);
+System.out.println("Candidate generation " + candidate.path("id").asText() + ": " + candidate.path("status").asText());
 ```
 
 ## Default binding
@@ -328,6 +416,21 @@ overview = await client.get_embedding_overview()
 if overview.status_code != 200:
     raise SystemExit(f"Overview failed: {overview.status_code}")
 print(json.dumps(json.loads(overview.content)["defaultBinding"], indent=2))
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// revisionId is the revision "id" under provider.latestRevision when the provider was created.
+long revisionId = 12L;
+
+client.setDefaultEmbeddingBinding(revisionId);
+
+// Counts of cases on the default revision, on older revisions and on the original index
+JsonNode overview = client.getEmbeddingOverview();
+System.out.println(overview.path("defaultBinding").toPrettyString());
 ```
 
 The default revision is used for new case generations only. The response and

@@ -710,7 +710,7 @@ await client.fill("invoice", request)
 Manage bring-your-own LLM and OCR providers and the logical key bindings that route requests to them. See [Bring Your Own LLM](https://docs.docudevs.ai/docs/administration/bring-your-own-llm) and [Bring Your Own OCR](https://docs.docudevs.ai/docs/administration/bring-your-own-ocr) for the provider model and setup steps.
 
 :::warning
-`create_llm_provider`, `update_llm_provider`, `create_ocr_provider`, and `update_ocr_provider` send field names the API does not accept. The create methods are rejected with `400`; the update methods change only the name (and the endpoint for OCR), and other fields are ignored. Call the REST API for these steps: see the cURL examples in [Bring Your Own LLM](https://docs.docudevs.ai/docs/administration/bring-your-own-llm) and [Bring Your Own OCR](https://docs.docudevs.ai/docs/administration/bring-your-own-ocr).
+`create_llm_provider`, `update_llm_provider`, `create_ocr_provider`, and `update_ocr_provider` send field names the API does not accept. The create methods are rejected with `400`; the update methods change only the name (and the endpoint for OCR), and other fields are ignored. Call the REST API or use the Java SDK for these steps: see the cURL examples in [Bring Your Own LLM](https://docs.docudevs.ai/docs/administration/bring-your-own-llm) and [Bring Your Own OCR](https://docs.docudevs.ai/docs/administration/bring-your-own-ocr).
 :::
 
 ### list_llm_providers

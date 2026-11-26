@@ -32,7 +32,7 @@ Every code block that calls the API, SDK or CLI lives in a file under `examples/
 | `Example.java` | Java |
 | `cli.sh` | CLI |
 
-Tabs always render in that order, grouped with `groupId="lang"` and `queryString="lang"`. A language without a file gets no tab. Every example needs cURL and Python, except those listed with a reason in `examples/not-applicable.txt`. Java is required where the published Java facade has the method; otherwise record the gap (see the ratchet). CLI is optional where a command exists. Every file is complete and valid on its own, and all languages of one example share the scenario, sample file names and variable names.
+Tabs always render in that order, grouped with `groupId="lang"` and `queryString="lang"`. A language without a file gets no tab. Every example needs cURL and Python, except those listed with a reason in `examples/not-applicable.txt`. Java is required where the published Java facade has the method; where it has none, list the example as `<area>/<name>:java` with the reason in `examples/not-applicable.txt`. CLI is optional where a command exists. Every file is complete and valid on its own, and all languages of one example share the scenario, sample file names and variable names.
 
 ### Markers
 
