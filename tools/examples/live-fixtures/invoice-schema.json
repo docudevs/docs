@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "invoiceNumber": {
+      "type": "string",
+      "description": "Invoice number"
+    },
+    "vendor": {
+      "type": "string",
+      "description": "Name of the vendor"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total amount due"
+    }
+  },
+  "required": [
+    "invoiceNumber",
+    "vendor",
+    "total"
+  ]
+}

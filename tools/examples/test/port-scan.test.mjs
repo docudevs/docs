@@ -103,6 +103,7 @@ test('public hosts are allowed, other github.com paths are not', () => {
     'http://example.com/a',
     'https://example.org',
     'https://json-schema.org/draft',
+    'http://schemas.openxmlformats.org/package/2006/relationships',
     'https://pypi.org/project/docudevs',
     'https://github.com/docudevs/docudevs-sdk',
   ];

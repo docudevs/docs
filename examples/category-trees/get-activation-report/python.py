@@ -13,7 +13,7 @@ async def main():
     job_guid = "<job-guid>"  # jobGuid returned when the version was activated
 
     # Returns when the job is COMPLETED; raises RecordsImportFailed when it ends ERROR or TIMEOUT,
-    # and TimeoutError after 600 seconds
+    # and TimeoutError after 600 seconds (a job that ends FAILED is not detected, so this waits out the 600 seconds)
     await client.wait_for_records_job(job_guid, timeout=600, poll_interval=5)
 
     # Find the activation among the case's imports (newest first). This reads one page

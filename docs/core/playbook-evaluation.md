@@ -7,7 +7,7 @@ description: Test a contract-analysis playbook against gold answers from a sprea
 
 Use this guide to run the evaluation loop from a cold start. You need:
 
-- an organization API key in `DOCUDEVS_TOKEN` (keep it out of logs and shared output),
+- an organization API key in `DOCUDEVS_TOKEN` (keep it out of logs and shared output); the cURL and Python examples below read `API_KEY`, so set it to the same key (the CLI reads either variable),
 - the case id of the playbook (`CASE_ID` below),
 - the gold file and the contract files it names.
 
@@ -268,7 +268,7 @@ The contract-analysis playbooks guide has the full publish section ("Test and pu
 
 ## Run the loop from Python or cURL
 
-The steps that need no judgement can run from a script. The examples read the key from `API_KEY`, use the base URL `https://api.docudevs.ai`, and work with an organization API key. The Python variants use `DocuDevsClient`, which raises an error when the API answers with an error status. Each subsection does what the CLI step it names does.
+The steps that need no judgement can run from a script. The examples read the key from `API_KEY`, use the base URL `https://api.docudevs.ai`, and work with an organization API key. The Python variants use `DocuDevsClient`; its evaluation methods raise an error when the API answers with an error status. Each subsection does what the CLI step it names does.
 
 ### Import gold (step 1)
 

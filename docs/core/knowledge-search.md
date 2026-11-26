@@ -106,12 +106,12 @@ When the reference data is a [records dataset](../advanced/records-datasets.md) 
 
 | Config key | Meaning |
 |------------|---------|
-| `caseId` | Required. A records knowledge base of your organization. |
+| `caseId` | Required. A records case of your organization that the organization can reach: organization-wide or a knowledge base. |
 | `topK` | Hits per lookup, 1 to 50 (default 10). The model can ask for fewer, never more. |
 | `subtree` | Optional category code; only records labelled in that subtree are returned. |
 | `attributes` | Optional `{name: value}` map of strings; only records with matching metadata are returned. |
 
-Unknown keys are rejected. The request fails with `400` when the case is not a records knowledge base, `404` when it is not found. Each hit contains the record `key`, the matched text (`chunk`), the `label` and its `labelPath`, and the `score`. Search uses the knowledge base's active embedding provider and its search settings, and fails instead of falling back when the provider cannot be resolved.
+Unknown keys are rejected. The request fails with `400` when the case has no records dataset, `404` when it is not found or is not one the organization can reach (see [Cases](../advanced/cases.md#knowledge-bases)). Each hit contains the record `key`, the matched text (`chunk`), the `label` and its `labelPath`, and the `score`. Search uses the knowledge base's active embedding provider and its search settings, and fails instead of falling back when the provider cannot be resolved.
 
 <Example name="knowledge-search/extract-with-records-search" />
 
@@ -119,7 +119,7 @@ To match many values in one run, use a [classify job with the record target](../
 
 ## Records Match
 
-`RECORDS_MATCH` resolves one value to one record of a records knowledge base: the GL account of an invoice line, or the vendor a supplier name refers to. The model compares the value with the most similar records and returns the chosen record, or `declined` with a reason.
+`RECORDS_MATCH` resolves one value to one record of a records case: the GL account of an invoice line, or the vendor a supplier name refers to. The model compares the value with the most similar records and returns the chosen record, or `declined` with a reason.
 
 ```json
 {"type": "RECORDS_MATCH", "config": {"caseId": "51", "topK": 10, "llmLevel": "MINI"}}
@@ -127,7 +127,7 @@ To match many values in one run, use a [classify job with the record target](../
 
 | Config key | Meaning |
 |------------|---------|
-| `caseId` | Required. A records knowledge base of your organization. |
+| `caseId` | Required. A records case of your organization that the organization can reach: organization-wide or a knowledge base. |
 | `topK` | Candidate records the model compares, 1 to 50 (default 10). |
 | `llmLevel` | `DEFAULT`, `NANO`, `MINI` (default) or `HIGH`. |
 

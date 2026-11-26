@@ -4,7 +4,7 @@ description: Complete CLI reference for DocuDevs including document processing, 
 sidebar_position: 5
 ---
 
-The DocuDevs CLI provides convenient command-line access to all platform functionality. The CLI is included with the SDK installation and supports both high-level convenience commands and low-level API operations.
+The DocuDevs CLI provides convenient command-line access to most of the platform. The CLI is included with the SDK installation and supports both high-level convenience commands and low-level API operations.
 
 ## Installation
 
@@ -1095,7 +1095,7 @@ docudevs records bulk CASE_ID records.ndjson --wait
 
 ### `records import-url`
 
-Import records from an HTTPS URL fetched by the worker.
+Import records from an HTTPS URL fetched by DocuDevs.
 
 ```bash
 docudevs records import-url CASE_ID https://example.com/records.csv.gz --format csv --gzip --wait

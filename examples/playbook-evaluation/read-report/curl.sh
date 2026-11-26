@@ -19,5 +19,5 @@ curl -s -S -f "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contrac
   | jq -r '"Complete: \(.complete)",
     "Passed \(.totals.passed) of \(.totals.assertions) assertions",
     "Missed problems: \(.totals.missedProblems // 0), false alarms: \(.totals.falseAlarms // 0)",
-    ((.contracts // [])[] | select(.trialStatus != "finished") | "\(.name): \(.trialStatus) (\(.failureReason))")'
+    ((.contracts // [])[] | select(.trialStatus != "finished") | "\(.name): \(.trialStatus) (\(.failureReason // "no reason"))")'
 # docs:end

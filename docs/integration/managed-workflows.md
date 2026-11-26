@@ -9,9 +9,9 @@ A managed workflow is a workflow saved in [Flow Builder](../guides/flow-builder.
 
 ## Availability
 
-Starting a run needs the component that executes workflow jobs, which a deployment provides. When your deployment does not have it, `POST /managed-execution` answers `503` with the message `Managed workflow execution is unavailable`. In the web app, **Save and Run** shows the same message. Contact support to have managed runs enabled.
+Managed runs are available where managed execution is enabled for your deployment. Where it is not, `POST /managed-execution` answers `503` with the message `Managed workflow execution is unavailable`. In the web app, **Save and Run** shows the same message. Contact support to have managed runs enabled.
 
-When the component is present but a run cannot be started, the call answers `502` with the message `Could not start the managed runner`. The run is recorded with the status `FAILED` and the error message `Could not start the managed runner`, so it shows up in the list.
+When managed execution is enabled but a run cannot be started, the call answers `502` with the message `Could not start the managed runner`. The run is recorded with the status `FAILED` and the error message `Could not start the managed runner`, so it shows up in the list.
 
 Automatic runs from a **Schedule** node have their own condition. On a deployment where scheduling is not available, the builder shows **Managed scheduling is disabled on this deployment.** and the workflow only runs when you start it. Contact support to have scheduling enabled.
 
@@ -36,7 +36,7 @@ The Python client and the command-line tool have no commands for these routes, s
 | `flowConfigId` | integer, required | The flow config id of an active workflow of your organization; use one saved with the scope **Managed (DocuDevs)**. |
 | `resourceClass` | string | The runner size, `small` or `medium`. The default is `small`. |
 | `timeoutSeconds` | integer | The time limit of the run in seconds, from 1 to 1800. The default is 300. |
-| `inputs` | object | Values passed to the workflow as run inputs. The default is an empty object. |
+| `inputs` | object | Optional; the default is `{}`. Passed to the workflow as its run inputs. |
 
 <Example name="managed-workflows/start-run" />
 
@@ -107,7 +107,7 @@ Every entry can carry `timestamp`, `level`, `taskId`, `taskRunId`, `message`, `f
 
 `POST /managed-execution/{executionId}/cancel` records a cancellation request for a `PENDING` or `RUNNING` run. The call answers `200` with no body and the run's status becomes `CANCELLING`. It does not interrupt a run that has already started.
 
-- A run that had not started is not picked up by a runner.
+- A run that had not started is not picked up by a runner, and it ends as `TIMEOUT` at its deadline (below).
 - A run that had started can still finish as `COMPLETED` or `FAILED`.
 - A run that never reports ends as `TIMEOUT` at its deadline, which is `timeoutSeconds` plus five minutes after it was queued.
 - A `CANCELLING` run counts toward the concurrency limit until it reaches a final status.

@@ -113,9 +113,9 @@ Select **View logs** on a run to see its task messages, timestamps, and log leve
 
 ## Archive files from other sources
 
-The **Google Drive Archive** node works with **Google Drive Folder Downloads**. For other sources, the managed runner bundles the Kestra tasks below. Use them in the workflow YAML. Flow Builder currently wires post-upload archiving for Google Drive only.
+The **Google Drive Archive** node works with **Google Drive Folder Downloads**. For other sources, the managed runner bundles the Kestra tasks below. Use them in the workflow YAML. Flow Builder wires post-upload archiving for Google Drive only.
 
-| Source | Kestra task | How it archives |
+| Source | Task type in the YAML | How it archives |
 | --- | --- | --- |
 | Amazon S3 | `io.kestra.plugin.aws.s3.Copy` | Set `delete: true` to copy the object server-side and remove the source after the copy succeeds. [S3 object moves](https://docs.aws.amazon.com/AmazonS3/latest/userguide/copy-object.html) |
 | Azure Blob Storage | `io.kestra.plugin.azure.storage.blob.Copy` | Set `delete: true` to move a blob to another path or container. [Azure Blob Copy task](https://kestra.io/plugins/plugin-azure/v2.4.0/azure-blob-storage/io.kestra.plugin.azure.storage.blob.copy) |

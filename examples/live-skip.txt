@@ -1,0 +1,169 @@
+# <area>/<name><TAB><reason>: examples the live runner does not execute
+# Allowed reasons: needs a signed-in user; needs a dedicated deployment; needs a public callback URL; needs provider credentials; deletes or changes organization-wide settings; needs an existing resource id
+agent-actions/confirm-action	needs a signed-in user
+agent-actions/list-pending-actions	needs an existing resource id
+agent-actions/reject-action	needs a signed-in user
+agent-runs/cancel-run	needs an existing resource id
+agent-runs/investigate-after-classify	needs an existing resource id
+agent-runs/list-runs	needs an existing resource id
+agent-runs/start-run	needs an existing resource id
+case-agent/chat-with-case-agent	needs an existing resource id
+case-agent/investigate-flagged-rows	needs an existing resource id
+case-agent/reply-to-run	needs an existing resource id
+case-evals/compare-evals	needs an existing resource id
+case-evals/evaluate-memo-entry	needs an existing resource id
+case-evals/run-holdout-eval	needs an existing resource id
+case-memo/add-and-approve-instruction	needs an existing resource id
+case-memo/read-and-retire-entries	needs an existing resource id
+case-search/search-documents	needs an existing resource id
+case-search/search-records	needs an existing resource id
+cases/delete	needs an existing resource id
+cases/delete-document	needs an existing resource id
+cases/demote-knowledge-base	needs an existing resource id
+cases/get	needs an existing resource id
+cases/get-document	needs an existing resource id
+cases/get-summary	needs an existing resource id
+cases/list-documents	needs an existing resource id
+cases/list-summaries	needs an existing resource id
+cases/promote-knowledge-base	needs an existing resource id
+cases/update	needs an existing resource id
+cases/upload-document	needs an existing resource id
+category-trees/activate-tree	needs an existing resource id
+category-trees/browse-tree-nodes	needs an existing resource id
+category-trees/get-activation-report	needs an existing resource id
+category-trees/get-tree-node	needs an existing resource id
+category-trees/list-trees	needs an existing resource id
+category-trees/upload-tree	needs an existing resource id
+classification/cancel-classify	needs an existing resource id
+classification/classify-file	needs an existing resource id
+classification/download-classify-csv	needs an existing resource id
+classification/get-classify-results	needs an existing resource id
+classification/match-records	needs an existing resource id
+classification/review-classify-row	needs an existing resource id
+classification/start-classify	needs an existing resource id
+classification/wait-for-classify	needs an existing resource id
+configuration/delete-configuration	deletes or changes organization-wide settings
+contract-analysis/analyze-contract	needs an existing resource id
+contract-analysis/attest-trial	needs an existing resource id
+contract-analysis/check-readiness	needs an existing resource id
+contract-analysis/confirm-findings	needs an existing resource id
+contract-analysis/create-draft-run	needs an existing resource id
+contract-analysis/create-run	needs an existing resource id
+contract-analysis/create-trial	needs an existing resource id
+contract-analysis/export-playbook	needs an existing resource id
+contract-analysis/generate-profile	needs an existing resource id
+contract-analysis/generate-profile-with-scope	needs an existing resource id
+contract-analysis/get-draft-profile	needs an existing resource id
+contract-analysis/get-published-profile	needs an existing resource id
+contract-analysis/get-run	needs an existing resource id
+contract-analysis/get-run-result	needs an existing resource id
+contract-analysis/get-source-authority	needs an existing resource id
+contract-analysis/get-test-suite	needs an existing resource id
+contract-analysis/get-trial	needs an existing resource id
+contract-analysis/import-playbook	needs an existing resource id
+contract-analysis/list-draft-revisions	needs an existing resource id
+contract-analysis/list-run-reviews	needs an existing resource id
+contract-analysis/mark-test-contract	needs an existing resource id
+contract-analysis/prepare-test-package	needs an existing resource id
+contract-analysis/propose-test-case	needs an existing resource id
+contract-analysis/publish-with-attestation	needs an existing resource id
+contract-analysis/record-source-authority-decision	needs an existing resource id
+contract-analysis/review-finding	needs an existing resource id
+contract-analysis/suggest-source-roles	needs an existing resource id
+contract-analysis/update-draft	needs an existing resource id
+contract-analysis/update-test-suite	needs an existing resource id
+contract-analysis/upload-test-contract	needs an existing resource id
+embedding-providers/cancel-case-reindex	needs an existing resource id
+embedding-providers/create-embedding-provider	needs provider credentials
+embedding-providers/get-case-embedding-status	needs an existing resource id
+embedding-providers/retry-case-reindex	needs an existing resource id
+embedding-providers/set-default-embedding	deletes or changes organization-wide settings
+embedding-providers/start-case-reindex	needs an existing resource id
+extraction/check-map-reduce-progress	needs an existing resource id
+extraction/reprocess-with-map-reduce	needs an existing resource id
+extraction/upload-calendar-dataset	needs an existing resource id
+extraction-review/find-and-register-run	needs an existing resource id
+extraction-review/pull-decisions	needs an existing resource id
+extraction-review/save-profile-with-descriptor	needs an existing resource id
+extraction-review/submit-claims	needs an existing resource id
+integrations/create-connection	needs provider credentials
+integrations/delete-connection	deletes or changes organization-wide settings
+jobs/check-quality	needs an existing resource id
+jobs/delete-job	needs an existing resource id
+jobs/handle-delete-errors	needs an existing resource id
+jobs/inspect-job	needs an existing resource id
+knowledge-search/extract-with-knowledge-base	needs an existing resource id
+knowledge-search/extract-with-records-search	needs an existing resource id
+layout/get-document-layout	needs an existing resource id
+layout/resolve-source-locations	needs an existing resource id
+llm-providers/bind-llm-level	deletes or changes organization-wide settings
+llm-providers/create-llm-provider	needs provider credentials
+llm-providers/delete-llm-provider	deletes or changes organization-wide settings
+llm-providers/update-llm-provider	deletes or changes organization-wide settings
+llm-providers/verify-llm-provider	needs an existing resource id
+lookup-files/download-excel-result	needs an existing resource id
+lookup-files/manage-batch-lookup-file	needs an existing resource id
+lookup-files/manage-configuration-lookup-file	deletes or changes organization-wide settings
+managed-workflows/cancel-run	needs a dedicated deployment
+managed-workflows/get-logs	needs a dedicated deployment
+managed-workflows/get-run	needs a dedicated deployment
+managed-workflows/start-run	needs a dedicated deployment
+members/remove-member	deletes or changes organization-wide settings
+members/set-join-policy	deletes or changes organization-wide settings
+members/update-member-role	deletes or changes organization-wide settings
+model-credentials/create-api-key-credential	needs provider credentials
+model-credentials/create-entra-credential	needs provider credentials
+model-credentials/delete-credential	deletes or changes organization-wide settings
+model-credentials/disable-and-enable-credential	deletes or changes organization-wide settings
+model-credentials/get-credential	needs an existing resource id
+model-credentials/rotate-credential	deletes or changes organization-wide settings
+model-credentials/update-credential	deletes or changes organization-wide settings
+model-credentials/validate-credential	needs an existing resource id
+ocr-providers/bind-ocr-key	deletes or changes organization-wide settings
+ocr-providers/create-ocr-provider	needs provider credentials
+ocr-providers/delete-ocr-provider	deletes or changes organization-wide settings
+ocr-providers/update-ocr-provider	deletes or changes organization-wide settings
+operations/ask-document-questions	needs an existing resource id
+operations/convert-pdf-to-acroform	needs an existing resource id
+operations/document-outline	needs an existing resource id
+operations/download-acroform-pdf	needs an existing resource id
+operations/error-analysis	needs an existing resource id
+operations/generative-task	needs an existing resource id
+operations/get-document-outline	needs an existing resource id
+operations/review-acroform-fields	needs an existing resource id
+operations/select-images	needs an existing resource id
+operations/submit-pdf-acroform	needs an existing resource id
+operations/submit-with-llm-type	needs an existing resource id
+playbook-evaluation/import-gold	needs an existing resource id
+playbook-evaluation/read-report	needs an existing resource id
+playbook-evaluation/run-and-wait	needs an existing resource id
+playbook-evaluation/split-suite	needs an existing resource id
+records/batch-records	needs an existing resource id
+records/configure-dataset	needs an existing resource id
+records/delete-record	needs an existing resource id
+records/get-dataset	needs an existing resource id
+records/get-import	needs an existing resource id
+records/get-record	needs an existing resource id
+records/import-file	needs an existing resource id
+records/import-from-url	needs an existing resource id
+records/list-records	needs an existing resource id
+records/record-stats	needs an existing resource id
+records/retry-import	needs an existing resource id
+records/sync-snapshot	needs an existing resource id
+records/upsert-record	needs an existing resource id
+records/wait-for-import	needs an existing resource id
+results/check-non-json-result	needs an existing resource id
+results/download-excel-with-template	needs an existing resource id
+results/download-result-formats	needs an existing resource id
+results/get-batch-result	needs an existing resource id
+results/get-result-schema	needs an existing resource id
+sso/add-domain	deletes or changes organization-wide settings
+sso/configure-oidc-provider	deletes or changes organization-wide settings
+sso/verify-domain	deletes or changes organization-wide settings
+submission-portals/check-submission	needs a signed-in user
+submission-portals/create-portal	deletes or changes organization-wide settings
+submission-portals/submit-document	needs a signed-in user
+templates/delete-template	deletes or changes organization-wide settings
+templates/fill-word-template	needs an existing resource id
+tracing/get-page-image	needs an existing resource id
+webhooks/configure-webhook	needs a public callback URL

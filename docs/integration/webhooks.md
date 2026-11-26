@@ -9,7 +9,7 @@ DocuDevs can call a URL you configure whenever a processing job finishes, instea
 
 ## When it fires
 
-DocuDevs sends a `POST` request to your URL only when a job reaches a **terminal** status: `COMPLETED`, `ERROR`, or `FAILED`. Intermediate status transitions (queued, processing, and so on) do not trigger a call.
+DocuDevs sends a `POST` request to your URL only when a job ends `COMPLETED`, `ERROR` or `FAILED`. Intermediate status transitions (queued, processing, and so on) do not trigger a call, and a job that ends `TIMEOUT` sends none; poll the job status to catch it.
 
 ### Records import, tree activation and classify jobs
 
