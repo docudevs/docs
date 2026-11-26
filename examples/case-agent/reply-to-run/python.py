@@ -9,7 +9,7 @@ async def main():
 
     # docs:start
     status = await client.agent_chat_and_wait(
-        [{"role": "user", "content": "Record that fiction books are filed by genre when the description names one."}],
+        "Record that fiction books are filed by genre when the description names one.",
         session_id="run-9001-reply",
         case_id=42,
         playbook="general",

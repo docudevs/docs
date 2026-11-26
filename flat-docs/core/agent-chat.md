@@ -65,7 +65,7 @@ async def main():
 
     # Sends the message, polls the status endpoint and raises TimeoutError after 120 seconds
     status = await client.agent_chat_and_wait(
-        messages=[{"role": "user", "content": "Help me build an invoice extraction schema"}],
+        messages="Help me build an invoice extraction schema",
         session_id="session-123",
     )
 

@@ -72,7 +72,7 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     status = await client.agent_chat_and_wait(
-        [{"role": "user", "content": "Classify this week file into levels 4 and 5 using the memo rules."}],
+        "Classify this week file into levels 4 and 5 using the memo rules.",
         session_id="week-41",
         case_id=42,
         playbook="general",
@@ -188,7 +188,7 @@ echo "$STATUS_JSON" | jq -r '.pendingActions[]? | "\(.id) \(.summary)"'
 
 ```python
 status = await client.agent_chat_and_wait(
-    [{"role": "user", "content": "Investigate the flagged rows of classify job 55."}],
+    "Investigate the flagged rows of classify job 55.",
     session_id="week-41",
     case_id=42,
     playbook="investigate-flagged",
@@ -272,7 +272,7 @@ echo "$STATUS_JSON" | jq -r '.pendingActions[]? | "\(.id) \(.summary)"'
 
 ```python
 status = await client.agent_chat_and_wait(
-    [{"role": "user", "content": "Record that fiction books are filed by genre when the description names one."}],
+    "Record that fiction books are filed by genre when the description names one.",
     session_id="run-9001-reply",
     case_id=42,
     playbook="general",
