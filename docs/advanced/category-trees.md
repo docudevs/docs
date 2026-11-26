@@ -60,3 +60,10 @@ Activation is refused, and the report lists the codes, while missing codes remai
 <Example name="category-trees/activate-tree" />
 
 Both body fields are optional; send `{}` to activate with the successors already in the tree. The response carries the `jobGuid` to poll with `GET /job/status/{guid}` and the `importId` of the activation. `409` means the version is already active or another activation is running. A refused activation ends the job with an error; read its report with `GET /cases/{caseId}/trees/{versionId}/activations/{importId}/report` (`docudevs trees activation-report`). Retired categories are never used as evidence labels.
+
+The report holds the `status`, the `counts` of valid, retired and missing record labels, the `successorRewrites` that were applied, the `missing` codes and the `retiredWithoutSuccessor` codes (each with a sample of record keys), and the `memoScopeIssues`: memo entries whose scope names categories that are not valid in the version. The route answers `404` until the worker has written the report.
+
+<Example name="category-trees/get-activation-report" />
+
+The example waits for the activation, finds its import in the list of the case's imports by `jobGuid`, and reads the report. When you kept the `importId` from the activation response, skip the lookup. The example stops when the job fails; to read the report of a refused activation, skip the wait. The command-line client has no wait step: `docudevs trees activation-report` takes the case, version and import ids.
+

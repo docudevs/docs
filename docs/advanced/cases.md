@@ -139,6 +139,41 @@ Cases support two levels of scope:
 
 A signed-in user sees their own cases plus the organization-wide ones. The scope is set by how you create the case: with an API key it is organization-wide, as a signed-in user it is yours alone. See [which cases you can use](./case-agent.md#which-cases-you-can-use).
 
+## Knowledge bases
+
+A knowledge base is a case that you have promoted so that the whole organization can use it as reference content. A [records](./records-datasets.md) case or a case of documents can be promoted.
+
+### Promoting a case
+
+`POST /knowledge-bases` with the `caseId` promotes a case. It answers `201` with the case, whose `isKnowledgeBase` is `true`. Promoting a case that already is a knowledge base changes nothing. It answers `404` when the case does not exist or you may not change it.
+
+<Example name="cases/promote-knowledge-base" />
+
+Promotion changes who can reach the case. A case created by a signed-in user is visible only to its creator. Once it is promoted, every member of the organization and every organization API key can list and read it, and search it. Its documents, records and settings are not copied or moved. See [Which cases you can use](./case-agent.md#which-cases-you-can-use).
+
+An organization API key can promote organization-wide cases. A signed-in user can promote their own cases and organization-wide ones; a case created by another user answers `404`, organization admins included. Users with the submission-portal role cannot call the knowledge-base routes. Demotion follows the same rules.
+
+To start a contract-analysis playbook, pass `profileType` `"contract-analysis"` (`profile_type` in the Python client): the case is promoted and gets an empty contract-analysis profile. Any other value is refused with `400`. See [Contract analysis](../core/contract-analysis.md).
+
+### Listing knowledge bases
+
+`GET /knowledge-bases` lists every knowledge base of the organization, whoever created it, and `GET /knowledge-bases/{caseId}` returns one (`404` when the case is not a knowledge base). Each entry has the case `id`, `name`, `description`, `isKnowledgeBase`, `userId` (absent for an organization-wide case) and timestamps. A contract-analysis playbook also carries its `profileType`, `profileStatus` and `publishedRevision`.
+
+<Example name="cases/list-knowledge-base" />
+
+### Demoting a knowledge base
+
+`DELETE /knowledge-bases/{caseId}` answers `204` and clears the designation. It answers `404` when the case is not a knowledge base or you may not change it.
+
+<Example name="cases/demote-knowledge-base" />
+
+Demotion keeps the case, its documents, records and trees, and a contract-analysis profile with its revisions; promoting the case again with `profileType` `"contract-analysis"` restores that profile. The case is visible again only as its scope allows: a case created by a signed-in user is back to its creator alone, and an organization-wide case stays organization-wide. `GET /knowledge-bases/{caseId}` and the contract-analysis run routes answer `404` for it until it is promoted again.
+
+### What needs a knowledge base
+
+- Contract analysis runs and test packages work on a knowledge base and answer `404` for a case that is not one.
+- The `RECORDS_SEARCH` and `RECORDS_MATCH` extraction tools name a case with a records dataset that is organization-wide or a knowledge base; a case created by a signed-in user answers `404` until you promote it. See [Knowledge search](../core/knowledge-search.md).
+
 ## Processing Status Tracking
 
 Each document in a case tracks its processing status:

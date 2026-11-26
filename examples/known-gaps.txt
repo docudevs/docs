@@ -16,8 +16,12 @@ case-memo/add-and-approve-instruction:java
 case-memo/read-and-retire-entries:java
 case-search/search-documents:java
 case-search/search-records:java
+cases/demote-knowledge-base:java
+cases/list-knowledge-base:java
+cases/promote-knowledge-base:java
 category-trees/activate-tree:java
 category-trees/browse-tree-nodes:java
+category-trees/get-activation-report:java
 category-trees/get-tree-node:java
 category-trees/list-trees:java
 category-trees/upload-tree:java
@@ -121,6 +125,7 @@ playbook-evaluation/run-and-wait:java
 playbook-evaluation/split-suite:java
 records/batch-records:java
 records/configure-dataset:java
+records/create-records-case:java
 records/delete-record:java
 records/get-dataset:java
 records/get-import:java
