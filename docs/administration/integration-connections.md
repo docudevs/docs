@@ -73,4 +73,4 @@ Delete a connection. A connection that a flow configuration still references ans
 
 <Example name="integrations/delete-connection" />
 
-The Python SDK has no helper for the integration connection routes, so these examples are cURL only.
+The Python and Java SDKs have no helper for the integration connection routes, so these examples are cURL only.

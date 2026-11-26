@@ -57,3 +57,23 @@ jobs/inspect-job:java  # the Java client 0.4.0 has no method for GET /job/params
 jobs/list-jobs:java  # the Java client 0.4.0 has no method for GET /job/list
 pipelines/client-pipeline-conditional:java  # the Java client 0.4.0 has no client-side pipeline runner (ClientPipeline, run_client_pipeline)
 pipelines/run-client-pipeline:java  # the Java client 0.4.0 has no client-side pipeline runner (ClientPipeline, run_client_pipeline)
+integrations/create-connection:java  # the Java client 0.4.0 has no method for POST /integration/connections
+integrations/delete-connection:java  # the Java client 0.4.0 has no method for DELETE /integration/connections/{id}
+integrations/list-connections:java  # the Java client 0.4.0 has no method for GET /integration/connections
+managed-workflows/cancel-run:java  # the Java client 0.4.0 has no method for POST /managed-execution/{id}/cancel
+managed-workflows/get-logs:java  # the Java client 0.4.0 has no method for GET /managed-execution/{id}/logs
+managed-workflows/get-run:java  # the Java client 0.4.0 has no method for GET /managed-execution/{id}
+managed-workflows/list-runs:java  # the Java client 0.4.0 has no method for GET /managed-execution
+managed-workflows/start-run:java  # the Java client 0.4.0 has no method for POST /managed-execution
+members/list-members:java  # the Java client 0.4.0 has no method for GET /members
+members/remove-member:java  # the Java client 0.4.0 has no method for DELETE /members/{id}
+members/set-join-policy:java  # the Java client 0.4.0 has no method for PUT /members/join-policy
+members/update-member-role:java  # the Java client 0.4.0 has no method for PATCH /members/{id}
+sso/add-domain:java  # the Java client 0.4.0 has no method for POST /sso/domains
+sso/configure-oidc-provider:java  # the Java client 0.4.0 has no method for PUT /sso/config
+sso/verify-domain:java  # the Java client 0.4.0 has no method for POST /sso/domains/{id}/verify
+submission-portals/check-submission:java  # the Java client 0.4.0 has no method for GET /submission-records/{receiptCode}
+submission-portals/create-portal:java  # the Java client 0.4.0 has no method for POST /submission-portals
+submission-portals/submit-document:java  # the Java client 0.4.0 has no method for POST /submission-portals/{id}/submissions
+track-changes/extract-track-changes:java  # the Java client 0.4.0 has no method for POST /document/track-changes
+webhooks/configure-webhook:java  # the Java client 0.4.0 has no method for PUT /settings/webhook

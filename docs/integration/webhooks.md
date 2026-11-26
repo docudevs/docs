@@ -54,7 +54,7 @@ Delivery is best-effort: a failed delivery is logged on the DocuDevs side and is
 
 <Example name="webhooks/configure-webhook" />
 
-The request body `{"url": null}` removes the URL and turns webhooks off. The Python SDK has no helper for these two routes, so the example is cURL only.
+The request body `{"url": null}` removes the URL and turns webhooks off. The Python and Java SDKs have no helper for these two routes, so the example is cURL only.
 
 ## Minimal receiver
 
