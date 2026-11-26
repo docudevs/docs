@@ -9,11 +9,8 @@ get_contract_analysis_workflow
 get_document_compare
 get_extraction_review_artifact
 get_extraction_review_profile
-get_tree_activation_report
 list_classify_jobs
-list_imports
 list_records_page
 records_case
 resolve_extraction_review_values
 search
-wait_for_records_job
