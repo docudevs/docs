@@ -1,7 +1,6 @@
 ---
 title: Managed workflows API
 description: Start, monitor, read the logs of and cancel runs of a saved managed workflow with the DocuDevs API.
-slug: /integration/managed-workflows
 ---
 
 # Managed workflows API
