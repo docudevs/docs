@@ -2,6 +2,7 @@
 # curl: the step runs in the client and makes no HTTP request of its own
 # python: DocuDevsClient has no method for the route
 extraction-review/build-review-descriptor:curl  # runs in the client
+extraction-review/build-review-descriptor:java  # the Java client 0.4.0 has no method for building a review descriptor from a client pipeline
 extraction/extract-with-pydantic:java  # the schema is generated from a Pydantic model, a Python feature; the Java client 0.4.0 has no method for it
 extraction/extract-with-source-locations-single-call:curl  # polling helper that wraps several calls
 integrations/create-connection:python  # DocuDevsClient 1.15.0 has no method for POST /integration/connections
@@ -34,6 +35,7 @@ pipelines/client-pipeline-conditional:curl  # runs in the client
 pipelines/correct-ocr-text:curl  # runs in the client
 pipelines/run-client-pipeline:curl  # runs in the client
 playbook-evaluation/import-gold:curl  # runs in the client
+playbook-evaluation/import-gold:java  # the Java client 0.4.0 has no method for importing gold answers from a spreadsheet
 results/check-non-json-result:python  # DocuDevsClient 1.15.0 result_json falls back to GET /job/result/{uuid} on 415, so it cannot report the status of GET /job/result/{uuid}/json
 results/get-result-schema:python  # DocuDevsClient 1.15.0 has no method for GET /job/result/{uuid}/schema
 sso/add-domain:python  # DocuDevsClient 1.15.0 has no method for POST /sso/domains

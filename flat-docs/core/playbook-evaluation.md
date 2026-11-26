@@ -8,7 +8,7 @@ description: Test a contract-analysis playbook against gold answers from a sprea
 
 Use this guide to run the evaluation loop from a cold start. You need:
 
-- an organization API key in `DOCUDEVS_TOKEN` (keep it out of logs and shared output); the cURL and Python examples below read `API_KEY`, so set it to the same key (the CLI reads either variable),
+- an organization API key in `DOCUDEVS_TOKEN` (keep it out of logs and shared output); the cURL, Python and Java examples below read `API_KEY`, so set it to the same key (the CLI reads either variable),
 - the case id of the playbook (`CASE_ID` below),
 - the gold file and the contract files it names.
 
@@ -267,13 +267,13 @@ Publishing checks the latest run of every case that has a mandatory expectation,
 
 The contract-analysis playbooks guide has the full publish section ("Test and publish a playbook").
 
-## Run the loop from Python or cURL
+## Run the loop from Python, Java or cURL
 
-The steps that need no judgement can run from a script. The examples read the key from `API_KEY`, use the base URL `https://api.docudevs.ai`, and work with an organization API key. The Python variants use `DocuDevsClient`; its evaluation methods raise an error when the API answers with an error status. Each subsection does what the CLI step it names does.
+The steps that need no judgement can run from a script. The examples read the key from `API_KEY`, use the base URL `https://api.docudevs.ai`, and work with an organization API key. The Python variants use `DocuDevsClient`; its evaluation methods raise an error when the API answers with an error status. The Java variants use `DocuDevsClient` from `ai.docudevs.client`, which raises `DocuDevsApiException` in the same case. Each subsection does what the CLI step it names does.
 
 ### Import gold (step 1)
 
-The client reads the gold table and the mapping file and uploads the contracts itself. Do the dry run first, as in step 1. There is no cURL variant: the client uploads the contracts that are missing, prepares a test package for each and saves the test suite, so the import is several calls, not one route.
+The client reads the gold table and the mapping file and uploads the contracts itself. Do the dry run first, as in step 1. There is no cURL or Java variant: the client uploads the contracts that are missing, prepares a test package for each and saves the test suite, so the import is several calls, not one route.
 
 **Python**
 
@@ -343,6 +343,38 @@ print(
 )
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+long caseId = 42L; // id of the playbook's case
+
+// Both calls raise DocuDevsApiException when the API answers with an error status
+JsonNode suite = client.getContractAnalysisTestSuite(caseId);
+JsonNode saved = client.splitTestSuite(
+        caseId,
+        new ObjectMapper().createObjectNode()
+                .put("holdout", 0.3)
+                .put("seed", 1)
+                .put("expectedSuiteRevision", suite.path("revision").asLong()));
+
+int tuning = 0;
+int holdout = 0;
+JsonNode cases = saved.path("cases");
+for (JsonNode testCase : cases) {
+    String set = testCase.path("set").asText();
+    if (set.equals("tuning")) {
+        tuning++;
+    } else if (set.equals("holdout")) {
+        holdout++;
+    }
+}
+System.out.println("Suite revision " + saved.path("revision").asLong() + " saved: " + tuning
+        + " tuning, " + holdout + " holdout, " + (cases.size() - tuning - holdout) + " unassigned.");
+```
+
 **CLI**
 
 ```bash
@@ -353,7 +385,7 @@ docudevs eval split "$CASE_ID" --holdout 0.3 --seed 1
 
 ### Run an evaluation and wait (step 3)
 
-An evaluation starts one scored trial per test case of the set. A start answers `400` with `EMPTY_SET` when the set has no test cases, and `409` with `TRIAL_RUNNING` while a trial of a selected case is still pending. The request also takes `limit` and `repeats`, as the CLI options do. The API needs an idempotency key on a start: the Python client and the CLI create one, and the cURL variant sends one. The cURL and Python variants poll every 15 seconds for up to 3600 seconds, and the CLI waits the same way. The wait ends when every trial has finished or failed.
+An evaluation starts one scored trial per test case of the set. A start answers `400` with `EMPTY_SET` when the set has no test cases, and `409` with `TRIAL_RUNNING` while a trial of a selected case is still pending. The request also takes `limit` and `repeats`, as the CLI options do. The API needs an idempotency key on a start: the Python client, the Java client and the CLI create one, and the cURL variant sends one. The cURL and Python variants poll every 15 seconds for up to 3600 seconds, and the CLI and the Java `waitForEvaluation` call wait the same way. The wait ends when every trial has finished or failed.
 
 **cURL**
 
@@ -404,6 +436,31 @@ finished = await client.wait_for_evaluation(
 print(f"Evaluation {evaluation_id} complete: {finished.parsed.get('trialCounts', {})}")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
+
+long caseId = 42L; // id of the playbook's case
+
+// The client creates the idempotency key; pass one as the last argument to retry a start safely
+JsonNode started = client.startEvaluation(caseId, "tuning", null, null);
+String evaluationId = started.path("evaluationId").asText();
+System.out.println("Evaluation " + evaluationId + " started: " + started.path("caseIds").size() + " cases");
+
+// Polls every 15 seconds and raises DocuDevsTimeoutException after 3600 seconds
+JsonNode finished = client.waitForEvaluation(
+        caseId,
+        evaluationId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(15))
+                .build());
+System.out.println("Evaluation " + evaluationId + " complete: " + finished.path("trialCounts"));
+```
+
 **CLI**
 
 ```bash
@@ -414,7 +471,7 @@ docudevs eval run "$CASE_ID" --set tuning
 
 ### Read the status and the report (steps 3 and 4)
 
-The report is the one described in step 4. While `complete` is false the report covers only the trials that have finished, so read the figures after it turns true. `complete` is true when every trial has finished or failed, so check each contract's `trialStatus` for failed trials. Add `against` with an earlier evaluation id, or `published`, to get the comparison from steps 7 and 8. The CLI prints the whole status and report as JSON, and the Python and cURL variants print a summary.
+The report is the one described in step 4. While `complete` is false the report covers only the trials that have finished, so read the figures after it turns true. `complete` is true when every trial has finished or failed, so check each contract's `trialStatus` for failed trials. Add `against` with an earlier evaluation id, or `published`, to get the comparison from steps 7 and 8. The CLI prints the whole status and report as JSON, and the Python, Java and cURL variants print a summary.
 
 **cURL**
 
@@ -462,6 +519,39 @@ print(f"Missed problems: {totals.get('missedProblems', 0)}, false alarms: {total
 for contract in report.get("contracts", []):
     if contract["trialStatus"] != "finished":
         print(f"{contract['name']}: {contract['trialStatus']} ({contract.get('failureReason') or 'no reason'})")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of the playbook's case
+
+JsonNode listing = client.listEvaluations(caseId);
+for (JsonNode evaluation : listing.path("evaluations")) {
+    System.out.println(evaluation.path("evaluationId").asText() + " " + evaluation.path("set").asText() + " "
+            + (evaluation.path("complete").asBoolean() ? "complete" : "running"));
+}
+
+String evaluationId = "<evaluation-id>"; // evaluationId returned when the evaluation was started
+JsonNode status = client.getEvaluation(caseId, evaluationId);
+System.out.println("Trials: " + status.path("trialCounts"));
+
+// Pass an evaluation id or "published" instead of null to compare with another evaluation
+JsonNode report = client.getEvaluationReport(caseId, evaluationId, null);
+JsonNode totals = report.path("totals");
+System.out.println("Complete: " + report.path("complete").asBoolean());
+System.out.println("Passed " + totals.path("passed").asLong() + " of " + totals.path("assertions").asLong()
+        + " assertions");
+System.out.println("Missed problems: " + totals.path("missedProblems").asLong() + ", false alarms: "
+        + totals.path("falseAlarms").asLong());
+for (JsonNode contract : report.path("contracts")) {
+    if (!contract.path("trialStatus").asText().equals("finished")) {
+        System.out.println(contract.path("name").asText() + ": " + contract.path("trialStatus").asText()
+                + " (" + contract.path("failureReason").asText("no reason") + ")");
+    }
+}
 ```
 
 **CLI**
