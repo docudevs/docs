@@ -91,6 +91,53 @@ To look up paragraph text for a reference, fetch the paragraphs from the layout 
 
 References to tables or figures are not among the paragraphs, so they print an empty string. Fetch `tables` or `figures` from the layout to resolve those.
 
+## Figures and page images
+
+The layout lists where each figure sits on a page. To get the figures themselves as images, switch figure extraction on in the processing request:
+
+- `extractFigures: true` keeps every figure of the document as a PNG image, together with a list that describes them.
+- `describeFigures: true` does the same and also asks a model to describe each figure. The description is added to the markdown text as a `FigureDescription` comment inside the figure's `<figure>` element, so the extraction that reads the text sees it. `describeFigures` implies `extractFigures`. Use markdown output with it; the Python client rejects `describe_figures` together with plain output.
+
+Both options are off unless you set them. They are fields of the process request and of the OCR request, and the Python client takes them as `extract_figures` and `describe_figures`. In the CLI, `docudevs process --describe-figures` turns them on; there is no CLI flag for extraction alone. Figures are read by the document OCR, so use `ocr` set to `DEFAULT`, `PREMIUM` or `AUTO`; `LOW` and `EXCEL` do not extract figures.
+
+| Route | Returns |
+| --- | --- |
+| `GET /job/figures/{guid}` | The list of extracted figures |
+| `GET /job/figure/{guid}/{imageId}` | One figure as a PNG image |
+| `GET /job/image/{guid}/{pageIndex}` | One page as a PNG image (page indexes start at 0) |
+
+The two figure routes accept `batchIndex` to read the figures of one document of a batch. `{imageId}` is the `id` from the list; a trailing `.png` is optional.
+
+The list looks like this:
+
+```json
+{
+  "version": 1,
+  "images": [
+    {
+      "id": "figure_0",
+      "figureId": "1.1",
+      "pageIndex": 0,
+      "boundingPolygon": [{ "x": 1.0, "y": 2.0 }, { "x": 4.0, "y": 2.0 }, { "x": 4.0, "y": 5.0 }, { "x": 1.0, "y": 5.0 }],
+      "caption": "Revenue by quarter",
+      "mimeType": "image/png",
+      "width": 640,
+      "height": 480
+    }
+  ]
+}
+```
+
+`id` names the image, in the order of the figures. `figureId` is the identifier of the figure in the OCR output. `pageIndex` is the page that holds the figure, counted from 0 like the page image route. `caption`, `pageIndex` and `boundingPolygon` can be empty when the OCR did not return them, so read them as optional.
+
+A job that was processed with figure extraction on answers the list with `200`, and an empty `images` list when the document has no figures. `404` means that the job does not exist or was processed without figure extraction. A missing image also answers `404`.
+
+Page images are rendered for PDFs processed with `PREMIUM` OCR, including `AUTO` when it moves up to `PREMIUM`. Without page images the route answers `404`. [LLM Tracing](/docs/advanced/tracing#retrieving-page-images) shows the page image call on its own.
+
+The example processes a PDF with figure extraction on, waits for the job, lists the figures, and downloads every figure and the first page image. cURL and Python poll the job; both stop after 600 seconds.
+
+<Example name="layout/download-figures" />
+
 ## Migrating from Azure Document Intelligence `AnalyzeResult`
 
 | Azure Document Intelligence | DocuDevs layout |

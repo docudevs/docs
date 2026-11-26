@@ -78,6 +78,7 @@ jobs/process-and-clean-up:java
 jobs/process-with-auto-ocr:java
 jobs/process-with-depends-on:java
 knowledge-search/extract-with-records-search:java
+layout/download-figures:java
 layout/get-document-layout:java
 layout/resolve-source-locations:java
 llm-providers/bind-llm-level:java
