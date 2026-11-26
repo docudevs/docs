@@ -27,7 +27,7 @@ async def main():
     print(f"Missed problems: {totals.get('missedProblems', 0)}, false alarms: {totals.get('falseAlarms', 0)}")
     for contract in report.get("contracts", []):
         if contract["trialStatus"] != "finished":
-            print(f"{contract['name']}: {contract['trialStatus']} ({contract.get('failureReason')})")
+            print(f"{contract['name']}: {contract['trialStatus']} ({contract.get('failureReason') or 'no reason'})")
     # docs:end
 
 

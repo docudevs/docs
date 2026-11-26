@@ -115,7 +115,7 @@ An id that does not exist, or that belongs to another organization, answers `404
 
 <Example name="members/set-join-policy" />
 
-The join policy applies when someone signs in through the Microsoft Entra sign-in that your deployment is set up for and has no membership yet. `ssoDefaultRole` takes one of:
+The join policy applies when someone signs in with Microsoft Entra and has no membership yet. `ssoDefaultRole` takes one of:
 
 | Value | Effect |
 | --- | --- |
@@ -147,6 +147,6 @@ Available choices in the current UI are:
 - `SUBMISSION_PORTAL_USER`
 - `Deny (invite only)`
 
-If you choose **Deny**, uninvited identity-provider users are blocked until an admin explicitly creates a membership for them.
+**Deny (invite only)** stores no policy, and when no policy is set an uninvited person who signs in through Microsoft Entra joins as `MEMBER`. To refuse uninvited sign-ins, set the policy to `NONE` through the API (see [Set the join policy](#set-the-join-policy)). Saving the join policy card in the web app writes the card's selected value, so it replaces a policy set through the API.
 
 For more detail on the current SSO behavior and scope, see [Single Sign-On](./single-sign-on).

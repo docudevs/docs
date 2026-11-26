@@ -88,7 +88,7 @@ This table is generated from the released Python client (`docu-devs-api-client` 
 | `get_contract_analysis_test_suite` | `case_id: Union[int, str]` | `SimpleNamespace` | Get the current immutable test-suite revision for a knowledge base. |  |
 | `get_contract_analysis_trial` | `case_id: Union[int, str]`<br />`trial_id: str` | `SimpleNamespace` | Read status and immutable report for a trial. |  |
 | `get_contract_analysis_trial_readiness` | `case_id: Union[int, str]` | `SimpleNamespace` | Read current publication readiness and blockers for the current draft/suite. |  |
-| `get_contract_analysis_workflow` | `case_id: Union[int, str]` | `SimpleNamespace` | Where a case is in contract-analysis setup: step, clause build, pending rebuild, readiness. | ruleCount counts clauses; pendingRebuild can appear after a build with all counts 0. |
+| `get_contract_analysis_workflow` | `case_id: Union[int, str]` | `SimpleNamespace` | Where a case is in contract-analysis setup: step, clause build, pending rebuild, readiness. | For a clause-format playbook, `pendingRebuild` has nothing to apply. |
 | `get_dataset` | `case_id: Union[int, str]` | `dict` | Get the records dataset configuration of a case. |  |
 | `get_default_embedding_binding` | — | — | Get the organization default embedding binding and rollout counters. |  |
 | `get_document_compare` | `compare_guid: str` | `dict` | Return the document-compare artifact of a completed redline comparison. |  |

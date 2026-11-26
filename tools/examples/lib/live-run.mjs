@@ -59,6 +59,20 @@ export function parseSkipFile(text, knownNames) {
   return skip;
 }
 
+export function parseOrderFile(text, knownNames) {
+  const known = new Set(knownNames);
+  const order = [];
+  text.split('\n').forEach((raw, index) => {
+    const name = raw.trim();
+    if (name === '' || name.startsWith('#')) return;
+    const where = `examples/live-order.txt:${index + 1}`;
+    if (!known.has(name)) throw new Error(`${where}: ${name} is not an example in the manifest`);
+    if (order.includes(name)) throw new Error(`${where}: ${name} is listed twice`);
+    order.push(name);
+  });
+  return order;
+}
+
 export function parseLiveArgs(argv) {
   const options = { only: undefined, variants: [...VARIANTS], list: false };
   for (let index = 0; index < argv.length; index += 1) {
@@ -84,8 +98,19 @@ export function parseLiveArgs(argv) {
 
 const matchesOnly = (name, only) => only === undefined || name === only || name.startsWith(`${only}/`);
 
-export function selectRuns({ examples, skip, only, variants = VARIANTS }) {
+const orderedFirst = (examples, order) => {
+  const rank = (example) => {
+    const position = order.indexOf(example.name);
+    return position === -1 ? order.length : position;
+  };
   return examples
+    .map((example, index) => ({ example, index }))
+    .sort((a, b) => rank(a.example) - rank(b.example) || a.index - b.index)
+    .map(({ example }) => example);
+};
+
+export function selectRuns({ examples, skip, only, variants = VARIANTS, order = [] }) {
+  return orderedFirst(examples, order)
     .filter((example) => matchesOnly(example.name, only))
     .flatMap((example) =>
       VARIANTS.filter((variant) => variants.includes(variant) && example.files.some((file) => file.lang === variant)).map(

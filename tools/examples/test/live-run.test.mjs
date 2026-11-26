@@ -11,6 +11,7 @@ import {
   executeRuns,
   formatReport,
   parseLiveArgs,
+  parseOrderFile,
   parseSkipFile,
   redact,
   runExitCode,
@@ -67,6 +68,29 @@ test('selection covers curl, python and cli for every example without java', () 
 });
 test('selection skips only languages the example has', () => {
   assert.deepEqual(keys(selectRuns({ examples: partial, skip: new Map() })), ['a/only-python:python']);
+});
+test('parseOrderFile reads one example per line and ignores comments and blank lines', () => {
+  assert.deepEqual(parseOrderFile('# header\n\ncases/list\njobs/delete-job\n', names), ['cases/list', 'jobs/delete-job']);
+});
+test('parseOrderFile rejects an example that does not exist', () => {
+  assert.throws(() => parseOrderFile('cases/missing', names), /cases\/missing/);
+});
+test('parseOrderFile rejects an example listed twice', () => {
+  assert.throws(() => parseOrderFile('cases/list\ncases/list', names), /twice/);
+});
+test('the committed order file is valid for the committed examples', () => {
+  const found = discoverExamples(join(root, 'examples')).map((example) => example.name);
+  const order = parseOrderFile(readFileSync(join(root, 'examples', 'live-order.txt'), 'utf8'), found);
+  assert.ok(order.includes('configuration/save-configuration'));
+  assert.ok(order.includes('templates/upload-template'));
+});
+test('selection runs the listed examples first in the listed order, then the rest alphabetically', () => {
+  const runs = selectRuns({ examples, skip: new Map(), order: ['jobs/delete-job', 'cases/list'], variants: ['curl'] });
+  assert.deepEqual(keys(runs), ['jobs/delete-job:curl', 'cases/list:curl', 'cases/create:curl']);
+});
+test('selection without an order keeps alphabetical order', () => {
+  const runs = selectRuns({ examples, skip: new Map(), variants: ['curl'] });
+  assert.deepEqual(keys(runs), ['cases/create:curl', 'cases/list:curl', 'jobs/delete-job:curl']);
 });
 test('selection honours --variant', () => {
   const runs = selectRuns({ examples, skip: new Map(), variants: ['python'] });

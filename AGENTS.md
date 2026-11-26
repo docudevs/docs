@@ -14,6 +14,7 @@ This is the public documentation site for DocuDevs, built with Docusaurus. A pus
 | `src/generated/` | Build output (`examples.json`), gitignored |
 | `.github/workflows/examples.yml` | CI for the example checks |
 | `examples/live-skip.txt` | Examples the live runner does not execute, with a reason |
+| `examples/live-order.txt` | Examples the live runner runs first, in order |
 | `tools/examples/live-fixtures/` | Generated sample input files for the live runner |
 
 ## Examples
@@ -153,7 +154,7 @@ npm run examples:live -- --only cases --variant curl
 - Flags: `--only <area>[/<name>]`, `--variant curl|python|cli` (default all three), `--list` (print the selection and run nothing). `API_KEY` is required; the script exits 2 without it.
 - The Python and CLI variants need `tools/examples/python/.venv` (see Checks).
 - Each file runs with `bash` (Python with the venv interpreter, the CLI with the venv `bin` first on `PATH`) in its own temporary directory holding the files from `tools/examples/live-fixtures/`, under a 10 minute timeout, with only `API_KEY`, `PATH`, `HOME` and `DOCUDEVS_API_URL` in its environment. Most examples hardcode `https://api.docudevs.ai`, so `DOCUDEVS_API_URL` only applies where an example reads it.
-- What a run creates in the organization: jobs and batches, cases (documents and records datasets), saved configurations, uploaded templates and Excel templates, and a review profile on a configuration. Run order is alphabetical; an example that uses a configuration or template another example saves (`invoice-config`, `invoice`) fails on a first run when it comes first, so run again before treating it as a defect.
+- What a run creates in the organization: jobs and batches, cases (documents and records datasets), saved configurations, uploaded templates and Excel templates, and a review profile on a configuration. Run order is alphabetical, except that `examples/live-order.txt` (one `<area>/<name>` per line) lists examples that run first in that order; list an example there when siblings read what it creates (`invoice-config`, the `invoice` template). A test fails for a line that names an unknown example.
 - Output goes to `live-run/<area>/<name>/<variant>.log` and the table to `live-run/report.md` (`pass`, `fail` with the exit code and last output line, `skipped` with the reason). The directory is gitignored. The key value is replaced with `***` in every log and on the console. The exit code is 1 when any row failed.
 - `examples/live-skip.txt` lists `<area>/<name><TAB><reason>`; the runner never executes those. The reason is one of: needs a signed-in user; needs a dedicated deployment; needs a public callback URL; needs provider credentials; deletes or changes organization-wide settings; needs an existing resource id. A test fails for an unknown example, a missing reason or any other reason. A new example that deletes or changes organization-wide settings, or that starts from an id the example cannot create, gets a line there.
 - A selected example that opens or uploads a file needs a file of that name in `tools/examples/live-fixtures/`; a test fails otherwise. Regenerate the fixtures with `node tools/examples/make-live-fixtures.mjs` and commit them. Names an example writes are detected automatically; list any other output name in `OUTPUT_NAMES` in `tools/examples/lib/live-run.mjs`.

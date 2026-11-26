@@ -1318,7 +1318,7 @@ knowledge_bases = await client.list_knowledge_bases()
 
 ### promote_knowledge_base
 
-Mark a case as a knowledge base.
+Mark a case as a knowledge base. The optional `profile_type` accepts only `"contract-analysis"`, which makes the case a playbook; any other value is rejected with `400`.
 
 ```python
 await client.promote_knowledge_base(case_id)

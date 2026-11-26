@@ -51,13 +51,12 @@ The app lists the findings of a run and records reviews (see [Review a
 finding](#review-a-finding)).
 
 Runs use the clause format (`profileVersion` `2026-11`). A run started against a
-playbook stored in the earlier rule-based format (`profileVersion` `2026-09`) is
-refused with `400` and the message "unsupported contract analysis profile
-version", and the run page for an old result says "This run uses a format that is
-no longer supported." To use such a playbook, create it again in the clause format.
-On the Clauses step the app says "This playbook uses a format that is no longer
-supported. Import a playbook file to replace it."; importing a playbook file
-replaces the draft.
+playbook in any other format is refused with `400` and the message "unsupported
+contract analysis profile version", and the run page for an old result says "This
+run uses a format that is no longer supported." To use such a playbook, create it
+again in the clause format. On the Clauses step the app says "This playbook uses a
+format that is no longer supported. Import a playbook file to replace it.";
+importing a playbook file replaces the draft.
 
 ## Import and export a playbook
 

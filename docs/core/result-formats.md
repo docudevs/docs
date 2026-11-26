@@ -15,7 +15,7 @@ A completed job keeps its result. You can read it as it was stored, or ask DocuD
 | `GET /job/result/{guid}/excel` | The result as an Excel workbook, sent as an attachment |
 | `GET /job/result/{guid}/schema` | The schema the job was processed with |
 
-Wait until the job status is `COMPLETED` before you read a result. A job without a stored result, and a GUID that does not belong to your organization, both answer `404`.
+Wait until the job status is `COMPLETED` before you read a result (except the batch overview below). A job without a stored result, and a GUID that does not belong to your organization, both answer `404`.
 
 ## Download JSON, CSV and Excel
 
@@ -30,6 +30,8 @@ The CSV and Excel routes flatten the result into a table:
 - A list inside a record is not expanded into rows. It is written into its cell as JSON text.
 - The columns of a list of objects are the union of the keys of all objects, in the order they first appear. A missing value is an empty cell.
 - For a map-reduce job the rows are the `records` of the result.
+
+For numbers that should arrive in Excel as numbers, make the field required in the schema (see [Example: Strict Invoice Schema](../basics/SimpleDocuments.md#example-strict-invoice-schema)).
 
 In Python, `result_json`, `result_csv` and `result_excel` wrap these routes. `result_csv` and `result_excel` raise `FileNotFoundError` when the result is not found. `wait_until_ready` returns the same formats when you pass `result_format` as `"json"`, `"csv"` or `"excel"`. The CLI command `docudevs result <guid>` reads the stored result and has no format option.
 

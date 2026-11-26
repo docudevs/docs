@@ -59,13 +59,13 @@ Activation requires at least one verified domain.
 
 ## Join policy for uninvited users
 
-The **join policy**, on **Settings > Members** (not on this page), is a separate setting: the default role assigned to a user who signs in through an already-configured, single-tenant identity provider (for example, a dedicated Microsoft Entra ID deployment) without having been explicitly invited first. It has four choices — `ADMIN`, `MEMBER`, `SUBMISSION_PORTAL_USER`, or **Deny (invite only)**.
+The **join policy**, on **Settings > Members** (not on this page), is a separate setting: the default role assigned to a user who signs in through an already-configured, single-tenant identity provider (for example, a dedicated Microsoft Entra ID deployment) without having been explicitly invited first. It has four choices — `ADMIN`, `MEMBER`, `SUBMISSION_PORTAL_USER`, or **Deny (invite only)**, which stores no policy. With no policy set, an uninvited person joins as `MEMBER`; to refuse them, set the policy to `NONE` through the API, as described in [Members and Roles](./members-and-roles#set-the-join-policy).
 
 The current behavior:
 
 - **Explicitly invited user signs in through the identity provider** — DocuDevs links that sign-in to the invited membership and activates the account automatically.
 - **Uninvited user signs in and a default role is configured** — DocuDevs provisions that user with the configured role.
-- **Uninvited user signs in and the policy is set to deny** — DocuDevs denies provisioning until an admin creates a membership explicitly.
+- **Uninvited user signs in and the policy is `NONE`** — DocuDevs denies provisioning until an admin creates a membership explicitly. With no policy set, the user joins as `MEMBER`.
 - **User is suspended later** — standard suspended-account behavior still applies, regardless of how the account was created.
 
 See [Members and Roles](./members-and-roles) for the full member lifecycle (invites, roles, suspension).

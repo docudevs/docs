@@ -6,8 +6,6 @@ sidebar_position: 11
 
 Contract analysis reads a contract against a **playbook** and reports one finding per clause: a verdict, the red flags that were triggered, and the passages of the contract the finding rests on. A playbook states what your side wants from a kind of contract. A run is immutable: it captures the contract, the playbook revision and the execution configuration, so later edits never change its result.
 
-Contract analysis is an information-extraction and review aid. It does not provide legal advice, legal opinions, underwriting decisions, or a substitute for qualified counsel. Your organization remains responsible for reviewing the contracts and every finding before relying on them.
-
 ## Where to find what
 
 | To do this | Read |
@@ -127,6 +125,6 @@ The CLI covers the run lifecycle and most of the setup: run `docudevs knowledge-
 
 ## In the web app
 
-- **Playbooks** in the sidebar opens `/app/playbooks`: the list of playbooks, a **New playbook** button, and a link to each playbook. A playbook opens at `/app/playbooks/{playbookId}` with the steps **Upload**, **Clauses**, **Test** and **Publish**: guideline documents and roles, the clause editor with **Import playbook (JSON)**, **Export** and **Save playbook**, the test suite with the **Scored trial**, and **Publish playbook**. The steps are described in [What is available](./contract-analysis-playbooks.md#what-is-available).
+- **Playbooks** in the sidebar; the steps are in [What is available](./contract-analysis-playbooks.md#what-is-available).
 - On the **Jobs** page, a completed document job has an **Analyze contract** button. The dialog asks for a **Playbook**, and only playbooks with a published revision can be chosen. It also lets you select further documents for the analysis (up to 32 documents and 32 MiB of captured source) and name an **Expected but unavailable document**. **Analyze contract** creates a `published` run and opens its page.
 - A run opens at `/app/contract-analysis/runs/{runId}`: the run ID, its status and mode, and the findings by clause. For a `draft_trial` run the page says that the result is for review and does not change the published playbook. Each finding offers **Agree**, **Correct** and **Dismiss**; **Correct** asks for a verdict, and **Correct** and **Dismiss** need a reason. **Save review** records the disposition.

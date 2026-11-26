@@ -22,7 +22,7 @@ CASE_ID=42  # id of a records case
 VERSION_ID=7  # treeVersionId returned when the tree was uploaded
 JOB_GUID="<job-guid>"  # jobGuid returned when the version was activated
 
-# Returns when the job is COMPLETED; exits when it ends ERROR, FAILED or TIMEOUT, or after 600 seconds
+# Returns when the job is COMPLETED; exits when it ends ERROR, FAILED or TIMEOUT, or when 600 seconds pass first
 wait_for_job "$JOB_GUID"
 
 # Find the activation among the case's imports (newest first). This reads one page

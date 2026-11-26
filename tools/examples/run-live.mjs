@@ -7,6 +7,7 @@ import {
   executeRuns,
   formatReport,
   parseLiveArgs,
+  parseOrderFile,
   parseSkipFile,
   redact,
   runExitCode,
@@ -39,7 +40,11 @@ try {
     readFileSync(join(root, 'examples', 'live-skip.txt'), 'utf8'),
     examples.map((example) => example.name),
   );
-  runs = selectRuns({ examples, skip, only: options.only, variants: options.variants });
+  const orderPath = join(root, 'examples', 'live-order.txt');
+  const order = existsSync(orderPath)
+    ? parseOrderFile(readFileSync(orderPath, 'utf8'), examples.map((example) => example.name))
+    : [];
+  runs = selectRuns({ examples, skip, only: options.only, variants: options.variants, order });
 } catch (error) {
   fail(redact(error.message, apiKey));
 }
