@@ -392,6 +392,9 @@ Update an existing case.
 docudevs cases update CASE_ID --name "Quarterly Invoices (Updated)"
 ```
 
+- `--name TEXT`: Case name (required)
+- `--description TEXT`: Case description
+
 ### `cases delete`
 
 Delete a case and all associated documents.
