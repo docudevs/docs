@@ -865,6 +865,34 @@ confirmed = await client.confirm_contract_analysis_findings(
 print(f"Suite case: {confirmed.parsed['suiteCaseId']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+long caseId = 42L; // id of the case that holds the playbook documents
+String runId = "<run-id>"; // runId returned when the run was created
+String resultFingerprint = "<result-fingerprint>"; // resultFingerprint of that run's result
+long suiteRevision = 4L; // revision returned by the test-suite read
+
+ObjectMapper mapper = new ObjectMapper();
+ObjectNode confirmation = mapper.createObjectNode()
+        .put("runId", runId)
+        .put("resultFingerprint", resultFingerprint)
+        .put("expectedSuiteRevision", suiteRevision);
+ObjectNode clause = confirmation.putArray("confirmations").addObject()
+        .put("clauseId", "term")
+        .put("expectedVerdict", "flagged")
+        .put("importance", "mandatory")
+        .put("notes", "Confirmed by review.");
+clause.putObject("expectedRedFlags").put("auto-renewal", "triggered");
+
+JsonNode confirmed = client.confirmContractAnalysisFindings(caseId, confirmation);
+System.out.println("Suite case: " + confirmed.path("suiteCaseId").asText());
+```
+
 `expectedRedFlags` defaults to empty and `importance` to `mandatory`. A clause
 the run does not have returns `400 UNKNOWN_CLAUSE`; the same clause twice in one
 request returns `400 DUPLICATE_EXPECTATION`. The suite is unchanged on error.
@@ -1027,6 +1055,20 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+
+long caseId = 42L; // id of the case that holds the playbook documents
+
+byte[] fileBytes = Files.readAllBytes(Path.of("supplier-agreement.pdf"));
+UploadRequest upload = new UploadRequest("supplier-agreement.pdf", "application/pdf", fileBytes);
+
+client.uploadCaseDocument(caseId, upload, "test_contract", "kept");
+System.out.println("Upload status: OK");
+```
+
 Or mark a document that is already in the case. The document must have finished
 processing:
 
@@ -1146,6 +1188,24 @@ package = await client.prepare_contract_analysis_test_package(
     context={"asOfDate": "2026-09-22"},
 )
 print(f"Package {package.parsed['packageId']}, fingerprint {package.parsed['fingerprint']}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ContractTestPackageOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of the case that holds the playbook documents
+String anchorJobGuid = "<completed-contract-job>"; // jobGuid of a completed contract job
+
+JsonNode pkg = client.prepareContractAnalysisTestPackage(
+        caseId,
+        anchorJobGuid,
+        "package-1",
+        ContractTestPackageOptions.builder().asOfDate("2026-09-22").build());
+System.out.println("Package " + pkg.path("packageId").asText()
+        + ", fingerprint " + pkg.path("fingerprint").asText());
 ```
 
 **CLI**
@@ -1567,6 +1627,20 @@ print(f"Blockers: {readiness.get('blockers', [])}")
 print(f"Scenarios still missing: {readiness.get('outstandingScenarios', [])}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of the case that holds the playbook documents
+
+JsonNode readiness = client.getContractAnalysisTrialReadiness(caseId);
+
+System.out.println("Ready: " + readiness.path("ready").asBoolean());
+System.out.println("Blockers: " + readiness.path("blockers"));
+System.out.println("Scenarios still missing: " + readiness.path("outstandingScenarios"));
+```
+
 **CLI**
 
 ```bash
@@ -1902,6 +1976,22 @@ generation = await client.generate_contract_analysis_profile(
     scope={"jurisdictions": ["Finland"], "from": "1 January 2026"},
 )
 print(f"Profile generation job: {generation.parsed['jobGuid']}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+long caseId = 42L; // id of the case that holds the playbook documents
+
+ObjectNode scope = new ObjectMapper().createObjectNode().put("from", "1 January 2026");
+scope.putArray("jurisdictions").add("Finland");
+
+JsonNode generation = client.generateContractAnalysisProfile(caseId, "Acme Corp", "Globex Ltd", scope);
+System.out.println("Profile generation job: " + generation.path("jobGuid").asText());
 ```
 
 The CLI `generate` command takes the two sides only; send a scope through the API or a client that takes one.

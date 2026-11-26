@@ -42,7 +42,7 @@ a stable function/version ID for every local node. Exactly one final is required
 
 <Example name="extraction-review/build-review-descriptor" />
 
-The example builds a client pipeline with one local node and writes the descriptor to `descriptor.json`. `local_function_ids` maps every local node ID to its supplied implementation ID. Missing or extra entries fail; several nodes may use the same implementation ID. Release and implementation IDs must be nonblank. Code/data digests must be 64 lowercase hexadecimal characters; data IDs must be unique. Supply `data: []` when the producer has no versioned data dependencies. Unknown producer fields, non-string object keys and nonfinite/non-JSON values are rejected. `ClientPipeline.review_descriptor` runs in the Python client and makes no HTTP request, so there is no cURL variant.
+The example builds a client pipeline with one local node and writes the descriptor to `descriptor.json`. `local_function_ids` maps every local node ID to its supplied implementation ID. Missing or extra entries fail; several nodes may use the same implementation ID. Release and implementation IDs must be nonblank. Code/data digests must be 64 lowercase hexadecimal characters; data IDs must be unique. Supply `data: []` when the producer has no versioned data dependencies. Unknown producer fields, non-string object keys and nonfinite/non-JSON values are rejected. `ClientPipeline.review_descriptor` runs in the Python client and makes no HTTP request, so there is no cURL or Java variant.
 
 The returned object is a detached JSON snapshot with format/compiler versions,
 the pipeline version, declared producer, original remote nodes, local node

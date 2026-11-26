@@ -59,6 +59,33 @@ saved = await client.save_extraction_review_profile(
 print(f"Saved revision {saved.parsed['revision']}, enabled: {saved.parsed['enabled']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+// The configuration invoice-v1 must already exist.
+ObjectMapper mapper = new ObjectMapper();
+ObjectNode schema = mapper.createObjectNode().put("type", "object");
+schema.putObject("properties").putObject("total").put("type", "number");
+
+ObjectNode previewRequest = mapper.createObjectNode().put("schemaJson", mapper.writeValueAsString(schema));
+previewRequest.putNull("overlay");
+JsonNode preview = client.previewExtractionReviewProfile("invoice-v1", previewRequest);
+
+ObjectNode saveRequest = mapper.createObjectNode()
+        .put("expectedRevision", preview.path("revision").asLong())
+        .put("enabled", true)
+        .put("schemaJson", preview.path("schemaJson").asText());
+saveRequest.putNull("overlay");
+JsonNode saved = client.saveExtractionReviewProfile("invoice-v1", saveRequest);
+
+System.out.println("Saved revision " + saved.path("revision").asLong()
+        + ", enabled: " + saved.path("enabled").asBoolean());
+```
+
 Who can call what, in the organization that owns the run or configuration:
 
 | Calls | Allowed | Rejected with 403 |
@@ -164,7 +191,7 @@ descriptor = pipeline.review_descriptor(
 Path("descriptor.json").write_text(json.dumps(descriptor, allow_nan=False))
 ```
 
-The example builds a client pipeline with one local node and writes the descriptor to `descriptor.json`. `local_function_ids` maps every local node ID to its supplied implementation ID. Missing or extra entries fail; several nodes may use the same implementation ID. Release and implementation IDs must be nonblank. Code/data digests must be 64 lowercase hexadecimal characters; data IDs must be unique. Supply `data: []` when the producer has no versioned data dependencies. Unknown producer fields, non-string object keys and nonfinite/non-JSON values are rejected. `ClientPipeline.review_descriptor` runs in the Python client and makes no HTTP request, so there is no cURL variant.
+The example builds a client pipeline with one local node and writes the descriptor to `descriptor.json`. `local_function_ids` maps every local node ID to its supplied implementation ID. Missing or extra entries fail; several nodes may use the same implementation ID. Release and implementation IDs must be nonblank. Code/data digests must be 64 lowercase hexadecimal characters; data IDs must be unique. Supply `data: []` when the producer has no versioned data dependencies. Unknown producer fields, non-string object keys and nonfinite/non-JSON values are rejected. `ClientPipeline.review_descriptor` runs in the Python client and makes no HTTP request, so there is no cURL or Java variant.
 
 The returned object is a detached JSON snapshot with format/compiler versions,
 the pipeline version, declared producer, original remote nodes, local node
@@ -219,6 +246,32 @@ saved = await client.save_extraction_review_profile(
 )
 print(f"Saved revision {saved.parsed['revision']}")
 print(f"Producer fingerprint: {saved.parsed['producerFingerprint']}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+// descriptor.json is written by the previous example, which builds it in Python.
+// The configuration invoice-v1 must already exist.
+String descriptorJson = Files.readString(Path.of("descriptor.json"));
+
+ObjectMapper mapper = new ObjectMapper();
+JsonNode preview = client.previewExtractionReviewProfile(
+        "invoice-v1",
+        mapper.createObjectNode().put("clientPipelineJson", descriptorJson));
+
+ObjectNode saveRequest = mapper.createObjectNode()
+        .put("expectedRevision", preview.path("revision").asLong())
+        .put("clientPipelineJson", preview.path("clientPipelineJson").asText())
+        .put("enabled", true);
+JsonNode saved = client.saveExtractionReviewProfile("invoice-v1", saveRequest);
+
+System.out.println("Saved revision " + saved.path("revision").asLong());
+System.out.println("Producer fingerprint: " + saved.path("producerFingerprint").asText());
 ```
 
 The API stores canonical descriptor JSON and returns `producerFingerprint`
@@ -330,6 +383,27 @@ print(registered.parsed["identity"])
 print(f"Review revision: {registered.parsed['reviewRevision']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String jobGuid = "<job-guid>"; // GUID of a job processed with the saved configuration
+
+JsonNode runs = client.listExtractionReviewRuns(jobGuid);
+for (JsonNode descriptor : runs) {
+    System.out.println(descriptor.path("runId").asText() + " "
+            + descriptor.path("availability").asText() + " "
+            + descriptor.path("profileRevision").asText());
+}
+
+String runId = "<run-id>"; // runId of the descriptor you selected from the list above
+
+JsonNode registered = client.registerExtractionReviewRun(runId);
+System.out.println(registered.path("identity"));
+System.out.println("Review revision: " + registered.path("reviewRevision").asLong());
+```
+
 Keep the full private reference set outside the extraction request, profile, and model input. Compare the extracted result against that set separately, then submit the specific disagreement as a post-extraction evaluator claim. That claim may include the relevant proposed value, comparison rationale, and reference/comparator version identifiers; do not upload the full golden corpus or place expected answers in the extraction prompt or profile. If the selected archive is incomplete or unavailable, stop that review path and retain its reported status.
 
 `identity` binds the organization, run, job, artifact, and raw-result fingerprint. Write requests use the `reference` subset (`jobGuid`, `artifactId`, `resultFingerprint`) returned by the server. The fingerprint is the lowercase SHA-256 of raw archived result bytes without a `sha256:` prefix. Download verified evidence with `GET /extraction-review-runs/{runId}/artifacts?path=` (Python `get_extraction_review_artifact`); it returns the raw bytes.
@@ -412,6 +486,50 @@ claim = await client.submit_extraction_review_claims(
     audit={"evidenceArtifactPaths": [], "exampleEligibility": False},
 )
 print(f"Review run: {claim.parsed['event']['runId']}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+String runId = "<run-id>"; // runId of the registered run
+
+JsonNode run = client.getExtractionReviewRun(runId);
+JsonNode identity = run.path("identity");
+
+ObjectMapper mapper = new ObjectMapper();
+ObjectNode request = (ObjectNode) mapper.readTree("""
+        {
+          "claims": [{
+            "claimId": "check-total-0001",
+            "claimRevision": 1,
+            "identity": {
+              "reporterId": "invoice-checker",
+              "externalIssueId": "check-0001",
+              "referenceVersion": "dataset-2026-10",
+              "comparatorVersion": "2"
+            },
+            "address": {"scope": "BASE", "pointer": "/total"},
+            "observed": {"present": true, "valueJson": "0"},
+            "proposedValueJson": "125.5",
+            "rationaleJson": "\\"reference differs from extracted value\\"",
+            "priority": "HIGH"
+          }],
+          "audit": {"evidenceArtifactPaths": [], "exampleEligibility": false}
+        }
+        """);
+request.putObject("reference")
+        .put("jobGuid", identity.path("jobGuid").asText())
+        .put("artifactId", identity.path("artifactId").asText())
+        .put("resultFingerprint", identity.path("resultFingerprint").asText());
+request.put("expectedReviewRevision", run.path("reviewRevision").asLong());
+
+JsonNode claim = client.submitExtractionReviewClaims(
+        identity.path("runId").asText(), request, "evaluator-2026-10-06-0001");
+System.out.println("Review run: " + claim.path("event").path("runId").asText());
 ```
 
 JSON-valued fields such as `valueJson`, `proposedValueJson`, and `rationaleJson` are canonical JSON strings. For example, boolean false is the string `"false"`, numeric zero is `"0"`, and explicit JSON null is `"null"`. A missing value is represented by `present: false` with `valueJson: null`; preserve false, zero, null, and absence as separate states. Audit input contains no actor or timestamp; the service supplies trusted actor and time metadata.
@@ -560,6 +678,25 @@ for event in page.parsed.get("events", []):
 # Persist nextCursor exactly as returned, even when events is empty
 cursor = page.parsed["nextCursor"]
 print(f"Next cursor: {cursor}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long cursor = 0L; // nextCursor from the previous pull; 0 for the first pull
+
+JsonNode page = client.pullExtractionReviewDecisions(cursor, 100, null);
+
+for (JsonNode event : page.path("events")) {
+    System.out.println(event.path("cursorOrdinal").asLong() + " "
+            + event.path("eventId").asText() + " " + event.path("kind").asText());
+}
+
+// Persist nextCursor exactly as returned, even when events is empty
+cursor = page.path("nextCursor").asLong();
+System.out.println("Next cursor: " + cursor);
 ```
 
 ## Keep evaluation outputs separate

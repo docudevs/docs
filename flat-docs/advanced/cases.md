@@ -673,6 +673,19 @@ case = response.parsed
 print(f"Case {case['id']} ({case['name']}): knowledge base = {case['isKnowledgeBase']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of an organization-wide case, created with an API key
+
+JsonNode promoted = client.promoteKnowledgeBase(caseId);
+
+System.out.println("Case " + promoted.path("id").asLong() + " (" + promoted.path("name").asText()
+        + "): knowledge base = " + promoted.path("isKnowledgeBase").asBoolean());
+```
+
 **CLI**
 
 ```bash
@@ -707,6 +720,19 @@ for knowledge_base in response.parsed or []:
     print(f"Knowledge base {knowledge_base['id']}: {knowledge_base['name']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+JsonNode knowledgeBases = client.listKnowledgeBases();
+
+for (JsonNode knowledgeBase : knowledgeBases) {
+    System.out.println("Knowledge base " + knowledgeBase.path("id").asLong() + ": "
+            + knowledgeBase.path("name").asText());
+}
+```
+
 **CLI**
 
 ```bash
@@ -737,6 +763,17 @@ if response.status_code >= 300:
     raise SystemExit(f"Demote failed: {response.status_code}")
 
 print(f"Case {case_id} is no longer a knowledge base")
+```
+
+**Java**
+
+```java
+long caseId = 42L; // id of a knowledge base
+
+// Returns nothing; an error status raises DocuDevsApiException
+client.deleteKnowledgeBase(caseId);
+
+System.out.println("Case " + caseId + " is no longer a knowledge base");
 ```
 
 **CLI**
