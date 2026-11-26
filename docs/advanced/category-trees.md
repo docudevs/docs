@@ -30,7 +30,7 @@ Invalid trees are rejected with `400` and nothing is stored. The body lists `pro
 
 <Example name="category-trees/upload-tree" />
 
-The Python client's `upload_tree` takes a node list or a path to a JSON file holding the list or `{"name", "nodes"}`. A rejected tree raises `RecordsApiError`; its `body["problems"]` lists the problems. The CLI reads the same file.
+The Python client's `upload_tree` takes a node list or a path to a JSON file holding the list or `{"name", "nodes"}`. A rejected tree raises `RecordsApiError`; its `body["problems"]` lists the problems. The Java client's `uploadTree` takes the same node list or file; a rejected tree throws `DocuDevsApiException` with status 400 and the problems in its response body. The CLI reads the same file.
 
 List the versions of a case, newest first, with `GET /cases/{caseId}/trees`. Each entry has `treeVersionId`, `status`, `nodes`, `levels` and a `contentHash`.
 

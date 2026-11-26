@@ -106,6 +106,26 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+JsonNode entry = client.addMemoEntry(
+        caseId,
+        "instruction",
+        Map.of("kind", "subtree", "code", "7.31"),
+        "Fiction books are filed by genre when the description names one.");
+System.out.println("Proposed entry " + entry.path("id").asText());
+
+// Nothing changes in classification until the instruction is approved
+JsonNode approved = client.approveMemoEntry(caseId, entry.path("id").asText());
+System.out.println(approved.path("id").asText() + " " + approved.path("status").asText()
+        + " " + approved.path("memoVersion").asText());
+```
+
 **CLI**
 
 ```bash
@@ -153,6 +173,32 @@ for revision in history.get("items") or []:
 # Retiring adds a revision; earlier versions stay readable
 retired = await client.retire_memo_entry(case_id, entry_id)
 print(retired["id"], retired["status"], retired["memoVersion"])
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.MemoListOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+String entryId = "m_88"; // id returned when the entry was created
+
+JsonNode memo = client.listMemo(caseId, MemoListOptions.builder().status("active").build());
+for (JsonNode entry : memo.path("items")) {
+    System.out.println(entry.path("id").asText() + " " + entry.path("type").asText()
+            + " " + entry.path("status").asText());
+}
+
+JsonNode history = client.listMemoRevisions(caseId, entryId);
+for (JsonNode revision : history.path("items")) {
+    System.out.println("revision " + revision.path("revision").asText() + ": " + revision.path("status").asText());
+}
+
+// Retiring adds a revision; earlier versions stay readable
+JsonNode retired = client.retireMemoEntry(caseId, entryId);
+System.out.println(retired.path("id").asText() + " " + retired.path("status").asText()
+        + " " + retired.path("memoVersion").asText());
 ```
 
 **CLI**

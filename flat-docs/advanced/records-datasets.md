@@ -104,6 +104,29 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.DatasetOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a case that holds no documents
+
+// Throws DocuDevsApiException when the request is refused
+JsonNode dataset = client.setDataset(
+        caseId,
+        Map.of(
+                "key", "sku",
+                "text", Map.of("title", "title", "desc", "description"),
+                "label", "category",
+                "metadata", Map.of("brand", "brand")),
+        DatasetOptions.builder()
+                .embeddedText(Map.of("template", "{title}\n{description}"))
+                .indexSettings(Map.of("top_k", 10, "hybrid", false))
+                .build());
+System.out.println("Mapping version: " + dataset.path("mappingVersion").asText());
+```
+
 **CLI**
 
 ```bash
@@ -152,6 +175,18 @@ print(f"Mapping version: {dataset['mappingVersion']}")
 print(f"Active tree version: {dataset.get('activeTreeVersionId')}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+JsonNode dataset = client.getDataset(caseId);
+System.out.println("Mapping version: " + dataset.path("mappingVersion").asText());
+System.out.println("Active tree version: " + dataset.path("activeTreeVersionId").asText(null));
+```
+
 **CLI**
 
 ```bash
@@ -162,7 +197,7 @@ docudevs records dataset-get "$CASE_ID"
 
 ## Create a records case in one call
 
-The Python client can create the case and configure its dataset in one call. `create_records_case` takes the case name, the source column of the key (`key`), the text columns (`text`, a list of names or a `{column: name}` map) and optionally `label`, `metadata`, `embedded_text`, `target_depth`, `index_settings` and `description`. Without `embedded_text` the embedded text is the text fields, one per line, with empty fields skipped; a string is used as the template. `target_depth` becomes `classifyDefaults.targetDepth`. The other languages make the two requests the example shows.
+The Python and Java clients can create the case and configure its dataset in one call (`createRecordsCase` in Java, which takes the options in a builder). `create_records_case` takes the case name, the source column of the key (`key`), the text columns (`text`, a list of names or a `{column: name}` map) and optionally `label`, `metadata`, `embedded_text`, `target_depth`, `index_settings` and `description`. Without `embedded_text` the embedded text is the text fields, one per line, with empty fields skipped; a string is used as the template. `target_depth` becomes `classifyDefaults.targetDepth`. The other languages make the two requests the example shows.
 
 **cURL**
 
@@ -210,6 +245,28 @@ case = await client.create_records_case(
     index_settings={"top_k": 10, "hybrid": False},
 )
 print(f"Records case {case.id}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.RecordsCase;
+import ai.docudevs.client.RecordsCaseOptions;
+
+// One call creates the case and configures its records dataset.
+// Throws DocuDevsApiException when the case or the dataset is refused.
+RecordsCase records = client.createRecordsCase(
+        "Product catalogue",
+        "sku",
+        Map.of("title", "title", "desc", "description"),
+        RecordsCaseOptions.builder()
+                .description("Reference products for matching")
+                .label("category")
+                .metadata(Map.of("brand", "brand"))
+                .embeddedText("{title}\n{description}")
+                .indexSettings(Map.of("top_k", 10, "hybrid", false))
+                .build());
+System.out.println("Records case " + records.id());
 ```
 
 **CLI**
@@ -292,6 +349,24 @@ accepted = await client.upsert_record(
 print(f"Import {accepted['importId']}: {accepted['status']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+// Throws DocuDevsApiException when the request is refused
+JsonNode accepted = client.upsertRecord(
+        caseId,
+        "1000000000001",
+        Map.of("title", "Soft sock 3-pack", "description", "Cotton, size 40-45"),
+        "4.12.3",
+        null,
+        Map.of("brand", "Foo"));
+System.out.println("Import " + accepted.path("importId").asText() + ": " + accepted.path("status").asText());
+```
+
 **CLI**
 
 ```bash
@@ -323,6 +398,18 @@ case_id = 42  # id of a records case
 # Raises RecordsApiError when the request is refused
 accepted = await client.delete_record(case_id, "1000000000001")
 print(f"Import {accepted['importId']}: {accepted['status']}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+// Throws DocuDevsApiException when the request is refused
+JsonNode accepted = client.deleteRecord(caseId, "1000000000001");
+System.out.println("Import " + accepted.path("importId").asText() + ": " + accepted.path("status").asText());
 ```
 
 **CLI**
@@ -377,6 +464,25 @@ accepted = await client.batch_records(
 print(f"Import {accepted['importId']}: {accepted['status']}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+// Throws DocuDevsApiException when the request is refused
+JsonNode accepted = client.batchRecords(
+        caseId,
+        List.of(Map.of(
+                "key", "1000000000002",
+                "text", Map.of("title", "Wool sock", "description", "Merino, size 36-40"),
+                "label", "4.12.3",
+                "metadata", Map.of("brand", "Foo"))),
+        List.of("1000000000001"));
+System.out.println("Import " + accepted.path("importId").asText() + ": " + accepted.path("status").asText());
+```
+
 ## Reading records
 
 **cURL**
@@ -396,6 +502,19 @@ case_id = 42  # id of a records case
 record = await client.get_record(case_id, "1000000000001")
 print(record.get("label"), record.get("labelPath", []), record.get("labelSource"))
 print(record.get("chunk"))
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+JsonNode record = client.getRecord(caseId, "1000000000001");
+System.out.println(record.path("label").asText(null) + " " + record.path("labelPath")
+        + " " + record.path("labelSource").asText(null));
+System.out.println(record.path("chunk"));
 ```
 
 **CLI**
@@ -432,6 +551,26 @@ async for record in client.list_records(case_id, subtree="4.12", attributes={"br
     print(record["key"], record.get("label"))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.RecordListOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+// Follows the continuation tokens until every matching record was read
+JsonNode records = client.listRecords(
+        caseId,
+        RecordListOptions.builder()
+                .subtree("4.12")
+                .attributes(Map.of("brand", "Foo"))
+                .build());
+for (JsonNode record : records) {
+    System.out.println(record.path("key").asText() + " " + record.path("label").asText(null));
+}
+```
+
 **CLI**
 
 ```bash
@@ -440,7 +579,7 @@ CASE_ID=42  # id of a records case
 docudevs records list "$CASE_ID" --subtree 4.12 --attribute brand=Foo --all
 ```
 
-`GET /cases/{caseId}/records` pages through records ordered by key. Filter with `label`, `subtree`, `labelSource` and repeated `attribute=name=value`. `limit` is 1-200 (default 50). Pass the returned `continuation` token to fetch the next page; there is no depth limit. The cURL variant reads one page; the Python client and the CLI (`--all`) follow the tokens for you.
+`GET /cases/{caseId}/records` pages through records ordered by key. Filter with `label`, `subtree`, `labelSource` and repeated `attribute=name=value`. `limit` is 1-200 (default 50). Pass the returned `continuation` token to fetch the next page; there is no depth limit. The cURL variant reads one page; the Python and Java clients and the CLI (`--all`) follow the tokens for you.
 
 **cURL**
 
@@ -460,6 +599,21 @@ stats = await client.record_stats(case_id)
 print(f"{stats['records']} records, {stats['unlabelled']} without a label")
 for code, counts in stats.get("labels", {}).items():
     print(code, counts)
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+JsonNode stats = client.recordStats(caseId);
+System.out.println(stats.path("records").asText() + " records, "
+        + stats.path("unlabelled").asText() + " without a label");
+for (var counts : stats.path("labels").properties()) {
+    System.out.println(counts.getKey() + " " + counts.getValue());
+}
 ```
 
 **CLI**

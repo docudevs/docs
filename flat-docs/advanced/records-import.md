@@ -90,6 +90,32 @@ print(result["status"], result["rowsReceived"], result["rowsRejected"])
 print(result["recordsAdded"], result["recordsUpdated"], result["recordsUnchanged"])
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.RecordUpsertImportOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with a configured dataset
+
+// Compresses the file and uploads it in blocks. Throws DocuDevsApiException (409) when the
+// import fails, and DocuDevsTimeoutException after 1800 seconds.
+JsonNode result = client.bulkUpsertRecordsAndWait(
+        caseId,
+        Path.of("products.csv"), // columns as named in the dataset field mapping
+        RecordUpsertImportOptions.builder().build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(1800))
+                .pollInterval(Duration.ofSeconds(2))
+                .build(),
+        System.out::println);
+System.out.println(result.path("status").asText() + " " + result.path("rowsReceived").asText()
+        + " " + result.path("rowsRejected").asText());
+System.out.println(result.path("recordsAdded").asText() + " " + result.path("recordsUpdated").asText()
+        + " " + result.path("recordsUnchanged").asText());
+```
+
 **CLI**
 
 ```bash
@@ -98,11 +124,11 @@ CASE_ID=42  # id of a records case with a configured dataset
 docudevs records bulk "$CASE_ID" products.csv --wait
 ```
 
-The Python client and the CLI choose the path for you:
+The Python and Java clients and the CLI choose the path for you:
 
-- Up to 1,000 rows (and 10 MB) of ndjson or row dictionaries are sent as one batch. Python also accepts a list of row dictionaries instead of a file path.
+- Up to 1,000 rows (and 10 MB) of ndjson or row dictionaries are sent as one batch. The Python and Java clients also accept a list of rows (dictionaries or maps) instead of a file path.
 - CSV files and anything larger become a file import. The client gzip-compresses the input, uploads it through the API in blocks and commits it.
-- A mapping overrides the dataset mapping for one call (`mapping` in Python, `--mapping-file` on the CLI, `mapping` in the request).
+- A mapping overrides the dataset mapping for one call (`mapping` in Python and in the Java options, `--mapping-file` on the CLI, `mapping` in the request).
 - Waiting polls until the import completes and returns the final import, including counters.
 
 The cURL variant shows the underlying flow, which is the same for every client:
@@ -156,6 +182,30 @@ result = await client.import_records_from_url(
 print(result["status"], result["rowsReceived"], result["recordsAdded"])
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.RecordUrlImportOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with a configured dataset
+
+// The worker fetches the file, so the URL must be https and publicly reachable.
+// Throws DocuDevsApiException (409) when the import fails, and DocuDevsTimeoutException after 1800 seconds.
+JsonNode result = client.importRecordsFromUrlAndWait(
+        caseId,
+        "https://example.com/exports/products.csv",
+        "csv",
+        RecordUrlImportOptions.builder().build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(1800))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(result.path("status").asText() + " " + result.path("rowsReceived").asText()
+        + " " + result.path("recordsAdded").asText());
+```
+
 **CLI**
 
 ```bash
@@ -164,7 +214,7 @@ CASE_ID=42  # id of a records case with a configured dataset
 docudevs records import-url "$CASE_ID" "https://example.com/exports/products.csv" --format csv --wait
 ```
 
-The Python client and the CLI wait for the import; the cURL variant returns after creating it, so read the import status until it is final. The URL must be `https`, must not contain user information and must not point at a private or local address. DocuDevs enforces a size cap. The import is queued when it is created; there is no commit step.
+The Python client and the CLI wait for the import, and so do the Java methods ending in `AndWait`; the cURL variant returns after creating it, so read the import status until it is final. The URL must be `https`, must not contain user information and must not point at a private or local address. DocuDevs enforces a size cap. The import is queued when it is created; there is no commit step.
 
 ## Import status
 
@@ -189,6 +239,21 @@ import_id = 301  # importId returned when the import was created
 current = await client.get_import(case_id, import_id)
 print(current["status"], current["rowsReceived"], current["rowsRejected"])
 print(current["recordsAdded"], current["recordsUpdated"], current["recordsDeleted"])
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long importId = 301L; // importId returned when the import was created
+
+JsonNode current = client.getImport(caseId, importId);
+System.out.println(current.path("status").asText() + " " + current.path("rowsReceived").asText()
+        + " " + current.path("rowsRejected").asText());
+System.out.println(current.path("recordsAdded").asText() + " " + current.path("recordsUpdated").asText()
+        + " " + current.path("recordsDeleted").asText());
 ```
 
 **CLI**
@@ -243,6 +308,28 @@ finished = await client.wait_for_import(case_id, import_id, on_progress=print)
 print(finished["status"], finished["recordsAdded"], finished["recordsUpdated"])
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long importId = 301L; // importId returned when the import was created
+
+// Throws DocuDevsApiException (409) when the import fails, and DocuDevsTimeoutException after 1800 seconds
+JsonNode finished = client.waitForImport(
+        caseId,
+        importId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(1800))
+                .pollInterval(Duration.ofSeconds(2))
+                .build(),
+        System.out::println);
+System.out.println(finished.path("status").asText() + " " + finished.path("recordsAdded").asText()
+        + " " + finished.path("recordsUpdated").asText());
+```
+
 **CLI**
 
 ```bash
@@ -277,6 +364,19 @@ import_id = 301  # id of the import that failed
 # Raises RecordsApiError (409) when the import has not failed
 accepted = await client.retry_import(case_id, import_id)
 print(f"Import {accepted['importId']}: {accepted['status']}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long importId = 301L; // id of the import that failed
+
+// Throws DocuDevsApiException (409) when the import has not failed
+JsonNode accepted = client.retryImport(caseId, importId);
+System.out.println("Import " + accepted.path("importId").asText() + ": " + accepted.path("status").asText());
 ```
 
 **CLI**
@@ -366,6 +466,39 @@ applied = await client.confirm_sync_records(
     case_id, "snapshot.ndjson", report_id=dry["importId"], wait=True
 )
 print(applied["status"], applied["recordsAdded"], applied["recordsDeleted"])
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.RecordSyncOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with a configured dataset
+
+Path snapshot = Path.of("snapshot.ndjson");
+RecordSyncOptions syncOptions = RecordSyncOptions.builder().build();
+WaitOptions waitOptions = WaitOptions.builder()
+        .timeout(Duration.ofSeconds(1800))
+        .pollInterval(Duration.ofSeconds(2))
+        .build();
+
+// A dry run: it changes nothing and produces the report.
+// Throws DocuDevsApiException (409) when an import fails, and DocuDevsTimeoutException after 1800 seconds.
+JsonNode dry = client.syncRecordsAndWait(caseId, snapshot, syncOptions, waitOptions);
+JsonNode summary = dry.path("syncSummary");
+if (summary.isMissingNode() || summary.isNull()) {
+    throw new IllegalStateException("The dry run produced no report");
+}
+System.out.println(summary.path("counts"));
+System.out.println(summary.path("guard"));
+
+// After reviewing the report, apply the same file for real
+JsonNode applied = client.confirmSyncRecordsAndWait(
+        caseId, snapshot, dry.path("importId").asLong(), syncOptions, waitOptions);
+System.out.println(applied.path("status").asText() + " " + applied.path("recordsAdded").asText()
+        + " " + applied.path("recordsDeleted").asText());
 ```
 
 **CLI**
