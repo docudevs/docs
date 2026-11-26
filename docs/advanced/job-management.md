@@ -53,7 +53,7 @@ Without `sort` the oldest jobs come first. Use `sort=createdAt,desc` for the new
 
 The response has `content`, the jobs of the page, and `totalSize` and `totalPages`, the counts over all jobs that match the filters. Each job is the same object that `GET /job/status/{guid}` returns, with fields such as `guid`, `status`, `jobType`, `createdAt`, `updatedAt` and `error`. Timestamps are UTC.
 
-The example walks through all pages of the completed jobs created since a date, newest first. The Python SDK has no method for this route, so it is called over HTTP.
+The example walks through all pages of the completed jobs created since a date, newest first. The Python SDK and the Java client have no method for this route, so it is called over HTTP.
 
 <Example name="jobs/list-jobs" />
 
@@ -78,7 +78,7 @@ The example walks through all pages of the completed jobs created since a date, 
 - `dependencyStatus` is `PENDING` while the job waits for its parent, `READY` once the job is released to run, and `BLOCKED` when the parent failed, timed out or cannot be found. A blocked job carries the reason in its `error`.
 - An unknown GUID answers `404`.
 
-The example reads the parameters and the dependency of one job. The Python SDK has no method for either route.
+The example reads the parameters and the dependency of one job. The Python SDK and the Java client have no method for either route.
 
 <Example name="jobs/inspect-job" />
 

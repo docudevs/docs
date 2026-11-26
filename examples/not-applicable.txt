@@ -51,3 +51,7 @@ model-credentials/update-credential:java  # the Java client 0.4.0 has no method 
 model-credentials/validate-credential:java  # the Java client 0.4.0 has no method for POST /model-credentials/{id}/validate
 results/check-non-json-result:java  # the Java client 0.4.0 has no method for GET /job/result/{guid}/schema
 results/get-result-schema:java  # the Java client 0.4.0 has no method for GET /job/result/{guid}/schema
+jobs/inspect-job:java  # the Java client 0.4.0 has no method for GET /job/params/{guid} or GET /job/dependencies/{guid}
+jobs/list-jobs:java  # the Java client 0.4.0 has no method for GET /job/list
+pipelines/client-pipeline-conditional:java  # the Java client 0.4.0 has no client-side pipeline runner (ClientPipeline, run_client_pipeline)
+pipelines/run-client-pipeline:java  # the Java client 0.4.0 has no client-side pipeline runner (ClientPipeline, run_client_pipeline)

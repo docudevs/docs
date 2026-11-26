@@ -99,6 +99,48 @@ pdf_bytes = await client.export_document_compare(
 print(f"Saved {len(pdf_bytes)} bytes to redline.pdf")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.Map;
+
+String compareGuid = client.compareDocuments(
+        new UploadRequest("slip-2025.pdf", "application/pdf", Files.readAllBytes(Path.of("slip-2025.pdf"))),
+        new UploadRequest("slip-2026-draft.pdf", "application/pdf",
+                Files.readAllBytes(Path.of("slip-2026-draft.pdf"))),
+        "PREMIUM",
+        "Slip 2025",
+        "Draft 2026");
+
+// Throws DocuDevsApiException with the failed stage as its body if a stage fails,
+// and DocuDevsTimeoutException after 1200 seconds
+JsonNode artifact = client.waitUntilCompareReady(
+        compareGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(1200))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println("Changes found: " + artifact.path("changes").size());
+
+// Export a redline as PDF with only the substantive changes
+byte[] pdfBytes = client.exportDocumentCompare(
+        compareGuid,
+        "pdf",
+        Map.of("substantiveOnly", true),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(300))
+                .pollInterval(Duration.ofSeconds(1))
+                .build());
+Files.write(Path.of("redline.pdf"), pdfBytes);
+System.out.println("Saved " + pdfBytes.length + " bytes to redline.pdf");
+```
+
 Python client helpers:
 
 - `compare_documents` accepts a path, bytes or a file-like object for each document. It returns the compare GUID.
