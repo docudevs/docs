@@ -15,7 +15,7 @@
     "node_modules"
   ],
   "rules": [
-    "The REST API base URL is https://api.docudevs.ai.",
+    "The REST API base URL is https://api.docudevs.ai",
     "Send the API key in the Authorization header as the bare key, without a Bearer prefix.",
     "Install the Python SDK and CLI with pip install docu-devs-api-client.",
     "In Python, use DocuDevsClient from docudevs.docudevs_client with token=<API key> and await its async methods inside asyncio.run(main()).",

@@ -164,3 +164,11 @@ test('placeholder hosts under example.com and example.org and the Azure example 
 test('a host that only ends like a placeholder is still reported', () => {
   assert.equal(scanText('curl https://notexample.com/a\n', 'a.sh', []).length, 1);
 });
+
+test('generated flattened docs are checked for forbidden text only', async () => {
+  const { addedLineFindings } = await import('../../port/scan.mjs');
+  const line = 'see https://dev.mysql.com/doc and SECRETVALUE';
+  assert.deepEqual(addedLineFindings('flat-docs/a.md', line, ['SECRETVALUE']), ['forbidden literal #1']);
+  assert.deepEqual(addedLineFindings('flat-docs/a.md', 'see https://dev.mysql.com/doc', []), []);
+  assert.deepEqual(addedLineFindings('docs/a.md', 'see https://dev.mysql.com/doc', []), ['non-API host']);
+});
