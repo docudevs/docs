@@ -20,6 +20,7 @@ pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client
 pipelines/correct-ocr-text:curl  # runs in the client
 pipelines/run-client-pipeline:curl  # runs in the client
+playbook-evaluation/import-gold:curl  # runs in the client
 sso/configure-oidc-provider:python  # DocuDevsClient 1.15.0 has no method for PUT /sso/config or POST /sso/sync
 submission-portals/check-submission:python  # DocuDevsClient 1.15.0 has no method for GET /submission-records/{receiptCode}
 submission-portals/create-portal:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals
