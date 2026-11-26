@@ -17,7 +17,7 @@ Automatic runs from a **Schedule** node have their own condition. On a deploymen
 
 Request validation runs first, so an invalid request or an unknown flow answers `400` or `404` even where managed runs are unavailable.
 
-The routes that read, list, log and cancel routes answer for the runs your organization already has.
+The routes that read a run, list runs, read a log and request cancellation still answer for the runs your organization already has.
 
 ## Before you start
 
