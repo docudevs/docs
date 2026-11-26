@@ -19,14 +19,14 @@ async def main():
     class InvoiceHeader(BaseModel):
         invoice_number: str | None = None
         vendor: str | None = None
-        total: float | None = None
+        total: float
 
     class LineItem(BaseModel):
         description: str | None = None
         amount: float | None = None
 
     class InvoiceLineItems(BaseModel):
-        line_items: list[LineItem] | None = None
+        line_items: list[LineItem] = []
 
     with open("invoice.pdf", "rb") as f:
         document_data = f.read()

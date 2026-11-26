@@ -23,7 +23,7 @@ async def main():
         invoice_number: str | None = None
         date: datetime.date | None = None
         vendor: str | None = None
-        total: float | None = None
+        total: float
 
     # Save the configuration under a name
     save_response = await client.save_configuration(

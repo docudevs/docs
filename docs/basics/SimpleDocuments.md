@@ -66,7 +66,7 @@ Define a schema for an invoice and pass it with the document. Use arrays of obje
 
 <Example name="quick-start/custom-schema" />
 
-The Python examples in this documentation describe their schemas with Pydantic models and pass them through `json_schema` (see [Type-Safe Extraction with Pydantic](#type-safe-extraction-with-pydantic-python)). A field with a default of `None` is optional; a field without a default is required. The cURL and CLI variants of the same example send the equivalent JSON Schema.
+Most Python examples in this documentation describe their schemas with Pydantic models and pass them through `json_schema` (see [Type-Safe Extraction with Pydantic](#type-safe-extraction-with-pydantic-python)). A field with a default (usually `None`) is optional, and an optional field appears as nullable in the generated schema. A number you intend to export to Excel should be a required field (`float`, not `float | None`) so the column is written as numbers. The cURL and CLI variants of the same example send the equivalent JSON Schema.
 
 ## Type-Safe Extraction with Pydantic (Python)
 

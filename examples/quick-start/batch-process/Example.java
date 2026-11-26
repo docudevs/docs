@@ -35,7 +35,8 @@ public class Example {
                 "type", "object",
                 "properties", Map.of(
                         "invoice_number", Map.of("type", "string"),
-                        "total", Map.of("type", "number"))));
+                        "total", Map.of("type", "number")),
+                "required", List.of("total")));
 
         client.processBatch(
                 batchGuid,

@@ -26,7 +26,7 @@ async def main():
 
     class Invoice(BaseModel):
         invoice_number: str | None = None
-        total: float | None = None
+        total: float
 
     await client.process_batch(
         batch_guid=batch_guid,

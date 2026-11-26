@@ -9,7 +9,8 @@ SCHEMA='{
     "date": {"type": "string", "format": "date"},
     "vendor": {"type": "string"},
     "total": {"type": "number"}
-  }
+  },
+  "required": ["total"]
 }'
 
 # The configuration file holds the processing settings

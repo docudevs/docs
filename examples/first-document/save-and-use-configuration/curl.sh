@@ -25,7 +25,8 @@ SCHEMA='{
     "date": {"type": "string", "format": "date"},
     "vendor": {"type": "string"},
     "total": {"type": "number"}
-  }
+  },
+  "required": ["total"]
 }'
 
 # Save the configuration under a name

@@ -18,7 +18,7 @@ async def main():
     class VehicleRegistration(BaseModel):
         registration_number: str | None = None
         first_registration_date: datetime.date | None = None
-        vehicle_age_years: float | None = None
+        vehicle_age_years: float
 
     job_guid = await client.submit_and_process_document(
         document=document_data,

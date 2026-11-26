@@ -24,7 +24,8 @@ SCHEMA='{
     "registration_number": {"type": "string"},
     "first_registration_date": {"type": "string", "format": "date"},
     "vehicle_age_years": {"type": "number"}
-  }
+  },
+  "required": ["vehicle_age_years"]
 }'
 
 JOB_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \

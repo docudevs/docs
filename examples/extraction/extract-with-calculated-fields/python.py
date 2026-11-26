@@ -14,9 +14,8 @@ async def main():
 
     # docs:start
     class Invoice(BaseModel):
-        net_amount: float | None = None
-        vat_rate: float | None = None
-        # Calculated fields are removed from the schema before extraction, so this one may be required
+        net_amount: float
+        vat_rate: float
         gross_amount: float = Field(
             json_schema_extra={
                 "x-docudevs": {

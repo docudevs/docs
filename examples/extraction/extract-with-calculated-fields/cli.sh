@@ -19,7 +19,8 @@ cat > schema-with-calculated-fields.json <<'JSON'
         }
       }
     }
-  }
+  },
+  "required": ["net_amount", "vat_rate", "gross_amount"]
 }
 JSON
 

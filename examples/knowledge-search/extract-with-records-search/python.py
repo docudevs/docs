@@ -21,7 +21,7 @@ async def main():
         product_key: str | None = None
 
     class Invoice(BaseModel):
-        lines: list[InvoiceLine] | None = None
+        lines: list[InvoiceLine] = []
 
     tool = {"type": "RECORDS_SEARCH", "config": {"caseId": case_id, "topK": 5}}
 

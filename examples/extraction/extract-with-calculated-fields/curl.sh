@@ -34,7 +34,8 @@ SCHEMA='{
         }
       }
     }
-  }
+  },
+  "required": ["net_amount", "vat_rate", "gross_amount"]
 }'
 
 JOB_GUID=$(curl -s -S -f -X POST "https://api.docudevs.ai/document/upload" \

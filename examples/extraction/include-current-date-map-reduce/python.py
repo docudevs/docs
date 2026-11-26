@@ -23,7 +23,7 @@ async def main():
         remaining_warranty_days: float | None = None
 
     class WarrantyList(BaseModel):
-        line_items: list[WarrantyLineItem] | None = None
+        line_items: list[WarrantyLineItem] = []
 
     with open("warranty-list.pdf", "rb") as f:
         document_data = f.read()

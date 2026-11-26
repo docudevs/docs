@@ -8,7 +8,8 @@ SCHEMA='{
     "vendor_name": {"type": "string"},
     "invoice_number": {"type": "string"},
     "total_amount": {"type": "number"}
-  }
+  },
+  "required": ["total_amount"]
 }'
 
 # startRow and startCol are 0-based cell coordinates: 0 and 0 target cell A1

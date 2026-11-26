@@ -17,7 +17,7 @@ async def main():
     class Invoice(BaseModel):
         vendor_name: str | None = None
         invoice_number: str | None = None
-        total_amount: float | None = None
+        total_amount: float
 
     config = UploadCommand(
         prompt="Extract the vendor, invoice number and total of each invoice.",
