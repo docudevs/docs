@@ -222,6 +222,46 @@ source_locations = await client.get_source_locations(job_id)
 print(json.dumps(source_locations, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+String schema = Schema.of(Map.of(
+        "type", "object",
+        "properties", Map.of(
+                "clauses", Map.of("type", "array", "items", Map.of("type", "string"))),
+        "required", List.of("clauses")));
+
+byte[] documentData = Files.readAllBytes(Path.of("contract.pdf"));
+
+String jobId = client.submitAndProcessDocument(
+        new UploadRequest("contract.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract the main clauses from this contract.")
+                .schema(schema)
+                .sourceLocations(true)
+                .sourceLocationGranularity("block")
+                .build());
+
+JsonNode result = client.waitUntilReadyJson(
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(result.toPrettyString());
+
+// The evidence manifest is a separate artifact
+JsonNode sourceLocations = client.getSourceLocations(jobId);
+System.out.println(sourceLocations.toPrettyString());
+```
+
 The Python client can also wait for the job and fetch both artifacts in one call. `wait_until_ready_with_source_locations(guid)` does that for a job you already submitted, and `submit_and_wait_for_document_with_source_locations(...)` does submit, wait and fetch. It takes the same arguments as `submit_and_process_document(...)` plus `timeout` and `poll_interval`:
 
 **Python**
@@ -248,6 +288,40 @@ combined = await client.submit_and_wait_for_document_with_source_locations(
 
 print(json.dumps(combined.result, indent=2))
 print(json.dumps(combined.source_locations, indent=2))
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+String schema = Schema.of(Map.of(
+        "type", "object",
+        "properties", Map.of(
+                "clauses", Map.of("type", "array", "items", Map.of("type", "string"))),
+        "required", List.of("clauses")));
+
+byte[] documentData = Files.readAllBytes(Path.of("contract.pdf"));
+
+JsonNode combined = client.submitAndWaitForDocumentWithSourceLocations(
+        new UploadRequest("contract.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract the main clauses from this contract.")
+                .schema(schema)
+                .sourceLocationGranularity("block")
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+System.out.println(combined.path("result").toPrettyString());
+System.out.println(combined.path("sourceLocations").toPrettyString());
 ```
 
 Both return an object with `result` and `source_locations`. The single-call helpers exist only in the Python client; every other language makes the same calls one at a time, as the first example shows.

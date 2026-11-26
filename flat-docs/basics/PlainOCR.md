@@ -301,7 +301,7 @@ The scan is part of the document OCR, so it has no effect when `ocr` is `NONE`, 
 
 ## One-Step Synchronous OCR
 
-For simpler usage, upload the document and receive the text in the same request. The response is a JSON string containing the OCR output. This endpoint is called over HTTP; the Python SDK has no helper for it.
+For simpler usage, upload the document and receive the text in the same request. The response is a JSON string containing the OCR output. This endpoint is called over HTTP; neither the Python SDK nor the Java client has a helper for it.
 
 **cURL**
 

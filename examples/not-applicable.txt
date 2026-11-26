@@ -2,6 +2,7 @@
 # curl: the step runs in the client and makes no HTTP request of its own
 # python: DocuDevsClient has no method for the route
 extraction-review/build-review-descriptor:curl  # runs in the client
+extraction/extract-with-pydantic:java  # the schema is generated from a Pydantic model, a Python feature; the Java client 0.4.0 has no method for it
 extraction/extract-with-source-locations-single-call:curl  # polling helper that wraps several calls
 integrations/create-connection:python  # DocuDevsClient 1.15.0 has no method for POST /integration/connections
 integrations/delete-connection:python  # DocuDevsClient 1.15.0 has no method for DELETE /integration/connections/{id}
@@ -26,6 +27,7 @@ model-credentials/update-credential:python  # DocuDevsClient 1.15.0 has no metho
 model-credentials/validate-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/validate
 ocr-providers/create-ocr-provider:python  # DocuDevsClient 1.15.0 create_ocr_provider sends field names that POST /ocr/providers rejects
 ocr-providers/update-ocr-provider:python  # DocuDevsClient 1.15.0 update_ocr_provider sends model, not modelId, so a model change on PATCH /ocr/providers/{id} is ignored
+ocr/ocr-sync:java  # the Java client 0.4.0 has no method for POST /document/ocr/sync
 ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
 pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client
