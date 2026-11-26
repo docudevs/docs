@@ -74,7 +74,7 @@ As with the other case calls, an API key reaches organization-wide cases and kno
 
 <Example name="case-search/search-records" />
 
-The Python SDK takes the settings as keyword arguments (`top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank`) and `filters` as a dictionary. The SDK also has a `search` method that takes the kind as an argument.
+The Python SDK takes the settings as keyword arguments (`top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank`) and `filters` as a dictionary. The SDK also has a `search` method that takes the kind as an argument. The Java client takes the settings and filters in `CaseSearchOptions` (`topK`, `exhaustive`, `oversampling`, `hybrid`, `semanticRerank`, `subtree`, `attributes`) and has `searchRecords`, `searchDocuments` and `search`.
 
 ## Search the documents of a case
 

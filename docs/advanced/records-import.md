@@ -27,11 +27,11 @@ sku,title,desc,category,brand
 
 <Example name="records/import-file" />
 
-The Python client and the CLI choose the path for you:
+The Python and Java clients and the CLI choose the path for you:
 
-- Up to 1,000 rows (and 10 MB) of ndjson or row dictionaries are sent as one batch. Python also accepts a list of row dictionaries instead of a file path.
+- Up to 1,000 rows (and 10 MB) of ndjson or row dictionaries are sent as one batch. The Python and Java clients also accept a list of rows (dictionaries or maps) instead of a file path.
 - CSV files and anything larger become a file import. The client gzip-compresses the input, uploads it through the API in blocks and commits it.
-- A mapping overrides the dataset mapping for one call (`mapping` in Python, `--mapping-file` on the CLI, `mapping` in the request).
+- A mapping overrides the dataset mapping for one call (`mapping` in Python and in the Java options, `--mapping-file` on the CLI, `mapping` in the request).
 - Waiting polls until the import completes and returns the final import, including counters.
 
 The cURL variant shows the underlying flow, which is the same for every client:
@@ -53,7 +53,7 @@ The cURL variant shows the underlying flow, which is the same for every client:
 
 <Example name="records/import-from-url" />
 
-The Python client and the CLI wait for the import; the cURL variant returns after creating it, so read the import status until it is final. The URL must be `https`, must not contain user information and must not point at a private or local address. DocuDevs enforces a size cap. The import is queued when it is created; there is no commit step.
+The Python client and the CLI wait for the import, and so do the Java methods ending in `AndWait`; the cURL variant returns after creating it, so read the import status until it is final. The URL must be `https`, must not contain user information and must not point at a private or local address. DocuDevs enforces a size cap. The import is queued when it is created; there is no commit step.
 
 ## Import status
 

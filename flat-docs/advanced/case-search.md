@@ -117,13 +117,36 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.CaseSearchOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+JsonNode hits = client.searchRecords(
+        caseId,
+        "Soft sports sock",
+        CaseSearchOptions.builder()
+                .topK(10)
+                .subtree("4.12")
+                .attributes(Map.of("brand", "Foo"))
+                .build());
+
+for (JsonNode result : hits.path("results")) {
+    System.out.println(result.path("key").asText() + " " + result.path("label").asText(null)
+            + " " + result.path("score").asText(null));
+}
+```
+
 **CLI**
 
 ```bash
 docudevs records search 42 "Soft sports sock" --kind records --top-k 10 --subtree 4.12 --attribute brand=Foo
 ```
 
-The Python SDK takes the settings as keyword arguments (`top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank`) and `filters` as a dictionary. The SDK also has a `search` method that takes the kind as an argument.
+The Python SDK takes the settings as keyword arguments (`top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank`) and `filters` as a dictionary. The SDK also has a `search` method that takes the kind as an argument. The Java client takes the settings and filters in `CaseSearchOptions` (`topK`, `exhaustive`, `oversampling`, `hybrid`, `semanticRerank`, `subtree`, `attributes`) and has `searchRecords`, `searchDocuments` and `search`.
 
 ## Search the documents of a case
 
@@ -148,6 +171,24 @@ docs = await client.search_documents(case_id, "termination notice period", top_k
 
 for result in docs.get("results") or []:
     print(result.get("filename"), "page", result.get("pageNumber"))
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.CaseSearchOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a case that holds documents and no records dataset
+
+JsonNode docs = client.searchDocuments(
+        caseId,
+        "termination notice period",
+        CaseSearchOptions.builder().topK(5).build());
+
+for (JsonNode result : docs.path("results")) {
+    System.out.println(result.path("filename").asText(null) + " page " + result.path("pageNumber").asText(null));
+}
 ```
 
 **CLI**

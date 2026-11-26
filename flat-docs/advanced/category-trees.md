@@ -89,6 +89,40 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.DocuDevsApiException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+long caseId = 42L; // id of a records case
+
+// The root node has no parent; the field is left out
+List<Map<String, String>> nodes = List.of(
+        Map.of("code", "4", "name", "Clothing"),
+        Map.of("code", "4.12", "parent", "4", "name", "Socks and tights"),
+        Map.of("code", "4.12.3", "parent", "4.12", "name", "Socks",
+                "description", "Socks worn inside shoes"),
+        Map.of("code", "9.90.1", "parent", "9.90", "name", "OLD Socks",
+                "status", "retired", "successor", "4.12.3"));
+
+JsonNode created;
+try {
+    created = client.uploadTree(caseId, nodes, "Catalogue 2026-10");
+} catch (DocuDevsApiException error) {
+    // A rejected tree stores nothing; its body lists every problem
+    JsonNode body = new ObjectMapper().readTree(error.getResponseBody());
+    for (JsonNode problem : body.path("problems")) {
+        System.out.println(problem.path("type").asText() + " " + problem.path("code").asText(null)
+                + " " + problem.path("message").asText());
+    }
+    throw error;
+}
+System.out.println("Tree version " + created.path("treeVersionId").asText() + ": "
+        + created.path("status").asText() + ", " + created.path("nodes").asText() + " nodes");
+```
+
 **CLI**
 
 ```bash
@@ -109,7 +143,7 @@ JSON
 docudevs trees upload "$CASE_ID" tree.json
 ```
 
-The Python client's `upload_tree` takes a node list or a path to a JSON file holding the list or `{"name", "nodes"}`. A rejected tree raises `RecordsApiError`; its `body["problems"]` lists the problems. The CLI reads the same file.
+The Python client's `upload_tree` takes a node list or a path to a JSON file holding the list or `{"name", "nodes"}`. A rejected tree raises `RecordsApiError`; its `body["problems"]` lists the problems. The Java client's `uploadTree` takes the same node list or file; a rejected tree throws `DocuDevsApiException` with status 400 and the problems in its response body. The CLI reads the same file.
 
 List the versions of a case, newest first, with `GET /cases/{caseId}/trees`. Each entry has `treeVersionId`, `status`, `nodes`, `levels` and a `contentHash`.
 
@@ -130,6 +164,20 @@ case_id = 42  # id of a records case
 versions = await client.list_trees(case_id)
 for version in versions.get("items", []):
     print(version["treeVersionId"], version["status"], version["nodes"], version["levels"])
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+
+JsonNode versions = client.listTrees(caseId);
+for (JsonNode version : versions.path("items")) {
+    System.out.println(version.path("treeVersionId").asText() + " " + version.path("status").asText()
+            + " " + version.path("nodes").asText() + " " + version.path("levels").asText());
+}
 ```
 
 **CLI**
@@ -180,6 +228,30 @@ print(f"{len(roots.get('items', []))} roots")
 print(f"{len(children.get('items', []))} children of 4.12")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.TreeNodeOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long versionId = 7L; // treeVersionId returned when the tree was uploaded
+
+JsonNode roots = client.browseTreeNodes(caseId, versionId);
+JsonNode children = client.browseTreeNodes(
+        caseId, versionId, TreeNodeOptions.builder().parent("4.12").build());
+JsonNode hits = client.browseTreeNodes(
+        caseId, versionId, TreeNodeOptions.builder().query("sock").build());
+
+for (JsonNode node : hits.path("items")) {
+    System.out.println(node.path("code").asText() + " " + node.path("name").asText()
+            + " " + node.path("status").asText() + " " + node.path("childCount").asText());
+}
+System.out.println(hits.path("total").asText() + " matches");
+System.out.println(roots.path("items").size() + " roots");
+System.out.println(children.path("items").size() + " children of 4.12");
+```
+
 `GET /cases/{caseId}/trees/{versionId}/nodes` returns the roots, the children of `parent`, or nodes whose name or code match `q` (case-insensitive) in pages (`page`, `size`). The CLI has no browse command; read one category with `docudevs trees node`. `GET .../nodes/{code}` returns the category with its `path`, `labelPath`, children and siblings.
 
 **cURL**
@@ -202,6 +274,35 @@ node = await client.get_tree_node(case_id, version_id, "4.12.3")
 print(" > ".join(node["path"]))
 print([child["code"] for child in node.get("children", [])])
 print([sibling["code"] for sibling in node.get("siblings", [])])
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long versionId = 7L; // treeVersionId returned when the tree was uploaded
+
+JsonNode node = client.getTreeNode(caseId, versionId, "4.12.3");
+
+List<String> path = new ArrayList<>();
+for (JsonNode name : node.path("path")) {
+    path.add(name.asText());
+}
+System.out.println(String.join(" > ", path));
+
+List<String> childCodes = new ArrayList<>();
+for (JsonNode child : node.path("children")) {
+    childCodes.add(child.path("code").asText());
+}
+System.out.println(childCodes);
+
+List<String> siblingCodes = new ArrayList<>();
+for (JsonNode sibling : node.path("siblings")) {
+    siblingCodes.add(sibling.path("code").asText());
+}
+System.out.println(siblingCodes);
 ```
 
 **CLI**
@@ -270,6 +371,32 @@ job = await client.activate_tree(
     wait=True,
 )
 print(f"Activation job {job['jobGuid']}: {job['status']}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.TreeActivationOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long versionId = 7L; // treeVersionId returned when the tree was uploaded
+
+// Throws DocuDevsApiException (409) when the job fails, and DocuDevsTimeoutException after 3600 seconds.
+// The result is the activation import; it carries the job's jobGuid.
+JsonNode job = client.activateTreeAndWait(
+        caseId,
+        versionId,
+        TreeActivationOptions.builder()
+                .successorMapping(Map.of("9.90.1", "4.12.3"))
+                .allowMissing(false)
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println("Activation job " + job.path("jobGuid").asText() + ": " + job.path("status").asText());
 ```
 
 **CLI**
@@ -353,6 +480,44 @@ if import_id is None:
 report = await client.get_tree_activation_report(case_id, version_id, import_id)
 print(report.get("status"), report.get("counts"))
 print(f"Memo entries to review: {len(report.get('memoScopeIssues', []))}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long versionId = 7L; // treeVersionId returned when the tree was uploaded
+String jobGuid = "<job-guid>"; // jobGuid returned when the version was activated
+
+// Returns when the job is COMPLETED. Throws DocuDevsApiException (409) when it ends ERROR, FAILED or TIMEOUT,
+// and DocuDevsTimeoutException after 600 seconds
+client.waitForRecordsJob(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+// Find the activation among the case's imports (newest first). This reads one page
+// of up to 200; an older activation may need the continuation token of the page.
+JsonNode page = client.listImports(caseId, 200, null);
+Long importId = null;
+for (JsonNode item : page.path("items")) {
+    if (jobGuid.equals(item.path("jobGuid").asText(null))) {
+        importId = item.path("importId").asLong();
+        break;
+    }
+}
+if (importId == null) {
+    throw new IllegalStateException("No import found for job " + jobGuid);
+}
+
+JsonNode report = client.getTreeActivationReport(caseId, versionId, importId);
+System.out.println(report.path("status").asText(null) + " " + report.path("counts"));
+System.out.println("Memo entries to review: " + report.path("memoScopeIssues").size());
 ```
 
 The example waits for the activation, finds its import in the list of the case's imports by `jobGuid`, and reads the report. When you kept the `importId` from the activation response, skip the lookup. The example stops when the job fails; to read the report of a refused activation, skip the wait. The command-line client has no wait step: `docudevs trees activation-report` takes the case, version and import ids.

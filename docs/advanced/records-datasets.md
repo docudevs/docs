@@ -57,7 +57,7 @@ Read the configuration back with `GET /cases/{caseId}/dataset`. The response add
 
 ## Create a records case in one call
 
-The Python client can create the case and configure its dataset in one call. `create_records_case` takes the case name, the source column of the key (`key`), the text columns (`text`, a list of names or a `{column: name}` map) and optionally `label`, `metadata`, `embedded_text`, `target_depth`, `index_settings` and `description`. Without `embedded_text` the embedded text is the text fields, one per line, with empty fields skipped; a string is used as the template. `target_depth` becomes `classifyDefaults.targetDepth`. The other languages make the two requests the example shows.
+The Python and Java clients can create the case and configure its dataset in one call (`createRecordsCase` in Java, which takes the options in a builder). `create_records_case` takes the case name, the source column of the key (`key`), the text columns (`text`, a list of names or a `{column: name}` map) and optionally `label`, `metadata`, `embedded_text`, `target_depth`, `index_settings` and `description`. Without `embedded_text` the embedded text is the text fields, one per line, with empty fields skipped; a string is used as the template. `target_depth` becomes `classifyDefaults.targetDepth`. The other languages make the two requests the example shows.
 
 <Example name="records/create-records-case" />
 
@@ -99,7 +99,7 @@ A batch (`POST /cases/{caseId}/records:batch`) holds up to 1,000 upserts and del
 
 <Example name="records/list-records" />
 
-`GET /cases/{caseId}/records` pages through records ordered by key. Filter with `label`, `subtree`, `labelSource` and repeated `attribute=name=value`. `limit` is 1-200 (default 50). Pass the returned `continuation` token to fetch the next page; there is no depth limit. The cURL variant reads one page; the Python client and the CLI (`--all`) follow the tokens for you.
+`GET /cases/{caseId}/records` pages through records ordered by key. Filter with `label`, `subtree`, `labelSource` and repeated `attribute=name=value`. `limit` is 1-200 (default 50). Pass the returned `continuation` token to fetch the next page; there is no depth limit. The cURL variant reads one page; the Python and Java clients and the CLI (`--all`) follow the tokens for you.
 
 <Example name="records/record-stats" />
 
