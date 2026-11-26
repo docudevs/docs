@@ -104,6 +104,8 @@ implementation("ai.docudevs:docudevs-java-sdk:0.4.0")
   </TabItem>
 </Tabs>
 
+The Java SDK requires Java 17 or newer. The Gradle line is for the Kotlin DSL.
+
 ### Verify Installation
 
 ```bash

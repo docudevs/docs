@@ -247,8 +247,6 @@ byte[] imageBytes = client.downloadImage(jobGuid, 0);
 Files.write(Path.of("page_0.png"), imageBytes);
 ```
 
-The Java SDK has no method for page images, so there is no Java example for this call.
-
 ## Map-Reduce Tracing
 
 For large documents processed with map-reduce, tracing captures all chunk processing:

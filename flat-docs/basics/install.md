@@ -89,6 +89,8 @@ pip install docu-devs-api-client
 implementation("ai.docudevs:docudevs-java-sdk:0.4.0")
 ```
 
+The Java SDK requires Java 17 or newer. The Gradle line is for the Kotlin DSL.
+
 ### Verify Installation
 
 ```bash
