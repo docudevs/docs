@@ -495,7 +495,7 @@ docudevs knowledge-base remove CASE_ID
 
 ## Contract Analysis
 
-Manage a knowledge base's contract-analysis profile, generations, test suite, trials, and immutable analysis runs. All commands are nested under `knowledge-base contract-analysis`. See [Contract Analysis](/docs/core/contract-analysis) for the profile/draft/publish lifecycle and the run/review model.
+Manage a knowledge base's contract-analysis profile, generations, test suite, trials, and immutable analysis runs. All commands are nested under `knowledge-base contract-analysis`. See [Contract-analysis playbooks](/docs/core/contract-analysis-playbooks) for building, testing, publishing and running a playbook.
 
 ### `knowledge-base contract-analysis get`
 
@@ -589,7 +589,7 @@ docudevs knowledge-base contract-analysis readiness CASE_ID
 
 ### `knowledge-base contract-analysis package-prepare`
 
-Capture an immutable test package without launching paid analysis. See [Contract Analysis](/docs/core/contract-analysis).
+Capture an immutable test package without launching paid analysis. See [Prepare a test package](/docs/core/contract-analysis-playbooks#1-prepare-a-test-package).
 
 ```bash
 docudevs knowledge-base contract-analysis package-prepare CASE_ID \
@@ -607,7 +607,7 @@ docudevs knowledge-base contract-analysis package-prepare CASE_ID \
 
 ### `knowledge-base contract-analysis trial-estimate`
 
-Show the current trial work estimate and the configured execution ceilings. Run it before `trial`: the launch takes the fingerprints this estimate returns. See [Contract Analysis](/docs/core/contract-analysis).
+Show the current trial work estimate and the configured execution ceilings. Run it before `trial`: the launch takes the fingerprints this estimate returns. See [Estimate and run a scored trial](/docs/core/contract-analysis-playbooks#4-estimate-and-run-a-scored-trial).
 
 ```bash
 docudevs knowledge-base contract-analysis trial-estimate CASE_ID \

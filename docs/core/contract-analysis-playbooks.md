@@ -205,7 +205,7 @@ at the `draftRevision` you send, or `published`.
 <Example name="contract-analysis/create-draft-run" />
 
 To analyze a package of several documents against the published playbook, see
-[Analyze a contract](./contract-analysis.md#contract-analysis-runs-v2).
+[Analyze a package of documents](./contract-analysis.md#analyze-a-package-of-documents).
 
 The response includes a `runId`. Use `GET /contract-analysis/runs/{runId}` for
 status and `GET /contract-analysis/runs/{runId}/result` for the result.

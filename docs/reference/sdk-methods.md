@@ -1413,7 +1413,7 @@ for row in page.get("rows", []):
 
 ## Contract Analysis
 
-Contract analysis compiles a knowledge base into a reviewable profile, runs immutable analysis runs against it, and supports expert review and test-suite curation. See [Contract Analysis](/docs/core/contract-analysis) for the profile/draft/publish lifecycle and the run/review model.
+Contract analysis compiles a knowledge base into a reviewable profile, runs immutable analysis runs against it, and supports expert review and test-suite curation. See [Contract-analysis playbooks](/docs/core/contract-analysis-playbooks) for building, testing, publishing and running a playbook, and [Contract Analysis](/docs/core/contract-analysis) for the one-document shortcut, package runs and source authority.
 
 ### get_contract_analysis_profile
 

@@ -153,7 +153,7 @@ Promotion changes who can reach the case. A case created by a signed-in user is 
 
 An organization API key can promote organization-wide cases. A signed-in user can promote their own cases and organization-wide ones; a case created by another user answers `404`, organization admins included. Users with the submission-portal role cannot call the knowledge-base routes. Demotion follows the same rules.
 
-To start a contract-analysis playbook, pass `profileType` `"contract-analysis"` (`profile_type` in the Python client): the case is promoted and gets an empty contract-analysis profile. Any other value is refused with `400`. See [Contract analysis](../core/contract-analysis.md).
+To start a contract-analysis playbook, pass `profileType` `"contract-analysis"` (`profile_type` in the Python client): the case is promoted and gets an empty contract-analysis profile. Any other value is refused with `400`. See [Contract-analysis playbooks](../core/contract-analysis-playbooks.md).
 
 ### Listing knowledge bases
 
