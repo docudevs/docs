@@ -63,7 +63,7 @@ Checks run against published packages, never a sibling checkout. The private mai
 
 ## Public content
 
-Pages state what the product does today and how to call it. Do not publish prices or rate figures, internal endpoints, private repository names or file paths, storage paths, infrastructure hosts, operator or installation configuration keys, internal vendor or project names, agent tokens, or rollout, roadmap and changelog wording ("yet", "no longer", "currently", "will"). Run `node tools/port/scan.mjs --diff main` with `PORT_SCAN_LITERALS_FILE` set before pushing content taken from another source.
+Pages state what the product does today and how to call it. A plain availability statement is allowed ("private preview", "dedicated deployments only", or the condition under which a feature is available). Do not publish prices or rate figures, internal endpoints, private repository names or file paths, storage paths, infrastructure hosts, operator or installation configuration keys, internal vendor or project names, agent tokens, or rollout, roadmap and changelog wording ("coming soon", "new in", "yet", "no longer", "currently", "will"). Run `node tools/port/scan.mjs --diff main` with `PORT_SCAN_LITERALS_FILE` set before pushing content taken from another source.
 
 ## Pinned versions
 
@@ -133,3 +133,7 @@ The checks do not validate response field names, request body shapes, or that th
 ## User-facing SDK methods
 
 A user-facing Python client method is a public method of `DocuDevsClient` (no leading underscore) that is not a transport helper. Each one should be covered by a guide or example. Methods that do not need coverage are listed in `examples/sdk-exclusions.txt`, one `<method>  # reason` per line. `python tools/examples/python/check_method_coverage.py examples docs/reference/sdk-methods.md examples/sdk-exclusions.txt examples/sdk-uncovered.txt` runs the check.
+
+## SDK method index
+
+`docs/reference/sdk-method-index.md` is generated from the installed Python client: run `npm run sdk:index` (and commit the result) whenever the pinned `docu-devs-api-client` version changes; `npm run sdk:index -- --check` and CI fail when the page is stale. Notes for methods with known limits live in `tools/examples/python/sdk-index-notes.txt` (`<method>  # note`); a note for a method that does not exist fails the generator. The index never counts as coverage: the method coverage check reads only `docs/reference/sdk-methods.md`.

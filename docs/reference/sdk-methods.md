@@ -4,7 +4,7 @@ description: Complete Python SDK reference for DocuDevs including document proce
 sidebar_position: 4
 ---
 
-Complete reference for the DocuDevs Python SDK (`docudevs-sdk`).
+Complete reference for the DocuDevs Python SDK (`docudevs-sdk`). For a table of every public method with its parameters, see the [SDK Method Index](/docs/reference/sdk-method-index).
 
 ## Client Initialization
 

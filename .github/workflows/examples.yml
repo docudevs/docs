@@ -52,6 +52,8 @@ jobs:
         run: python tools/examples/python/check_fences.py docs examples/fence-known-failures.txt
       - if: ${{ !cancelled() }}
         run: python tools/examples/python/check_method_coverage.py examples docs/reference/sdk-methods.md examples/sdk-exclusions.txt examples/sdk-uncovered.txt
+      - if: ${{ !cancelled() }}
+        run: python tools/examples/python/gen_sdk_index.py --check docs/reference/sdk-method-index.md
 
   java:
     runs-on: ubuntu-latest

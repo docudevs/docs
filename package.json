@@ -20,6 +20,7 @@
     "examples:coverage": "node tools/examples/check-coverage.mjs",
     "examples:inline": "node tools/examples/check-inline-code.mjs",
     "examples:curl": "node tools/examples/check-curl.mjs",
+    "sdk:index": "tools/examples/python/.venv/bin/python -B tools/examples/python/gen_sdk_index.py docs/reference/sdk-method-index.md",
     "examples:test": "node --test tools/examples/test/*.test.mjs",
     "api-docs": "docusaurus clean-api-docs all && docusaurus gen-api-docs all"
   },
