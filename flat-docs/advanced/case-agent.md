@@ -143,7 +143,7 @@ On a classify job's results, the **Ask agent about this row** link opens the age
 
 ## Investigate flagged rows from the API
 
-The chat request takes the same case fields (`caseId`, `playbook`, `context`) for every playbook. The Python helper `agent_chat_and_wait` and the Java `agentChatAndWait` also wait for the answer and returns the completed status. This example points the investigate playbook at one row of a classify job:
+The chat request takes the same case fields (`caseId`, `playbook`, `context`) for every playbook. The Python helper `agent_chat_and_wait` and the Java `agentChatAndWait` also wait for the answer and return the completed status. This example points the investigate playbook at one row of a classify job:
 
 **cURL**
 

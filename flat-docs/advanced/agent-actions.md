@@ -150,7 +150,7 @@ if (!"confirmed".equals(confirmed.path("status").asText())) {
 docudevs agent confirm 9001
 ```
 
-The confirm call answers `200` with the action. Check its `status`: `confirmed` means the replayed write succeeded, and `failed` means it answered an error. The cURL and Python variants exit non-zero when the action ends `failed`; the CLI only prints the action. The API replays a confirmed action with the credentials of your own request, so your permissions apply to the write exactly as they would if you sent it yourself.
+The confirm call answers `200` with the action. Check its `status`: `confirmed` means the replayed write succeeded, and `failed` means it answered an error. The cURL, Python and Java variants fail when the action ends `failed`; the CLI only prints the action. The API replays a confirmed action with the credentials of your own request, so your permissions apply to the write exactly as they would if you sent it yourself.
 
 ### Reject an action
 
