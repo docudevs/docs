@@ -11,7 +11,7 @@ while [ "$SECONDS" -lt "$deadline" ]; do
     -H "Authorization: $API_KEY")
   STATUS=$(echo "$RUN" | jq -r '.status')
   case "$STATUS" in
-    COMPLETED|FAILED|CANCELLED|TIMEOUT) break ;;
+    COMPLETED|FAILED|TIMEOUT) break ;;
   esac
   sleep 5
 done

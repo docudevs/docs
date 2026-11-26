@@ -111,11 +111,11 @@ Open **Integrations → Flow Configs** and click **Run History**, or click **Run
 | **Workflow** | The workflow name. A failed run shows its error message underneath. |
 | **Created (UTC)** | When the run was created. |
 | **Trigger** | **Manual** or **Scheduled**. |
-| **Status** | **Queued**, **Running**, **Completed**, **Failed**, **Cancelling**, **Cancelled** or **Timed out**. |
+| **Status** | **Queued**, **Running**, **Completed**, **Failed**, **Cancelling** or **Timed out**. |
 | **Duration** | The run time in seconds, or a dash while it has none. |
 | **Logs** | **View logs** opens the run's log entries below the filter, with timestamp, level, task and message. |
 
-Use the **Workflow** list to filter by workflow and **Refresh** to reload. The page refreshes itself every ten seconds while it is visible. **Completed**, **Failed**, **Cancelled** and **Timed out** are final states.
+Use the **Workflow** list to filter by workflow and **Refresh** to reload. The page refreshes itself every ten seconds while it is visible. **Completed**, **Failed** and **Timed out** are final states.
 
 ## Nodes
 
@@ -176,7 +176,7 @@ The **Nodes** panel groups the nodes as follows. The tables give each node's nam
 | Azure Blob Upload | Upload a file to Azure Blob Storage |
 | S3 Upload | Upload a file to AWS S3 |
 | GCS Upload | Upload a file to Google Cloud Storage |
-| Google Drive Archive | Move successfully extracted files after the SharePoint workbook uploads |
+| Google Drive Archive | Move processed files to another Drive folder after the upload step |
 | Google Drive Upload | Upload a file to Google Drive |
 | SharePoint Upload | Upload a file to a SharePoint document library |
 | Outlook Send Email | Send an email through Outlook |

@@ -1,11 +1,11 @@
 ---
 title: Managed workflows API
-description: Start, monitor, read the logs of and cancel runs of a saved managed workflow with the DocuDevs API.
+description: Start, monitor, read the logs of and request cancellation of runs of a saved managed workflow with the DocuDevs API.
 ---
 
 # Managed workflows API
 
-A managed workflow is a workflow saved in [Flow Builder](../guides/flow-builder.md) with the scope **Managed (DocuDevs)**. DocuDevs runs it on its own infrastructure. The managed-execution routes let your own code start a run, follow its status, read its log, cancel it and list past runs. The same runs appear under **Integrations → Flow Configs → Run History** in the web app.
+A managed workflow is a workflow saved in [Flow Builder](../guides/flow-builder.md) with the scope **Managed (DocuDevs)**. DocuDevs runs it on its own infrastructure. The managed-execution routes let your own code start a run, follow its status, read its log, request its cancellation and list past runs. The same runs appear under **Integrations → Flow Configs → Run History** in the web app.
 
 ## Availability
 
@@ -15,7 +15,9 @@ When the component is present but a run cannot be started, the call answers `502
 
 Automatic runs from a **Schedule** node have their own condition. On a deployment where scheduling is not available, the builder shows **Managed scheduling is disabled on this deployment.** and the workflow only runs when you start it. Contact support to have scheduling enabled.
 
-The routes that read, list, log and cancel runs answer for the runs your organization already has.
+Request validation runs first, so an invalid request or an unknown flow answers `400` or `404` even where managed runs are unavailable.
+
+The routes that read, list, log and cancel routes answer for the runs your organization already has.
 
 ## Before you start
 
@@ -101,10 +103,15 @@ Every entry can carry `timestamp`, `level`, `taskId`, `taskRunId`, `message`, `f
 
 <Example name="managed-workflows/list-runs" />
 
-## Cancel a run
+## Request cancellation
 
-`POST /managed-execution/{executionId}/cancel` asks for a `PENDING` or `RUNNING` run to stop. The call answers `200` with no body and the run's status becomes `CANCELLING`. The run reaches a final status when the runner reports its result, or `TIMEOUT` when it does not report by its deadline.
+`POST /managed-execution/{executionId}/cancel` records a cancellation request for a `PENDING` or `RUNNING` run. The call answers `200` with no body and the run's status becomes `CANCELLING`. It does not interrupt a run that has already started.
 
-Cancelling a run that is already `CANCELLING` or final answers `400` with no body. An unknown run id answers `404`.
+- A run that had not started is not picked up by a runner.
+- A run that had started can still finish as `COMPLETED` or `FAILED`.
+- A run that never reports ends as `TIMEOUT` at its deadline, which is `timeoutSeconds` plus five minutes after it was queued.
+- A `CANCELLING` run counts toward the concurrency limit until it reaches a final status.
+
+Requesting cancellation of a run that is already `CANCELLING` or final answers `400` with no body. An unknown run id answers `404`.
 
 <Example name="managed-workflows/cancel-run" />
