@@ -76,6 +76,20 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id returned by create_case
+
+JsonNode pending = client.listAgentActions(caseId, "pending", 20, null);
+for (JsonNode action : pending.path("items")) {
+    System.out.println(action.path("id").asText() + " " + action.path("tool").asText()
+            + " " + action.path("summary").asText());
+}
+```
+
 **CLI**
 
 ```bash
@@ -112,6 +126,23 @@ if confirmed["status"] != "confirmed":
     raise SystemExit(f"Action {action_id} {confirmed['status']}: {confirmed.get('result')}")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long actionId = 9001L; // id of a pending action from the case inbox
+
+JsonNode confirmed = client.confirmAgentAction(actionId);
+System.out.println(confirmed.path("status").asText() + " " + confirmed.path("resultStatus").asText(null));
+
+// A write that answered an error ends as "failed", not "confirmed"
+if (!"confirmed".equals(confirmed.path("status").asText())) {
+    throw new IllegalStateException("Action " + actionId + " " + confirmed.path("status").asText()
+            + ": " + confirmed.path("result"));
+}
+```
+
 **CLI**
 
 ```bash
@@ -141,6 +172,17 @@ action_id = 9002  # id of a pending action from the case inbox
 
 rejected = await client.reject_agent_action(action_id, reason="Use the 7.31 subtree instead")
 print(rejected["id"], rejected["status"])
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long actionId = 9002L; // id of a pending action from the case inbox
+
+JsonNode rejected = client.rejectAgentAction(actionId, "Use the 7.31 subtree instead");
+System.out.println(rejected.path("id").asText() + " " + rejected.path("status").asText());
 ```
 
 **CLI**

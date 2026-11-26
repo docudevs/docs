@@ -53,7 +53,7 @@ An evaluation is asynchronous. Its `status` moves through `PREPARING`, `RUNNING`
 
 <Example name="case-evals/run-holdout-eval" />
 
-The example starts the evaluation, waits for it and prints each variant's accuracy at the target depth. The Python SDK takes `memo_include` in a variant and `sample_size` and `group_field` as keyword arguments, where the request uses `memoInclude`, `sampleSize` and `groupField`; the CLI reads `variants.json` as a list of `{"name", "memo_include"?, "config"?}` and its first entry is the baseline. To group by a record metadata key, pass `groupField` (`group_field` in Python, `--group-field` in the CLI) instead of the grouping options. `get_holdout_eval` in Python and `docudevs eval status` read the status without waiting.
+The example starts the evaluation, waits for it and prints each variant's accuracy at the target depth. The Java variant writes `memoInclude` as in the request and sets the sample and grouping through `HoldoutEvalOptions`. The Python SDK takes `memo_include` in a variant and `sample_size` and `group_field` as keyword arguments, where the request uses `memoInclude`, `sampleSize` and `groupField`; the CLI reads `variants.json` as a list of `{"name", "memo_include"?, "config"?}` and its first entry is the baseline. To group by a record metadata key, pass `groupField` (`group_field` in Python, `--group-field` in the CLI) instead of the grouping options. `get_holdout_eval` in Python and `docudevs eval status` read the status without waiting.
 
 ## Compare two runs
 

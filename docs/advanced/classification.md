@@ -26,7 +26,7 @@ Start a job with inline rows:
 
 <Example name="classification/start-classify" />
 
-Upload a file of rows when there are more than 1,000 or the file is large. The client compresses the file, uploads it in blocks and commits it; the cURL variant shows the three calls and does not wait for the job, while the Python client and the CLI wait:
+Upload a file of rows when there are more than 1,000 or the file is large. The client compresses the file, uploads it in blocks and commits it; the cURL variant shows the three calls and does not wait for the job, while the Python client, the Java `classifyAndWait` and the CLI wait:
 
 <Example name="classification/classify-file" />
 
@@ -95,7 +95,7 @@ When the similar records and the category matches disagree about the family at t
 
 <Example name="classification/wait-for-classify" />
 
-The Python client and the CLI wait until the job completes; the Python client calls your progress callback with the job status and raises `ClassifyJobFailed` when the job fails or is cancelled. The cURL variant reads the job until it is final and fails on `FAILED` or `CANCELLED`. Cancel a job that you no longer need:
+The Python client, the Java `classifyAndWait` and `waitForClassify`, and the CLI wait until the job completes; the Python client and the Java methods call your progress callback with the job status, and fail when the job fails or is cancelled (Python raises `ClassifyJobFailed`, Java throws `DocuDevsApiException` with status 409). The cURL variant reads the job until it is final and fails on `FAILED` or `CANCELLED`. Cancel a job that you no longer need:
 
 <Example name="classification/cancel-classify" />
 
