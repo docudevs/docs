@@ -30,7 +30,7 @@ Learn about the main functionality:
 - **[OCR Processing](/docs/basics/PlainOCR)** - Text extraction from images and scans
 - **[Templates](/docs/templates/)** - Reusable document processing templates
 - **[Schema Generation](/docs/core/schema-generation)** - AI-powered output structure creation
-- **[Contract Analysis](/docs/core/contract-analysis)** - Review contracts against published knowledge-base profiles
+- **[Contract Analysis](/docs/core/contract-analysis)** - Review contracts clause by clause against a playbook
 - **[Workbook Normalization](/docs/core/workbook-normalization)** - Turn messy spreadsheets into structured tables
 
 ### ⚡ Advanced Features

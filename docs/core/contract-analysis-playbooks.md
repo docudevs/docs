@@ -27,18 +27,37 @@ Playbooks come from import: you write or edit the playbook as JSON and import
 it. The format is described in [Playbook format](../reference/playbook-format.md),
 which also carries the JSON Schema. You can also build the first set of clauses
 from uploaded guideline documents (see [Build clauses from guidelines](#build-clauses-from-guidelines)).
-The app does not edit clauses; edit them through the API or CLI (see
-[Edit a playbook](#edit-a-playbook)). You can test a draft against contracts with known answers and publish it through the API
-(see [Test and publish a playbook](#test-and-publish-a-playbook)). Runs use the
-draft playbook (`mode` set to `draft_trial`) until a revision is published. The
-app shows the clauses read-only, imports and exports the playbook, and lists the
-findings of a run.
+You can edit clauses, test a draft against contracts with known answers and
+publish it through the API or CLI (see [Edit a playbook](#edit-a-playbook) and
+[Test and publish a playbook](#test-and-publish-a-playbook)), and in the app. Runs
+use the draft playbook (`mode` set to `draft_trial`) until a revision is
+published.
+
+A playbook in the app (**Playbooks**, then the playbook) has four steps:
+
+- **Upload**: upload the guideline documents, choose a role for each
+  (**Confirm roles**) and build the clauses.
+- **Clauses**: lists the draft revision and the number of clauses, with
+  **Import playbook (JSON)** and **Export**. The editor has the sections Sides,
+  Scope, Facts and Clauses (**Add clause**), an optional **Reason for this
+  change** and **Save playbook**. A **Changes** list shows the change log.
+- **Test**: **Try the playbook on a contract**, the **Test suite** editor
+  (**Save test suite**), the **Scored trial** (**Run scored trial**, then **Sign
+  off on this trial** for a passing trial) and the **Evaluation** panel.
+- **Publish**: **Publish playbook**. The panel lists what stops publishing
+  until everything needed is in place.
+
+The app lists the findings of a run and records reviews (see [Review a
+finding](#review-a-finding)).
 
 Runs use the clause format (`profileVersion` `2026-11`). A run started against a
 playbook stored in the earlier rule-based format (`profileVersion` `2026-09`) is
 refused with `400` and the message "unsupported contract analysis profile
 version", and the run page for an old result says "This run uses a format that is
 no longer supported." To use such a playbook, create it again in the clause format.
+On the Clauses step the app says "This playbook uses a format that is no longer
+supported. Import a playbook file to replace it."; importing a playbook file
+replaces the draft.
 
 ## Import and export a playbook
 
@@ -205,7 +224,7 @@ at the `draftRevision` you send, or `published`.
 <Example name="contract-analysis/create-draft-run" />
 
 To analyze a package of several documents against the published playbook, see
-[Analyze a contract](./contract-analysis.md#contract-analysis-runs-v2).
+[Analyze a package of documents](./contract-analysis.md#analyze-a-package-of-documents).
 
 The response includes a `runId`. Use `GET /contract-analysis/runs/{runId}` for
 status and `GET /contract-analysis/runs/{runId}/result` for the result.
@@ -249,6 +268,12 @@ The result has one entry per clause:
 
 The result also carries `facts`, the facts used with their values and sources.
 Coverage and diagnostics are reported alongside the clauses.
+
+The result also identifies what produced it: `resultVersion` (`2026-11`), `runId`,
+`mode`, the `publishedRevision` of a published run or the `draftRevision` of a
+`draft_trial` run, `profileFingerprint`, `packageFingerprint` and `execution`
+(the execution configuration that answered). Use them to tie a result to the
+playbook revision and the package it was run on.
 
 ### Review a finding
 
@@ -614,7 +639,7 @@ importance: "mandatory"}` into the suite form, unapproved. The analysis returns
 `flagged` for a missing mandatory or expected clause, so change the expected verdict
 to `flagged` before you approve it; Dismiss hides the suggestion. Nothing is
 written until you save the suite, which sets `recordedBy` as for any expectation, and a
-clause that already has an expectation in that test case gets no suggestion. The Sources
+clause that already has an expectation in that test case gets no suggestion. The Upload
 step shows the facts of an example source under its suggestion as "Sample contract:
 \<type>, \<parties>, governed by \<law>, \<date>".
 
