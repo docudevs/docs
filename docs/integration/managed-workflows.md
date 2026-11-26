@@ -36,6 +36,7 @@ The Python client and the command-line tool have no commands for these routes, s
 | `flowConfigId` | integer, required | The flow config id of an active workflow of your organization; use one saved with the scope **Managed (DocuDevs)**. |
 | `resourceClass` | string | The runner size, `small` or `medium`. The default is `small`. |
 | `timeoutSeconds` | integer | The time limit of the run in seconds, from 1 to 1800. The default is 300. |
+| `inputs` | object | Optional; the default is `{}`. Passed to the workflow as its run inputs. |
 
 <Example name="managed-workflows/start-run" />
 

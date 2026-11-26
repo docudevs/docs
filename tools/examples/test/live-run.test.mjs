@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { spawn, spawnSync } from 'node:child_process';
 import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -11,7 +12,9 @@ import {
   executeRuns,
   formatReport,
   parseLiveArgs,
+  formatWritesBlock,
   parseOrderFile,
+  parseWritesFile,
   parseSkipFile,
   redact,
   runExitCode,
@@ -121,8 +124,10 @@ test('parseLiveArgs reads flags', () => {
     only: 'cases/list',
     variants: ['curl'],
     list: true,
+    yes: false,
   });
-  assert.deepEqual(parseLiveArgs([]), { only: undefined, variants: ['curl', 'python', 'cli'], list: false });
+  assert.equal(parseLiveArgs(['--yes']).yes, true);
+  assert.deepEqual(parseLiveArgs([]), { only: undefined, variants: ['curl', 'python', 'cli'], list: false, yes: false });
 });
 test('parseLiveArgs rejects an unknown variant, flag or missing value', () => {
   assert.throws(() => parseLiveArgs(['--variant', 'java']), /variant/);
@@ -141,9 +146,6 @@ test('detectFixtureReads ignores names the example writes', () => {
   assert.deepEqual(detectFixtureReads('curl --output result.csv "https://api.docudevs.ai/x"'), []);
   assert.deepEqual(detectFixtureReads('echo "$X" > config.json'), []);
   assert.deepEqual(detectFixtureReads('await client.compare(save_to="redline.pdf")'), []);
-});
-test('detectFixtureReads ignores names on the output allowlist', () => {
-  assert.deepEqual(detectFixtureReads('print(Path("response.json").read_text())', ['response.json']), []);
 });
 test('detectFixtureReads ignores unknown extensions, URLs and duplicates', () => {
   assert.deepEqual(detectFixtureReads('x = "notes.rtf"'), []);
@@ -322,4 +324,110 @@ test('--list prints the selection without running anything and without the key',
 test('the script exits 2 on a bad flag', async () => {
   const result = await runScript(['--variant', 'java'], { API_KEY: FAKE_KEY });
   assert.equal(result.status, 2);
+});
+
+test('parseWritesFile reads name, tab and description and rejects unknown examples', () => {
+  const writes = parseWritesFile('# h\ncases/create\tconfiguration x\n', names);
+  assert.equal(writes.get('cases/create'), 'configuration x');
+  assert.throws(() => parseWritesFile('cases/missing\tconfiguration x', names), /cases\/missing/);
+  assert.throws(() => parseWritesFile('cases/create', names), /what it writes/);
+});
+test('the committed writes file is valid for the committed examples', () => {
+  const found = discoverExamples(join(root, 'examples')).map((example) => example.name);
+  const writes = parseWritesFile(readFileSync(join(root, 'examples', 'live-writes.txt'), 'utf8'), found);
+  assert.ok(writes.size > 0);
+});
+test('formatWritesBlock lists only what the selected examples write', () => {
+  const writes = new Map([['cases/create', 'configuration x'], ['cases/list', 'template y']]);
+  const block = formatWritesBlock(writes, ['cases/create', 'jobs/delete-job']);
+  assert.match(block, /configuration x/);
+  assert.doesNotMatch(block, /template y/);
+});
+test('redact replaces a key split across two output chunks once the chunks are joined', async () => {
+  const fx = makeFixture({ 'a/split/curl.sh': `printf '%s' "${FAKE_KEY.slice(0, 8)}"\nsleep 0.3\nprintf '%s\\n' "${FAKE_KEY.slice(8)}"\n` });
+  await run(fx, [pick('a/split', 'curl')]);
+  const log = readFileSync(join(fx.outDir, 'a', 'split', 'curl.log'), 'utf8');
+  assert.equal(log.includes(FAKE_KEY), false);
+  assert.match(log, /\*\*\*/);
+});
+test('redact handles a key with regex-special characters', () => {
+  const key = 'k.e*y+(1)[x]$^?|\\';
+  assert.equal(redact(`a ${key} b`, key), 'a *** b');
+});
+test('the temporary working directory is removed after a run', async () => {
+  const before = readdirSync(tmpdir()).filter((n) => n.startsWith('docudevs-live-')).length;
+  const fx = makeFixture({ 'a/ok/curl.sh': 'echo hi\n' });
+  await run(fx, [pick('a/ok', 'curl')]);
+  assert.equal(readdirSync(tmpdir()).filter((n) => n.startsWith('docudevs-live-')).length, before);
+});
+
+const makeRoot = (files, extra = {}) => {
+  const base = mkdtempSync(join(tmpdir(), 'live-root-'));
+  const all = { 'live-skip.txt': '', 'live-order.txt': '', 'live-writes.txt': '', ...extra };
+  for (const [path, body] of Object.entries(files)) {
+    mkdirSync(dirname(join(base, 'examples', path)), { recursive: true });
+    writeFileSync(join(base, 'examples', path), body);
+  }
+  for (const [path, body] of Object.entries(all)) writeFileSync(join(base, 'examples', path), body);
+  mkdirSync(join(base, 'tools', 'examples', 'live-fixtures'), { recursive: true });
+  return base;
+};
+const runIn = (base, args, extraEnv = {}) =>
+  spawnSync('node', [script, ...args], {
+    encoding: 'utf8',
+    env: { PATH: process.env.PATH, HOME: process.env.HOME, LIVE_RUN_ROOT: base, API_KEY: FAKE_KEY, ...extraEnv },
+  });
+
+test('without --yes the script prints the writes block, exits 2 and runs nothing', () => {
+  const base = makeRoot({ 'a/ok/curl.sh': 'touch ran\n' }, { 'live-writes.txt': 'a/ok\tconfiguration invoice-config\n' });
+  const result = runIn(base, []);
+  assert.equal(result.status, 2);
+  assert.match(result.stdout + result.stderr, /configuration invoice-config/);
+  assert.match(result.stdout + result.stderr, /re-run with --yes to run against this organization/);
+  assert.equal(existsSync(join(base, 'live-run')), false);
+});
+test('--list needs no --yes', () => {
+  const base = makeRoot({ 'a/ok/curl.sh': 'echo hi\n' });
+  assert.equal(runIn(base, ['--list']).status, 0);
+});
+test('an empty selection exits 2', () => {
+  const base = makeRoot({ 'a/ok/curl.sh': 'echo hi\n' });
+  const result = runIn(base, ['--only', 'nothing', '--yes']);
+  assert.equal(result.status, 2);
+});
+test('a missing venv exits 2 when a python variant is selected', () => {
+  const base = makeRoot({ 'a/ok/python.py': 'echo hi\n' });
+  assert.equal(runIn(base, ['--yes']).status, 2);
+});
+test('the script exits 1 when a row fails and 0 when all pass', () => {
+  const bad = makeRoot({ 'a/bad/curl.sh': 'exit 3\n' });
+  assert.equal(runIn(bad, ['--yes']).status, 1);
+  const good = makeRoot({ 'a/ok/curl.sh': 'echo hi\n' });
+  assert.equal(runIn(good, ['--yes']).status, 0);
+});
+test('the script redacts the key in the error line of an unexpected failure and exits 2', () => {
+  const base = makeRoot({ 'a/ok/curl.sh': 'echo hi\n' }, { 'live-order.txt': `a/missing-${FAKE_KEY}\n` });
+  const result = runIn(base, ['--yes']);
+  assert.equal(result.status, 2);
+  assert.equal((result.stdout + result.stderr).includes(FAKE_KEY), false);
+});
+test('SIGINT stops the child, removes the temp directory, writes the report and exits 130', async () => {
+  const tmpRoot = mkdtempSync(join(tmpdir(), 'live-tmp-'));
+  const pidFile = join(tmpRoot, 'child.pid');
+  const base = makeRoot({ 'a/sleepy/curl.sh': `echo $$ > ${pidFile}\nsleep 30\n` });
+  const child = spawn('node', [script, '--yes'], {
+    env: { PATH: process.env.PATH, HOME: process.env.HOME, LIVE_RUN_ROOT: base, API_KEY: FAKE_KEY, TMPDIR: tmpRoot },
+    stdio: 'ignore',
+  });
+  const exited = new Promise((resolve) => child.on('close', (code) => resolve(code)));
+  const deadline = Date.now() + 10000;
+  while (!existsSync(pidFile) && Date.now() < deadline) await new Promise((r) => setTimeout(r, 50));
+  assert.ok(existsSync(pidFile));
+  const pid = Number(readFileSync(pidFile, 'utf8').trim());
+  child.kill('SIGINT');
+  assert.equal(await exited, 130);
+  await new Promise((r) => setTimeout(r, 200));
+  assert.throws(() => process.kill(pid, 0));
+  assert.deepEqual(readdirSync(tmpRoot).filter((n) => n.startsWith('docudevs-live-')), []);
+  assert.ok(existsSync(join(base, 'live-run', 'report.md')));
 });

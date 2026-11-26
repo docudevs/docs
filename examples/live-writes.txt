@@ -1,0 +1,9 @@
+# <area>/<name><TAB><what it writes>: organization-wide names the live runner saves or overwrites
+configuration/save-configuration	configuration invoice-config
+first-document/save-and-use-configuration	configuration invoice_processing_standard
+extraction-review/save-profile	review profile of configuration invoice-v1
+extraction-review/save-profile-with-descriptor	review profile of configuration invoice-v1
+lookup-files/manage-configuration-lookup-file	lookup file of configuration invoice-config
+lookup-files/save-excel-template-config	configuration invoice-config
+lookup-files/upload-excel-template	Excel template of configuration invoice-config
+templates/upload-template	template invoice

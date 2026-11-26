@@ -115,7 +115,7 @@ An id that does not exist, or that belongs to another organization, answers `404
 
 <Example name="members/set-join-policy" />
 
-The join policy applies when someone signs in with Microsoft Entra and has no membership yet. `ssoDefaultRole` takes one of:
+The join policy applies when someone signs in with Microsoft Entra on a single-tenant deployment and has no membership yet. `ssoDefaultRole` takes one of:
 
 | Value | Effect |
 | --- | --- |

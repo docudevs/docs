@@ -18,8 +18,6 @@ const VARIANT_FILES = { curl: 'curl.sh', python: 'python.py', cli: 'cli.sh' };
 export const DEFAULT_API_URL = 'https://api.docudevs.ai';
 export const DEFAULT_TIMEOUT_MS = 10 * 60 * 1000;
 
-export const OUTPUT_NAMES = [];
-
 const EXTENSIONS = 'pdf|docx|xlsx|csv|png|jpg|jpeg|txt|json|md|zip';
 const NAME = String.raw`[\w][\w.-]*\.(?:${EXTENSIONS})`;
 const CANDIDATE = new RegExp(String.raw`(?<=^|[\s"'@(=])(${NAME})(?=$|[\s"'),\;|&])`, 'gim');
@@ -33,8 +31,8 @@ const WRITTEN_PATTERNS = [
 
 const matches = (pattern, text) => Array.from(text.matchAll(pattern), (match) => match[1]);
 
-export function detectFixtureReads(source, outputNames = OUTPUT_NAMES) {
-  const written = new Set([...outputNames, ...WRITTEN_PATTERNS.flatMap((pattern) => matches(pattern, source))]);
+export function detectFixtureReads(source) {
+  const written = new Set([...WRITTEN_PATTERNS.flatMap((pattern) => matches(pattern, source))]);
   return [...new Set(matches(CANDIDATE, source))].filter((name) => !written.has(name));
 }
 
@@ -73,12 +71,37 @@ export function parseOrderFile(text, knownNames) {
   return order;
 }
 
+export function parseWritesFile(text, knownNames) {
+  const known = new Set(knownNames);
+  const writes = new Map();
+  text.split('\n').forEach((raw, index) => {
+    const line = raw.replace(/\s+$/, '');
+    if (line.trim() === '' || line.trim().startsWith('#')) return;
+    const where = `examples/live-writes.txt:${index + 1}`;
+    const tab = line.indexOf('\t');
+    const name = (tab === -1 ? line : line.slice(0, tab)).trim();
+    const what = tab === -1 ? '' : line.slice(tab + 1).trim();
+    if (!known.has(name)) throw new Error(`${where}: ${name} is not an example in the manifest`);
+    if (what === '') throw new Error(`${where}: ${name} needs what it writes after a tab`);
+    if (writes.has(name)) throw new Error(`${where}: ${name} is listed twice`);
+    writes.set(name, what);
+  });
+  return writes;
+}
+
+export function formatWritesBlock(writes, selectedNames) {
+  const lines = selectedNames.filter((name) => writes.has(name)).map((name) => `  ${name}: ${writes.get(name)}`);
+  return ['The selected examples save or overwrite these names in the organization:', ...(lines.length ? lines : ['  (none listed)'])].join('\n');
+}
+
 export function parseLiveArgs(argv) {
-  const options = { only: undefined, variants: [...VARIANTS], list: false };
+  const options = { only: undefined, variants: [...VARIANTS], list: false, yes: false };
   for (let index = 0; index < argv.length; index += 1) {
     const flag = argv[index];
     if (flag === '--list') {
       options.list = true;
+    } else if (flag === '--yes') {
+      options.yes = true;
     } else if (flag === '--only' || flag === '--variant') {
       const value = argv[index + 1];
       if (value === undefined || value.startsWith('--')) throw new Error(`${flag} needs a value`);
@@ -130,23 +153,29 @@ function commandFor(variant, venvBin) {
   return { command: 'bash', args: [VARIANT_FILES[variant]] };
 }
 
-function execute({ command, args, cwd, env, timeoutMs }) {
+function execute({ command, args, cwd, env, timeoutMs, signal }) {
   return new Promise((resolve) => {
     const child = spawn(command, args, { cwd, env, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const chunks = [];
     let timedOut = false;
-    const timer = setTimeout(() => {
-      timedOut = true;
+    const killGroup = () => {
       try {
         process.kill(-child.pid, 'SIGKILL');
       } catch {
         child.kill('SIGKILL');
       }
+    };
+    const timer = setTimeout(() => {
+      timedOut = true;
+      killGroup();
     }, timeoutMs);
+    if (signal?.aborted) killGroup();
+    signal?.addEventListener('abort', killGroup, { once: true });
     child.stdout.on('data', (chunk) => chunks.push(chunk));
     child.stderr.on('data', (chunk) => chunks.push(chunk));
     const finish = (exitCode, spawnError) => {
       clearTimeout(timer);
+      signal?.removeEventListener('abort', killGroup);
       const output = Buffer.concat(chunks).toString('utf8') + (spawnError ? `${spawnError}\n` : '');
       resolve({ exitCode, timedOut, output });
     };
@@ -166,9 +195,11 @@ export async function executeRuns({
   parentEnv = process.env,
   timeoutMs = DEFAULT_TIMEOUT_MS,
   log = console.log,
+  signal,
 }) {
   const results = [];
   for (const run of runs) {
+    if (signal?.aborted) break;
     const base = { name: run.name, variant: run.variant };
     if (run.skip) {
       results.push({ ...base, status: 'skipped', reason: run.skip });
@@ -181,7 +212,8 @@ export async function executeRuns({
       if (existsSync(fixturesDir)) cpSync(fixturesDir, cwd, { recursive: true });
       cpSync(join(examplesDir, run.name, VARIANT_FILES[run.variant]), join(cwd, VARIANT_FILES[run.variant]));
       const { command, args } = commandFor(run.variant, venvBin);
-      const outcome = await execute({ command, args, cwd, env, timeoutMs });
+      const outcome = await execute({ command, args, cwd, env, timeoutMs, signal });
+      if (signal?.aborted) break;
       const output = redact(outcome.output, apiKey);
       const logDir = join(outDir, run.name);
       mkdirSync(logDir, { recursive: true });
