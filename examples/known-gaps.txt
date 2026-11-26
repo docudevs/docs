@@ -94,7 +94,6 @@ lookup-files/manage-configuration-lookup-file:java
 lookup-files/process-batch-with-lookup-file:java
 lookup-files/save-excel-template-config:java
 lookup-files/upload-excel-template:java
-members/invite-member:java
 members/list-members:java
 members/remove-member:java
 members/set-join-policy:java

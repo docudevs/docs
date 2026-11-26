@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # docs:start
-# Grant uninvited identity-provider sign-ins the MEMBER role
+# Uninvited Microsoft Entra sign-ins join as MEMBER; send "NONE" instead to refuse them
 curl -s -S -f -X PUT "https://api.docudevs.ai/members/join-policy" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \

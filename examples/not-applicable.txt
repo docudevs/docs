@@ -11,7 +11,6 @@ jobs/list-jobs:python  # DocuDevsClient 1.15.0 has no method for GET /job/list
 llm-providers/create-llm-provider:python  # DocuDevsClient 1.15.0 create_llm_provider sends field names that POST /llm/providers rejects
 llm-providers/update-llm-provider:python  # DocuDevsClient 1.15.0 update_llm_provider changes only the name; its other field names are ignored by PATCH /llm/providers/{id}
 llm-providers/verify-llm-provider:python  # DocuDevsClient 1.15.0 has no method for POST /llm/providers/{id}/verify
-members/invite-member:python  # DocuDevsClient 1.15.0 has no method for POST /members
 members/list-members:python  # DocuDevsClient 1.15.0 has no method for GET /members
 members/remove-member:python  # DocuDevsClient 1.15.0 has no method for DELETE /members/{id}
 members/set-join-policy:python  # DocuDevsClient 1.15.0 has no method for GET or PUT /members/join-policy
