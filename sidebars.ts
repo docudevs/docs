@@ -97,6 +97,7 @@ const sidebars: SidebarsConfig = {
       label: 'Integrations',
       items: [
         'guides/integration-connections',
+        'guides/flow-builder',
         'guides/drive-to-sharepoint',
         'integration/webhooks',
         'integration/submission-portals',
