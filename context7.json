@@ -1,4 +1,31 @@
 {
-"url": "https://context7.com/docudevs/docs",
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "DocuDevs",
+  "description": "DocuDevs is a document processing API that extracts structured data from documents with OCR and JSON schemas, supports templates, batch and map-reduce processing, cases with knowledge search and contract analysis, and ships Python and Java SDKs and a CLI.",
+  "folders": [
+    "flat-docs"
+  ],
+  "excludeFolders": [
+    "docs",
+    "examples",
+    "tools",
+    "src",
+    "static",
+    "build",
+    "node_modules"
+  ],
+  "rules": [
+    "The REST API base URL is https://api.docudevs.ai.",
+    "Send the API key in the Authorization header as the bare key, without a Bearer prefix.",
+    "Install the Python SDK and CLI with pip install docu-devs-api-client.",
+    "In Python, use DocuDevsClient from docudevs.docudevs_client with token=<API key> and await its async methods inside asyncio.run(main()).",
+    "Document processing is asynchronous: submit the document, wait until the job finishes, then read the result.",
+    "In Python, wait_until_ready(job_guid) waits for a submitted job; check status_code on responses because the client does not always raise on HTTP errors.",
+    "Describe extraction schemas with Pydantic models and convert them with json_schema(Model) from docudevs, passed as schema.",
+    "In cURL examples poll GET /job/status/{guid} until status is COMPLETED; ERROR, FAILED and TIMEOUT mean the job failed.",
+    "The CLI command is docudevs, for example docudevs --help lists the commands.",
+    "The Java SDK is ai.docudevs:docudevs-java-sdk; build the client with ai.docudevs.client.DocuDevsClient and its builder."
+  ],
+  "url": "https://context7.com/docudevs/docs",
   "public_key": "pk_OfkxL1I1k03Dri7YO383u"
 }

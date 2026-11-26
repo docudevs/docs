@@ -22,6 +22,7 @@
     "examples:curl": "node tools/examples/check-curl.mjs",
     "sdk:index": "tools/examples/python/.venv/bin/python -B tools/examples/python/gen_sdk_index.py docs/reference/sdk-method-index.md",
     "examples:live": "node tools/examples/run-live.mjs",
+    "docs:flat": "node tools/examples/build-flat-docs.mjs",
     "examples:test": "node --test tools/examples/test/*.test.mjs",
     "api-docs": "docusaurus clean-api-docs all && docusaurus gen-api-docs all"
   },
