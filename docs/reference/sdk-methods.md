@@ -1449,6 +1449,69 @@ Record an authenticated expert's approval of a passing trial report.
 await client.attest_contract_analysis_trial(case_id, trial_id, report_id=report_id)
 ```
 
+### import_gold
+
+Turn a gold table of expected playbook results into approved test cases. The client reads the table and the mapping file, uploads the contracts the case does not have yet and saves the next test-suite revision. With `dry_run=True` it validates and reports without writing. It returns a report with `summary()` and `to_dict()`, and raises an error that names the row and the value when a cell cannot be mapped.
+
+```python
+report = await client.import_gold(case_id, "gold.xlsx", "mapping.yaml", dry_run=True)
+print(report.summary())
+```
+
+### split_test_suite
+
+Assign every test case to the tuning or holdout set as a new suite revision. It needs the suite revision you read. It returns the saved suite in `.parsed`, with a `set` on each case.
+
+```python
+suite = await client.get_contract_analysis_test_suite(case_id)
+saved = await client.split_test_suite(
+    case_id, holdout=0.3, seed=1, expected_suite_revision=suite.parsed["revision"]
+)
+```
+
+### start_evaluation
+
+Start one scored trial per test case of a set (`tuning`, `holdout` or `all`). `limit` keeps the first N cases, and `repeats` (1 to 3) runs each case that many times. Reusing `idempotency_key` for the same selection returns the same evaluation. The response in `.parsed` has `evaluationId`, `suiteRevision`, `draftRevision`, `trialIds` and `caseIds`.
+
+```python
+started = await client.start_evaluation(case_id, set="tuning", limit=3)
+evaluation_id = started.parsed["evaluationId"]
+```
+
+### wait_for_evaluation
+
+Poll an evaluation until every trial has finished or failed. It returns the last status response and raises `TimeoutError` after `timeout` seconds. `on_progress` receives each poll.
+
+```python
+finished = await client.wait_for_evaluation(case_id, evaluation_id, poll_seconds=15, timeout=3600)
+```
+
+### get_evaluation
+
+Read an evaluation's status. `complete` is true when every trial has finished or failed. `.parsed` has `evaluationId`, `set`, `suiteRevision`, `draftRevision`, `complete` and `trialCounts`.
+
+```python
+status = await client.get_evaluation(case_id, evaluation_id)
+print(status.parsed["complete"])
+```
+
+### get_evaluation_report
+
+Read the clause, red flag, fact and contract report of an evaluation. Pass `against` with another evaluation id, or `"published"`, to add a comparison. `.parsed` has `complete`, `totals`, `clauses`, `redFlags`, `facts`, `contracts` and, with `against`, `comparison`.
+
+```python
+response = await client.get_evaluation_report(case_id, evaluation_id, against="published")
+print(response.parsed["totals"])
+```
+
+### list_evaluations
+
+List a case's evaluations, newest first. `.parsed["evaluations"]` holds one status entry per evaluation.
+
+```python
+listing = await client.list_evaluations(case_id)
+```
+
 ### Submit contract analysis
 
 Contract analysis for a completed parent job is a `contract-analysis` operation. Pass the published knowledge-base profile as the `knowledgeBaseId` parameter of `submit_operation_with_parameters`.

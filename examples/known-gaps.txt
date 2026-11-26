@@ -115,6 +115,10 @@ pipelines/client-pipeline-conditional:java
 pipelines/correct-ocr-text:java
 pipelines/route-by-document-type:java
 pipelines/run-client-pipeline:java
+playbook-evaluation/import-gold:java
+playbook-evaluation/read-report:java
+playbook-evaluation/run-and-wait:java
+playbook-evaluation/split-suite:java
 records/batch-records:java
 records/configure-dataset:java
 records/delete-record:java
