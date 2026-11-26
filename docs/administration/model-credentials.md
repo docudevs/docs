@@ -56,9 +56,8 @@ API-key credential, set `authType` to `API_KEY` and send the key as `secret`:
 
 <Example name="model-credentials/create-api-key-credential" />
 
-The create call answers with the credential metadata, including its `id`. Read
-the body from `response.content`: the API answers `201 Created`, and the
-generated Python client only parses a `200` into `response.parsed`.
+The create call answers `201 Created` with the credential metadata, including its `id`. In Python, read
+the body from `response.content`: the generated Python client only parses a `200` into `response.parsed`.
 
 Select the credential when creating or updating either an LLM provider or an
 embedding provider. A credential may be shared by both. The provider response
@@ -76,7 +75,7 @@ List the credentials of the organization, read one, or change its metadata. Memb
 
 <Example name="model-credentials/update-credential" />
 
-The Python SDK lists credentials, but has no method for reading one credential
+The Python and Java SDKs list credentials, but have no method for reading one credential
 or updating its metadata, so the last two examples are cURL only.
 
 ## Validate the credential and provider
@@ -103,7 +102,7 @@ routed to a DocuDevs platform model or another credential.
 
 <Example name="model-credentials/validate-credential" />
 
-The Python SDK has no method for validating a credential.
+Neither the Python SDK nor the Java SDK has a method for validating a credential.
 
 ## Rotate, disable, enable, and delete
 
@@ -126,5 +125,5 @@ generic form.
 
 <Example name="model-credentials/delete-credential" />
 
-The Python SDK has no methods for disabling or enabling a credential, so the
+Neither the Python SDK nor the Java SDK has methods for disabling or enabling a credential, so the
 first example is cURL only.

@@ -91,6 +91,29 @@ credential = json.loads(response.content)
 print(f"Credential {credential['id']}: {credential['status']}")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ModelCredentialOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// ENTRA_CLIENT_SECRET holds the client secret value copied from Entra.
+// Java: the call returns the JSON body of the 201 response and throws DocuDevsApiException on an error status.
+JsonNode credential = client.createModelCredential(
+        "Enterprise AI gateway",
+        System.getenv("ENTRA_CLIENT_SECRET"),
+        ModelCredentialOptions.builder()
+                .authType("ENTRA_CLIENT_SECRET")
+                .description("Shared by chat and embeddings")
+                .tenantId("00000000-0000-0000-0000-000000000000")
+                .clientId("11111111-1111-1111-1111-111111111111")
+                .scope("api://22222222-2222-2222-2222-222222222222/.default")
+                .cloud("PUBLIC")
+                .secretExpiresAt("2027-08-25T00:00:00Z")
+                .build());
+System.out.println("Credential " + credential.path("id").asLong() + ": " + credential.path("status").asText());
+```
+
 The secret goes in the write-only `secret` field; the
 example reads it from the `ENTRA_CLIENT_SECRET` environment variable. For an
 API-key credential, set `authType` to `API_KEY` and send the key as `secret`:
@@ -125,9 +148,19 @@ credential = json.loads(response.content)
 print(f"Credential {credential['id']}: {credential['status']}")
 ```
 
-The create call answers with the credential metadata, including its `id`. Read
-the body from `response.content`: the API answers `201 Created`, and the
-generated Python client only parses a `200` into `response.parsed`.
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// PROVIDER_API_KEY holds the API key issued by your model provider.
+// Java: the call returns the JSON body of the 201 response and throws DocuDevsApiException on an error status.
+JsonNode credential = client.createModelCredential("Provider embeddings", System.getenv("PROVIDER_API_KEY"));
+System.out.println("Credential " + credential.path("id").asLong() + ": " + credential.path("status").asText());
+```
+
+The create call answers `201 Created` with the credential metadata, including its `id`. In Python, read
+the body from `response.content`: the generated Python client only parses a `200` into `response.parsed`.
 
 Select the credential when creating or updating either an LLM provider or an
 embedding provider. A credential may be shared by both. The provider response
@@ -157,6 +190,18 @@ for credential in response.parsed or []:
     print(f"{credential.id}: {credential.name} ({credential.status})")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+JsonNode credentials = client.listModelCredentials();
+for (JsonNode credential : credentials) {
+    System.out.println(credential.path("id").asLong() + ": " + credential.path("name").asText()
+            + " (" + credential.path("status").asText() + ")");
+}
+```
+
 **cURL**
 
 ```bash
@@ -179,7 +224,7 @@ curl -s -S -f -X PATCH "https://api.docudevs.ai/model-credentials/$CREDENTIAL_ID
   -d '{"description": "Updated description"}'
 ```
 
-The Python SDK lists credentials, but has no method for reading one credential
+The Python and Java SDKs list credentials, but have no method for reading one credential
 or updating its metadata, so the last two examples are cURL only.
 
 ## Validate the credential and provider
@@ -214,7 +259,7 @@ curl -s -S -f -X POST "https://api.docudevs.ai/model-credentials/$CREDENTIAL_ID/
   -H "Authorization: $API_KEY"
 ```
 
-The Python SDK has no method for validating a credential.
+Neither the Python SDK nor the Java SDK has a method for validating a credential.
 
 ## Rotate, disable, enable, and delete
 
@@ -247,6 +292,19 @@ if response.status_code != 200:
     raise SystemExit(f"Rotate failed: {response.status_code}")
 
 print(f"Credential version: {response.parsed.credential_version}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+// credentialId is the "id" returned when the credential was created or listed.
+// NEW_PROVIDER_API_KEY holds the replacement secret.
+long credentialId = 42L;
+
+JsonNode rotated = client.rotateModelCredential(credentialId, System.getenv("NEW_PROVIDER_API_KEY"));
+System.out.println("Credential version: " + rotated.path("credentialVersion").asLong());
 ```
 
 Rotation increments `credentialVersion`, invalidates cached tokens, and marks
@@ -298,5 +356,16 @@ response = await client.delete_model_credential(credential_id)
 print(f"HTTP {response.status_code.value}")
 ```
 
-The Python SDK has no methods for disabling or enabling a credential, so the
+**Java**
+
+```java
+// credentialId is the "id" returned when the credential was created or listed.
+long credentialId = 42L;
+
+// Returns normally on 204 when deleted; throws DocuDevsApiException with status 409 while a provider still references the credential
+client.deleteModelCredential(credentialId);
+System.out.println("Deleted credential " + credentialId);
+```
+
+Neither the Python SDK nor the Java SDK has methods for disabling or enabling a credential, so the
 first example is cURL only.
