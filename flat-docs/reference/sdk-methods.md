@@ -941,11 +941,11 @@ Case-bound agent chat, pending actions, headless runs, holdout evaluations and m
 
 ### agent_chat
 
-Send a chat message to the agent. With `case_id` the agent works on that case, with `playbook` (`general` or `investigate-flagged`) and an optional `context` (`classify:{jobId}:{rowId}`). Returns the job, with `jobGuid`.
+Send a chat message to the agent. With `case_id` the agent works on that case, with `playbook` (`general` or `investigate-flagged`) and an optional `context` (`classify:{jobId}:{rowId}`). Returns the job, with `jobGuid`. `messages` is a plain string for a single user message; pass a list of `{"role", "content"}` dicts to send several.
 
 ```python
 job = await client.agent_chat(
-    [{"role": "user", "content": "Summarise the flagged rows of job 55."}],
+    "Summarise the flagged rows of job 55.",
     session_id="week-41",
     case_id=42,
     playbook="investigate-flagged",
@@ -1161,11 +1161,11 @@ For generated AcroForm PDFs, this metadata reflects the widgets embedded in the 
 
 ### agent_chat
 
-Send a chat message to the agent and receive a job GUID.
+Send a chat message to the agent and receive a job GUID. `messages` is a plain string for a single user message; pass a list of `{"role", "content"}` dicts to send several.
 
 ```python
 response = await client.agent_chat(
-    messages=[{"role": "user", "content": "Help me extract invoice line items"}],
+    messages="Help me extract invoice line items",
     session_id="session-123"
 )
 ```
@@ -1184,7 +1184,7 @@ Send a message and wait for the completed response.
 
 ```python
 result = await client.agent_chat_and_wait(
-    messages=[{"role": "user", "content": "Create a schema for insurance claims"}],
+    messages="Create a schema for insurance claims",
     session_id="session-123"
 )
 print(result["response"]["message"])

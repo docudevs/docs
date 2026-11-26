@@ -38,7 +38,7 @@ A run acts as whoever started it: a signed-in user, or your organization when yo
 
 <Example name="agent-runs/start-run" />
 
-The cURL and Python variants start the run, wait for it to end and print its report; the CLI starts it and, with `--wait`, waits too. The wait ends when the run is `COMPLETED`, and fails when it is `FAILED` or `CANCELLED`. The Python SDK takes `max_rows` and `job_id` in `params` and `max_total_tokens` in `budget`; the request itself uses `maxRows`, `jobId` and `maxTotalTokens`. The CLI reads `max_rows`, `flags` and `job_id` from the params file.
+The cURL, Python and Java variants start the run, wait for it to end and print its report; the CLI starts it and, with `--wait`, waits too. The wait ends when the run is `COMPLETED`, and fails when it is `FAILED` or `CANCELLED`. The Python SDK takes `max_rows` and `job_id` in `params` and `max_total_tokens` in `budget`; the request itself uses `maxRows`, `jobId` and `maxTotalTokens`, which the Java variant passes as written. The CLI reads `max_rows`, `flags` and `job_id` from the params file.
 
 A run continues in further turns until it has investigated `maxRows`, uses its budget, is cancelled, or reaches 100 turns. The 45-step limit applies to each turn, not to the run.
 

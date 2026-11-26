@@ -24,7 +24,7 @@ The agent orchestrates and investigates. It can start a classify job from instru
 
 A session belongs to one organization and one case. A `sessionId` sent for another case starts a new history. Session ids are letters, digits, `-` and `_`, up to 64 characters; anything else is `400`.
 
-The chat is a job, as in the general agent: the cURL variant polls `GET /agent/status/{jobGuid}` until it completes and the Python helper waits for you. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md); a chat started with an API key can be decided with any API key of the organization, see [who can confirm or reject](./agent-actions.md#who-can-confirm-or-reject).
+The chat is a job, as in the general agent: the cURL variant polls `GET /agent/status/{jobGuid}` until it completes and the Python and Java helpers wait for you. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md); a chat started with an API key can be decided with any API key of the organization, see [who can confirm or reject](./agent-actions.md#who-can-confirm-or-reject).
 
 ## Which cases you can use
 
@@ -55,7 +55,7 @@ On a classify job's results, the **Ask agent about this row** link opens the age
 
 ## Investigate flagged rows from the API
 
-The chat request takes the same case fields (`caseId`, `playbook`, `context`) for every playbook. The Python helper `agent_chat_and_wait` also waits for the answer and returns the completed status. This example points the investigate playbook at one row of a classify job:
+The chat request takes the same case fields (`caseId`, `playbook`, `context`) for every playbook. The Python helper `agent_chat_and_wait` and the Java `agentChatAndWait` also wait for the answer and return the completed status. This example points the investigate playbook at one row of a classify job:
 
 <Example name="case-agent/investigate-flagged-rows" />
 

@@ -65,7 +65,7 @@ async def main():
 
     # Sends the message, polls the status endpoint and raises TimeoutError after 120 seconds
     status = await client.agent_chat_and_wait(
-        messages=[{"role": "user", "content": "Help me build an invoice extraction schema"}],
+        messages="Help me build an invoice extraction schema",
         session_id="session-123",
     )
 
@@ -76,7 +76,25 @@ async def main():
 asyncio.run(main())
 ```
 
-The request starts a chat job and returns its `jobGuid` and the `sessionId`. Poll `GET /agent/status/{jobGuid}` until `status` is `COMPLETED`; the answer is in `response.message`. A job that ends in `ERROR` carries the reason in `error`. The cURL variant and the Python helper both give up after 120 seconds.
+**Java**
+
+```java
+import ai.docudevs.client.AgentChatOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// Sends the message, polls the status endpoint and throws DocuDevsTimeoutException after 120 seconds
+JsonNode status = client.agentChatAndWait(
+        "Help me build an invoice extraction schema",
+        AgentChatOptions.builder().sessionId("session-123").build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(status.path("response").path("message").asText(null));
+```
+
+The request starts a chat job and returns its `jobGuid` and the `sessionId`. Poll `GET /agent/status/{jobGuid}` until `status` is `COMPLETED`; the answer is in `response.message`. A job that ends in `ERROR` carries the reason in `error`. The cURL variant and the Python and Java helpers all give up after 120 seconds.
 
 ## Case-bound chat
 

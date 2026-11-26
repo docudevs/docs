@@ -114,6 +114,41 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.AgentRunOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id returned by create_case
+long classifyJobId = 55L; // id of a completed classify job of this case
+
+JsonNode started = client.startAgentRun(
+        caseId,
+        "investigate-flagged",
+        AgentRunOptions.builder()
+                .params(Map.of("jobId", classifyJobId, "maxRows", 10))
+                .budget(Map.of("maxTotalTokens", 60000))
+                .build());
+
+// Throws DocuDevsApiException (409) when the run fails or is cancelled, and
+// DocuDevsTimeoutException after 1800 seconds
+JsonNode run = client.waitForAgentRun(
+        caseId,
+        started.path("runId").asLong(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(1800))
+                .pollInterval(Duration.ofSeconds(5))
+                .build(),
+        status -> System.out.println(status.path("status").asText() + " " + status.path("turnsDone").asText()));
+JsonNode report = run.path("report");
+System.out.println(report.path("summary").asText(null));
+for (JsonNode question : report.path("questions")) {
+    System.out.println("question: " + question);
+}
+```
+
 **CLI**
 
 ```bash
@@ -124,7 +159,7 @@ EOF
 docudevs agent run start 42 investigate-flagged --params-file params.json --budget-tokens 60000 --wait
 ```
 
-The cURL and Python variants start the run, wait for it to end and print its report; the CLI starts it and, with `--wait`, waits too. The wait ends when the run is `COMPLETED`, and fails when it is `FAILED` or `CANCELLED`. The Python SDK takes `max_rows` and `job_id` in `params` and `max_total_tokens` in `budget`; the request itself uses `maxRows`, `jobId` and `maxTotalTokens`. The CLI reads `max_rows`, `flags` and `job_id` from the params file.
+The cURL, Python and Java variants start the run, wait for it to end and print its report; the CLI starts it and, with `--wait`, waits too. The wait ends when the run is `COMPLETED`, and fails when it is `FAILED` or `CANCELLED`. The Python SDK takes `max_rows` and `job_id` in `params` and `max_total_tokens` in `budget`; the request itself uses `maxRows`, `jobId` and `maxTotalTokens`, which the Java variant passes as written. The CLI reads `max_rows`, `flags` and `job_id` from the params file.
 
 A run continues in further turns until it has investigated `maxRows`, uses its budget, is cancelled, or reaches 100 turns. The 45-step limit applies to each turn, not to the run.
 
@@ -178,6 +213,24 @@ for run in runs.get("items", []):
     print(run["runId"], run["status"], run["tokensUsed"])
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.AgentRunListOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id returned by create_case
+long classifyJobId = 55L; // id of a classify job of this case
+
+JsonNode runs = client.listAgentRuns(
+        caseId,
+        AgentRunListOptions.builder().originJobId(classifyJobId).status("COMPLETED").build());
+for (JsonNode run : runs.path("items")) {
+    System.out.println(run.path("runId").asText() + " " + run.path("status").asText()
+            + " " + run.path("tokensUsed").asText());
+}
+```
+
 ## Cancel a run
 
 `POST /cases/{caseId}/agent/runs/{runId}/cancel` marks the run `CANCELLED` immediately; a turn already in progress may still finish. Cancelling a cancelled run returns the same state. A run that has already finished returns `409`.
@@ -200,6 +253,18 @@ run_id = 9001  # id returned when the run was started
 
 cancelled = await client.cancel_agent_run(case_id, run_id)
 print(cancelled["runId"], cancelled["status"])
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id returned by create_case
+long runId = 9001L; // id returned when the run was started
+
+JsonNode cancelled = client.cancelAgentRun(caseId, runId);
+System.out.println(cancelled.path("runId").asText() + " " + cancelled.path("status").asText());
 ```
 
 **CLI**
@@ -281,6 +346,32 @@ job = await client.classify(
     wait=True,
 )
 print(f"Classify job {job['jobId']} completed; the investigation run starts from it")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ClassifyOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with an active category tree
+List<String> keys = List.of("SKU-1001", "SKU-1002", "SKU-1003"); // record keys of the case's records
+
+// Throws DocuDevsApiException (409) when the job fails or is cancelled, and
+// DocuDevsTimeoutException after 3600 seconds
+JsonNode job = client.classifyKeysAndWait(
+        caseId,
+        keys,
+        ClassifyOptions.builder()
+                .maxTotalTokens(400000L)
+                .investigate(Map.of("enabled", true, "maxRows", 10))
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println("Classify job " + job.path("jobId").asText() + " completed; the investigation run starts from it");
 ```
 
 The example sends the `investigate` settings in the job's `config` and waits for the job. The job's own `maxTotalTokens` bounds the classify work only; the run takes its own budget from `investigate.maxTotalTokens`. Read the run afterwards by listing the runs of the job, as above.

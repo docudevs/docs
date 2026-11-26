@@ -18,7 +18,7 @@ Agent Chat provides an interactive assistant that helps you design extraction co
 
 <Example name="agent-chat/chat-with-agent" />
 
-The request starts a chat job and returns its `jobGuid` and the `sessionId`. Poll `GET /agent/status/{jobGuid}` until `status` is `COMPLETED`; the answer is in `response.message`. A job that ends in `ERROR` carries the reason in `error`. The cURL variant and the Python helper both give up after 120 seconds.
+The request starts a chat job and returns its `jobGuid` and the `sessionId`. Poll `GET /agent/status/{jobGuid}` until `status` is `COMPLETED`; the answer is in `response.message`. A job that ends in `ERROR` carries the reason in `error`. The cURL variant and the Python and Java helpers all give up after 120 seconds.
 
 ## Case-bound chat
 

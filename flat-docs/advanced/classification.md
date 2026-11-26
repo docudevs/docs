@@ -80,6 +80,31 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ClassifyOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with an active category tree
+
+List<Map<String, Object>> rows = List.of(
+        Map.of(
+                "key", "1000000000003",
+                "text", Map.of("title", "Running socks 3-pack", "description", "Cotton blend")));
+
+// Throws DocuDevsApiException when the request is refused
+JsonNode accepted = client.classify(
+        caseId,
+        rows,
+        ClassifyOptions.builder()
+                .target("category")
+                .llmLevel("MINI")
+                .targetDepth(List.of(4, 5))
+                .build());
+System.out.println("Classify job " + accepted.path("jobId").asText() + ": " + accepted.path("status").asText());
+```
+
 **CLI**
 
 ```bash
@@ -98,7 +123,7 @@ echo '{"target": "category", "llmLevel": "MINI", "targetDepth": [4, 5]}' > confi
 docudevs classify start "$CASE_ID" --rows-file rows.json --config-file config.json --no-wait
 ```
 
-Upload a file of rows when there are more than 1,000 or the file is large. The client compresses the file, uploads it in blocks and commits it; the cURL variant shows the three calls and does not wait for the job, while the Python client and the CLI wait:
+Upload a file of rows when there are more than 1,000 or the file is large. The client compresses the file, uploads it in blocks and commits it; the cURL variant shows the three calls and does not wait for the job, while the Python client, the Java `classifyAndWait` and the CLI wait:
 
 **cURL**
 
@@ -148,6 +173,31 @@ job = await client.classify(
     wait=True,
 )
 print(job["jobId"], job["status"], job["counts"])
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ClassifyFileOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with an active category tree
+
+// Compresses the file and uploads it in blocks. The columns are the source column names
+// of the dataset, and an uploaded file needs a token budget.
+// Throws DocuDevsApiException (409) when the job fails or is cancelled, and
+// DocuDevsTimeoutException after 3600 seconds.
+JsonNode job = client.classifyAndWait(
+        caseId,
+        Path.of("weekly.csv"),
+        ClassifyFileOptions.builder().maxTotalTokens(5_000_000L).build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(job.path("jobId").asText() + " " + job.path("status").asText()
+        + " " + job.path("counts"));
 ```
 
 **CLI**
@@ -261,6 +311,28 @@ job = await client.wait_for_classify(
 print(job["status"], job["counts"], job["usage"])
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long jobId = 9L; // jobId returned when the job was started
+
+// Throws DocuDevsApiException (409) when the job fails or is cancelled, and
+// DocuDevsTimeoutException after 3600 seconds
+JsonNode job = client.waitForClassify(
+        caseId,
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(2))
+                .build(),
+        current -> System.out.println(current.path("status").asText() + " " + current.path("counts")));
+System.out.println(job.path("status").asText() + " " + job.path("counts") + " " + job.path("usage"));
+```
+
 **CLI**
 
 ```bash
@@ -270,7 +342,7 @@ JOB_ID=9  # jobId returned when the job was started
 docudevs classify status "$CASE_ID" "$JOB_ID" --wait
 ```
 
-The Python client and the CLI wait until the job completes; the Python client calls your progress callback with the job status and raises `ClassifyJobFailed` when the job fails or is cancelled. The cURL variant reads the job until it is final and fails on `FAILED` or `CANCELLED`. Cancel a job that you no longer need:
+The Python client, the Java `classifyAndWait` and `waitForClassify`, and the CLI wait until the job completes; the Python client and the Java methods call your progress callback with the job status, and fail when the job fails or is cancelled (Python raises `ClassifyJobFailed`, Java throws `DocuDevsApiException` with status 409). The cURL variant reads the job until it is final and fails on `FAILED` or `CANCELLED`. Cancel a job that you no longer need:
 
 **cURL**
 
@@ -291,6 +363,19 @@ job_id = 9  # jobId returned when the job was started
 # Raises RecordsApiError (409) when the job has already finished
 job = await client.cancel_classify(case_id, job_id)
 print(job["status"])
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long jobId = 9L; // jobId returned when the job was started
+
+// Throws DocuDevsApiException (409) when the job has already finished
+JsonNode job = client.cancelClassify(caseId, jobId);
+System.out.println(job.path("status").asText());
 ```
 
 **CLI**
@@ -362,6 +447,25 @@ async for row in client.get_classify_results(case_id, job_id, review_required=Tr
     print(row["rowId"], row.get("key"), chosen.get("code"), row["review"].get("reasons", []))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ClassifyResultFilters;
+
+long caseId = 42L; // id of a records case
+long jobId = 9L; // jobId returned when the job was started
+
+// Follows the continuation tokens until every matching row was read, one page at a time
+client.forEachClassifyResult(
+        caseId,
+        jobId,
+        ClassifyResultFilters.builder().reviewRequired(true).build(),
+        null,
+        row -> System.out.println(row.path("rowId").asText() + " " + row.path("key").asText(null)
+                + " " + row.path("chosen").path("code").asText(null)
+                + " " + row.path("review").path("reasons")));
+```
+
 **CLI**
 
 ```bash
@@ -417,6 +521,20 @@ path = await client.download_classify_csv(case_id, job_id, flag="declined", path
 print(f"Wrote {path}")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ClassifyResultFilters;
+
+long caseId = 42L; // id of a records case
+long jobId = 9L; // jobId returned when the job was started
+
+byte[] csv = client.downloadClassifyCsv(
+        caseId, jobId, ClassifyResultFilters.builder().flag("declined").build());
+Path path = Files.write(Path.of("declined.csv"), csv);
+System.out.println("Wrote " + path);
+```
+
 **CLI**
 
 ```bash
@@ -465,6 +583,26 @@ review = await client.review_classify(
 )
 write = review.get("labelWrite") or {}
 print(review["reviewId"], review["decision"], write.get("importId"), write.get("status"))
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ClassifyReviewDecision;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case
+long jobId = 9L; // jobId returned when the job was started
+long rowId = 17L; // rowId of a result row
+
+JsonNode review = client.reviewClassify(
+        caseId,
+        jobId,
+        rowId,
+        ClassifyReviewDecision.correct("4.12.3.1", "Plain cotton sock, no sport use."));
+JsonNode write = review.path("labelWrite");
+System.out.println(review.path("reviewId").asText() + " " + review.path("decision").asText()
+        + " " + write.path("importId").asText(null) + " " + write.path("status").asText(null));
 ```
 
 **CLI**
@@ -537,6 +675,28 @@ accepted = await client.classify(
     },
 )
 print(f"Classify job {accepted['jobId']}: {accepted['status']}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ClassifyOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of the case that holds the rows; it may differ from the catalogue
+
+// Throws DocuDevsApiException when the request is refused
+JsonNode accepted = client.classify(
+        caseId,
+        List.of(Map.of("key", "line-1", "text", Map.of("title", "M8 hex bolt 40 mm, 100 pcs"))),
+        ClassifyOptions.builder()
+                .target("record")
+                .recordsKnowledgeBaseId(51L) // id of the catalogue's records case
+                .candidateStrategy(Map.of("similarRecords", Map.of("k", 20)))
+                .instructions("Match the invoice line to the catalogue product with the same item and pack size.")
+                .routing(Map.of("reviewWhen", List.of("declined", "modelNamedDifferentBestFit")))
+                .build());
+System.out.println("Classify job " + accepted.path("jobId").asText() + ": " + accepted.path("status").asText());
 ```
 
 **CLI**

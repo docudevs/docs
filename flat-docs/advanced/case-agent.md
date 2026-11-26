@@ -72,7 +72,7 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     status = await client.agent_chat_and_wait(
-        [{"role": "user", "content": "Classify this week file into levels 4 and 5 using the memo rules."}],
+        "Classify this week file into levels 4 and 5 using the memo rules.",
         session_id="week-41",
         case_id=42,
         playbook="general",
@@ -86,9 +86,33 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.AgentChatOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+JsonNode status = client.agentChatAndWait(
+        "Classify this week file into levels 4 and 5 using the memo rules.",
+        AgentChatOptions.builder()
+                .sessionId("week-41")
+                .caseId(42L)
+                .playbook("general")
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(status.path("response").path("message").asText(null));
+for (JsonNode action : status.path("pendingActions")) {
+    System.out.println(action.path("id").asText() + " " + action.path("summary").asText());
+}
+```
+
 A session belongs to one organization and one case. A `sessionId` sent for another case starts a new history. Session ids are letters, digits, `-` and `_`, up to 64 characters; anything else is `400`.
 
-The chat is a job, as in the general agent: the cURL variant polls `GET /agent/status/{jobGuid}` until it completes and the Python helper waits for you. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md); a chat started with an API key can be decided with any API key of the organization, see [who can confirm or reject](./agent-actions.md#who-can-confirm-or-reject).
+The chat is a job, as in the general agent: the cURL variant polls `GET /agent/status/{jobGuid}` until it completes and the Python and Java helpers wait for you. The status carries `pendingActions`: a summary of each action the turn proposed (`id`, `tool`, `toolClass`, `summary`, `expiresAt`). Confirm or reject them with the [pending-action endpoints](./agent-actions.md); a chat started with an API key can be decided with any API key of the organization, see [who can confirm or reject](./agent-actions.md#who-can-confirm-or-reject).
 
 ## Which cases you can use
 
@@ -119,7 +143,7 @@ On a classify job's results, the **Ask agent about this row** link opens the age
 
 ## Investigate flagged rows from the API
 
-The chat request takes the same case fields (`caseId`, `playbook`, `context`) for every playbook. The Python helper `agent_chat_and_wait` also waits for the answer and returns the completed status. This example points the investigate playbook at one row of a classify job:
+The chat request takes the same case fields (`caseId`, `playbook`, `context`) for every playbook. The Python helper `agent_chat_and_wait` and the Java `agentChatAndWait` also wait for the answer and return the completed status. This example points the investigate playbook at one row of a classify job:
 
 **cURL**
 
@@ -164,7 +188,7 @@ echo "$STATUS_JSON" | jq -r '.pendingActions[]? | "\(.id) \(.summary)"'
 
 ```python
 status = await client.agent_chat_and_wait(
-    [{"role": "user", "content": "Investigate the flagged rows of classify job 55."}],
+    "Investigate the flagged rows of classify job 55.",
     session_id="week-41",
     case_id=42,
     playbook="investigate-flagged",
@@ -174,6 +198,31 @@ status = await client.agent_chat_and_wait(
 print((status.get("response") or {}).get("message"))
 for action in status.get("pendingActions") or []:
     print(action["id"], action["summary"])
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.AgentChatOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+JsonNode status = client.agentChatAndWait(
+        "Investigate the flagged rows of classify job 55.",
+        AgentChatOptions.builder()
+                .sessionId("week-41")
+                .caseId(42L)
+                .playbook("investigate-flagged")
+                .context("classify:55:17")
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(status.path("response").path("message").asText(null));
+for (JsonNode action : status.path("pendingActions")) {
+    System.out.println(action.path("id").asText() + " " + action.path("summary").asText());
+}
 ```
 
 ## Reply to a headless run
@@ -223,7 +272,7 @@ echo "$STATUS_JSON" | jq -r '.pendingActions[]? | "\(.id) \(.summary)"'
 
 ```python
 status = await client.agent_chat_and_wait(
-    [{"role": "user", "content": "Record that fiction books are filed by genre when the description names one."}],
+    "Record that fiction books are filed by genre when the description names one.",
     session_id="run-9001-reply",
     case_id=42,
     playbook="general",
@@ -233,6 +282,31 @@ status = await client.agent_chat_and_wait(
 print((status.get("response") or {}).get("message"))
 for action in status.get("pendingActions") or []:
     print(action["id"], action["summary"])
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.AgentChatOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+JsonNode status = client.agentChatAndWait(
+        "Record that fiction books are filed by genre when the description names one.",
+        AgentChatOptions.builder()
+                .sessionId("run-9001-reply")
+                .caseId(42L)
+                .playbook("general")
+                .context("run:9001") // run:{runId}, the id returned when the run was started
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(status.path("response").path("message").asText(null));
+for (JsonNode action : status.path("pendingActions")) {
+    System.out.println(action.path("id").asText() + " " + action.path("summary").asText());
+}
 ```
 
 To continue the conversation, send the next message with the same session id (`sessionId`, `session_id` in Python); a session keeps its history per case.

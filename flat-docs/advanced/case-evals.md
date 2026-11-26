@@ -134,6 +134,45 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.HoldoutEvalOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with an active category tree
+String entryId = "m_88"; // id of a proposed memo entry
+
+List<Map<String, Object>> variants = List.of(
+        Map.of("name", "baseline"),
+        Map.of("name", "with-rule", "memoInclude", List.of(entryId)));
+
+JsonNode started = client.startHoldoutEval(
+        caseId,
+        variants,
+        HoldoutEvalOptions.builder()
+                .sampleSize(200)
+                .seed(7L)
+                .grouping(Map.of("mode", "nearDuplicate", "threshold", 0.98))
+                .config(Map.of("llmLevel", "MINI"))
+                .build());
+
+// Throws DocuDevsApiException (409) when the evaluation fails, and
+// DocuDevsTimeoutException after 3600 seconds
+JsonNode finished = client.waitForEval(
+        caseId,
+        started.path("evalId").asLong(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+for (JsonNode variant : finished.path("report").path("variants")) {
+    System.out.println(variant.path("name").asText() + " "
+            + variant.path("score").path("targetAccuracy").path("all").asText(null));
+}
+```
+
 **CLI**
 
 ```bash
@@ -147,7 +186,7 @@ EOF
 docudevs eval holdout 42 --variants-file variants.json --sample-size 200 --seed 7 --grouping-mode nearDuplicate --grouping-threshold 0.98 --config-file config.json --wait
 ```
 
-The example starts the evaluation, waits for it and prints each variant's accuracy at the target depth. The Python SDK takes `memo_include` in a variant and `sample_size` and `group_field` as keyword arguments, where the request uses `memoInclude`, `sampleSize` and `groupField`; the CLI reads `variants.json` as a list of `{"name", "memo_include"?, "config"?}` and its first entry is the baseline. To group by a record metadata key, pass `groupField` (`group_field` in Python, `--group-field` in the CLI) instead of the grouping options. `get_holdout_eval` in Python and `docudevs eval status` read the status without waiting.
+The example starts the evaluation, waits for it and prints each variant's accuracy at the target depth. The Java variant writes `memoInclude` as in the request and sets the sample and grouping through `HoldoutEvalOptions`. The Python SDK takes `memo_include` in a variant and `sample_size` and `group_field` as keyword arguments, where the request uses `memoInclude`, `sampleSize` and `groupField`; the CLI reads `variants.json` as a list of `{"name", "memo_include"?, "config"?}` and its first entry is the baseline. To group by a record metadata key, pass `groupField` (`group_field` in Python, `--group-field` in the CLI) instead of the grouping options. `get_holdout_eval` in Python and `docudevs eval status` read the status without waiting.
 
 ## Compare two runs
 
@@ -221,6 +260,34 @@ for pair in scored["report"].get("comparisons", []):
     print(pair["baseline"], pair["candidate"], pair["target"])
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with an active category tree
+long baselineEvalId = 301L; // ids of two completed holdout evaluations
+long candidateEvalId = 302L; // that drew the same sample
+
+// Scoring is asynchronous: the answer carries the id of a new evaluation
+JsonNode comparison = client.compareHoldoutEvals(
+        caseId, baselineEvalId, candidateEvalId, "baseline", "with-rule");
+
+// Throws DocuDevsApiException (409) when the scoring fails, and
+// DocuDevsTimeoutException after 3600 seconds
+JsonNode scored = client.waitForEval(
+        caseId,
+        comparison.path("evalId").asLong(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+for (JsonNode pair : scored.path("report").path("comparisons")) {
+    System.out.println(pair.path("baseline") + " " + pair.path("candidate") + " " + pair.path("target"));
+}
+```
+
 **CLI**
 
 ```bash
@@ -283,6 +350,39 @@ finished = await client.wait_for_eval(case_id, started["evalId"], timeout=3600)
 
 for pair in finished["report"].get("comparisons", []):
     print(pair["baseline"], pair["candidate"], pair["target"])
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.MemoEvaluationOptions;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+long caseId = 42L; // id of a records case with an active category tree
+String entryId = "m_88"; // id of a proposed memo entry
+
+JsonNode started = client.evaluateMemoEntry(
+        caseId,
+        entryId,
+        MemoEvaluationOptions.builder()
+                .sampleSize(200)
+                .seed(7L)
+                .groupField("base_product_id")
+                .build());
+
+// Throws DocuDevsApiException (409) when the evaluation fails, and
+// DocuDevsTimeoutException after 3600 seconds
+JsonNode finished = client.waitForEval(
+        caseId,
+        started.path("evalId").asLong(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(3600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+for (JsonNode pair : finished.path("report").path("comparisons")) {
+    System.out.println(pair.path("baseline") + " " + pair.path("candidate") + " " + pair.path("target"));
+}
 ```
 
 The example reads the report's paired comparison between the active memo and the memo with the proposed entry. The CLI has no command for this call.
