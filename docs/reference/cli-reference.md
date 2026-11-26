@@ -311,6 +311,8 @@ Upload a template document.
 docudevs upload-template TEMPLATE_NAME template.pdf
 ```
 
+- `--mime-type TEXT`: Override the detected MIME type
+
 ### `template-metadata`
 
 Fetch metadata for a template.
@@ -389,6 +391,9 @@ Update an existing case.
 ```bash
 docudevs cases update CASE_ID --name "Quarterly Invoices (Updated)"
 ```
+
+- `--name TEXT`: Case name (required)
+- `--description TEXT`: Case description
 
 ### `cases delete`
 
@@ -507,8 +512,11 @@ docudevs knowledge-base contract-analysis get CASE_ID --view draft
 Start profile compilation from the eligible knowledge-base documents.
 
 ```bash
-docudevs knowledge-base contract-analysis generate CASE_ID
+docudevs knowledge-base contract-analysis generate CASE_ID --our-party "Example Supplier" --counterparty "Example Customer"
 ```
+
+- `--our-party TEXT`: The side the playbook is written for (required)
+- `--counterparty TEXT`: The other side of the agreements (required)
 
 ### `knowledge-base contract-analysis generation-compare`
 
@@ -538,6 +546,7 @@ docudevs knowledge-base contract-analysis update CASE_ID --draft-revision 3 --pr
 
 - `--draft-revision INTEGER`: Observed draft revision (required)
 - `--profile PATH` (aliases `--profile-file`, `--input`): Draft profile JSON file (required)
+- `--reason TEXT`: Why the draft changed, recorded in the draft change log (at most 500 characters)
 
 ### `knowledge-base contract-analysis publish`
 
@@ -570,6 +579,48 @@ docudevs knowledge-base contract-analysis suite-update CASE_ID --revision 2 --ca
 - `--revision INTEGER`: Observed suite revision (required)
 - `--cases PATH`: JSON array of test cases (required)
 
+### `knowledge-base contract-analysis readiness`
+
+Read the current suite readiness and the blockers to publication.
+
+```bash
+docudevs knowledge-base contract-analysis readiness CASE_ID
+```
+
+### `knowledge-base contract-analysis package-prepare`
+
+Capture an immutable test package without launching paid analysis. See [Contract Analysis](/docs/core/contract-analysis).
+
+```bash
+docudevs knowledge-base contract-analysis package-prepare CASE_ID \
+  --anchor-job-guid JOB_GUID \
+  --idempotency-key package-1 \
+  --as-of-date 2026-01-31
+```
+
+- `--anchor-job-guid TEXT`: Anchor job GUID (required)
+- `--idempotency-key TEXT`: Idempotency key (required)
+- `--package-members PATH`: JSON array of selected `{jobGuid, role}` documents
+- `--expected-missing PATH`: JSON file of expected package documents that are unavailable
+- `--excluded-documents PATH`: JSON file of documents excluded from the package
+- `--as-of-date TEXT`: Contract context date in strict `YYYY-MM-DD` format
+
+### `knowledge-base contract-analysis trial-estimate`
+
+Show the current trial work estimate and the configured execution ceilings. Run it before `trial`: the launch takes the fingerprints this estimate returns. See [Contract Analysis](/docs/core/contract-analysis).
+
+```bash
+docudevs knowledge-base contract-analysis trial-estimate CASE_ID \
+  --anchor-job-guid JOB_GUID \
+  --kind scored
+```
+
+- `--anchor-job-guid TEXT`: Anchor job GUID (required)
+- `--suite-revision INTEGER`: Optional suite revision to estimate against
+- `--kind [exploratory|scored]`: Trial kind (default: `exploratory`)
+- `--suite-case-id TEXT`: Optional single suite case to estimate
+- `--package-id TEXT`: Optional captured package ID
+
 ### `knowledge-base contract-analysis trial`
 
 Launch an explicit draft-profile trial and print its trial/run identities.
@@ -578,11 +629,15 @@ Launch an explicit draft-profile trial and print its trial/run identities.
 docudevs knowledge-base contract-analysis trial CASE_ID \
   --anchor-job-guid JOB_GUID \
   --idempotency-key trial-1 \
-  --kind scored
+  --kind scored \
+  --estimate-fingerprint ESTIMATE_FINGERPRINT \
+  --configuration-fingerprint CONFIGURATION_FINGERPRINT
 ```
 
 - `--anchor-job-guid TEXT`: Anchor job GUID (required)
 - `--idempotency-key TEXT`: Idempotency key (required)
+- `--estimate-fingerprint TEXT`: Estimate fingerprint from `trial-estimate` (required)
+- `--configuration-fingerprint TEXT`: Execution fingerprint from `trial-estimate` (required)
 - `--suite-revision INTEGER`: Optional suite revision to trial against
 - `--kind [exploratory|scored]`: Trial kind (default: `exploratory`)
 - `--suite-case-id TEXT`: Optional single suite case to trial
@@ -620,7 +675,7 @@ docudevs knowledge-base contract-analysis run-create KNOWLEDGE_BASE_ID \
 - `--idempotency-key TEXT`: Idempotency key (required)
 - `--mode [published|draft_trial]`: Run mode (default: `published`)
 - `--draft-revision INTEGER`: Required when `--mode draft_trial`
-- `--package-members PATH`: JSON array of selected package documents (maximum 32)
+- `--package-members PATH`: JSON array of selected `{jobGuid, role}` documents (maximum 32)
 - `--expected-missing PATH`: JSON array of unavailable expected package documents
 - `--excluded-documents PATH`: JSON array of explicitly excluded package documents
 
@@ -650,10 +705,10 @@ docudevs knowledge-base contract-analysis run-reviews RUN_ID
 
 ### `knowledge-base contract-analysis review`
 
-Append a human disposition to one captured result finding.
+Append a human disposition to one clause finding of a captured result.
 
 ```bash
-docudevs knowledge-base contract-analysis review RUN_ID CRITERION_ID TARGET_KEY \
+docudevs knowledge-base contract-analysis review RUN_ID CLAUSE_ID \
   --result-fingerprint sha256:... \
   --disposition accepted \
   --expected-review-revision 0 \
@@ -664,13 +719,14 @@ docudevs knowledge-base contract-analysis review RUN_ID CRITERION_ID TARGET_KEY 
 - `--disposition [accepted|corrected|dismissed|unresolved]`: Disposition (required)
 - `--expected-review-revision INTEGER`: Observed review revision (required)
 - `--idempotency-key TEXT`: Idempotency key (required)
-- `--corrected-assessment TEXT`: Optional corrected assessment
+- `--corrected-verdict [satisfactory|mixed|flagged|ai_unsure|not_found|does_not_apply]`: Required with `--disposition corrected`
+- `--corrected-red-flag TEXT`: Corrected red flag as `id=triggered` or `id=not_triggered` (repeatable)
 - `--reason TEXT`: Optional reason
 - `--evidence PATH`: Optional JSON array of immutable evidence references
 
 ### `knowledge-base contract-analysis propose-test-case`
 
-Propose an unapproved suite expectation from one immutable finding.
+Propose an unapproved suite expectation from one clause finding.
 
 ```bash
 docudevs knowledge-base contract-analysis propose-test-case CASE_ID \
@@ -686,7 +742,7 @@ docudevs knowledge-base contract-analysis propose-test-case CASE_ID \
 
 - `--run-id`, `--result-fingerprint`, `--clause-id`, `--name`, `--reason`, `--expected-suite-revision`, `--idempotency-key`: All required
 - `--expected-verdict [satisfactory|mixed|flagged|ai_unsure|not_found|does_not_apply]`: Required
-- `--expected-red-flag TEXT`: Optional red flag as `id=triggered` or `id=not_triggered`
+- `--expected-red-flag TEXT`: Optional red flag as `id=triggered` or `id=not_triggered` (repeatable)
 - `--notes TEXT`: Optional notes
 
 ## Operations Management
@@ -946,15 +1002,389 @@ Get the result of a completed job.
 docudevs result JOB_GUID
 ```
 
-## Case Agent and Evaluation
+## Records
+
+Manage the records dataset of a case: its configuration, single records, bulk loads, imports and search. See [Records datasets and field mapping](/docs/advanced/records-datasets) and [Importing records](/docs/advanced/records-import).
+
+### `records dataset-set`
+
+Configure the dataset from a JSON file with `fieldMapping` and the optional `embeddedText`, `examplePolicy` and `indexSettings`.
+
+```bash
+docudevs records dataset-set CASE_ID dataset.json --reindex
+```
+
+- `--reindex`: Confirm re-embedding of existing records
+
+### `records dataset-get`
+
+Show the dataset configuration.
+
+```bash
+docudevs records dataset-get CASE_ID
+```
+
+### `records upsert`
+
+Upsert one record.
+
+```bash
+docudevs records upsert CASE_ID SKU-1001 --text title="Steel bolt" --metadata supplier=example
+```
+
+- `--text TEXT`: Text field as `name=value` (repeatable, at least one required)
+- `--label TEXT`: Category code
+- `--label-source [import|review]`: Origin of the label
+- `--metadata TEXT`: Metadata as `name=value` (repeatable)
+
+### `records get`
+
+Show one record.
+
+```bash
+docudevs records get CASE_ID SKU-1001
+```
+
+### `records delete`
+
+Delete one record.
+
+```bash
+docudevs records delete CASE_ID SKU-1001
+```
+
+### `records list`
+
+List records ordered by key.
+
+```bash
+docudevs records list CASE_ID --subtree FASTENERS --all
+```
+
+- `--label TEXT`: Exact category code
+- `--subtree TEXT`: Category code whose subtree to list
+- `--label-source [import|review]`: Filter by label origin
+- `--attribute TEXT`: Metadata filter as `name=value` (repeatable)
+- `--limit INTEGER`: Page size (1-200)
+- `--continuation TEXT`: Continuation token of the previous page
+- `--all`: Follow continuation tokens and print every record
+
+### `records stats`
+
+Show per-label record counts.
+
+```bash
+docudevs records stats CASE_ID --size 20
+```
+
+- `--page INTEGER`: Zero-based category page
+- `--size INTEGER`: Categories per page (default 50)
+- `--q TEXT`: Case-insensitive category-code substring
+
+### `records bulk`
+
+Upsert records from an ndjson or csv file. The command sends a batch when the file is small and a file import otherwise.
+
+```bash
+docudevs records bulk CASE_ID records.ndjson --wait
+```
+
+- `--format [ndjson|csv]`: Input format (default: from the file name)
+- `--mapping-file PATH`: JSON field mapping overriding the dataset mapping
+- `--wait/--no-wait`: Wait for the import to finish (default: `--no-wait`)
+
+### `records import-url`
+
+Import records from an HTTPS URL fetched by the worker.
+
+```bash
+docudevs records import-url CASE_ID https://example.com/records.csv.gz --format csv --gzip --wait
+```
+
+- `--format [ndjson|csv]`: File format (required)
+- `--mode [upsert|sync]`: Import mode (default: `upsert`)
+- `--gzip`: The file at the URL is gzip-compressed
+- `--mapping-file PATH`: JSON field mapping overriding the dataset mapping
+- `--wait/--no-wait`: Wait for the import to finish (default: `--no-wait`)
+
+### `records sync`
+
+Synchronise the dataset with a full snapshot. Without `--confirm` the command runs a dry run; apply it by passing the import ID of the completed dry run.
+
+```bash
+docudevs records sync CASE_ID snapshot.ndjson
+docudevs records sync CASE_ID snapshot.ndjson --confirm IMPORT_ID
+```
+
+- `--confirm INTEGER`: Apply for real; the import ID of the completed dry run
+- `--format [ndjson|csv]`: Input format (default: from the file name)
+- `--mapping-file PATH`: JSON field mapping overriding the dataset mapping
+- `--max-delete-fraction FLOAT`: Largest share of existing records a sync may delete
+- `--confirm-large-delete`: Allow a sync that exceeds the delete limit
+- `--reviewed-records [keep|delete]`: What to do with reviewed records absent from the snapshot
+- `--reviewed-label-policy [reviewWins|importWins]`: Which label wins for a reviewed record
+- `--wait/--no-wait`: Wait and print the report (default: wait)
+
+### `records imports`
+
+List a case's imports, newest first.
+
+```bash
+docudevs records imports CASE_ID --limit 20
+```
+
+- `--limit INTEGER`: Page size, 1 to 200
+- `--continuation TEXT`: Token of the previous page
+
+### `records import-status`
+
+Show an import's status, counters and sync summary.
+
+```bash
+docudevs records import-status CASE_ID IMPORT_ID --wait
+```
+
+- `--wait/--no-wait`: Wait for the import to finish (default: `--no-wait`)
+
+### `records import-retry`
+
+Requeue a failed or stuck import.
+
+```bash
+docudevs records import-retry CASE_ID IMPORT_ID
+```
+
+### `records search`
+
+Search the records or documents of a case. See [Case search](/docs/advanced/case-search).
+
+```bash
+docudevs records search CASE_ID "steel bolt" --kind records --top-k 5
+```
+
+- `--kind [records|documents]`: What to search (default: `records`)
+- `--top-k INTEGER`: Number of results
+- `--exhaustive/--no-exhaustive`: Search exhaustively or not
+- `--oversampling FLOAT`: Oversampling factor
+- `--hybrid/--no-hybrid`: Combine keyword and vector search or not
+- `--semantic-rerank/--no-semantic-rerank`: Apply semantic reranking or not
+- `--subtree TEXT`: Restrict records to a category subtree
+- `--label-source [import|review]`: Restrict records by label origin
+- `--attribute TEXT`: Metadata filter as `name=value` (repeatable)
+- `--document-id TEXT`: Restrict documents to these job IDs (repeatable)
+
+## Category Trees
+
+Manage the category trees of a records case. See [Category trees and activation](/docs/advanced/category-trees).
+
+### `trees upload`
+
+Upload a JSON tree, either a node list or `{name, nodes}`, as a draft version.
+
+```bash
+docudevs trees upload CASE_ID tree.json --name "Fasteners v1"
+```
+
+- `--name TEXT`: Version name
+
+### `trees list`
+
+List tree versions.
+
+```bash
+docudevs trees list CASE_ID
+```
+
+### `trees node`
+
+Show one category with its path, children and siblings.
+
+```bash
+docudevs trees node CASE_ID VERSION_ID FASTENERS
+```
+
+### `trees activate`
+
+Activate a tree version.
+
+```bash
+docudevs trees activate CASE_ID VERSION_ID --successor-file successors.json --wait
+```
+
+- `--successor-file PATH`: JSON object mapping retired or missing codes to active codes
+- `--allow-missing`: Activate although record labels name unknown codes
+- `--wait/--no-wait`: Wait for the activation job (default: `--no-wait`)
+
+### `trees activation-report`
+
+Show the report of a tree activation. Find the import ID with `records imports`.
+
+```bash
+docudevs trees activation-report CASE_ID VERSION_ID IMPORT_ID
+```
+
+## Case Memo
+
+Manage the classification memo of a records case. See [Case memo](/docs/advanced/case-memo).
+
+### `memo add`
+
+Add an instruction or a feedback entry. An instruction is proposed until it is approved.
+
+```bash
+docudevs memo add CASE_ID instruction "Treat bolts with a hex head as fasteners" --scope subtree --code FASTENERS
+```
+
+- `TYPE`: `instruction` or `feedback`
+- `--scope [global|subtree|record|document]`: Scope of the entry (default: `global`)
+- `--code TEXT`: Category code of a subtree scope
+- `--key TEXT`: Record key of a record scope
+- `--document-id TEXT`: Document ID of a document scope
+- `--links-file PATH`: JSON file with `classification_results` and `record_keys`
+
+### `memo list`
+
+List memo entries.
+
+```bash
+docudevs memo list CASE_ID --status proposed
+```
+
+- `--type [instruction|feedback|correction]`: Filter by entry type
+- `--scope [global|subtree|record|document]`: Filter by scope
+- `--status [proposed|active|retired]`: Filter by status
+- `--version INTEGER`: Read the snapshot at this memo version
+
+### `memo approve`
+
+Approve a proposed instruction.
+
+```bash
+docudevs memo approve CASE_ID ENTRY_ID
+```
+
+### `memo retire`
+
+Retire a memo entry.
+
+```bash
+docudevs memo retire CASE_ID ENTRY_ID
+```
+
+### `memo revisions`
+
+List every revision of a memo entry.
+
+```bash
+docudevs memo revisions CASE_ID ENTRY_ID
+```
+
+## Classification
+
+Classify rows or records against a category tree or a knowledge base. See [Classification and matching](/docs/advanced/classification).
+
+### `classify start`
+
+Start a classify job from exactly one of `--rows-file`, `--keys-file` or `--file`.
+
+```bash
+docudevs classify start CASE_ID --keys-file keys.txt --max-total-tokens 100000 --wait
+```
+
+- `--rows-file PATH`: JSON list of inline rows `{key, text, metadata}`
+- `--keys-file PATH`: Record keys, one per line
+- `--file PATH`: ndjson, jsonl or csv file (optionally `.gz`) to upload
+- `--format [ndjson|csv]`: File format when the name does not say
+- `--config-file PATH`: JSON classify config
+- `--max-total-tokens INTEGER`: Token budget; required for uploaded files
+- `--wait/--no-wait`: Wait for the job to finish (default: `--no-wait`)
+
+### `classify status`
+
+Show the status, counts, usage and pinned versions of a classify job.
+
+```bash
+docudevs classify status CASE_ID JOB_ID --wait
+```
+
+- `--wait/--no-wait`: Wait for the job to finish (default: `--no-wait`)
+
+### `classify list`
+
+List a case's classify jobs, newest first.
+
+```bash
+docudevs classify list CASE_ID --limit 20
+```
+
+- `--limit INTEGER`: Page size, 1 to 200
+- `--continuation TEXT`: Token of the previous page
+
+### `classify cancel`
+
+Cancel a classify job.
+
+```bash
+docudevs classify cancel CASE_ID JOB_ID
+```
+
+### `classify results`
+
+Show classify result rows.
+
+```bash
+docudevs classify results CASE_ID JOB_ID --review-required --all
+```
+
+- `--flag TEXT`: Rows with this flag
+- `--review-required/--no-review-required`: Rows that need (or do not need) review
+- `--level INTEGER`: Tree level; with `--code`, matches the chosen code at that level
+- `--code TEXT`: Chosen code
+- `--decision [accept|correct|feedback|none]`: Review state
+- `--routing TEXT`: Comma-separated flags that route a row to review
+- `--limit INTEGER`: Page size, 1 to 1000
+- `--continuation TEXT`: Token of the previous page
+- `--all`: Follow every page and print one list
+
+### `classify csv`
+
+Export classify results as CSV. It takes the same filters as `classify results`.
+
+```bash
+docudevs classify csv CASE_ID JOB_ID --decision none --output results.csv
+```
+
+- `--flag`, `--review-required/--no-review-required`, `--level`, `--code`, `--decision`, `--routing`: As in `classify results`
+- `--output FILE` (alias `-o`): Write the CSV to this file instead of stdout
+
+### `classify review`
+
+Accept, correct or comment on one result row.
+
+```bash
+docudevs classify review CASE_ID JOB_ID ROW_ID correct --code FASTENERS --reason "Wrong category"
+```
+
+- `DECISION`: `accept`, `correct` or `feedback`
+- `--code TEXT`: The right code (for `correct`)
+- `--reason TEXT`: Why the model was wrong (for `correct`)
+- `--text TEXT`: The comment (for `feedback`)
+
+## Case Agent
+
+See [Case agent](/docs/advanced/case-agent), [Agent actions](/docs/advanced/agent-actions) and [Agent runs](/docs/advanced/agent-runs).
 
 ### `agent actions`
 
-List the pending-action inbox of a case.
+List the pending actions of a case, newest first.
 
 ```bash
-docudevs agent actions CASE_ID [--status STATUS] [--limit N] [--before ID]
+docudevs agent actions CASE_ID --status pending --limit 20
 ```
+
+- `--status TEXT`: Filter by status, such as `pending`
+- `--limit INTEGER`: Page size
+- `--before INTEGER`: Paging cursor from the previous page
 
 ### `agent confirm`
 
@@ -969,34 +1399,45 @@ docudevs agent confirm ACTION_ID
 Reject a pending action, optionally with a reason.
 
 ```bash
-docudevs agent reject ACTION_ID [--reason TEXT]
+docudevs agent reject ACTION_ID --reason "Not needed"
 ```
+
+- `--reason TEXT`: Why the action is rejected
 
 ### `agent run start`
 
-Start a headless agent run. `PLAYBOOK` is `general` (needs `--goal`) or `investigate-flagged` (needs `job_id` in `--params-file`). `--budget-tokens` is authorised when the run starts.
+Start a headless agent run and print its run ID. `PLAYBOOK` is `general` (needs `--goal`) or `investigate-flagged` (needs `job_id` in `--params-file`).
 
 ```bash
 docudevs agent run start CASE_ID investigate-flagged --params-file params.json --budget-tokens 60000 --wait
 ```
 
-`params.json` holds `max_rows`, `flags` and `job_id`.
+- `--goal TEXT`: What the run should do; required by the `general` playbook
+- `--params-file PATH`: JSON file with `max_rows`, `flags` and `job_id`
+- `--budget-tokens INTEGER`: Tokens the run may use in total; authorised when the run starts
+- `--wait/--no-wait`: Wait for the run to finish (default: `--no-wait`)
 
 ### `agent run status`
 
-Show a run's state and report. `--wait` polls until it finishes.
+Show the status, usage, pending actions and report of a run.
 
 ```bash
 docudevs agent run status CASE_ID RUN_ID --wait
 ```
 
+- `--wait/--no-wait`: Wait for the run to finish (default: `--no-wait`)
+
 ### `agent run cancel`
 
-Cancel a run after its current turn.
+Cancel a run at its next turn boundary.
 
 ```bash
 docudevs agent run cancel CASE_ID RUN_ID
 ```
+
+## Holdout Evaluation
+
+Holdout evaluations score classification variants on a case. See [Holdout evaluation and memo A/B](/docs/advanced/case-evals). For contract-analysis playbooks use the commands under [Playbooks and Playbook Evaluation](#playbooks-and-playbook-evaluation).
 
 ### `eval holdout`
 
@@ -1006,21 +1447,116 @@ Start a holdout evaluation. `--variants-file` is a JSON list of `{"name", "memo_
 docudevs eval holdout CASE_ID --variants-file variants.json --sample-size 200 --seed 7 --group-field base_product_id --wait
 ```
 
-### `eval status`
-
-Show an evaluation, waiting for it with `--wait`.
-
-```bash
-docudevs eval status CASE_ID EVAL_ID --wait
-```
+- `--variants-file PATH`: JSON list of variants (required)
+- `--sample-size INTEGER`: Rows in the scored sample, 10 to 5000 (default 200)
+- `--seed INTEGER`: Seed of the grouped split
+- `--group-field TEXT`: Record metadata key that groups variants of one product
+- `--grouping-mode [nearDuplicate|none]`: `nearDuplicate` (default) leaves out near-duplicates of the sample; `none` is ungrouped and its accuracy is optimistic
+- `--grouping-threshold FLOAT`: Cosine similarity at or above which a record is a near-duplicate (0 to 1, default 0.98)
+- `--config-file PATH`: JSON classify settings shared by the variants
+- `--wait/--no-wait`: Wait for the evaluation to finish (default: `--no-wait`)
 
 ### `eval compare`
 
-Score two completed evaluations against each other. Choose variants with `--baseline-variant` and `--candidate-variant`.
+Score two completed evaluations against each other without classifying again. Choose variants with `--baseline-variant` and `--candidate-variant`.
 
 ```bash
 docudevs eval compare CASE_ID BASELINE_EVAL_ID CANDIDATE_EVAL_ID --baseline-variant baseline --candidate-variant with-rule
 ```
+
+- `--baseline-variant TEXT`: Variant of the baseline evaluation (default: its first)
+- `--candidate-variant TEXT`: Variant of the candidate evaluation (default: its first)
+
+## Playbooks and Playbook Evaluation
+
+Test a contract-analysis playbook against gold answers and edit its draft. See [Playbook evaluation](/docs/core/playbook-evaluation) for the whole procedure.
+
+### `eval status`
+
+Show an evaluation's status. A holdout evaluation is read by its number; a contract-analysis evaluation by its ID.
+
+```bash
+docudevs eval status CASE_ID EVALUATION_ID --wait
+```
+
+- `--wait/--no-wait`: Wait for the evaluation to finish (default: `--no-wait`)
+
+### `eval list`
+
+List a case's contract-analysis evaluations, newest first, with their status and trial counts.
+
+```bash
+docudevs eval list CASE_ID
+```
+
+### `eval import`
+
+Import a gold table as approved contract-analysis test cases.
+
+```bash
+docudevs eval import CASE_ID --gold gold.xlsx --mapping mapping.yaml --dry-run
+```
+
+- `--gold PATH`: Gold table (CSV, XLSX or JSON rows) (required)
+- `--mapping PATH`: YAML or JSON mapping from the table to clauses and facts (required)
+- `--dry-run`: Validate the table and report what would be written, without writing
+
+### `eval split`
+
+Assign test cases to the tuning and holdout sets as a new suite revision.
+
+```bash
+docudevs eval split CASE_ID --holdout 0.3 --seed 1
+```
+
+- `--holdout FLOAT`: Share of each scenario held back for the holdout set (0 to 1, default: 0.3)
+- `--seed INTEGER`: Seed for the held-back selection (default: 1)
+
+### `eval run`
+
+Start one scored trial per test case and wait for the results.
+
+```bash
+docudevs eval run CASE_ID --set tuning --repeats 2
+```
+
+- `--set [tuning|holdout|all]`: Which test cases to run (default: `all`)
+- `--limit INTEGER`: Run only the first N cases of the set, in suite order
+- `--llm-level [mini|default]`: Save this model level to the draft before running; omit it to keep the draft's level
+- `--repeats INTEGER`: Run each case this many times (1 to 3) to find unstable expectations (default: 1)
+- `--no-wait`: Print the evaluation ID and return without waiting for the trials
+
+### `eval report`
+
+Show an evaluation report as Markdown or JSON.
+
+```bash
+docudevs eval report CASE_ID EVALUATION_ID --against published --format json
+```
+
+- `--against TEXT`: Compare with another evaluation of the same case, or `published` for the newest settled evaluation of the published draft revision that covers every case of this evaluation, preferring the same suite revision
+- `--format [json|md]`: Output format (default: `md`)
+
+### `playbook export`
+
+Export the playbook of a case as a document.
+
+```bash
+docudevs playbook export CASE_ID --view draft > playbook.json
+```
+
+- `--view [draft|published]`: Which version to export (default: `draft`)
+
+### `playbook import`
+
+Import a playbook document as the draft.
+
+```bash
+docudevs playbook import CASE_ID playbook.json --reason "Clarified the liability clause"
+```
+
+- `--draft-revision INTEGER`: Draft revision to replace (default: the current draft)
+- `--reason TEXT`: Why the draft changed, recorded in the draft change log (at most 500 characters)
 
 ## Global Options
 
