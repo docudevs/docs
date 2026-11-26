@@ -19,11 +19,12 @@ wait_for_evaluation() {
   return 1
 }
 
-# Reuse the idempotency key to retry a start safely
+# Send the same key again to retry a start safely
+KEY=$(python3 -c 'import uuid; print(uuid.uuid4().hex)')
 STARTED=$(curl -s -S -f -X POST "https://api.docudevs.ai/knowledge-bases/$CASE_ID/profiles/contract-analysis/evaluations" \
   -H "Authorization: $API_KEY" \
   -H "Content-Type: application/json" \
-  -d "$(jq -n --arg key "$(uuidgen)" '{set: "tuning", idempotencyKey: $key}')")
+  -d "$(jq -n --arg key "$KEY" '{set: "tuning", idempotencyKey: $key}')")
 EVALUATION_ID=$(echo "$STARTED" | jq -r '.evaluationId')
 echo "Evaluation $EVALUATION_ID started: $(echo "$STARTED" | jq '(.caseIds // []) | length') cases"
 

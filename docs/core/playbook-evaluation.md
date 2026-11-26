@@ -268,29 +268,29 @@ The contract-analysis playbooks guide has the full publish section ("Test and pu
 
 ## Run the loop from Python or cURL
 
-The steps that need no judgement can run from a script. The examples read the key from `API_KEY`, use the base URL `https://api.docudevs.ai`, and work with an organization API key. The Python variants use `DocuDevsClient`, which raises an error when the API answers with an error status. Each example does the same as the CLI step with the same number above.
+The steps that need no judgement can run from a script. The examples read the key from `API_KEY`, use the base URL `https://api.docudevs.ai`, and work with an organization API key. The Python variants use `DocuDevsClient`, which raises an error when the API answers with an error status. Each subsection does what the CLI step it names does.
 
-### Import gold
+### Import gold (step 1)
 
-The client reads the gold table and the mapping file and uploads the contracts itself. Do the dry run first, as in step 1. The import has no single API route, so there is no cURL variant.
+The client reads the gold table and the mapping file and uploads the contracts itself. Do the dry run first, as in step 1. There is no cURL variant: the client uploads the contracts that are missing, prepares a test package for each and saves the test suite, so the import is several calls, not one route.
 
 <Example name="playbook-evaluation/import-gold" />
 
-### Split the suite
+### Split the suite (step 2)
 
 The split needs the suite revision you read, and answers `409` when someone saved the suite since. The CLI reads the revision itself.
 
 <Example name="playbook-evaluation/split-suite" />
 
-### Run an evaluation and wait
+### Run an evaluation and wait (step 3)
 
-An evaluation starts one scored trial per test case of the set. A start answers `400` with `EMPTY_SET` when the set has no test cases, and `409` with `TRIAL_RUNNING` while a trial of a selected case is still pending. The request also takes `limit` and `repeats`, as the CLI options do. The API needs an idempotency key on a start: the Python client and the CLI create one, and the cURL variant sends one. The cURL and Python variants poll every 15 seconds for up to 3600 seconds, and the CLI waits the same way.
+An evaluation starts one scored trial per test case of the set. A start answers `400` with `EMPTY_SET` when the set has no test cases, and `409` with `TRIAL_RUNNING` while a trial of a selected case is still pending. The request also takes `limit` and `repeats`, as the CLI options do. The API needs an idempotency key on a start: the Python client and the CLI create one, and the cURL variant sends one. The cURL and Python variants poll every 15 seconds for up to 3600 seconds, and the CLI waits the same way. The wait ends when every trial has finished or failed.
 
 <Example name="playbook-evaluation/run-and-wait" />
 
-### Read the status and the report
+### Read the status and the report (steps 3 and 4)
 
-The report is the one described in step 4. While `complete` is false the report covers only the trials that have finished, so read the figures after it turns true. Add `against` with an earlier evaluation id, or `published`, to get the comparison from steps 7 and 8. The CLI prints the whole status and report as JSON, and the Python and cURL variants print a summary.
+The report is the one described in step 4. While `complete` is false the report covers only the trials that have finished, so read the figures after it turns true. `complete` is true when every trial has finished or failed, so check each contract's `trialStatus` for failed trials. Add `against` with an earlier evaluation id, or `published`, to get the comparison from steps 7 and 8. The CLI prints the whole status and report as JSON, and the Python and cURL variants print a summary.
 
 <Example name="playbook-evaluation/read-report" />
 

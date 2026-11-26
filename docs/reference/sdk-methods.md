@@ -1480,7 +1480,7 @@ evaluation_id = started.parsed["evaluationId"]
 
 ### wait_for_evaluation
 
-Poll an evaluation until every trial has finished. It returns the last status response and raises `TimeoutError` after `timeout` seconds. `on_progress` receives each poll.
+Poll an evaluation until every trial has finished or failed. It returns the last status response and raises `TimeoutError` after `timeout` seconds. `on_progress` receives each poll.
 
 ```python
 finished = await client.wait_for_evaluation(case_id, evaluation_id, poll_seconds=15, timeout=3600)
@@ -1488,7 +1488,7 @@ finished = await client.wait_for_evaluation(case_id, evaluation_id, poll_seconds
 
 ### get_evaluation
 
-Read an evaluation's status. `.parsed` has `evaluationId`, `set`, `suiteRevision`, `draftRevision`, `complete` and `trialCounts`.
+Read an evaluation's status. `complete` is true when every trial has finished or failed. `.parsed` has `evaluationId`, `set`, `suiteRevision`, `draftRevision`, `complete` and `trialCounts`.
 
 ```python
 status = await client.get_evaluation(case_id, evaluation_id)
