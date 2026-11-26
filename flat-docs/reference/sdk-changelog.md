@@ -12,6 +12,30 @@ mdx:
 
 ### Highlights
 
+- Java SDK 0.4.1 reads the text of OCR results and sends lookup files and schema-generation instructions the way the API expects.
+- These changes are in Java SDK 0.4.1.
+
+### Python SDK
+
+- No Python SDK user-facing updates.
+
+### Java SDK
+
+- Added: `waitUntilReadyText` waits for a job and returns its stored result as text, such as the Markdown or plain text of an OCR job.
+- Added: `ProcessOptions.acroFormMetadata` requests AcroForm field metadata for a PDF input; read it with `getAcroformMetadata` after the job completes.
+- Added: `ExcelTemplateOptions` and `ProcessOptions.excelTemplate` set where an Excel export writes results into the template uploaded for a saved configuration; `saveConfiguration` sends them.
+- Fixed: `waitUntilReadyJson` and `fetchResultJson` no longer fail on a result stored as text, such as an OCR job's. They return it as `{"result": text}`.
+- Fixed: `uploadBatchLookupFile` and `uploadConfigurationLookupFile` send the file in the part the API reads. The API rejected their requests before.
+- Fixed: `generateSchema` sends its instructions.
+
+### Migration Notes
+
+- Code that read the OCR text of a job through `waitUntilReadyJson` now gets `{"result": text}`; use `waitUntilReadyText` to read the text directly.
+
+## 2026-11-26 UTC
+
+### Highlights
+
 - The Java SDK now covers the operations of the Python client: records and datasets, classify, category trees, memos, knowledge bases and search, agent chat and runs, providers and credentials, map-reduce, compare, document layout and figures, and the rest of contract analysis.
 - Every blocking method of the Java client has an async version on `DocuDevsAsyncClient`.
 - These changes are in Java SDK 0.4.0 and Python SDK 1.16.0.

@@ -90,7 +90,7 @@ pip install docu-devs-api-client
 <dependency>
   <groupId>ai.docudevs</groupId>
   <artifactId>docudevs-java-sdk</artifactId>
-  <version>0.4.0</version>
+  <version>0.4.1</version>
 </dependency>
 ```
 
@@ -98,7 +98,7 @@ pip install docu-devs-api-client
   <TabItem value="gradle">
 
 ```kotlin
-implementation("ai.docudevs:docudevs-java-sdk:0.4.0")
+implementation("ai.docudevs:docudevs-java-sdk:0.4.1")
 ```
 
   </TabItem>
