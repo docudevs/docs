@@ -45,7 +45,7 @@ mdx:
 
 ### Migration Notes
 
-- `createContractAnalysisTrial(caseId, anchorJobGuid, trialKind, suiteRevision, suiteCaseId)` and the six-parameter form are deprecated: the API requires an estimate fingerprint, which they do not send. Use `createContractAnalysisTrial(caseId, anchorJobGuid, options, idempotencyKey, trialKind, estimateFingerprint)`.
+- `createContractAnalysisTrial(caseId, anchorJobGuid, idempotencyKey, suiteRevision, trialKind)` and the six-parameter form are deprecated: the API requires an estimate fingerprint, which they do not send. Use `createContractAnalysisTrial(caseId, anchorJobGuid, options, idempotencyKey, trialKind, estimateFingerprint)`.
 - `submitAndWaitForOperation` and the other new submit-and-wait methods return the operation's result document. `waitForOperation` still returns the status envelope with the result as a string, and can return an earlier operation of the same type under the same parent.
 - A failed wait throws `DocuDevsApiException` with status `409` and the polled status in the body. For record imports and tree activations the body holds both the import and its job, so the job's `error` is available.
 - A `switch` over `MapReduceOptions.SplitType` without a default branch needs a case for `DOCUMENT_OUTLINE`.

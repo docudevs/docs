@@ -50,7 +50,7 @@ Your API key is required to authenticate with the DocuDevs platform.
 pip install docu-devs-api-client
 
 # Or install a specific version
-pip install docu-devs-api-client==1.15.0
+pip install docu-devs-api-client==1.16.0
 ```
 
 **poetry**
@@ -61,7 +61,7 @@ poetry add docu-devs-api-client
 
 # Or specify version
 
-poetry add docu-devs-api-client==1.15.0
+poetry add docu-devs-api-client==1.16.0
 
 ```
 
@@ -99,7 +99,7 @@ python -c "import docudevs; print('DocuDevs SDK installed successfully!')"
 
 ## Step 3: Configure Your Environment
 
-Set up your API key for easy access across your projects. The examples in this documentation and the CLI read the key from the `API_KEY` environment variable; the Python client takes it as its `token` argument.
+Set up your API key for easy access across your projects. The examples in this documentation and the CLI read the key from the `API_KEY` environment variable; the Python client takes it as its `token` argument and the Java client as `apiKey(...)` on `DocuDevsClient.builder()`.
 
 **Environment Variable**
 
@@ -138,7 +138,7 @@ Then load it with `load_dotenv()` from `python-dotenv` before you create the cli
 pip install python-dotenv
 ```
 
-The Python client takes the key as its `token` argument. Reading it from the environment keeps the key out of your source code.
+The Python client takes the key as its `token` argument; in Java, pass `System.getenv("API_KEY")` to `DocuDevsClient.builder().apiKey(...)`. Reading it from the environment keeps the key out of your source code.
 
 ## Step 4: Test Your Connection
 
@@ -214,7 +214,7 @@ try {
 docudevs list-configurations
 ```
 
-The cURL example does not need the SDK. The CLI example prints nothing and exits with status 0 when the key is rejected, so it cannot verify a key: use the cURL or Python variant for that. To process a document next, follow the [Quick Start](https://docs.docudevs.ai/docs/getting-started/quick-start).
+The cURL example does not need the SDK. The CLI example prints nothing and exits with status 0 when the key is rejected, so it cannot verify a key: use the cURL, Python or Java variant for that. To process a document next, follow the [Quick Start](https://docs.docudevs.ai/docs/getting-started/quick-start).
 
 ## Alternative Integration Methods
 
@@ -284,11 +284,11 @@ For complete CLI documentation including all commands and options, see the **[CL
 
 ### API Endpoint Configuration
 
-The client uses the production endpoint `https://api.docudevs.ai` by default. Pass `api_url` to `DocuDevsClient` to use a different endpoint, and `--api-url` before the command name in the CLI.
+The client uses the production endpoint `https://api.docudevs.ai` by default. Pass `api_url` to `DocuDevsClient` to use a different endpoint, `.baseUrl(...)` on `DocuDevsClient.builder()` in Java, and `--api-url` before the command name in the CLI.
 
 ### Timeout Configuration
 
-Waiting for a result is bounded by the `timeout` argument of `wait_until_ready`, in seconds (default 180), and by `--timeout` on CLI commands that wait.
+Waiting for a result is bounded by the `timeout` argument of `wait_until_ready`, in seconds (default 180), by a `WaitOptions` argument on the Java wait methods (timeout 180 seconds and poll interval 5 seconds by default), and by `--timeout` on CLI commands that wait.
 
 ## Troubleshooting
 
