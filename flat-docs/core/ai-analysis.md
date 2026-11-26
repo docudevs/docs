@@ -145,7 +145,7 @@ docudevs operations generative-task "$OCR_JOB_ID" \
 
 ### Question Answering
 
-Ask questions about a document that has already been through OCR. Each question is its own generative task on the OCR job (the Java client reads only the first task of a parent, so this example has no Java variant), so replace `<job-guid>` with the GUID of the OCR job from the summarization step.
+Ask questions about a document that has already been through OCR. Each question is its own generative task on the OCR job (the Java variant submits each question with `submitAndWaitForGenerativeTask`, which waits for that task's own result), so replace `<job-guid>` with the GUID of the OCR job from the summarization step.
 
 **cURL**
 

@@ -146,7 +146,7 @@ If the job already has an outline artifact (for example, a job originally proces
 
 In Python, `wait_until_ready_with_document_outline` waits for a still-running job and returns its result and outline in one call.
 
-`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command and no Java SDK method for this operation: use the Python SDK or the raw HTTP API directly.
+`pagesPerChunk` must be at least 1, `overlapPages` must be at least 0, and `overlapPages` must be less than `pagesPerChunk`. There is no CLI command for this operation: use the Java client, the Python SDK or the raw HTTP API directly.
 
 ## Advanced Usage
 

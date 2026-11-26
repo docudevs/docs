@@ -17,6 +17,9 @@ integrations/create-connection:java
 integrations/delete-connection:java
 integrations/list-connections:java
 layout/download-figures:java
+lookup-files/manage-batch-lookup-file:java
+lookup-files/manage-configuration-lookup-file:java
+lookup-files/process-batch-with-lookup-file:java
 lookup-files/save-excel-template-config:java
 managed-workflows/cancel-run:java
 managed-workflows/get-logs:java

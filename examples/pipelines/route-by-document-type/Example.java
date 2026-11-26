@@ -16,6 +16,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 // docs:end
@@ -117,7 +118,8 @@ public class Example {
                 pipeline,
                 "AUTO");
 
-        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
+        JsonNode result = client.waitUntilReadyJson(guid,
+                WaitOptions.builder().timeout(Duration.ofSeconds(180)).pollInterval(Duration.ofSeconds(5)).build());
         System.out.println(result.toPrettyString());
 
         JsonNode nodes = client.getPipelineNodes(guid);

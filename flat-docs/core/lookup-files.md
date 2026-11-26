@@ -42,27 +42,6 @@ delete = await client.delete_configuration_lookup_file("invoice-config")
 print(f"Delete status: {delete.status_code}")
 ```
 
-**Java**
-
-```java
-import ai.docudevs.client.UploadRequest;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-byte[] lookupData = Files.readAllBytes(Path.of("vendors.csv"));
-
-// The Java client returns no status code: each call throws DocuDevsApiException unless the API answers 2xx
-client.uploadConfigurationLookupFile(
-        "invoice-config", new UploadRequest("vendors.csv", "text/csv", lookupData));
-System.out.println("Uploaded vendors.csv");
-
-byte[] downloaded = client.downloadConfigurationLookupFile("invoice-config");
-Files.write(Path.of("vendors-downloaded.csv"), downloaded);
-
-client.deleteConfigurationLookupFile("invoice-config");
-System.out.println("Deleted the configuration lookup file");
-```
-
 **CLI**
 
 ```bash
@@ -206,28 +185,6 @@ delete = await client.delete_batch_lookup_file(batch_guid)
 print(f"Delete status: {delete.status_code}")
 ```
 
-**Java**
-
-```java
-import ai.docudevs.client.UploadRequest;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-String batchGuid = "<batch-guid>"; // GUID of a batch whose documents are uploaded and not yet processed
-
-byte[] lookupData = Files.readAllBytes(Path.of("vendors-2024.csv"));
-
-// The Java client returns no status code: each call throws DocuDevsApiException unless the API answers 2xx
-client.uploadBatchLookupFile(batchGuid, new UploadRequest("vendors-2024.csv", "text/csv", lookupData));
-System.out.println("Uploaded vendors-2024.csv");
-
-byte[] downloaded = client.downloadBatchLookupFile(batchGuid);
-Files.write(Path.of("vendors-downloaded.csv"), downloaded);
-
-client.deleteBatchLookupFile(batchGuid);
-System.out.println("Deleted the batch lookup file");
-```
-
 The batch-scoped file is used whenever present, and otherwise the configuration's own lookup file (if any) applies. The same file-type and `extractionMode=simple` rules as the configuration lookup file apply. The CLI uploads the batch lookup file as part of `batch process` with `--lookup-file`, with or without `--configuration`. The full flow, from creating the batch to reading the results, looks like this:
 
 **cURL**
@@ -296,41 +253,6 @@ await client.process_batch_with_configuration(batch_guid, "invoice-config")
 
 results = await client.wait_until_ready(batch_guid, timeout=600, result_format="json")
 print(json.dumps(results, indent=2))
-```
-
-**Java**
-
-```java
-import ai.docudevs.client.UploadRequest;
-import ai.docudevs.client.WaitOptions;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Duration;
-import java.util.List;
-
-String batchGuid = client.createBatch(3);
-
-for (String filename : List.of("invoice1.pdf", "invoice2.pdf")) {
-    byte[] documentData = Files.readAllBytes(Path.of(filename));
-    client.uploadBatchDocument(
-            batchGuid,
-            new UploadRequest(filename, "application/pdf", documentData));
-}
-
-// The batch lookup file overrides the lookup file of invoice-config for this batch
-byte[] lookupData = Files.readAllBytes(Path.of("vendors-2024.csv"));
-client.uploadBatchLookupFile(batchGuid, new UploadRequest("vendors-2024.csv", "text/csv", lookupData));
-
-client.processBatchWithConfiguration(batchGuid, "invoice-config");
-
-JsonNode results = client.waitUntilReadyJson(
-        batchGuid,
-        WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
-                .pollInterval(Duration.ofSeconds(5))
-                .build());
-System.out.println(results.toPrettyString());
 ```
 
 **CLI**
