@@ -845,7 +845,7 @@ Create an embedding provider and its initial embedding revision. Changing endpoi
 provider = await client.create_embedding_provider(
     name="Org Azure OpenAI embeddings",
     provider_type="azure-openai",
-    api_url="https://my-resource.openai.azure.com",
+    api_url="https://example.openai.azure.com",
     deployment_name="text-embedding-3-large",
     dimensions=3072,
     similarity_metric="cosine",

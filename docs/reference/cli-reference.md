@@ -939,7 +939,7 @@ This command does not work with the current API. It sends `model`, and `POST /oc
 :::
 
 ```bash
-docudevs ocr create --name "My Azure OCR" --endpoint "https://..." --api-key "..."
+docudevs ocr create --name "My Azure OCR" --endpoint "https://example.cognitiveservices.azure.com" --api-key "..."
 ```
 
 ### `ocr get`
