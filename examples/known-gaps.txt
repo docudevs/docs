@@ -94,6 +94,10 @@ lookup-files/manage-configuration-lookup-file:java
 lookup-files/process-batch-with-lookup-file:java
 lookup-files/save-excel-template-config:java
 lookup-files/upload-excel-template:java
+members/list-members:java
+members/remove-member:java
+members/set-join-policy:java
+members/update-member-role:java
 model-credentials/create-api-key-credential:java
 model-credentials/create-entra-credential:java
 model-credentials/delete-credential:java
@@ -147,7 +151,9 @@ results/download-excel-with-template:java
 results/download-result-formats:java
 results/get-batch-result:java
 results/get-result-schema:java
+sso/add-domain:java
 sso/configure-oidc-provider:java
+sso/verify-domain:java
 submission-portals/check-submission:java
 submission-portals/create-portal:java
 submission-portals/submit-document:java

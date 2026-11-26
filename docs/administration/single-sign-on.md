@@ -27,6 +27,16 @@ Add each domain your organization's users sign in from. For each domain:
 
 Unverified domains can be removed at any time.
 
+The same steps work over HTTP with an organization API key; the routes need the `ADMIN` role.
+
+<Example name="sso/add-domain" />
+
+The route answers `200` with the domain's `id` and `verificationToken`. A consumer mail domain, a malformed domain or a domain another organization already claimed is rejected (`400`, `400` and `409`). Publish the TXT record, then verify:
+
+<Example name="sso/verify-domain" />
+
+Verification answers `400` while the TXT record cannot be found. `DELETE /sso/domains/{id}` removes a domain and answers `204`. The Python SDK has no helper for these routes.
+
 ## Step 3 — Identity provider
 
 Configure exactly one provider per organization, either:

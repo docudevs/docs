@@ -74,6 +74,57 @@ DocuDevs protects the last active admin in the organization. In practice, that m
 
 This guardrail keeps every organization from locking itself out of admin access.
 
+## Manage members from the API
+
+Listing members, changing roles, removing members and the join policy are available over HTTP. These routes need the `ADMIN` role, so an organization API key can call them (an API key acts as an admin and is not itself a member). A signed-in user can call them only as an `ADMIN`; any other role receives `403`. The Python SDK has no helper for these routes, so the examples are cURL only.
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/members` | List the organization's members |
+| PATCH | `/members/{id}` | Change `role`, `status`, or both |
+| DELETE | `/members/{id}` | Remove a member |
+| GET, PUT | `/members/join-policy` | Read or set the join policy |
+
+A member has `id`, `email`, `role`, `status`, and, when set, `invitedAt` and `acceptedAt`. Roles are `ADMIN`, `MEMBER` and `SUBMISSION_PORTAL_USER`; statuses are `INVITED`, `ACTIVE` and `SUSPENDED`. An unknown role or status answers `400`.
+
+### List members
+
+<Example name="members/list-members" />
+
+The response is a JSON array of members. The `id` is what the other member routes take in their path.
+
+### Change a member's role or status
+
+<Example name="members/update-member-role" />
+
+`PATCH` takes `role`, `status`, or both, and answers `200` with the updated member.
+
+### Remove a member
+
+<Example name="members/remove-member" />
+
+The route answers `204` with no body.
+
+### Last admin protection
+
+An organization must keep at least one member who is both `ADMIN` and `ACTIVE`. When only one such member remains, changing that member's role away from `ADMIN`, changing their status away from `ACTIVE`, or removing them answers `409` with the code `last_admin`, and nothing changes. Promote or activate another admin first.
+
+An id that does not exist, or that belongs to another organization, answers `404` with the code `not_found`. Error bodies are `{"code": "...", "message": "..."}`.
+
+### Set the join policy
+
+<Example name="members/set-join-policy" />
+
+The join policy applies when someone signs in through the Microsoft Entra sign-in that your deployment is set up for and has no membership yet. `ssoDefaultRole` takes one of:
+
+| Value | Effect |
+| --- | --- |
+| `ADMIN`, `MEMBER`, `SUBMISSION_PORTAL_USER` | The uninvited person joins with that role |
+| `NONE` | The uninvited person is not added; only existing members can sign in |
+| unset (`null`) | The default applies: the uninvited person joins as `MEMBER` |
+
+Any other value answers `400`. Both routes answer `200` with `{"ssoDefaultRole": ...}`; the field is absent when no policy is set.
+
 ## Role-based app behavior
 
 The current app shell enforces a few role-specific behaviors that are visible in the UI:
