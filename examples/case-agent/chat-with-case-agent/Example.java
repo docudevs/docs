@@ -1,8 +1,8 @@
 package examples.case_agent.chat_with_case_agent;
 
-import ai.docudevs.client.DocuDevsClient;
 // docs:start
 import ai.docudevs.client.AgentChatOptions;
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 // docs:end
@@ -10,12 +10,12 @@ import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         JsonNode status = client.agentChatAndWait(
                 "Classify this week file into levels 4 and 5 using the memo rules.",
                 AgentChatOptions.builder()

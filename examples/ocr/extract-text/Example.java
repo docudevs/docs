@@ -1,8 +1,7 @@
 package examples.ocr.extract_text;
 
-import ai.docudevs.client.DocuDevsClient;
-
 // docs:start
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.ProcessOptions;
 import ai.docudevs.client.UploadRequest;
 import ai.docudevs.client.WaitOptions;
@@ -13,12 +12,12 @@ import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         byte[] documentData = Files.readAllBytes(Path.of("document.pdf"));
 
         String jobId = client.uploadDocument(

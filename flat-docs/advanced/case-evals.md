@@ -137,9 +137,15 @@ asyncio.run(main())
 **Java**
 
 ```java
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.HoldoutEvalOptions;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 long caseId = 42L; // id of a records case with an active category tree
 String entryId = "m_88"; // id of a proposed memo entry

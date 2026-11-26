@@ -1,8 +1,7 @@
 package examples.operations.convert_pdf_to_acroform;
 
-import ai.docudevs.client.DocuDevsClient;
-
 // docs:start
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.PdfAcroformOptions;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,12 +13,12 @@ import java.util.List;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         String parentJobGuid = "<job-guid>"; // GUID of a completed PDF job whose page images exist (processed with ocr PREMIUM)
 
         JsonNode result = client.submitAndWaitForPdfAcroformOperation(

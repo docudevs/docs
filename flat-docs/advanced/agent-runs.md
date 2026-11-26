@@ -118,8 +118,14 @@ asyncio.run(main())
 
 ```java
 import ai.docudevs.client.AgentRunOptions;
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 long caseId = 42L; // id returned by create_case
 long classifyJobId = 55L; // id of a completed classify job of this case

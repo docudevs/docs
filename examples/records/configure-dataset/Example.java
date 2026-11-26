@@ -1,20 +1,20 @@
 package examples.records.configure_dataset;
 
-import ai.docudevs.client.DocuDevsClient;
 // docs:start
 import ai.docudevs.client.DatasetOptions;
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 // docs:end
 import java.util.Map;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         long caseId = 42L; // id of a case that holds no documents
 
         // Throws DocuDevsApiException when the request is refused

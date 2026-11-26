@@ -90,8 +90,14 @@ asyncio.run(main())
 
 ```java
 import ai.docudevs.client.AgentChatOptions;
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 JsonNode status = client.agentChatAndWait(
         "Classify this week file into levels 4 and 5 using the memo rules.",

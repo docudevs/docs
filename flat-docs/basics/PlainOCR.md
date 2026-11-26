@@ -98,12 +98,18 @@ asyncio.run(main())
 **Java**
 
 ```java
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.ProcessOptions;
 import ai.docudevs.client.UploadRequest;
 import ai.docudevs.client.WaitOptions;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 byte[] documentData = Files.readAllBytes(Path.of("document.pdf"));
 

@@ -1,18 +1,18 @@
 package examples.agent_actions.list_pending_actions;
 
-import ai.docudevs.client.DocuDevsClient;
 // docs:start
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 // docs:end
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         long caseId = 42L; // id returned by create_case
 
         JsonNode pending = client.listAgentActions(caseId, "pending", 20, null);

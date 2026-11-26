@@ -191,6 +191,12 @@ asyncio.run(main())
 
 ```java
 import ai.docudevs.client.DocuDevsApiException;
+import ai.docudevs.client.DocuDevsClient;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 // List your saved configurations to confirm the API key works.
 // The Java client throws on any status outside 2xx instead of returning it.

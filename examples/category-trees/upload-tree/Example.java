@@ -1,8 +1,8 @@
 package examples.category_trees.upload_tree;
 
-import ai.docudevs.client.DocuDevsClient;
 // docs:start
 import ai.docudevs.client.DocuDevsApiException;
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 // docs:end
@@ -11,12 +11,12 @@ import java.util.Map;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         long caseId = 42L; // id of a records case
 
         // The root node has no parent; the field is left out

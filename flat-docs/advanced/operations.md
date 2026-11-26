@@ -500,6 +500,7 @@ asyncio.run(main())
 **Java**
 
 ```java
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.PdfAcroformOptions;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -507,6 +508,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 String parentJobGuid = "<job-guid>"; // GUID of a completed PDF job whose page images exist (processed with ocr PREMIUM)
 
