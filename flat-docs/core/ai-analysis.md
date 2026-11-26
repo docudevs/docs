@@ -123,7 +123,7 @@ client.ocrDocument(
 client.waitUntilReadyText(
         ocrJobId,
         WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
+                .timeout(Duration.ofSeconds(180))
                 .pollInterval(Duration.ofSeconds(5))
                 .build());
 
@@ -132,8 +132,8 @@ JsonNode analysis = client.submitAndWaitForGenerativeTask(
         ocrJobId,
         "Summarize this document and explain what type of document it is and its main purpose.",
         WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
-                .pollInterval(Duration.ofSeconds(5))
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
                 .build());
 
 System.out.println("\nAI Analysis:");
@@ -380,7 +380,7 @@ client.ocrDocument(
 client.waitUntilReadyText(
         ocrJobId,
         WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
+                .timeout(Duration.ofSeconds(180))
                 .pollInterval(Duration.ofSeconds(5))
                 .build());
 
@@ -398,8 +398,8 @@ for (Map.Entry<String, String> prompt : prompts.entrySet()) {
             ocrJobId,
             prompt.getValue(),
             WaitOptions.builder()
-                    .timeout(Duration.ofSeconds(600))
-                    .pollInterval(Duration.ofSeconds(5))
+                    .timeout(Duration.ofSeconds(120))
+                    .pollInterval(Duration.ofSeconds(2))
                     .build());
     results.put(prompt.getKey(), task.path("generated_text").asText());
 }
@@ -554,6 +554,7 @@ asyncio.run(main())
 import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
@@ -567,7 +568,10 @@ public class Example {
         client.submitOperation(jobGuid, "error-analysis");
 
         JsonNode result = client.waitForOperation(
-                jobGuid, "error-analysis", WaitOptions.builder().build());
+                jobGuid, "error-analysis", WaitOptions.builder()
+                        .timeout(Duration.ofSeconds(120))
+                        .pollInterval(Duration.ofSeconds(2))
+                        .build());
         System.out.println(result.path("result"));
     }
 }

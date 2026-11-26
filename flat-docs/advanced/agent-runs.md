@@ -127,7 +127,7 @@ DocuDevsClient client = DocuDevsClient.builder()
         .baseUrl("https://api.docudevs.ai")
         .build();
 
-long caseId = 42L; // id returned by create_case
+long caseId = 42L; // id returned when the case was created
 long classifyJobId = 55L; // id of a completed classify job of this case
 
 JsonNode started = client.startAgentRun(
@@ -225,7 +225,7 @@ for run in runs.get("items", []):
 import ai.docudevs.client.AgentRunListOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 
-long caseId = 42L; // id returned by create_case
+long caseId = 42L; // id returned when the case was created
 long classifyJobId = 55L; // id of a classify job of this case
 
 JsonNode runs = client.listAgentRuns(
@@ -266,7 +266,7 @@ print(cancelled["runId"], cancelled["status"])
 ```java
 import com.fasterxml.jackson.databind.JsonNode;
 
-long caseId = 42L; // id returned by create_case
+long caseId = 42L; // id returned when the case was created
 long runId = 9001L; // id returned when the run was started
 
 JsonNode cancelled = client.cancelAgentRun(caseId, runId);

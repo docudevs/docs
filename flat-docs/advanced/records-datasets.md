@@ -128,7 +128,7 @@ JsonNode dataset = client.setDataset(
                 "metadata", Map.of("brand", "brand")),
         DatasetOptions.builder()
                 .embeddedText(Map.of("template", "{title}\n{description}"))
-                .indexSettings(Map.of("top_k", 10, "hybrid", false))
+                .indexSettings(Map.of("topK", 10, "hybrid", false))
                 .build());
 System.out.println("Mapping version: " + dataset.path("mappingVersion").asText());
 ```
@@ -270,7 +270,7 @@ RecordsCase records = client.createRecordsCase(
                 .label("category")
                 .metadata(Map.of("brand", "brand"))
                 .embeddedText("{title}\n{description}")
-                .indexSettings(Map.of("top_k", 10, "hybrid", false))
+                .indexSettings(Map.of("topK", 10, "hybrid", false))
                 .build());
 System.out.println("Records case " + records.id());
 ```

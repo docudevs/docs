@@ -608,7 +608,7 @@ JsonNode review = client.reviewClassify(
         ClassifyReviewDecision.correct("4.12.3.1", "Plain cotton sock, no sport use."));
 JsonNode write = review.path("labelWrite");
 System.out.println(review.path("reviewId").asText() + " " + review.path("decision").asText()
-        + " " + write.path("importId").asText(null) + " " + write.path("status").asText(null));
+        + " " + write.path("importId").asText("-") + " " + write.path("status").asText("-"));
 ```
 
 **CLI**

@@ -161,6 +161,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 byte[] documentData = Files.readAllBytes(Path.of("large-invoice.pdf"));
 UploadRequest upload = new UploadRequest("large-invoice.pdf", "application/pdf", documentData);
@@ -182,7 +183,10 @@ ProcessOptions options = ProcessOptions.builder()
 String jobId = client.submitAndProcessDocument(upload, options);
 System.out.println("Job submitted: " + jobId);
 
-JsonNode result = client.waitUntilReadyJson(jobId, WaitOptions.defaults());
+JsonNode result = client.waitUntilReadyJson(jobId, WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build());
 System.out.println("Header: " + result.path("header"));
 System.out.println("Extracted " + result.path("records").size() + " line items.");
 ```
@@ -277,6 +281,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 byte[] documentData = Files.readAllBytes(Path.of("contract.pdf"));
 UploadRequest upload = new UploadRequest("contract.pdf", "application/pdf", documentData);
@@ -291,7 +296,10 @@ ProcessOptions options = ProcessOptions.builder()
         .build();
 
 String jobId = client.submitAndProcessDocument(upload, options);
-JsonNode result = client.waitUntilReadyJson(jobId, WaitOptions.defaults());
+JsonNode result = client.waitUntilReadyJson(jobId, WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build());
 System.out.println(result.toPrettyString());
 ```
 

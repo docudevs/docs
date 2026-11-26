@@ -22,7 +22,7 @@ public class Example {
         String evaluationId = started.path("evaluationId").asText();
         System.out.println("Evaluation " + evaluationId + " started: " + started.path("caseIds").size() + " cases");
 
-        // Polls every 15 seconds and raises DocuDevsTimeoutException after 3600 seconds
+        // Polls every 15 seconds and throws DocuDevsTimeoutException after 3600 seconds
         JsonNode finished = client.waitForEvaluation(
                 caseId,
                 evaluationId,

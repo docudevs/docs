@@ -171,6 +171,7 @@ asyncio.run(main())
 import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
@@ -184,7 +185,10 @@ public class Example {
         client.submitOperation(jobGuid, "error-analysis");
 
         JsonNode result = client.waitForOperation(
-                jobGuid, "error-analysis", WaitOptions.builder().build());
+                jobGuid, "error-analysis", WaitOptions.builder()
+                        .timeout(Duration.ofSeconds(120))
+                        .pollInterval(Duration.ofSeconds(2))
+                        .build());
         System.out.println(result.path("result"));
     }
 }
@@ -369,6 +373,7 @@ if selected:
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
 import java.util.Map;
 
 ObjectMapper mapper = new ObjectMapper();
@@ -382,7 +387,10 @@ client.submitOperation(jobGuid, "image-select", null,
                 "useVision", false));
 
 JsonNode result = client.waitForOperation(
-        jobGuid, "image-select", WaitOptions.builder().build());
+        jobGuid, "image-select", WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
 
 JsonNode payload = mapper.readTree(result.path("result").asText());
 System.out.println(payload.toPrettyString());

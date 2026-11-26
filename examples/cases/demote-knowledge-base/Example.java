@@ -12,7 +12,7 @@ public class Example {
         // docs:start
         long caseId = 42L; // id of a knowledge base
 
-        // Returns nothing; an error status raises DocuDevsApiException
+        // Returns nothing; an error status throws DocuDevsApiException
         client.deleteKnowledgeBase(caseId);
 
         System.out.println("Case " + caseId + " is no longer a knowledge base");

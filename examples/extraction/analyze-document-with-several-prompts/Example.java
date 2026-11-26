@@ -35,7 +35,7 @@ public class Example {
         client.waitUntilReadyText(
                 ocrJobId,
                 WaitOptions.builder()
-                        .timeout(Duration.ofSeconds(600))
+                        .timeout(Duration.ofSeconds(180))
                         .pollInterval(Duration.ofSeconds(5))
                         .build());
 
@@ -53,8 +53,8 @@ public class Example {
                     ocrJobId,
                     prompt.getValue(),
                     WaitOptions.builder()
-                            .timeout(Duration.ofSeconds(600))
-                            .pollInterval(Duration.ofSeconds(5))
+                            .timeout(Duration.ofSeconds(120))
+                            .pollInterval(Duration.ofSeconds(2))
                             .build());
             results.put(prompt.getKey(), task.path("generated_text").asText());
         }

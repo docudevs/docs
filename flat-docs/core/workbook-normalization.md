@@ -104,7 +104,10 @@ ProcessOptions options = ProcessOptions.builder()
 
 String guid = client.submitAndProcessDocument(workbook, options);
 
-JsonNode dataset = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
+JsonNode dataset = client.waitUntilReadyJson(guid, WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build());
 System.out.println(dataset);
 
 // The plan, source map and summary are separate artifacts of the same job

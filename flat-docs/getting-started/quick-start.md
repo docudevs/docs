@@ -316,7 +316,7 @@ client.ocrDocument(
 client.waitUntilReadyText(
         ocrJobId,
         WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
+                .timeout(Duration.ofSeconds(180))
                 .pollInterval(Duration.ofSeconds(5))
                 .build());
 
@@ -325,8 +325,8 @@ JsonNode analysis = client.submitAndWaitForGenerativeTask(
         ocrJobId,
         "Summarize this document and explain what type of document it is and its main purpose.",
         WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
-                .pollInterval(Duration.ofSeconds(5))
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
                 .build());
 
 System.out.println("\nAI Analysis:");

@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
 import java.util.Map;
 // docs:end
 
@@ -30,7 +31,10 @@ public class Example {
                         "useVision", false));
 
         JsonNode result = client.waitForOperation(
-                jobGuid, "image-select", WaitOptions.builder().build());
+                jobGuid, "image-select", WaitOptions.builder()
+                        .timeout(Duration.ofSeconds(120))
+                        .pollInterval(Duration.ofSeconds(2))
+                        .build());
 
         JsonNode payload = mapper.readTree(result.path("result").asText());
         System.out.println(payload.toPrettyString());

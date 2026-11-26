@@ -15,7 +15,7 @@ public class Example {
 
         // docs:start
         // ENTRA_CLIENT_SECRET holds the client secret value copied from Entra.
-        // Java: the call returns the JSON body of the 201 response and throws DocuDevsApiException on an error status.
+        // The call returns the JSON body of the 201 response and throws DocuDevsApiException on an error status.
         JsonNode credential = client.createModelCredential(
                 "Enterprise AI gateway",
                 System.getenv("ENTRA_CLIENT_SECRET"),

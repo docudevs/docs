@@ -54,7 +54,7 @@ public class Example {
         JsonNode result = client.waitUntilReadyJson(
                 jobId,
                 WaitOptions.builder()
-                        .timeout(Duration.ofSeconds(600))
+                        .timeout(Duration.ofSeconds(180))
                         .pollInterval(Duration.ofSeconds(5))
                         .build());
         System.out.println("Processing with Named Configuration Result:");

@@ -33,7 +33,7 @@ public class Example {
         client.waitUntilReadyJson(
                 jobGuid,
                 WaitOptions.builder()
-                        .timeout(Duration.ofSeconds(600))
+                        .timeout(Duration.ofSeconds(180))
                         .pollInterval(Duration.ofSeconds(5))
                         .build());
 

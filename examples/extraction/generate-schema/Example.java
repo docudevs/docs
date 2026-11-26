@@ -8,6 +8,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 // docs:end
 
 public class Example {
@@ -25,7 +26,10 @@ public class Example {
                 upload,
                 "Focus on extracting the invoice number, date, and all line items with prices.");
 
-        JsonNode schema = client.waitUntilReadyJson(jobGuid, WaitOptions.builder().build());
+        JsonNode schema = client.waitUntilReadyJson(jobGuid, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
         System.out.println("Generated schema:");
         System.out.println(schema.toPrettyString());
         // docs:end

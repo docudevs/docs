@@ -13,7 +13,7 @@ public class Example {
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        long caseId = 42L; // id returned by create_case
+        long caseId = 42L; // id returned when the case was created
 
         JsonNode pending = client.listAgentActions(caseId, "pending", 20, null);
         for (JsonNode action : pending.path("items")) {

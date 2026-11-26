@@ -123,7 +123,7 @@ client.ocrDocument(
 String text = client.waitUntilReadyText(
         jobId,
         WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
+                .timeout(Duration.ofSeconds(180))
                 .pollInterval(Duration.ofSeconds(5))
                 .build());
 System.out.println(text);
@@ -261,7 +261,7 @@ client.ocrDocument(
 String text = client.waitUntilReadyText(
         jobId,
         WaitOptions.builder()
-                .timeout(Duration.ofSeconds(600))
+                .timeout(Duration.ofSeconds(180))
                 .pollInterval(Duration.ofSeconds(5))
                 .build());
 System.out.println(text);

@@ -501,11 +501,13 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
+                .baseUrl("https://api.docudevs.ai")
                 .build();
 
         byte[] fileBytes = Files.readAllBytes(Path.of("invoice.pdf"));
@@ -519,7 +521,10 @@ public class Example {
                         .barcodes(true)
                         .build());
 
-        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
+        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
         System.out.println(result);
     }
 }
@@ -602,11 +607,13 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
+                .baseUrl("https://api.docudevs.ai")
                 .build();
 
         byte[] fileBytes = Files.readAllBytes(Path.of("invoice.pdf"));
@@ -620,7 +627,10 @@ public class Example {
                         .reasoningEffort("low")
                         .build());
 
-        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
+        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
         System.out.println(result.toPrettyString());
     }
 }

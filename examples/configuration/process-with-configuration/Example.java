@@ -3,6 +3,7 @@ package examples.configuration.process_with_configuration;
 import ai.docudevs.client.DocuDevsClient;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 // docs:start
 import ai.docudevs.client.UploadRequest;
@@ -24,7 +25,10 @@ public class Example {
         String guid = client.uploadDocument(upload);
         client.processDocumentWithConfiguration(guid, "invoice-config");
 
-        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
+        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
         System.out.println(result);
         // docs:end
     }

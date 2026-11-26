@@ -4,6 +4,7 @@ package examples.operations.error_analysis;
 import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
@@ -17,7 +18,10 @@ public class Example {
         client.submitOperation(jobGuid, "error-analysis");
 
         JsonNode result = client.waitForOperation(
-                jobGuid, "error-analysis", WaitOptions.builder().build());
+                jobGuid, "error-analysis", WaitOptions.builder()
+                        .timeout(Duration.ofSeconds(120))
+                        .pollInterval(Duration.ofSeconds(2))
+                        .build());
         System.out.println(result.path("result"));
     }
 }

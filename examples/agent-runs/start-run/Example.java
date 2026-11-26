@@ -17,7 +17,7 @@ public class Example {
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        long caseId = 42L; // id returned by create_case
+        long caseId = 42L; // id returned when the case was created
         long classifyJobId = 55L; // id of a completed classify job of this case
 
         JsonNode started = client.startAgentRun(

@@ -13,7 +13,7 @@ public class Example {
                 .build();
 
         // docs:start
-        long caseId = 42L; // id returned by create_case
+        long caseId = 42L; // id returned when the case was created
         long runId = 9001L; // id returned when the run was started
 
         JsonNode cancelled = client.cancelAgentRun(caseId, runId);

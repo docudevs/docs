@@ -14,7 +14,7 @@ public class Example {
                 .build();
 
         // docs:start
-        long caseId = 42L; // id returned by create_case
+        long caseId = 42L; // id returned when the case was created
         long classifyJobId = 55L; // id of a classify job of this case
 
         JsonNode runs = client.listAgentRuns(
