@@ -30,7 +30,9 @@ const sidebars: SidebarsConfig = {
         'core/source-locations',            // NEW: Field-level evidence boxes
         'core/extraction-review',
         'core/document-compare',
+        'core/track-changes',
         'core/document-layout',
+        'core/result-formats',
         'core/object-detection',            // NEW: Model-emitted bounding boxes for image tasks
         'core/map-reduce-extraction',       // NEW: Map-Reduce extraction for large documents
         'reference/pipeline-mode',          // NEW: Pipeline extraction graphs

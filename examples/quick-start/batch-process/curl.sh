@@ -51,6 +51,7 @@ jq -n \
 
 wait_for_job "$BATCH_GUID"
 
+# A document that failed or has no stored result is null in this list
 curl -s -S -f "https://api.docudevs.ai/job/result/$BATCH_GUID/json" \
   -H "Authorization: $API_KEY" | jq .
 # docs:end

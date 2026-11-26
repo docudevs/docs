@@ -88,6 +88,21 @@ The examples wait for the job to finish and print the text. To check a job yours
 - `--token` overrides the key from the environment for one command. Put it before the command name.
 - `--timeout` sets how long the CLI waits for the result, in seconds.
 
+## Barcodes and QR codes
+
+OCR can also read barcodes and QR codes and write their values into the text. Set `barcodes` to `true` in the request:
+
+- In a process request, the `barcodes` field; in the Python client, `barcodes=True`; in the CLI, `docudevs process --barcodes`.
+- In a saved [configuration](/docs/configuration/), the `barcodes` field.
+
+The plain OCR request has no `barcodes` option: `POST /document/ocr/{guid}`, `POST /document/ocr/sync`, `docudevs ocr-only` and `submit_and_ocr_document` do not read barcodes. To get the OCR text with barcodes, send a process request with `extractionMode` set to `OCR`, which returns the text without structured extraction. The example does that.
+
+<Example name="ocr/ocr-with-barcodes" />
+
+Each value is written into the text at the place where the barcode appears, as `<kind>=<value>`, where `<kind>` is the barcode type that the scanner reports. If you use a prompt and a schema instead of `extractionMode` `OCR`, the extraction reads the same text and can return the values as fields; see [Extracting QR Codes](/docs/basics/SimpleDocuments#extracting-qr-codes).
+
+The scan is part of the document OCR, so it has no effect when `ocr` is `NONE`, `LOW` or `EXCEL`. Workbook normalization rejects requests that set `barcodes`. The CLI waits 60 seconds by default, so the example raises `--timeout`; cURL and Python stop waiting after 600 seconds.
+
 ## One-Step Synchronous OCR
 
 For simpler usage, upload the document and receive the text in the same request. The response is a JSON string containing the OCR output. This endpoint is called over HTTP; the Python SDK has no helper for it.

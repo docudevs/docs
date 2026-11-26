@@ -34,6 +34,54 @@ Jobs progress through several states:
 
 Any status that is not terminal means the job is still running: keep polling until `COMPLETED`, `ERROR`, `FAILED` or `TIMEOUT`. Only jobs in these **terminal states** can be deleted. A batch whose documents partly failed ends `COMPLETED`; `GET /job/result/{guid}` for the batch reports `state: "PARTIAL"` with a status for each document, and the results of the documents that succeeded can still be read.
 
+## List and Inspect Jobs
+
+### List jobs
+
+`GET /job/list` returns one page of the jobs of your organization: document jobs, batches and the jobs that operations create (`jobType` tells them apart). Jobs that were deleted or removed by the automatic purge are not in the list. Every query parameter is optional:
+
+| Parameter | Meaning |
+| --- | --- |
+| `page` | Page number, starting at 0. Default `0`. |
+| `size` | Jobs per page. Default `20`. |
+| `sort` | `<field>` or `<field>,asc` or `<field>,desc`, where the field is `createdAt`, `updatedAt` or `status`. Any other field sorts by `createdAt`. Default `createdAt`. |
+| `status` | Only jobs with exactly this status, for example `COMPLETED` or `ERROR`. |
+| `createdAtFrom` | Only jobs created on or after this date, written `YYYY-MM-DD`. |
+| `createdAtTo` | Only jobs created on or before this date, written `YYYY-MM-DD`. |
+
+The order is ascending unless `sort` contains lower-case `desc` (`Desc` or `DESC` sorts ascending), so without `sort` the oldest jobs come first. Use `sort=createdAt,desc` for the newest first. A date that is not in the `YYYY-MM-DD` form is ignored instead of rejected.
+
+The response has `content`, the jobs of the page, and `totalSize` and `totalPages`, the counts over all jobs that match the filters. Each job is the same object that `GET /job/status/{guid}` returns, with fields such as `guid`, `status`, `jobType`, `createdAt`, `updatedAt` and `error`. Timestamps are UTC.
+
+The example walks through all pages of the completed jobs created since a date, newest first. The Python SDK has no method for this route, so it is called over HTTP.
+
+<Example name="jobs/list-jobs" />
+
+### Processing parameters of a job
+
+`GET /job/params/{guid}` returns the processing options the job was submitted with, as JSON: for example `mimeType`, `ocr`, `llm`, `barcodes` and `extractionMode`. The prompt and the schema are not part of it. The route answers `404` when the job does not exist or has no stored parameters.
+
+### Dependencies of a job
+
+`GET /job/dependencies/{guid}` describes the [`dependsOn`](#reusing-previous-results-dependson) link of a job:
+
+```json
+{
+  "guid": "11111111-2222-3333-4444-555555555555",
+  "dependsOnGuid": "66666666-7777-8888-9999-000000000000",
+  "dependencyStatus": "PENDING",
+  "parentJob": { "guid": "66666666-7777-8888-9999-000000000000", "status": "IN_PROGRESS" }
+}
+```
+
+- `dependsOnGuid` and `parentJob` are present only for a job that was submitted with `dependsOn`. `parentJob` is the full job object of the parent. Read `dependencyStatus` only when `dependsOnGuid` is present.
+- `dependencyStatus` is `PENDING` while the job waits for its parent, `READY` once the job is released to run, and `BLOCKED` when the parent failed, timed out or cannot be found. A blocked job carries the reason in its `error`.
+- An unknown GUID answers `404`.
+
+The example reads the parameters and the dependency of one job. The Python SDK has no method for either route.
+
+<Example name="jobs/inspect-job" />
+
 ## Deleting Jobs
 
 Delete a job when you no longer need its data. Jobs older than 14 days are automatically purged, so this API is primarily for cleaning up recent jobs before the scheduled cleanup.

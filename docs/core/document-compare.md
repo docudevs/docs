@@ -5,7 +5,7 @@ description: Compare two PDF versions of a document, review the changes, and exp
 
 # Redline (document comparison)
 
-A redline compares two versions of a document, for example the original contract and a new draft, and returns every change between them. It compares the documents themselves, so it works on two clean PDFs, a scan, or a redline someone else made. It does not read Word tracked changes.
+A redline compares two versions of a document, for example the original contract and a new draft, and returns every change between them. It compares the documents themselves, so it works on two clean PDFs, a scan, or a redline someone else made. It does not read Word tracked changes; to read those, see [Track changes](/docs/core/track-changes).
 
 A comparison runs as one job. It OCRs both documents, builds the structure (outline) of both, and then compares them. The result is a document-compare artifact that you can render, filter and export.
 
