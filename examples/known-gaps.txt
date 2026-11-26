@@ -108,6 +108,7 @@ ocr-providers/update-ocr-provider:java
 ocr/choose-quality-and-format:java
 ocr/extract-text:java
 ocr/ocr-sync:java
+ocr/ocr-with-barcodes:java
 operations/ask-document-questions:java
 operations/convert-pdf-to-acroform:java
 operations/document-outline:java
