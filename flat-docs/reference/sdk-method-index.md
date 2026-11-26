@@ -4,7 +4,7 @@ description: Every public method of the DocuDevs Python client with its paramete
 ---
 <!-- Generated from docs/reference/sdk-method-index.md. Do not edit by hand. -->
 
-This table is generated from the released Python client (`docu-devs-api-client` 1.15.0) and lists every public method of `DocuDevsClient`. The hand-written [SDK Methods](https://docs.docudevs.ai/docs/reference/sdk-methods) page has explanations and examples.
+This table is generated from the released Python client (`docu-devs-api-client` 1.16.0) and lists every public method of `DocuDevsClient`. The hand-written [SDK Methods](https://docs.docudevs.ai/docs/reference/sdk-methods) page has explanations and examples.
 
 | Method | Parameters | Returns | Description | Notes |
 | --- | --- | --- | --- | --- |
@@ -12,8 +12,8 @@ This table is generated from the released Python client (`docu-devs-api-client` 
 | `add_extraction_review_flags` | `run_id: str`<br />`reference: Mapping[str, Any]`<br />`expected_review_revision: int`<br />`idempotency_key: str`<br />`flags: list[Mapping[str, Any]]`<br />`audit: Mapping[str, Any]` | `SimpleNamespace` |  | Needs a signed-in user; an organization API key is refused. |
 | `add_memo_entry` | `case_id: Union[int, str]`<br />`type: str`<br />`scope: Mapping[str, Any]`<br />`text: str`<br />`links: Optional[Mapping[str, Any]] = None` | `dict` | Create a memo entry. |  |
 | `adjudicate_extraction_review_claim` | `run_id: str`<br />`claim_id: str`<br />`request: Mapping[str, Any]`<br />`idempotency_key: str` | `SimpleNamespace` |  | Needs a signed-in user; an organization API key is refused. |
-| `agent_chat` | `messages: list[dict[str, str]]`<br />`session_id: str \| None = None`<br />`document_guid: str \| None = None`<br />`case_id: int \| None = None`<br />`playbook: str \| None = None`<br />`context: str \| None = None` | `dict` | Send a chat message to the AI agent. |  |
-| `agent_chat_and_wait` | `messages: list[dict[str, str]]`<br />`session_id: str \| None = None`<br />`document_guid: str \| None = None`<br />`timeout: int = 120`<br />`poll_interval: float = 2.0`<br />`case_id: int \| None = None`<br />`playbook: str \| None = None`<br />`context: str \| None = None` | `dict` | Send a chat message to the AI agent and wait for the response. |  |
+| `agent_chat` | `messages: str \| list[dict[str, str]]`<br />`session_id: str \| None = None`<br />`document_guid: str \| None = None`<br />`case_id: int \| None = None`<br />`playbook: str \| None = None`<br />`context: str \| None = None` | `dict` | Send a chat message to the AI agent. |  |
+| `agent_chat_and_wait` | `messages: str \| list[dict[str, str]]`<br />`session_id: str \| None = None`<br />`document_guid: str \| None = None`<br />`timeout: int = 120`<br />`poll_interval: float = 2.0`<br />`case_id: int \| None = None`<br />`playbook: str \| None = None`<br />`context: str \| None = None` | `dict` | Send a chat message to the AI agent and wait for the response. |  |
 | `agent_status` | `job_guid: str` | `dict` | Get the status and response for an agent chat job. |  |
 | `analyze_document` | `document: bytes \| BytesIO`<br />`document_mime_type: str`<br />`ocr: str \| None = None`<br />`describe_figures: bool \| None = None`<br />`extract_figures: bool \| None = None` | `str` |  |  |
 | `analyze_document_and_wait` | `document: bytes \| BytesIO`<br />`document_mime_type: str`<br />`ocr: str \| None = None`<br />`describe_figures: bool \| None = None`<br />`extract_figures: bool \| None = None`<br />`timeout: int = 180`<br />`poll_interval: float = 5.0` | `Any` |  |  |

@@ -7,6 +7,49 @@ mdx:
 
 # SDK Changelog
 
+## 2026-11-26 UTC
+
+### Highlights
+
+- The Java SDK now covers the operations of the Python client: records and datasets, classify, category trees, memos, knowledge bases and search, agent chat and runs, providers and credentials, map-reduce, compare, document layout and figures, and the rest of contract analysis.
+- Every blocking method of the Java client has an async version on `DocuDevsAsyncClient`.
+- These changes are in Java SDK 0.4.0 and Python SDK 1.16.0.
+
+### Python SDK
+
+- `agent_chat` and `agent_chat_and_wait` accept a plain string as `messages`. A string is sent as one user message; the list form is unchanged. An empty string raises `ValueError`.
+
+### Java SDK
+
+- New areas on `DocuDevsClient` and `DocuDevsAsyncClient`:
+  - Records and datasets: `createRecordsCase`, `recordsCase`, `setDataset`, `upsertRecord`, `bulkUpsertRecords`, `syncRecords`, `confirmSyncRecords`, `importRecordsFromUrl`, `listRecordsPage`, `recordStats`, `waitForImport`, and the `RecordsCase` handle.
+  - Classify: `classify` for rows or a file, `classifyKeys`, `waitForClassify`, `getClassifyResultsPage`, `forEachClassifyResult`, `reviewClassify`, `commitClassify`, `downloadClassifyCsv`.
+  - Category trees, memos and knowledge bases: `uploadTree`, `activateTree`, `waitForTreeActivation`, `getTreeActivationReport`, `listMemo`, `addMemoEntry`, `promoteKnowledgeBase`, `listKnowledgeBases`, `deleteKnowledgeBase`, `search`.
+  - Agent: `agentChat` and `agentChatAndWait` with a string or a message list, `startAgentRun`, `waitForAgentRun`, `listAgentActions`, `confirmAgentAction`, `rejectAgentAction`, `startHoldoutEval`, `waitForEval`, `compareHoldoutEvals`.
+  - Providers and credentials: LLM, OCR and embedding providers, model credentials, key bindings, embedding overview and reindex.
+  - Documents and results: `fetchResult`, `fetchResultJson`, `getSourceLocations`, `getDocumentLayout`, `getDocumentOutline`, `getOcrQuality`, `getFiguresMetadata`, `downloadImage`, AcroForm metadata and fill, `uploadTemplateImages`, `scheduleBatch`.
+  - Operations and compare: `submitAndWaitForOperation` and the per-operation variants, `compareDocuments`, `waitUntilCompareReady`, `exportDocumentCompare`.
+  - Map-reduce: `processDocumentMapReduce`, `submitAndProcessDocumentMapReduce`, `submitAndWaitForMapReduce`; `MapReduceOptions.SplitType` gains `DOCUMENT_OUTLINE`.
+  - Contract analysis: `prepareContractAnalysisTestPackage`, `getContractAnalysisTrialReadiness`, `waitForEvaluation`, `ContractTrialOptions`, and `scope` on profile generation.
+- Methods that wait take `WaitOptions`. Methods ending in `AndWait` wait for the job; the same method without the suffix returns as soon as the job is accepted.
+- `DocuDevsClient.Builder.requestTimeout(Duration)` sets a timeout for each request.
+- `ProcessOptions` gains `dependsOn`, `sourceLocations` and `sourceLocationGranularity`.
+- Cancelling a future returned by a waiting async method with `cancel(true)` stops the wait.
+- Fixed: `ocrDocument(UploadRequest, String)` called a route that does not exist and always failed. It now uploads the document and starts OCR on it.
+- Fixed: names with a space in a URL path, such as a configuration or template name, were sent with `+` instead of `%20`.
+- Fixed: `waitForOperation` and `waitForGenerativeTask` kept polling after the job ended with the status `TIMEOUT`. They now fail at once.
+- Fixed: map-reduce header settings without a header page limit were not sent.
+- An API key with a trailing newline is accepted. A key with control characters or characters outside Latin-1 is rejected when the client is built.
+- File names, field names and content types of uploads are rejected when they contain a quote or a line break.
+
+### Migration Notes
+
+- `createContractAnalysisTrial(caseId, anchorJobGuid, trialKind, suiteRevision, suiteCaseId)` and the six-parameter form are deprecated: the API requires an estimate fingerprint, which they do not send. Use `createContractAnalysisTrial(caseId, anchorJobGuid, options, idempotencyKey, trialKind, estimateFingerprint)`.
+- `submitAndWaitForOperation` and the other new submit-and-wait methods return the operation's result document. `waitForOperation` still returns the status envelope with the result as a string, and can return an earlier operation of the same type under the same parent.
+- A failed wait throws `DocuDevsApiException` with status `409` and the polled status in the body. For record imports and tree activations the body holds both the import and its job, so the job's `error` is available.
+- A `switch` over `MapReduceOptions.SplitType` without a default branch needs a case for `DOCUMENT_OUTLINE`.
+- Path values that are empty, `.` or `..` are rejected with `IllegalArgumentException`.
+
 ## 2026-11-16 UTC
 
 ### Highlights

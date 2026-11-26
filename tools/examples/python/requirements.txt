@@ -1,2 +1,2 @@
-docu-devs-api-client==1.15.0
+docu-devs-api-client==1.16.0
 pytest==9.2.0
