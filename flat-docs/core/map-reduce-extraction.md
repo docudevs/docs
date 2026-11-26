@@ -485,7 +485,7 @@ If you have already processed or OCR'd a document, you can run map-reduce on it 
 - Run different chunking strategies on the same document.
 - Extract different fields from a document that was already OCR'd.
 
-Use `submit_and_wait_for_map_reduce` with the `parent_job_id` of the completed job in Python, or send the process request with `dependsOn` set to the completed job (the Java client has no `dependsOn` option and processes the job directly):
+Use `submit_and_wait_for_map_reduce` with the `parent_job_id` of the completed job in Python, `submitAndWaitForMapReduce` with the guid of the completed job in Java, or send the process request with `dependsOn` set to the completed job:
 
 **cURL**
 
@@ -565,25 +565,29 @@ import ai.docudevs.client.ProcessOptions;
 import ai.docudevs.client.Schema;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
 import java.util.Map;
 
 String existingJobGuid = "<job-guid>"; // GUID of a completed job from a previous run
 
-ProcessOptions options = ProcessOptions.builder()
-        .prompt("Extract all line items (sku, description, qty, total)")
-        .schema(Schema.arrayOf(Map.of("type", "object")))
-        .mapReduce(MapReduceOptions.builder()
+// Re-run with map-reduce on the same document: no upload, no new OCR
+JsonNode result = client.submitAndWaitForMapReduce(
+        existingJobGuid,
+        ProcessOptions.builder()
+                .prompt("Extract all line items (sku, description, qty, total)")
+                .schema(Schema.arrayOf(Map.of("type", "object")))
+                .build(),
+        MapReduceOptions.builder()
                 .pagesPerChunk(5)
                 .overlapPages(1)
                 .dedupKey("sku")
                 .parallelProcessing(true)
-                .build())
-        .build();
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(300))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
 
-// The Java client has no dependsOn option, which the Python and cURL variants send
-client.processDocument(existingJobGuid, options);
-
-JsonNode result = client.waitUntilReadyJson(existingJobGuid, WaitOptions.defaults());
 System.out.println("Header: " + result.path("header"));
 System.out.println("Extracted " + result.path("records").size() + " line items.");
 ```

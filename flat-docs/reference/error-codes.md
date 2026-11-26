@@ -115,6 +115,28 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.DocuDevsApiException;
+import ai.docudevs.client.DocuDevsClient;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey("invalid-key")
+        .baseUrl("https://api.docudevs.ai")
+        .build();
+
+try {
+    client.listCases();
+} catch (DocuDevsApiException error) {
+    if (error.getStatusCode() == 401) {
+        System.out.println("Authentication failed (401)");
+    } else {
+        throw error;
+    }
+}
+```
+
 #### 403 Forbidden
 
 Valid authentication but insufficient permissions.
@@ -155,6 +177,22 @@ fi
 response = await client.get_case(case_id=99999)
 if response.status_code == 404:
     print("Case not found")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.DocuDevsApiException;
+
+try {
+    client.getCase(99999);
+} catch (DocuDevsApiException error) {
+    if (error.getStatusCode() == 404) {
+        System.out.println("Case not found");
+    } else {
+        throw error;
+    }
+}
 ```
 
 #### 409 Conflict
@@ -414,6 +452,51 @@ except TimeoutError:
     print(f"Current status: {status_response.parsed.status}")
 except Exception as error:
     print(f"Processing failed: {error}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.DocuDevsApiException;
+import ai.docudevs.client.DocuDevsTimeoutException;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+Path documentPath = Path.of("sample_invoice.pdf");
+if (!Files.exists(documentPath)) {
+    System.out.println("Document file not found: sample_invoice.pdf");
+    return;
+}
+
+byte[] documentData = Files.readAllBytes(documentPath);
+
+String jobId = client.submitAndProcessDocument(
+        new UploadRequest("sample_invoice.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract key information from this document")
+                .build());
+System.out.println("Processing job " + jobId + "...");
+
+try {
+    // Wait up to 5 minutes for the result
+    JsonNode result = client.waitUntilReadyJson(
+            jobId,
+            WaitOptions.builder()
+                    .timeout(Duration.ofSeconds(300))
+                    .pollInterval(Duration.ofSeconds(5))
+                    .build());
+    System.out.println("Processing successful!");
+    System.out.println(result.toPrettyString());
+} catch (DocuDevsTimeoutException error) {
+    JsonNode status = client.getJobStatus(jobId);
+    System.out.println("Processing timed out for job " + jobId);
+    System.out.println("Current status: " + status.path("status").asText());
+} catch (DocuDevsApiException error) {
+    System.out.println("Processing failed: " + error.getMessage());
+}
 ```
 
 ## CLI Error Handling

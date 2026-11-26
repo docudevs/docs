@@ -102,8 +102,6 @@ Messages may contain `image_ref` objects referencing document pages. You can ret
 
 <Example name="tracing/get-page-image" />
 
-The Java SDK has no method for page images, so there is no Java example for this call.
-
 ## Map-Reduce Tracing
 
 For large documents processed with map-reduce, tracing captures all chunk processing:

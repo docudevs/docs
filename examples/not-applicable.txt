@@ -49,3 +49,5 @@ model-credentials/disable-and-enable-credential:java  # the Java client 0.4.0 ha
 model-credentials/get-credential:java  # the Java client 0.4.0 has no method for GET /model-credentials/{id}
 model-credentials/update-credential:java  # the Java client 0.4.0 has no method for PATCH /model-credentials/{id}
 model-credentials/validate-credential:java  # the Java client 0.4.0 has no method for POST /model-credentials/{id}/validate
+results/check-non-json-result:java  # the Java client 0.4.0 has no method for GET /job/result/{guid}/schema
+results/get-result-schema:java  # the Java client 0.4.0 has no method for GET /job/result/{guid}/schema
