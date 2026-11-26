@@ -232,6 +232,49 @@ result = await client.wait_until_ready(job_guid, result_format="json")
 print(result["gross_amount"])
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+String schema = Schema.of(Map.of(
+        "type", "object",
+        "properties", Map.of(
+                "net_amount", Map.of("type", "number"),
+                "vat_rate", Map.of("type", "number"),
+                "gross_amount", Map.of(
+                        "type", "number",
+                        "x-docudevs", Map.of(
+                                "fieldType", "calculated",
+                                "dependsOn", List.of("net_amount", "vat_rate"),
+                                "formula", Map.of(
+                                        "lang", "excel",
+                                        "expression", "ROUND({net_amount} * (1 + {vat_rate}), 2)")))),
+        "required", List.of("net_amount", "vat_rate", "gross_amount")));
+
+byte[] documentData = Files.readAllBytes(Path.of("invoice.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+        new UploadRequest("invoice.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract net amount and vat rate as numbers.")
+                .schema(schema)
+                .build());
+
+JsonNode result = client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(result.path("gross_amount"));
+```
+
 **CLI**
 
 ```bash

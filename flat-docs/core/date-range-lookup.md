@@ -59,6 +59,21 @@ response = await client.upload_case_document(case_id=case_id, body=body, dataset
 print(f"Upload status: {response.status_code}")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+
+long caseId = 42L; // id of the knowledge base, from listKnowledgeBases
+
+byte[] fileData = Files.readAllBytes(Path.of("public-holidays-2024.csv"));
+UploadRequest upload = new UploadRequest("public-holidays-2024.csv", "text/csv", fileData);
+
+// The Java client throws DocuDevsApiException when the upload is refused
+client.uploadCaseDocument(caseId, upload, "calendar", null);
+System.out.println("Upload accepted");
+```
+
 The worker recognizes the calendar dataset, parses it into a date index, and skips text embedding. Deleting the document removes its calendar entries.
 
 ## Use the tool during extraction

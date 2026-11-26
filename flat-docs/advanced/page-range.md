@@ -210,6 +210,41 @@ result = await client.wait_until_ready(job_guid, result_format="json")
 print(json.dumps(result, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.MapReduceOptions;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+byte[] documentData = Files.readAllBytes(Path.of("report.pdf"));
+UploadRequest upload = new UploadRequest("report.pdf", "application/pdf", documentData);
+
+// The document has 20 pages, but only pages 1-2, 5-6 and 10-11 are needed.
+// These 6 pages are chunked into 3 chunks of 2 pages each.
+String jobGuid = client.submitAndProcessDocumentMapReduce(
+        upload,
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract all items from these pages.")
+                .pageRange(List.of(1, 2, 5, 6, 10, 11))
+                .build(),
+        MapReduceOptions.builder()
+                .splitType(MapReduceOptions.SplitType.PAGE)
+                .pagesPerChunk(2)
+                .build());
+
+JsonNode result = client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(result.toPrettyString());
+```
+
 :::note Processing Order
 With `pageRange` set to `[1, 2, 5, 6, 10, 11]` and `pagesPerChunk` set to `2`:
 
@@ -304,6 +339,51 @@ regulatory = await extract_pages(
 )
 
 print(json.dumps([identification, properties, regulatory], indent=2))
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+byte[] documentData = Files.readAllBytes(Path.of("safety-data-sheet.pdf"));
+UploadRequest upload = new UploadRequest("safety-data-sheet.pdf", "application/pdf", documentData);
+WaitOptions wait = WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build();
+
+// Upload one document per extraction and process only the pages that hold the section
+// Section 1: Identification (page 1)
+String identificationJob = client.submitAndProcessDocument(upload, ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .prompt("Extract product name, manufacturer, and emergency contact.")
+        .pageRange(List.of(1))
+        .build());
+JsonNode identification = client.waitUntilReadyJson(identificationJob, wait);
+
+// Section 9: Physical properties (pages 8-9)
+String propertiesJob = client.submitAndProcessDocument(upload, ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .prompt("Extract appearance, odor, boiling point, and flash point.")
+        .pageRange(List.of(8, 9))
+        .build());
+JsonNode properties = client.waitUntilReadyJson(propertiesJob, wait);
+
+// Sections 14-16: Transport and regulatory (pages 12-14)
+String regulatoryJob = client.submitAndProcessDocument(upload, ProcessOptions.builder()
+        .mimeType("application/pdf")
+        .prompt("Extract transport classification and regulatory information.")
+        .pageRange(List.of(12, 13, 14))
+        .build());
+JsonNode regulatory = client.waitUntilReadyJson(regulatoryJob, wait);
+
+System.out.println(identification.toPrettyString());
+System.out.println(properties.toPrettyString());
+System.out.println(regulatory.toPrettyString());
 ```
 
 ## Limitations

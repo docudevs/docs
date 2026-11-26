@@ -16,18 +16,6 @@ extraction-review/save-profile-with-descriptor:java
 extraction-review/save-profile:java
 extraction-review/submit-claims:java
 extraction/analyze-document-with-several-prompts:java
-extraction/check-map-reduce-progress:java
-extraction/detect-objects:java
-extraction/extract-sections-by-page-range:java
-extraction/extract-with-calculated-fields:java
-extraction/extract-with-pydantic:java
-extraction/extract-with-source-locations-single-call:java
-extraction/extract-with-source-locations:java
-extraction/include-current-date-map-reduce:java
-extraction/process-page-range-map-reduce:java
-extraction/process-with-generated-schema:java
-extraction/split-map-reduce-by-document-outline:java
-extraction/upload-calendar-dataset:java
 first-document/handle-timeout:java
 first-document/save-and-use-configuration:java
 install/verify-connection:java
@@ -61,7 +49,6 @@ members/set-join-policy:java
 members/update-member-role:java
 ocr/choose-quality-and-format:java
 ocr/extract-text:java
-ocr/ocr-sync:java
 ocr/ocr-with-barcodes:java
 operations/ask-document-questions:java
 operations/convert-pdf-to-acroform:java

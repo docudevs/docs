@@ -168,6 +168,36 @@ result = await client.wait_until_ready(job_guid, result_format="json")
 print(json.dumps(result, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// invoice-schema.json holds the schema from the generation step, after review
+String schema = Schema.of(Files.readString(Path.of("invoice-schema.json")));
+
+byte[] documentData = Files.readAllBytes(Path.of("new-invoice.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+        new UploadRequest("new-invoice.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .schema(schema)
+                .build());
+
+JsonNode result = client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(result.toPrettyString());
+```
+
 **CLI**
 
 ```bash

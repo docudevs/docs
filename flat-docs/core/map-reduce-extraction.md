@@ -377,6 +377,42 @@ outline = await client.get_document_outline(job_id)
 print(json.dumps(outline, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.MapReduceOptions;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+byte[] documentData = Files.readAllBytes(Path.of("contract.pdf"));
+UploadRequest upload = new UploadRequest("contract.pdf", "application/pdf", documentData);
+
+String jobId = client.submitAndProcessDocumentMapReduce(
+        upload,
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract obligations by section.")
+                .build(),
+        MapReduceOptions.builder()
+                .splitType(MapReduceOptions.SplitType.DOCUMENT_OUTLINE)
+                .pagesPerChunk(3)
+                .parallelProcessing(true)
+                .build());
+
+JsonNode result = client.waitUntilReadyJson(
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(result.toPrettyString());
+
+JsonNode outline = client.getDocumentOutline(jobId);
+System.out.println(outline.toPrettyString());
+```
+
 Notes:
 
 - `pagesPerChunk` is optional; when omitted, chunk sizing is determined automatically. When provided, it acts as a page budget for page-fallback windows and as a soft target for grouping, not a strict chunk size.
@@ -422,6 +458,23 @@ if response.status_code != 200:
 progress = response.parsed.map_reduce_status
 if progress:
     print(f"Progress: {progress.completed_chunks} / {progress.total_chunks}")
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String jobId = "<job-guid>"; // GUID of a running map-reduce job
+
+// The Java client throws DocuDevsApiException when the status is not 200
+JsonNode status = client.getJobStatus(jobId);
+
+JsonNode progress = status.path("mapReduceStatus");
+if (!progress.isMissingNode() && !progress.isNull()) {
+    System.out.println("Progress: " + progress.path("completedChunks").asInt()
+            + " / " + progress.path("totalChunks").asInt());
+}
 ```
 
 ## Re-running Map-Reduce on an Existing Job
