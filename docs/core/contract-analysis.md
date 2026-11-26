@@ -6,6 +6,8 @@ sidebar_position: 11
 
 Contract analysis reads a contract against a **playbook** and reports one finding per clause: a verdict, the red flags that were triggered, and the passages of the contract the finding rests on. A playbook states what your side wants from a kind of contract. A run is immutable: it captures the contract, the playbook revision and the execution configuration, so later edits never change its result.
 
+Contract analysis is an information-extraction and review aid. It does not provide legal advice, legal opinions, underwriting decisions, or a substitute for qualified counsel. Your organization remains responsible for reviewing the contracts and every finding before relying on them.
+
 ## Where to find what
 
 | To do this | Read |
