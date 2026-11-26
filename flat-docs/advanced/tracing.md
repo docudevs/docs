@@ -237,6 +237,16 @@ if image_bytes:
         f.write(image_bytes)
 ```
 
+**Java**
+
+```java
+String jobGuid = "<job-guid>"; // GUID of a completed job
+
+// Get the thumbnail of page 0
+byte[] imageBytes = client.downloadImage(jobGuid, 0);
+Files.write(Path.of("page_0.png"), imageBytes);
+```
+
 The Java SDK has no method for page images, so there is no Java example for this call.
 
 ## Map-Reduce Tracing
@@ -306,6 +316,39 @@ await client.wait_until_ready(job_guid)
 trace = await client.get_trace(job_guid)
 if trace:
     print(f"Processed in {len(trace.get('events', []))} events")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.MapReduceOptions;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+byte[] documentData = Files.readAllBytes(Path.of("large-report.pdf"));
+
+// Tracing covers every chunk
+String jobGuid = client.submitAndProcessDocumentMapReduce(
+        new UploadRequest("large-report.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .prompt("Extract line items")
+                .trace(true)
+                .build(),
+        MapReduceOptions.builder()
+                .pagesPerChunk(5)
+                .build());
+
+client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+JsonNode trace = client.getTrace(jobGuid);
+System.out.println("Processed in " + trace.path("events").size() + " events");
 ```
 
 ## Best Practices

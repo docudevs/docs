@@ -51,6 +51,8 @@ Your API key is required to authenticate with the DocuDevs platform.
     {label: 'pip', value: 'pip'},
     {label: 'poetry', value: 'poetry'},
     {label: 'conda', value: 'conda'},
+    {label: 'Java (Maven)', value: 'maven'},
+    {label: 'Java (Gradle)', value: 'gradle'},
   ]}>
   <TabItem value="pip">
 
@@ -79,6 +81,24 @@ poetry add docu-devs-api-client==1.15.0
 # Install from PyPI via conda
 conda install -c conda-forge pip
 pip install docu-devs-api-client
+```
+
+  </TabItem>
+  <TabItem value="maven">
+
+```xml
+<dependency>
+  <groupId>ai.docudevs</groupId>
+  <artifactId>docudevs-java-sdk</artifactId>
+  <version>0.4.0</version>
+</dependency>
+```
+
+  </TabItem>
+  <TabItem value="gradle">
+
+```kotlin
+implementation("ai.docudevs:docudevs-java-sdk:0.4.0")
 ```
 
   </TabItem>

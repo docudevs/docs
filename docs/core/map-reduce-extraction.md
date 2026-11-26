@@ -100,7 +100,7 @@ If you have already processed or OCR'd a document, you can run map-reduce on it 
 - Run different chunking strategies on the same document.
 - Extract different fields from a document that was already OCR'd.
 
-Use `submit_and_wait_for_map_reduce` with the `parent_job_id` of the completed job in Python, or send the process request with `dependsOn` set to the completed job (the Java client has no `dependsOn` option and processes the job directly):
+Use `submit_and_wait_for_map_reduce` with the `parent_job_id` of the completed job in Python, `submitAndWaitForMapReduce` with the guid of the completed job in Java, or send the process request with `dependsOn` set to the completed job:
 
 <Example name="extraction/reprocess-with-map-reduce" />
 

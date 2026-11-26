@@ -563,6 +563,53 @@ print("Processing with Named Configuration Result:")
 print(json.dumps(result, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+String configName = "invoice_processing_standard";
+
+Map<String, Object> properties = new LinkedHashMap<>();
+properties.put("invoice_number", Map.of("type", "string"));
+properties.put("date", Map.of("type", "string", "format", "date"));
+properties.put("vendor", Map.of("type", "string"));
+properties.put("total", Map.of("type", "number"));
+
+String schema = Schema.of(Map.of(
+        "type", "object",
+        "properties", properties,
+        "required", List.of("total")));
+
+// Save the configuration under a name
+client.saveConfiguration(configName, ProcessOptions.builder()
+        .prompt("Extract comprehensive invoice data")
+        .schema(schema)
+        .llm("HIGH")
+        .build());
+System.out.println("Configuration saved: " + configName);
+
+// Upload a document and process it with the saved configuration
+byte[] documentData = Files.readAllBytes(Path.of("sample_invoice.pdf"));
+
+String jobId = client.submitAndProcessDocumentWithConfiguration(
+        new UploadRequest("sample_invoice.pdf", "application/pdf", documentData),
+        configName);
+
+JsonNode result = client.waitUntilReadyJson(
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println("Processing with Named Configuration Result:");
+System.out.println(result.toPrettyString());
+```
+
 **CLI**
 
 ```bash
@@ -748,6 +795,51 @@ except TimeoutError:
     print(f"Current status: {status_response.parsed.status}")
 except Exception as error:
     print(f"Processing failed: {error}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.DocuDevsApiException;
+import ai.docudevs.client.DocuDevsTimeoutException;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+
+Path documentPath = Path.of("sample_invoice.pdf");
+if (!Files.exists(documentPath)) {
+    System.out.println("Document file not found: sample_invoice.pdf");
+    return;
+}
+
+byte[] documentData = Files.readAllBytes(documentPath);
+
+String jobId = client.submitAndProcessDocument(
+        new UploadRequest("sample_invoice.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .prompt("Extract key information from this document")
+                .build());
+System.out.println("Processing job " + jobId + "...");
+
+try {
+    // Wait up to 5 minutes for the result
+    JsonNode result = client.waitUntilReadyJson(
+            jobId,
+            WaitOptions.builder()
+                    .timeout(Duration.ofSeconds(300))
+                    .pollInterval(Duration.ofSeconds(5))
+                    .build());
+    System.out.println("Processing successful!");
+    System.out.println(result.toPrettyString());
+} catch (DocuDevsTimeoutException error) {
+    JsonNode status = client.getJobStatus(jobId);
+    System.out.println("Processing timed out for job " + jobId);
+    System.out.println("Current status: " + status.path("status").asText());
+} catch (DocuDevsApiException error) {
+    System.out.println("Processing failed: " + error.getMessage());
+}
 ```
 
 ## Advanced Processing Options

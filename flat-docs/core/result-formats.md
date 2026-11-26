@@ -62,6 +62,26 @@ with open("result.csv", "w") as f:
 await client.result_excel(job_guid, save_to="result.xlsx")
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String jobGuid = "<job-guid>"; // GUID of a completed extraction job
+
+// JSON: the stored result as it is, parsed
+JsonNode result = client.fetchResultJson(jobGuid);
+Files.writeString(Path.of("result.json"), result.toPrettyString());
+
+// CSV: one row per record, nested fields as dotted column names
+byte[] csv = client.fetchResultCsvBytes(jobGuid);
+Files.write(Path.of("result.csv"), csv);
+
+// Excel: the same table as a workbook
+byte[] workbook = client.fetchResultExcelBytes(jobGuid);
+Files.write(Path.of("result.xlsx"), workbook);
+```
+
 The CSV and Excel routes flatten the result into a table:
 
 - An object becomes one row. A list of objects becomes one row per object.
@@ -100,6 +120,17 @@ job_guid = "<job-guid>"  # GUID of a completed extraction job
 await client.result_excel(job_guid, save_to="result.xlsx", configuration="invoice-config")
 ```
 
+**Java**
+
+```java
+String jobGuid = "<job-guid>"; // GUID of a completed extraction job
+
+// invoice-config is a saved configuration that has an Excel template attached.
+// Name the output file .xlsm when the template is macro-enabled.
+byte[] workbook = client.fetchResultExcelBytes(jobGuid, "invoice-config");
+Files.write(Path.of("result.xlsx"), workbook);
+```
+
 A workbook normalization result is not a flat table: its CSV and Excel routes answer `400`. See [Workbook normalization](https://docs.docudevs.ai/docs/core/workbook-normalization).
 
 ## Results that are not JSON
@@ -123,7 +154,7 @@ for ROUTE in "" "/json" "/csv" "/excel" "/schema"; do
 done
 ```
 
-The Python `result_json` does not report the `415`: it falls back to the plain route and returns the text. `result_csv` and `result_excel` raise an exception for it. For that reason the example has no Python variant.
+The Python `result_json` does not report the `415`: it falls back to the plain route and returns the text. `result_csv` and `result_excel` raise an exception for it. The Java client reads the stored text with `fetchResult`, but it has no method for the schema route. For these reasons the example has no Python or Java variant.
 
 ## Schema of a job
 
@@ -138,7 +169,7 @@ curl -s -S -f "https://api.docudevs.ai/job/result/$JOB_GUID/schema" \
   -H "Authorization: $API_KEY" | jq .
 ```
 
-The Python SDK has no method for this route, so it is called over HTTP.
+Neither the Python SDK nor the Java SDK has a method for this route, so it is called over HTTP.
 
 ## Batch results
 
@@ -183,6 +214,29 @@ for document in overview.get("documents", []):
 # Only the results, in upload order; a document without a result is None
 results = await client.result_json(batch_guid)
 print(json.dumps(results, indent=2))
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+String batchGuid = "<batch-guid>"; // GUID of a batch whose processing has finished
+
+// Batch overview: state and one entry per document
+JsonNode overview = new ObjectMapper().readTree(client.fetchResult(batchGuid));
+System.out.println("state: " + overview.path("state").asText()
+        + ", completed: " + overview.path("completed").asInt(0)
+        + ", failed: " + overview.path("failed").asInt(0));
+for (JsonNode document : overview.path("documents")) {
+    System.out.println("document " + document.path("index").asInt()
+            + ": " + document.path("status").asText());
+}
+
+// Only the results, in upload order; a document without a result is null
+JsonNode results = client.fetchResultJson(batchGuid);
+System.out.println(results.toPrettyString());
 ```
 
 The API leaves null and empty fields out of its responses, so read the lists and optional fields as optional, as the example does. See [Batch processing](https://docs.docudevs.ai/docs/core/batch-processing) for creating and processing a batch.

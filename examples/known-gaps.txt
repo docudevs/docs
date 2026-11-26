@@ -7,8 +7,6 @@ contract-analysis/confirm-findings:java
 contract-analysis/generate-profile-with-scope:java
 contract-analysis/prepare-test-package:java
 contract-analysis/upload-test-contract:java
-errors/case-not-found:java
-errors/unauthorized:java
 extraction-review/build-review-descriptor:java
 extraction-review/find-and-register-run:java
 extraction-review/pull-decisions:java
@@ -16,9 +14,6 @@ extraction-review/save-profile-with-descriptor:java
 extraction-review/save-profile:java
 extraction-review/submit-claims:java
 extraction/analyze-document-with-several-prompts:java
-first-document/handle-timeout:java
-first-document/save-and-use-configuration:java
-install/verify-connection:java
 integrations/create-connection:java
 integrations/delete-connection:java
 integrations/list-connections:java
@@ -30,8 +25,6 @@ jobs/process-and-clean-up:java
 jobs/process-with-auto-ocr:java
 jobs/process-with-depends-on:java
 layout/download-figures:java
-layout/get-document-layout:java
-layout/resolve-source-locations:java
 lookup-files/download-excel-result:java
 lookup-files/manage-batch-lookup-file:java
 lookup-files/manage-configuration-lookup-file:java
@@ -66,11 +59,6 @@ playbook-evaluation/import-gold:java
 playbook-evaluation/read-report:java
 playbook-evaluation/run-and-wait:java
 playbook-evaluation/split-suite:java
-results/check-non-json-result:java
-results/download-excel-with-template:java
-results/download-result-formats:java
-results/get-batch-result:java
-results/get-result-schema:java
 sso/add-domain:java
 sso/configure-oidc-provider:java
 sso/verify-domain:java
@@ -78,8 +66,5 @@ submission-portals/check-submission:java
 submission-portals/create-portal:java
 submission-portals/submit-document:java
 templates/acroform-job-metadata:java
-templates/acroform-metadata:java
-tracing/get-page-image:java
-tracing/trace-map-reduce:java
 track-changes/extract-track-changes:java
 webhooks/configure-webhook:java

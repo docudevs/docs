@@ -66,6 +66,22 @@ print(json.dumps(layout, indent=2))
 print(json.dumps(quality, indent=2))
 ```
 
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String jobGuid = "<job-guid>"; // GUID of a completed job that was processed with OCR
+
+// Only page 1, and only its words and paragraphs
+JsonNode layout = client.getDocumentLayout(jobGuid, null, "1", List.of("words", "paragraphs"));
+JsonNode quality = client.getOcrQuality(jobGuid);
+
+// Both methods throw DocuDevsApiException with status 404 when the artifact does not exist
+System.out.println(layout.toPrettyString());
+System.out.println(quality.toPrettyString());
+```
+
 ## Layout model
 
 ```json
@@ -150,6 +166,30 @@ if sources and layout:
     for pointer, location in sources.get("locations", {}).items():
         for ref in location.get("sourceRefs", []):
             print(pointer, ref, paragraph_text.get(ref, ""))
+```
+
+**Java**
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+
+String jobGuid = "<job-guid>"; // GUID of a completed job that was processed with sourceLocations enabled
+
+JsonNode sources = client.getSourceLocations(jobGuid);
+JsonNode layout = client.getDocumentLayout(jobGuid, null, null, List.of("paragraphs"));
+
+// Print each pointer, its source reference and the paragraph text for that reference.
+// References to tables or figures print an empty string.
+Map<String, String> paragraphText = new HashMap<>();
+for (JsonNode paragraph : layout.path("paragraphs")) {
+    paragraphText.put(paragraph.path("id").asText(), paragraph.path("content").asText());
+}
+for (Map.Entry<String, JsonNode> location : sources.path("locations").properties()) {
+    for (JsonNode ref : location.getValue().path("sourceRefs")) {
+        System.out.println(location.getKey() + " " + ref.asText() + " "
+                + paragraphText.getOrDefault(ref.asText(), ""));
+    }
+}
 ```
 
 References to tables or figures are not among the paragraphs, so they print an empty string. Fetch `tables` or `figures` from the layout to resolve those.

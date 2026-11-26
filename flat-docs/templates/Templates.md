@@ -469,6 +469,29 @@ print(f"Direct fields: {len(fields)}")
 print(json.dumps(fields[:3], indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
+byte[] pdfBytes = Files.readAllBytes(Path.of("fillable-form.pdf"));
+
+JsonNode metadata = client.extractAcroformMetadata(
+        new UploadRequest("fillable-form.pdf", "application/pdf", pdfBytes));
+
+JsonNode fields = metadata.path("fields");
+System.out.println("Direct fields: " + fields.size());
+
+ArrayNode firstFields = JsonNodeFactory.instance.arrayNode();
+for (int i = 0; i < Math.min(3, fields.size()); i++) {
+    firstFields.add(fields.get(i));
+}
+System.out.println(firstFields.toPrettyString());
+```
+
 To get AcroForm metadata and source locations tied to a processed job, request them when you submit the document, wait for the job, and then fetch the stored artifacts:
 
 **cURL**

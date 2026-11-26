@@ -53,7 +53,7 @@ The job result of an OCR-only job is text, not JSON. For these jobs:
 
 <Example name="results/check-non-json-result" />
 
-The Python `result_json` does not report the `415`: it falls back to the plain route and returns the text. `result_csv` and `result_excel` raise an exception for it. For that reason the example has no Python variant.
+The Python `result_json` does not report the `415`: it falls back to the plain route and returns the text. `result_csv` and `result_excel` raise an exception for it. The Java client reads the stored text with `fetchResult`, but it has no method for the schema route. For these reasons the example has no Python or Java variant.
 
 ## Schema of a job
 
@@ -61,7 +61,7 @@ The schema route returns the schema that was sent with the processing request, a
 
 <Example name="results/get-result-schema" />
 
-The Python SDK has no method for this route, so it is called over HTTP.
+Neither the Python SDK nor the Java SDK has a method for this route, so it is called over HTTP.
 
 ## Batch results
 
