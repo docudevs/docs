@@ -149,7 +149,7 @@ A knowledge base is a case that you have promoted so that the whole organization
 
 <Example name="cases/promote-knowledge-base" />
 
-Promotion changes who can reach the case. A case created by a signed-in user is visible only to its creator. Once it is promoted, every member of the organization and every organization API key can list and read it, and its indexed content is treated as visible to the whole organization in search. Its documents, records and settings are not copied or moved. See [Which cases you can use](./case-agent.md#which-cases-you-can-use).
+Promotion changes who can reach the case. A case created by a signed-in user is visible only to its creator. Once it is promoted, every member of the organization and every organization API key can list and read it, and search it. Its documents, records and settings are not copied or moved. See [Which cases you can use](./case-agent.md#which-cases-you-can-use).
 
 An organization API key can promote organization-wide cases. A signed-in user can promote their own cases and organization-wide ones; a case created by another user answers `404`, organization admins included. Users with the submission-portal role cannot call the knowledge-base routes. Demotion follows the same rules.
 

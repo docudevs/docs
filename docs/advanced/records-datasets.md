@@ -77,6 +77,8 @@ The call returns a `RecordsCase` handle. `client.records_case(case_id)` returns 
 
 Methods that start a job return a handle to it; the `_and_wait` variants block until the job finishes and raise an error when it fails.
 
+The next step is to fill the dataset: see [Importing records](./records-import.md#file-import).
+
 ## Single records and batches
 
 <Example name="records/upsert-record" />

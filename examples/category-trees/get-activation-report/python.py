@@ -12,7 +12,8 @@ async def main():
     version_id = 7  # treeVersionId returned when the tree was uploaded
     job_guid = "<job-guid>"  # jobGuid returned when the version was activated
 
-    # Raises RecordsImportFailed when the job fails, and TimeoutError after 600 seconds
+    # Returns when the job is COMPLETED; raises RecordsImportFailed when it ends ERROR or TIMEOUT,
+    # and TimeoutError after 600 seconds
     await client.wait_for_records_job(job_guid, timeout=600, poll_interval=5)
 
     # Find the activation among the case's imports (newest first). This reads one page

@@ -3,11 +3,9 @@ set -euo pipefail
 
 # docs:start
 # Two commands: create the case, then configure its records dataset.
-docudevs cases create \
+CASE_ID=$(docudevs cases create \
   --name "Product catalogue" \
-  --description "Reference products for matching"
-
-CASE_ID=42  # id of the case printed by the previous command
+  --description "Reference products for matching" | jq -r '.id')
 
 cat > dataset.json <<'JSON'
 {

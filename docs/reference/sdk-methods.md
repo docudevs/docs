@@ -1686,7 +1686,7 @@ Extraction review works on an immutable captured run of a job. See [Extraction r
 
 ### get_extraction_review_profile
 
-Read the extraction review profile saved for a named configuration: `.parsed` has `configurationName`, `revision`, `enabled`, `configurationFingerprint`, `schemaJson`, `overlayJson` and `stale`. An organization API key or a signed-in admin or member can read it. It raises an exception that names status `404` when the configuration or its profile does not exist.
+Read the extraction review profile saved for a named configuration: `.parsed` has `configurationName`, `revision`, `enabled`, `configurationFingerprint`, `schemaJson`, `overlayJson` and `stale`. An organization API key or a signed-in admin or member can read it; an API key reaches runs on organization-wide cases. It raises an exception that names status `404` when the configuration or its profile does not exist.
 
 ```python
 profile = await client.get_extraction_review_profile("invoice-review")
@@ -1695,7 +1695,7 @@ print(profile.parsed["revision"], profile.parsed["enabled"])
 
 ### get_extraction_review_artifact
 
-Download one file of a captured run's archive as `bytes`. `path` is the path of the artifact inside the run, for example the `artifactId` of a result reference. An organization API key or a signed-in admin or member can read it.
+Download one file of a captured run's archive as `bytes`. `path` is the path of the artifact inside the run, for example the `artifactId` of a result reference. An organization API key or a signed-in admin or member can read it; an API key reaches runs on organization-wide cases.
 
 ```python
 content = await client.get_extraction_review_artifact(run_id, artifact_path)
