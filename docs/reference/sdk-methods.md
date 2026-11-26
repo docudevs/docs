@@ -1203,6 +1203,14 @@ case = await client.create_case(
 )
 ```
 
+### create_case_id
+
+Create a case and return its id as an integer. It raises `RecordsApiError` when the case is not created. `create_case` returns the full response instead.
+
+```python
+case_id = await client.create_case_id("Q1 Invoices", description="Invoices received in Q1")
+```
+
 ### list_cases
 
 List all cases.
@@ -1332,6 +1340,77 @@ Remove the knowledge base designation from a case. The case itself is not delete
 await client.delete_knowledge_base(case_id)
 ```
 
+## Records and Classification
+
+These methods work on a [records dataset](/docs/advanced/records-datasets) and its [classify jobs](/docs/advanced/classification). They return the decoded JSON of the response as a `dict` and raise `RecordsApiError` (with `status_code` and `body`) when the API answers an error status.
+
+### records_case
+
+Return a `RecordsCase` handle for an existing case. It makes no request. The handle binds the case id to the records, category tree, classify, evaluation and case agent methods; see [Create a records case in one call](/docs/advanced/records-datasets#create-a-records-case-in-one-call) for the list. `create_records_case` returns the same kind of handle after it creates the case.
+
+```python
+case = client.records_case(case_id)
+hits = await case.search("Soft sports sock", top_k=5)
+```
+
+### list_records_page
+
+Read one page of records ordered by key: `{records, continuation?}`. Filter with `label`, `subtree`, `label_source` and `attributes` (`{name: value}`). `limit` is 1 to 200 (default 50). Pass the returned `continuation` back for the next page. `list_records` follows the tokens for you.
+
+```python
+page = await client.list_records_page(case_id, subtree="4.12", limit=100)
+for record in page.get("records", []):
+    print(record["key"], record.get("label"))
+```
+
+### search
+
+Search the records or the documents of a case with one synchronous call. `kind` is `"records"` or `"documents"`; any other value raises `ValueError`. Settings are `top_k`, `exhaustive`, `oversampling`, `hybrid`, `semantic_rerank` and `filters` (`subtree`, `attributes`, `label_source`, `document_ids`); an unknown setting raises `TypeError`. The response has `kind`, `generationId`, `results` and `settingsUsed`. See [Case search](/docs/advanced/case-search) for the limits and the `409`, `502` and `503` answers. `search_records` is the same call with `kind="records"`.
+
+```python
+hits = await client.search(case_id, "documents", "termination notice period", top_k=5)
+for result in hits.get("results", []):
+    print(result.get("filename"), result.get("pageNumber"), result.get("score"))
+```
+
+### get_classify
+
+Read a classify job: its `status`, `counts`, token `usage`, the pinned `treeVersionId`, `memoVersion` and `recordsTableVersion`, and timestamps. A job that does not exist for the case raises with status `404`.
+
+```python
+job = await client.get_classify(case_id, job_id)
+print(job["status"], job.get("counts"))
+```
+
+### list_classify_jobs
+
+List one page of the case's classify jobs, newest first: `{items, continuation?}`. Each item has the shape of `get_classify`. `limit` is 1 to 200 (default 50); pass the returned `continuation` back for the next page.
+
+```python
+page = await client.list_classify_jobs(case_id, limit=20)
+for job in page.get("items", []):
+    print(job["jobId"], job["status"])
+```
+
+### commit_classify
+
+Queue a classify job whose rows you uploaded as a file in blocks. Pass `block_count`, the number of blocks you uploaded (1 to 50,000), so blocks left by an earlier attempt are discarded. Committing a job that is already queued returns it unchanged. The response has `jobId`, `jobGuid` and `status`. A job with no uploaded file, an expired upload or a missing block raises with status `409`.
+
+```python
+accepted = await client.commit_classify(case_id, job_id, block_count=3)
+print(accepted["status"])
+```
+
+### get_classify_results_page
+
+Read one page of a classify job's rows: `{rows, continuation?, complete, status}`. `complete` is `False` while the job is still running and more rows may follow. Filter with `flag`, `review_required`, `level` with `code`, and `decision` (`accept`, `correct`, `feedback` or `none`). `routing` lists the flags that send a row to review and overrides the job's own rule, so you can recompute which rows need review without a rerun. `limit` is 1 to 1,000 (default 100). An unknown flag, decision or routing flag raises with status `400`.
+
+```python
+page = await client.get_classify_results_page(case_id, job_id, review_required=True, limit=100)
+for row in page.get("rows", []):
+    print(row["rowId"], row.get("review"))
+```
+
 ## Contract Analysis
 
 Contract analysis compiles a knowledge base into a reviewable profile, runs immutable analysis runs against it, and supports expert review and test-suite curation. See [Contract Analysis](/docs/core/contract-analysis) for the profile/draft/publish lifecycle and the run/review model.
@@ -1342,6 +1421,15 @@ Get a contract-analysis profile draft or its currently published version.
 
 ```python
 profile = await client.get_contract_analysis_profile(case_id, view="draft")
+```
+
+### get_contract_analysis_workflow
+
+Read where a case is in contract-analysis setup. `.parsed` has the `step` (`upload`, `build`, `review`, `test` or `publish`), `draftRevision`, `publishedRevision`, `ruleCount`, `testCaseCount`, `readyToPublish` and `publishWarnings`. While a rule build runs or after it failed, `build` holds the `generationJobGuid`, its `status` and, on failure, an `error`. A finished rebuild that is waiting to be applied appears as `pendingRebuild` with the number of added, changed, removed and conflicting rules. A case without a profile reports the step `upload`. The method does not raise on an error status; check `status_code`.
+
+```python
+workflow = await client.get_contract_analysis_workflow(case_id)
+print(workflow.parsed["step"])
 ```
 
 ### generate_contract_analysis_profile
@@ -1580,6 +1668,80 @@ Add an unapproved finding expectation to a new test-suite revision, seeded from 
 
 ```python
 async def propose_contract_analysis_finding_test_case(self, case_id: int, *, run_id: str, result_fingerprint: str, criterion_id: str, target_key: str, name: str, expected_assessment: str, reason: str, expected_suite_revision: int, idempotency_key: str, scenario_tags: list[str] | None = None)
+```
+
+## Document Compare
+
+### get_document_compare
+
+Return the document-compare artifact of a completed comparison, as a `dict`. `compare_guid` is the job GUID of the comparison. It raises an exception when the API does not answer `200`, for example `404` while the comparison has no artifact. See [Document compare](/docs/core/document-compare).
+
+```python
+artifact = await client.get_document_compare(compare_guid)
+```
+
+## Extraction Review
+
+Extraction review works on an immutable captured run of a job. See [Extraction review](/docs/core/extraction-review) for the run, claim and review-revision model. These methods return a response whose `.parsed` holds the JSON body, and raise an exception that names the status and body when the API answers a non-2xx status.
+
+### get_extraction_review_profile
+
+Read the extraction review profile saved for a named configuration: `.parsed` has `configurationName`, `revision`, `enabled`, `configurationFingerprint`, `schemaJson`, `overlayJson` and `stale`. An organization API key or a signed-in admin or member can read it. It raises an exception that names status `404` when the configuration or its profile does not exist.
+
+```python
+profile = await client.get_extraction_review_profile("invoice-review")
+print(profile.parsed["revision"], profile.parsed["enabled"])
+```
+
+### get_extraction_review_artifact
+
+Download one file of a captured run's archive as `bytes`. `path` is the path of the artifact inside the run, for example the `artifactId` of a result reference. An organization API key or a signed-in admin or member can read it.
+
+```python
+content = await client.get_extraction_review_artifact(run_id, artifact_path)
+```
+
+### add_extraction_review_flags
+
+Add manual flags to a run's review state. `reference` is the `jobGuid`, `artifactId` and `resultFingerprint` of the result, `expected_review_revision` is the review revision you read, and `idempotency_key` makes a retry safe. `flags` is a list of flag objects in the request's JSON shape and `audit` holds a `reason` and optional evidence metadata. `.parsed` has the committed `event` and the new review `state`. The call needs a signed-in user's token (an admin or member); an organization API key is refused with `403`.
+
+```python
+committed = await client.add_extraction_review_flags(
+    run_id,
+    reference=reference,
+    expected_review_revision=revision,
+    idempotency_key="flags-1",
+    flags=flags,
+    audit={"reason": "Total does not match the footer"},
+)
+```
+
+### resolve_extraction_review_values
+
+Record a reviewer's resolution of values in a run. It takes the same `reference`, `expected_review_revision`, `idempotency_key` and `audit` arguments as `add_extraction_review_flags`, and `changes`, a list of resolution objects in the request's JSON shape. `.parsed` has the committed `event` and the new review `state`. The call needs a signed-in user's token (an admin or member); an organization API key is refused with `403`.
+
+```python
+committed = await client.resolve_extraction_review_values(
+    run_id,
+    reference=reference,
+    expected_review_revision=revision,
+    idempotency_key="resolve-1",
+    changes=changes,
+    audit={"reason": "Confirmed against the source document"},
+)
+```
+
+### adjudicate_extraction_review_claim
+
+Adjudicate one evaluator claim. `request` is the request body: `reference`, `expectedReviewRevision`, `expectedClaimRevision`, `expectedAdjudicationRevision`, `expectedResolutionRevision`, `disposition` (`SEMANTIC_EQUIVALENT`, `REFERENCE_ERROR`, `EXTRACTION_ERROR` or `UNRESOLVED`) and `audit`. `.parsed` has the committed `event` and the new review `state`. The call needs a signed-in user's token (an admin or member); an organization API key is refused with `403`.
+
+```python
+committed = await client.adjudicate_extraction_review_claim(
+    run_id,
+    claim_id,
+    request=request,
+    idempotency_key="adjudicate-1",
+)
 ```
 
 ## Operations
