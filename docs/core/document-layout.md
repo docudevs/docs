@@ -134,7 +134,7 @@ A job that was processed with figure extraction on answers the list with `200`, 
 
 Page images are rendered for PDFs processed with `PREMIUM` OCR, including `AUTO` when it moves up to `PREMIUM`. Without page images the route answers `404`. [LLM Tracing](/docs/advanced/tracing#retrieving-page-images) shows the page image call on its own.
 
-The example processes a PDF with figure extraction on, waits for the job, lists the figures, and downloads every figure and the first page image. cURL and Python poll the job; both stop after 600 seconds.
+The example processes a PDF with figure extraction on, waits for the job, lists the figures, and downloads every figure and the first page image. cURL and Python poll the job and Java waits for it with one call; each stops after 600 seconds.
 
 <Example name="layout/download-figures" />
 

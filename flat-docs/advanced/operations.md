@@ -255,17 +255,20 @@ print(result_data["generated_text"])
 ```java
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
 
-ObjectMapper mapper = new ObjectMapper();
 String parentJobGuid = "<job-guid>"; // GUID of a completed document job
 
-client.createGenerativeTask(parentJobGuid, "Summarize the main findings", "DEFAULT");
-
-JsonNode result = client.waitForGenerativeTask(
-        parentJobGuid, WaitOptions.builder().build());
-JsonNode payload = mapper.readTree(result.path("result").asText());
-System.out.println(payload.path("generated_text").asText());
+// One call submits the task and waits for it; it returns the task's result document
+JsonNode summary = client.submitAndWaitForGenerativeTask(
+        parentJobGuid,
+        "Summarize the main findings",
+        "DEFAULT",
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(summary.path("generated_text").asText());
 ```
 
 **CLI**

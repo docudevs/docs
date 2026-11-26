@@ -58,8 +58,9 @@ public class Example {
         JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
         System.out.println(result.toPrettyString());
 
-        // The Java client has no source-location helper; the Python and cURL variants
-        // also read the source locations.
+        JsonNode sources = client.getSourceLocations(guid);
+        System.out.println(sources.toPrettyString());
+
         JsonNode nodes = client.getPipelineNodes(guid);
         System.out.println(nodes.toPrettyString());
         // docs:end
