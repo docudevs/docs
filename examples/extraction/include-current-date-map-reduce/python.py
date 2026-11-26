@@ -5,6 +5,10 @@ import os
 from docudevs.docudevs_client import DocuDevsClient
 
 # docs:start
+import datetime
+
+from pydantic import BaseModel
+
 from docudevs import json_schema
 # docs:end
 
@@ -13,22 +17,13 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
-    schema = {
-        "type": "object",
-        "properties": {
-            "line_items": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "description": {"type": "string"},
-                        "warranty_end_date": {"type": "string", "format": "date"},
-                        "remaining_warranty_days": {"type": "number"},
-                    },
-                },
-            },
-        },
-    }
+    class WarrantyLineItem(BaseModel):
+        description: str | None = None
+        warranty_end_date: datetime.date | None = None
+        remaining_warranty_days: float | None = None
+
+    class WarrantyList(BaseModel):
+        line_items: list[WarrantyLineItem] | None = None
 
     with open("warranty-list.pdf", "rb") as f:
         document_data = f.read()
@@ -38,7 +33,7 @@ async def main():
         document=document_data,
         document_mime_type="application/pdf",
         prompt="Extract line items with remaining warranty days",
-        schema=json_schema(schema),
+        schema=json_schema(WarrantyList),
         pages_per_chunk=2,
         include_current_date=True,
     )

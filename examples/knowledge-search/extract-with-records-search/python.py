@@ -2,6 +2,11 @@ import asyncio
 import json
 import os
 
+# docs:start
+from pydantic import BaseModel
+
+from docudevs import json_schema
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 
@@ -11,21 +16,12 @@ async def main():
     # docs:start
     case_id = "51"  # id of the records knowledge base, from list_knowledge_bases
 
-    schema = {
-        "type": "object",
-        "properties": {
-            "lines": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "description": {"type": "string"},
-                        "product_key": {"type": "string"},
-                    },
-                },
-            }
-        },
-    }
+    class InvoiceLine(BaseModel):
+        description: str | None = None
+        product_key: str | None = None
+
+    class Invoice(BaseModel):
+        lines: list[InvoiceLine] | None = None
 
     tool = {"type": "RECORDS_SEARCH", "config": {"caseId": case_id, "topK": 5}}
 
@@ -36,7 +32,7 @@ async def main():
         document=document_data,
         document_mime_type="application/pdf",
         prompt="For each invoice line, fill product_key with the catalogue record that matches the item.",
-        schema=json.dumps(schema),
+        schema=json_schema(Invoice),
         tools=[tool],
     )
 

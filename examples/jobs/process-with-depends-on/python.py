@@ -5,6 +5,8 @@ import os
 from docudevs.docudevs_client import DocuDevsClient
 
 # docs:start
+from pydantic import BaseModel
+
 from docudevs import json_schema
 from docudevs.models import UploadCommand
 # docs:end
@@ -14,30 +16,17 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
-    header_schema = {
-        "type": "object",
-        "properties": {
-            "invoice_number": {"type": "string"},
-            "vendor": {"type": "string"},
-            "total": {"type": "number"},
-        },
-    }
+    class InvoiceHeader(BaseModel):
+        invoice_number: str | None = None
+        vendor: str | None = None
+        total: float | None = None
 
-    line_items_schema = {
-        "type": "object",
-        "properties": {
-            "line_items": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "description": {"type": "string"},
-                        "amount": {"type": "number"},
-                    },
-                },
-            },
-        },
-    }
+    class LineItem(BaseModel):
+        description: str | None = None
+        amount: float | None = None
+
+    class InvoiceLineItems(BaseModel):
+        line_items: list[LineItem] | None = None
 
     with open("invoice.pdf", "rb") as f:
         document_data = f.read()
@@ -47,7 +36,7 @@ async def main():
         document=document_data,
         document_mime_type="application/pdf",
         prompt="Extract invoice header fields",
-        schema=json_schema(header_schema),
+        schema=json_schema(InvoiceHeader),
     )
     header_result = await client.wait_until_ready(job_guid, result_format="json")
     print(json.dumps(header_result, indent=2))
@@ -58,7 +47,7 @@ async def main():
         body=UploadCommand(
             mime_type="application/pdf",
             prompt="Extract line items",
-            schema=json_schema(line_items_schema),
+            schema=json_schema(InvoiceLineItems),
         ),
         depends_on=job_guid,
     )

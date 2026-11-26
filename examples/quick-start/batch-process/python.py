@@ -2,6 +2,8 @@ import asyncio
 import os
 
 # docs:start
+from pydantic import BaseModel
+
 from docudevs import json_schema
 # docs:end
 from docudevs.docudevs_client import DocuDevsClient
@@ -22,19 +24,15 @@ async def main():
                 file_name=filename,
             )
 
-    schema = {
-        "type": "object",
-        "properties": {
-            "invoice_number": {"type": "string"},
-            "total": {"type": "number"},
-        },
-    }
+    class Invoice(BaseModel):
+        invoice_number: str | None = None
+        total: float | None = None
 
     await client.process_batch(
         batch_guid=batch_guid,
         mime_type="application/pdf",
         prompt="Extract invoice data",
-        schema=json_schema(schema),
+        schema=json_schema(Invoice),
     )
 
     results = await client.wait_until_ready(batch_guid, timeout=600, result_format="json")

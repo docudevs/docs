@@ -2,6 +2,8 @@ import asyncio
 import os
 
 # docs:start
+from pydantic import BaseModel
+
 from docudevs import ClientPipeline, eq
 # docs:end
 from docudevs.docudevs_client import DocuDevsClient
@@ -11,17 +13,16 @@ async def main():
     client = DocuDevsClient(api_url="https://api.docudevs.ai", token=os.environ["API_KEY"])
 
     # docs:start
+    class Observation(BaseModel):
+        observed: bool
+
     cp = ClientPipeline()
 
     route = cp.local_function("route", lambda: {"positive": True})
     guarded = cp.extract(
         "guarded",
         prompt="Return one object with boolean field observed.",
-        schema={
-            "type": "object",
-            "properties": {"observed": {"type": "boolean"}},
-            "required": ["observed"],
-        },
+        schema=Observation.model_json_schema(),
         when=eq(route.result.positive, True),
     )
     assembled = cp.local_function(

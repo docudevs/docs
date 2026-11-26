@@ -3,6 +3,10 @@ import json
 import os
 
 # docs:start
+from typing import Literal
+
+from pydantic import BaseModel
+
 from docudevs import P, Pipeline, eq
 # docs:end
 from docudevs.docudevs_client import DocuDevsClient
@@ -12,24 +16,29 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
+    class Classification(BaseModel):
+        document_type: Literal["invoice", "safety_data_sheet", "other"]
+        confidence: float
+        reason: str
+
+    class InvoiceFields(BaseModel):
+        invoice_number: str | None = None
+        vendor_name: str | None = None
+        total_amount: float | None = None
+        currency: str | None = None
+
+    class SafetyDataSheetFields(BaseModel):
+        product_name: str | None = None
+        supplier: str | None = None
+        signal_word: str | None = None
+
     pipeline = Pipeline().ocr(mode="AUTO", quality_artifact=True).max_nodes(2)
 
     classification = pipeline.extract(
         "classify_document",
         source=P.ocr.content,
         prompt="Classify this document as invoice, safety_data_sheet, or other. Only classify the document.",
-        schema={
-            "type": "object",
-            "properties": {
-                "document_type": {
-                    "type": "string",
-                    "enum": ["invoice", "safety_data_sheet", "other"],
-                },
-                "confidence": {"type": "number"},
-                "reason": {"type": "string"},
-            },
-            "required": ["document_type", "confidence", "reason"],
-        },
+        schema=Classification.model_json_schema(),
         llm_tier="nano",
     )
 
@@ -39,15 +48,7 @@ async def main():
         when=eq(classification.result.document_type, "invoice"),
         source=P.ocr.content,
         prompt="Extract invoice fields from the document. Return null for missing fields.",
-        schema={
-            "type": "object",
-            "properties": {
-                "invoice_number": {"type": ["string", "null"]},
-                "vendor_name": {"type": ["string", "null"]},
-                "total_amount": {"type": ["number", "null"]},
-                "currency": {"type": ["string", "null"]},
-            },
-        },
+        schema=InvoiceFields.model_json_schema(),
         llm_tier="mini",
     )
 
@@ -57,14 +58,7 @@ async def main():
         when=eq(classification.result.document_type, "safety_data_sheet"),
         source=P.ocr.content,
         prompt="Extract product and safety information from the document.",
-        schema={
-            "type": "object",
-            "properties": {
-                "product_name": {"type": ["string", "null"]},
-                "supplier": {"type": ["string", "null"]},
-                "signal_word": {"type": ["string", "null"]},
-            },
-        },
+        schema=SafetyDataSheetFields.model_json_schema(),
         llm_tier="mini",
     )
 

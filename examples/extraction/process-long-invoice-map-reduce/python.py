@@ -1,6 +1,11 @@
 import asyncio
 import os
 
+# docs:start
+from pydantic import BaseModel
+
+from docudevs import json_schema
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 
@@ -8,6 +13,11 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
+    class InvoiceHeader(BaseModel):
+        invoiceNumber: str | None = None
+        issueDate: str | None = None
+        billingAddress: str | None = None
+
     with open("large-invoice.pdf", "rb") as f:
         document_data = f.read()
 
@@ -27,10 +37,7 @@ async def main():
             "include_in_rows": False,  # do not process page 1 as rows
             "row_prompt_augmentation": "This is an invoice from Acme Corp.",
         },
-        header_schema=(
-            '{"type": "object", "properties": {"invoiceNumber": {"type": "string"},'
-            ' "issueDate": {"type": "string"}, "billingAddress": {"type": "string"}}}'
-        ),
+        header_schema=json_schema(InvoiceHeader),
     )
     print(f"Job submitted: {job_id}")
 

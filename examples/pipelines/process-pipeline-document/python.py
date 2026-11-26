@@ -3,6 +3,8 @@ import json
 import os
 
 # docs:start
+from pydantic import BaseModel
+
 from docudevs import P, Pipeline
 # docs:end
 from docudevs.docudevs_client import DocuDevsClient
@@ -12,15 +14,15 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
+    class ExtractedFields(BaseModel):
+        name: str | None = None
+
     pipeline = Pipeline().ocr(mode="AUTO", source_locations=True, quality_artifact=True)
     extract_data = pipeline.extract(
         "extract_data",
         source=P.ocr.content,
         prompt="Extract the requested fields.",
-        schema={
-            "type": "object",
-            "properties": {"name": {"type": "string"}},
-        },
+        schema=ExtractedFields.model_json_schema(),
         source_locations=True,
     )
     pipeline.final(

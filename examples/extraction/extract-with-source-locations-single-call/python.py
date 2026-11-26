@@ -2,6 +2,11 @@ import asyncio
 import json
 import os
 
+# docs:start
+from pydantic import BaseModel
+
+from docudevs import json_schema
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 
@@ -9,13 +14,8 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
-    schema = {
-        "type": "object",
-        "properties": {
-            "clauses": {"type": "array", "items": {"type": "string"}},
-        },
-        "required": ["clauses"],
-    }
+    class ContractClauses(BaseModel):
+        clauses: list[str]
 
     with open("contract.pdf", "rb") as f:
         document_data = f.read()
@@ -24,7 +24,7 @@ async def main():
         document=document_data,
         document_mime_type="application/pdf",
         prompt="Extract the main clauses from this contract.",
-        schema=json.dumps(schema),
+        schema=json_schema(ContractClauses),
         source_location_granularity="block",
         timeout=180,
     )

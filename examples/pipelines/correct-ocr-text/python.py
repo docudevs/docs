@@ -1,7 +1,14 @@
 import json
 
 # docs:start
+from pydantic import BaseModel
+
 from docudevs import P, Pipeline
+
+
+class ExtractedFields(BaseModel):
+    name: str | None = None
+
 
 pipeline = Pipeline().ocr(mode="AUTO", source_locations=True)
 
@@ -19,7 +26,7 @@ extracted = pipeline.extract(
     depends_on=[ocr_corrected],
     source=ocr_corrected.result.content,
     prompt="Extract fields from the corrected OCR text.",
-    schema={"type": "object", "properties": {"name": {"type": "string"}}},
+    schema=ExtractedFields.model_json_schema(),
     source_locations=True,
 )
 pipeline.final("final_result", depends_on=[extracted], output=extracted.result)
