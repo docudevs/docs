@@ -1,6 +1,9 @@
 import asyncio
+import datetime
 import json
 import os
+
+from pydantic import BaseModel
 
 from docudevs import json_schema
 from docudevs.docudevs_client import DocuDevsClient
@@ -12,20 +15,16 @@ async def main():
     with open("registration.pdf", "rb") as f:
         document_data = f.read()
 
-    schema = {
-        "type": "object",
-        "properties": {
-            "registration_number": {"type": "string"},
-            "first_registration_date": {"type": "string", "format": "date"},
-            "vehicle_age_years": {"type": "number"},
-        },
-    }
+    class VehicleRegistration(BaseModel):
+        registration_number: str | None = None
+        first_registration_date: datetime.date | None = None
+        vehicle_age_years: float
 
     job_guid = await client.submit_and_process_document(
         document=document_data,
         document_mime_type="application/pdf",
         prompt="Extract vehicle registration details including vehicle age in years",
-        schema=json_schema(schema),
+        schema=json_schema(VehicleRegistration),
         include_current_date=True,
     )
 

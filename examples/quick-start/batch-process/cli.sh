@@ -7,7 +7,8 @@ SCHEMA='{
   "properties": {
     "invoice_number": {"type": "string"},
     "total": {"type": "number"}
-  }
+  },
+  "required": ["total"]
 }'
 
 docudevs batch process invoice1.pdf invoice2.pdf invoice3.pdf \

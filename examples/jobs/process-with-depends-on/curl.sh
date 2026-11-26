@@ -24,7 +24,8 @@ HEADER_SCHEMA='{
     "invoice_number": {"type": "string"},
     "vendor": {"type": "string"},
     "total": {"type": "number"}
-  }
+  },
+  "required": ["total"]
 }'
 
 LINE_ITEMS_SCHEMA='{

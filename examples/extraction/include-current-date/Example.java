@@ -23,7 +23,8 @@ public class Example {
                     "registration_number": {"type": "string"},
                     "first_registration_date": {"type": "string", "format": "date"},
                     "vehicle_age_years": {"type": "number"}
-                  }
+                  },
+                  "required": ["vehicle_age_years"]
                 }
                 """;
 

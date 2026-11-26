@@ -4,6 +4,11 @@ import os
 
 from docudevs.docudevs_client import DocuDevsClient
 # docs:start
+import datetime
+
+from pydantic import BaseModel
+
+from docudevs import json_schema
 from docudevs.models import UploadCommand
 # docs:end
 
@@ -14,22 +19,18 @@ async def main():
     # docs:start
     config_name = "invoice_processing_standard"
 
-    schema = {
-        "type": "object",
-        "properties": {
-            "invoice_number": {"type": "string"},
-            "date": {"type": "string", "format": "date"},
-            "vendor": {"type": "string"},
-            "total": {"type": "number"},
-        },
-    }
+    class Invoice(BaseModel):
+        invoice_number: str | None = None
+        date: datetime.date | None = None
+        vendor: str | None = None
+        total: float
 
     # Save the configuration under a name
     save_response = await client.save_configuration(
         config_name,
         UploadCommand(
             prompt="Extract comprehensive invoice data",
-            schema=json.dumps(schema),
+            schema=json_schema(Invoice),
             llm="HIGH",
         ),
     )

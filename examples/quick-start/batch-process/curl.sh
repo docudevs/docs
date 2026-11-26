@@ -34,7 +34,8 @@ SCHEMA='{
   "properties": {
     "invoice_number": {"type": "string"},
     "total": {"type": "number"}
-  }
+  },
+  "required": ["total"]
 }'
 
 jq -n \

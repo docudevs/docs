@@ -2,6 +2,11 @@ import asyncio
 import json
 import os
 
+# docs:start
+from pydantic import BaseModel, Field
+
+from docudevs import json_schema
+# docs:end
 from docudevs.docudevs_client import DocuDevsClient
 
 
@@ -11,26 +16,15 @@ async def main():
     # docs:start
     case_id = "42"  # id of the knowledge base, from list_knowledge_bases
 
-    schema = {
-        "type": "object",
-        "properties": {
-            "records": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "sku": {"type": "string"},
-                        "canonical_name": {"type": "string"},
-                        "localized_display_name": {"type": "string", "maxLength": 40},
-                        "product_group": {"type": "string"},
-                        "marketing_summary": {"type": "string"},
-                    },
-                    "required": ["sku", "canonical_name", "localized_display_name"],
-                },
-            }
-        },
-        "required": ["records"],
-    }
+    class ProductRecord(BaseModel):
+        sku: str
+        canonical_name: str
+        localized_display_name: str = Field(max_length=40)
+        product_group: str | None = None
+        marketing_summary: str | None = None
+
+    class ProductRecords(BaseModel):
+        records: list[ProductRecord]
 
     tool = {"type": "KNOWLEDGE_BASE_SEARCH", "config": {"caseId": case_id, "topK": 8}}
 
@@ -45,7 +39,7 @@ async def main():
             "product_group and marketing_summary for every SKU, "
             "using the Product Catalogue knowledge base."
         ),
-        schema=json.dumps(schema),
+        schema=json_schema(ProductRecords),
         tools=[tool],
     )
 

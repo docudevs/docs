@@ -1,8 +1,10 @@
 import asyncio
-import json
 import os
 
 # docs:start
+from pydantic import BaseModel
+
+from docudevs import json_schema
 from docudevs.models import ExcelTemplateConfig, UploadCommand
 # docs:end
 from docudevs.docudevs_client import DocuDevsClient
@@ -12,18 +14,14 @@ async def main():
     client = DocuDevsClient(token=os.environ["API_KEY"])
 
     # docs:start
-    schema = {
-        "type": "object",
-        "properties": {
-            "vendor_name": {"type": "string"},
-            "invoice_number": {"type": "string"},
-            "total_amount": {"type": "number"},
-        },
-    }
+    class Invoice(BaseModel):
+        vendor_name: str | None = None
+        invoice_number: str | None = None
+        total_amount: float
 
     config = UploadCommand(
         prompt="Extract the vendor, invoice number and total of each invoice.",
-        schema=json.dumps(schema),
+        schema=json_schema(Invoice),
         # start_row and start_col are 0-based cell coordinates: 0 and 0 target cell A1
         excel_template=ExcelTemplateConfig(
             start_row=0,
