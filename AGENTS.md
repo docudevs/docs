@@ -64,6 +64,10 @@ Checks run against published packages, never a sibling checkout. The private mai
 - cURL: `static/files/docudevs.yaml`.
 - CLI: the commands of the pinned Python package.
 
+## Flattened docs for indexers
+
+`flat-docs/` is a generated, committed copy of `docs/` (without `docs/openapi/`) in which each `<Example>` tag is replaced by the example code as ordinary fenced blocks and MDX-only syntax is removed, so indexers that read raw Markdown (Context7) see the code. Never edit it by hand: run `npm run docs:flat` after changing a page or an example and commit the result. `npm run docs:flat -- --check` lists stale, missing and differing files, and CI fails when `flat-docs/` is out of date. `context7.json` points Context7 at `flat-docs/` and excludes the source folders; keep its `url` and `public_key` unchanged.
+
 ## Public content
 
 Pages state what the product does today and how to call it. A plain availability statement is allowed ("private preview", "dedicated deployments only", or the condition under which a feature is available). Do not publish prices or rate figures, internal endpoints, private repository names or file paths, storage paths, infrastructure hosts, operator or installation configuration keys, internal vendor or project names, agent tokens, or rollout, roadmap and changelog wording ("coming soon", "new in", "yet", "no longer", "currently", "will"). Run `node tools/port/scan.mjs --diff main` with `PORT_SCAN_LITERALS_FILE` set before pushing content taken from another source.
@@ -96,6 +100,7 @@ Run these before opening a pull request. CI (`.github/workflows/examples.yml`) r
 | `npm run examples:coverage` | Missing Java files match `examples/known-gaps.txt` |
 | `npm run examples:inline` | Inline language tabs and inline product calls per page do not exceed `examples/inline-language-tabs.txt` and `examples/inline-calls.txt`, and listed counts are not stale |
 | `npm run examples:curl` | `curl.sh` and `cli.sh` pass `bash -n`; each cURL request matches a path and method in the spec; a `curl` to anything other than the API fails unless its URL is a variable reference |
+| `npm run docs:flat -- --check` | `flat-docs/` matches what `npm run docs:flat` generates |
 | `npm run typecheck` | TypeScript in `src/` |
 | `npm run build` | The site builds (broken links only warn) |
 

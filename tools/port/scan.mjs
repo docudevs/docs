@@ -3,9 +3,10 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const ALLOWED_HOSTS = ['api.docudevs.ai', 'docs.docudevs.ai', 'docudevs.ai', 'example.com', 'example.org', 'json-schema.org', 'jqlang.org', 'schemas.openxmlformats.org', 'pypi.org', 'example.openai.azure.com', 'example.cognitiveservices.azure.com'];
+const ALLOWED_HOSTS = ['api.docudevs.ai', 'docs.docudevs.ai', 'docudevs.ai', 'example.com', 'example.org', 'json-schema.org', 'jqlang.org', 'learn.microsoft.com', 'context7.com', 'schemas.openxmlformats.org', 'pypi.org', 'example.openai.azure.com', 'example.cognitiveservices.azure.com'];
 const PLACEHOLDER_HOSTS = ['example.com', 'example.org'];
 const PUBLIC_GITHUB_PATH = /^\/docudevs(?:[/?#]|$)/i;
+const GENERATED_PATHS = ['flat-docs/'];
 const SCANNER_PATHS = ['tools/port/', 'tools/examples/test/port-scan.test.mjs'];
 const ALLOWED_EMAIL_DOMAINS = ['docudevs.ai', 'example.com', 'example.org'];
 const MARKDOWN = new Set(['.md', '.mdx']);
@@ -47,7 +48,7 @@ function codeFindings(line) {
   return found;
 }
 
-function lineFindings(line, inCode, literals) {
+function forbiddenFindings(line, literals) {
   const found = [];
   literals.forEach((literal, index) => {
     if (literal !== '' && line.includes(literal)) found.push(`forbidden literal #${index + 1}`);
@@ -55,6 +56,19 @@ function lineFindings(line, inCode, literals) {
   for (const term of ANYWHERE_TERMS) {
     if (line.includes(term)) found.push(`forbidden text ${term}`);
   }
+  return found;
+}
+
+function isGenerated(file) {
+  return GENERATED_PATHS.some((path) => file.startsWith(path));
+}
+
+export function addedLineFindings(file, line, literals) {
+  return isGenerated(file) ? forbiddenFindings(line, literals) : lineFindings(line, true, literals);
+}
+
+function lineFindings(line, inCode, literals) {
+  const found = forbiddenFindings(line, literals);
   for (const [address, domain] of line.matchAll(EMAIL)) {
     if (!ALLOWED_EMAIL_DOMAINS.includes(domain.toLowerCase())) found.push('email address outside allowed domains');
   }
@@ -99,7 +113,7 @@ function scanAddedLines(base, literals) {
     if (row.startsWith('@@')) {
       line = Number(/\+(\d+)/.exec(row)[1]);
     } else if (file && row.startsWith('+') && !SCANNER_PATHS.some((path) => file.startsWith(path))) {
-      for (const message of lineFindings(row.slice(1), true, literals)) findings.push(`${file}:${line}: ${message}`);
+      for (const message of addedLineFindings(file, row.slice(1), literals)) findings.push(`${file}:${line}: ${message}`);
       line++;
     } else if (file && row.startsWith('+')) {
       line++;

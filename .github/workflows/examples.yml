@@ -32,6 +32,8 @@ jobs:
       - if: ${{ !cancelled() }}
         run: npm run examples:inline
       - if: ${{ !cancelled() }}
+        run: npm run docs:flat -- --check
+      - if: ${{ !cancelled() }}
         run: npm run typecheck
 
   python:

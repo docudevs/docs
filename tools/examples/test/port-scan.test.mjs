@@ -103,6 +103,8 @@ test('public hosts are allowed, other github.com paths are not', () => {
     'http://example.com/a',
     'https://example.org',
     'https://json-schema.org/draft',
+    'https://learn.microsoft.com/en-us/sql/connect/jdbc/x',
+    'https://context7.com/schema/context7.json',
     'http://schemas.openxmlformats.org/package/2006/relationships',
     'https://pypi.org/project/docudevs',
     'https://github.com/docudevs/docudevs-sdk',
@@ -161,4 +163,12 @@ test('placeholder hosts under example.com and example.org and the Azure example 
 
 test('a host that only ends like a placeholder is still reported', () => {
   assert.equal(scanText('curl https://notexample.com/a\n', 'a.sh', []).length, 1);
+});
+
+test('generated flattened docs are checked for forbidden text only', async () => {
+  const { addedLineFindings } = await import('../../port/scan.mjs');
+  const line = 'see https://dev.mysql.com/doc and SECRETVALUE';
+  assert.deepEqual(addedLineFindings('flat-docs/a.md', line, ['SECRETVALUE']), ['forbidden literal #1']);
+  assert.deepEqual(addedLineFindings('flat-docs/a.md', 'see https://dev.mysql.com/doc', []), []);
+  assert.deepEqual(addedLineFindings('docs/a.md', 'see https://dev.mysql.com/doc', []), ['non-API host']);
 });
