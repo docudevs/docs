@@ -8,12 +8,12 @@ mdx:
 
 # SDK Changelog
 
-## 2026-11-26 UTC
+## 2026-11-26 20:00 UTC
 
 ### Highlights
 
-- Java SDK 0.4.1 reads the text of OCR results and sends lookup files and schema-generation instructions the way the API expects.
-- These changes are in Java SDK 0.4.1.
+- The Java SDK reads the text of OCR results and sends lookup files and schema-generation instructions the way the API expects.
+- These changes are in Java SDK 0.4.2. Version 0.4.1 has `waitUntilReadyText`, the text result fix and `ProcessOptions.acroFormMetadata` only; use 0.4.2.
 
 ### Python SDK
 

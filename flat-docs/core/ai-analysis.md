@@ -565,14 +565,14 @@ public class Example {
 
         String jobGuid = "<job-guid>"; // GUID of a completed document job
 
-        client.submitOperation(jobGuid, "error-analysis");
-
-        JsonNode result = client.waitForOperation(
-                jobGuid, "error-analysis", WaitOptions.builder()
+        // One call submits the operation and waits for it; it returns the operation's result document
+        JsonNode result = client.submitAndWaitForErrorAnalysis(
+                jobGuid,
+                WaitOptions.builder()
                         .timeout(Duration.ofSeconds(120))
                         .pollInterval(Duration.ofSeconds(2))
                         .build());
-        System.out.println(result.path("result"));
+        System.out.println(result.toPrettyString());
     }
 }
 ```
