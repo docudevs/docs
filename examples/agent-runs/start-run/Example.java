@@ -1,8 +1,8 @@
 package examples.agent_runs.start_run;
 
-import ai.docudevs.client.DocuDevsClient;
 // docs:start
 import ai.docudevs.client.AgentRunOptions;
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 // docs:end
@@ -11,13 +11,13 @@ import java.util.Map;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
-        long caseId = 42L; // id returned by create_case
+        long caseId = 42L; // id returned when the case was created
         long classifyJobId = 55L; // id of a completed classify job of this case
 
         JsonNode started = client.startAgentRun(

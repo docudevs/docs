@@ -73,7 +73,7 @@ Notes:
 - `overlapPages` applies only to page-fallback windows and structural boundary context.
 - `dedupKey` and `splitHeaderLevel` are not supported with this split type and are rejected.
 - The outline artifact can also be (re)built after the fact as a standalone follow-up operation — see [Document Outline](/docs/advanced/operations#document-outline) — without re-running the whole extraction.
-- `DOCUMENT_OUTLINE` is available through the REST API and the Python SDK. It is not exposed by the Java SDK's `MapReduceOptions.SplitType` enum or by the CLI's `--split-type` option.
+- `DOCUMENT_OUTLINE` is available through the REST API and the Python and Java SDKs. It is not exposed by the CLI's `--split-type` option.
 
 ## Header Capture Strategy
 

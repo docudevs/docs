@@ -1,8 +1,8 @@
 package examples.classification.start_classify;
 
-import ai.docudevs.client.DocuDevsClient;
 // docs:start
 import ai.docudevs.client.ClassifyOptions;
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 // docs:end
 import java.util.List;
@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         long caseId = 42L; // id of a records case with an active category tree
 
         List<Map<String, Object>> rows = List.of(

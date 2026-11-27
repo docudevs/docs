@@ -95,6 +95,40 @@ async def main():
 asyncio.run(main())
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.DocuDevsClient;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
+
+byte[] documentData = Files.readAllBytes(Path.of("document.pdf"));
+
+String jobId = client.uploadDocument(
+        new UploadRequest("document.pdf", "application/pdf", documentData));
+client.ocrDocument(
+        jobId,
+        ProcessOptions.builder().ocr("DEFAULT").mimeType("application/pdf").build(),
+        "markdown");
+
+String text = client.waitUntilReadyText(
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(text);
+```
+
 **CLI**
 
 ```bash
@@ -204,6 +238,35 @@ text = await client.wait_until_ready(job_id)
 print(text)
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+byte[] documentData = Files.readAllBytes(Path.of("handwritten.pdf"));
+
+// ocr: "DEFAULT", "PREMIUM" or "AUTO". format: "markdown" or "plain"
+String jobId = client.uploadDocument(
+        new UploadRequest("handwritten.pdf", "application/pdf", documentData));
+client.ocrDocument(
+        jobId,
+        ProcessOptions.builder().ocr("PREMIUM").mimeType("application/pdf").build(),
+        "plain");
+
+String text = client.waitUntilReadyText(
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(text);
+```
+
 **CLI**
 
 ```bash
@@ -289,6 +352,37 @@ text = await client.wait_until_ready(job_id, timeout=600)
 print(text)
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+byte[] documentData = Files.readAllBytes(Path.of("invoice.pdf"));
+
+// extractionMode "OCR" returns the text only; barcodes(true) turns on the scan
+String jobId = client.submitAndProcessDocument(
+        new UploadRequest("invoice.pdf", "application/pdf", documentData),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .ocr("DEFAULT")
+                .extractionMode("OCR")
+                .barcodes(true)
+                .build());
+
+String text = client.waitUntilReadyText(
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(text);
+```
+
 **CLI**
 
 ```bash
@@ -297,7 +391,7 @@ docudevs process invoice.pdf --ocr DEFAULT --extraction-mode OCR --barcodes --ti
 
 Each value is written into the text at the place where the barcode appears, as `<kind>=<value>`, where `<kind>` is the barcode type that the scanner reports. If you use a prompt and a schema instead of `extractionMode` `OCR`, the extraction reads the same text and can return the values as fields; see [Extracting QR Codes](https://docs.docudevs.ai/docs/basics/SimpleDocuments#extracting-qr-codes).
 
-The scan is part of the document OCR, so it has no effect when `ocr` is `NONE`, `LOW` or `EXCEL`. Workbook normalization rejects requests that set `barcodes`. The CLI waits 60 seconds by default, so the example raises `--timeout`; cURL and Python stop waiting after 600 seconds.
+The scan is part of the document OCR, so it has no effect when `ocr` is `NONE`, `LOW` or `EXCEL`. Workbook normalization rejects requests that set `barcodes`. The CLI waits 60 seconds by default, so the example raises `--timeout`; cURL, Python and Java stop waiting after 600 seconds.
 
 ## One-Step Synchronous OCR
 

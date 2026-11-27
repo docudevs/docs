@@ -8,6 +8,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 
 public class Example {
@@ -29,7 +30,10 @@ public class Example {
                         .pageRange(List.of(1))
                         .build());
 
-        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder().build());
+        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
         System.out.println(result.toPrettyString());
     }
 }

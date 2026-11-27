@@ -322,7 +322,10 @@ UploadRequest upload = new UploadRequest("invoice.pdf", "application/pdf", fileB
 String guid = client.uploadDocument(upload);
 client.processDocumentWithConfiguration(guid, "invoice-config");
 
-JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build());
 System.out.println(result);
 ```
 

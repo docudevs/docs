@@ -42,6 +42,27 @@ delete = await client.delete_configuration_lookup_file("invoice-config")
 print(f"Delete status: {delete.status_code}")
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+byte[] lookupData = Files.readAllBytes(Path.of("vendors.csv"));
+
+// The Java client returns no status code: each call throws DocuDevsApiException unless the API answers 2xx
+client.uploadConfigurationLookupFile(
+        "invoice-config", new UploadRequest("vendors.csv", "text/csv", lookupData));
+System.out.println("Uploaded vendors.csv");
+
+byte[] downloaded = client.downloadConfigurationLookupFile("invoice-config");
+Files.write(Path.of("vendors-downloaded.csv"), downloaded);
+
+client.deleteConfigurationLookupFile("invoice-config");
+System.out.println("Deleted the configuration lookup file");
+```
+
 **CLI**
 
 ```bash
@@ -133,7 +154,10 @@ UploadRequest upload = new UploadRequest("invoice.pdf", "application/pdf", fileB
 String guid = client.uploadDocument(upload);
 client.processDocumentWithConfiguration(guid, "invoice-config");
 
-JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build());
 System.out.println(result);
 ```
 
@@ -183,6 +207,28 @@ Path("vendors-downloaded.csv").write_bytes(downloaded)
 
 delete = await client.delete_batch_lookup_file(batch_guid)
 print(f"Delete status: {delete.status_code}")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+String batchGuid = "<batch-guid>"; // GUID of a batch whose documents are uploaded and not yet processed
+
+byte[] lookupData = Files.readAllBytes(Path.of("vendors-2024.csv"));
+
+// The Java client returns no status code: each call throws DocuDevsApiException unless the API answers 2xx
+client.uploadBatchLookupFile(batchGuid, new UploadRequest("vendors-2024.csv", "text/csv", lookupData));
+System.out.println("Uploaded vendors-2024.csv");
+
+byte[] downloaded = client.downloadBatchLookupFile(batchGuid);
+Files.write(Path.of("vendors-downloaded.csv"), downloaded);
+
+client.deleteBatchLookupFile(batchGuid);
+System.out.println("Deleted the batch lookup file");
 ```
 
 The batch-scoped file is used whenever present, and otherwise the configuration's own lookup file (if any) applies. The same file-type and `extractionMode=simple` rules as the configuration lookup file apply. The CLI uploads the batch lookup file as part of `batch process` with `--lookup-file`, with or without `--configuration`. The full flow, from creating the batch to reading the results, looks like this:
@@ -255,6 +301,41 @@ results = await client.wait_until_ready(batch_guid, timeout=600, result_format="
 print(json.dumps(results, indent=2))
 ```
 
+**Java**
+
+```java
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.List;
+
+String batchGuid = client.createBatch(3);
+
+for (String filename : List.of("invoice1.pdf", "invoice2.pdf")) {
+    byte[] documentData = Files.readAllBytes(Path.of(filename));
+    client.uploadBatchDocument(
+            batchGuid,
+            new UploadRequest(filename, "application/pdf", documentData));
+}
+
+// The batch lookup file overrides the lookup file of invoice-config for this batch
+byte[] lookupData = Files.readAllBytes(Path.of("vendors-2024.csv"));
+client.uploadBatchLookupFile(batchGuid, new UploadRequest("vendors-2024.csv", "text/csv", lookupData));
+
+client.processBatchWithConfiguration(batchGuid, "invoice-config");
+
+JsonNode results = client.waitUntilReadyJson(
+        batchGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+System.out.println(results.toPrettyString());
+```
+
 **CLI**
 
 ```bash
@@ -323,6 +404,40 @@ config = UploadCommand(
 
 response = await client.save_configuration("invoice-config", config)
 print(f"Configuration saved (status {response.status_code})")
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ExcelTemplateOptions;
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.Schema;
+import java.util.List;
+import java.util.Map;
+
+String schema = Schema.of(Map.of(
+        "type", "object",
+        "properties", Map.of(
+                "vendor_name", Map.of("type", "string"),
+                "invoice_number", Map.of("type", "string"),
+                "total_amount", Map.of("type", "number")),
+        "required", List.of("total_amount")));
+
+// The Java client returns no status code: the call throws DocuDevsApiException unless the API answers 2xx
+client.saveConfiguration(
+        "invoice-config",
+        ProcessOptions.builder()
+                .prompt("Extract the vendor, invoice number and total of each invoice.")
+                .schema(schema)
+                // startRow and startCol are 0-based cell coordinates: 0 and 0 target cell A1
+                .excelTemplate(ExcelTemplateOptions.builder()
+                        .startRow(0)
+                        .startCol(0)
+                        .includeHeaders(true)
+                        .sheetName("Data")
+                        .build())
+                .build());
+System.out.println("Configuration saved");
 ```
 
    `startRow` and `startCol` are 0-based cell coordinates, so `0` and `0` target cell A1. `sheets` (optional) can instead list several `{sheetName, startRow, startCol, includeHeaders}` targets to write the same result into multiple sheets of the template in one export.

@@ -105,7 +105,7 @@ POST /operation/{parentJobId}/generative-task
 
 ## Examples
 
-The examples below start from a completed job: replace `<job-guid>` with the GUID of a job you processed earlier. The cURL tabs poll the operation job until it completes; the Python SDK helpers and the CLI wait for you.
+The examples below start from a completed job: replace `<job-guid>` with the GUID of a job you processed earlier. The cURL tabs poll the operation job until it completes; the Python SDK helpers, the Java submit-and-wait methods and the CLI wait for you.
 
 ### Error Analysis
 
@@ -171,6 +171,7 @@ asyncio.run(main())
 import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
@@ -181,11 +182,14 @@ public class Example {
 
         String jobGuid = "<job-guid>"; // GUID of a completed document job
 
-        client.submitOperation(jobGuid, "error-analysis");
-
-        JsonNode result = client.waitForOperation(
-                jobGuid, "error-analysis", WaitOptions.builder().build());
-        System.out.println(result.path("result"));
+        // One call submits the operation and waits for it; it returns the operation's result document
+        JsonNode result = client.submitAndWaitForErrorAnalysis(
+                jobGuid,
+                WaitOptions.builder()
+                        .timeout(Duration.ofSeconds(120))
+                        .pollInterval(Duration.ofSeconds(2))
+                        .build());
+        System.out.println(result.toPrettyString());
     }
 }
 ```
@@ -255,17 +259,20 @@ print(result_data["generated_text"])
 ```java
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
 
-ObjectMapper mapper = new ObjectMapper();
 String parentJobGuid = "<job-guid>"; // GUID of a completed document job
 
-client.createGenerativeTask(parentJobGuid, "Summarize the main findings", "DEFAULT");
-
-JsonNode result = client.waitForGenerativeTask(
-        parentJobGuid, WaitOptions.builder().build());
-JsonNode payload = mapper.readTree(result.path("result").asText());
-System.out.println(payload.path("generated_text").asText());
+// One call submits the task and waits for it; it returns the task's result document
+JsonNode summary = client.submitAndWaitForGenerativeTask(
+        parentJobGuid,
+        "Summarize the main findings",
+        "DEFAULT",
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
+System.out.println(summary.path("generated_text").asText());
 ```
 
 **CLI**
@@ -363,25 +370,26 @@ if selected:
 **Java**
 
 ```java
+import ai.docudevs.client.ImageSelectionOptions;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
+import java.time.Duration;
 
-ObjectMapper mapper = new ObjectMapper();
 String jobGuid = "<job-guid>"; // GUID of a completed job processed with figure extraction
 
-client.submitOperation(jobGuid, "image-select", null,
-        Map.of(
-                "prompt", "Return all diagrams from the document",
-                "topK", 5,
-                "matchMode", "all",
-                "useVision", false));
-
-JsonNode result = client.waitForOperation(
-        jobGuid, "image-select", WaitOptions.builder().build());
-
-JsonNode payload = mapper.readTree(result.path("result").asText());
+// One call submits the operation and waits for it; it returns the operation's result document
+JsonNode payload = client.submitAndWaitForImageSelection(
+        jobGuid,
+        "Return all diagrams from the document",
+        ImageSelectionOptions.builder()
+                .topK(5)
+                .matchMode("all")
+                .useVision(false)
+                .build(),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
 System.out.println(payload.toPrettyString());
 
 JsonNode first = payload.path("selected").get(0);
@@ -497,6 +505,7 @@ asyncio.run(main())
 **Java**
 
 ```java
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.PdfAcroformOptions;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -504,6 +513,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 String parentJobGuid = "<job-guid>"; // GUID of a completed PDF job whose page images exist (processed with ocr PREMIUM)
 

@@ -108,7 +108,13 @@ asyncio.run(main())
 
 ```java
 import ai.docudevs.client.DatasetOptions;
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 long caseId = 42L; // id of a case that holds no documents
 
@@ -122,7 +128,7 @@ JsonNode dataset = client.setDataset(
                 "metadata", Map.of("brand", "brand")),
         DatasetOptions.builder()
                 .embeddedText(Map.of("template", "{title}\n{description}"))
-                .indexSettings(Map.of("top_k", 10, "hybrid", false))
+                .indexSettings(Map.of("topK", 10, "hybrid", false))
                 .build());
 System.out.println("Mapping version: " + dataset.path("mappingVersion").asText());
 ```
@@ -264,7 +270,7 @@ RecordsCase records = client.createRecordsCase(
                 .label("category")
                 .metadata(Map.of("brand", "brand"))
                 .embeddedText("{title}\n{description}")
-                .indexSettings(Map.of("top_k", 10, "hybrid", false))
+                .indexSettings(Map.of("topK", 10, "hybrid", false))
                 .build());
 System.out.println("Records case " + records.id());
 ```

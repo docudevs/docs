@@ -121,7 +121,13 @@ asyncio.run(main())
 
 ```java
 import ai.docudevs.client.CaseSearchOptions;
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 long caseId = 42L; // id of a records case
 

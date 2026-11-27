@@ -88,13 +88,13 @@ The example gives every document the role `policy`; set the role of each documen
 
 ## Java SDK
 
-`DocuDevsClient` (synchronous, returns `JsonNode`) and `DocuDevsAsyncClient` (the same method names, returns `CompletableFuture<JsonNode>`) have these contract-analysis methods in version 0.3.0:
+`DocuDevsClient` (synchronous, returns `JsonNode`) and `DocuDevsAsyncClient` (the same method names, returns `CompletableFuture<JsonNode>`) have these contract-analysis methods:
 
 | Method | Purpose |
 | --- | --- |
 | `getContractAnalysisProfile(caseId[, view])` | Read the draft (default) or published playbook. |
 | `getContractAnalysisWorkflow(caseId)` | Read where the playbook is in its setup. |
-| `generateContractAnalysisProfile(caseId, ourParty, counterparty)` | Start building clauses from the guideline documents. |
+| `generateContractAnalysisProfile(caseId, ourParty, counterparty[, scope])` | Start building clauses from the guideline documents. |
 | `suggestContractAnalysisSourceRoles(caseId)` | Start the background read that suggests source roles and sides. |
 | `getContractAnalysisSourceAuthority(caseId)` | Read the source-authority revision, decisions and sources. |
 | `recordContractAnalysisSourceAuthorityDecision(caseId, observedRevision, decisionType, content, reason)` | Record a source-authority decision. |

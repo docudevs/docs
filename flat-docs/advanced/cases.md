@@ -770,7 +770,7 @@ print(f"Case {case_id} is no longer a knowledge base")
 ```java
 long caseId = 42L; // id of a knowledge base
 
-// Returns nothing; an error status raises DocuDevsApiException
+// Returns nothing; an error status throws DocuDevsApiException
 client.deleteKnowledgeBase(caseId);
 
 System.out.println("Case " + caseId + " is no longer a knowledge base");

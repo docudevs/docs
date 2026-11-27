@@ -5,10 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 // docs:start
+import ai.docudevs.client.ImageSelectionOptions;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
+import java.time.Duration;
 // docs:end
 
 public class Example {
@@ -19,20 +19,21 @@ public class Example {
                 .build();
 
         // docs:start
-        ObjectMapper mapper = new ObjectMapper();
         String jobGuid = "<job-guid>"; // GUID of a completed job processed with figure extraction
 
-        client.submitOperation(jobGuid, "image-select", null,
-                Map.of(
-                        "prompt", "Return all diagrams from the document",
-                        "topK", 5,
-                        "matchMode", "all",
-                        "useVision", false));
-
-        JsonNode result = client.waitForOperation(
-                jobGuid, "image-select", WaitOptions.builder().build());
-
-        JsonNode payload = mapper.readTree(result.path("result").asText());
+        // One call submits the operation and waits for it; it returns the operation's result document
+        JsonNode payload = client.submitAndWaitForImageSelection(
+                jobGuid,
+                "Return all diagrams from the document",
+                ImageSelectionOptions.builder()
+                        .topK(5)
+                        .matchMode("all")
+                        .useVision(false)
+                        .build(),
+                WaitOptions.builder()
+                        .timeout(Duration.ofSeconds(120))
+                        .pollInterval(Duration.ofSeconds(2))
+                        .build());
         System.out.println(payload.toPrettyString());
 
         JsonNode first = payload.path("selected").get(0);

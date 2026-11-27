@@ -80,8 +80,14 @@ asyncio.run(main())
 
 ```java
 import ai.docudevs.client.AgentChatOptions;
+import ai.docudevs.client.DocuDevsClient;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
 
 // Sends the message, polls the status endpoint and throws DocuDevsTimeoutException after 120 seconds
 JsonNode status = client.agentChatAndWait(

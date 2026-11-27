@@ -297,28 +297,40 @@ print(result_data["generated_text"])
 **Java**
 
 ```java
+import ai.docudevs.client.ProcessOptions;
 import ai.docudevs.client.UploadRequest;
 import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 byte[] documentData = Files.readAllBytes(Path.of("your-document.pdf"));
-UploadRequest upload = new UploadRequest("your-document.pdf", "application/pdf", documentData);
 
-// Step 1: OCR the document (the Java client sets the OCR type only, not the output format)
-String ocrGuid = client.ocrDocument(upload, "PREMIUM");
-client.waitUntilReadyJson(ocrGuid, WaitOptions.defaults());
+String ocrJobId = client.uploadDocument(
+        new UploadRequest("your-document.pdf", "application/pdf", documentData));
+client.ocrDocument(
+        ocrJobId,
+        ProcessOptions.builder().ocr("PREMIUM").mimeType("application/pdf").build(),
+        "markdown");
+client.waitUntilReadyText(
+        ocrJobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
 
-// Step 2: Generate the analysis
-client.createGenerativeTask(
-        ocrGuid,
-        "Summarize this document and explain what type of document it is and its main purpose.");
+// One call submits the generative task and waits for it; it returns the task's result document
+JsonNode analysis = client.submitAndWaitForGenerativeTask(
+        ocrJobId,
+        "Summarize this document and explain what type of document it is and its main purpose.",
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(120))
+                .pollInterval(Duration.ofSeconds(2))
+                .build());
 
-// The result field holds the task output as a JSON string with a generated_text field
-JsonNode result = client.waitForGenerativeTask(ocrGuid, WaitOptions.defaults());
-System.out.println("AI Analysis:");
-System.out.println(result.path("result"));
+System.out.println("\nAI Analysis:");
+System.out.println(analysis.path("generated_text").asText());
 ```
 
 **CLI**

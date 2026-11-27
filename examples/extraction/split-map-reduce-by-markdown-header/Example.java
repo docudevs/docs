@@ -10,6 +10,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 // docs:end
 
 public class Example {
@@ -33,7 +34,10 @@ public class Example {
                 .build();
 
         String jobId = client.submitAndProcessDocument(upload, options);
-        JsonNode result = client.waitUntilReadyJson(jobId, WaitOptions.defaults());
+        JsonNode result = client.waitUntilReadyJson(jobId, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
         System.out.println(result.toPrettyString());
         // docs:end
     }

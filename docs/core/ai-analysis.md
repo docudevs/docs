@@ -28,7 +28,7 @@ AI Document Analysis uses generative AI models to understand and analyze documen
 
 ### Document Summarization
 
-OCR the document first, then submit a generative task whose parent is the OCR job. The task result carries the generated text. The Java variant prints the raw `result` field, a JSON string that contains `generated_text`, and does not set the OCR output format.
+OCR the document first, then submit a generative task whose parent is the OCR job. The task result carries the generated text. The Java variant submits the task with `submitAndWaitForGenerativeTask`, which waits for the task's own result, and reads `generated_text` from it.
 
 <Example name="quick-start/analyze-document" />
 

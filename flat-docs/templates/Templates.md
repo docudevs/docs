@@ -152,7 +152,7 @@ docudevs list-templates
 
 Retrieve details about a specific template, including its fillable fields.
 
-For PDF templates, `GET /template/metadata/{name}` returns `202 Accepted` with `Retry-After: 1` while field extraction is still pending. The cURL example polls until the metadata is ready, and the Python SDK helper `wait_for_template_metadata(...)` does the same for you. The Java SDK and the CLI make a single call, so for a freshly uploaded PDF repeat it until the fields appear.
+For PDF templates, `GET /template/metadata/{name}` returns `202 Accepted` with `Retry-After: 1` while field extraction is still pending. The cURL example polls until the metadata is ready, the Python SDK helper `wait_for_template_metadata(...)` and the Java method `waitForTemplateMetadata(...)` do the same for you. The CLI makes a single call, so for a freshly uploaded PDF repeat it until the fields appear.
 
 **cURL**
 
@@ -188,10 +188,16 @@ for field in fields:
 **Java**
 
 ```java
+import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Duration;
 
-// Returns immediately: for a freshly uploaded PDF, repeat the call until the fields appear
-JsonNode metadata = client.getTemplateMetadata("invoice");
+JsonNode metadata = client.waitForTemplateMetadata(
+        "invoice",
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(60))
+                .pollInterval(Duration.ofSeconds(1))
+                .build());
 
 for (JsonNode field : metadata) {
     System.out.println("- " + field.path("name").asText() + " (" + field.path("type").asText() + ")");
@@ -241,7 +247,7 @@ docudevs delete-template invoice
 
 Once a template is uploaded, you can fill it with data. The data structure depends on the template type.
 
-If you fill a template immediately after upload, prefer `fill_with_retry(...)` in the Python SDK. It retries transient readiness races while background template preparation finishes. The Java SDK and the CLI fill once without retrying, so retry the call yourself if it fails right after an upload.
+If you fill a template immediately after upload, prefer `fill_with_retry(...)` in the Python SDK or `fillWithRetry(...)` in the Java SDK. They retry transient readiness races while background template preparation finishes. The CLI fills once without retrying, so retry the call yourself if it fails right after an upload.
 
 ### Filling a PDF Form
 
@@ -298,12 +304,20 @@ print("Saved filled_invoice.pdf")
 **Java**
 
 ```java
-byte[] filled = client.fillTemplate("invoice", Map.of(
-    "customerName", "Acme Corp",
-    "invoiceNumber", "INV-2024-001",
-    "totalAmount", "1500.00",
-    "paid", true
-));
+import ai.docudevs.client.WaitOptions;
+
+// Retries while a freshly uploaded template finishes preparing
+byte[] filled = client.fillWithRetry(
+        "invoice",
+        Map.of(
+                "customerName", "Acme Corp",
+                "invoiceNumber", "INV-2024-001",
+                "totalAmount", "1500.00",
+                "paid", true),
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(1))
+                .build());
 
 Files.write(Path.of("filled_invoice.pdf"), filled);
 System.out.println("Saved filled_invoice.pdf");
@@ -561,6 +575,41 @@ if source_locations is None:
 
 print(f"Async metadata fields: {len(job_metadata.get('fields', []))}")
 print(json.dumps(source_locations, indent=2))
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+byte[] pdfBytes = Files.readAllBytes(Path.of("fillable-form.pdf"));
+
+String jobGuid = client.submitAndProcessDocument(
+        new UploadRequest("fillable-form.pdf", "application/pdf", pdfBytes),
+        ProcessOptions.builder()
+                .mimeType("application/pdf")
+                .acroFormMetadata(true)
+                .sourceLocations(true)
+                .sourceLocationGranularity("block")
+                .build());
+client.waitUntilReadyJson(
+        jobGuid,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+JsonNode jobMetadata = client.getAcroformMetadata(jobGuid);
+JsonNode sourceLocations = client.getSourceLocations(jobGuid);
+
+System.out.println("Async metadata fields: " + jobMetadata.path("fields").size());
+System.out.println(sourceLocations.toPrettyString());
 ```
 
 For OCR-backed evidence overlays on the same job, combine the `acroFormMetadata` and `sourceLocations` request options (`acro_form_metadata=True` and `source_locations=True` in Python) and then read [Source Locations](https://docs.docudevs.ai/docs/core/source-locations).

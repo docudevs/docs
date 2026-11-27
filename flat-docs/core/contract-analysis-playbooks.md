@@ -1065,6 +1065,7 @@ long caseId = 42L; // id of the case that holds the playbook documents
 byte[] fileBytes = Files.readAllBytes(Path.of("supplier-agreement.pdf"));
 UploadRequest upload = new UploadRequest("supplier-agreement.pdf", "application/pdf", fileBytes);
 
+// Returns nothing: the call throws DocuDevsApiException unless the API answers 2xx
 client.uploadCaseDocument(caseId, upload, "test_contract", "kept");
 System.out.println("Upload status: OK");
 ```

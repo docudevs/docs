@@ -135,7 +135,7 @@ When an async PDF job requests both `sourceLocations=true` and `acroFormMetadata
 
 ## Requesting source locations
 
-Send `sourceLocations: true` (Python `source_locations=True`) and, optionally, `sourceLocationGranularity` with the processing request. The example uploads a contract, extracts its clauses, and fetches the evidence artifact next to the extracted JSON. The Java SDK has no source-location option, and the CLI has no flag for it.
+Send `sourceLocations: true` (Python `source_locations=True`, Java `.sourceLocations(true)`) and, optionally, `sourceLocationGranularity` with the processing request. The example uploads a contract, extracts its clauses, and fetches the evidence artifact next to the extracted JSON. The CLI has no flag for it.
 
 **cURL**
 
@@ -324,7 +324,7 @@ System.out.println(combined.path("result").toPrettyString());
 System.out.println(combined.path("sourceLocations").toPrettyString());
 ```
 
-Both return an object with `result` and `source_locations`. The single-call helpers exist only in the Python client; every other language makes the same calls one at a time, as the first example shows.
+Both return an object with `result` and `source_locations`. The Python client has `wait_until_ready_with_source_locations` and `submit_and_wait_for_document_with_source_locations`, and the Java client has `waitUntilReadyWithSourceLocations` and `submitAndWaitForDocumentWithSourceLocations`; cURL makes the same calls one at a time, as the first example shows.
 
 ## Jobs UI
 

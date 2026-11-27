@@ -10,7 +10,7 @@ Pipeline mode is available through the public API and SDK facade helpers. Prefer
 
 ## Python SDK
 
-Use `Pipeline`, `P`, and condition helpers such as `eq` to build the pipeline. Node methods return `NodeRef` objects, so dependencies and result paths can refer to previous nodes directly. The example below builds a one-node extraction pipeline, submits it, waits for the result, and reads the source locations and node statuses. The Java variant builds the same pipeline with `PipelineDefinition`, `PipelineNode` and `PipelinePath`, but does not read source locations because the Java client has no helper for them; `PipelineNodeRef` values can be used in `dependsOn(...)` and result outputs.
+Use `Pipeline`, `P`, and condition helpers such as `eq` to build the pipeline. Node methods return `NodeRef` objects, so dependencies and result paths can refer to previous nodes directly. The example below builds a one-node extraction pipeline, submits it, waits for the result, and reads the source locations and node statuses. The Java variant builds the same pipeline with `PipelineDefinition`, `PipelineNode` and `PipelinePath`; `PipelineNodeRef` values can be used in `dependsOn(...)` and result outputs.
 
 **cURL**
 
@@ -142,6 +142,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Map;
 
 PipelineDefinition.Builder pipelineBuilder = PipelineDefinition.builder()
@@ -174,11 +175,15 @@ String guid = client.processPipelineDocument(
         pipeline,
         "AUTO");
 
-JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
+JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+        .timeout(Duration.ofSeconds(180))
+        .pollInterval(Duration.ofSeconds(5))
+        .build());
 System.out.println(result.toPrettyString());
 
-// The Java client has no source-location helper; the Python and cURL variants
-// also read the source locations.
+JsonNode sources = client.getSourceLocations(guid);
+System.out.println(sources.toPrettyString());
+
 JsonNode nodes = client.getPipelineNodes(guid);
 System.out.println(nodes.toPrettyString());
 ```

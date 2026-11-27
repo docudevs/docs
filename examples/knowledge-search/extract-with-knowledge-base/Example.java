@@ -3,6 +3,7 @@ package examples.knowledge_search.extract_with_knowledge_base;
 import ai.docudevs.client.DocuDevsClient;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 
 // docs:start
@@ -59,7 +60,10 @@ public class Example {
                 .build();
 
         String guid = client.submitAndProcessDocument(upload, options);
-        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.defaults());
+        JsonNode result = client.waitUntilReadyJson(guid, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
         System.out.println(result);
         // docs:end
     }

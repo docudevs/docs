@@ -1,20 +1,20 @@
 package examples.case_search.search_records;
 
-import ai.docudevs.client.DocuDevsClient;
 // docs:start
 import ai.docudevs.client.CaseSearchOptions;
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 // docs:end
 import java.util.Map;
 
 public class Example {
     public static void main(String[] args) throws Exception {
+        // docs:start
         DocuDevsClient client = DocuDevsClient.builder()
                 .apiKey(System.getenv("API_KEY"))
                 .baseUrl("https://api.docudevs.ai")
                 .build();
 
-        // docs:start
         long caseId = 42L; // id of a records case
 
         JsonNode hits = client.searchRecords(

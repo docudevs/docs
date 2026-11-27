@@ -112,7 +112,7 @@ print(f"Credential {credential['id']}: {credential['status']}")
 import com.fasterxml.jackson.databind.JsonNode;
 
 // PROVIDER_API_KEY holds the API key issued by your model provider.
-// Java: the call returns the JSON body of the 201 response and throws DocuDevsApiException on an error status.
+// The call returns the JSON body of the 201 response and throws DocuDevsApiException on an error status.
 JsonNode credential = client.createModelCredential("Provider embeddings", System.getenv("PROVIDER_API_KEY"));
 System.out.println("Credential " + credential.path("id").asLong() + ": " + credential.path("status").asText());
 ```

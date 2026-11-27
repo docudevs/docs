@@ -79,9 +79,15 @@ asyncio.run(main())
 **Java**
 
 ```java
+import ai.docudevs.client.DocuDevsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 
-long caseId = 42L; // id returned by create_case
+DocuDevsClient client = DocuDevsClient.builder()
+        .apiKey(System.getenv("API_KEY"))
+        .baseUrl("https://api.docudevs.ai")
+        .build();
+
+long caseId = 42L; // id returned when the case was created
 
 JsonNode pending = client.listAgentActions(caseId, "pending", 20, null);
 for (JsonNode action : pending.path("items")) {

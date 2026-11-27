@@ -237,7 +237,7 @@ A job that was processed with figure extraction on answers the list with `200`, 
 
 Page images are rendered for PDFs processed with `PREMIUM` OCR, including `AUTO` when it moves up to `PREMIUM`. Without page images the route answers `404`. [LLM Tracing](https://docs.docudevs.ai/docs/advanced/tracing#retrieving-page-images) shows the page image call on its own.
 
-The example processes a PDF with figure extraction on, waits for the job, lists the figures, and downloads every figure and the first page image. cURL and Python poll the job; both stop after 600 seconds.
+The example processes a PDF with figure extraction on, waits for the job, lists the figures, and downloads every figure and the first page image. cURL and Python poll the job and Java waits for it with one call; each stops after 600 seconds.
 
 **cURL**
 
@@ -328,6 +328,53 @@ page_bytes = await client.get_image(job_id, 0)
 if page_bytes:
     with open("page_0.png", "wb") as f:
         f.write(page_bytes)
+```
+
+**Java**
+
+```java
+import ai.docudevs.client.ProcessOptions;
+import ai.docudevs.client.UploadRequest;
+import ai.docudevs.client.WaitOptions;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
+byte[] documentData = Files.readAllBytes(Path.of("report.pdf"));
+
+// extractFigures keeps the figures as images; PREMIUM OCR also renders page images
+String jobId = client.uploadDocument(
+        new UploadRequest("report.pdf", "application/pdf", documentData));
+client.ocrDocument(
+        jobId,
+        ProcessOptions.builder()
+                .ocr("PREMIUM")
+                .mimeType("application/pdf")
+                .extractFigures(true)
+                .build(),
+        "markdown");
+client.waitUntilReadyText(
+        jobId,
+        WaitOptions.builder()
+                .timeout(Duration.ofSeconds(600))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
+
+// List the figures, then download each one
+JsonNode images = client.getFiguresMetadata(jobId).path("images");
+for (JsonNode image : images) {
+    String pageIndex = image.hasNonNull("pageIndex") ? image.path("pageIndex").asText() : "unknown";
+    System.out.println(image.path("id").asText() + " page " + pageIndex);
+}
+
+for (JsonNode image : images) {
+    String figureId = image.path("id").asText();
+    Files.write(Path.of(figureId + ".png"), client.getFigureImage(jobId, figureId));
+}
+
+// Download the image of the first page (page indexes start at 0)
+Files.write(Path.of("page_0.png"), client.downloadImage(jobId, 0));
 ```
 
 ## Migrating from Azure Document Intelligence `AnalyzeResult`

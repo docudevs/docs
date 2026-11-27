@@ -104,7 +104,7 @@ POST /operation/{parentJobId}/generative-task
 
 ## Examples
 
-The examples below start from a completed job: replace `<job-guid>` with the GUID of a job you processed earlier. The cURL tabs poll the operation job until it completes; the Python SDK helpers and the CLI wait for you.
+The examples below start from a completed job: replace `<job-guid>` with the GUID of a job you processed earlier. The cURL tabs poll the operation job until it completes; the Python SDK helpers, the Java submit-and-wait methods and the CLI wait for you.
 
 ### Error Analysis
 

@@ -2,78 +2,78 @@
 # curl: the step runs in the client and makes no HTTP request of its own
 # python: DocuDevsClient has no method for the route
 extraction-review/build-review-descriptor:curl  # runs in the client
-extraction-review/build-review-descriptor:java  # the Java client 0.4.0 has no method for building a review descriptor from a client pipeline
-extraction/extract-with-pydantic:java  # the schema is generated from a Pydantic model, a Python feature; the Java client 0.4.0 has no method for it
+extraction-review/build-review-descriptor:java  # `DocuDevsClient` (Java) has no method for building a review descriptor from a client pipeline
+extraction/extract-with-pydantic:java  # the schema is generated from a Pydantic model, a Python feature; `DocuDevsClient` (Java) has no method for it
 extraction/extract-with-source-locations-single-call:curl  # polling helper that wraps several calls
-integrations/create-connection:python  # DocuDevsClient 1.15.0 has no method for POST /integration/connections
-integrations/delete-connection:python  # DocuDevsClient 1.15.0 has no method for DELETE /integration/connections/{id}
-integrations/list-connections:python  # DocuDevsClient 1.15.0 has no method for GET /integration/connections
-jobs/inspect-job:python  # DocuDevsClient 1.15.0 has no method for GET /job/params/{guid} or GET /job/dependencies/{guid}
-jobs/list-jobs:python  # DocuDevsClient 1.15.0 has no method for GET /job/list
-llm-providers/create-llm-provider:python  # DocuDevsClient 1.15.0 create_llm_provider sends field names that POST /llm/providers rejects
-llm-providers/update-llm-provider:python  # DocuDevsClient 1.15.0 update_llm_provider changes only the name; its other field names are ignored by PATCH /llm/providers/{id}
-llm-providers/verify-llm-provider:python  # DocuDevsClient 1.15.0 has no method for POST /llm/providers/{id}/verify
-managed-workflows/cancel-run:python  # DocuDevsClient 1.15.0 has no method for POST /managed-execution/{executionId}/cancel
-managed-workflows/get-logs:python  # DocuDevsClient 1.15.0 has no method for GET /managed-execution/{executionId}/logs
-managed-workflows/get-run:python  # DocuDevsClient 1.15.0 has no method for GET /managed-execution/{executionId}
-managed-workflows/list-runs:python  # DocuDevsClient 1.15.0 has no method for GET /managed-execution
-managed-workflows/start-run:python  # DocuDevsClient 1.15.0 has no method for POST /managed-execution
-members/list-members:python  # DocuDevsClient 1.15.0 has no method for GET /members
-members/remove-member:python  # DocuDevsClient 1.15.0 has no method for DELETE /members/{id}
-members/set-join-policy:python  # DocuDevsClient 1.15.0 has no method for GET or PUT /members/join-policy
-members/update-member-role:python  # DocuDevsClient 1.15.0 has no method for PATCH /members/{id}
-model-credentials/disable-and-enable-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/disable or /enable
-model-credentials/get-credential:python  # DocuDevsClient 1.15.0 has no method for GET /model-credentials/{id}
-model-credentials/update-credential:python  # DocuDevsClient 1.15.0 has no method for PATCH /model-credentials/{id}
-model-credentials/validate-credential:python  # DocuDevsClient 1.15.0 has no method for POST /model-credentials/{id}/validate
-ocr-providers/create-ocr-provider:python  # DocuDevsClient 1.15.0 create_ocr_provider sends field names that POST /ocr/providers rejects
-ocr-providers/update-ocr-provider:python  # DocuDevsClient 1.15.0 update_ocr_provider sends model, not modelId, so a model change on PATCH /ocr/providers/{id} is ignored
-ocr/ocr-sync:java  # the Java client 0.4.0 has no method for POST /document/ocr/sync
-ocr/ocr-sync:python  # DocuDevsClient 1.15.0 has no method for POST /document/ocr/sync
+integrations/create-connection:python  # `DocuDevsClient` (Python) has no method for POST /integration/connections
+integrations/delete-connection:python  # `DocuDevsClient` (Python) has no method for DELETE /integration/connections/{id}
+integrations/list-connections:python  # `DocuDevsClient` (Python) has no method for GET /integration/connections
+jobs/inspect-job:python  # `DocuDevsClient` (Python) has no method for GET /job/params/{guid} or GET /job/dependencies/{guid}
+jobs/list-jobs:python  # `DocuDevsClient` (Python) has no method for GET /job/list
+llm-providers/create-llm-provider:python  # `DocuDevsClient` (Python) create_llm_provider sends field names that POST /llm/providers rejects
+llm-providers/update-llm-provider:python  # `DocuDevsClient` (Python) update_llm_provider changes only the name; its other field names are ignored by PATCH /llm/providers/{id}
+llm-providers/verify-llm-provider:python  # `DocuDevsClient` (Python) has no method for POST /llm/providers/{id}/verify
+managed-workflows/cancel-run:python  # `DocuDevsClient` (Python) has no method for POST /managed-execution/{executionId}/cancel
+managed-workflows/get-logs:python  # `DocuDevsClient` (Python) has no method for GET /managed-execution/{executionId}/logs
+managed-workflows/get-run:python  # `DocuDevsClient` (Python) has no method for GET /managed-execution/{executionId}
+managed-workflows/list-runs:python  # `DocuDevsClient` (Python) has no method for GET /managed-execution
+managed-workflows/start-run:python  # `DocuDevsClient` (Python) has no method for POST /managed-execution
+members/list-members:python  # `DocuDevsClient` (Python) has no method for GET /members
+members/remove-member:python  # `DocuDevsClient` (Python) has no method for DELETE /members/{id}
+members/set-join-policy:python  # `DocuDevsClient` (Python) has no method for GET or PUT /members/join-policy
+members/update-member-role:python  # `DocuDevsClient` (Python) has no method for PATCH /members/{id}
+model-credentials/disable-and-enable-credential:python  # `DocuDevsClient` (Python) has no method for POST /model-credentials/{id}/disable or /enable
+model-credentials/get-credential:python  # `DocuDevsClient` (Python) has no method for GET /model-credentials/{id}
+model-credentials/update-credential:python  # `DocuDevsClient` (Python) has no method for PATCH /model-credentials/{id}
+model-credentials/validate-credential:python  # `DocuDevsClient` (Python) has no method for POST /model-credentials/{id}/validate
+ocr-providers/create-ocr-provider:python  # `DocuDevsClient` (Python) create_ocr_provider sends field names that POST /ocr/providers rejects
+ocr-providers/update-ocr-provider:python  # `DocuDevsClient` (Python) update_ocr_provider sends model, not modelId, so a model change on PATCH /ocr/providers/{id} is ignored
+ocr/ocr-sync:java  # `DocuDevsClient` (Java) has no method for POST /document/ocr/sync
+ocr/ocr-sync:python  # `DocuDevsClient` (Python) has no method for POST /document/ocr/sync
 pipelines/bucket-ocr-quality:curl  # runs in the client
 pipelines/client-pipeline-conditional:curl  # runs in the client
 pipelines/correct-ocr-text:curl  # runs in the client
 pipelines/run-client-pipeline:curl  # runs in the client
 playbook-evaluation/import-gold:curl  # runs in the client
-playbook-evaluation/import-gold:java  # the Java client 0.4.0 has no method for importing gold answers from a spreadsheet
-results/check-non-json-result:python  # DocuDevsClient 1.15.0 result_json falls back to GET /job/result/{uuid} on 415, so it cannot report the status of GET /job/result/{uuid}/json
-results/get-result-schema:python  # DocuDevsClient 1.15.0 has no method for GET /job/result/{uuid}/schema
-sso/add-domain:python  # DocuDevsClient 1.15.0 has no method for POST /sso/domains
-sso/configure-oidc-provider:python  # DocuDevsClient 1.15.0 has no method for PUT /sso/config or POST /sso/sync
-sso/verify-domain:python  # DocuDevsClient 1.15.0 has no method for POST /sso/domains/{id}/verify
-submission-portals/check-submission:python  # DocuDevsClient 1.15.0 has no method for GET /submission-records/{receiptCode}
-submission-portals/create-portal:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals
-submission-portals/submit-document:python  # DocuDevsClient 1.15.0 has no method for POST /submission-portals/{id}/submissions
-track-changes/extract-track-changes:python  # DocuDevsClient 1.15.0 has no method for POST /document/track-changes
-webhooks/configure-webhook:python  # DocuDevsClient 1.15.0 has no method for GET or PUT /settings/webhook
-llm-providers/verify-llm-provider:java  # the Java client 0.4.0 has no method for POST /llm/providers/{id}/verify
-model-credentials/disable-and-enable-credential:java  # the Java client 0.4.0 has no method for POST /model-credentials/{id}/disable or /enable
-model-credentials/get-credential:java  # the Java client 0.4.0 has no method for GET /model-credentials/{id}
-model-credentials/update-credential:java  # the Java client 0.4.0 has no method for PATCH /model-credentials/{id}
-model-credentials/validate-credential:java  # the Java client 0.4.0 has no method for POST /model-credentials/{id}/validate
-results/check-non-json-result:java  # the Java client 0.4.0 has no method for GET /job/result/{guid}/schema
-results/get-result-schema:java  # the Java client 0.4.0 has no method for GET /job/result/{guid}/schema
-jobs/inspect-job:java  # the Java client 0.4.0 has no method for GET /job/params/{guid} or GET /job/dependencies/{guid}
-jobs/list-jobs:java  # the Java client 0.4.0 has no method for GET /job/list
-pipelines/client-pipeline-conditional:java  # the Java client 0.4.0 has no client-side pipeline runner (ClientPipeline, run_client_pipeline)
-pipelines/run-client-pipeline:java  # the Java client 0.4.0 has no client-side pipeline runner (ClientPipeline, run_client_pipeline)
-integrations/create-connection:java  # the Java client 0.4.0 has no method for POST /integration/connections
-integrations/delete-connection:java  # the Java client 0.4.0 has no method for DELETE /integration/connections/{id}
-integrations/list-connections:java  # the Java client 0.4.0 has no method for GET /integration/connections
-managed-workflows/cancel-run:java  # the Java client 0.4.0 has no method for POST /managed-execution/{id}/cancel
-managed-workflows/get-logs:java  # the Java client 0.4.0 has no method for GET /managed-execution/{id}/logs
-managed-workflows/get-run:java  # the Java client 0.4.0 has no method for GET /managed-execution/{id}
-managed-workflows/list-runs:java  # the Java client 0.4.0 has no method for GET /managed-execution
-managed-workflows/start-run:java  # the Java client 0.4.0 has no method for POST /managed-execution
-members/list-members:java  # the Java client 0.4.0 has no method for GET /members
-members/remove-member:java  # the Java client 0.4.0 has no method for DELETE /members/{id}
-members/set-join-policy:java  # the Java client 0.4.0 has no method for PUT /members/join-policy
-members/update-member-role:java  # the Java client 0.4.0 has no method for PATCH /members/{id}
-sso/add-domain:java  # the Java client 0.4.0 has no method for POST /sso/domains
-sso/configure-oidc-provider:java  # the Java client 0.4.0 has no method for PUT /sso/config
-sso/verify-domain:java  # the Java client 0.4.0 has no method for POST /sso/domains/{id}/verify
-submission-portals/check-submission:java  # the Java client 0.4.0 has no method for GET /submission-records/{receiptCode}
-submission-portals/create-portal:java  # the Java client 0.4.0 has no method for POST /submission-portals
-submission-portals/submit-document:java  # the Java client 0.4.0 has no method for POST /submission-portals/{id}/submissions
-track-changes/extract-track-changes:java  # the Java client 0.4.0 has no method for POST /document/track-changes
-webhooks/configure-webhook:java  # the Java client 0.4.0 has no method for PUT /settings/webhook
+playbook-evaluation/import-gold:java  # `DocuDevsClient` (Java) has no method for importing gold answers from a spreadsheet
+results/check-non-json-result:python  # `DocuDevsClient` (Python) result_json falls back to GET /job/result/{uuid} on 415, so it cannot report the status of GET /job/result/{uuid}/json
+results/get-result-schema:python  # `DocuDevsClient` (Python) has no method for GET /job/result/{uuid}/schema
+sso/add-domain:python  # `DocuDevsClient` (Python) has no method for POST /sso/domains
+sso/configure-oidc-provider:python  # `DocuDevsClient` (Python) has no method for PUT /sso/config or POST /sso/sync
+sso/verify-domain:python  # `DocuDevsClient` (Python) has no method for POST /sso/domains/{id}/verify
+submission-portals/check-submission:python  # `DocuDevsClient` (Python) has no method for GET /submission-records/{receiptCode}
+submission-portals/create-portal:python  # `DocuDevsClient` (Python) has no method for POST /submission-portals
+submission-portals/submit-document:python  # `DocuDevsClient` (Python) has no method for POST /submission-portals/{id}/submissions
+track-changes/extract-track-changes:python  # `DocuDevsClient` (Python) has no method for POST /document/track-changes
+webhooks/configure-webhook:python  # `DocuDevsClient` (Python) has no method for GET or PUT /settings/webhook
+llm-providers/verify-llm-provider:java  # `DocuDevsClient` (Java) has no method for POST /llm/providers/{id}/verify
+model-credentials/disable-and-enable-credential:java  # `DocuDevsClient` (Java) has no method for POST /model-credentials/{id}/disable or /enable
+model-credentials/get-credential:java  # `DocuDevsClient` (Java) has no method for GET /model-credentials/{id}
+model-credentials/update-credential:java  # `DocuDevsClient` (Java) has no method for PATCH /model-credentials/{id}
+model-credentials/validate-credential:java  # `DocuDevsClient` (Java) has no method for POST /model-credentials/{id}/validate
+results/check-non-json-result:java  # the Java result methods return no HTTP status (they throw on a non-2xx answer), and `DocuDevsClient` (Java) has no method for GET /job/result/{guid}/schema
+results/get-result-schema:java  # `DocuDevsClient` (Java) has no method for GET /job/result/{guid}/schema
+jobs/inspect-job:java  # `DocuDevsClient` (Java) has no method for GET /job/params/{guid} or GET /job/dependencies/{guid}
+jobs/list-jobs:java  # `DocuDevsClient` (Java) has no method for GET /job/list
+pipelines/client-pipeline-conditional:java  # `DocuDevsClient` (Java) has no client-side pipeline runner (ClientPipeline, run_client_pipeline)
+pipelines/run-client-pipeline:java  # `DocuDevsClient` (Java) has no client-side pipeline runner (ClientPipeline, run_client_pipeline)
+integrations/create-connection:java  # `DocuDevsClient` (Java) has no method for POST /integration/connections
+integrations/delete-connection:java  # `DocuDevsClient` (Java) has no method for DELETE /integration/connections/{id}
+integrations/list-connections:java  # `DocuDevsClient` (Java) has no method for GET /integration/connections
+managed-workflows/cancel-run:java  # `DocuDevsClient` (Java) has no method for POST /managed-execution/{id}/cancel
+managed-workflows/get-logs:java  # `DocuDevsClient` (Java) has no method for GET /managed-execution/{id}/logs
+managed-workflows/get-run:java  # `DocuDevsClient` (Java) has no method for GET /managed-execution/{id}
+managed-workflows/list-runs:java  # `DocuDevsClient` (Java) has no method for GET /managed-execution
+managed-workflows/start-run:java  # `DocuDevsClient` (Java) has no method for POST /managed-execution
+members/list-members:java  # `DocuDevsClient` (Java) has no method for GET /members
+members/remove-member:java  # `DocuDevsClient` (Java) has no method for DELETE /members/{id}
+members/set-join-policy:java  # `DocuDevsClient` (Java) has no method for PUT /members/join-policy
+members/update-member-role:java  # `DocuDevsClient` (Java) has no method for PATCH /members/{id}
+sso/add-domain:java  # `DocuDevsClient` (Java) has no method for POST /sso/domains
+sso/configure-oidc-provider:java  # `DocuDevsClient` (Java) has no method for PUT /sso/config
+sso/verify-domain:java  # `DocuDevsClient` (Java) has no method for POST /sso/domains/{id}/verify
+submission-portals/check-submission:java  # `DocuDevsClient` (Java) has no method for GET /submission-records/{receiptCode}
+submission-portals/create-portal:java  # `DocuDevsClient` (Java) has no method for POST /submission-portals
+submission-portals/submit-document:java  # `DocuDevsClient` (Java) has no method for POST /submission-portals/{id}/submissions
+track-changes/extract-track-changes:java  # `DocuDevsClient` (Java) has no method for POST /document/track-changes
+webhooks/configure-webhook:java  # `DocuDevsClient` (Java) has no method for PUT /settings/webhook

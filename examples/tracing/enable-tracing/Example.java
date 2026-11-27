@@ -8,6 +8,7 @@ import ai.docudevs.client.WaitOptions;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 public class Example {
     public static void main(String[] args) throws Exception {
@@ -27,7 +28,10 @@ public class Example {
                         .trace(true)
                         .build());
 
-        client.waitUntilReadyJson(guid, WaitOptions.builder().build());
+        client.waitUntilReadyJson(guid, WaitOptions.builder()
+                .timeout(Duration.ofSeconds(180))
+                .pollInterval(Duration.ofSeconds(5))
+                .build());
 
         JsonNode trace = client.getTrace(guid);
         System.out.println("Total tokens used: " + trace.path("total_tokens").asInt());

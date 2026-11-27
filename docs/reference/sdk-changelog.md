@@ -7,6 +7,30 @@ mdx:
 
 # SDK Changelog
 
+## 2026-11-26 20:00 UTC
+
+### Highlights
+
+- The Java SDK reads the text of OCR results and sends lookup files and schema-generation instructions the way the API expects.
+- These changes are in Java SDK 0.4.2. Version 0.4.1 has `waitUntilReadyText`, the text result fix and `ProcessOptions.acroFormMetadata` only; use 0.4.2.
+
+### Python SDK
+
+- No Python SDK user-facing updates.
+
+### Java SDK
+
+- Added: `waitUntilReadyText` waits for a job and returns its stored result as text, such as the Markdown or plain text of an OCR job.
+- Added: `ProcessOptions.acroFormMetadata` requests AcroForm field metadata for a PDF input; read it with `getAcroformMetadata` after the job completes.
+- Added: `ExcelTemplateOptions` and `ProcessOptions.excelTemplate` set where an Excel export writes results into the template uploaded for a saved configuration; `saveConfiguration` sends them.
+- Fixed: `waitUntilReadyJson` and `fetchResultJson` no longer fail on a result stored as text, such as an OCR job's. They return it as `{"result": text}`.
+- Fixed: `uploadBatchLookupFile` and `uploadConfigurationLookupFile` send the file in the part the API reads. The API rejected their requests before.
+- Fixed: `generateSchema` sends its instructions.
+
+### Migration Notes
+
+- Code that read the OCR text of a job through `waitUntilReadyJson` now gets `{"result": text}`; use `waitUntilReadyText` to read the text directly.
+
 ## 2026-11-26 UTC
 
 ### Highlights
@@ -44,7 +68,7 @@ mdx:
 
 ### Migration Notes
 
-- `createContractAnalysisTrial(caseId, anchorJobGuid, trialKind, suiteRevision, suiteCaseId)` and the six-parameter form are deprecated: the API requires an estimate fingerprint, which they do not send. Use `createContractAnalysisTrial(caseId, anchorJobGuid, options, idempotencyKey, trialKind, estimateFingerprint)`.
+- `createContractAnalysisTrial(caseId, anchorJobGuid, idempotencyKey, suiteRevision, trialKind)` and the six-parameter form are deprecated: the API requires an estimate fingerprint, which they do not send. Use `createContractAnalysisTrial(caseId, anchorJobGuid, options, idempotencyKey, trialKind, estimateFingerprint)`.
 - `submitAndWaitForOperation` and the other new submit-and-wait methods return the operation's result document. `waitForOperation` still returns the status envelope with the result as a string, and can return an earlier operation of the same type under the same parent.
 - A failed wait throws `DocuDevsApiException` with status `409` and the polled status in the body. For record imports and tree activations the body holds both the import and its job, so the job's `error` is available.
 - A `switch` over `MapReduceOptions.SplitType` without a default branch needs a case for `DOCUMENT_OUTLINE`.
