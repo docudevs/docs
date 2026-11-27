@@ -8,7 +8,7 @@ An agent session stores a conversation under an opaque `sessionId`. Save that ID
 There are two session kinds:
 
 - `platform-chat` is the agent in the DocuDevs web app. It is always available.
-- `document-workspace` works on uploaded workbooks and publishes verified revisions. It is available only on dedicated deployments that include the document workspace add-on. Contact support to find out whether yours does.
+- `document-workspace` works on uploaded workbooks and can publish verified spreadsheet, Word and PDF results. It is available only on dedicated deployments that include the document workspace add-on. Contact support to find out whether yours does.
 
 ## Credentials
 
@@ -93,12 +93,16 @@ Where the `document-workspace` kind is available, create a session of that kind 
 | `413` | The file is larger than 5 MiB |
 | `415` | The file is not an XLSX workbook |
 
-A turn publishes at most one workbook revision, and only output that passes verification becomes downloadable.
+## Download workspace results
 
-- Use `GET /v1/agent/sessions/{sessionId}/artifacts` to list published revisions in `revisions`. Its `limit` and `after` query parameters work with the returned `nextCursor`.
-- Each revision has `revisionId`, `turnId`, `name`, `mediaType`, `sizeBytes`, `sha256`, `passedChecks`, `accepted` and a `download` URL. The download returns the exact bytes covered by `sha256` and `passedChecks`. Every published revision has an XLSX structure check. A correction returns a new revision ID.
+A completed turn can publish up to five files in value-only XLSX, DOCX or PDF format, with a limit of 5 MiB per file and 15 MiB per turn. For example, one turn can produce an XLSX reconciliation, a DOCX report and a PDF copy. DocuDevs performs format-specific checks and publishes the verified files together with the turn's reply. A correction creates a new revision ID.
+
+- Use `GET /v1/agent/sessions/{sessionId}/artifacts` to list the session's published `revisions`. To find every file from a turn, match each revision's `turnId` to the completed turn ID and pass each `nextCursor` as `after` until there are no more pages.
+- Each revision has `revisionId`, `turnId`, `name`, `mediaType`, `sizeBytes`, `sha256`, `passedChecks`, `accepted` and a `download` URL. GET the `download` URL with the same session credential. It returns the immutable bytes as an `application/octet-stream` attachment. Use `name` and `mediaType` from the revision to identify the file, and compare its SHA-256 digest with `sha256` to verify the downloaded bytes.
 - The user who owns the session can mark a revision accepted with `POST /v1/agent/sessions/{sessionId}/artifacts/{revisionId}/accept`. An integration credential receives `403`. Acceptance applies to that revision and is distinct from its verification checks.
 - Use `POST /v1/agent/sessions/{sessionId}/turns/{turnId}/cancel` to prevent a queued or running turn from publishing. Cancelling an already cancelled turn returns `CANCELLED`. A turn that already completed or failed returns `409`. Cancel exists only for `document-workspace` sessions.
+
+In the Python SDK, use `list_agent_workspace_artifacts` and `download_agent_workspace_artifact` from `docudevs.api.agent_sessions` with an `AuthenticatedClient`. The `sync_detailed` and `asyncio_detailed` variants provide the HTTP status. On a successful download, the parsed file's `payload` contains the bytes. In the Java SDK, `AgentSessionsApi` exposes `listAgentWorkspaceArtifacts` and `downloadAgentWorkspaceArtifact`, which returns a `File`.
 
 Workspace sessions are kept for a limited time from creation, 30 days unless your deployment sets another period. After that the session returns `404`, and its files, revisions and conversation content are removed.
 
