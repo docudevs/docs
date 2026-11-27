@@ -7468,7 +7468,7 @@ paths:
           format: uuid
       responses:
         "200":
-          description: Verified immutable workbook
+          description: Verified immutable document attachment
           content:
             application/octet-stream:
               schema:
